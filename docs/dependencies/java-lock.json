@@ -1,0 +1,4791 @@
+{
+  "artifacts_sha256": {
+    "ch.qos.logback:logback-classic:jar::1.5.38": "afb439c61fa287c9e1925523b13baab03617e724406a389d48b61c2c3e46b700",
+    "ch.qos.logback:logback-core:jar::1.5.38": "a855a0fc97b1d06f4efb1c3bba5ebd0eb508d8b58e68e89e4bbc23a85135c883",
+    "com.fasterxml.jackson.core:jackson-annotations:jar::2.21": "53ca085f4a150f703f49e1aabd935bd03b43e1ea3d55d135438292af22cef56b",
+    "com.fasterxml:classmate:jar::1.7.3": "75fbda45456f123fb6e2028a6189442d8d0730b357adce4c0a6d7e789f70669b",
+    "com.github.stephenc.jcip:jcip-annotations:jar::1.0-1": "4fccff8382aafc589962c4edb262f6aa595e34f1e11e61057d1c6a96e8fc7323",
+    "com.google.code.findbugs:jsr305:jar::3.0.2": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+    "com.jayway.jsonpath:json-path:jar::2.10.0": "890daa95dd3892d34d9fabc27cd5153656e6f369358625c88f4dc7b79cbd6c5a",
+    "com.nimbusds:content-type:jar::2.3": "60349793e006fba96b532cb0c21e10e969fe0db8d87f91c3b9eaf82ba2998895",
+    "com.nimbusds:lang-tag:jar::1.7": "e8c1c594e2425bdbea2d860de55c69b69fc5d59454452449a0f0913c2a5b8a31",
+    "com.nimbusds:nimbus-jose-jwt:jar::10.9.1": "33152ea83ec50d22706fdaf3b07acbcd716f9a68edcabdd7c4d02843cbdcdcf6",
+    "com.nimbusds:oauth2-oidc-sdk:jar::11.38.2": "30e63220c15bd93006c557bd0d614bb57a5f00232188693577c222383ea4bbe7",
+    "com.opencsv:opencsv:jar::5.12.0": "f1c55d80a92c8ecfe3f15fb71785d5b156f3674cb5b9ad55dcfd378ffeed2960",
+    "com.structurizr:structurizr-core:jar::5.0.3": "4c5035574797af60b93c1ba9005c2bfe53114dc287a475479bd98eb3e1331a62",
+    "com.structurizr:structurizr-export:jar::5.0.3": "32075f8fb083ea37ef77b7bf44558948ffdd26fa7cea5009dc37e11d290aebad",
+    "com.sun.istack:istack-commons-runtime:jar::4.1.2": "7fd6792361f4dd00f8c56af4a20cecc0066deea4a8f3dec38348af23fc2296ee",
+    "com.tngtech.archunit:archunit:jar::1.4.2": "6d8adf69a3f109ebe1b395764feb07f919e9e0e2ab5e2ea141d2e6251ba7d17f",
+    "com.vaadin.external.google:android-json:jar::0.0.20131108.vaadin1": "dfb7bae2f404cfe0b72b4d23944698cb716b7665171812a0a4d0f5926c0fac79",
+    "com.zaxxer:HikariCP:jar::7.0.2": "f1e612fa27345be3107a85431e8a8aeb205c15364ab2f2d411e40a9d7bb08095",
+    "commons-io:commons-io:jar::2.22.0": "2b9a7b1f726fb86216dbd2c8321eabe0221dbd5b1be81c18e1cb53811b104758",
+    "commons-logging:commons-logging:jar::1.3.6": "f8ead8943401081dea0aa824b5b1ba40a0e4ed297a572a0f02258150a0b62357",
+    "io.micrometer:micrometer-commons:jar::1.17.1": "f2cee6ef046e72eec8128474c7f58c6217173b45ae373c30de0289f2a56ab0fd",
+    "io.micrometer:micrometer-core:jar::1.17.1": "9ca47dfa831409b40253c8dc98c17b9d3e050ebbde4d1543c5521dca2b95ad56",
+    "io.micrometer:micrometer-jakarta9:jar::1.17.1": "37fbb0a98ba92e185ae7ebe0804fe6c1394bf7fba7573b204fa6fc3998c2e246",
+    "io.micrometer:micrometer-observation:jar::1.17.1": "eb34f0cd84a879393ae5c21160fc06385ccdc74f36a4d1e31b199f59acfdaf71",
+    "jakarta.activation:jakarta.activation-api:jar::2.1.4": "c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004",
+    "jakarta.annotation:jakarta.annotation-api:jar::3.0.0": "b01f55552284cfb149411e64eabca75e942d26d2e1786b32914250e4330afaa2",
+    "jakarta.inject:jakarta.inject-api:jar::2.0.1": "f7dc98062fccf14126abb751b64fab12c312566e8cbdc8483598bffcea93af7c",
+    "jakarta.persistence:jakarta.persistence-api:jar::3.2.0": "be8a26b0e75c84c1b7600f759256fbc68d60333d89ec0ce3f784fc3ffa09aa8c",
+    "jakarta.transaction:jakarta.transaction-api:jar::2.0.1": "50c0a7c760c13ae6c042acf182b28f0047413db95b4636fb8879bcffab5ba875",
+    "jakarta.validation:jakarta.validation-api:jar::3.1.1": "63ce00156388c365f3ac1be71fcfaf114682fc0c452020b5df6e7ec236e142ab",
+    "jakarta.xml.bind:jakarta.xml.bind-api:jar::4.0.5": "5e489b6c874c4119e003ff1403db523ee3a8959ec499f3de29e77245efccf216",
+    "net.bytebuddy:byte-buddy-agent:jar::1.18.11": "780b3601c34150ab9fb822673c472f7229c1041e8e2a12facf6a5de9ba7a2d64",
+    "net.bytebuddy:byte-buddy:jar::1.18.11": "e32f454c2c1f4aca982f9ec764ed892d9a6eee7e8a77f435cbdd180f6ffdb821",
+    "net.minidev:accessors-smart:jar::2.6.0": "222c9f547bb20a99fc486403a398352d1306fb671b38abd7ecab6401df170e61",
+    "net.minidev:json-smart:jar::2.6.0": "1ae4b561458afb540be8ec5c6dbb4f2e715a319a7ae64854998aaf924770d61b",
+    "org.antlr:antlr4-runtime:jar::4.13.2": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
+    "org.apache.commons:commons-collections4:jar::4.5.0": "00f93263c267be201b8ae521b44a7137271b16688435340bf629db1bac0a5845",
+    "org.apache.commons:commons-lang3:jar::3.20.0": "69e5c9fa35da7a51a5fd2099dfe56a2d8d32cf233e2f6d770e796146440263f4",
+    "org.apache.commons:commons-text:jar::1.15.0": "58d2da30f058512a1e7f914e39241deca4dff5c27a085b4ed2faa9e7208067f6",
+    "org.apache.logging.log4j:log4j-api:jar::2.25.5": "64777f73ea0b3104c04eb82befbdccc30a425a19e83ad06cb2f93aa303511863",
+    "org.apache.logging.log4j:log4j-to-slf4j:jar::2.25.5": "b68e8b47342dbc9b35644a14fe2efc0b7bf18da703910cd05ad5501ffe07bba1",
+    "org.apache.tomcat.embed:tomcat-embed-core:jar::11.0.26": "062cf4191139c08aef678673039e41ed9d69b6c1b9b30b44820e5a83d0c09cb6",
+    "org.apache.tomcat.embed:tomcat-embed-el:jar::11.0.26": "a852c99fb5e4e174c08fb4b13cc6c7cd9de9332d46582020aaa219e95092a309",
+    "org.apache.tomcat.embed:tomcat-embed-websocket:jar::11.0.26": "89184380e3c4b0d3c7af828230b179e35123623f2a5b4231c052d6f2eecb5976",
+    "org.apiguardian:apiguardian-api:jar::1.1.2": "b509448ac506d607319f182537f0b35d71007582ec741832a1f111e5b5b70b38",
+    "org.aspectj:aspectjweaver:jar::1.9.25.1": "4fe86fdc18faea571f29129c70eaad5d121363504a06d7907be88f6c60ba3116",
+    "org.assertj:assertj-core:jar::3.27.7": "c4a445426c3c2861666863b842cc4ec7bbb1c4226fefd370b6d2fe83d6c4ff0f",
+    "org.awaitility:awaitility:jar::4.3.0": "ee58568ea5945dcf988551501655183dc184e23e45a8e013fdfd9036194e6f7b",
+    "org.checkerframework:checker-qual:jar::3.55.1": "857658c8bdcbff794949a8d9922f88d63ee3751c203c7cd7d21ea97f9e745288",
+    "org.eclipse.angus:angus-activation:jar::2.0.3": "a6bd35c538cf90fff941ad6258c40c08fca0b5c9c3f536c657114f27ce0527a7",
+    "org.glassfish.jaxb:jaxb-core:jar::4.0.9": "6b014df25d22c8446cc2df0a378c5b2137747f197a731d99eb24c756b26f7e8d",
+    "org.glassfish.jaxb:jaxb-runtime:jar::4.0.9": "93e09b7316b6af68d6e2083e4c297daf28e8957f45d725077af812c0b12c39ab",
+    "org.glassfish.jaxb:txw2:jar::4.0.9": "d6343e5945d87266ca4e8974a0a2a876e1bd147a00fb65ed3f2e1a3a00f3a82a",
+    "org.hamcrest:hamcrest:jar::3.0": "5d66b6a4a680755cb6ed7cb104fa7835ef644667586ff0737adeb977c39ecdbc",
+    "org.hdrhistogram:HdrHistogram:jar::2.2.2": "22d1d4316c4ec13a68b559e98c8256d69071593731da96136640f864fa14fad8",
+    "org.hibernate.models:hibernate-models:jar::1.1.1": "7cb645f2ebe5fcb63e21d26259cef62d93a1ca77c400bda6992c92cb19826a89",
+    "org.hibernate.orm:hibernate-core:jar::7.4.5.Final": "e894c0ae560f0031883a2f5c819e1ef1ee3e16b2cbca31e6301a004876a67dc7",
+    "org.hibernate.validator:hibernate-validator:jar::9.1.3.Final": "0497ebbe23fafe4180b74bd0b96a67eee8556552decc4d3c120c1dc737a2b5fb",
+    "org.jboss.logging:jboss-logging:jar::3.6.3.Final": "7c12ee575508f81e22b1db9334b969d0ec54ef0fd1dcba24eeab1a44235fc366",
+    "org.jmolecules:jmolecules-events:jar::2.0.1": "2dd20f02039c825de38c381d76a0f5cc912b9ab85f9fb6dabf7b10c1c3c9e983",
+    "org.jmolecules:jstereotype:jar::2.0.1": "8ee2277ede551ba969c381b2f90fb697a0fad610d1d1d2e432947c9bdcf19e7e",
+    "org.jspecify:jspecify:jar::1.0.1": "070d75f261fe4c5b8202508366715f7f2d4660f88c8ef7e6d3575e48c9683b66",
+    "org.junit.jupiter:junit-jupiter-api:jar::6.0.3": "d655d7e6f0c7ae07f10a2f3bbaaebb6d30e9b26204a068ad9e9b3950aa28792c",
+    "org.junit.jupiter:junit-jupiter-engine:jar::6.0.3": "1e2fab61ad27ea08fc7c70dd9677cf8c6d1ae5434d42dcfdd633b12c7e7c04d0",
+    "org.junit.jupiter:junit-jupiter-params:jar::6.0.3": "cf2947e2302b9f8c8a059259a277881c1cadae8fbc2514c16a925cfeb7beb2e5",
+    "org.junit.jupiter:junit-jupiter:jar::6.0.3": "784b65815f479a0c99a9d3a573b142e2a525efb6025d97f751b19e72f90aeda3",
+    "org.junit.platform:junit-platform-commons:jar::6.0.3": "39f262d09c3d52719fe0b77f080e90a3695e285d779a41b232e17963ae5da200",
+    "org.junit.platform:junit-platform-engine:jar::6.0.3": "491e9e4f745f161b8a8e4186a1a7c6a450ea12c70930c9aedae427215301d947",
+    "org.liquibase:liquibase-core:jar::5.0.3": "3ccd4608829836b4c0f7fb1d23a4619bac16c68ca725d623aae0838bce734156",
+    "org.mockito:mockito-core:jar::5.23.0": "ae295bebd5d11fab97ab297815dc7617188b86003cbce3dfd5c0d5c3a6cc4a0c",
+    "org.mockito:mockito-junit-jupiter:jar::5.23.0": "65938526fdc311bb3a1c0015eb1c8a0be81515aa998f22b9f4e92f1b668e4f63",
+    "org.objenesis:objenesis:jar::3.3": "02dfd0b0439a5591e35b708ed2f5474eb0948f53abf74637e959b8e4ef69bfeb",
+    "org.opentest4j:opentest4j:jar::1.3.0": "48e2df636cab6563ced64dcdff8abb2355627cb236ef0bf37598682ddf742f1b",
+    "org.ow2.asm:asm:jar::9.7.1": "8cadd43ac5eb6d09de05faecca38b917a040bb9139c7edeb4cc81c740b713281",
+    "org.postgresql:postgresql:jar::42.7.13": "6e0e4cc2d8cae902084f8a2b18728b073a6fd9d1f87c9d8bff8f298c18185b93",
+    "org.skyscreamer:jsonassert:jar::1.5.3": "719095c07d4203961320da593441d8b3b643c18eb1d81aa98ea933bb7eb351ba",
+    "org.slf4j:jul-to-slf4j:jar::2.0.18": "cbb7d1aaaa9e871eb1a06594abd911bf97027152976edf1edc315be75239204e",
+    "org.slf4j:slf4j-api:jar::2.0.18": "44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55",
+    "org.springframework.boot:spring-boot-actuator-autoconfigure:jar::4.1.1": "bedbd4282a0f0c6a08bd5342d3940b50d8a013420d8a536695aedb1421b5e0f5",
+    "org.springframework.boot:spring-boot-actuator:jar::4.1.1": "2bbb38417af25cfc6f57a9b01a85db9b6ccdcadb9e5d40f6b1b2f54a08f8b798",
+    "org.springframework.boot:spring-boot-autoconfigure:jar::4.1.1": "59228756ddd76cea050f95d86deff334789bc53b6688beaa673b1af2b9794592",
+    "org.springframework.boot:spring-boot-data-commons:jar::4.1.1": "e9911b99825ea5650827ec1e2d2fc1890c7e63b6f048c1f4dba2c8e85ff6d354",
+    "org.springframework.boot:spring-boot-data-jpa:jar::4.1.1": "19860139ccffcdeb27ea5a6c96bc2977bbc586f0aa2e5bb64eca49602e9de95c",
+    "org.springframework.boot:spring-boot-health:jar::4.1.1": "f60151e1f014b40761d0644be1cb04f82df7fc3e9b7bf6e946848547eec399e7",
+    "org.springframework.boot:spring-boot-hibernate:jar::4.1.1": "8ad72a7fea79102390661779157a5064ac9e61c395dccc01c0696debf3c69859",
+    "org.springframework.boot:spring-boot-http-converter:jar::4.1.1": "52a167430a918c223b2ccd2eb62aff91a8e43e6daebe5a07caa37b9a04c61cb9",
+    "org.springframework.boot:spring-boot-jackson:jar::4.1.1": "69a9b4d8850a0532a5e44ff7306a03621485b26596e7f9481de7d28e68a2dd42",
+    "org.springframework.boot:spring-boot-jdbc:jar::4.1.1": "30de56a06ccedb40245fd3a69a5107c7b3c0500447bb982a54a3b5da2859ae2c",
+    "org.springframework.boot:spring-boot-jpa:jar::4.1.1": "ccefec84e31f99938543031511215ea16d9a06984be010702ca5c5960c3a2c1f",
+    "org.springframework.boot:spring-boot-liquibase:jar::4.1.1": "b2fcf07490922c8c0280f49f5f81116bc3b184a057e24d96c3699920099afd43",
+    "org.springframework.boot:spring-boot-micrometer-metrics:jar::4.1.1": "70dd91dcc319d00998ce5e410b03b841e682aa2f60e4bab159c78ff0ecdb7d0f",
+    "org.springframework.boot:spring-boot-micrometer-observation:jar::4.1.1": "09ebd9ff7de21d10b1f11c70ca0ea8766a8a727affd19642584bee5a314ea11a",
+    "org.springframework.boot:spring-boot-persistence:jar::4.1.1": "0f78d2556ac3ed75f9eaf3134a1fba94ad1ec3414b52aa279c1f690217e71e3c",
+    "org.springframework.boot:spring-boot-security-oauth2-client:jar::4.1.1": "f194178e5ba4ea7e27b2c1ba172f4f4b9ebcce4abc7780c93b82ad45d0a2ba38",
+    "org.springframework.boot:spring-boot-security-oauth2-resource-server:jar::4.1.1": "8b28c4c3ce43b8fabac0df94f66dd3d1c77b24c7ea7726977c6d6bee2d41fab1",
+    "org.springframework.boot:spring-boot-security:jar::4.1.1": "c940697be9bc67820d5011b86d58105836b7cae7c8fb5d4e61d635b51b392cbe",
+    "org.springframework.boot:spring-boot-servlet:jar::4.1.1": "4dcb156e311a4c1ad5f1ed7eabd94a78ea74510b05c429a4fcfdcf8beb9d5882",
+    "org.springframework.boot:spring-boot-session-jdbc:jar::4.1.1": "cac9f7402eecfd0ef282d6f358a514266e543292e242fbaf3bacab5762b4873a",
+    "org.springframework.boot:spring-boot-session:jar::4.1.1": "2bb4ac8c9af285b1211b1dc40b5defb6088712aa5a8b03cc977d3030b62bdae7",
+    "org.springframework.boot:spring-boot-sql:jar::4.1.1": "fa4f6ddded1bb3bbc496897686336d8433e34f1f22daa886872be2aa184def23",
+    "org.springframework.boot:spring-boot-starter-actuator:jar::4.1.1": "d26bb8461ccc417c97a869fbd2e9f0067ce8a56a9ab6058093097ca16e4cc128",
+    "org.springframework.boot:spring-boot-starter-data-jpa:jar::4.1.1": "88eb7c8a4d1af4333f40e9c8d53835fd306600ae8a078d633b673f491fcba79a",
+    "org.springframework.boot:spring-boot-starter-jackson:jar::4.1.1": "d30e594a3e0f3a090438fc22000a87ab577a3b80c674180a10544ca331207f24",
+    "org.springframework.boot:spring-boot-starter-jdbc:jar::4.1.1": "c51b28a3793168bff837eea90b1ae641efc3a28d6cdb980dd2b0b230914e93ee",
+    "org.springframework.boot:spring-boot-starter-liquibase:jar::4.1.1": "6fa90f582fac1055bab156627b28ad4364a60f1e582641b29caebd87dabfb487",
+    "org.springframework.boot:spring-boot-starter-logging:jar::4.1.1": "8eca7d72c8434f5c3b935385c656cd5337f473434bdbcb4913b3b3a34897d178",
+    "org.springframework.boot:spring-boot-starter-micrometer-metrics:jar::4.1.1": "ad34ce3535a82b3920efea7f9c5d6322de484969f3ab5fa6da05030edd7c14d4",
+    "org.springframework.boot:spring-boot-starter-oauth2-client:jar::4.1.1": "38d0ed03316db125a5122742495c90393e6cb0e22aac68064efba8543c3eac75",
+    "org.springframework.boot:spring-boot-starter-oauth2-resource-server:jar::4.1.1": "f2deafebcbc7fbd00b005c59875b5c062a5bef2b3f2f1369b75306bb423e320d",
+    "org.springframework.boot:spring-boot-starter-security:jar::4.1.1": "38628875b75cbed6ba4642f3b0a4baf4735bd4f82b49450e4ae5a5e4d1b7b4a9",
+    "org.springframework.boot:spring-boot-starter-session-jdbc:jar::4.1.1": "be4339bb887f7b10be07f223844a07a1775371ae691a3da4176faaba605af464",
+    "org.springframework.boot:spring-boot-starter-test:jar::4.1.1": "37baecb7fdf6bd5ffc1f88320b04ea166da0e0af0b22b35bca17d48bbc7a5d1e",
+    "org.springframework.boot:spring-boot-starter-tomcat-runtime:jar::4.1.1": "580f0d9a9d02a1a6e387640e422af42f9dbdf302836d562ec595fdb2b31a1c29",
+    "org.springframework.boot:spring-boot-starter-tomcat:jar::4.1.1": "f224d8504be3b413825ee85ef549a7b1598ee8512e062c6bd5ddce1043cd388a",
+    "org.springframework.boot:spring-boot-starter-validation:jar::4.1.1": "f86edd0ba377e67f1549359d936756e727d23944b4399d7682462b6717d0ded6",
+    "org.springframework.boot:spring-boot-starter-webmvc:jar::4.1.1": "4aec3edbdf6317fefe23db1b989d8bba143a45a51c1fc32346146ecebf67d625",
+    "org.springframework.boot:spring-boot-starter:jar::4.1.1": "de5b2dd28400eda20914fd4a6054d0c201e68d2e4de35a25a4d89f054ccc2e63",
+    "org.springframework.boot:spring-boot-test-autoconfigure:jar::4.1.1": "fcae103bb2ca65226f225b846b210ba19fbfc42bdec1bf7009d3083baeb819b8",
+    "org.springframework.boot:spring-boot-test:jar::4.1.1": "c16efcceaf7c0f7fff6c2cbac5ba1e7e47ee68bacc6a446f8adfe07ffe4ea579",
+    "org.springframework.boot:spring-boot-tomcat:jar::4.1.1": "17f65629e4eb3c979c0572b69b57d630bb12e64869e9d7520adddaa6734256b6",
+    "org.springframework.boot:spring-boot-transaction:jar::4.1.1": "e7f2fad4fe65bf6aaf1b1a538a68a1cf69988adb558f4a0fc0992a8be4fddf64",
+    "org.springframework.boot:spring-boot-validation:jar::4.1.1": "c2546a81b6b7a39f51d889c99047f24567e4b28d1717fb53a65e9327cfc436f1",
+    "org.springframework.boot:spring-boot-web-server:jar::4.1.1": "6912fb1fdf7f657a61ac050760fa835fb1e7496399291697e2901f82887a4fee",
+    "org.springframework.boot:spring-boot-webmvc:jar::4.1.1": "9f08c1fb938c45a8693fec5f3065be3aca203948a7ab4d56b06444986f75a6b2",
+    "org.springframework.boot:spring-boot:jar::4.1.1": "0d92b532b1d4020640e72d78c31af175c23db8e0ddd45b81855b7fdf4c9c70f0",
+    "org.springframework.data:spring-data-commons:jar::4.1.1": "cf2a3f9bfabefca1a8c2c0f0a65c393d9ff83b0cb1cf7b705accac18a6ed0ee4",
+    "org.springframework.data:spring-data-jpa:jar::4.1.1": "e90191b8d9f1c5a9398db0587460f1f4002e0fe4ff267321ed3a107f7fec46e1",
+    "org.springframework.modulith:spring-modulith-api:jar::2.1.1": "b8d083929e9f2078287619a81e01c9efc7bea5830fe03341608d283faffb37b2",
+    "org.springframework.modulith:spring-modulith-apt:jar::2.1.1": "4aa6d1ef0d932c99a648bb73665e4c89f17938574f1102e9bf27709199b9f5e2",
+    "org.springframework.modulith:spring-modulith-core:jar::2.1.1": "235b6d0a3cc43c2b5ece010df0e34a69bc0662982d4de9cc741185c73bff6c4a",
+    "org.springframework.modulith:spring-modulith-docs:jar::2.1.1": "a793cd9f56e65726031c55c9da5b75023838e2f6ed2de65d2005f743fccac176",
+    "org.springframework.modulith:spring-modulith-moments:jar::2.1.1": "ba89cc2edefc997ddab319aa0839709ab3647108296f53e00fcb1d13e91fef42",
+    "org.springframework.modulith:spring-modulith-starter-core:jar::2.1.1": "9e22b7dc3b3e5959a081d8ce8d16c453267db86826c138e4f0cc32539b0297de",
+    "org.springframework.modulith:spring-modulith-starter-test:jar::2.1.1": "035b74491246e501c581c4d6e639232aa1ab1a2d56ced953674d1f3f37ba4c7b",
+    "org.springframework.modulith:spring-modulith-test:jar::2.1.1": "ec29c06163acc563d21bcbdf0da7521fa3486f0328faba897b7c5199bbbdcd09",
+    "org.springframework.security:spring-security-config:jar::7.1.1": "1f947c853f14cab76563464ee22e72f6672f3913db52647d2f5d1df5f2b1e5a5",
+    "org.springframework.security:spring-security-core:jar::7.1.1": "98a5011baa78df36fb184e6ce0e8e086ca9a64fcdd8f161c0a96475a3a0907bd",
+    "org.springframework.security:spring-security-crypto:jar::7.1.1": "6e8bb2337faccabd30626f917ed1d2bfa9dde982229b6b373b644d1a01635403",
+    "org.springframework.security:spring-security-oauth2-client:jar::7.1.1": "d871b3571201c69e0142cca3a61fbcca4fd4ec9c0dedb21fdd4fe4a77ff9991d",
+    "org.springframework.security:spring-security-oauth2-core:jar::7.1.1": "29140d71b37cf1246bf16e33619e88e7baaa1c66bf5574e3c3e9a9f225f0ef6e",
+    "org.springframework.security:spring-security-oauth2-jose:jar::7.1.1": "e07d47cac04de4f01be6a6c3f8be249472444b24fd4fad8ff030b45bfe6c5b9c",
+    "org.springframework.security:spring-security-oauth2-resource-server:jar::7.1.1": "d8e2d24d2829ec4e2f8212c2c465c5abb30463f550d650080cc8f1d71d0daa6c",
+    "org.springframework.security:spring-security-web:jar::7.1.1": "dece134a2332c976a2c94ecf13f816c64e8ea7f2139795485afe655fba0408f3",
+    "org.springframework.session:spring-session-core:jar::4.1.1": "01b836bfcc5b64f7039c3430980878112a10db5066eda4274a1d3eb874e49733",
+    "org.springframework.session:spring-session-jdbc:jar::4.1.1": "669e4388684949edb0c5aef0a7f4e15af86d6c87ffb90df3145f073746870529",
+    "org.springframework:spring-aop:jar::7.0.9": "b8c5d6bfcb1f4993f2cc124f7ab7fac40edf5256b9e43c2f7250a733cb5510e9",
+    "org.springframework:spring-aspects:jar::7.0.9": "68247ea5d8cc7c2d06fb36b80b9e9692bddab72fffeac5e68f974d547fb28875",
+    "org.springframework:spring-beans:jar::7.0.9": "ff218b827a25c9e8929b0cd56dfb56916cea9d5b669ed97dc7cb262508ff548b",
+    "org.springframework:spring-context:jar::7.0.9": "7552a2fcfa30cea53eb14d7a65a7a8e1b1dd82e832a7164fb7e6fb105f438858",
+    "org.springframework:spring-core:jar::7.0.9": "5195f4722699b39878d99a832549fe65df2890b159d063b88fff31b1ca65ae36",
+    "org.springframework:spring-expression:jar::7.0.9": "046434c40f43819729b9b1db0e6c659dfa68184c1c2c2efa5f7b3a5b27c4e2e2",
+    "org.springframework:spring-jdbc:jar::7.0.9": "ca0d9af1c5721eef8cac1f94c8b9d27a753248bc33c86e3472bd3d1dbd78f450",
+    "org.springframework:spring-orm:jar::7.0.9": "d44082acd9377b67858ae207316057e2ef236a16c96e1b4fd8af8d43a6784b31",
+    "org.springframework:spring-test:jar::7.0.9": "6ce8fc116f5d309b9ac50a6738bd1b15ea4012a4a5563c0ee89b795bfc9af0dc",
+    "org.springframework:spring-tx:jar::7.0.9": "bfb15da6e096e2c0752e9db9987d2415bf0da1d744efc988535c10c6b6c2eedd",
+    "org.springframework:spring-web:jar::7.0.9": "941ced476427bde2533872f293da535fd0258de3f3a650a7f1bfe01ed2927302",
+    "org.springframework:spring-webmvc:jar::7.0.9": "8f114c1461692c5e534e82b27de23b7fb23370db8dee7ce0c92d5106906c9555",
+    "org.xmlunit:xmlunit-core:jar::2.11.0": "50970e6069c21182689eb44ae9f8193970e080b6f37fc13f22aa4201cca2dfe4",
+    "org.yaml:snakeyaml:jar::2.6": "c8f7a98e7394adda02f6317249710e4d1b4c7a25aa8c7eace0c2eea52eb8bf85",
+    "tools.jackson.core:jackson-core:jar::3.1.7": "7608c367fd8a92666d28711519599543c180298259963184ce04d2947a8f71e7",
+    "tools.jackson.core:jackson-databind:jar::3.1.7": "48c781de87e2016e1f0d973748a27130f11643e7ac080173f40e2d9669d84be3"
+  },
+  "format": 1,
+  "graphs": {
+    ".": {
+      "artifactId": "nigson-backend",
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "pom",
+      "version": "0.1.0"
+    },
+    "services/commerce": {
+      "artifactId": "commerce",
+      "children": [
+        {
+          "artifactId": "spring-boot-starter-webmvc",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter",
+              "children": [
+                {
+                  "artifactId": "spring-boot-starter-logging",
+                  "children": [
+                    {
+                      "artifactId": "logback-classic",
+                      "children": [
+                        {
+                          "artifactId": "logback-core",
+                          "classifier": "",
+                          "groupId": "ch.qos.logback",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "1.5.38"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "ch.qos.logback",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.5.38"
+                    },
+                    {
+                      "artifactId": "log4j-to-slf4j",
+                      "children": [
+                        {
+                          "artifactId": "log4j-api",
+                          "classifier": "",
+                          "groupId": "org.apache.logging.log4j",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "2.25.5"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.apache.logging.log4j",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.25.5"
+                    },
+                    {
+                      "artifactId": "jul-to-slf4j",
+                      "classifier": "",
+                      "groupId": "org.slf4j",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.0.18"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-autoconfigure",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "jakarta.annotation-api",
+                  "classifier": "",
+                  "groupId": "jakarta.annotation",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "3.0.0"
+                },
+                {
+                  "artifactId": "snakeyaml",
+                  "classifier": "",
+                  "groupId": "org.yaml",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-starter-jackson",
+              "children": [
+                {
+                  "artifactId": "spring-boot-jackson",
+                  "children": [
+                    {
+                      "artifactId": "jackson-databind",
+                      "children": [
+                        {
+                          "artifactId": "jackson-core",
+                          "classifier": "",
+                          "groupId": "tools.jackson.core",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "3.1.7"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "tools.jackson.core",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.1.7"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-starter-tomcat",
+              "children": [
+                {
+                  "artifactId": "spring-boot-starter-tomcat-runtime",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-web-server",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "tomcat-embed-core",
+                      "classifier": "",
+                      "groupId": "org.apache.tomcat.embed",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "11.0.26"
+                    },
+                    {
+                      "artifactId": "tomcat-embed-websocket",
+                      "classifier": "",
+                      "groupId": "org.apache.tomcat.embed",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "11.0.26"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-tomcat",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-http-converter",
+              "children": [
+                {
+                  "artifactId": "spring-boot",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-web",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-webmvc",
+              "children": [
+                {
+                  "artifactId": "spring-boot-servlet",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-webmvc",
+                  "children": [
+                    {
+                      "artifactId": "spring-expression",
+                      "classifier": "",
+                      "groupId": "org.springframework",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.0.9"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-actuator",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter-micrometer-metrics",
+              "children": [
+                {
+                  "artifactId": "spring-boot-micrometer-metrics",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-micrometer-observation",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-actuator-autoconfigure",
+              "children": [
+                {
+                  "artifactId": "spring-boot-actuator",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-health",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "micrometer-observation",
+              "children": [
+                {
+                  "artifactId": "jspecify",
+                  "classifier": "",
+                  "groupId": "org.jspecify",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.0.1"
+                },
+                {
+                  "artifactId": "micrometer-commons",
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            },
+            {
+              "artifactId": "micrometer-jakarta9",
+              "children": [
+                {
+                  "artifactId": "micrometer-core",
+                  "children": [
+                    {
+                      "artifactId": "HdrHistogram",
+                      "classifier": "",
+                      "groupId": "org.hdrhistogram",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "2.2.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-validation",
+          "children": [
+            {
+              "artifactId": "spring-boot-validation",
+              "children": [
+                {
+                  "artifactId": "tomcat-embed-el",
+                  "classifier": "",
+                  "groupId": "org.apache.tomcat.embed",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "11.0.26"
+                },
+                {
+                  "artifactId": "hibernate-validator",
+                  "children": [
+                    {
+                      "artifactId": "jakarta.validation-api",
+                      "classifier": "",
+                      "groupId": "jakarta.validation",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.1.1"
+                    },
+                    {
+                      "artifactId": "jboss-logging",
+                      "classifier": "",
+                      "groupId": "org.jboss.logging",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.6.3.Final"
+                    },
+                    {
+                      "artifactId": "classmate",
+                      "classifier": "",
+                      "groupId": "com.fasterxml",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.7.3"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.hibernate.validator",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "9.1.3.Final"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-security",
+          "children": [
+            {
+              "artifactId": "spring-boot-security",
+              "children": [
+                {
+                  "artifactId": "spring-security-config",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-web",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-aop",
+              "children": [
+                {
+                  "artifactId": "spring-beans",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "children": [
+            {
+              "artifactId": "spring-boot-security-oauth2-resource-server",
+              "children": [
+                {
+                  "artifactId": "spring-security-oauth2-resource-server",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-data-jpa",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter-jdbc",
+              "children": [
+                {
+                  "artifactId": "HikariCP",
+                  "classifier": "",
+                  "groupId": "com.zaxxer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-data-jpa",
+              "children": [
+                {
+                  "artifactId": "spring-boot-data-commons",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-persistence",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "spring-data-commons",
+                      "classifier": "",
+                      "groupId": "org.springframework.data",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-hibernate",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-jpa",
+                      "children": [
+                        {
+                          "artifactId": "jakarta.persistence-api",
+                          "classifier": "",
+                          "groupId": "jakarta.persistence",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "3.2.0"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "hibernate-core",
+                      "children": [
+                        {
+                          "artifactId": "jakarta.transaction-api",
+                          "classifier": "",
+                          "groupId": "jakarta.transaction",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "2.0.1"
+                        },
+                        {
+                          "artifactId": "hibernate-models",
+                          "classifier": "",
+                          "groupId": "org.hibernate.models",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "1.1.1"
+                        },
+                        {
+                          "artifactId": "jaxb-runtime",
+                          "children": [
+                            {
+                              "artifactId": "jaxb-core",
+                              "children": [
+                                {
+                                  "artifactId": "angus-activation",
+                                  "classifier": "",
+                                  "groupId": "org.eclipse.angus",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "2.0.3"
+                                },
+                                {
+                                  "artifactId": "txw2",
+                                  "classifier": "",
+                                  "groupId": "org.glassfish.jaxb",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "4.0.9"
+                                },
+                                {
+                                  "artifactId": "istack-commons-runtime",
+                                  "classifier": "",
+                                  "groupId": "com.sun.istack",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "4.1.2"
+                                }
+                              ],
+                              "classifier": "",
+                              "groupId": "org.glassfish.jaxb",
+                              "optional": "false",
+                              "scope": "runtime",
+                              "type": "jar",
+                              "version": "4.0.9"
+                            }
+                          ],
+                          "classifier": "",
+                          "groupId": "org.glassfish.jaxb",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "4.0.9"
+                        },
+                        {
+                          "artifactId": "jakarta.inject-api",
+                          "classifier": "",
+                          "groupId": "jakarta.inject",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "2.0.1"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.hibernate.orm",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.4.5.Final"
+                    },
+                    {
+                      "artifactId": "spring-orm",
+                      "classifier": "",
+                      "groupId": "org.springframework",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.0.9"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-data-jpa",
+                  "children": [
+                    {
+                      "artifactId": "antlr4-runtime",
+                      "classifier": "",
+                      "groupId": "org.antlr",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.13.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.data",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-aspects",
+                  "children": [
+                    {
+                      "artifactId": "aspectjweaver",
+                      "classifier": "",
+                      "groupId": "org.aspectj",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.9.25.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-jdbc",
+              "children": [
+                {
+                  "artifactId": "spring-boot-sql",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-transaction",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-jdbc",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-liquibase",
+          "children": [
+            {
+              "artifactId": "spring-boot-liquibase",
+              "children": [
+                {
+                  "artifactId": "liquibase-core",
+                  "children": [
+                    {
+                      "artifactId": "commons-collections4",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.5.0"
+                    },
+                    {
+                      "artifactId": "commons-text",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.15.0"
+                    },
+                    {
+                      "artifactId": "opencsv",
+                      "classifier": "",
+                      "groupId": "com.opencsv",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "5.12.0"
+                    },
+                    {
+                      "artifactId": "commons-lang3",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.20.0"
+                    },
+                    {
+                      "artifactId": "commons-io",
+                      "classifier": "",
+                      "groupId": "commons-io",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.22.0"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.liquibase",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "5.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-client",
+          "children": [
+            {
+              "artifactId": "spring-boot-security-oauth2-client",
+              "children": [
+                {
+                  "artifactId": "spring-security-oauth2-client",
+                  "children": [
+                    {
+                      "artifactId": "oauth2-oidc-sdk",
+                      "children": [
+                        {
+                          "artifactId": "jcip-annotations",
+                          "classifier": "",
+                          "groupId": "com.github.stephenc.jcip",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "1.0-1"
+                        },
+                        {
+                          "artifactId": "content-type",
+                          "classifier": "",
+                          "groupId": "com.nimbusds",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "2.3"
+                        },
+                        {
+                          "artifactId": "lang-tag",
+                          "classifier": "",
+                          "groupId": "com.nimbusds",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "1.7"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "com.nimbusds",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "11.38.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-security-oauth2-jose",
+              "children": [
+                {
+                  "artifactId": "spring-security-core",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-crypto",
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-oauth2-core",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "nimbus-jose-jwt",
+                  "classifier": "",
+                  "groupId": "com.nimbusds",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "10.9.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-session-jdbc",
+          "children": [
+            {
+              "artifactId": "spring-boot-session-jdbc",
+              "children": [
+                {
+                  "artifactId": "spring-boot-session",
+                  "children": [
+                    {
+                      "artifactId": "spring-session-core",
+                      "classifier": "",
+                      "groupId": "org.springframework.session",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-session-jdbc",
+                  "classifier": "",
+                  "groupId": "org.springframework.session",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-modulith-starter-core",
+          "children": [
+            {
+              "artifactId": "spring-modulith-api",
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-apt",
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-core",
+              "children": [
+                {
+                  "artifactId": "archunit",
+                  "classifier": "",
+                  "groupId": "com.tngtech.archunit",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.4.2"
+                },
+                {
+                  "artifactId": "spring-context",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-moments",
+              "children": [
+                {
+                  "artifactId": "jmolecules-events",
+                  "children": [
+                    {
+                      "artifactId": "jstereotype",
+                      "classifier": "",
+                      "groupId": "org.jmolecules",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.0.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.jmolecules",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.modulith",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.1.1"
+        },
+        {
+          "artifactId": "postgresql",
+          "children": [
+            {
+              "artifactId": "checker-qual",
+              "classifier": "",
+              "groupId": "org.checkerframework",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "3.55.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.postgresql",
+          "optional": "false",
+          "scope": "runtime",
+          "type": "jar",
+          "version": "42.7.13"
+        },
+        {
+          "artifactId": "spring-boot-starter-test",
+          "children": [
+            {
+              "artifactId": "spring-boot-test",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-test-autoconfigure",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "json-path",
+              "children": [
+                {
+                  "artifactId": "slf4j-api",
+                  "classifier": "",
+                  "groupId": "org.slf4j",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.18"
+                }
+              ],
+              "classifier": "",
+              "groupId": "com.jayway.jsonpath",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.10.0"
+            },
+            {
+              "artifactId": "jakarta.xml.bind-api",
+              "children": [
+                {
+                  "artifactId": "jakarta.activation-api",
+                  "classifier": "",
+                  "groupId": "jakarta.activation",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "2.1.4"
+                }
+              ],
+              "classifier": "",
+              "groupId": "jakarta.xml.bind",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "4.0.5"
+            },
+            {
+              "artifactId": "json-smart",
+              "children": [
+                {
+                  "artifactId": "accessors-smart",
+                  "children": [
+                    {
+                      "artifactId": "asm",
+                      "classifier": "",
+                      "groupId": "org.ow2.asm",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "9.7.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "net.minidev",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.6.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "net.minidev",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.6.0"
+            },
+            {
+              "artifactId": "assertj-core",
+              "children": [
+                {
+                  "artifactId": "byte-buddy",
+                  "classifier": "",
+                  "groupId": "net.bytebuddy",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.18.11"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.assertj",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "3.27.7"
+            },
+            {
+              "artifactId": "awaitility",
+              "classifier": "",
+              "groupId": "org.awaitility",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.3.0"
+            },
+            {
+              "artifactId": "hamcrest",
+              "classifier": "",
+              "groupId": "org.hamcrest",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "3.0"
+            },
+            {
+              "artifactId": "junit-jupiter",
+              "children": [
+                {
+                  "artifactId": "junit-jupiter-api",
+                  "children": [
+                    {
+                      "artifactId": "opentest4j",
+                      "classifier": "",
+                      "groupId": "org.opentest4j",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "1.3.0"
+                    },
+                    {
+                      "artifactId": "junit-platform-commons",
+                      "classifier": "",
+                      "groupId": "org.junit.platform",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "6.0.3"
+                    },
+                    {
+                      "artifactId": "apiguardian-api",
+                      "classifier": "",
+                      "groupId": "org.apiguardian",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "1.1.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                },
+                {
+                  "artifactId": "junit-jupiter-params",
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                },
+                {
+                  "artifactId": "junit-jupiter-engine",
+                  "children": [
+                    {
+                      "artifactId": "junit-platform-engine",
+                      "classifier": "",
+                      "groupId": "org.junit.platform",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "6.0.3"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.junit.jupiter",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "6.0.3"
+            },
+            {
+              "artifactId": "mockito-core",
+              "children": [
+                {
+                  "artifactId": "byte-buddy-agent",
+                  "classifier": "",
+                  "groupId": "net.bytebuddy",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "1.18.11"
+                },
+                {
+                  "artifactId": "objenesis",
+                  "classifier": "",
+                  "groupId": "org.objenesis",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "3.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.mockito",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "5.23.0"
+            },
+            {
+              "artifactId": "mockito-junit-jupiter",
+              "classifier": "",
+              "groupId": "org.mockito",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "5.23.0"
+            },
+            {
+              "artifactId": "jsonassert",
+              "children": [
+                {
+                  "artifactId": "android-json",
+                  "classifier": "",
+                  "groupId": "com.vaadin.external.google",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "0.0.20131108.vaadin1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.skyscreamer",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "1.5.3"
+            },
+            {
+              "artifactId": "spring-core",
+              "children": [
+                {
+                  "artifactId": "commons-logging",
+                  "classifier": "",
+                  "groupId": "commons-logging",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.3.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-test",
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "xmlunit-core",
+              "classifier": "",
+              "groupId": "org.xmlunit",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.11.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-modulith-starter-test",
+          "children": [
+            {
+              "artifactId": "spring-modulith-test",
+              "children": [
+                {
+                  "artifactId": "spring-tx",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-docs",
+              "children": [
+                {
+                  "artifactId": "structurizr-core",
+                  "children": [
+                    {
+                      "artifactId": "jackson-annotations",
+                      "classifier": "",
+                      "groupId": "com.fasterxml.jackson.core",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.21"
+                    },
+                    {
+                      "artifactId": "jsr305",
+                      "classifier": "",
+                      "groupId": "com.google.code.findbugs",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "3.0.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "com.structurizr",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "5.0.3"
+                },
+                {
+                  "artifactId": "structurizr-export",
+                  "classifier": "",
+                  "groupId": "com.structurizr",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "5.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.modulith",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "2.1.1"
+        }
+      ],
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "jar",
+      "version": "0.1.0"
+    },
+    "services/experience": {
+      "artifactId": "experience",
+      "children": [
+        {
+          "artifactId": "spring-boot-starter-webmvc",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter",
+              "children": [
+                {
+                  "artifactId": "spring-boot-starter-logging",
+                  "children": [
+                    {
+                      "artifactId": "logback-classic",
+                      "children": [
+                        {
+                          "artifactId": "logback-core",
+                          "classifier": "",
+                          "groupId": "ch.qos.logback",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "1.5.38"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "ch.qos.logback",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.5.38"
+                    },
+                    {
+                      "artifactId": "log4j-to-slf4j",
+                      "children": [
+                        {
+                          "artifactId": "log4j-api",
+                          "classifier": "",
+                          "groupId": "org.apache.logging.log4j",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "2.25.5"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.apache.logging.log4j",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.25.5"
+                    },
+                    {
+                      "artifactId": "jul-to-slf4j",
+                      "classifier": "",
+                      "groupId": "org.slf4j",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.0.18"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-autoconfigure",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "jakarta.annotation-api",
+                  "classifier": "",
+                  "groupId": "jakarta.annotation",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "3.0.0"
+                },
+                {
+                  "artifactId": "snakeyaml",
+                  "classifier": "",
+                  "groupId": "org.yaml",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-starter-jackson",
+              "children": [
+                {
+                  "artifactId": "spring-boot-jackson",
+                  "children": [
+                    {
+                      "artifactId": "jackson-databind",
+                      "children": [
+                        {
+                          "artifactId": "jackson-core",
+                          "classifier": "",
+                          "groupId": "tools.jackson.core",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "3.1.7"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "tools.jackson.core",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.1.7"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-starter-tomcat",
+              "children": [
+                {
+                  "artifactId": "spring-boot-starter-tomcat-runtime",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-web-server",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "tomcat-embed-core",
+                      "classifier": "",
+                      "groupId": "org.apache.tomcat.embed",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "11.0.26"
+                    },
+                    {
+                      "artifactId": "tomcat-embed-websocket",
+                      "classifier": "",
+                      "groupId": "org.apache.tomcat.embed",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "11.0.26"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-tomcat",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-http-converter",
+              "children": [
+                {
+                  "artifactId": "spring-boot",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-web",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-webmvc",
+              "children": [
+                {
+                  "artifactId": "spring-boot-servlet",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-webmvc",
+                  "children": [
+                    {
+                      "artifactId": "spring-expression",
+                      "classifier": "",
+                      "groupId": "org.springframework",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.0.9"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-actuator",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter-micrometer-metrics",
+              "children": [
+                {
+                  "artifactId": "spring-boot-micrometer-metrics",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-micrometer-observation",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-actuator-autoconfigure",
+              "children": [
+                {
+                  "artifactId": "spring-boot-actuator",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-health",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "micrometer-observation",
+              "children": [
+                {
+                  "artifactId": "jspecify",
+                  "classifier": "",
+                  "groupId": "org.jspecify",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.0.1"
+                },
+                {
+                  "artifactId": "micrometer-commons",
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            },
+            {
+              "artifactId": "micrometer-jakarta9",
+              "children": [
+                {
+                  "artifactId": "micrometer-core",
+                  "children": [
+                    {
+                      "artifactId": "HdrHistogram",
+                      "classifier": "",
+                      "groupId": "org.hdrhistogram",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "2.2.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-validation",
+          "children": [
+            {
+              "artifactId": "spring-boot-validation",
+              "children": [
+                {
+                  "artifactId": "tomcat-embed-el",
+                  "classifier": "",
+                  "groupId": "org.apache.tomcat.embed",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "11.0.26"
+                },
+                {
+                  "artifactId": "hibernate-validator",
+                  "children": [
+                    {
+                      "artifactId": "jakarta.validation-api",
+                      "classifier": "",
+                      "groupId": "jakarta.validation",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.1.1"
+                    },
+                    {
+                      "artifactId": "jboss-logging",
+                      "classifier": "",
+                      "groupId": "org.jboss.logging",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.6.3.Final"
+                    },
+                    {
+                      "artifactId": "classmate",
+                      "classifier": "",
+                      "groupId": "com.fasterxml",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.7.3"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.hibernate.validator",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "9.1.3.Final"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-security",
+          "children": [
+            {
+              "artifactId": "spring-boot-security",
+              "children": [
+                {
+                  "artifactId": "spring-security-config",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-core",
+                      "children": [
+                        {
+                          "artifactId": "spring-security-crypto",
+                          "classifier": "",
+                          "groupId": "org.springframework.security",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "7.1.1"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-web",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-aop",
+              "children": [
+                {
+                  "artifactId": "spring-beans",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "children": [
+            {
+              "artifactId": "spring-boot-security-oauth2-resource-server",
+              "children": [
+                {
+                  "artifactId": "spring-security-oauth2-jose",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-oauth2-core",
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    },
+                    {
+                      "artifactId": "nimbus-jose-jwt",
+                      "classifier": "",
+                      "groupId": "com.nimbusds",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "10.9.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-oauth2-resource-server",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-data-jpa",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter-jdbc",
+              "children": [
+                {
+                  "artifactId": "HikariCP",
+                  "classifier": "",
+                  "groupId": "com.zaxxer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-data-jpa",
+              "children": [
+                {
+                  "artifactId": "spring-boot-data-commons",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-persistence",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "spring-data-commons",
+                      "classifier": "",
+                      "groupId": "org.springframework.data",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-hibernate",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-jpa",
+                      "children": [
+                        {
+                          "artifactId": "jakarta.persistence-api",
+                          "classifier": "",
+                          "groupId": "jakarta.persistence",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "3.2.0"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "hibernate-core",
+                      "children": [
+                        {
+                          "artifactId": "jakarta.transaction-api",
+                          "classifier": "",
+                          "groupId": "jakarta.transaction",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "2.0.1"
+                        },
+                        {
+                          "artifactId": "hibernate-models",
+                          "classifier": "",
+                          "groupId": "org.hibernate.models",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "1.1.1"
+                        },
+                        {
+                          "artifactId": "jaxb-runtime",
+                          "children": [
+                            {
+                              "artifactId": "jaxb-core",
+                              "children": [
+                                {
+                                  "artifactId": "angus-activation",
+                                  "classifier": "",
+                                  "groupId": "org.eclipse.angus",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "2.0.3"
+                                },
+                                {
+                                  "artifactId": "txw2",
+                                  "classifier": "",
+                                  "groupId": "org.glassfish.jaxb",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "4.0.9"
+                                },
+                                {
+                                  "artifactId": "istack-commons-runtime",
+                                  "classifier": "",
+                                  "groupId": "com.sun.istack",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "4.1.2"
+                                }
+                              ],
+                              "classifier": "",
+                              "groupId": "org.glassfish.jaxb",
+                              "optional": "false",
+                              "scope": "runtime",
+                              "type": "jar",
+                              "version": "4.0.9"
+                            }
+                          ],
+                          "classifier": "",
+                          "groupId": "org.glassfish.jaxb",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "4.0.9"
+                        },
+                        {
+                          "artifactId": "jakarta.inject-api",
+                          "classifier": "",
+                          "groupId": "jakarta.inject",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "2.0.1"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.hibernate.orm",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.4.5.Final"
+                    },
+                    {
+                      "artifactId": "spring-orm",
+                      "classifier": "",
+                      "groupId": "org.springframework",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.0.9"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-data-jpa",
+                  "children": [
+                    {
+                      "artifactId": "antlr4-runtime",
+                      "classifier": "",
+                      "groupId": "org.antlr",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.13.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.data",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-aspects",
+                  "children": [
+                    {
+                      "artifactId": "aspectjweaver",
+                      "classifier": "",
+                      "groupId": "org.aspectj",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.9.25.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-jdbc",
+              "children": [
+                {
+                  "artifactId": "spring-boot-sql",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-transaction",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-jdbc",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-liquibase",
+          "children": [
+            {
+              "artifactId": "spring-boot-liquibase",
+              "children": [
+                {
+                  "artifactId": "liquibase-core",
+                  "children": [
+                    {
+                      "artifactId": "commons-collections4",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.5.0"
+                    },
+                    {
+                      "artifactId": "commons-text",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.15.0"
+                    },
+                    {
+                      "artifactId": "opencsv",
+                      "classifier": "",
+                      "groupId": "com.opencsv",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "5.12.0"
+                    },
+                    {
+                      "artifactId": "commons-lang3",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.20.0"
+                    },
+                    {
+                      "artifactId": "commons-io",
+                      "classifier": "",
+                      "groupId": "commons-io",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.22.0"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.liquibase",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "5.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-modulith-starter-core",
+          "children": [
+            {
+              "artifactId": "spring-modulith-api",
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-apt",
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-core",
+              "children": [
+                {
+                  "artifactId": "archunit",
+                  "classifier": "",
+                  "groupId": "com.tngtech.archunit",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.4.2"
+                },
+                {
+                  "artifactId": "spring-context",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-moments",
+              "children": [
+                {
+                  "artifactId": "jmolecules-events",
+                  "children": [
+                    {
+                      "artifactId": "jstereotype",
+                      "classifier": "",
+                      "groupId": "org.jmolecules",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.0.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.jmolecules",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.modulith",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.1.1"
+        },
+        {
+          "artifactId": "postgresql",
+          "children": [
+            {
+              "artifactId": "checker-qual",
+              "classifier": "",
+              "groupId": "org.checkerframework",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "3.55.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.postgresql",
+          "optional": "false",
+          "scope": "runtime",
+          "type": "jar",
+          "version": "42.7.13"
+        },
+        {
+          "artifactId": "spring-boot-starter-test",
+          "children": [
+            {
+              "artifactId": "spring-boot-test",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-test-autoconfigure",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "json-path",
+              "children": [
+                {
+                  "artifactId": "slf4j-api",
+                  "classifier": "",
+                  "groupId": "org.slf4j",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.18"
+                }
+              ],
+              "classifier": "",
+              "groupId": "com.jayway.jsonpath",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.10.0"
+            },
+            {
+              "artifactId": "jakarta.xml.bind-api",
+              "children": [
+                {
+                  "artifactId": "jakarta.activation-api",
+                  "classifier": "",
+                  "groupId": "jakarta.activation",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "2.1.4"
+                }
+              ],
+              "classifier": "",
+              "groupId": "jakarta.xml.bind",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "4.0.5"
+            },
+            {
+              "artifactId": "json-smart",
+              "children": [
+                {
+                  "artifactId": "accessors-smart",
+                  "children": [
+                    {
+                      "artifactId": "asm",
+                      "classifier": "",
+                      "groupId": "org.ow2.asm",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "9.7.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "net.minidev",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "2.6.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "net.minidev",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.6.0"
+            },
+            {
+              "artifactId": "assertj-core",
+              "children": [
+                {
+                  "artifactId": "byte-buddy",
+                  "classifier": "",
+                  "groupId": "net.bytebuddy",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.18.11"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.assertj",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "3.27.7"
+            },
+            {
+              "artifactId": "awaitility",
+              "classifier": "",
+              "groupId": "org.awaitility",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.3.0"
+            },
+            {
+              "artifactId": "hamcrest",
+              "classifier": "",
+              "groupId": "org.hamcrest",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "3.0"
+            },
+            {
+              "artifactId": "junit-jupiter",
+              "children": [
+                {
+                  "artifactId": "junit-jupiter-api",
+                  "children": [
+                    {
+                      "artifactId": "opentest4j",
+                      "classifier": "",
+                      "groupId": "org.opentest4j",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "1.3.0"
+                    },
+                    {
+                      "artifactId": "junit-platform-commons",
+                      "classifier": "",
+                      "groupId": "org.junit.platform",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "6.0.3"
+                    },
+                    {
+                      "artifactId": "apiguardian-api",
+                      "classifier": "",
+                      "groupId": "org.apiguardian",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "1.1.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                },
+                {
+                  "artifactId": "junit-jupiter-params",
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                },
+                {
+                  "artifactId": "junit-jupiter-engine",
+                  "children": [
+                    {
+                      "artifactId": "junit-platform-engine",
+                      "classifier": "",
+                      "groupId": "org.junit.platform",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "6.0.3"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.junit.jupiter",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "6.0.3"
+            },
+            {
+              "artifactId": "mockito-core",
+              "children": [
+                {
+                  "artifactId": "byte-buddy-agent",
+                  "classifier": "",
+                  "groupId": "net.bytebuddy",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "1.18.11"
+                },
+                {
+                  "artifactId": "objenesis",
+                  "classifier": "",
+                  "groupId": "org.objenesis",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "3.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.mockito",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "5.23.0"
+            },
+            {
+              "artifactId": "mockito-junit-jupiter",
+              "classifier": "",
+              "groupId": "org.mockito",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "5.23.0"
+            },
+            {
+              "artifactId": "jsonassert",
+              "children": [
+                {
+                  "artifactId": "android-json",
+                  "classifier": "",
+                  "groupId": "com.vaadin.external.google",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "0.0.20131108.vaadin1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.skyscreamer",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "1.5.3"
+            },
+            {
+              "artifactId": "spring-core",
+              "children": [
+                {
+                  "artifactId": "commons-logging",
+                  "classifier": "",
+                  "groupId": "commons-logging",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.3.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-test",
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "xmlunit-core",
+              "classifier": "",
+              "groupId": "org.xmlunit",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.11.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-modulith-starter-test",
+          "children": [
+            {
+              "artifactId": "spring-modulith-test",
+              "children": [
+                {
+                  "artifactId": "spring-tx",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-docs",
+              "children": [
+                {
+                  "artifactId": "structurizr-core",
+                  "children": [
+                    {
+                      "artifactId": "jackson-annotations",
+                      "classifier": "",
+                      "groupId": "com.fasterxml.jackson.core",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.21"
+                    },
+                    {
+                      "artifactId": "jsr305",
+                      "classifier": "",
+                      "groupId": "com.google.code.findbugs",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "3.0.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "com.structurizr",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "5.0.3"
+                },
+                {
+                  "artifactId": "structurizr-export",
+                  "classifier": "",
+                  "groupId": "com.structurizr",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "5.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.modulith",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "2.1.1"
+        }
+      ],
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "jar",
+      "version": "0.1.0"
+    },
+    "services/integration": {
+      "artifactId": "integration",
+      "children": [
+        {
+          "artifactId": "spring-boot-starter-webmvc",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter",
+              "children": [
+                {
+                  "artifactId": "spring-boot-starter-logging",
+                  "children": [
+                    {
+                      "artifactId": "logback-classic",
+                      "children": [
+                        {
+                          "artifactId": "logback-core",
+                          "classifier": "",
+                          "groupId": "ch.qos.logback",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "1.5.38"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "ch.qos.logback",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.5.38"
+                    },
+                    {
+                      "artifactId": "log4j-to-slf4j",
+                      "children": [
+                        {
+                          "artifactId": "log4j-api",
+                          "classifier": "",
+                          "groupId": "org.apache.logging.log4j",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "2.25.5"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.apache.logging.log4j",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.25.5"
+                    },
+                    {
+                      "artifactId": "jul-to-slf4j",
+                      "classifier": "",
+                      "groupId": "org.slf4j",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.0.18"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-autoconfigure",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "jakarta.annotation-api",
+                  "classifier": "",
+                  "groupId": "jakarta.annotation",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "3.0.0"
+                },
+                {
+                  "artifactId": "snakeyaml",
+                  "classifier": "",
+                  "groupId": "org.yaml",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-starter-jackson",
+              "children": [
+                {
+                  "artifactId": "spring-boot-jackson",
+                  "children": [
+                    {
+                      "artifactId": "jackson-databind",
+                      "children": [
+                        {
+                          "artifactId": "jackson-core",
+                          "classifier": "",
+                          "groupId": "tools.jackson.core",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "3.1.7"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "tools.jackson.core",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.1.7"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-starter-tomcat",
+              "children": [
+                {
+                  "artifactId": "spring-boot-starter-tomcat-runtime",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-web-server",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "tomcat-embed-core",
+                      "classifier": "",
+                      "groupId": "org.apache.tomcat.embed",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "11.0.26"
+                    },
+                    {
+                      "artifactId": "tomcat-embed-websocket",
+                      "classifier": "",
+                      "groupId": "org.apache.tomcat.embed",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "11.0.26"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-tomcat",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-http-converter",
+              "children": [
+                {
+                  "artifactId": "spring-boot",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-web",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-webmvc",
+              "children": [
+                {
+                  "artifactId": "spring-boot-servlet",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-webmvc",
+                  "children": [
+                    {
+                      "artifactId": "spring-expression",
+                      "classifier": "",
+                      "groupId": "org.springframework",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.0.9"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-actuator",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter-micrometer-metrics",
+              "children": [
+                {
+                  "artifactId": "spring-boot-micrometer-metrics",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-micrometer-observation",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-actuator-autoconfigure",
+              "children": [
+                {
+                  "artifactId": "spring-boot-actuator",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-health",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "micrometer-observation",
+              "children": [
+                {
+                  "artifactId": "jspecify",
+                  "classifier": "",
+                  "groupId": "org.jspecify",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.0.1"
+                },
+                {
+                  "artifactId": "micrometer-commons",
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            },
+            {
+              "artifactId": "micrometer-jakarta9",
+              "children": [
+                {
+                  "artifactId": "micrometer-core",
+                  "children": [
+                    {
+                      "artifactId": "HdrHistogram",
+                      "classifier": "",
+                      "groupId": "org.hdrhistogram",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "2.2.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-validation",
+          "children": [
+            {
+              "artifactId": "spring-boot-validation",
+              "children": [
+                {
+                  "artifactId": "tomcat-embed-el",
+                  "classifier": "",
+                  "groupId": "org.apache.tomcat.embed",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "11.0.26"
+                },
+                {
+                  "artifactId": "hibernate-validator",
+                  "children": [
+                    {
+                      "artifactId": "jakarta.validation-api",
+                      "classifier": "",
+                      "groupId": "jakarta.validation",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.1.1"
+                    },
+                    {
+                      "artifactId": "jboss-logging",
+                      "classifier": "",
+                      "groupId": "org.jboss.logging",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.6.3.Final"
+                    },
+                    {
+                      "artifactId": "classmate",
+                      "classifier": "",
+                      "groupId": "com.fasterxml",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.7.3"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.hibernate.validator",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "9.1.3.Final"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-security",
+          "children": [
+            {
+              "artifactId": "spring-boot-security",
+              "children": [
+                {
+                  "artifactId": "spring-security-config",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-core",
+                      "children": [
+                        {
+                          "artifactId": "spring-security-crypto",
+                          "classifier": "",
+                          "groupId": "org.springframework.security",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "7.1.1"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-web",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-aop",
+              "children": [
+                {
+                  "artifactId": "spring-beans",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "children": [
+            {
+              "artifactId": "spring-boot-security-oauth2-resource-server",
+              "children": [
+                {
+                  "artifactId": "spring-security-oauth2-jose",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-oauth2-core",
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    },
+                    {
+                      "artifactId": "nimbus-jose-jwt",
+                      "classifier": "",
+                      "groupId": "com.nimbusds",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "10.9.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-oauth2-resource-server",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-data-jpa",
+          "children": [
+            {
+              "artifactId": "spring-boot-starter-jdbc",
+              "children": [
+                {
+                  "artifactId": "HikariCP",
+                  "classifier": "",
+                  "groupId": "com.zaxxer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-data-jpa",
+              "children": [
+                {
+                  "artifactId": "spring-boot-data-commons",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-persistence",
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "spring-data-commons",
+                      "classifier": "",
+                      "groupId": "org.springframework.data",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-hibernate",
+                  "children": [
+                    {
+                      "artifactId": "spring-boot-jpa",
+                      "children": [
+                        {
+                          "artifactId": "jakarta.persistence-api",
+                          "classifier": "",
+                          "groupId": "jakarta.persistence",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "3.2.0"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.springframework.boot",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.1.1"
+                    },
+                    {
+                      "artifactId": "hibernate-core",
+                      "children": [
+                        {
+                          "artifactId": "jakarta.transaction-api",
+                          "classifier": "",
+                          "groupId": "jakarta.transaction",
+                          "optional": "false",
+                          "scope": "compile",
+                          "type": "jar",
+                          "version": "2.0.1"
+                        },
+                        {
+                          "artifactId": "hibernate-models",
+                          "classifier": "",
+                          "groupId": "org.hibernate.models",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "1.1.1"
+                        },
+                        {
+                          "artifactId": "jaxb-runtime",
+                          "children": [
+                            {
+                              "artifactId": "jaxb-core",
+                              "children": [
+                                {
+                                  "artifactId": "angus-activation",
+                                  "classifier": "",
+                                  "groupId": "org.eclipse.angus",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "2.0.3"
+                                },
+                                {
+                                  "artifactId": "txw2",
+                                  "classifier": "",
+                                  "groupId": "org.glassfish.jaxb",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "4.0.9"
+                                },
+                                {
+                                  "artifactId": "istack-commons-runtime",
+                                  "classifier": "",
+                                  "groupId": "com.sun.istack",
+                                  "optional": "false",
+                                  "scope": "runtime",
+                                  "type": "jar",
+                                  "version": "4.1.2"
+                                }
+                              ],
+                              "classifier": "",
+                              "groupId": "org.glassfish.jaxb",
+                              "optional": "false",
+                              "scope": "runtime",
+                              "type": "jar",
+                              "version": "4.0.9"
+                            }
+                          ],
+                          "classifier": "",
+                          "groupId": "org.glassfish.jaxb",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "4.0.9"
+                        },
+                        {
+                          "artifactId": "jakarta.inject-api",
+                          "classifier": "",
+                          "groupId": "jakarta.inject",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "2.0.1"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.hibernate.orm",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.4.5.Final"
+                    },
+                    {
+                      "artifactId": "spring-orm",
+                      "classifier": "",
+                      "groupId": "org.springframework",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.0.9"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-data-jpa",
+                  "children": [
+                    {
+                      "artifactId": "antlr4-runtime",
+                      "classifier": "",
+                      "groupId": "org.antlr",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.13.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.data",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-aspects",
+                  "children": [
+                    {
+                      "artifactId": "aspectjweaver",
+                      "classifier": "",
+                      "groupId": "org.aspectj",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.9.25.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-jdbc",
+              "children": [
+                {
+                  "artifactId": "spring-boot-sql",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-boot-transaction",
+                  "classifier": "",
+                  "groupId": "org.springframework.boot",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "4.1.1"
+                },
+                {
+                  "artifactId": "spring-jdbc",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-boot-starter-liquibase",
+          "children": [
+            {
+              "artifactId": "spring-boot-liquibase",
+              "children": [
+                {
+                  "artifactId": "liquibase-core",
+                  "children": [
+                    {
+                      "artifactId": "commons-collections4",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "4.5.0"
+                    },
+                    {
+                      "artifactId": "commons-text",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.15.0"
+                    },
+                    {
+                      "artifactId": "opencsv",
+                      "classifier": "",
+                      "groupId": "com.opencsv",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "5.12.0"
+                    },
+                    {
+                      "artifactId": "commons-lang3",
+                      "classifier": "",
+                      "groupId": "org.apache.commons",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "3.20.0"
+                    },
+                    {
+                      "artifactId": "commons-io",
+                      "classifier": "",
+                      "groupId": "commons-io",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.22.0"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.liquibase",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "5.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-modulith-starter-core",
+          "children": [
+            {
+              "artifactId": "spring-modulith-api",
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-apt",
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-core",
+              "children": [
+                {
+                  "artifactId": "archunit",
+                  "classifier": "",
+                  "groupId": "com.tngtech.archunit",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.4.2"
+                },
+                {
+                  "artifactId": "spring-context",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-moments",
+              "children": [
+                {
+                  "artifactId": "jmolecules-events",
+                  "children": [
+                    {
+                      "artifactId": "jstereotype",
+                      "classifier": "",
+                      "groupId": "org.jmolecules",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.0.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.jmolecules",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.modulith",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.1.1"
+        },
+        {
+          "artifactId": "postgresql",
+          "children": [
+            {
+              "artifactId": "checker-qual",
+              "classifier": "",
+              "groupId": "org.checkerframework",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "3.55.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.postgresql",
+          "optional": "false",
+          "scope": "runtime",
+          "type": "jar",
+          "version": "42.7.13"
+        },
+        {
+          "artifactId": "spring-boot-starter-test",
+          "children": [
+            {
+              "artifactId": "spring-boot-test",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "spring-boot-test-autoconfigure",
+              "classifier": "",
+              "groupId": "org.springframework.boot",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.1.1"
+            },
+            {
+              "artifactId": "json-path",
+              "children": [
+                {
+                  "artifactId": "slf4j-api",
+                  "classifier": "",
+                  "groupId": "org.slf4j",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.18"
+                }
+              ],
+              "classifier": "",
+              "groupId": "com.jayway.jsonpath",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.10.0"
+            },
+            {
+              "artifactId": "jakarta.xml.bind-api",
+              "children": [
+                {
+                  "artifactId": "jakarta.activation-api",
+                  "classifier": "",
+                  "groupId": "jakarta.activation",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "2.1.4"
+                }
+              ],
+              "classifier": "",
+              "groupId": "jakarta.xml.bind",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "4.0.5"
+            },
+            {
+              "artifactId": "json-smart",
+              "children": [
+                {
+                  "artifactId": "accessors-smart",
+                  "children": [
+                    {
+                      "artifactId": "asm",
+                      "classifier": "",
+                      "groupId": "org.ow2.asm",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "9.7.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "net.minidev",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "2.6.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "net.minidev",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.6.0"
+            },
+            {
+              "artifactId": "assertj-core",
+              "children": [
+                {
+                  "artifactId": "byte-buddy",
+                  "classifier": "",
+                  "groupId": "net.bytebuddy",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.18.11"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.assertj",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "3.27.7"
+            },
+            {
+              "artifactId": "awaitility",
+              "classifier": "",
+              "groupId": "org.awaitility",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "4.3.0"
+            },
+            {
+              "artifactId": "hamcrest",
+              "classifier": "",
+              "groupId": "org.hamcrest",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "3.0"
+            },
+            {
+              "artifactId": "junit-jupiter",
+              "children": [
+                {
+                  "artifactId": "junit-jupiter-api",
+                  "children": [
+                    {
+                      "artifactId": "opentest4j",
+                      "classifier": "",
+                      "groupId": "org.opentest4j",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "1.3.0"
+                    },
+                    {
+                      "artifactId": "junit-platform-commons",
+                      "classifier": "",
+                      "groupId": "org.junit.platform",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "6.0.3"
+                    },
+                    {
+                      "artifactId": "apiguardian-api",
+                      "classifier": "",
+                      "groupId": "org.apiguardian",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "1.1.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                },
+                {
+                  "artifactId": "junit-jupiter-params",
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                },
+                {
+                  "artifactId": "junit-jupiter-engine",
+                  "children": [
+                    {
+                      "artifactId": "junit-platform-engine",
+                      "classifier": "",
+                      "groupId": "org.junit.platform",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "6.0.3"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.junit.jupiter",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "6.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.junit.jupiter",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "6.0.3"
+            },
+            {
+              "artifactId": "mockito-core",
+              "children": [
+                {
+                  "artifactId": "byte-buddy-agent",
+                  "classifier": "",
+                  "groupId": "net.bytebuddy",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "1.18.11"
+                },
+                {
+                  "artifactId": "objenesis",
+                  "classifier": "",
+                  "groupId": "org.objenesis",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "3.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.mockito",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "5.23.0"
+            },
+            {
+              "artifactId": "mockito-junit-jupiter",
+              "classifier": "",
+              "groupId": "org.mockito",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "5.23.0"
+            },
+            {
+              "artifactId": "jsonassert",
+              "children": [
+                {
+                  "artifactId": "android-json",
+                  "classifier": "",
+                  "groupId": "com.vaadin.external.google",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "0.0.20131108.vaadin1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.skyscreamer",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "1.5.3"
+            },
+            {
+              "artifactId": "spring-core",
+              "children": [
+                {
+                  "artifactId": "commons-logging",
+                  "classifier": "",
+                  "groupId": "commons-logging",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.3.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-test",
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "xmlunit-core",
+              "classifier": "",
+              "groupId": "org.xmlunit",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.11.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.boot",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "4.1.1"
+        },
+        {
+          "artifactId": "spring-modulith-starter-test",
+          "children": [
+            {
+              "artifactId": "spring-modulith-test",
+              "children": [
+                {
+                  "artifactId": "spring-tx",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.1.1"
+            },
+            {
+              "artifactId": "spring-modulith-docs",
+              "children": [
+                {
+                  "artifactId": "structurizr-core",
+                  "children": [
+                    {
+                      "artifactId": "jackson-annotations",
+                      "classifier": "",
+                      "groupId": "com.fasterxml.jackson.core",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "2.21"
+                    },
+                    {
+                      "artifactId": "jsr305",
+                      "classifier": "",
+                      "groupId": "com.google.code.findbugs",
+                      "optional": "false",
+                      "scope": "test",
+                      "type": "jar",
+                      "version": "3.0.2"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "com.structurizr",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "5.0.3"
+                },
+                {
+                  "artifactId": "structurizr-export",
+                  "classifier": "",
+                  "groupId": "com.structurizr",
+                  "optional": "false",
+                  "scope": "test",
+                  "type": "jar",
+                  "version": "5.0.3"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.modulith",
+              "optional": "false",
+              "scope": "test",
+              "type": "jar",
+              "version": "2.1.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.modulith",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "2.1.1"
+        }
+      ],
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "jar",
+      "version": "0.1.0"
+    },
+    "shared/common-events": {
+      "artifactId": "common-events",
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "jar",
+      "version": "0.1.0"
+    },
+    "shared/common-observability": {
+      "artifactId": "common-observability",
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "jar",
+      "version": "0.1.0"
+    },
+    "shared/common-problem": {
+      "artifactId": "common-problem",
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "jar",
+      "version": "0.1.0"
+    },
+    "shared/common-security": {
+      "artifactId": "common-security",
+      "classifier": "",
+      "groupId": "com.nigson",
+      "optional": "false",
+      "scope": "",
+      "type": "jar",
+      "version": "0.1.0"
+    }
+  }
+}

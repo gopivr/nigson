@@ -2,6 +2,17 @@
 
 Specification1.1.0; synchronized view; master is authoritative.
 
+## Implemented command status (5 October 2026)
+
+FOUND-001 implements `make status-check`. FOUND-002 adds `make build`, `make test`,
+`make verify`, `make dependency-check` and their optional `PROFILE=ai` build/test
+composition. Export the pinned Oracle JDK as JAVA_HOME; Maven rejects the default
+Java 17. AI requires uv 0.9.3 (override `UV` to its installed path), installs
+Python 3.12.12, and uses only the committed uv.lock. Caches are workspace-local.
+See DEPENDENCY_LOCK.md and task reports for executed evidence and limitations.
+The remaining commands below remain specified task outputs until their tasks
+are implemented; they are not current executable local/provider workflows.
+
 
 # Master section30: Configuration Management
 
@@ -123,4 +134,3 @@ Scripts use strict shell error handling, quote paths/variables, bounded readines
 | make provider-scenario PROVIDER=<name> SCENARIO=<fixture> | Bounded local fixture transition/callback; no arbitrary external URL. |
 | make keycloak-config-check ENV=<env> | Realm/client/audience/MFA/hostname/admin/prod profile validation. |
 | make provider-live-check ENV=stage | Explicit genuine sandbox credentials/account/sender/route smoke; record results honestly. |
-

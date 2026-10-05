@@ -8,19 +8,20 @@ EP00 — Repository/build/local mocks; BP1 foundation.
 
 ## Current Task
 
-FOUND-001 — IN_PROGRESS. Establish repository tree and authoritative instructions; verify TEST-FOUND-TREE in a fresh checkout.
+FOUND-002 — IN_PROGRESS. Pin and verify Java/Python build toolchains.
 
 ## Completed Tasks
 
-None. Revised specification is a document deliverable, not implemented backend features.
+- FOUND-001 — DONE; AC-FOUND-001 / TEST-FOUND-TREE passed against fresh clone of 65da3bd17c1f73a1570c69cd1e0c2796768daba0. No backend feature completed.
+- Report: docs/implementation/2026-10-05-FOUND-001.md
 
 ## In Progress
 
-- FOUND-001 — IN_PROGRESS; planned checks: tree, tracked files, task IDs, secrets and fresh checkout onboarding.
+- FOUND-002 — IN_PROGRESS; planned checks: checksum-pinned Maven wrapper, Java 25 enforcer, two clean dependency graphs and locked Python 3.12 build.
 
 ## Pending
 
-- [ ] FOUND-001 — Create backend repository and authoritative instruction files (EP00)
+- [x] FOUND-001 — Create backend repository and authoritative instruction files (EP00)
 - [ ] FOUND-002 — Pin compatible toolchains and reproducible Java/Python builds (EP00)
 - [ ] FOUND-003 — Prepare local containers, deterministic fixtures and command surface (EP00)
 - [ ] DATA-001 — Implement owner roles, migrations and all declared phase schemas (EP01)
@@ -95,11 +96,11 @@ NOT_RUN — document revision only; no backend build performed.
 
 ## Test Status
 
-NOT_RUN — no backend/mocks/provider tests executed. Static document checks reported separately.
+PASS — FOUND-001 repository checks and 9 negative tests only, 2026-10-05 11:06–11:07 UTC. Backend/mocks/provider tests NOT_RUN.
 
 ## Last Successful Commit
 
-NONE — no implementation commit created by this task.
+65da3bd17c1f73a1570c69cd1e0c2796768daba0 — FOUND-001 repository foundation.
 
 ## Confirmed Inputs
 
@@ -113,8 +114,8 @@ Credentials absent does not block offline implementation: MOCK-001 must create s
 
 ## Next Recommended Task
 
-FOUND-001, then dependency-ready foundation tasks. MOCK-001 follows FOUND-003. Read revised sections3/15/17/25/27/30/49 and ADR-008. No source or executable mock has been generated in this document task.
+FOUND-002, then FOUND-003; MOCK-001 follows FOUND-003. Read task contracts before each increment.
 
 ## Session Evidence / Protocol
 
-None. PENDING -> IN_PROGRESS -> DONE only with actual AC/task/commit/test evidence; preserve failed/blocked history and report after every session. See docs/implementation/README.md.
+FOUND-001 evidence: docs/implementation/2026-10-05-FOUND-001.md. Original blueprint remains unchanged. Initial normal-sandbox git init and Maven Central DNS failed; authorized escalated operations succeeded. Copied specification has original EOF blank lines; diff whitespace validation uses core.whitespace=-blank-at-eof to preserve source bytes.

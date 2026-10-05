@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.1</version>
+    <relativePath/>
+  </parent>
+  <groupId>com.nigson</groupId>
+  <artifactId>nigson-backend</artifactId>
+  <version>0.1.0</version>
+  <packaging>pom</packaging>
+  <name>Nigson backend</name>
+  <properties>
+    <java.version>25</java.version>
+    <spring-modulith.version>2.1.1</spring-modulith.version>
+    <maven-enforcer.version>3.6.2</maven-enforcer.version>
+    <maven-dependency.version>3.8.1</maven-dependency.version>
+    <commons-text.version>1.15.0</commons-text.version>
+    <!-- Same-line security patches; rationale and compatibility evidence in DEPENDENCY_LOCK.md. -->
+    <tomcat.version>11.0.26</tomcat.version>
+    <jackson-bom.version>3.1.7</jackson-bom.version>
+    <jackson-2-bom.version>2.21.7</jackson-2-bom.version>
+    <project.build.outputTimestamp>2026-10-04T00:00:00Z</project.build.outputTimestamp>
+  </properties>
+  <modules>
+    <module>shared/common-security</module>
+    <module>shared/common-observability</module>
+    <module>shared/common-events</module>
+    <module>shared/common-problem</module>
+    <module>services/commerce</module>
+    <module>services/experience</module>
+    <module>services/integration</module>
+  </modules>
+  <dependencyManagement>
+    <dependencies>
+      <!-- Not managed by Boot: converge Liquibase and OpenCSV on Liquibase's version. -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>${commons-text.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.modulith</groupId>
+        <artifactId>spring-modulith-bom</artifactId>
+        <version>${spring-modulith.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer.version}</version>
+        <executions>
+          <execution>
+            <id>reproducible-toolchain</id>
+            <goals><goal>enforce</goal></goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion><version>[25.0.2,25.0.3)</version></requireJavaVersion>
+                <requireJavaVendor><includes><include>Oracle Corporation</include></includes></requireJavaVendor>
+                <requireMavenVersion><version>[3.9.11,3.9.12)</version></requireMavenVersion>
+                <requireReleaseDeps><onlyWhenRelease>false</onlyWhenRelease><failWhenParentIsSnapshot>false</failWhenParentIsSnapshot></requireReleaseDeps>
+                <dependencyConvergence/>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${maven-dependency.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
