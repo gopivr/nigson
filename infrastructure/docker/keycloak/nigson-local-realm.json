@@ -1,0 +1,309 @@
+{
+  "realm": "nigson-local",
+  "id": "nigson-local",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "CUSTOMER"
+      },
+      {
+        "name": "CONTENT_EDITOR"
+      },
+      {
+        "name": "CONTENT_PUBLISHER"
+      },
+      {
+        "name": "SALES"
+      },
+      {
+        "name": "OPERATIONS"
+      },
+      {
+        "name": "FINANCE"
+      },
+      {
+        "name": "ANALYST"
+      },
+      {
+        "name": "ADMIN"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "nigson-bff",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "mock-bff-local",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8081/login/oauth2/code/keycloak"
+      ],
+      "webOrigins": [
+        "http://localhost:8081"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    },
+    {
+      "clientId": "nigson-commerce",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "mock-commerce-local",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    },
+    {
+      "clientId": "nigson-experience",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "mock-experience-local",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    },
+    {
+      "clientId": "nigson-integration",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "mock-integration-local",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    }
+  ],
+  "users": [
+    {
+      "id": "f2c479e6-9c5a-5f06-aaae-2f429631f436",
+      "username": "retailA",
+      "email": "retaila@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "CUSTOMER"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "0bcc4c05-c2e7-5fcc-a059-c1cf5319e3c3",
+      "username": "retailB",
+      "email": "retailb@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "CUSTOMER"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "02b6b604-0298-5f0d-8ad1-0d1b8df23a8c",
+      "username": "orgA-owner",
+      "email": "orga-owner@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "CUSTOMER"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "2bcdd805-d834-5230-8a6b-6f5242c2a002",
+      "username": "orgA-buyer",
+      "email": "orga-buyer@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "CUSTOMER"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "0c36198a-d71a-53bb-8b40-ffd7f9ad1897",
+      "username": "orgB-buyer",
+      "email": "orgb-buyer@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "CUSTOMER"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "5a68ecda-64ac-511f-acf8-a6c21c53413e",
+      "username": "editor",
+      "email": "editor@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "CONTENT_EDITOR"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "f0082abe-2b21-54af-8c48-fc8e1a226831",
+      "username": "publisher",
+      "email": "publisher@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "CONTENT_PUBLISHER"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "20f23ef1-2395-5c7e-abe7-00e07dcde379",
+      "username": "sales",
+      "email": "sales@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "SALES"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "ef88a0dc-27c1-5ef9-b53e-a745d253d5cc",
+      "username": "financeA",
+      "email": "financea@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "FINANCE"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "77ce3d1a-b2f2-5edf-b4d4-12fef448a8b0",
+      "username": "financeB",
+      "email": "financeb@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "FINANCE"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "5cb1caac-6970-5ef9-99c6-8d3be9d2d793",
+      "username": "operations",
+      "email": "operations@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "OPERATIONS"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "3c2b8f13-37c3-5764-a6ea-f1085167acb4",
+      "username": "analyst",
+      "email": "analyst@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "ANALYST"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "id": "43c829a8-5ddc-5d8a-be64-557f8998c1a9",
+      "username": "admin",
+      "email": "admin@example.invalid",
+      "enabled": true,
+      "emailVerified": true,
+      "realmRoles": [
+        "ADMIN"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "mock-local-user",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

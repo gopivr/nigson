@@ -10,7 +10,12 @@ composition. Export the pinned Oracle JDK as JAVA_HOME; Maven rejects the defaul
 Java 17. AI requires uv 0.9.3 (override `UV` to its installed path), installs
 Python 3.12.12, and uses only the committed uv.lock. Caches are workspace-local.
 See DEPENDENCY_LOCK.md and task reports for executed evidence and limitations.
-The remaining commands below remain specified task outputs until their tasks
+FOUND-003 currently adds `make local-up`, `make local-down`, `make local-status`
+and `make local-config-check`, with real pinned vendor dependencies, local-only
+guards and repeatable infrastructure bootstrap. It remains IN_PROGRESS:
+`migrate`, `seed`, application Docker profiles and AI/vector support are unfinished.
+`local-up` currently proves infrastructure readiness only. The remaining commands
+below remain specified task outputs until their tasks
 are implemented; they are not current executable local/provider workflows.
 
 

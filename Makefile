@@ -1,4 +1,4 @@
-.PHONY: status-check build test verify java-build dependency-check ai-sync ai-build ai-test ai-lint
+.PHONY: status-check build test verify java-build dependency-check ai-sync ai-build ai-test ai-lint local-up local-down local-config-check local-status
 UV ?= uv
 PROFILE ?= core
 export MAVEN_USER_HOME := $(CURDIR)/.build/maven
@@ -39,3 +39,15 @@ ai-test: ai-sync
 ai-lint: ai-sync
 	$(UV_PROJECT_ENVIRONMENT)/bin/ruff check services/ai/src services/ai/tests
 	$(UV_PROJECT_ENVIRONMENT)/bin/mypy services/ai/src
+
+local-up:
+	python3 scripts/local/dependencies.py up
+
+local-down:
+	python3 scripts/local/dependencies.py down
+
+local-config-check:
+	python3 scripts/local/dependencies.py validate
+
+local-status:
+	python3 scripts/local/dependencies.py status

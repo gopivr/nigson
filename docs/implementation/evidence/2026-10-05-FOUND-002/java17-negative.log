@@ -1,7 +1,7 @@
 [INFO] Scanning for projects...
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Build Order:
-[INFO] 
+[INFO]
 [INFO] Nigson backend                                                     [pom]
 [INFO] common-security                                                    [jar]
 [INFO] common-observability                                               [jar]
@@ -10,19 +10,19 @@
 [INFO] commerce                                                           [jar]
 [INFO] experience                                                         [jar]
 [INFO] integration                                                        [jar]
-[INFO] 
+[INFO]
 [INFO] ---------------------< com.nigson:nigson-backend >----------------------
 [INFO] Building Nigson backend 0.1.0                                      [1/8]
 [INFO]   from pom.xml
 [INFO] --------------------------------[ pom ]---------------------------------
-[INFO] 
+[INFO]
 [INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ nigson-backend ---
 [INFO] Rule 2: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
 [INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
 [INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Summary for Nigson backend 0.1.0:
-[INFO] 
+[INFO]
 [INFO] Nigson backend ..................................... FAILURE [  0.150 s]
 [INFO] common-security .................................... SKIPPED
 [INFO] common-observability ............................... SKIPPED
@@ -37,15 +37,15 @@
 [INFO] Total time:  0.318 s
 [INFO] Finished at: 2026-10-05T07:51:16-04:00
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal org.apache.maven.plugins:maven-enforcer-plugin:3.6.2:enforce (reproducible-toolchain) on project nigson-backend: 
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-enforcer-plugin:3.6.2:enforce (reproducible-toolchain) on project nigson-backend:
 [ERROR] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion failed with message:
 [ERROR] Detected JDK /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home is version 17.0.14 which is not in the allowed range [25.0.2,25.0.3).
 [ERROR] Rule 1: org.apache.maven.enforcer.rules.RequireJavaVendor failed with message:
 [ERROR] Eclipse Adoptium is not an included Required Java Vendor (detected JDK: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home)
 [ERROR] -> [Help 1]
-[ERROR] 
+[ERROR]
 [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
 [ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
+[ERROR]
 [ERROR] For more information about the errors and possible solutions, please read the following articles:
 [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

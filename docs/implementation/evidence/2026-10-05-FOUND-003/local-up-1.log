@@ -1,0 +1,37 @@
+python3 scripts/local/dependencies.py up
+ Container nigson-local-identity-db-1  Running
+ Container nigson-local-mailpit-1  Running
+ Container nigson-local-localstack-1  Running
+ Container nigson-local-postgres-1  Running
+ Container nigson-local-keycloak-1  Running
+ Container nigson-local-identity-db-1  Waiting
+ Container nigson-local-identity-db-1  Healthy
+ Container nigson-local-keycloak-1  Waiting
+ Container nigson-local-localstack-1  Waiting
+ Container nigson-local-mailpit-1  Waiting
+ Container nigson-local-postgres-1  Waiting
+ Container nigson-local-identity-db-1  Waiting
+ Container nigson-local-identity-db-1  Healthy
+ Container nigson-local-mailpit-1  Healthy
+ Container nigson-local-postgres-1  Healthy
+ Container nigson-local-localstack-1  Healthy
+ Container nigson-local-keycloak-1  Healthy
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:91be0a4f-e8f0-43e7-87fa-c4b5f0af5d8c"
+}
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:09c2f991-c748-4e28-815a-a83d2aba132e"
+}
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:cabdfeb1-fc32-4120-842f-624087652f8d"
+}
+{
+    "Location": "/nigson-local-quarantine",
+    "BucketArn": "arn:aws:s3:::nigson-local-quarantine"
+}
+{
+    "Location": "/nigson-local-private",
+    "BucketArn": "arn:aws:s3:::nigson-local-private"
+}
+Real local Keycloak discovery ready; trust/session qualification is SEC-001
+Local infrastructure bootstrap applied; production/provider activation remains disabled
