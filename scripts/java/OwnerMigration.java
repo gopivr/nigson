@@ -14,6 +14,10 @@ public class OwnerMigration {
         if (!java.util.Set.of("local", "test").contains(required("APP_ENV"))) {
             throw new IllegalArgumentException("Foundation migration requires APP_ENV=local|test");
         }
+        String release = required("MIGRATION_RELEASE");
+        if (!release.matches("BP[1-5]")) {
+            throw new IllegalArgumentException("Migration release must be BP1..BP5");
+        }
         String owner = required("MIGRATION_OWNER");
         if (!java.util.Set.of("commerce", "experience", "integration", "ai").contains(owner)) {
             throw new IllegalArgumentException("Unsupported migration owner");
@@ -21,7 +25,11 @@ public class OwnerMigration {
         String url = required("MIGRATION_JDBC_URL");
         String expectedUrl = owner.equals("ai") ? "jdbc:postgresql://vector-db:5432/nigson_vector_test"
                 : "jdbc:postgresql://postgres:5432/nigson";
-        if (!url.equals(expectedUrl)) {
+        // The isolated catalog qualification uses the production topology: all
+        // four schemas in one pgvector-enabled PostgreSQL database.
+        boolean sharedAiTest = owner.equals("ai") && required("APP_ENV").equals("test")
+                && url.equals("jdbc:postgresql://postgres:5432/nigson");
+        if (!url.equals(expectedUrl) && !sharedAiTest) {
             throw new IllegalArgumentException("Refusing nonlocal migration target");
         }
         String username = "nigson_" + owner + "_migrator";
@@ -35,6 +43,24 @@ public class OwnerMigration {
             database.setDefaultSchemaName(owner);
             database.setLiquibaseSchemaName(owner);
             try (var migration = new Liquibase(changelog, resources, database)) {
+                migration.setChangeLogParameter("schema.release", release);
+                // Refuse a lower release than already deployed. Changelog is owner-local.
+                try (var statement = connection.prepareStatement("SELECT to_regclass(?::text)")) {
+                    statement.setString(1, owner + ".databasechangelog");
+                    try (var result = statement.executeQuery()) {
+                        result.next();
+                        if (result.getString(1) != null) {
+                            try (var version = connection.prepareStatement("SELECT count(*) FROM " + owner
+                                    + ".databasechangelog WHERE filename ~ ?")) {
+                                version.setString(1, "-bp[" + (Integer.parseInt(release.substring(2)) + 1) + "-9]-");
+                                try (var deployed = version.executeQuery()) {
+                                    deployed.next();
+                                    if (deployed.getInt(1) != 0) throw new IllegalStateException("Schema release downgrade refused");
+                                }
+                            }
+                        }
+                    }
+                }
                 migration.validate();
                 var contexts = new Contexts();
                 var labels = new LabelExpression();

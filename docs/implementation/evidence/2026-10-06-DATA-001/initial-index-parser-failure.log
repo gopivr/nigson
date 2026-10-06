@@ -1,0 +1,268 @@
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 215, in <module>
+    main()
+    ~~~~^^
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 183, in main
+    db.migrate(owner, phase)
+    ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 59, in migrate
+    output, error = docker('run', '--rm', '--network', self.network, '--read-only', '--tmpfs', '/tmp',
+                    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                          '-v', str(ROOT) + ':/app/source:ro', '-e', 'APP_ENV=test',
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+                          '-e', 'MIGRATION_PASSWORD=mock-' + owner + '-migration',
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                          'nigson/migration:local', expected=expected)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 25, in docker
+    raise AssertionError('Docker check failed: ' + ' '.join(args[:5]) + '\n' + result.stdout + result.stderr)
+AssertionError: Docker check failed: run --rm --network nigson-test-data-1f7161f2b6 --read-only
+No validation errors found.
+Running Changeset: commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform
+Running Changeset: commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform
+Running Changeset: commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform
+Running Changeset: commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform
+Running Changeset: commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform
+ERROR: Exception Details
+ERROR: Exception Primary Class:  PSQLException
+ERROR: Exception Primary Reason:  ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140
+ERROR: Exception Primary Source:  PostgreSQL 18.4 (Debian 18.4-1.pgdg12+1)
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 06, 2026 11:07:53 AM liquibase.changelog
+INFO: Creating database changelog table with name: commerce.databasechangelog
+Oct 06, 2026 11:07:53 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:07:53 AM liquibase.snapshot
+INFO: Creating snapshot
+Oct 06, 2026 11:07:53 AM liquibase.command
+INFO: Command execution complete
+Oct 06, 2026 11:07:53 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:07:53 AM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 06, 2026 11:07:53 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:07:54 AM liquibase.command
+INFO: Using deploymentId: 1284872798
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform ran successfully in 4ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 001-framework-sessions.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform ran successfully in 5ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform ran successfully in 12ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform ran successfully in 96ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform ran successfully in 37ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/022-bp1-constraints.yaml::commerce-20261006-014::nigson-platform ran successfully in 14ms
+Oct 06, 2026 11:07:54 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 06, 2026 11:07:54 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 06, 2026 11:07:54 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 06, 2026 11:07:54 AM liquibase.command
+INFO: Command execution complete
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:07:54 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 06, 2026 11:07:54 AM liquibase.command
+INFO: Using deploymentId: 1284872798
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform ran successfully in 3ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 001-framework-sessions.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform ran successfully in 6ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform ran successfully in 12ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+INFO: ChangeSet commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform ran successfully in 75ms
+Oct 06, 2026 11:07:54 AM liquibase.changelog
+SEVERE: ChangeSet commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform encountered an exception.
+liquibase.exception.DatabaseException: ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140 [Failed SQL: (0) CREATE UNIQUE INDEX payment_attempt_order_id_where_state_in_created_initia_cd47f4bc ON commerce.payment_attempt (order_id) WHERE state IN (CREATED,INITIATING,PENDING,UNKNOWN)]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:525)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:85)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:188)
+	at liquibase.executor.AbstractExecutor.execute(AbstractExecutor.java:148)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1198)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:860)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:127)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:71)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$0(ChangeLogIterator.java:133)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$1(ChangeLogIterator.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Scope.child(Scope.java:309)
+	at liquibase.Scope.child(Scope.java:313)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:91)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$1(AbstractUpdateCommandStep.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:120)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:100)
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:269)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:228)
+	at liquibase.command.CommandScope.execute(CommandScope.java:257)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:216)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1366)
+	at liquibase.Liquibase.update(Liquibase.java:205)
+	at liquibase.Liquibase.update(Liquibase.java:188)
+	at OwnerMigration.main(OwnerMigration.java:70)
+Caused by: org.postgresql.util.PSQLException: ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:327)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:517)
+	... 40 more
+
+Oct 06, 2026 11:07:54 AM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 06, 2026 11:07:54 AM liquibase.util
+INFO: Run:                          4
+Oct 06, 2026 11:07:54 AM liquibase.util
+INFO: Previously run:               0
+Oct 06, 2026 11:07:54 AM liquibase.util
+INFO: Filtered out:                 0
+Oct 06, 2026 11:07:54 AM liquibase.util
+INFO: -------------------------------
+Oct 06, 2026 11:07:54 AM liquibase.util
+INFO: Total change sets:            6
+Oct 06, 2026 11:07:54 AM liquibase.util
+INFO: Update summary generated
+Oct 06, 2026 11:07:54 AM liquibase.command
+INFO: Update command encountered an exception.
+Oct 06, 2026 11:07:54 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 06, 2026 11:07:54 AM liquibase.command
+INFO: Logging exception.
+Oct 06, 2026 11:07:54 AM liquibase.command
+INFO: Command execution complete
+Exception in thread "main" liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform:
+     Reason: liquibase.exception.DatabaseException: ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140 [Failed SQL: (0) CREATE UNIQUE INDEX payment_attempt_order_id_where_state_in_created_initia_cd47f4bc ON commerce.payment_attempt (order_id) WHERE state IN (CREATED,INITIATING,PENDING,UNKNOWN)]
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:325)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:228)
+	at liquibase.command.CommandScope.execute(CommandScope.java:257)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:216)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1366)
+	at liquibase.Liquibase.update(Liquibase.java:205)
+	at liquibase.Liquibase.update(Liquibase.java:188)
+	at OwnerMigration.main(OwnerMigration.java:70)
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform:
+     Reason: liquibase.exception.DatabaseException: ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140 [Failed SQL: (0) CREATE UNIQUE INDEX payment_attempt_order_id_where_state_in_created_initia_cd47f4bc ON commerce.payment_attempt (order_id) WHERE state IN (CREATED,INITIATING,PENDING,UNKNOWN)]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:155)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$1(AbstractUpdateCommandStep.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:120)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:100)
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:269)
+	... 12 more
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform:
+     Reason: liquibase.exception.DatabaseException: ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140 [Failed SQL: (0) CREATE UNIQUE INDEX payment_attempt_order_id_where_state_in_created_initia_cd47f4bc ON commerce.payment_attempt (order_id) WHERE state IN (CREATED,INITIATING,PENDING,UNKNOWN)]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:918)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:127)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:71)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$0(ChangeLogIterator.java:133)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$1(ChangeLogIterator.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Scope.child(Scope.java:309)
+	at liquibase.Scope.child(Scope.java:313)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:91)
+	... 20 more
+Caused by: liquibase.exception.DatabaseException: ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140 [Failed SQL: (0) CREATE UNIQUE INDEX payment_attempt_order_id_where_state_in_created_initia_cd47f4bc ON commerce.payment_attempt (order_id) WHERE state IN (CREATED,INITIATING,PENDING,UNKNOWN)]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:525)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:85)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:188)
+	at liquibase.executor.AbstractExecutor.execute(AbstractExecutor.java:148)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1198)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:860)
+	... 35 more
+Caused by: org.postgresql.util.PSQLException: ERROR: column "created" does not exist
+  Hint: Perhaps you meant to reference the column "payment_attempt.created_at" or the column "payment_attempt.created_by".
+  Position: 140
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:327)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:517)
+	... 40 more

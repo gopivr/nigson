@@ -1,0 +1,5 @@
+ALTER TABLE experience.lead_requested_item DROP CONSTRAINT lead_requested_item_lead_id_fk;
+
+ALTER TABLE experience.application_document DROP CONSTRAINT application_document_file_asset_id_fk;
+
+ALTER TABLE experience.application_document DROP CONSTRAINT application_document_application_id_fk;

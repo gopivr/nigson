@@ -70,9 +70,19 @@ class LocalIsolationTests(unittest.TestCase):
     def test_remote_migration_target_rejected(self):
         config = {"services": {"migrate-commerce": {"image": "nigson/migration:local",
             "build": {"context": str(ROOT), "dockerfile": "services/commerce/Dockerfile", "target": "migration"},
-            "environment": {"APP_ENV": "local", "MIGRATION_OWNER": "commerce", "MIGRATION_PASSWORD": "mock-only",
+            "environment": {"APP_ENV": "local", "MIGRATION_OWNER": "commerce", "MIGRATION_RELEASE": "BP1", "MIGRATION_PASSWORD": "mock-only",
                             "MIGRATION_JDBC_URL": "jdbc:postgresql://production.example.invalid/nigson"}}}}
         with self.assertRaises(ValueError):
+            local.validate_config(config)
+
+    def test_explicit_schema_gate_is_validated(self):
+        config = {"services": {"migrate-commerce": {"image": "nigson/migration:local",
+            "build": {"context": str(ROOT), "dockerfile": "services/commerce/Dockerfile", "target": "migration"},
+            "environment": {"APP_ENV": "test", "MIGRATION_OWNER": "commerce", "MIGRATION_PASSWORD": "mock-only",
+                            "MIGRATION_JDBC_URL": "jdbc:postgresql://postgres:5432/nigson", "MIGRATION_RELEASE": "BP1"}}}}
+        self.assertEqual(local.validate_config(config), config)
+        config["services"]["migrate-commerce"]["environment"]["MIGRATION_RELEASE"] = "BP0"
+        with self.assertRaisesRegex(ValueError, "deployment gate"):
             local.validate_config(config)
 
     def test_wrong_owner_role_rejected(self):

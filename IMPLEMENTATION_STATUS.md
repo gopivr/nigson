@@ -1,14 +1,14 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:5 October2026
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:6 October2026
 
 ## Current Phase
 
-EP00 — Repository/build/local mocks; BP1 foundation.
+EP01 — Owner schemas and reliable platform primitives; BP1 foundation.
 
 ## Current Task
 
-FOUND-003 — DONE. Owner bootstrap migrations, guarded migrate/seed, Java/optional-vector application profiles and complete isolated cold-start acceptance passed. No next task started.
+DATA-001 — IN_PROGRESS; all acceptance checks passed, recording the implementation commit before DONE. All 122 tables, cumulative gates, owner/audit roles, actual catalog/upgrade/constraint/rollback tests and cold-start regression are complete.
 
 ## Completed Tasks
 
@@ -16,13 +16,14 @@ FOUND-003 — DONE. Owner bootstrap migrations, guarded migrate/seed, Java/optio
 - Report: docs/implementation/2026-10-05-FOUND-001.md
 - [x] FOUND-002 — DONE; AC-FOUND-002 evidence in docs/implementation/2026-10-05-FOUND-002.md; implementation commit 12a6c932be0b51517dd2c99a67e155a08206b226.
 
+- [x] FOUND-003 — DONE; AC-FOUND-003 / TEST-LOCAL-COLD-START PASS, two complete empty-volume setup passes, owner migrations/drift checks, real identity fixtures, non-root apps/vector, security/outage/cleanup and original local-state preservation. Implementation 9c5e57ee7237aaed360a5c18e06ad3b64074e837. See docs/implementation/2026-10-05-FOUND-003.md.
+
 ## In Progress
 
-- [x] FOUND-003 — DONE; AC-FOUND-003 / TEST-LOCAL-COLD-START PASS, two complete empty-volume setup passes, owner migrations/drift checks, real identity fixtures, non-root apps/vector, security/outage/cleanup and original local-state preservation. Implementation 9c5e57ee7237aaed360a5c18e06ad3b64074e837. See docs/implementation/2026-10-05-FOUND-003.md.
+- [ ] DATA-001 — Acceptance verified; implementation commit pending.
 
 ## Pending
 
-- [ ] DATA-001 — Implement owner roles, migrations and all declared phase schemas (EP01)
 - [ ] PLAT-001 — Implement transactional outbox, consumers and idempotency primitives (EP01)
 - [ ] PLAT-002 — Implement errors, validation, audit and observability foundation (EP01)
 - [ ] SEC-001 — Configure identity realms and token/session trust (EP02)
@@ -90,11 +91,11 @@ FOUND-003 — DONE. Owner bootstrap migrations, guarded migrate/seed, Java/optio
 
 ## Build Status
 
-PASS — final FOUND-003 `make verify PROFILE=ai`, 2026-10-06 01:47 UTC: pinned Java reactor and locked Python artifacts, dependency graph/hash checks, Ruff/mypy. All application/migration Docker images built and exercised. Repeated application hashes match refreshed evidence. No domain/release qualification inferred.
+PASS — DATA-001 pinned `make verify PROFILE=ai`, repeated Java/Python artifact hashes, dependency lock checks, Ruff/mypy. Migration and application Docker images exercised; Terraform database SQL fmt/validate/render and repeat provisioning pass. No production deployment or provider qualification inferred.
 
 ## Test Status
 
-PASS — 6 Java tests, 4 Python tests, 25 repository/local command contracts; complete TEST-LOCAL-COLD-START including two setup passes, all owner migration/denial/session/vector/JWT/drift/outage/credential/production/cleanup checks; legacy role upgrade preserves OIDs/data; real fixture role drift denied; five production runtime guards. Genuine provider/model, business contracts/races, production deployment/load/restore/image advisory qualification NOT_RUN under their pending tasks.
+PASS — 6 Java, 4 AI, 29 repository/local/catalog contracts; TEST-DATA-MIGRATE/OWNERSHIP compares 122-table fresh BP5 and FOUND-003/BP1–BP5 upgrades/repeats, exact columns/defaults/checks/indexes/FKs and privileges. Commerce negative/duplicate constraints, actual four-owner Liquibase rollback/reapply and populated-evidence refusal pass. Complete two-pass TEST-LOCAL-COLD-START passes with original local state preserved. Live providers, production infrastructure and domain/API/release tests remain NOT_RUN under pending tasks.
 
 ## Last Successful Commit
 
@@ -106,7 +107,7 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-Foundation acceptance complete. Business tables/APIs and stateful provider mocks remain unimplemented; DATA-001 and MOCK-001 remain PENDING and are now dependency-ready. Local seed profile covers genuine identity fixtures only; domain fixtures await owned tables. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Full audience/scopes/BFF/MFA/production Keycloak is SEC-001/IDP-001; exact SNS filters/consumer IAM is PLAT-001. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
+Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs and stateful provider mocks remain task-owned pending work. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Full audience/scopes/BFF/MFA/production Keycloak is SEC-001/IDP-001; exact SNS filters/consumer IAM is PLAT-001. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
@@ -114,10 +115,12 @@ Credentials absent does not block offline implementation: MOCK-001 must create s
 
 ## Next Recommended Task
 
-DATA-001 — PENDING, dependency-ready now that FOUND-003 is DONE. Read all declared owner schemas/constraints/transaction rules, extend the accepted masters, retain existing framework session tables, then implement/verify all phase schemas. MOCK-001 is also dependency-ready and remains PENDING; offline HTTP mocks/adapters require no live credentials. Preserve the five running nigson-local vendor containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
+PLAT-001 — dependency-ready after DATA-001 commit/DONE; implement durable owner outbox, processed-event dedup and request-hash/idempotency replay with short leases and failure/race tests. MOCK-001 remains PENDING and is also dependency-ready; real stateful HTTP mock implementation requires no live credentials. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
 
 ## Session Evidence / Protocol
 
 FOUND-001/002 evidence: docs/implementation/2026-10-05-FOUND-001.md and docs/implementation/2026-10-05-FOUND-002.md. FOUND-002 retains initial convergence/security/sandbox failures and successful remedies. Original blueprint remains unchanged. Initial normal-sandbox git init and Maven Central DNS failed; authorized escalated operations succeeded. Copied specification has original EOF blank lines; diff whitespace validation uses core.whitespace=-blank-at-eof to preserve source bytes.
 
 FOUND-003 final evidence/report: docs/implementation/2026-10-05-FOUND-003.md and docs/implementation/evidence/2026-10-05-FOUND-003/. All initial failures and fixes retained. Implementation acceptance commit 9c5e57ee7237aaed360a5c18e06ad3b64074e837.
+
+DATA-001 report: docs/implementation/2026-10-06-DATA-001.md; accepted schema, previous-version/data preservation, critical constraints, rollback/reapply and cold-start evidence: docs/implementation/evidence/2026-10-06-DATA-001/. Initial index-parser, mount ordering and rollback statement-splitting failures are preserved with fixes.

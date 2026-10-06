@@ -2,3 +2,6 @@ databaseChangeLog:
   - include:
       file: 000-schema-and-roles.yaml
       relativeToChangelogFile: true
+  - include:
+      file: releases/${schema.release}.yaml
+      relativeToChangelogFile: true

@@ -1,0 +1,10 @@
+{
+  "databaseChangeLog": [
+    {
+      "include": {
+        "file": "BP1.yaml",
+        "relativeToChangelogFile": true
+      }
+    }
+  ]
+}

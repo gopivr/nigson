@@ -67,3 +67,18 @@ cold-start:
 	python3 scripts/local/cold_start.py
 command-surface-check:
 	python3 -m unittest discover -s tests/contract -v
+
+.PHONY: schema-check database-check
+schema-check:
+	python3 scripts/database/generate.py --check
+
+database-check: schema-check
+	terraform -chdir=infrastructure/terraform/database init -backend=false
+	terraform -chdir=infrastructure/terraform/database validate
+	terraform -chdir=infrastructure/terraform/database apply -auto-approve
+	docker build --file services/commerce/Dockerfile --target migration --tag nigson/migration:local .
+	ENV=test python3 scripts/database/verify.py
+
+.PHONY: database-rollback-check
+database-rollback-check:
+	ENV=test python3 scripts/database/rollback_check.py

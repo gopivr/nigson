@@ -1,0 +1,9 @@
+ALTER TABLE experience.inbound_message DROP CONSTRAINT inbound_message_lead_id_fk;
+
+ALTER TABLE experience.destination_verification DROP CONSTRAINT destination_verification_destination_id_fk;
+
+ALTER TABLE experience.lead_activity DROP CONSTRAINT lead_activity_lead_id_fk;
+
+ALTER TABLE experience.content_revision DROP CONSTRAINT content_revision_content_item_id_fk;
+
+ALTER TABLE experience.content_item DROP CONSTRAINT content_item_current_published_revision_id_fk;

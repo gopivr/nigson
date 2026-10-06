@@ -1,0 +1,22 @@
+{
+  "databaseChangeLog": [
+    {
+      "include": {
+        "file": "BP1.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../030-bp2-domain-tables.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../031-bp2-indexes.yaml",
+        "relativeToChangelogFile": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+DROP INDEX commerce.product_recommendation_related_product_id_fk_ix;
+
+DROP INDEX commerce.product_recommendation_product_id_fk_ix;
+
+ALTER TABLE commerce.product_recommendation DROP CONSTRAINT product_recommendation_product_id_related_product_id_kind_uq;

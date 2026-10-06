@@ -1,0 +1,91 @@
+{
+  "containers": {
+    "c8c88fb5eda956c1430eff6912863ed9f54b464d5352e592a5e575be4b970787": {
+      "started": "2026-10-05T12:02:40.558330376Z",
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "/Users/gopiravi/workspace/nigson/infrastructure/docker/keycloak/nigson-local-realm.json",
+          "Destination": "/opt/keycloak/data/import/nigson-local-realm.json",
+          "Mode": "ro",
+          "RW": false,
+          "Propagation": "rprivate"
+        }
+      ]
+    },
+    "28b4e658d9b5d03f802c3c10c49ed34ba895acff6b09018530db81e0e0d3cddf": {
+      "started": "2026-10-05T12:02:34.876592179Z",
+      "mounts": [
+        {
+          "Type": "bind",
+          "Source": "/host_mnt/Users/gopiravi/workspace/nigson/infrastructure/docker/postgres/10-local-bootstrap.sql",
+          "Destination": "/docker-entrypoint-initdb.d/10-local-bootstrap.sql",
+          "Mode": "ro",
+          "RW": false,
+          "Propagation": "rprivate"
+        },
+        {
+          "Type": "volume",
+          "Name": "nigson-local_nigson-postgres",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-postgres/_data",
+          "Destination": "/var/lib/postgresql",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        }
+      ]
+    },
+    "edd1913f1dc7b69969e8147e84b86cc52c3f181e1f85bcccb020674c9b2fdb25": {
+      "started": "2026-10-05T12:02:34.865824763Z",
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "nigson-local_nigson-identity",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-identity/_data",
+          "Destination": "/var/lib/postgresql",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        }
+      ]
+    },
+    "4d0cbb2f7c669683042f1a8a45fc5c3b48bd4d396085b2fed0c7601a9f3f6649": {
+      "started": "2026-10-05T12:02:34.868958221Z",
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "nigson-local_nigson-localstack",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-localstack/_data",
+          "Destination": "/var/lib/localstack",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        }
+      ]
+    },
+    "d0ef36ecae16f6fe573c024e078759d09bda99e82047098d24cb861fda152bb6": {
+      "started": "2026-10-05T12:02:34.867275763Z",
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "nigson-local_nigson-mailpit",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-mailpit/_data",
+          "Destination": "/data",
+          "Driver": "local",
+          "Mode": "rw",
+          "RW": true,
+          "Propagation": ""
+        }
+      ]
+    }
+  },
+  "volumes": [
+    "nigson-local_nigson-identity",
+    "nigson-local_nigson-localstack",
+    "nigson-local_nigson-mailpit",
+    "nigson-local_nigson-postgres"
+  ]
+}

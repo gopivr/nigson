@@ -185,4 +185,44 @@ CREATE SCHEMA IF NOT EXISTS ai AUTHORIZATION nigson_ai_migrator;
 ALTER SCHEMA ai OWNER TO nigson_ai_migrator;
 REVOKE ALL ON SCHEMA ai FROM PUBLIC;
 GRANT USAGE ON SCHEMA ai TO nigson_ai_app;
+DO $bootstrap$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'nigson_commerce_audit') THEN
+    CREATE ROLE nigson_commerce_audit NOLOGIN;
+  END IF;
+END
+$bootstrap$;
+ALTER ROLE nigson_commerce_audit NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+ALTER ROLE nigson_commerce_audit SET search_path = commerce;
+GRANT USAGE ON SCHEMA commerce TO nigson_commerce_audit;
+DO $bootstrap$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'nigson_experience_audit') THEN
+    CREATE ROLE nigson_experience_audit NOLOGIN;
+  END IF;
+END
+$bootstrap$;
+ALTER ROLE nigson_experience_audit NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+ALTER ROLE nigson_experience_audit SET search_path = experience;
+GRANT USAGE ON SCHEMA experience TO nigson_experience_audit;
+DO $bootstrap$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'nigson_integration_audit') THEN
+    CREATE ROLE nigson_integration_audit NOLOGIN;
+  END IF;
+END
+$bootstrap$;
+ALTER ROLE nigson_integration_audit NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+ALTER ROLE nigson_integration_audit SET search_path = integration;
+GRANT USAGE ON SCHEMA integration TO nigson_integration_audit;
+DO $bootstrap$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'nigson_ai_audit') THEN
+    CREATE ROLE nigson_ai_audit NOLOGIN;
+  END IF;
+END
+$bootstrap$;
+ALTER ROLE nigson_ai_audit NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+ALTER ROLE nigson_ai_audit SET search_path = ai;
+GRANT USAGE ON SCHEMA ai TO nigson_ai_audit;
 COMMIT;

@@ -1,0 +1,15 @@
+{
+  "test": "TEST-DATA-CONSTRAINTS",
+  "result": "PASS",
+  "database": "nigson-test-data-a586a27f61-fresh",
+  "checks": [
+    "NULL-aware active-cart uniqueness",
+    "product JSON object shape",
+    "stock nonnegative/available balance and SKU/location uniqueness",
+    "order arithmetic/refund caps",
+    "UNKNOWN payment attempt prevents second payable attempt",
+    "historical FAILED attempt permitted",
+    "payment nonnegative amount",
+    "owner FK delete RESTRICT"
+  ]
+}

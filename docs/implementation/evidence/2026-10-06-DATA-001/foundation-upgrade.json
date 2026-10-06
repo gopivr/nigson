@@ -1,0 +1,12 @@
+{
+  "test": "TEST-DATA-PREVIOUS-VERSION",
+  "result": "PASS",
+  "source_commit": "9c5e57ee7237aaed360a5c18e06ad3b64074e837",
+  "checks": [
+    "Exact accepted FOUND-003 masters applied",
+    "Foundation to DATA-001 BP1 to BP5 upgrades pass",
+    "Existing framework session and attribute rows preserved",
+    "Full 122-table inventory after upgrade",
+    "Original local state preserved"
+  ]
+}

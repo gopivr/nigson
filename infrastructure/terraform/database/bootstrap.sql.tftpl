@@ -1,0 +1,54 @@
+-- DATA-001. Run with psql -X -v ON_ERROR_STOP=1 using the infrastructure identity.
+-- Supply each nigson_<owner>_{migrator,app}_password psql variable from Secrets Manager.
+BEGIN;
+DO $$ BEGIN
+  IF current_database() <> '${database_name}' OR current_setting('server_version_num')::int NOT BETWEEN 180000 AND 189999 THEN
+    RAISE EXCEPTION 'Expected configured PostgreSQL 18 domain database';
+  END IF;
+END $$;
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+%{ for owner in owners ~}
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='nigson_${owner}_migrator') THEN
+    CREATE ROLE nigson_${owner}_migrator LOGIN;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='nigson_${owner}_app') THEN
+    CREATE ROLE nigson_${owner}_app LOGIN;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='nigson_${owner}_audit') THEN
+    CREATE ROLE nigson_${owner}_audit NOLOGIN;
+  END IF;
+END $$;
+ALTER ROLE nigson_${owner}_migrator NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+ALTER ROLE nigson_${owner}_app NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+ALTER ROLE nigson_${owner}_audit NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+ALTER ROLE nigson_${owner}_migrator SET search_path=${owner};
+ALTER ROLE nigson_${owner}_app SET search_path=${owner};
+ALTER ROLE nigson_${owner}_audit SET search_path=${owner};
+SELECT format('ALTER ROLE nigson_${owner}_migrator PASSWORD %L', :'nigson_${owner}_migrator_password') \gexec
+SELECT format('ALTER ROLE nigson_${owner}_app PASSWORD %L', :'nigson_${owner}_app_password') \gexec
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_namespace WHERE nspname='${owner}' AND pg_get_userbyid(nspowner)<>'nigson_${owner}_migrator') THEN
+    RAISE EXCEPTION 'Unexpected schema owner: ${owner}';
+  END IF;
+END $$;
+CREATE SCHEMA IF NOT EXISTS ${owner} AUTHORIZATION nigson_${owner}_migrator;
+REVOKE ALL ON SCHEMA ${owner} FROM PUBLIC;
+REVOKE ALL ON SCHEMA ${owner} FROM nigson_${owner}_app,nigson_${owner}_audit;
+GRANT USAGE ON SCHEMA ${owner} TO nigson_${owner}_app,nigson_${owner}_audit;
+
+%{ endfor ~}
+%{ for owner in owners ~}
+%{ for other in owners ~}
+%{ if owner != other ~}
+REVOKE ALL ON SCHEMA ${owner} FROM nigson_${other}_app,nigson_${other}_migrator,nigson_${other}_audit;
+%{ endif ~}
+%{ endfor ~}
+%{ endfor ~}
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA ai;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname='vector' AND extversion='0.8.2' AND extnamespace='ai'::regnamespace) THEN
+    RAISE EXCEPTION 'Expected pgvector 0.8.2 installed in ai';
+  END IF;
+END $$;
+COMMIT;

@@ -1,0 +1,25 @@
+DROP INDEX experience.upload_session_claimed_application_id_fk_ix;
+
+DROP INDEX experience.upload_session_expires_at_ix;
+
+ALTER TABLE experience.upload_session DROP CONSTRAINT upload_session_token_hash_uq;
+
+ALTER TABLE experience.campaign DROP CONSTRAINT campaign_code_uq;
+
+DROP INDEX experience.career_application_cv_file_id_fk_ix;
+
+DROP INDEX experience.career_application_opportunity_id_fk_ix;
+
+DROP INDEX experience.career_application_retention_until_ix;
+
+DROP INDEX experience.career_application_opportunity_id_state_ix;
+
+ALTER TABLE experience.career_opportunity DROP CONSTRAINT career_opportunity_slug_uq;
+
+ALTER TABLE experience.newsletter_subscription DROP CONSTRAINT newsletter_subscription_unsubscribe_token_hash_uq;
+
+ALTER TABLE experience.newsletter_subscription DROP CONSTRAINT newsletter_subscription_email_hash_uq;
+
+DROP INDEX experience.review_party_id_order_line_id_uq;
+
+DROP INDEX experience.review_product_id_state_created_at_ix;

@@ -1,0 +1,3 @@
+ALTER TABLE commerce.abandoned_cart_candidate DROP CONSTRAINT abandoned_cart_candidate_party_id_fk;
+
+ALTER TABLE commerce.abandoned_cart_candidate DROP CONSTRAINT abandoned_cart_candidate_cart_id_fk;

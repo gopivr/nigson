@@ -1,0 +1,44 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "ai-20261006-013",
+        "author": "nigson-platform",
+        "logicalFilePath": "ai/061-bp5-indexes.yaml",
+        "preConditions": [
+          {
+            "onFail": "HALT"
+          },
+          {
+            "dbms": {
+              "type": "postgresql"
+            }
+          },
+          {
+            "sqlCheck": {
+              "expectedResult": "1",
+              "sql": "SELECT CASE WHEN current_user='nigson_ai_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 AND EXISTS (SELECT 1 FROM pg_extension WHERE extname='vector' AND extversion='0.8.2' AND extnamespace='ai'::regnamespace) THEN 1 ELSE 0 END"
+            }
+          }
+        ],
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "061-bp5-indexes.sql",
+              "relativeToChangelogFile": true
+            }
+          }
+        ],
+        "rollback": [
+          {
+            "sqlFile": {
+              "path": "061-bp5-indexes-rollback.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

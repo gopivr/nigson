@@ -108,6 +108,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-local}
       MIGRATION_OWNER: commerce
+      MIGRATION_RELEASE: ${SCHEMA_RELEASE:-BP1}
       MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
       MIGRATION_PASSWORD: ${COMMERCE_MIGRATION_PASSWORD:?Missing COMMERCE_MIGRATION_PASSWORD}
     read_only: true
@@ -150,6 +151,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-local}
       MIGRATION_OWNER: experience
+      MIGRATION_RELEASE: ${SCHEMA_RELEASE:-BP1}
       MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
       MIGRATION_PASSWORD: ${EXPERIENCE_MIGRATION_PASSWORD:?Missing EXPERIENCE_MIGRATION_PASSWORD}
     read_only: true
@@ -192,6 +194,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-local}
       MIGRATION_OWNER: integration
+      MIGRATION_RELEASE: ${SCHEMA_RELEASE:-BP1}
       MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
       MIGRATION_PASSWORD: ${INTEGRATION_MIGRATION_PASSWORD:?Missing INTEGRATION_MIGRATION_PASSWORD}
     read_only: true
@@ -234,6 +237,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-local}
       MIGRATION_OWNER: ai
+      MIGRATION_RELEASE: ${SCHEMA_RELEASE:-BP1}
       MIGRATION_JDBC_URL: jdbc:postgresql://vector-db:5432/nigson_vector_test
       MIGRATION_PASSWORD: ${AI_MIGRATION_PASSWORD:?Missing AI_MIGRATION_PASSWORD}
     read_only: true

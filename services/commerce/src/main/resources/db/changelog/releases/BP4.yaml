@@ -1,0 +1,28 @@
+{
+  "databaseChangeLog": [
+    {
+      "include": {
+        "file": "BP3.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../050-bp4-domain-tables.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../051-bp4-indexes.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../052-bp4-constraints.yaml",
+        "relativeToChangelogFile": true
+      }
+    }
+  ]
+}

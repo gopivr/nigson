@@ -1,0 +1,45 @@
+DROP INDEX integration.message_receipt_job_id_fk_ix;
+
+DROP INDEX integration.message_receipt_job_id_received_at_ix;
+
+ALTER TABLE integration.message_receipt DROP CONSTRAINT message_receipt_provider_provider_message_id_event_hash_uq;
+
+DROP INDEX integration.carrier_booking_state_next_poll_at_ix;
+
+ALTER TABLE integration.carrier_booking DROP CONSTRAINT carrier_booking_business_key_uq;
+
+ALTER TABLE integration.carrier_booking DROP CONSTRAINT carrier_booking_shipment_id_provider_uq;
+
+ALTER TABLE integration.feature_configuration DROP CONSTRAINT feature_configuration_key_revision_uq;
+
+DROP INDEX integration.audit_record_actor_subject_occurred_at_ix;
+
+DROP INDEX integration.audit_record_resource_type_resource_id_occurred_at_ix;
+
+DROP INDEX integration.idempotency_record_expires_at_ix;
+
+ALTER TABLE integration.idempotency_record DROP CONSTRAINT idempotency_record_principal_key_operation_request_key_uq;
+
+ALTER TABLE integration.processed_event DROP CONSTRAINT processed_event_consumer_event_id_uq;
+
+DROP INDEX integration.outbox_event_state_next_attempt_at_ix;
+
+ALTER TABLE integration.outbox_event DROP CONSTRAINT outbox_event_event_id_uq;
+
+ALTER TABLE integration.provider_cursor DROP CONSTRAINT provider_cursor_provider_job_kind_uq;
+
+DROP INDEX integration.integration_job_kind_state_next_attempt_at_ix;
+
+ALTER TABLE integration.integration_job DROP CONSTRAINT integration_job_business_key_uq;
+
+DROP INDEX integration.notification_attempt_job_id_fk_ix;
+
+DROP INDEX integration.notification_attempt_provider_message_id_ix;
+
+ALTER TABLE integration.notification_attempt DROP CONSTRAINT notification_attempt_job_id_attempt_number_uq;
+
+DROP INDEX integration.notification_job_state_next_attempt_at_ix;
+
+ALTER TABLE integration.notification_job DROP CONSTRAINT notification_job_business_key_uq;
+
+ALTER TABLE integration.notification_template DROP CONSTRAINT notification_template_code_revision_locale_channel_uq;

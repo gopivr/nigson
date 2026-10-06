@@ -1,0 +1,71 @@
+No validation errors found.
+Running Changeset: experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform
+Liquibase: Update has been successful. Rows affected: 0
+Owner migration verified: experience; applied=1
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Creating database changelog table with name: experience.databasechangelog
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 06, 2026 11:20:23 AM liquibase.snapshot
+INFO: Creating snapshot
+Oct 06, 2026 11:20:23 AM liquibase.command
+INFO: Command execution complete
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 06, 2026 11:20:23 AM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 06, 2026 11:20:23 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 06, 2026 11:20:23 AM liquibase.command
+INFO: Using deploymentId: 1285622556
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: ChangeSet experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform ran successfully in 7ms
+Oct 06, 2026 11:20:23 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 06, 2026 11:20:23 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 06, 2026 11:20:23 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 06, 2026 11:20:23 AM liquibase.command
+INFO: Command execution complete
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 06, 2026 11:20:23 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 06, 2026 11:20:23 AM liquibase.command
+INFO: Using deploymentId: 1285622556
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: ChangeSet experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform ran successfully in 9ms
+Oct 06, 2026 11:20:23 AM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 06, 2026 11:20:23 AM liquibase.util
+INFO: Run:                          1
+Oct 06, 2026 11:20:23 AM liquibase.util
+INFO: Previously run:               0
+Oct 06, 2026 11:20:23 AM liquibase.util
+INFO: Filtered out:                 0
+Oct 06, 2026 11:20:23 AM liquibase.util
+INFO: -------------------------------
+Oct 06, 2026 11:20:23 AM liquibase.util
+INFO: Total change sets:            1
+Oct 06, 2026 11:20:23 AM liquibase.util
+INFO: Update summary generated
+Oct 06, 2026 11:20:23 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 06, 2026 11:20:23 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 06, 2026 11:20:23 AM liquibase.command
+INFO: Command execution complete
+Oct 06, 2026 11:20:23 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog

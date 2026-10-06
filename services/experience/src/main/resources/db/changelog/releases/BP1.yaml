@@ -1,0 +1,28 @@
+{
+  "databaseChangeLog": [
+    {
+      "include": {
+        "file": "../010-bp1-platform-tables.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../020-bp1-domain-tables.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../021-bp1-indexes.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../022-bp1-constraints.yaml",
+        "relativeToChangelogFile": true
+      }
+    }
+  ]
+}

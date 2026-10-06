@@ -214,3 +214,24 @@ Scripts use strict shell error handling, quote paths/variables, bounded readines
 | make provider-scenario PROVIDER=<name> SCENARIO=<fixture> | Bounded local fixture transition/callback; no arbitrary external URL. |
 | make keycloak-config-check ENV=<env> | Realm/client/audience/MFA/hostname/admin/prod profile validation. |
 | make provider-live-check ENV=stage | Explicit genuine sandbox credentials/account/sender/route smoke; record results honestly. |
+
+### Schema release gates
+
+`make migrate ENV=local SCHEMA_RELEASE=BP1` installs the launch schema. BP2–BP5
+are cumulative explicit deployment gates; use `PROFILE=ai` to migrate the optional
+local vector database. AI business/platform tables start only at BP5. A lower gate
+than already applied is refused; rerunning the same gate validates checksums and
+has no pending changes. Do not edit applied SQL or clear checksums.
+
+`make schema-check` verifies checked-in catalog artifacts. `make database-check`
+renders/validates the Terraform provisioning SQL, builds the migration image,
+and qualifies all four schemas on one isolated PostgreSQL 18 / pgvector database.
+It uses no published ports or provider calls and preserves `nigson-local` state.
+The production database provisioning module is described in
+`infrastructure/terraform/database/README.md`; RDS/ECS deployment remains INFRA-001.
+
+With the pinned `JAVA_HOME`, run `make database-rollback-check` after the build
+and database checks. It compiles a test-only Liquibase probe using the locked local
+JARs, verifies empty additive rollback and BP5 reapply for every owner, and verifies
+that populated audit/platform tables refuse rollback before any drop. The normal
+migration launcher remains forward-only; this command targets fresh test containers.

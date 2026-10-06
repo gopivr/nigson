@@ -1,0 +1,3 @@
+ALTER TABLE integration.message_receipt DROP CONSTRAINT message_receipt_job_id_fk;
+
+ALTER TABLE integration.notification_attempt DROP CONSTRAINT notification_attempt_job_id_fk;

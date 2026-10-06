@@ -1,0 +1,7 @@
+ALTER TABLE experience.upload_session DROP CONSTRAINT upload_session_claimed_application_id_fk;
+
+ALTER TABLE experience.career_application DROP CONSTRAINT career_application_cv_file_id_fk;
+
+ALTER TABLE experience.career_application DROP CONSTRAINT career_application_opportunity_id_fk;
+
+ALTER TABLE experience.file_asset DROP CONSTRAINT file_asset_upload_session_id_fk;

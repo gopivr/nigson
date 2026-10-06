@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 215, in <module>
+    assert os.environ.get('ENV', 'test') == 'test', 'Qualification requires ENV=test'
+    ^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 208, in main
+    sid = str(uuid.uuid4())
+           ~~^^^^^^^^^^^^^^
+AssertionError: Original nigson-local state changed

@@ -1,0 +1,69 @@
+DROP INDEX experience.inbound_message_lead_id_fk_ix;
+
+DROP INDEX experience.inbound_message_retention_until_ix;
+
+ALTER TABLE experience.inbound_message DROP CONSTRAINT inbound_message_provider_provider_message_id_uq;
+
+DROP INDEX experience.destination_verification_destination_id_fk_ix;
+
+DROP INDEX experience.destination_verification_destination_id_uq;
+
+DROP INDEX experience.destination_verification_destination_id_status_ix;
+
+ALTER TABLE experience.destination_verification DROP CONSTRAINT destination_verification_sent_job_key_uq;
+
+DROP INDEX experience.communication_destination_party_id_channel_uq;
+
+DROP INDEX experience.communication_destination_destination_hash_channel_ix;
+
+ALTER TABLE experience.communication_destination DROP CONSTRAINT communication_destination_party_id_channel_destination_hash_uq;
+
+ALTER TABLE experience.feature_configuration DROP CONSTRAINT feature_configuration_key_revision_uq;
+
+DROP INDEX experience.audit_record_actor_subject_occurred_at_ix;
+
+DROP INDEX experience.audit_record_resource_type_resource_id_occurred_at_ix;
+
+DROP INDEX experience.idempotency_record_expires_at_ix;
+
+ALTER TABLE experience.idempotency_record DROP CONSTRAINT idempotency_record_principal_key_operation_request_key_uq;
+
+ALTER TABLE experience.processed_event DROP CONSTRAINT processed_event_consumer_event_id_uq;
+
+DROP INDEX experience.outbox_event_state_next_attempt_at_ix;
+
+ALTER TABLE experience.outbox_event DROP CONSTRAINT outbox_event_event_id_uq;
+
+ALTER TABLE experience.channel_configuration DROP CONSTRAINT channel_configuration_kind_key_uq;
+
+DROP INDEX experience.communication_suppression_email_hash_channel_ix;
+
+ALTER TABLE experience.communication_suppression DROP CONSTRAINT communication_suppression_destination_hash_channel_uq;
+
+DROP INDEX experience.consent_event_email_hash_channel_purpose_occurred_at_ix;
+
+DROP INDEX experience.lead_activity_lead_id_fk_ix;
+
+DROP INDEX experience.lead_activity_lead_id_created_at_ix;
+
+DROP INDEX experience.lead_assigned_to_follow_up_at_ix;
+
+DROP INDEX experience.lead_status_priority_created_at_ix;
+
+DROP INDEX experience.file_asset_upload_session_id_fk_ix;
+
+DROP INDEX experience.file_asset_scan_status_created_at_ix;
+
+DROP INDEX experience.file_asset_owner_party_id_ix;
+
+ALTER TABLE experience.file_asset DROP CONSTRAINT file_asset_object_key_uq;
+
+DROP INDEX experience.content_revision_content_item_id_fk_ix;
+
+DROP INDEX experience.content_revision_state_scheduled_at_ix;
+
+ALTER TABLE experience.content_revision DROP CONSTRAINT content_revision_content_item_id_revision_uq;
+
+DROP INDEX experience.content_item_current_published_revision_id_fk_ix;
+
+ALTER TABLE experience.content_item DROP CONSTRAINT content_item_content_type_slug_locale_uq;

@@ -1,0 +1,3 @@
+ALTER TABLE commerce.product_recommendation DROP CONSTRAINT product_recommendation_related_product_id_fk;
+
+ALTER TABLE commerce.product_recommendation DROP CONSTRAINT product_recommendation_product_id_fk;

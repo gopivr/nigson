@@ -1,8 +1,8 @@
 {
   "java": {
-    "services/commerce/target/commerce-0.1.0.jar": "0f349fbc88a4d5c959da829b39b9bfd4d49ef3d14cfbf6c521d1675111503fb4",
-    "services/experience/target/experience-0.1.0.jar": "f8b9e3fdc796a77ecc350b5fcd57b8fea68b4829bc8c2cb300b45f9440f9da52",
-    "services/integration/target/integration-0.1.0.jar": "2dbff7579b593057fa0fbd99e97e2250f9371eda72294e093a3e1398e9974441",
+    "services/commerce/target/commerce-0.1.0.jar": "3dca4f9a4a940f2e1c5c6966246cccedb5ad3c862c3fa3bdee931a83d436fe74",
+    "services/experience/target/experience-0.1.0.jar": "d5588fedb217de9bb6bacbbac4b12d32f4b9d3b00db5ed0f875009f8cb60fe3a",
+    "services/integration/target/integration-0.1.0.jar": "1798e834ade2e3c8cf6e3660c32b71949009dcf070723d27b0f73b8c3068ebbd",
     "shared/common-events/target/common-events-0.1.0.jar": "7c781f51808108f331814147738d680b807e5ec8e645b3321f57d0360cac6fe2",
     "shared/common-observability/target/common-observability-0.1.0.jar": "3ae27905d3f2939cdcc5f4da93e91d50fdfa6eaf382df008b88431bf8cd37bb6",
     "shared/common-problem/target/common-problem-0.1.0.jar": "c38182de00dfc49b4357c92f3933f01e78a4d6d3e021cc428404b92826d24d1c",

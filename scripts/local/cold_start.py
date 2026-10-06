@@ -27,7 +27,7 @@ def docker(*args: str) -> str:
 def existing() -> dict:
     ids = sorted(docker("ps", "-aq", "--filter", "label=com.docker.compose.project=nigson-local").split())
     containers = json.loads(docker("inspect", *ids)) if ids else []
-    return {"containers": {c["Id"]: {"started": c["State"]["StartedAt"], "mounts": c["Mounts"]} for c in containers},
+    return {"containers": {c["Id"]: {"started": c["State"]["StartedAt"], "mounts": sorted(c["Mounts"], key=lambda m: m["Destination"])} for c in containers},
             "volumes": sorted(docker("volume", "ls", "--filter", "label=com.docker.compose.project=nigson-local", "--format", "{{.Name}}").split())}
 
 

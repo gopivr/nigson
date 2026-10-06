@@ -1,0 +1,91 @@
+Traceback (most recent call last):
+  File "/private/tmp/nigson-data001-rollback.py", line 9, in <module>
+    out,err=docker('run','--rm','--network',network,'-v',str(ROOT)+':/app/source:ro','-v',str(ROOT/'.build/database-rollback')+':/app/check:ro','-e','MIGRATION_OWNER='+owner,'-e','MIGRATION_PASSWORD=mock-'+owner+'-migration','--entrypoint','java','nigson/migration:local','-cp','/app/check:/app/lib/*','RollbackProbe')
+            ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 25, in docker
+    raise AssertionError('Docker check failed: ' + ' '.join(args[:5]) + '\n' + result.stdout + result.stderr)
+AssertionError: Docker check failed: run --rm --network nigson-test-data-e3c643de54 -v
+Rolling Back Changeset: commerce/062-bp5-constraints.yaml::commerce-20261006-026::nigson-platform
+Rolling Back Changeset: commerce/061-bp5-indexes.yaml::commerce-20261006-025::nigson-platform
+Rolling Back Changeset: commerce/060-bp5-domain-tables.yaml::commerce-20261006-024::nigson-platform
+ERROR: Exception Details
+ERROR: Exception Primary Class:  PSQLException
+ERROR: Exception Primary Reason:  Unterminated dollar quote started at position 3 in SQL DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF. Expected terminating $$
+ERROR: Exception Primary Source:  PostgreSQL 18.4 (Debian 18.4-1.pgdg12+1)
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 06, 2026 11:27:31 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:27:31 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 06, 2026 11:27:31 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 06, 2026 11:27:31 AM liquibase.command
+INFO: rollbackCount command encountered an exception.
+Oct 06, 2026 11:27:31 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 06, 2026 11:27:31 AM liquibase.command
+INFO: Logging exception.
+Oct 06, 2026 11:27:31 AM liquibase.command
+INFO: Command execution complete
+Exception in thread "main" liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.RollbackFailedException: liquibase.exception.DatabaseException: Unterminated dollar quote started at position 3 in SQL DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF. Expected terminating $$ [Failed SQL: (0) DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF]
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:325)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:228)
+	at liquibase.command.CommandScope.execute(CommandScope.java:257)
+	at liquibase.Liquibase.lambda$rollback$9(Liquibase.java:606)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1366)
+	at liquibase.Liquibase.rollback(Liquibase.java:595)
+	at liquibase.Liquibase.rollback(Liquibase.java:574)
+	at RollbackProbe.main(RollbackProbe.java:17)
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.RollbackFailedException: liquibase.exception.DatabaseException: Unterminated dollar quote started at position 3 in SQL DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF. Expected terminating $$ [Failed SQL: (0) DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:155)
+	at liquibase.command.core.AbstractRollbackCommandStep.doRollback(AbstractRollbackCommandStep.java:111)
+	at liquibase.command.core.AbstractRollbackCommandStep.doRollback(AbstractRollbackCommandStep.java:81)
+	at liquibase.command.core.RollbackCountCommandStep.lambda$run$0(RollbackCountCommandStep.java:47)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.command.core.RollbackCountCommandStep.run(RollbackCountCommandStep.java:47)
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:269)
+	... 12 more
+Caused by: liquibase.exception.RollbackFailedException: liquibase.exception.DatabaseException: Unterminated dollar quote started at position 3 in SQL DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF. Expected terminating $$ [Failed SQL: (0) DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF]
+	at liquibase.changelog.ChangeSet.rollback(ChangeSet.java:1086)
+	at liquibase.changelog.visitor.RollbackVisitor.visit(RollbackVisitor.java:63)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$0(ChangeLogIterator.java:133)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$1(ChangeLogIterator.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Scope.child(Scope.java:309)
+	at liquibase.Scope.child(Scope.java:313)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:91)
+	... 21 more
+Caused by: liquibase.exception.DatabaseException: Unterminated dollar quote started at position 3 in SQL DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF. Expected terminating $$ [Failed SQL: (0) DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:525)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:85)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:188)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1216)
+	at liquibase.database.AbstractJdbcDatabase.executeRollbackStatements(AbstractJdbcDatabase.java:1240)
+	at liquibase.changelog.ChangeSet.rollback(ChangeSet.java:1048)
+	... 35 more
+Caused by: org.postgresql.util.PSQLException: Unterminated dollar quote started at position 3 in SQL DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.product_recommendation) THEN RAISE EXCEPTION 'Populated table commerce.product_recommendation: use expand/contract migration'; END IF. Expected terminating $$
+	at org.postgresql.core.Parser.checkParsePosition(Parser.java:1459)
+	at org.postgresql.core.Parser.parseSql(Parser.java:1358)
+	at org.postgresql.core.Parser.replaceProcessing(Parser.java:1309)
+	at org.postgresql.core.CachedQueryCreateAction.create(CachedQueryCreateAction.java:43)
+	at org.postgresql.core.QueryExecutorBase.createQueryByKey(QueryExecutorBase.java:381)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:348)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:327)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:517)
+	... 40 more

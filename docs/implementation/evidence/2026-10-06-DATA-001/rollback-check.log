@@ -1,0 +1,11 @@
+ENV=test python3 scripts/database/rollback_check.py
+{
+  "test": "TEST-DATA-ROLLBACK",
+  "result": "PASS",
+  "checks": [
+    "Actual Liquibase rollback of empty additive changes and complete BP5 reapply for all owners",
+    "Populated audit/platform tables fail before any schema drop",
+    "Full catalog inventory restored",
+    "Original local state preserved"
+  ]
+}

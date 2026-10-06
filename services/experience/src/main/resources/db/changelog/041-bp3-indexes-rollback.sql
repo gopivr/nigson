@@ -1,0 +1,13 @@
+DROP INDEX experience.lead_requested_item_lead_id_fk_ix;
+
+ALTER TABLE experience.lead_requested_item DROP CONSTRAINT lead_requested_item_lead_id_sku_id_uq;
+
+DROP INDEX experience.application_document_file_asset_id_fk_ix;
+
+DROP INDEX experience.application_document_application_id_fk_ix;
+
+ALTER TABLE experience.application_document DROP CONSTRAINT application_document_application_id_file_asset_id_uq;
+
+DROP INDEX experience.distributor_application_decision_command_id_uq;
+
+DROP INDEX experience.distributor_application_party_id_submitted_at_ix;

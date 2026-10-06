@@ -58,6 +58,8 @@ def validate_config(config: dict) -> dict:
             raise ValueError(f"Refusing nonlocal configuration: {name}")
         environment = service.get("environment", {})
         if name.startswith("migrate-"):
+            if environment.get("MIGRATION_RELEASE") not in {"BP1", "BP2", "BP3", "BP4", "BP5"}:
+                raise ValueError("Schema deployment gate must be BP1..BP5")
             owner = name.removeprefix("migrate-")
             expected_url = "jdbc:postgresql://vector-db:5432/nigson_vector_test" if owner == "ai" else "jdbc:postgresql://postgres:5432/nigson"
             if environment.get("MIGRATION_OWNER") != owner or environment.get("MIGRATION_JDBC_URL") != expected_url:

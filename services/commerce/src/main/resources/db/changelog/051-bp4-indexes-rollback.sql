@@ -1,0 +1,7 @@
+DROP INDEX commerce.abandoned_cart_candidate_party_id_fk_ix;
+
+DROP INDEX commerce.abandoned_cart_candidate_cart_id_fk_ix;
+
+DROP INDEX commerce.abandoned_cart_candidate_status_scheduled_at_ix;
+
+ALTER TABLE commerce.abandoned_cart_candidate DROP CONSTRAINT abandoned_cart_candidate_cart_id_notification_key_uq;

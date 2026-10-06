@@ -1,0 +1,3 @@
+ALTER TABLE integration.sheet_sync_record DROP CONSTRAINT sheet_sync_record_spreadsheet_key_row_key_uq;
+
+ALTER TABLE integration.sheet_sync_record DROP CONSTRAINT sheet_sync_record_application_id_spreadsheet_key_uq;
