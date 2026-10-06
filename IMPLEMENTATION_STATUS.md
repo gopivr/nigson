@@ -8,7 +8,7 @@ EP00 — Repository/build/local mocks; BP1 foundation.
 
 ## Current Task
 
-FOUND-003 — IN_PROGRESS. Resumed: owner bootstrap masters, guarded migrate/seed, app/vector profiles and isolated complete cold-start test; preserve nigson-local containers/volumes.
+FOUND-003 — DONE. Owner bootstrap migrations, guarded migrate/seed, Java/optional-vector application profiles and complete isolated cold-start acceptance passed. No next task started.
 
 ## Completed Tasks
 
@@ -18,7 +18,7 @@ FOUND-003 — IN_PROGRESS. Resumed: owner bootstrap masters, guarded migrate/see
 
 ## In Progress
 
-- [ ] FOUND-003 — IN_PROGRESS; pinned local containers, schemas/roles and identity/emulator bootstrap run twice. Remaining: Liquibase migrate/seed command surface, application Docker profiles, optional AI/vector profile and complete TEST-LOCAL-COLD-START. See docs/implementation/2026-10-05-FOUND-003.md.
+- [x] FOUND-003 — DONE; AC-FOUND-003 / TEST-LOCAL-COLD-START PASS, two complete empty-volume setup passes, owner migrations/drift checks, real identity fixtures, non-root apps/vector, security/outage/cleanup and original local-state preservation. Implementation 9c5e57ee7237aaed360a5c18e06ad3b64074e837. See docs/implementation/2026-10-05-FOUND-003.md.
 
 ## Pending
 
@@ -90,15 +90,15 @@ FOUND-003 — IN_PROGRESS. Resumed: owner bootstrap masters, guarded migrate/see
 
 ## Build Status
 
-PASS — FOUND-002 final two clean Java builds, optional locked Python builds and root make verify PROFILE=ai, 2026-10-05. No domain implementation build/qualification inferred.
+PASS — final FOUND-003 `make verify PROFILE=ai`, 2026-10-06 01:47 UTC: pinned Java reactor and locked Python artifacts, dependency graph/hash checks, Ruff/mypy. All application/migration Docker images built and exercised. Repeated application hashes match refreshed evidence. No domain/release qualification inferred.
 
 ## Test Status
 
-PASS — FOUND-001 9 repository tests; FOUND-002 6 Java compatibility tests and 4 Python compatibility tests, lint/type checks, dependency convergence/hash repeatability and final advisory scans. FOUND-003 partial checks: 5 local isolation tests, two actual local-up/bootstrap runs, PostgreSQL 18.6 role/schema smoke and real Keycloak discovery pass. Full TEST-LOCAL-COLD-START, domain/migrations/mocks/provider tests NOT_RUN.
+PASS — 6 Java tests, 4 Python tests, 25 repository/local command contracts; complete TEST-LOCAL-COLD-START including two setup passes, all owner migration/denial/session/vector/JWT/drift/outage/credential/production/cleanup checks; legacy role upgrade preserves OIDs/data; real fixture role drift denied; five production runtime guards. Genuine provider/model, business contracts/races, production deployment/load/restore/image advisory qualification NOT_RUN under their pending tasks.
 
 ## Last Successful Commit
 
-89af6dde82d1018dc5d684898a5f6aa10a1484fd — partial FOUND-003 local dependencies/bootstrap. Last completed task implementation: 12a6c932be0b51517dd2c99a67e155a08206b226 (FOUND-002).
+9c5e57ee7237aaed360a5c18e06ad3b64074e837 — verified FOUND-003 implementation and acceptance evidence. Earlier partial implementation/failure history is retained in the task report.
 
 ## Confirmed Inputs
 
@@ -106,7 +106,7 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-FOUND-003 is partial, not DONE: no make migrate/make seed or application Dockerfiles/profiles yet; PostgreSQL pgvector AI profile not verified. Business tables and APIs remain unimplemented. Local subscription event filters and full consumer IAM qualification belong to PLAT-001; current emulator has infrastructure subscriptions only. Initial Keycloak readiness disconnect fixed with bounded transient retry. Local vendor containers are running; local-down preserves volumes.
+Foundation acceptance complete. Business tables/APIs and stateful provider mocks remain unimplemented; DATA-001 and MOCK-001 remain PENDING and are now dependency-ready. Local seed profile covers genuine identity fixtures only; domain fixtures await owned tables. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Full audience/scopes/BFF/MFA/production Keycloak is SEC-001/IDP-001; exact SNS filters/consumer IAM is PLAT-001. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
@@ -114,8 +114,10 @@ Credentials absent does not block offline implementation: MOCK-001 must create s
 
 ## Next Recommended Task
 
-Continue FOUND-003: implement owner Liquibase bootstrap masters and guarded make migrate/make seed; finish application/optional-vector profiles and command-surface checks; run complete TEST-LOCAL-COLD-START. Preserve running nigson-local containers/volumes. DATA-001 and MOCK-001 remain PENDING until FOUND-003 acceptance is complete.
+DATA-001 — PENDING, dependency-ready now that FOUND-003 is DONE. Read all declared owner schemas/constraints/transaction rules, extend the accepted masters, retain existing framework session tables, then implement/verify all phase schemas. MOCK-001 is also dependency-ready and remains PENDING; offline HTTP mocks/adapters require no live credentials. Preserve the five running nigson-local vendor containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
 
 ## Session Evidence / Protocol
 
 FOUND-001/002 evidence: docs/implementation/2026-10-05-FOUND-001.md and docs/implementation/2026-10-05-FOUND-002.md. FOUND-002 retains initial convergence/security/sandbox failures and successful remedies. Original blueprint remains unchanged. Initial normal-sandbox git init and Maven Central DNS failed; authorized escalated operations succeeded. Copied specification has original EOF blank lines; diff whitespace validation uses core.whitespace=-blank-at-eof to preserve source bytes.
+
+FOUND-003 final evidence/report: docs/implementation/2026-10-05-FOUND-003.md and docs/implementation/evidence/2026-10-05-FOUND-003/. All initial failures and fixes retained. Implementation acceptance commit 9c5e57ee7237aaed360a5c18e06ad3b64074e837.

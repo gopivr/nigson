@@ -10,6 +10,7 @@ docs/CHANGELOG.md
 docs/LOCAL_DEVELOPMENT.md
 docs/dependencies/build-artifacts.json
 docs/implementation/2026-10-05-FOUND-003.md
+docs/implementation/README.md
 docs/implementation/evidence/2026-10-05-FOUND-003/changed-paths.txt
 docs/implementation/evidence/2026-10-05-FOUND-003/cold-start-acceptance.json
 docs/implementation/evidence/2026-10-05-FOUND-003/cold-start-before-cleanup-fix.json
