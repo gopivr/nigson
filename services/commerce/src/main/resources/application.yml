@@ -6,7 +6,18 @@ spring:
     hibernate:
       ddl-auto: validate
   liquibase:
-    enabled: true
+    enabled: false
+  datasource:
+    url: ${NIGSON_JDBC_URL}
+    username: ${NIGSON_DB_USER}
+    password: ${NIGSON_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 5
+      connection-timeout: 2000
+  session:
+    jdbc:
+      initialize-schema: never
+      table-name: commerce.spring_session
   main:
     banner-mode: off
 server:
@@ -19,3 +30,8 @@ management:
   endpoint:
     health:
       show-details: never
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,db,ownerSchema

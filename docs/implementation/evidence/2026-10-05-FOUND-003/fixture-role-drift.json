@@ -1,0 +1,8 @@
+{
+  "result": "PASS",
+  "checks": [
+    "real Keycloak elevated retail fixture role drift refused",
+    "test ADMIN grant removed",
+    "all 13 signed fixture logins recover after restoring declared roles"
+  ]
+}

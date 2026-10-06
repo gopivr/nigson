@@ -1,0 +1,30 @@
+python3 -m unittest discover -s tests/contract -v
+test_externally_published_port_rejected (test_local_configuration.LocalIsolationTests.test_externally_published_port_rejected) ... ok
+test_fixture_manifest_matches_real_identity_import (test_local_configuration.LocalIsolationTests.test_fixture_manifest_matches_real_identity_import) ... ok
+test_floating_image_rejected (test_local_configuration.LocalIsolationTests.test_floating_image_rejected) ... ok
+test_foundation_make_targets_have_real_entrypoints (test_local_configuration.LocalIsolationTests.test_foundation_make_targets_have_real_entrypoints) ... ok
+test_implicit_provider_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_implicit_provider_profile_rejected_before_docker) ... ok
+test_missing_fixture_password_refused_before_identity (test_local_configuration.LocalIsolationTests.test_missing_fixture_password_refused_before_identity) ... ok
+test_missing_migration_credentials_explained_before_docker (test_local_configuration.LocalIsolationTests.test_missing_migration_credentials_explained_before_docker) ... ok
+test_nonlocal_project_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_nonlocal_project_rejected_before_docker) ... ok
+test_prod_configuration_rejected (test_local_configuration.LocalIsolationTests.test_prod_configuration_rejected) ... ok
+test_prod_environment_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_prod_environment_rejected_before_docker) ... ok
+test_remote_docker_host_refused_before_docker (test_local_configuration.LocalIsolationTests.test_remote_docker_host_refused_before_docker) ... ok
+test_remote_migration_target_rejected (test_local_configuration.LocalIsolationTests.test_remote_migration_target_rejected) ... ok
+test_unapproved_fixture_profile_refused_before_identity (test_local_configuration.LocalIsolationTests.test_unapproved_fixture_profile_refused_before_identity) ... ok
+test_unknown_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_unknown_profile_rejected_before_docker) ... ok
+test_wrong_owner_role_rejected (test_local_configuration.LocalIsolationTests.test_wrong_owner_role_rejected) ... ok
+test_complete_tracked_tree (test_repository.RepositoryChecks.test_complete_tracked_tree) ... ok
+test_disallowed_deployment_tree_rejected (test_repository.RepositoryChecks.test_disallowed_deployment_tree_rejected) ... ok
+test_duplicate_status_task (test_repository.RepositoryChecks.test_duplicate_status_task) ... ok
+test_manifest_path_escape_rejected (test_repository.RepositoryChecks.test_manifest_path_escape_rejected) ... ok
+test_missing_required_directory (test_repository.RepositoryChecks.test_missing_required_directory) ... ok
+test_missing_status_task (test_repository.RepositoryChecks.test_missing_status_task) ... ok
+test_real_provider_key_pattern_rejected (test_repository.RepositoryChecks.test_real_provider_key_pattern_rejected) ... ok
+test_tracked_runtime_secret_file_rejected (test_repository.RepositoryChecks.test_tracked_runtime_secret_file_rejected) ... ok
+test_untracked_onboarding_file_rejected (test_repository.RepositoryChecks.test_untracked_onboarding_file_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 1.840s
+
+OK

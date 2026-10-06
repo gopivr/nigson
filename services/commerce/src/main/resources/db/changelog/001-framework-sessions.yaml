@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: commerce-20261005-002
+      author: nigson-platform
+      logicalFilePath: commerce/001-framework-sessions.yaml
+      changes:
+        - sqlFile:
+            path: 001-framework-sessions.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sql:
+            sql: DROP TABLE commerce.spring_session_attributes; DROP TABLE commerce.spring_session;

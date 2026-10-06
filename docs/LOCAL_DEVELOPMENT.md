@@ -10,13 +10,88 @@ composition. Export the pinned Oracle JDK as JAVA_HOME; Maven rejects the defaul
 Java 17. AI requires uv 0.9.3 (override `UV` to its installed path), installs
 Python 3.12.12, and uses only the committed uv.lock. Caches are workspace-local.
 See DEPENDENCY_LOCK.md and task reports for executed evidence and limitations.
-FOUND-003 currently adds `make local-up`, `make local-down`, `make local-status`
-and `make local-config-check`, with real pinned vendor dependencies, local-only
-guards and repeatable infrastructure bootstrap. It remains IN_PROGRESS:
-`migrate`, `seed`, application Docker profiles and AI/vector support are unfinished.
-`local-up` currently proves infrastructure readiness only. The remaining commands
-below remain specified task outputs until their tasks
-are implemented; they are not current executable local/provider workflows.
+FOUND-003 implements the foundation workflow below. These services expose real
+process/database readiness and deny all domain routes; domain APIs, provider
+adapters, business fixtures and full OIDC/BFF authorization remain their roadmap
+tasks. The optional AI runtime exposes database/vector health only; it does not
+activate AI features or call a model.
+
+```bash
+cp .env.example .env
+make local-config-check
+make local-up
+make migrate ENV=local
+make seed ENV=local FIXTURE_PROFILE=foundation
+make run-core
+make local-status
+make verify
+# Optional BP5 foundation qualification only:
+make local-up PROFILE=ai
+make migrate ENV=local PROFILE=ai
+make run-ai
+# Independent fresh test namespace; retains its own volumes and stops its containers:
+make cold-start
+make local-down
+```
+
+`PROFILE=core` starts only the five vendor dependencies. `PROFILE=app` selects
+Java application definitions; `run-core` builds and starts them after separate
+owner migration jobs. `PROFILE=ai` adds a private vector database and the optional
+Python health runtime. `local-up` starts dependencies only, waits for real
+Keycloak discovery, and bootstraps LocalStack. `--no-recreate` preserves existing
+container identities; configuration changes requiring recreation must be applied
+explicitly after assessing their persisted state. `local-down` retains all named
+volumes. No reset or prune is performed by setup, seed or acceptance tests.
+
+Java health paths are `/actuator/health/liveness` and
+`/actuator/health/readiness` on localhost:8081/8082/8083. Python uses
+`/health/live` and `/health/ready` on localhost:8084. Host ports are configurable
+through COMMERCE_PORT, EXPERIENCE_PORT, INTEGRATION_PORT, AI_PORT, NIGSON_DB_PORT,
+KEYCLOAK_PORT, LOCALSTACK_PORT and MAILPIT_HTTP_PORT/MAILPIT_SMTP_PORT. All binds
+remain loopback. Migration URLs use private Compose hostnames and are guarded.
+Scripts refuse remote Docker endpoints, nonlocal environments/projects, unknown
+profiles, production application configuration, remote JDBC targets and missing
+local credentials. Python/uv is required on the host only for optional AI build
+checks; Docker builds the optional image with locked dependencies.
+
+Migration provisioning upgrades legacy role names to `nigson_<owner>_migrator`
+and `nigson_<owner>_app` in place, retaining role OIDs/ownership/data. Ambiguous
+roles or unexpected schema owners halt provisioning atomically. Local roles use
+the visibly mock credentials declared in `.env.example`; existing credentials
+are never silently reset. Each owner has its own master and Liquibase tracking
+schema. The one-shot tool validates checksums, reports pending changes, generates
+SQL before applying, then checks bootstrap privileges and session constraints.
+Applications never run Liquibase or Hibernate/session DDL. Do not clear checksums,
+drop schemas or delete volumes to conceal drift.
+
+`FIXTURE_PROFILE=foundation` explicitly selects the 13 deterministic synthetic
+Keycloak subjects in `tests/fixtures/local-identities.json`. Seed fills missing
+synthetic profile names, verifies stable IDs/emails/roles, and obtains a genuine
+signed token for every subject using KEYCLOAK_FIXTURE_PASSWORD. Password drift
+fails; existing passwords are not overwritten. The test-only
+`nigson-local-fixtures` client enables direct grants for local integration tests;
+the BFF client retains authorization-code/PKCE settings. No token bypass exists.
+Seed creates no domain tables, catalog prices, tax policies or provider accounts.
+Foundation Spring Session tables are real locked-version framework tables;
+DATA-001 must retain them when adding business tables, rather than recreate them.
+
+`make command-surface-check` runs repository/local command contracts, also included
+in `make verify`. `make cold-start` executes the full workflow twice in a unique
+`nigson-test-cold-*` namespace with fresh volumes and reserved loopback ports,
+checks owner denial/session persistence/checksum and constraint drift/real signed
+JWTs/invalid signatures/vector queries/missing credentials/production refusal,
+then tests DB outage readiness and recovery. It compares existing nigson-local
+container IDs, start times, mounts and volume names before/after. Its JSON evidence
+is `.build/evidence/found003-cold-start.json`; test volumes remain inspectable.
+
+Sequencing boundary: sections36/40 describe the eventual catalog/provider fixtures,
+contract regeneration, load and restore workflows. DATA-001 depends on FOUND-003
+and owns business schemas; MOCK-001 owns provider commands; PLAT/INFRA/REL tasks
+own business load/restore/release qualification. Generating those business seeds
+or claiming these future checks at FOUND-003 would contradict the dependency
+roadmap and its “Owned existing tables / APIs None directly” contract. The
+foundation profile and command checks above qualify this task; the later task
+commands below remain specified outputs, not successful placeholder targets.
 
 
 # Master section30: Configuration Management

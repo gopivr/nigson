@@ -1,0 +1,10 @@
+{
+  "test": "FOUND-003 legacy role upgrade",
+  "result": "PASS",
+  "checks": [
+    "eight role OIDs preserved",
+    "schema/table ownership preserved",
+    "existing session data preserved",
+    "owner migrations validate after in-place upgrade"
+  ]
+}

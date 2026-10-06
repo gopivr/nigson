@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: commerce-20261005-001
+      author: nigson-platform
+      logicalFilePath: commerce/000-schema-and-roles.yaml
+      preConditions:
+        - onFail: HALT
+        - dbms:
+            type: postgresql
+        - sqlCheck:
+            expectedResult: "1"
+            sql: >-
+              SELECT CASE WHEN current_user = 'nigson_commerce_migrator'
+              AND current_setting('server_version_num')::int >= 180000
+              AND current_setting('server_version_num')::int < 190000
+              AND pg_get_userbyid((SELECT nspowner FROM pg_namespace WHERE nspname = 'commerce')) = current_user
+              THEN 1 ELSE 0 END
+      changes:
+        - sql:
+            sql: >-
+              REVOKE ALL ON SCHEMA commerce FROM PUBLIC;
+              GRANT USAGE ON SCHEMA commerce TO nigson_commerce_app;
+              GRANT SELECT ON commerce.databasechangelog TO nigson_commerce_app;
+      rollback:
+        - sql:
+            sql: REVOKE SELECT ON commerce.databasechangelog FROM nigson_commerce_app;

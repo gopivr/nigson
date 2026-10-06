@@ -1,0 +1,14 @@
+{
+  ".build/evidence/FOUND-003/nigson-found003-cold-start-acceptance.log": {
+    "bytes": 150881,
+    "sha256": "7f136cb92356ba95f0bc692a892a7795c260629bcd30a1d37a6fb9e9ccd5c15a"
+  },
+  ".build/evidence/FOUND-003/nigson-found003-legacy-upgrade.log": {
+    "bytes": 318468,
+    "sha256": "7e9657dc3d1e43577e651d2ee86b33fa0e12574c415b6a5ae7694907431e39a6"
+  },
+  ".build/evidence/FOUND-003/nigson-found003-runtime-guards.log": {
+    "bytes": 80,
+    "sha256": "2046bb18986c9769012b21555a46032e3a0f7b762140bd05999ce699e1ba0df6"
+  }
+}

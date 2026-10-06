@@ -1,6 +1,8 @@
 .PHONY: status-check build test verify java-build dependency-check ai-sync ai-build ai-test ai-lint local-up local-down local-config-check local-status
 UV ?= uv
 PROFILE ?= core
+ENV ?= local
+export PROFILE ENV
 export MAVEN_USER_HOME := $(CURDIR)/.build/maven
 export UV_CACHE_DIR := $(CURDIR)/.build/uv-cache
 export UV_PYTHON_INSTALL_DIR := $(CURDIR)/.build/python
@@ -19,7 +21,7 @@ dependency-check:
 
 build test: java-build
 
-verify: status-check java-build dependency-check
+verify: status-check java-build dependency-check command-surface-check
 
 ifeq ($(PROFILE),ai)
 build: ai-build
@@ -51,3 +53,17 @@ local-config-check:
 
 local-status:
 	python3 scripts/local/dependencies.py status
+
+.PHONY: migrate seed run-core run-ai cold-start command-surface-check
+migrate:
+	python3 scripts/local/dependencies.py migrate
+seed:
+	python3 scripts/local/dependencies.py seed
+run-core:
+	python3 scripts/local/dependencies.py run-core
+run-ai:
+	PROFILE=ai python3 scripts/local/dependencies.py run-ai
+cold-start:
+	python3 scripts/local/cold_start.py
+command-surface-check:
+	python3 -m unittest discover -s tests/contract -v

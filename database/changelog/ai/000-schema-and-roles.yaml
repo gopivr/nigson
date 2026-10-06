@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: ai-20261005-001
+      author: nigson-platform
+      logicalFilePath: ai/000-schema-and-roles.yaml
+      preConditions:
+        - onFail: HALT
+        - dbms:
+            type: postgresql
+        - sqlCheck:
+            expectedResult: "1"
+            sql: >-
+              SELECT CASE WHEN current_user = 'nigson_ai_migrator'
+              AND current_setting('server_version_num')::int >= 180000
+              AND current_setting('server_version_num')::int < 190000
+              AND pg_get_userbyid((SELECT nspowner FROM pg_namespace WHERE nspname = 'ai')) = current_user
+              THEN 1 ELSE 0 END
+      changes:
+        - sql:
+            sql: >-
+              REVOKE ALL ON SCHEMA ai FROM PUBLIC;
+              GRANT USAGE ON SCHEMA ai TO nigson_ai_app;
+              GRANT SELECT ON ai.databasechangelog TO nigson_ai_app;
+      rollback:
+        - sql:
+            sql: REVOKE SELECT ON ai.databasechangelog FROM nigson_ai_app;

@@ -9,7 +9,9 @@
       "email": "retaila@example.invalid",
       "realmRoles": [
         "CUSTOMER"
-      ]
+      ],
+      "firstName": "retailA",
+      "lastName": "Local Fixture"
     },
     {
       "id": "0bcc4c05-c2e7-5fcc-a059-c1cf5319e3c3",
@@ -17,7 +19,9 @@
       "email": "retailb@example.invalid",
       "realmRoles": [
         "CUSTOMER"
-      ]
+      ],
+      "firstName": "retailB",
+      "lastName": "Local Fixture"
     },
     {
       "id": "02b6b604-0298-5f0d-8ad1-0d1b8df23a8c",
@@ -25,7 +29,9 @@
       "email": "orga-owner@example.invalid",
       "realmRoles": [
         "CUSTOMER"
-      ]
+      ],
+      "firstName": "orgA-owner",
+      "lastName": "Local Fixture"
     },
     {
       "id": "2bcdd805-d834-5230-8a6b-6f5242c2a002",
@@ -33,7 +39,9 @@
       "email": "orga-buyer@example.invalid",
       "realmRoles": [
         "CUSTOMER"
-      ]
+      ],
+      "firstName": "orgA-buyer",
+      "lastName": "Local Fixture"
     },
     {
       "id": "0c36198a-d71a-53bb-8b40-ffd7f9ad1897",
@@ -41,7 +49,9 @@
       "email": "orgb-buyer@example.invalid",
       "realmRoles": [
         "CUSTOMER"
-      ]
+      ],
+      "firstName": "orgB-buyer",
+      "lastName": "Local Fixture"
     },
     {
       "id": "5a68ecda-64ac-511f-acf8-a6c21c53413e",
@@ -49,7 +59,9 @@
       "email": "editor@example.invalid",
       "realmRoles": [
         "CONTENT_EDITOR"
-      ]
+      ],
+      "firstName": "editor",
+      "lastName": "Local Fixture"
     },
     {
       "id": "f0082abe-2b21-54af-8c48-fc8e1a226831",
@@ -57,7 +69,9 @@
       "email": "publisher@example.invalid",
       "realmRoles": [
         "CONTENT_PUBLISHER"
-      ]
+      ],
+      "firstName": "publisher",
+      "lastName": "Local Fixture"
     },
     {
       "id": "20f23ef1-2395-5c7e-abe7-00e07dcde379",
@@ -65,7 +79,9 @@
       "email": "sales@example.invalid",
       "realmRoles": [
         "SALES"
-      ]
+      ],
+      "firstName": "sales",
+      "lastName": "Local Fixture"
     },
     {
       "id": "ef88a0dc-27c1-5ef9-b53e-a745d253d5cc",
@@ -73,7 +89,9 @@
       "email": "financea@example.invalid",
       "realmRoles": [
         "FINANCE"
-      ]
+      ],
+      "firstName": "financeA",
+      "lastName": "Local Fixture"
     },
     {
       "id": "77ce3d1a-b2f2-5edf-b4d4-12fef448a8b0",
@@ -81,7 +99,9 @@
       "email": "financeb@example.invalid",
       "realmRoles": [
         "FINANCE"
-      ]
+      ],
+      "firstName": "financeB",
+      "lastName": "Local Fixture"
     },
     {
       "id": "5cb1caac-6970-5ef9-99c6-8d3be9d2d793",
@@ -89,7 +109,9 @@
       "email": "operations@example.invalid",
       "realmRoles": [
         "OPERATIONS"
-      ]
+      ],
+      "firstName": "operations",
+      "lastName": "Local Fixture"
     },
     {
       "id": "3c2b8f13-37c3-5764-a6ea-f1085167acb4",
@@ -97,7 +119,9 @@
       "email": "analyst@example.invalid",
       "realmRoles": [
         "ANALYST"
-      ]
+      ],
+      "firstName": "analyst",
+      "lastName": "Local Fixture"
     },
     {
       "id": "43c829a8-5ddc-5d8a-be64-557f8998c1a9",
@@ -105,7 +129,9 @@
       "email": "admin@example.invalid",
       "realmRoles": [
         "ADMIN"
-      ]
+      ],
+      "firstName": "admin",
+      "lastName": "Local Fixture"
     }
   ]
 }

@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "checks": [
+    "commerce: production runtime refused with network disabled",
+    "experience: production runtime refused with network disabled",
+    "integration: production runtime refused with network disabled",
+    "ai: production runtime refused with network disabled",
+    "migration: production runtime refused with network disabled"
+  ]
+}

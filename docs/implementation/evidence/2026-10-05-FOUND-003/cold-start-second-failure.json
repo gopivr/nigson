@@ -1,0 +1,10 @@
+{
+  "test": "TEST-LOCAL-COLD-START",
+  "project": "nigson-test-cold-622e1faced",
+  "checks": [
+    "setup-pass-1: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions",
+    "setup-pass-2: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions",
+    "runtime DDL and all cross-owner reads denied"
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: experience-20261005-001
+      author: nigson-platform
+      logicalFilePath: experience/000-schema-and-roles.yaml
+      preConditions:
+        - onFail: HALT
+        - dbms:
+            type: postgresql
+        - sqlCheck:
+            expectedResult: "1"
+            sql: >-
+              SELECT CASE WHEN current_user = 'nigson_experience_migrator'
+              AND current_setting('server_version_num')::int >= 180000
+              AND current_setting('server_version_num')::int < 190000
+              AND pg_get_userbyid((SELECT nspowner FROM pg_namespace WHERE nspname = 'experience')) = current_user
+              THEN 1 ELSE 0 END
+      changes:
+        - sql:
+            sql: >-
+              REVOKE ALL ON SCHEMA experience FROM PUBLIC;
+              GRANT USAGE ON SCHEMA experience TO nigson_experience_app;
+              GRANT SELECT ON experience.databasechangelog TO nigson_experience_app;
+      rollback:
+        - sql:
+            sql: REVOKE SELECT ON experience.databasechangelog FROM nigson_experience_app;

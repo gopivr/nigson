@@ -8,7 +8,7 @@ EP00 — Repository/build/local mocks; BP1 foundation.
 
 ## Current Task
 
-FOUND-003 — IN_PROGRESS. Implement local dependencies, bootstrap and deterministic command surface.
+FOUND-003 — IN_PROGRESS. Resumed: owner bootstrap masters, guarded migrate/seed, app/vector profiles and isolated complete cold-start test; preserve nigson-local containers/volumes.
 
 ## Completed Tasks
 

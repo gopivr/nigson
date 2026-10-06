@@ -38,3 +38,11 @@ installed uv executable. Build caches stay in `.build/`. These bootstraps contai
 no domain endpoints or AI assistant implementation. Genuine provider testing requires separately supplied credentials,
 accounts, senders, approved templates and routes; missing credentials do not
 block offline adapters and stateful mocks. No tax or campaign policy is inferred.
+
+The foundation local workflow is `make local-up`, `make migrate ENV=local`,
+`make seed ENV=local FIXTURE_PROFILE=foundation`, then `make run-core`.
+`make cold-start` qualifies that workflow twice on fresh isolated test volumes
+and preserves the running `nigson-local` stack. Owner migrations and non-root
+application Docker runtimes are executable; business schemas, APIs and stateful
+provider mocks remain pending in DATA-001 and MOCK-001. See the local development
+guide for guards, health URLs and optional vector/AI qualification.

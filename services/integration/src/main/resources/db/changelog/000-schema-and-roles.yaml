@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: integration-20261005-001
+      author: nigson-platform
+      logicalFilePath: integration/000-schema-and-roles.yaml
+      preConditions:
+        - onFail: HALT
+        - dbms:
+            type: postgresql
+        - sqlCheck:
+            expectedResult: "1"
+            sql: >-
+              SELECT CASE WHEN current_user = 'nigson_integration_migrator'
+              AND current_setting('server_version_num')::int >= 180000
+              AND current_setting('server_version_num')::int < 190000
+              AND pg_get_userbyid((SELECT nspowner FROM pg_namespace WHERE nspname = 'integration')) = current_user
+              THEN 1 ELSE 0 END
+      changes:
+        - sql:
+            sql: >-
+              REVOKE ALL ON SCHEMA integration FROM PUBLIC;
+              GRANT USAGE ON SCHEMA integration TO nigson_integration_app;
+              GRANT SELECT ON integration.databasechangelog TO nigson_integration_app;
+      rollback:
+        - sql:
+            sql: REVOKE SELECT ON integration.databasechangelog FROM nigson_integration_app;

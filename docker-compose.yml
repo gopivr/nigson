@@ -81,8 +81,189 @@ services:
       - "127.0.0.1:${MAILPIT_SMTP_PORT:-1025}:1025"
     volumes:
       - nigson-mailpit:/data
+
+  vector-db:
+    profiles: [ai]
+    image: pgvector/pgvector:0.8.2-pg18@sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      POSTGRES_USER: nigson_bootstrap
+      POSTGRES_PASSWORD: mock-local-bootstrap
+      POSTGRES_DB: nigson_vector_test
+    volumes:
+      - nigson-vector:/var/lib/postgresql
+      - ./infrastructure/docker/postgres/10-local-bootstrap.sql:/docker-entrypoint-initdb.d/10-local-bootstrap.sql:ro
+    healthcheck:
+      test: [CMD, pg_isready, -U, nigson_bootstrap, -d, nigson_vector_test]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  migrate-commerce:
+    profiles: [app]
+    image: nigson/migration:local
+    build:
+      context: .
+      dockerfile: services/commerce/Dockerfile
+      target: migration
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      MIGRATION_OWNER: commerce
+      MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
+      MIGRATION_PASSWORD: ${COMMERCE_MIGRATION_PASSWORD:?Missing COMMERCE_MIGRATION_PASSWORD}
+    read_only: true
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  commerce:
+    profiles: [app]
+    image: nigson/commerce:local
+    build:
+      context: .
+      dockerfile: services/commerce/Dockerfile
+      target: application
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=commerce
+      NIGSON_DB_USER: nigson_commerce_app
+      NIGSON_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?Missing COMMERCE_DB_PASSWORD}
+      NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
+      NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
+      SERVER_PORT: 8081
+    ports:
+      - "127.0.0.1:${COMMERCE_PORT:-8081}:8081"
+    read_only: true
+    tmpfs: [/tmp]
+    stop_grace_period: 35s
+    depends_on:
+      migrate-commerce:
+        condition: service_completed_successfully
+      keycloak:
+        condition: service_started
+  migrate-experience:
+    profiles: [app]
+    image: nigson/migration:local
+    build:
+      context: .
+      dockerfile: services/commerce/Dockerfile
+      target: migration
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      MIGRATION_OWNER: experience
+      MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
+      MIGRATION_PASSWORD: ${EXPERIENCE_MIGRATION_PASSWORD:?Missing EXPERIENCE_MIGRATION_PASSWORD}
+    read_only: true
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  experience:
+    profiles: [app]
+    image: nigson/experience:local
+    build:
+      context: .
+      dockerfile: services/experience/Dockerfile
+      target: application
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=experience
+      NIGSON_DB_USER: nigson_experience_app
+      NIGSON_DB_PASSWORD: ${EXPERIENCE_DB_PASSWORD:?Missing EXPERIENCE_DB_PASSWORD}
+      NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
+      NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
+      SERVER_PORT: 8082
+    ports:
+      - "127.0.0.1:${EXPERIENCE_PORT:-8082}:8082"
+    read_only: true
+    tmpfs: [/tmp]
+    stop_grace_period: 35s
+    depends_on:
+      migrate-experience:
+        condition: service_completed_successfully
+      keycloak:
+        condition: service_started
+  migrate-integration:
+    profiles: [app]
+    image: nigson/migration:local
+    build:
+      context: .
+      dockerfile: services/commerce/Dockerfile
+      target: migration
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      MIGRATION_OWNER: integration
+      MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
+      MIGRATION_PASSWORD: ${INTEGRATION_MIGRATION_PASSWORD:?Missing INTEGRATION_MIGRATION_PASSWORD}
+    read_only: true
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  integration:
+    profiles: [app]
+    image: nigson/integration:local
+    build:
+      context: .
+      dockerfile: services/integration/Dockerfile
+      target: application
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=integration
+      NIGSON_DB_USER: nigson_integration_app
+      NIGSON_DB_PASSWORD: ${INTEGRATION_DB_PASSWORD:?Missing INTEGRATION_DB_PASSWORD}
+      NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
+      NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
+      SERVER_PORT: 8083
+    ports:
+      - "127.0.0.1:${INTEGRATION_PORT:-8083}:8083"
+    read_only: true
+    tmpfs: [/tmp]
+    stop_grace_period: 35s
+    depends_on:
+      migrate-integration:
+        condition: service_completed_successfully
+      keycloak:
+        condition: service_started
+  migrate-ai:
+    profiles: [ai]
+    image: nigson/migration:local
+    build:
+      context: .
+      dockerfile: services/commerce/Dockerfile
+      target: migration
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      MIGRATION_OWNER: ai
+      MIGRATION_JDBC_URL: jdbc:postgresql://vector-db:5432/nigson_vector_test
+      MIGRATION_PASSWORD: ${AI_MIGRATION_PASSWORD:?Missing AI_MIGRATION_PASSWORD}
+    read_only: true
+    tmpfs: [/tmp]
+    depends_on:
+      vector-db:
+        condition: service_healthy
+  ai:
+    profiles: [ai]
+    image: nigson/ai:local
+    build:
+      context: services/ai
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      NIGSON_DB_HOST: vector-db
+      NIGSON_DB_NAME: nigson_vector_test
+      NIGSON_DB_PASSWORD: ${AI_DB_PASSWORD:?Missing AI_DB_PASSWORD}
+    ports:
+      - "127.0.0.1:${AI_PORT:-8084}:8084"
+    read_only: true
+    tmpfs: [/tmp]
+    stop_grace_period: 35s
+    depends_on:
+      migrate-ai:
+        condition: service_completed_successfully
+
 volumes:
   nigson-postgres:
   nigson-identity:
   nigson-localstack:
   nigson-mailpit:
+  nigson-vector:

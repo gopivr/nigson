@@ -1,0 +1,14 @@
+.git
+.DS_Store
+.env
+.env.*
+.build
+.local
+artifacts
+Nigson_Backend_Implementation_Blueprint
+**/target
+**/__pycache__
+**/.venv
+docs
+tests
+services/ai
