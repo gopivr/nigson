@@ -8,7 +8,7 @@ EP01 — Owner schemas and reliable platform primitives; BP1 foundation.
 
 ## Current Task
 
-DATA-001 — IN_PROGRESS; all acceptance checks passed, recording the implementation commit before DONE. All 122 tables, cumulative gates, owner/audit roles, actual catalog/upgrade/constraint/rollback tests and cold-start regression are complete.
+DATA-001 — DONE; AC-DATA-001 passed. All 122 tables, cumulative gates, owner/audit roles, actual catalog/upgrade/constraint/rollback tests and cold-start regression are complete. Implementation 87218e0675d453bb92098e80530df814bb06ae0a.
 
 ## Completed Tasks
 
@@ -18,9 +18,11 @@ DATA-001 — IN_PROGRESS; all acceptance checks passed, recording the implementa
 
 - [x] FOUND-003 — DONE; AC-FOUND-003 / TEST-LOCAL-COLD-START PASS, two complete empty-volume setup passes, owner migrations/drift checks, real identity fixtures, non-root apps/vector, security/outage/cleanup and original local-state preservation. Implementation 9c5e57ee7237aaed360a5c18e06ad3b64074e837. See docs/implementation/2026-10-05-FOUND-003.md.
 
+- [x] DATA-001 — DONE; implementation 87218e0675d453bb92098e80530df814bb06ae0a; AC-DATA-001 / TEST-DATA-MIGRATE / TEST-DATA-OWNERSHIP PASS. Report: docs/implementation/2026-10-06-DATA-001.md.
+
 ## In Progress
 
-- [ ] DATA-001 — Acceptance verified; implementation commit pending.
+None; next dependency-ready task is PLAT-001.
 
 ## Pending
 
@@ -99,7 +101,7 @@ PASS — 6 Java, 4 AI, 29 repository/local/catalog contracts; TEST-DATA-MIGRATE/
 
 ## Last Successful Commit
 
-9c5e57ee7237aaed360a5c18e06ad3b64074e837 — verified FOUND-003 implementation and acceptance evidence. Earlier partial implementation/failure history is retained in the task report.
+87218e0675d453bb92098e80530df814bb06ae0a — verified DATA-001 implementation, schema acceptance and preserved-state evidence. Initial failure history is retained in the task report.
 
 ## Confirmed Inputs
 
@@ -115,7 +117,7 @@ Credentials absent does not block offline implementation: MOCK-001 must create s
 
 ## Next Recommended Task
 
-PLAT-001 — dependency-ready after DATA-001 commit/DONE; implement durable owner outbox, processed-event dedup and request-hash/idempotency replay with short leases and failure/race tests. MOCK-001 remains PENDING and is also dependency-ready; real stateful HTTP mock implementation requires no live credentials. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
+PLAT-001 — dependency-ready now that DATA-001 is DONE; implement durable owner outbox, processed-event dedup and request-hash/idempotency replay with short leases and failure/race tests. MOCK-001 remains PENDING and is also dependency-ready; real stateful HTTP mock implementation requires no live credentials. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
 
 ## Session Evidence / Protocol
 
