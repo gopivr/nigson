@@ -8,7 +8,7 @@ EP01 — Owner schemas and reliable platform primitives; BP1 foundation.
 
 ## Current Task
 
-PLAT-001 and MOCK-001 — IN_PROGRESS. Owned PostgreSQL/SNS/SQS race and crash qualification, actual HTTP/signature/SMTP mock flows and repeatable builds pass; complete current-source cold-start passes; section54 acceptance commit/report pending. Original local state remains preserved.
+PLAT-001 and MOCK-001 — DONE (engineering acceptance); implementation 5b86b5d161681eb38d91fc1ec68adfd7d6e21971. Complete current-source cold-start, real PostgreSQL/SNS/SQS races, offline actual HTTP/signature/SMTP mocks and repeatable builds pass. Next dependency-ready task: PLAT-002. Genuine provider/cloud release qualification remains NOT_RUN.
 
 ## Completed Tasks
 
@@ -20,10 +20,12 @@ PLAT-001 and MOCK-001 — IN_PROGRESS. Owned PostgreSQL/SNS/SQS race and crash q
 
 - [x] DATA-001 — DONE; implementation 87218e0675d453bb92098e80530df814bb06ae0a; AC-DATA-001 / TEST-DATA-MIGRATE / TEST-DATA-OWNERSHIP PASS. Report: docs/implementation/2026-10-06-DATA-001.md.
 
+- [x] PLAT-001 — DONE; AC-PLAT-001, native PostgreSQL/SNS/SQS crash/replay/hash/race and complete cold-start PASS. Report: docs/implementation/2026-10-06-PLAT-001.md.
+- [x] MOCK-001 — DONE (engineering); AC-MOCK-001, actual HTTP/signature/SMTP/state/mode qualification PASS with external JVM HTTP denied. Genuine qualification NOT_RUN. Report: docs/implementation/2026-10-06-MOCK-001.md.
+
 ## In Progress
 
-- [ ] PLAT-001 — IN_PROGRESS; crash/replay/concurrency and real PostgreSQL/LocalStack acceptance.
-- [ ] MOCK-001 — IN_PROGRESS; stateful HTTP/provider mode/signature/offline acceptance.
+None. PLAT-002 is dependency-ready.
 
 ## Pending
 
@@ -100,7 +102,7 @@ PASS — ordinary build6 Java/5 AI/31 contracts; native platform11 Java passed w
 
 ## Last Successful Commit
 
-87218e0675d453bb92098e80530df814bb06ae0a — verified DATA-001 implementation, schema acceptance and preserved-state evidence. Initial failure history is retained in the task report.
+5b86b5d161681eb38d91fc1ec68adfd7d6e21971 — verified PLAT-001/MOCK-001 code, acceptance and resolved failure evidence. This status metadata follows the actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -116,7 +118,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-Finish PLAT-001/MOCK-001 cold-start/repeatability and commit/report acceptance, then PLAT-002 becomes dependency-ready. Provider genuine qualification requires supplied credentials/account/service context and remains NOT_RUN. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
+PLAT-002 — implement safe RFC9457 errors, validation, transactional redacted audit and HTTP/SQS observability. Its PLAT-001 dependency is DONE. Provider genuine qualification requires supplied credentials/account/service context and remains NOT_RUN. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
 
 ## Session Evidence / Protocol
 
