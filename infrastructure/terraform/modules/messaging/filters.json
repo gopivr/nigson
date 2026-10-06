@@ -1,0 +1,384 @@
+{
+  "1": {
+    "integration-work": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "catalogue.product.changed.v1",
+            "file.scan.requested.v1",
+            "inventory.availability.changed.v1",
+            "market.changed.v1",
+            "order.cancelled.v1",
+            "order.paid.v1",
+            "order.pending.v1",
+            "order.processing.v1",
+            "pricing.changed.v1",
+            "refund.approved.v1",
+            "refund.requested.v1",
+            "refund.succeeded.v1",
+            "shipment.booking.requested.v1",
+            "shipment.changed.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "communication.verification.requested.v1",
+            "content.published.v1",
+            "content.withdrawn.v1",
+            "file.scan.requested.v1",
+            "lead.created.v1"
+          ]
+        }
+      ]
+    },
+    "experience-projections": {
+      "event_type": [
+        {
+          "exists": false
+        }
+      ]
+    },
+    "commerce-domain": {
+      "producer": [
+        "commerce"
+      ],
+      "event_type": [
+        "order.cancelled.v1",
+        "order.paid.v1",
+        "refund.approved.v1",
+        "refund.succeeded.v1"
+      ]
+    }
+  },
+  "2": {
+    "integration-work": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "catalogue.product.changed.v1",
+            "file.scan.requested.v1",
+            "inventory.availability.changed.v1",
+            "market.changed.v1",
+            "order.cancelled.v1",
+            "order.paid.v1",
+            "order.pending.v1",
+            "order.processing.v1",
+            "pricing.changed.v1",
+            "refund.approved.v1",
+            "refund.requested.v1",
+            "refund.succeeded.v1",
+            "shipment.booking.requested.v1",
+            "shipment.changed.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "career.application.created.v1",
+            "communication.verification.requested.v1",
+            "consent.changed.v1",
+            "content.published.v1",
+            "content.withdrawn.v1",
+            "file.scan.requested.v1",
+            "lead.created.v1",
+            "newsletter.verification.requested.v1",
+            "review.published.v1"
+          ]
+        }
+      ]
+    },
+    "experience-projections": {
+      "event_type": [
+        {
+          "exists": false
+        }
+      ]
+    },
+    "commerce-domain": {
+      "producer": [
+        "commerce"
+      ],
+      "event_type": [
+        "order.cancelled.v1",
+        "order.paid.v1",
+        "refund.approved.v1",
+        "refund.succeeded.v1"
+      ]
+    }
+  },
+  "3": {
+    "integration-work": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "catalogue.product.changed.v1",
+            "distributor.entitlement.changed.v1",
+            "file.scan.requested.v1",
+            "inventory.availability.changed.v1",
+            "market.changed.v1",
+            "order.cancelled.v1",
+            "order.paid.v1",
+            "order.pending.v1",
+            "order.processing.v1",
+            "pricing.changed.v1",
+            "quote.accepted.v1",
+            "quote.offered.v1",
+            "refund.approved.v1",
+            "refund.requested.v1",
+            "refund.succeeded.v1",
+            "shipment.booking.requested.v1",
+            "shipment.changed.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "career.application.created.v1",
+            "communication.verification.requested.v1",
+            "consent.changed.v1",
+            "content.published.v1",
+            "content.withdrawn.v1",
+            "distributor.application.created.v1",
+            "file.scan.requested.v1",
+            "lead.created.v1",
+            "newsletter.verification.requested.v1",
+            "review.published.v1"
+          ]
+        }
+      ]
+    },
+    "experience-projections": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "distributor.entitlement.changed.v1",
+            "quote.accepted.v1",
+            "quote.offered.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "distributor.decision.requested.v1"
+          ]
+        }
+      ]
+    },
+    "commerce-domain": {
+      "producer": [
+        "commerce"
+      ],
+      "event_type": [
+        "order.cancelled.v1",
+        "order.paid.v1",
+        "refund.approved.v1",
+        "refund.succeeded.v1"
+      ]
+    }
+  },
+  "4": {
+    "integration-work": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "cart.recovery.requested.v1",
+            "catalogue.product.changed.v1",
+            "distributor.entitlement.changed.v1",
+            "file.scan.requested.v1",
+            "inventory.availability.changed.v1",
+            "market.changed.v1",
+            "order.cancelled.v1",
+            "order.paid.v1",
+            "order.pending.v1",
+            "order.processing.v1",
+            "pricing.changed.v1",
+            "quote.accepted.v1",
+            "quote.offered.v1",
+            "refund.approved.v1",
+            "refund.requested.v1",
+            "refund.succeeded.v1",
+            "shipment.booking.requested.v1",
+            "shipment.changed.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "career.application.created.v1",
+            "communication.verification.requested.v1",
+            "consent.changed.v1",
+            "content.published.v1",
+            "content.withdrawn.v1",
+            "distributor.application.created.v1",
+            "file.scan.requested.v1",
+            "lead.created.v1",
+            "newsletter.verification.requested.v1",
+            "review.published.v1"
+          ]
+        }
+      ]
+    },
+    "experience-projections": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "distributor.entitlement.changed.v1",
+            "quote.accepted.v1",
+            "quote.offered.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "distributor.decision.requested.v1"
+          ]
+        }
+      ]
+    },
+    "commerce-domain": {
+      "producer": [
+        "commerce"
+      ],
+      "event_type": [
+        "order.cancelled.v1",
+        "order.paid.v1",
+        "refund.approved.v1",
+        "refund.succeeded.v1"
+      ]
+    }
+  },
+  "5": {
+    "integration-work": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "cart.recovery.requested.v1",
+            "catalogue.product.changed.v1",
+            "distributor.entitlement.changed.v1",
+            "file.scan.requested.v1",
+            "inventory.availability.changed.v1",
+            "market.changed.v1",
+            "order.cancelled.v1",
+            "order.paid.v1",
+            "order.pending.v1",
+            "order.processing.v1",
+            "pricing.changed.v1",
+            "quote.accepted.v1",
+            "quote.offered.v1",
+            "refund.approved.v1",
+            "refund.requested.v1",
+            "refund.succeeded.v1",
+            "shipment.booking.requested.v1",
+            "shipment.changed.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "career.application.created.v1",
+            "communication.verification.requested.v1",
+            "consent.changed.v1",
+            "content.published.v1",
+            "content.withdrawn.v1",
+            "distributor.application.created.v1",
+            "file.scan.requested.v1",
+            "lead.created.v1",
+            "newsletter.verification.requested.v1",
+            "review.published.v1"
+          ]
+        }
+      ]
+    },
+    "experience-projections": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "distributor.entitlement.changed.v1",
+            "quote.accepted.v1",
+            "quote.offered.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "distributor.decision.requested.v1"
+          ]
+        }
+      ]
+    },
+    "commerce-domain": {
+      "producer": [
+        "commerce"
+      ],
+      "event_type": [
+        "order.cancelled.v1",
+        "order.paid.v1",
+        "refund.approved.v1",
+        "refund.succeeded.v1"
+      ]
+    },
+    "ai-ingestion": {
+      "$or": [
+        {
+          "producer": [
+            "commerce"
+          ],
+          "event_type": [
+            "catalogue.product.changed.v1",
+            "market.changed.v1"
+          ]
+        },
+        {
+          "producer": [
+            "experience"
+          ],
+          "event_type": [
+            "content.published.v1",
+            "content.withdrawn.v1"
+          ]
+        }
+      ]
+    }
+  }
+}

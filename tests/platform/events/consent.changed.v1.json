@@ -1,0 +1,22 @@
+{
+  "event_id": "d5433787-625f-427f-ba53-f44cb493310a",
+  "event_type": "consent.changed.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "569e8f66-0599-4e48-9c0e-2e56b2ce0ebf",
+  "aggregate_version": 1,
+  "organization_id": "921c3f74-89a7-44b2-abaa-54e2cb7dacba",
+  "correlation_id": "23131b62-2060-40ad-a688-4167533e9e7f",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "party_id": "bf84ad40-764a-4e39-868b-2b569af2bd09",
+    "destination_hash": "fixture",
+    "destination_kind": "EMAIL",
+    "email_hash": "fixture",
+    "channel": "EMAIL",
+    "purpose": "fixture",
+    "granted": false,
+    "revision": 1
+  }
+}

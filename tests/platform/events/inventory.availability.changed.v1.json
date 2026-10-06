@@ -1,0 +1,17 @@
+{
+  "event_id": "d9fc8704-15c3-4631-9300-7c926edfd3f5",
+  "event_type": "inventory.availability.changed.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "c6860b70-c707-4be3-9ff0-8c813053658a",
+  "aggregate_version": 1,
+  "organization_id": "86c31fb1-92b1-4c9c-a5ae-3ff183a83481",
+  "correlation_id": "c3d3ad69-77a2-4c00-b66c-110804b6334e",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "sku_id": "14f9daf9-4dbe-4cfd-bc8d-47ff624c983d",
+    "location_id": "9418e181-0634-487d-8646-72c6cbb7bc54",
+    "available": "10.00"
+  }
+}

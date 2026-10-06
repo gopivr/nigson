@@ -1,0 +1,15 @@
+{
+  "event_id": "76bdac17-8555-4488-9d38-3e789b800dd4",
+  "event_type": "order.processing.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "7ff55649-c8df-4217-8b28-1be67f073290",
+  "aggregate_version": 1,
+  "organization_id": "11194ead-0339-466c-b024-e09b5fe4998c",
+  "correlation_id": "1ee46e6d-ff74-4e0b-bfa8-b051c61016a5",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "order_id": "7f83bf7f-4da6-4ecb-b3cb-4e41ca04f555"
+  }
+}

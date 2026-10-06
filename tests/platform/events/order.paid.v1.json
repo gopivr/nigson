@@ -1,0 +1,20 @@
+{
+  "event_id": "e3a14455-f21f-440c-a143-f3090b08d6f1",
+  "event_type": "order.paid.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "93a07dcd-2dba-456f-8e96-563dc5d6592c",
+  "aggregate_version": 1,
+  "organization_id": "aaa22851-34f2-4854-a531-03ed1fbbbfdd",
+  "correlation_id": "4a269292-cd0c-4810-8d1e-8b3906024cc0",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "order_id": "8fd2407e-7d0d-44c6-aed0-e6cdd48468d1",
+    "party_id": "1d74b923-5d9a-483f-841b-d448452cd815",
+    "organization_id": "4ee50a7b-67b4-4bc7-a9ed-a872c29e918c",
+    "currency": "NGN",
+    "total": "10.00",
+    "payment_transaction_id": "6490a348-89ff-4779-abf5-153150c4fe62"
+  }
+}

@@ -21,9 +21,10 @@ COPY services/experience services/experience
 COPY services/integration services/integration
 COPY scripts/java scripts/java
 COPY database/changelog database/changelog
-RUN ./mvnw -B verify && ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+RUN ./mvnw -B install
+RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
 RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
-RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
 
 FROM oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c AS runtime-base
 COPY --from=build /jre /opt/java

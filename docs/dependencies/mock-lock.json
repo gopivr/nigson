@@ -1,0 +1,10 @@
+{
+  "wiremock_standalone": {
+    "version": "3.13.2",
+    "sha256": "d097b19bd483c5038479b13a5c71e9faf8f2f5106584f0c120a7770ab0bdb367"
+  },
+  "wiremock_image": "wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3",
+  "testcontainers": "2.0.5",
+  "ryuk_image": "testcontainers/ryuk:0.14.0@sha256:7c1a8a9a47c780ed0f983770a662f80deb115d95cce3e2daa3d12115b8cd28f0",
+  "testcontainers_probe_image": "alpine:3.17@sha256:8fc3dacfb6d69da8d44e42390de777e48577085db99aa4e4af35f483eb08b989"
+}

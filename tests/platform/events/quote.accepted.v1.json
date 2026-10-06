@@ -1,0 +1,18 @@
+{
+  "event_id": "04eeb8dd-985b-40f6-90c5-76f7881d34b2",
+  "event_type": "quote.accepted.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "5c06c714-bdfd-4ba5-8ca3-38aac1f35d21",
+  "aggregate_version": 1,
+  "organization_id": "2419ce1d-1464-438d-bd30-cb3e13e3e0d8",
+  "correlation_id": "1fce2db2-53b4-48dd-8e5f-47f08e35aea7",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "quote_id": "09260fdb-3236-4ed0-ab0b-47d4e2c89e27",
+    "revision_id": "977fb2e2-abdf-4e8b-8252-97f95f9b3b00",
+    "order_id": "b55f7aac-5e02-4832-a927-695bce292a39",
+    "lead_id": "b44b76c4-72c0-42c3-bf81-d43a04ccd494"
+  }
+}

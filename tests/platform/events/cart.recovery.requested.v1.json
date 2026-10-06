@@ -1,0 +1,17 @@
+{
+  "event_id": "9adce956-e781-44cf-8728-4cfd0d3197cb",
+  "event_type": "cart.recovery.requested.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "1d826645-33ca-4130-8935-00a33e256821",
+  "aggregate_version": 1,
+  "organization_id": "d0a2acf1-778d-45e1-af1d-d12bbdea3c37",
+  "correlation_id": "597e00ff-60b7-437e-81e3-e9f814962d53",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "candidate_id": "c4cb781c-a882-4cdc-9a7a-d653eaeb6a97",
+    "cart_id": "19b4841a-1168-4b15-b592-92b5158468db",
+    "party_id": "10c4de05-ccd6-427c-975d-d3032187c183"
+  }
+}

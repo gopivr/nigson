@@ -1,0 +1,18 @@
+{
+  "event_id": "af0e87c7-3892-4ce7-a142-d084d15fc31a",
+  "event_type": "catalogue.product.changed.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "4eef9fdc-94c9-4aac-b404-faa2d399da59",
+  "aggregate_version": 1,
+  "organization_id": "145eeeab-2e76-41f3-8fb8-817851cd1c5b",
+  "correlation_id": "84d013c0-98c3-497f-a0ef-a4cc1e649b7c",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "product_id": "2acc5a84-af34-466e-804d-b9ca1ee0f0b7",
+    "revision": 1,
+    "publication_state": "fixture",
+    "market_codes": []
+  }
+}

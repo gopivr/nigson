@@ -1,0 +1,17 @@
+{
+  "event_id": "cff4a64e-4226-4c53-b256-4b3a1f1a5a9d",
+  "event_type": "shipment.booking.requested.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "a2229dc2-46bf-4e0e-b091-6145497fe722",
+  "aggregate_version": 1,
+  "organization_id": "2952925e-794a-4cf9-bdc6-3409ac0dfeae",
+  "correlation_id": "c8240221-0dc3-4b74-a4f5-8dab88e7f187",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "shipment_id": "1102bf21-d55b-49d1-ad73-0703fe01037d",
+    "booking_request_id": "9491c607-63dd-4879-910c-83eed460e14c",
+    "provider": "FEDEX"
+  }
+}

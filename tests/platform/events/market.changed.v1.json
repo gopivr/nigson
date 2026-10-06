@@ -1,0 +1,17 @@
+{
+  "event_id": "b01862cb-e4ba-4591-9732-dcdd7b38a164",
+  "event_type": "market.changed.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "64c64f74-2354-416a-88b1-02eda074ff11",
+  "aggregate_version": 1,
+  "organization_id": "6d90ff0e-2217-4bd4-832a-35257a6721ca",
+  "correlation_id": "2eeb96a4-83eb-4539-898f-51b5e4b3ee7b",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "market_id": "ccdd19f7-4034-4761-9ab6-cda50d9ba7de",
+    "policy_revision": 1,
+    "enabled": false
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "event_id": "ff522e67-e84f-442d-8844-8d14f4aa0888",
+  "event_type": "newsletter.verification.requested.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "f922b834-d42f-43f5-b4cf-ff04f57c59cf",
+  "aggregate_version": 1,
+  "organization_id": "8456123b-f756-486e-84e8-d93564516e41",
+  "correlation_id": "123f2c7d-fb86-4f32-9ac9-eede3d10900f",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "subscription_id": "983dc0e7-b143-4814-8f3d-1d0bca90e75f"
+  }
+}

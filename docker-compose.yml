@@ -124,8 +124,18 @@ services:
       dockerfile: services/commerce/Dockerfile
       target: application
     environment:
+      NIGSON_EVENTS_ENABLED: "true"
+      NIGSON_EVENT_ENDPOINT: http://localstack:4566
+      NIGSON_EVENT_TOPIC: arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events
+      NIGSON_EVENT_QUEUE: http://localstack:4566/queue/us-east-1/000000000000/commerce-domain
+      NIGSON_EVENT_DLQ: http://localstack:4566/queue/us-east-1/000000000000/commerce-domain-dlq
+      SCHEMA_RELEASE: ${SCHEMA_RELEASE:-BP1}
       APP_ENV: ${APP_ENV:-local}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=commerce
+      NIGSON_PROVIDERS_ENABLED: "true"
+      PAYSTACK_MODE: MOCK
+      PAYSTACK_BASE_URL: http://paystack-mock:8080
+      PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY:-sk_mock_nigson}
       NIGSON_DB_USER: nigson_commerce_app
       NIGSON_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?Missing COMMERCE_DB_PASSWORD}
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
@@ -167,6 +177,12 @@ services:
       dockerfile: services/experience/Dockerfile
       target: application
     environment:
+      NIGSON_EVENTS_ENABLED: "true"
+      NIGSON_EVENT_ENDPOINT: http://localstack:4566
+      NIGSON_EVENT_TOPIC: arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events
+      NIGSON_EVENT_QUEUE: http://localstack:4566/queue/us-east-1/000000000000/experience-projections
+      NIGSON_EVENT_DLQ: http://localstack:4566/queue/us-east-1/000000000000/experience-projections-dlq
+      SCHEMA_RELEASE: ${SCHEMA_RELEASE:-BP1}
       APP_ENV: ${APP_ENV:-local}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=experience
       NIGSON_DB_USER: nigson_experience_app
@@ -210,8 +226,29 @@ services:
       dockerfile: services/integration/Dockerfile
       target: application
     environment:
+      NIGSON_EVENTS_ENABLED: "true"
+      NIGSON_EVENT_ENDPOINT: http://localstack:4566
+      NIGSON_EVENT_TOPIC: arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events
+      NIGSON_EVENT_QUEUE: http://localstack:4566/queue/us-east-1/000000000000/integration-work
+      NIGSON_EVENT_DLQ: http://localstack:4566/queue/us-east-1/000000000000/integration-work-dlq
+      SCHEMA_RELEASE: ${SCHEMA_RELEASE:-BP1}
       APP_ENV: ${APP_ENV:-local}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=integration
+      NIGSON_PROVIDERS_ENABLED: "true"
+      FEDEX_MODE: MOCK
+      FEDEX_BASE_URL: http://fedex-mock:8080
+      FEDEX_CLIENT_ID: ${FEDEX_CLIENT_ID:-mock-fedex-client}
+      FEDEX_CLIENT_SECRET: ${FEDEX_CLIENT_SECRET:-mock-fedex-secret}
+      FEDEX_ACCOUNT_NUMBER: ${FEDEX_ACCOUNT_NUMBER:-mock-fedex-account}
+      TWILIO_MODE: MOCK
+      TWILIO_BASE_URL: http://twilio-mock:8080
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-AC00000000000000000000000000000000}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-mock-twilio-token}
+      TWILIO_MESSAGING_SERVICE_SID: ${TWILIO_MESSAGING_SERVICE_SID:-MG00000000000000000000000000000000}
+      EMAIL_MODE: MOCK
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_FROM: synthetic@example.invalid
       NIGSON_DB_USER: nigson_integration_app
       NIGSON_DB_PASSWORD: ${INTEGRATION_DB_PASSWORD:?Missing INTEGRATION_DB_PASSWORD}
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
@@ -265,9 +302,66 @@ services:
       migrate-ai:
         condition: service_completed_successfully
 
+  paystack-mock:
+    profiles: [provider-mocks]
+    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
+    environment:
+      APP_ENV: local
+      MOCK_PROVIDER: paystack
+    command: ["--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal"]
+    volumes:
+      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
+      - nigson-paystack-mock:/home/wiremock/state
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+
+  fedex-mock:
+    profiles: [provider-mocks]
+    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
+    environment:
+      APP_ENV: local
+      MOCK_PROVIDER: fedex
+    command: ["--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal"]
+    volumes:
+      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
+      - nigson-fedex-mock:/home/wiremock/state
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+
+  twilio-mock:
+    profiles: [provider-mocks]
+    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
+    environment:
+      APP_ENV: local
+      MOCK_PROVIDER: twilio
+    command: ["--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal"]
+    volumes:
+      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
+      - nigson-twilio-mock:/home/wiremock/state
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+
 volumes:
   nigson-postgres:
   nigson-identity:
   nigson-localstack:
   nigson-mailpit:
   nigson-vector:
+  nigson-paystack-mock:
+  nigson-fedex-mock:
+  nigson-twilio-mock:

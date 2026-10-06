@@ -1,0 +1,17 @@
+{
+  "event_id": "e21a2470-2a39-406b-9136-656ab8b2cb76",
+  "event_type": "content.withdrawn.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "6c5d5061-717a-427f-8778-010090386e0a",
+  "aggregate_version": 1,
+  "organization_id": "29ee9c7c-0a91-46bc-bd23-686ba3bfb24c",
+  "correlation_id": "630a5c7a-12b8-40de-8b8e-0699a04c758e",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "content_item_id": "5e330f09-2885-4c95-8524-eb2f3a3bf6c6",
+    "revision": 1,
+    "locale": "fixture"
+  }
+}

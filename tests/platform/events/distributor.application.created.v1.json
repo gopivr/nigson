@@ -1,0 +1,16 @@
+{
+  "event_id": "97b1ba99-d0c7-4b26-9f23-db04b67d8901",
+  "event_type": "distributor.application.created.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "702a9459-18b2-480c-a329-b638c7cd6909",
+  "aggregate_version": 1,
+  "organization_id": "c57df45d-2ec2-432c-8fd6-afe055f9a21d",
+  "correlation_id": "9714c075-4071-4498-9f9f-6dc27cbb840f",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "application_id": "3a6e6bba-5ffe-4d1b-9a49-753328ff3ab0",
+    "recipient_group": "fixture"
+  }
+}

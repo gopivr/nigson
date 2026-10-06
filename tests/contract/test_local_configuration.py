@@ -50,7 +50,7 @@ class LocalIsolationTests(unittest.TestCase):
             docker.assert_not_called()
 
     def test_implicit_provider_profile_rejected_before_docker(self):
-        with patch.dict(os.environ, {"ENV": "local", "PROFILES": "provider-mocks"}), patch.object(local, "command") as docker:
+        with patch.dict(os.environ, {"ENV": "local", "PROFILES": "unapproved"}), patch.object(local, "command") as docker:
             with self.assertRaises(ValueError):
                 local.validate()
             docker.assert_not_called()

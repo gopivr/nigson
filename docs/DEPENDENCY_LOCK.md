@@ -12,6 +12,11 @@ Specification 1.1.0 / FOUND-002, verified 5 October 2026 on macOS ARM64.
 | Maven Enforcer | 3.6.2 |
 | Maven Dependency plugin | 3.8.1 |
 | Commons Text (outside Boot BOM) | 1.15.0 |
+| AWS Java SDK BOM / SNS / SQS | 2.55.10 |
+| Official Twilio signature SDK | 13.0.2 |
+| Commons IO convergence pin | 2.22.0 |
+| Testcontainers (test scope only) | 2.0.5 |
+| WireMock standalone/image (test-only) | 3.13.2; hashes in docs/dependencies/mock-lock.json |
 | Python | CPython 3.12.12, uv-managed python-build-standalone distribution |
 | uv | 0.9.3 |
 | FastAPI / Pydantic / Settings | 0.142.2 / 2.13.5 / 2.15.0 |
@@ -99,3 +104,25 @@ pins in this task. FOUND-003 must verify local image availability and pin digest
 INFRA-001/AI-KNOWL-001 must qualify the selected AWS region/RDS extension and BP5
 vector behavior. No AWS region was supplied or inferred. Container builds,
 database migration/role tests and provider qualifications have not run in FOUND-002.
+
+## PLAT-001 / MOCK-001 additions
+
+AWS SDK2.55.10 is pinned by its BOM. The official Twilio13.0.2 RequestValidator
+is used for complete webhook verification. Twilio requested Commons IO2.14.0,
+which conflicted with the existing Liquibase5.0.3 dependency on2.22.0; Enforcer
+rejected that graph. The explicit2.22.0 convergence pin retains the existing
+qualified Liquibase version and passes the adapter/signature/migration checks.
+Testcontainers2.0.5 is test scope only. WireMock3.13.2's standalone artifact
+checksum and multi-platform Docker digest, plus auxiliary reaper/probe images,
+are pinned separately. Application JARs contain neither mock controllers nor
+Testcontainers.
+
+Maven class/test output now uses `.build/java/<artifact>/` so concurrent IDE
+incremental compilation cannot replace qualified classes with error stubs.
+JARs and dependency graphs remain under each module's `target/`. Docker builds
+install the reactor before copying runtime dependencies and include `jdk.net`
+in the linked runtime because the qualified AWS Apache5 HTTP client needs it.
+Primary references: [AWS SDK Java API](https://docs.aws.amazon.com/java/api/latest/software/amazon/awssdk/services/sns/package-summary.html),
+[Twilio SDK](https://github.com/twilio/twilio-java),
+[WireMock response extensions](https://wiremock.org/docs/extensibility/transforming-responses/),
+[Testcontainers](https://java.testcontainers.org/).

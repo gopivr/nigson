@@ -8,7 +8,7 @@ EP01 — Owner schemas and reliable platform primitives; BP1 foundation.
 
 ## Current Task
 
-DATA-001 — DONE; AC-DATA-001 passed. All 122 tables, cumulative gates, owner/audit roles, actual catalog/upgrade/constraint/rollback tests and cold-start regression are complete. Implementation 87218e0675d453bb92098e80530df814bb06ae0a.
+PLAT-001 and MOCK-001 — IN_PROGRESS. Owned PostgreSQL/SNS/SQS race and crash qualification, actual HTTP/signature/SMTP mock flows and repeatable builds pass; complete current-source cold-start passes; section54 acceptance commit/report pending. Original local state remains preserved.
 
 ## Completed Tasks
 
@@ -22,11 +22,11 @@ DATA-001 — DONE; AC-DATA-001 passed. All 122 tables, cumulative gates, owner/a
 
 ## In Progress
 
-None; next dependency-ready task is PLAT-001.
+- [ ] PLAT-001 — IN_PROGRESS; crash/replay/concurrency and real PostgreSQL/LocalStack acceptance.
+- [ ] MOCK-001 — IN_PROGRESS; stateful HTTP/provider mode/signature/offline acceptance.
 
 ## Pending
 
-- [ ] PLAT-001 — Implement transactional outbox, consumers and idempotency primitives (EP01)
 - [ ] PLAT-002 — Implement errors, validation, audit and observability foundation (EP01)
 - [ ] SEC-001 — Configure identity realms and token/session trust (EP02)
 - [ ] COM-AUTHO-001 — Implement commerce authorization increment (EP02)
@@ -84,7 +84,6 @@ None; next dependency-ready task is PLAT-001.
 - [ ] INFRA-001 — Implement ECS reference infrastructure and immutable delivery pipeline (EP10)
 - [ ] OPS-002 — Verify resilience, restore and measured capacity (EP10)
 - [ ] REL-001 — Qualify each product phase and hand over documented release (EP13)
-- [ ] MOCK-001 — Build stateful Paystack FedEx and Twilio mock servers (EP00)
 - [ ] IDP-001 — Deploy production Keycloak identity and migrate provider-specific validation (EP02)
 - [ ] NGN-001 — Seed and validate approved Nigeria NGN market (EP04)
 - [ ] PAYSTACK-001 — Complete exclusive Paystack launch adapter and mock qualification (EP05)
@@ -93,11 +92,11 @@ None; next dependency-ready task is PLAT-001.
 
 ## Build Status
 
-PASS — DATA-001 pinned `make verify PROFILE=ai`, repeated Java/Python artifact hashes, dependency lock checks, Ruff/mypy. Migration and application Docker images exercised; Terraform database SQL fmt/validate/render and repeat provisioning pass. No production deployment or provider qualification inferred.
+PASS — pinned Java25/Python3.12 make verify PROFILE=ai, identical two clean-build hashes for7 JARs/wheel/sdist, locked dependency graph,31 contracts, Ruff and strict mypy. Messaging Terraform init/fmt/validate pass; AWS apply/IAM qualification NOT_RUN. Current packaged two-pass cold-start passes; no deployment or genuine provider qualification inferred.
 
 ## Test Status
 
-PASS — 6 Java, 4 AI, 29 repository/local/catalog contracts; TEST-DATA-MIGRATE/OWNERSHIP compares 122-table fresh BP5 and FOUND-003/BP1–BP5 upgrades/repeats, exact columns/defaults/checks/indexes/FKs and privileges. Commerce negative/duplicate constraints, actual four-owner Liquibase rollback/reapply and populated-evidence refusal pass. Complete two-pass TEST-LOCAL-COLD-START passes with original local state preserved. Live providers, production infrastructure and domain/API/release tests remain NOT_RUN under pending tasks.
+PASS — ordinary build6 Java/5 AI/31 contracts; native platform11 Java passed with1 explicit inapplicable producer skip and3 AI passed; real HTTP provider/signature/SMTP/state/mode suite passes.  TEST-DATA-MIGRATE/OWNERSHIP compares 122-table fresh BP5 and FOUND-003/BP1–BP5 upgrades/repeats, exact columns/defaults/checks/indexes/FKs and privileges. Commerce negative/duplicate constraints, actual four-owner Liquibase rollback/reapply and populated-evidence refusal pass. Complete current-source two-pass TEST-LOCAL-COLD-START passed after retrying an interrupted dependency download, whose failure is retained. Original local state remains preserved. Live providers, production infrastructure and domain/API/release tests remain NOT_RUN under pending tasks.
 
 ## Last Successful Commit
 
@@ -109,15 +108,15 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs and stateful provider mocks remain task-owned pending work. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Full audience/scopes/BFF/MFA/production Keycloak is SEC-001/IDP-001; exact SNS filters/consumer IAM is PLAT-001. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
+Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Full audience/scopes/BFF/MFA/production Keycloak is SEC-001/IDP-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
-Credentials absent does not block offline implementation: MOCK-001 must create stateful HTTP mock servers and all adapters/contract tests. Genuine sandbox/live smoke remains BLOCKED/NOT_RUN until actual configuration exists; never pass from mock evidence alone.
+Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol/signature/SMTP tests are implemented in MOCK-001; application financial/messaging callback inbox and workflow acceptance remain PAYSTACK-001/MSG-001. Genuine sandbox/live smoke remains BLOCKED/NOT_RUN until actual configuration exists; never pass from mock evidence alone.
 
 ## Next Recommended Task
 
-PLAT-001 — dependency-ready now that DATA-001 is DONE; implement durable owner outbox, processed-event dedup and request-hash/idempotency replay with short leases and failure/race tests. MOCK-001 remains PENDING and is also dependency-ready; real stateful HTTP mock implementation requires no live credentials. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
+Finish PLAT-001/MOCK-001 cold-start/repeatability and commit/report acceptance, then PLAT-002 becomes dependency-ready. Provider genuine qualification requires supplied credentials/account/service context and remains NOT_RUN. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
 
 ## Session Evidence / Protocol
 
@@ -126,3 +125,5 @@ FOUND-001/002 evidence: docs/implementation/2026-10-05-FOUND-001.md and docs/imp
 FOUND-003 final evidence/report: docs/implementation/2026-10-05-FOUND-003.md and docs/implementation/evidence/2026-10-05-FOUND-003/. All initial failures and fixes retained. Implementation acceptance commit 9c5e57ee7237aaed360a5c18e06ad3b64074e837.
 
 DATA-001 report: docs/implementation/2026-10-06-DATA-001.md; accepted schema, previous-version/data preservation, critical constraints, rollback/reapply and cold-start evidence: docs/implementation/evidence/2026-10-06-DATA-001/. Initial index-parser, mount ordering and rollback statement-splitting failures are preserved with fixes.
+
+PLAT-001/MOCK-001 reports and acceptance/failure evidence: docs/implementation/2026-10-06-PLAT-001.md, docs/implementation/2026-10-06-MOCK-001.md and their evidence directories. CF-MOCK-001 records the supporting callback-facade scope conflict and proposed master-task-boundary resolution; full business callbacks remain PAYSTACK-001/MSG-001 before BP1. No genuine provider request occurred.

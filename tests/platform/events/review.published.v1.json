@@ -1,0 +1,16 @@
+{
+  "event_id": "fe55b80d-aa82-4aaf-8436-720193d3c78f",
+  "event_type": "review.published.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "85185f1b-a54d-47eb-ae66-6bf0b265e3c4",
+  "aggregate_version": 1,
+  "organization_id": "2f7f92e0-b2a3-4d7d-9e5d-500f5e52a93c",
+  "correlation_id": "8b1592eb-6bc3-48c0-9d0d-9bff847ff432",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "review_id": "fe55efda-157c-459b-9e87-48c7442b15cd",
+    "product_id": "8bcc838b-d118-45db-9988-3437ddd7aa3f"
+  }
+}

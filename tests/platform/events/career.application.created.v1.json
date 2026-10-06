@@ -1,0 +1,17 @@
+{
+  "event_id": "2f025fe1-6370-442a-a4f2-32f6444e15c9",
+  "event_type": "career.application.created.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "9cc701b8-6e15-4109-9af9-ff5226e98512",
+  "aggregate_version": 1,
+  "organization_id": "b4691966-c93b-44fc-9754-915f555518b2",
+  "correlation_id": "9c9bdba5-994a-44bc-8712-15682ab464f8",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "application_id": "4f596f0a-544e-44f9-ae75-5ec7b4e9a1d0",
+    "opportunity_id": "2c0df737-4f8e-4872-a100-a5d5c90a6860",
+    "recipient_group": "fixture"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "event_id": "663e63f3-b803-438d-b9ea-1246a9d3e3de",
+  "event_type": "shipment.changed.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "5a2df379-4067-458b-a7d6-51f54160bf0b",
+  "aggregate_version": 1,
+  "organization_id": "2272df95-0840-47be-ada3-f1bdca707e8c",
+  "correlation_id": "4057d6a0-fb91-4287-981f-d3c3c4368e29",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "shipment_id": "caf623d4-469a-4abc-ae42-4cf3a1a4a487",
+    "order_id": "42cbc988-6712-4a6d-bb0f-2cbef5ed6600",
+    "status": "fixture",
+    "occurred_at": "2026-10-06T12:00:00Z"
+  }
+}

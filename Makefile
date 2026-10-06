@@ -82,3 +82,21 @@ database-check: schema-check
 .PHONY: database-rollback-check
 database-rollback-check:
 	ENV=test python3 scripts/database/rollback_check.py
+
+.PHONY: platform-check mock-build mock-reset provider-scenario provider-journal provider-contract-test
+platform-check: ai-sync
+	ENV=test python3 scripts/platform/verify.py
+mock-build:
+	python3 scripts/platform/build_mocks.py
+mock-reset:
+	python3 scripts/local/mock_admin.py reset
+provider-scenario:
+	python3 scripts/local/mock_admin.py configure
+provider-journal:
+	python3 scripts/local/mock_admin.py state
+provider-contract-test:
+	ENV=test python3 scripts/platform/provider_check.py
+
+.PHONY: provider-live-check
+provider-live-check:
+	python3 scripts/platform/provider_live_check.py

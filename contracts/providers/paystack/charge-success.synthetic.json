@@ -1,0 +1,1 @@
+{"event":"charge.success","data":{"id":1,"domain":"test","status":"success","reference":"synthetic-reference-1","amount":123456,"currency":"NGN","metadata":{"order_id":"00000000-0000-7000-8000-000000000001"}}}

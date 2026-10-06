@@ -1,0 +1,16 @@
+{
+  "event_id": "6df162c0-503c-4974-8c37-ad88ea25ed81",
+  "event_type": "order.cancelled.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "a486fa05-7030-4359-a737-ee4b77392339",
+  "aggregate_version": 1,
+  "organization_id": "90bfb5b6-b851-4d4f-94db-0b8318f65b66",
+  "correlation_id": "b6aedb43-a377-4b5a-b6c4-af78514199e0",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "order_id": "54e8ca92-ca67-4c1d-830f-e2eb91c55f42",
+    "reason_code": "fixture"
+  }
+}

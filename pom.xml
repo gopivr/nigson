@@ -18,6 +18,7 @@
     <spring-modulith.version>2.1.1</spring-modulith.version>
     <maven-enforcer.version>3.6.2</maven-enforcer.version>
     <maven-dependency.version>3.8.1</maven-dependency.version>
+    <aws-sdk.version>2.55.10</aws-sdk.version>
     <commons-text.version>1.15.0</commons-text.version>
     <!-- Same-line security patches; rationale and compatibility evidence in DEPENDENCY_LOCK.md. -->
     <tomcat.version>11.0.26</tomcat.version>
@@ -36,6 +37,8 @@
   </modules>
   <dependencyManagement>
     <dependencies>
+      <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId><version>2.22.0</version></dependency>
+      <dependency><groupId>software.amazon.awssdk</groupId><artifactId>bom</artifactId><version>${aws-sdk.version}</version><type>pom</type><scope>import</scope></dependency>
       <!-- Not managed by Boot: converge Liquibase and OpenCSV on Liquibase's version. -->
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -52,6 +55,9 @@
     </dependencies>
   </dependencyManagement>
   <build>
+    <!-- Keep Maven class files separate from IDE incremental compilation. -->
+    <outputDirectory>${maven.multiModuleProjectDirectory}/.build/java/${project.artifactId}/classes</outputDirectory>
+    <testOutputDirectory>${maven.multiModuleProjectDirectory}/.build/java/${project.artifactId}/test-classes</testOutputDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -1,0 +1,17 @@
+{
+  "event_id": "9e68730f-1cab-41f2-8540-75882aa59447",
+  "event_type": "file.scan.requested.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "fbf10ec3-e04a-4ab3-9c62-8dbebac1e4ec",
+  "aggregate_version": 1,
+  "organization_id": "f8dceb0e-94aa-46ef-a3f2-fd85b8eefa4b",
+  "correlation_id": "d38d94cd-17b6-4907-b128-fcf0b366d9ac",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "owner_service": "commerce",
+    "asset_id": "7e419c6a-fd5f-493c-9583-d7835323d604",
+    "checksum_sha256": "fixture"
+  }
+}

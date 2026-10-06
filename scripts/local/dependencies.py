@@ -23,7 +23,7 @@ def profiles() -> list[str]:
     selected = os.environ.get("PROFILE", "core")
     if selected not in {"core", "app", "ai"}:
         raise ValueError("Supported local profiles: core, app, ai")
-    return [] if selected == "core" else ["--profile", selected]
+    return ["--profile", "provider-mocks"] + ([] if selected == "core" else ["--profile", selected])
 
 
 def command(*arguments: str, capture: bool = False) -> str:
@@ -117,23 +117,30 @@ def validate() -> dict:
                                   check=True, text=True, capture_output=True, timeout=15).stdout.strip()
         if not json.loads(endpoint).startswith("unix://"):
             raise ValueError("Local commands refuse the active remote Docker endpoint")
-    if os.environ.get("COMPOSE_PROFILES") or os.environ.get("PROFILES"):
-        raise ValueError("Use PROFILE=core|app|ai; provider-mocks belongs to MOCK-001")
+    if os.environ.get("COMPOSE_PROFILES") or os.environ.get("PROFILES", "") not in {"", "provider-mocks"}:
+        raise ValueError("Use PROFILE=core|app|ai and optional PROFILES=provider-mocks")
     config = json.loads(command("--profile", "*", "config", "--format", "json", capture=True))
     return validate_config(config)
 
 
 def bootstrap() -> None:
+    import importlib.util
+    spec=importlib.util.spec_from_file_location("topology", ROOT/"scripts/platform/topology.py")
+    topology=importlib.util.module_from_spec(spec); spec.loader.exec_module(topology)
     # Explicit names, dummy local AWS credentials, emulator-only executable.
     topic = json.loads(command("exec", "-T", "localstack", "awslocal", "sns",
                                "create-topic", "--name", "nigson-local-domain-events", capture=True))["TopicArn"]
-    for name in ("integration-work", "experience-projections", "commerce-domain"):
+    command("exec", "-T", "localstack", "awslocal", "sns", "set-topic-attributes",
+            "--topic-arn", topic, "--attribute-name", "KmsMasterKeyId", "--attribute-value", "alias/aws/sns")
+    for owner,name in topology.QUEUES.items():
+        if owner=="ai" and os.environ.get("SCHEMA_RELEASE","BP1")!="BP5":
+            continue
         dead = json.loads(command("exec", "-T", "localstack", "awslocal", "sqs", "create-queue",
                                   "--queue-name", name + "-dlq", "--attributes",
-                                  "MessageRetentionPeriod=1209600", capture=True))["QueueUrl"]
+                                  "MessageRetentionPeriod=1209600,SqsManagedSseEnabled=true", capture=True))["QueueUrl"]
         arn = json.loads(command("exec", "-T", "localstack", "awslocal", "sqs", "get-queue-attributes",
                                  "--queue-url", dead, "--attribute-names", "QueueArn", capture=True))["Attributes"]["QueueArn"]
-        attributes = json.dumps({"VisibilityTimeout": "120", "MessageRetentionPeriod": "345600",
+        attributes = json.dumps({"VisibilityTimeout": "120", "MessageRetentionPeriod": "345600", "ReceiveMessageWaitTimeSeconds":"20", "SqsManagedSseEnabled":"true",
                                  "RedrivePolicy": json.dumps({"deadLetterTargetArn": arn, "maxReceiveCount": "5"})})
         queue = json.loads(command("exec", "-T", "localstack", "awslocal", "sqs", "create-queue",
                                    "--queue-name", name, "--attributes", attributes, capture=True))["QueueUrl"]
@@ -146,7 +153,7 @@ def bootstrap() -> None:
                 "--attributes", json.dumps({"Policy": policy}))
         command("exec", "-T", "localstack", "awslocal", "sns", "subscribe", "--topic-arn", topic,
                 "--protocol", "sqs", "--notification-endpoint", queue_arn,
-                "--attributes", "RawMessageDelivery=true")
+                "--attributes", json.dumps({"RawMessageDelivery":"true","FilterPolicyScope":"MessageBody","FilterPolicy":json.dumps(topology.filters(owner,int(os.environ.get("SCHEMA_RELEASE","BP1")[2:])))}))
     command("exec", "-T", "localstack", "awslocal", "s3api", "create-bucket", "--bucket", "nigson-local-quarantine")
     command("exec", "-T", "localstack", "awslocal", "s3api", "create-bucket", "--bucket", "nigson-local-private")
     print("Local infrastructure bootstrap applied; production/provider activation remains disabled")
@@ -270,6 +277,8 @@ def main() -> int:
                 provision("vector-db")
             wait_identity(config)
             bootstrap()
+            subprocess.run([sys.executable, str(ROOT/"scripts/platform/build_mocks.py")],check=True)
+            command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "60", "paystack-mock", "fedex-mock", "twilio-mock")
         elif args.action == "migrate":
             migrate()
         elif args.action == "seed":

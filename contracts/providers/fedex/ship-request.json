@@ -1,0 +1,13 @@
+{
+  "labelResponseOptions": "LABEL",
+  "requestedShipment": {
+    "shipper": {"contact": {"personName": "Synthetic Shipper", "phoneNumber": "2348000000001"}, "address": {"streetLines": ["Synthetic Origin"], "city": "Lagos", "countryCode": "NG"}},
+    "recipients": [{"contact": {"personName": "Synthetic Recipient", "phoneNumber": "2348000000002"}, "address": {"streetLines": ["Synthetic Destination"], "city": "Abuja", "countryCode": "NG"}}],
+    "pickupType": "DROPOFF_AT_FEDEX_LOCATION",
+    "serviceType": "FEDEX_INTERNATIONAL_PRIORITY",
+    "packagingType": "YOUR_PACKAGING",
+    "shippingChargesPayment": {"paymentType": "SENDER"},
+    "labelSpecification": {"imageType": "PDF", "labelStockType": "PAPER_4X6"},
+    "requestedPackageLineItems": [{"weight": {"units": "KG", "value": 1}, "customerReferences": [{"customerReferenceType": "CUSTOMER_REFERENCE", "value": "synthetic-booking-1"}]}]
+  }
+}

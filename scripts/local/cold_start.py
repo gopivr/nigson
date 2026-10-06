@@ -164,6 +164,18 @@ def main() -> None:
         evidence["snapshot_sha256"] = hashlib.sha256(json.dumps(first, sort_keys=True).encode()).hexdigest()
         evidence["result"] = "PASS"
     finally:
+        if evidence["result"] != "PASS":
+            output = ROOT / ".build/evidence" / (project + "-startup.log")
+            output.parent.mkdir(parents=True, exist_ok=True)
+            diagnostic = local.command("--profile", "*", "logs", "--no-color", "--tail", "100", capture=True)
+            for key, value in local.settings().items():
+                if value and any(part in key for part in ("PASSWORD", "SECRET", "TOKEN")):
+                    diagnostic = diagnostic.replace(value, "[REDACTED]")
+            ids = docker("ps", "-aq", "--filter", "label=com.docker.compose.project=" + project).split()
+            if ids:
+                health = json.loads(docker("inspect", *ids))
+                diagnostic += "\n" + json.dumps({c["Name"]: c["State"].get("Health", {}) for c in health}, indent=2)
+            output.write_text(diagnostic)
         # Deliberately retain test volumes, even on failure, for inspection. Stop only this generated namespace.
         try:
             local.command("--profile", "*", "down", "--timeout", "30")

@@ -1,0 +1,31 @@
+{
+  "specification": "1.1.0",
+  "qualification": "synthetic HTTP contract examples; genuine provider/account qualification NOT_RUN",
+  "paystack": {
+    "source": ["https://paystack.com/docs/api/transaction/", "https://paystack.com/docs/api/refund/"],
+    "operations": ["POST /transaction/initialize", "GET /transaction/verify/{reference}", "POST /refund", "GET /refund", "GET /refund/{id}"],
+    "signature": "HMAC-SHA512 over exact raw bytes; constant-time verification",
+    "money": "positive NGN kobo integer; input decimal strings reject third fractional digit",
+    "unknown": "accepted initialize/refund intent survives delayed response; reconcile before another write"
+  },
+  "fedex": {
+    "source": ["https://developer.fedex.com/api/en-us/catalog/authorization/v1/docs.html", "https://developer.fedex.com/api/en-us/catalog/rate/v1/docs.html", "https://developer.fedex.com/api/en-us/catalog/ship/v1/docs.html", "https://developer.fedex.com/api/en-us/catalog/track/v1/docs.html"],
+    "operations": ["POST /oauth/token", "POST /rate/v1/rates/quotes", "POST /ship/v1/shipments", "PUT /ship/v1/shipments/cancel", "POST /track/v1/trackingnumbers"],
+    "fixture": "fedex/ship-request.json",
+    "fixture_scope": "synthetic documented nested HTTP fields; no service/route/origin/account approval implied; account-qualified official schema snapshot and reference reconciliation remain CARRIER-001",
+    "unknown": "booking accepted before delayed response; no automatic duplicate booking"
+  },
+  "twilio": {
+    "source": ["https://www.twilio.com/docs/messaging/api/message-resource", "https://www.twilio.com/docs/usage/webhooks/webhooks-security"],
+    "operations": ["POST /2010-04-01/Accounts/{AccountSid}/Messages.json", "GET /2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}.json"],
+    "signature": "official Twilio Java13.0.2 RequestValidator; exact configured URL and complete parameters",
+    "channels": ["SMS Body", "WhatsApp ContentSid/ContentVariables"],
+    "unknown": "accepted SID is durable before delayed response; no automatic resend"
+  },
+  "email": {
+    "protocol": "SMTP",
+    "mock": "pinned Mailpit; no outbound relay configured",
+    "genuine": "authenticated STARTTLS with server identity verification; sender qualification required",
+    "semantics": "SMTP acceptance is distinct from delivery"
+  }
+}

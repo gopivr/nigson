@@ -1,0 +1,18 @@
+{
+  "event_id": "d43d18bd-b55f-490d-9106-28fd37a7a38a",
+  "event_type": "pricing.changed.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "e5ba31d4-922d-491c-b381-b365bcfa4637",
+  "aggregate_version": 1,
+  "organization_id": "7319ace8-0275-4e69-ad55-e8a381131cd1",
+  "correlation_id": "fcb2f089-b78a-43ef-8593-f2e9abb27976",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "entity_type": "PRICE_BOOK",
+    "entity_id": "e34ce758-71b0-497a-b1ed-aa2524b2dbf3",
+    "revision": 1,
+    "market_id": "ff66b92e-3a59-4c80-92d5-8818ad850ef0"
+  }
+}

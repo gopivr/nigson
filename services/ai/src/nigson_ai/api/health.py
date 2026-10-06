@@ -33,9 +33,20 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
     pool = AsyncConnectionPool(dsn, min_size=1, max_size=2, timeout=2, open=False)
     await pool.open()
     application.state.pool = pool
+    runtime = None
+    if os.environ.get("NIGSON_EVENTS_ENABLED") == "true":
+        from nigson_ai.platform.runtime import EventRuntime
+
+        runtime = EventRuntime(dsn)
+        application.state.events = runtime.pump
+        runtime.start()
     try:
         yield
     finally:
+        if runtime is not None:
+            import asyncio
+
+            await asyncio.to_thread(runtime.close)
         await pool.close()
 
 

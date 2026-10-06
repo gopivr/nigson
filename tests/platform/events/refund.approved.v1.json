@@ -1,0 +1,16 @@
+{
+  "event_id": "eb773ab2-d40d-49ad-b6aa-c0236820a8d4",
+  "event_type": "refund.approved.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "c44339cb-2fc1-4f24-977f-6344f96edd61",
+  "aggregate_version": 1,
+  "organization_id": "0790abbb-8884-4def-86e7-c79a9f32b84d",
+  "correlation_id": "90843600-43fd-478d-95c0-60495d26bc06",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "refund_id": "e984df81-29c0-4c2c-87b5-a2eb5bc99792",
+    "order_id": "efc4f6b1-91f8-49cb-8437-b170bd54f303"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "event_id": "adaf3af9-75ae-4c17-a617-78d2371458cd",
+  "event_type": "refund.succeeded.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "51febffb-2a7b-44a2-85a9-e3273a8b101f",
+  "aggregate_version": 1,
+  "organization_id": "94f9f3b4-9b24-44f8-bfcf-7cc0aa580fac",
+  "correlation_id": "b35a83bd-c630-478d-bc43-fe52c1636e1e",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "refund_id": "8ab5e920-1c74-45b4-b9df-c58c7de536e1",
+    "order_id": "8261f92f-24d0-4028-a4b6-4fa906927685",
+    "amount": "10.00",
+    "currency": "NGN"
+  }
+}

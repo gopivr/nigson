@@ -1,0 +1,18 @@
+{
+  "event_id": "b1c8504b-f986-4a19-bd68-ac84df078ffb",
+  "event_type": "content.published.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "01d5e0a7-b941-4e10-8bbb-20d184806141",
+  "aggregate_version": 1,
+  "organization_id": "bfb1a6bf-72cd-4756-ad22-a5f076c282b1",
+  "correlation_id": "3baa8f4d-5d3c-41d5-bbf9-2c2866661e11",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "content_item_id": "95e487a1-49a0-4168-b07a-9262f4b3147b",
+    "revision": 1,
+    "locale": "fixture",
+    "market_codes": []
+  }
+}

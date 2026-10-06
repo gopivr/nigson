@@ -1,0 +1,17 @@
+{
+  "event_id": "2890e1f5-74c5-4986-ae85-363a94607543",
+  "event_type": "communication.verification.requested.v1",
+  "schema_version": 1,
+  "producer": "experience",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "751ed5b4-ccd6-4310-8bc1-8fe8eb5a7edf",
+  "aggregate_version": 1,
+  "organization_id": "1dbc2c77-e781-4d25-8465-a9d2532f09da",
+  "correlation_id": "6ee7d71f-0ded-4649-be4d-b6ff7daa347b",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "verification_id": "e877c34c-013e-47fe-9da9-9f684275c851",
+    "destination_id": "c7fa86dc-58ef-4bff-8cb5-256357ddbfdc",
+    "channel": "SMS"
+  }
+}

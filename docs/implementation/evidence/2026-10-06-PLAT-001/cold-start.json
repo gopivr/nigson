@@ -1,0 +1,19 @@
+{
+  "test": "TEST-LOCAL-COLD-START",
+  "project": "nigson-test-cold-6a75db566a",
+  "checks": [
+    "setup-pass-1: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions",
+    "setup-pass-2: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions",
+    "runtime DDL and all cross-owner reads denied",
+    "session CRUD/cascade and positive interval constraint",
+    "checksum drift refused, restored test checksum and migration recovered",
+    "manual session constraint drift refused and recovery verified",
+    "real signed tokens validated; foundation routes denied; invalid signatures rejected",
+    "production commands, missing credentials and unapproved fixtures refused",
+    "DB outage readiness DOWN, liveness UP, recovery UP",
+    "existing nigson-local container IDs/start times/mounts/volumes preserved",
+    "all test profile containers stopped; named volumes and original local state retained"
+  ],
+  "result": "PASS",
+  "snapshot_sha256": "fcf8bbb00d2e027c0f85e06619fa4548bd0af0faa1abf6f6b782774fe8f412e5"
+}

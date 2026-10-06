@@ -1,0 +1,19 @@
+{
+  "event_id": "1f09056e-946a-48f6-afd1-4ed5441ffcc4",
+  "event_type": "distributor.entitlement.changed.v1",
+  "schema_version": 1,
+  "producer": "commerce",
+  "occurred_at": "2026-10-06T12:00:00Z",
+  "aggregate_id": "5d8662f4-194b-45df-ab2a-374a09e46a98",
+  "aggregate_version": 1,
+  "organization_id": "9707e6bb-0460-4742-b4dd-fb98eac63738",
+  "correlation_id": "093eae1a-feed-4095-8bee-4c1947cde1cd",
+  "traceparent": "00-11111111111111111111111111111111-2222222222222222-01",
+  "payload": {
+    "command_id": "03d2dcc2-9a53-46f3-a313-72897ba95a99",
+    "application_id": "06992980-0b2d-45c2-a7e2-ced837bd3684",
+    "organization_id": "6a5f513b-7da0-4bb5-927b-dbc3488d74cd",
+    "state": "fixture",
+    "revision": 1
+  }
+}
