@@ -17,12 +17,15 @@
     "com.google.code.findbugs:jsr305:jar::3.0.2": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
     "com.google.code.gson:gson:jar::2.13.2": "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0",
     "com.google.errorprone:error_prone_annotations:jar::2.41.0": "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc",
+    "com.google.protobuf:protobuf-java:jar::4.35.1": "a4345ba2aa009912ff6f90467fea2d104605256b72c50840d75f13256638a472",
     "com.jayway.jsonpath:json-path:jar::2.10.0": "890daa95dd3892d34d9fabc27cd5153656e6f369358625c88f4dc7b79cbd6c5a",
     "com.nimbusds:content-type:jar::2.3": "60349793e006fba96b532cb0c21e10e969fe0db8d87f91c3b9eaf82ba2998895",
     "com.nimbusds:lang-tag:jar::1.7": "e8c1c594e2425bdbea2d860de55c69b69fc5d59454452449a0f0913c2a5b8a31",
     "com.nimbusds:nimbus-jose-jwt:jar::10.9.1": "33152ea83ec50d22706fdaf3b07acbcd716f9a68edcabdd7c4d02843cbdcdcf6",
     "com.nimbusds:oauth2-oidc-sdk:jar::11.38.2": "30e63220c15bd93006c557bd0d614bb57a5f00232188693577c222383ea4bbe7",
     "com.opencsv:opencsv:jar::5.12.0": "f1c55d80a92c8ecfe3f15fb71785d5b156f3674cb5b9ad55dcfd378ffeed2960",
+    "com.squareup.okhttp3:okhttp-jvm:jar::5.3.2": "c771f48075b763f6c322055e21129a94b7de4c1faf3f8f58ace320b0c9517a30",
+    "com.squareup.okio:okio-jvm:jar::3.16.4": "2196b993cd34dbbd919e7e01f57a4781b58bee80f86106163e287c20343a96a7",
     "com.structurizr:structurizr-core:jar::5.0.3": "4c5035574797af60b93c1ba9005c2bfe53114dc287a475479bd98eb3e1331a62",
     "com.structurizr:structurizr-export:jar::5.0.3": "32075f8fb083ea37ef77b7bf44558948ffdd26fa7cea5009dc37e11d290aebad",
     "com.sun.istack:istack-commons-runtime:jar::4.1.2": "7fd6792361f4dd00f8c56af4a20cecc0066deea4a8f3dec38348af23fc2296ee",
@@ -40,6 +43,7 @@
     "io.micrometer:micrometer-core:jar::1.17.1": "9ca47dfa831409b40253c8dc98c17b9d3e050ebbde4d1543c5521dca2b95ad56",
     "io.micrometer:micrometer-jakarta9:jar::1.17.1": "37fbb0a98ba92e185ae7ebe0804fe6c1394bf7fba7573b204fa6fc3998c2e246",
     "io.micrometer:micrometer-observation:jar::1.17.1": "eb34f0cd84a879393ae5c21160fc06385ccdc74f36a4d1e31b199f59acfdaf71",
+    "io.micrometer:micrometer-registry-otlp:jar::1.17.1": "c991036f05cf1a84b02bcc95b9a686ac39a584b01e7afdab1562a5c1dc71d0c9",
     "io.netty:netty-buffer:jar::4.2.17.Final": "0d249178ec0204b35a6ad3e5ac8a6c2ecb3eb496c6cdae40b8eca4fa3cb6a0c7",
     "io.netty:netty-codec-base:jar::4.2.17.Final": "3b92bc3b7d231fa6f4889b2b9281cae6b634428b8121fb1b9b5fccba1543d352",
     "io.netty:netty-codec-compression:jar::4.2.17.Final": "425b287a1f36986a5c8edd76379a49decdf99d284f3454f3fa607a073bfb2c18",
@@ -54,6 +58,21 @@
     "io.netty:netty-transport-classes-epoll:jar::4.2.17.Final": "4e21d8a2e3429d9de967a716d58119f57585786bd2f7213bf5b27770425269de",
     "io.netty:netty-transport-native-unix-common:jar::4.2.17.Final": "e01aa467b9104de54a57c08c290f70b22e53ec97cf5583c87c112170ef5832cc",
     "io.netty:netty-transport:jar::4.2.17.Final": "d2409ce3a735cbab4188d0ea5d82abed823a6a07a8389f49af4a9e1243a562bc",
+    "io.opentelemetry.proto:opentelemetry-proto:jar::1.10.0-alpha": "931e84b0802d77ae963e26c6ad6129b4ad0f2510fe907f019f5c988c2a869c3a",
+    "io.opentelemetry:opentelemetry-api:jar::1.62.0": "d58143928c049233653e6bf1282ff8a767ebdd5e6a82b3f336158c30e40b431d",
+    "io.opentelemetry:opentelemetry-common:jar::1.62.0": "d6310bebde67d65c1519696728d8604005315ed08ab14071956fc0826fd71815",
+    "io.opentelemetry:opentelemetry-context:jar::1.62.0": "8ec86c3609222b9b6307bf40154c1f1c288d1f18ada0155409e7797adbdbe517",
+    "io.opentelemetry:opentelemetry-exporter-common:jar::1.62.0": "50f84b5b58048f69bd684ec874413944209995e01c177200555c151dabfe1ec9",
+    "io.opentelemetry:opentelemetry-exporter-otlp-common:jar::1.62.0": "79eaaaf044df15209ee1461b668f7c93547734a793d6cf6ad5e57290d3f8c0ea",
+    "io.opentelemetry:opentelemetry-exporter-otlp:jar::1.62.0": "59df47fdc4bef6866ed39eb6a04892c68e28d7938eaeaa21801ac5dd2dcb0d65",
+    "io.opentelemetry:opentelemetry-exporter-sender-okhttp:jar::1.62.0": "8c9b2c4394543c4f28e0a6c66d16259a1bfaf67a47a689fb001bd9a92dafb6ea",
+    "io.opentelemetry:opentelemetry-sdk-common:jar::1.62.0": "bf9d13df9a50e49a5db664ba8ebfad79f73f03219d2ac6f6709d432f6896eba0",
+    "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi:jar::1.62.0": "220c22bcf420faae59b7225c789f572eaa22e7af2304d55508aaf2a3efcfecf8",
+    "io.opentelemetry:opentelemetry-sdk-logs:jar::1.62.0": "51c94329bc8e335ed79027d29d49c075c11b91b39e48679edf590e784a392406",
+    "io.opentelemetry:opentelemetry-sdk-metrics:jar::1.62.0": "50b057fbf063f6801f623212f4b51b6a3fefc77837314a1316b2f54894c8b5d4",
+    "io.opentelemetry:opentelemetry-sdk-testing:jar::1.62.0": "84d8c16bd34b4d51256d1d62a5c767641e24a84f4932ce7b2beea2fdf0c84b73",
+    "io.opentelemetry:opentelemetry-sdk-trace:jar::1.62.0": "fb6c0953b229a6da1db813135ae11a621bf9da56b7356c1e93049ed4b088c232",
+    "io.opentelemetry:opentelemetry-sdk:jar::1.62.0": "99d421ea0e5a1ca8e45cb67f1d5db7f0e8a718dd55eeb86c1323597e1f10aed3",
     "jakarta.activation:jakarta.activation-api:jar::2.1.4": "c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004",
     "jakarta.annotation:jakarta.annotation-api:jar::3.0.0": "b01f55552284cfb149411e64eabca75e942d26d2e1786b32914250e4330afaa2",
     "jakarta.inject:jakarta.inject-api:jar::2.0.1": "f7dc98062fccf14126abb751b64fab12c312566e8cbdc8483598bffcea93af7c",
@@ -97,6 +116,8 @@
     "org.hibernate.orm:hibernate-core:jar::7.4.5.Final": "e894c0ae560f0031883a2f5c819e1ef1ee3e16b2cbca31e6301a004876a67dc7",
     "org.hibernate.validator:hibernate-validator:jar::9.1.3.Final": "0497ebbe23fafe4180b74bd0b96a67eee8556552decc4d3c120c1dc737a2b5fb",
     "org.jboss.logging:jboss-logging:jar::3.6.3.Final": "7c12ee575508f81e22b1db9334b969d0ec54ef0fd1dcba24eeab1a44235fc366",
+    "org.jetbrains.kotlin:kotlin-stdlib:jar::2.3.21": "6f64eac736db9434dd6925b4a518b9d1d17177652320c37916cf9ba3ce7d7d7a",
+    "org.jetbrains:annotations:jar::13.0": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
     "org.jetbrains:annotations:jar::17.0.0": "195fb0da046d55bb042e91543484cf1da68b02bb7afbfe031f229e45ac84b3f2",
     "org.jmolecules:jmolecules-events:jar::2.0.1": "2dd20f02039c825de38c381d76a0f5cc912b9ab85f9fb6dabf7b10c1c3c9e983",
     "org.jmolecules:jstereotype:jar::2.0.1": "8ee2277ede551ba969c381b2f90fb697a0fad610d1d1d2e432947c9bdcf19e7e",
@@ -253,6 +274,333 @@
       "artifactId": "commerce",
       "children": [
         {
+          "artifactId": "common-problem",
+          "children": [
+            {
+              "artifactId": "jackson-databind",
+              "children": [
+                {
+                  "artifactId": "jackson-annotations",
+                  "classifier": "",
+                  "groupId": "com.fasterxml.jackson.core",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.21"
+                },
+                {
+                  "artifactId": "jackson-core",
+                  "classifier": "",
+                  "groupId": "tools.jackson.core",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "3.1.7"
+                }
+              ],
+              "classifier": "",
+              "groupId": "tools.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "3.1.7"
+            }
+          ],
+          "classifier": "",
+          "groupId": "com.nigson",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "0.1.0"
+        },
+        {
+          "artifactId": "common-observability",
+          "children": [
+            {
+              "artifactId": "opentelemetry-api",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-context",
+                  "children": [
+                    {
+                      "artifactId": "opentelemetry-common",
+                      "classifier": "",
+                      "groupId": "io.opentelemetry",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.62.0"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "logback-classic",
+              "children": [
+                {
+                  "artifactId": "logback-core",
+                  "classifier": "",
+                  "groupId": "ch.qos.logback",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.5.38"
+                },
+                {
+                  "artifactId": "slf4j-api",
+                  "classifier": "",
+                  "groupId": "org.slf4j",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.18"
+                }
+              ],
+              "classifier": "",
+              "groupId": "ch.qos.logback",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.5.38"
+            }
+          ],
+          "classifier": "",
+          "groupId": "com.nigson",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "0.1.0"
+        },
+        {
+          "artifactId": "opentelemetry-sdk",
+          "children": [
+            {
+              "artifactId": "opentelemetry-sdk-common",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-trace",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-metrics",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-logs",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "opentelemetry-exporter-otlp",
+          "children": [
+            {
+              "artifactId": "opentelemetry-exporter-otlp-common",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-exporter-common",
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-exporter-sender-okhttp",
+              "children": [
+                {
+                  "artifactId": "okhttp-jvm",
+                  "children": [
+                    {
+                      "artifactId": "okio-jvm",
+                      "classifier": "",
+                      "groupId": "com.squareup.okio",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "3.16.4"
+                    },
+                    {
+                      "artifactId": "kotlin-stdlib",
+                      "children": [
+                        {
+                          "artifactId": "annotations",
+                          "classifier": "",
+                          "groupId": "org.jetbrains",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "13.0"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.jetbrains.kotlin",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "2.3.21"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "com.squareup.okhttp3",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "5.3.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-extension-autoconfigure-spi",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "opentelemetry-sdk-testing",
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "micrometer-registry-otlp",
+          "children": [
+            {
+              "artifactId": "jspecify",
+              "classifier": "",
+              "groupId": "org.jspecify",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.0.1"
+            },
+            {
+              "artifactId": "micrometer-core",
+              "children": [
+                {
+                  "artifactId": "micrometer-commons",
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                },
+                {
+                  "artifactId": "HdrHistogram",
+                  "classifier": "",
+                  "groupId": "org.hdrhistogram",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "2.2.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            },
+            {
+              "artifactId": "opentelemetry-proto",
+              "children": [
+                {
+                  "artifactId": "protobuf-java",
+                  "classifier": "",
+                  "groupId": "com.google.protobuf",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "4.35.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry.proto",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.10.0-alpha"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.micrometer",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.17.1"
+        },
+        {
           "artifactId": "common-security",
           "children": [
             {
@@ -342,15 +690,6 @@
                   "version": "2.21.7"
                 },
                 {
-                  "artifactId": "jackson-annotations",
-                  "classifier": "",
-                  "groupId": "com.fasterxml.jackson.core",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.21"
-                },
-                {
                   "artifactId": "jackson-databind",
                   "classifier": "",
                   "groupId": "com.fasterxml.jackson.core",
@@ -396,15 +735,6 @@
                   "scope": "compile",
                   "type": "jar",
                   "version": "2.21.7"
-                },
-                {
-                  "artifactId": "slf4j-api",
-                  "classifier": "",
-                  "groupId": "org.slf4j",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.0.18"
                 },
                 {
                   "artifactId": "json",
@@ -462,28 +792,6 @@
         },
         {
           "artifactId": "common-events",
-          "children": [
-            {
-              "artifactId": "jackson-databind",
-              "children": [
-                {
-                  "artifactId": "jackson-core",
-                  "classifier": "",
-                  "groupId": "tools.jackson.core",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "3.1.7"
-                }
-              ],
-              "classifier": "",
-              "groupId": "tools.jackson.core",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "3.1.7"
-            }
-          ],
           "classifier": "",
           "groupId": "com.nigson",
           "optional": "false",
@@ -928,26 +1236,6 @@
                   "artifactId": "spring-boot-starter-logging",
                   "children": [
                     {
-                      "artifactId": "logback-classic",
-                      "children": [
-                        {
-                          "artifactId": "logback-core",
-                          "classifier": "",
-                          "groupId": "ch.qos.logback",
-                          "optional": "false",
-                          "scope": "compile",
-                          "type": "jar",
-                          "version": "1.5.38"
-                        }
-                      ],
-                      "classifier": "",
-                      "groupId": "ch.qos.logback",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "1.5.38"
-                    },
-                    {
                       "artifactId": "log4j-to-slf4j",
                       "children": [
                         {
@@ -1239,26 +1527,6 @@
             },
             {
               "artifactId": "micrometer-observation",
-              "children": [
-                {
-                  "artifactId": "jspecify",
-                  "classifier": "",
-                  "groupId": "org.jspecify",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.0.1"
-                },
-                {
-                  "artifactId": "micrometer-commons",
-                  "classifier": "",
-                  "groupId": "io.micrometer",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.17.1"
-                }
-              ],
               "classifier": "",
               "groupId": "io.micrometer",
               "optional": "false",
@@ -1268,28 +1536,6 @@
             },
             {
               "artifactId": "micrometer-jakarta9",
-              "children": [
-                {
-                  "artifactId": "micrometer-core",
-                  "children": [
-                    {
-                      "artifactId": "HdrHistogram",
-                      "classifier": "",
-                      "groupId": "org.hdrhistogram",
-                      "optional": "false",
-                      "scope": "runtime",
-                      "type": "jar",
-                      "version": "2.2.2"
-                    }
-                  ],
-                  "classifier": "",
-                  "groupId": "io.micrometer",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.17.1"
-                }
-              ],
               "classifier": "",
               "groupId": "io.micrometer",
               "optional": "false",
@@ -2474,6 +2720,333 @@
       "artifactId": "experience",
       "children": [
         {
+          "artifactId": "common-problem",
+          "children": [
+            {
+              "artifactId": "jackson-databind",
+              "children": [
+                {
+                  "artifactId": "jackson-annotations",
+                  "classifier": "",
+                  "groupId": "com.fasterxml.jackson.core",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.21"
+                },
+                {
+                  "artifactId": "jackson-core",
+                  "classifier": "",
+                  "groupId": "tools.jackson.core",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "3.1.7"
+                }
+              ],
+              "classifier": "",
+              "groupId": "tools.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "3.1.7"
+            }
+          ],
+          "classifier": "",
+          "groupId": "com.nigson",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "0.1.0"
+        },
+        {
+          "artifactId": "common-observability",
+          "children": [
+            {
+              "artifactId": "opentelemetry-api",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-context",
+                  "children": [
+                    {
+                      "artifactId": "opentelemetry-common",
+                      "classifier": "",
+                      "groupId": "io.opentelemetry",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.62.0"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "logback-classic",
+              "children": [
+                {
+                  "artifactId": "logback-core",
+                  "classifier": "",
+                  "groupId": "ch.qos.logback",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.5.38"
+                },
+                {
+                  "artifactId": "slf4j-api",
+                  "classifier": "",
+                  "groupId": "org.slf4j",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.0.18"
+                }
+              ],
+              "classifier": "",
+              "groupId": "ch.qos.logback",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.5.38"
+            }
+          ],
+          "classifier": "",
+          "groupId": "com.nigson",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "0.1.0"
+        },
+        {
+          "artifactId": "opentelemetry-sdk",
+          "children": [
+            {
+              "artifactId": "opentelemetry-sdk-common",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-trace",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-metrics",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-logs",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "opentelemetry-exporter-otlp",
+          "children": [
+            {
+              "artifactId": "opentelemetry-exporter-otlp-common",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-exporter-common",
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-exporter-sender-okhttp",
+              "children": [
+                {
+                  "artifactId": "okhttp-jvm",
+                  "children": [
+                    {
+                      "artifactId": "okio-jvm",
+                      "classifier": "",
+                      "groupId": "com.squareup.okio",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "3.16.4"
+                    },
+                    {
+                      "artifactId": "kotlin-stdlib",
+                      "children": [
+                        {
+                          "artifactId": "annotations",
+                          "classifier": "",
+                          "groupId": "org.jetbrains",
+                          "optional": "false",
+                          "scope": "runtime",
+                          "type": "jar",
+                          "version": "13.0"
+                        }
+                      ],
+                      "classifier": "",
+                      "groupId": "org.jetbrains.kotlin",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "2.3.21"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "com.squareup.okhttp3",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "5.3.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-extension-autoconfigure-spi",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "opentelemetry-sdk-testing",
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "micrometer-registry-otlp",
+          "children": [
+            {
+              "artifactId": "jspecify",
+              "classifier": "",
+              "groupId": "org.jspecify",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.0.1"
+            },
+            {
+              "artifactId": "micrometer-core",
+              "children": [
+                {
+                  "artifactId": "micrometer-commons",
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                },
+                {
+                  "artifactId": "HdrHistogram",
+                  "classifier": "",
+                  "groupId": "org.hdrhistogram",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "2.2.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            },
+            {
+              "artifactId": "opentelemetry-proto",
+              "children": [
+                {
+                  "artifactId": "protobuf-java",
+                  "classifier": "",
+                  "groupId": "com.google.protobuf",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "4.35.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry.proto",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.10.0-alpha"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.micrometer",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.17.1"
+        },
+        {
           "artifactId": "common-security",
           "children": [
             {
@@ -2563,15 +3136,6 @@
                   "version": "2.21.7"
                 },
                 {
-                  "artifactId": "jackson-annotations",
-                  "classifier": "",
-                  "groupId": "com.fasterxml.jackson.core",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.21"
-                },
-                {
                   "artifactId": "jackson-databind",
                   "classifier": "",
                   "groupId": "com.fasterxml.jackson.core",
@@ -2617,15 +3181,6 @@
                   "scope": "compile",
                   "type": "jar",
                   "version": "2.21.7"
-                },
-                {
-                  "artifactId": "slf4j-api",
-                  "classifier": "",
-                  "groupId": "org.slf4j",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.0.18"
                 },
                 {
                   "artifactId": "json",
@@ -2683,28 +3238,6 @@
         },
         {
           "artifactId": "common-events",
-          "children": [
-            {
-              "artifactId": "jackson-databind",
-              "children": [
-                {
-                  "artifactId": "jackson-core",
-                  "classifier": "",
-                  "groupId": "tools.jackson.core",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "3.1.7"
-                }
-              ],
-              "classifier": "",
-              "groupId": "tools.jackson.core",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "3.1.7"
-            }
-          ],
           "classifier": "",
           "groupId": "com.nigson",
           "optional": "false",
@@ -3149,26 +3682,6 @@
                   "artifactId": "spring-boot-starter-logging",
                   "children": [
                     {
-                      "artifactId": "logback-classic",
-                      "children": [
-                        {
-                          "artifactId": "logback-core",
-                          "classifier": "",
-                          "groupId": "ch.qos.logback",
-                          "optional": "false",
-                          "scope": "compile",
-                          "type": "jar",
-                          "version": "1.5.38"
-                        }
-                      ],
-                      "classifier": "",
-                      "groupId": "ch.qos.logback",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "1.5.38"
-                    },
-                    {
                       "artifactId": "log4j-to-slf4j",
                       "children": [
                         {
@@ -3460,26 +3973,6 @@
             },
             {
               "artifactId": "micrometer-observation",
-              "children": [
-                {
-                  "artifactId": "jspecify",
-                  "classifier": "",
-                  "groupId": "org.jspecify",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.0.1"
-                },
-                {
-                  "artifactId": "micrometer-commons",
-                  "classifier": "",
-                  "groupId": "io.micrometer",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.17.1"
-                }
-              ],
               "classifier": "",
               "groupId": "io.micrometer",
               "optional": "false",
@@ -3489,28 +3982,6 @@
             },
             {
               "artifactId": "micrometer-jakarta9",
-              "children": [
-                {
-                  "artifactId": "micrometer-core",
-                  "children": [
-                    {
-                      "artifactId": "HdrHistogram",
-                      "classifier": "",
-                      "groupId": "org.hdrhistogram",
-                      "optional": "false",
-                      "scope": "runtime",
-                      "type": "jar",
-                      "version": "2.2.2"
-                    }
-                  ],
-                  "classifier": "",
-                  "groupId": "io.micrometer",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.17.1"
-                }
-              ],
               "classifier": "",
               "groupId": "io.micrometer",
               "optional": "false",
@@ -4575,6 +5046,313 @@
       "artifactId": "integration",
       "children": [
         {
+          "artifactId": "common-problem",
+          "children": [
+            {
+              "artifactId": "jackson-databind",
+              "children": [
+                {
+                  "artifactId": "jackson-annotations",
+                  "classifier": "",
+                  "groupId": "com.fasterxml.jackson.core",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "2.21"
+                },
+                {
+                  "artifactId": "jackson-core",
+                  "classifier": "",
+                  "groupId": "tools.jackson.core",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "3.1.7"
+                }
+              ],
+              "classifier": "",
+              "groupId": "tools.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "3.1.7"
+            }
+          ],
+          "classifier": "",
+          "groupId": "com.nigson",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "0.1.0"
+        },
+        {
+          "artifactId": "common-observability",
+          "children": [
+            {
+              "artifactId": "opentelemetry-api",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-context",
+                  "children": [
+                    {
+                      "artifactId": "opentelemetry-common",
+                      "classifier": "",
+                      "groupId": "io.opentelemetry",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.62.0"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "logback-classic",
+              "children": [
+                {
+                  "artifactId": "logback-core",
+                  "classifier": "",
+                  "groupId": "ch.qos.logback",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.5.38"
+                }
+              ],
+              "classifier": "",
+              "groupId": "ch.qos.logback",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.5.38"
+            }
+          ],
+          "classifier": "",
+          "groupId": "com.nigson",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "0.1.0"
+        },
+        {
+          "artifactId": "opentelemetry-sdk",
+          "children": [
+            {
+              "artifactId": "opentelemetry-sdk-common",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-trace",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-metrics",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-logs",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "opentelemetry-exporter-otlp",
+          "children": [
+            {
+              "artifactId": "opentelemetry-exporter-otlp-common",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-exporter-common",
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-exporter-sender-okhttp",
+              "children": [
+                {
+                  "artifactId": "okhttp-jvm",
+                  "children": [
+                    {
+                      "artifactId": "okio-jvm",
+                      "classifier": "",
+                      "groupId": "com.squareup.okio",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "3.16.4"
+                    },
+                    {
+                      "artifactId": "kotlin-stdlib",
+                      "classifier": "",
+                      "groupId": "org.jetbrains.kotlin",
+                      "optional": "false",
+                      "scope": "runtime",
+                      "type": "jar",
+                      "version": "2.3.21"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "com.squareup.okhttp3",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "5.3.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "opentelemetry-sdk-extension-autoconfigure-spi",
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.62.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "opentelemetry-sdk-testing",
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "test",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "micrometer-registry-otlp",
+          "children": [
+            {
+              "artifactId": "jspecify",
+              "classifier": "",
+              "groupId": "org.jspecify",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.0.1"
+            },
+            {
+              "artifactId": "micrometer-core",
+              "children": [
+                {
+                  "artifactId": "micrometer-commons",
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                },
+                {
+                  "artifactId": "HdrHistogram",
+                  "classifier": "",
+                  "groupId": "org.hdrhistogram",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "2.2.2"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            },
+            {
+              "artifactId": "opentelemetry-proto",
+              "children": [
+                {
+                  "artifactId": "protobuf-java",
+                  "classifier": "",
+                  "groupId": "com.google.protobuf",
+                  "optional": "false",
+                  "scope": "runtime",
+                  "type": "jar",
+                  "version": "4.35.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry.proto",
+              "optional": "false",
+              "scope": "runtime",
+              "type": "jar",
+              "version": "1.10.0-alpha"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.micrometer",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.17.1"
+        },
+        {
           "artifactId": "testcontainers",
           "children": [
             {
@@ -4632,7 +5410,7 @@
                   "classifier": "",
                   "groupId": "org.jetbrains",
                   "optional": "false",
-                  "scope": "test",
+                  "scope": "runtime",
                   "type": "jar",
                   "version": "17.0.0"
                 }
@@ -4646,17 +5424,6 @@
             },
             {
               "artifactId": "docker-java-api",
-              "children": [
-                {
-                  "artifactId": "jackson-annotations",
-                  "classifier": "",
-                  "groupId": "com.fasterxml.jackson.core",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.21"
-                }
-              ],
               "classifier": "",
               "groupId": "com.github.docker-java",
               "optional": "false",
@@ -4710,26 +5477,6 @@
                 {
                   "artifactId": "spring-boot-starter-logging",
                   "children": [
-                    {
-                      "artifactId": "logback-classic",
-                      "children": [
-                        {
-                          "artifactId": "logback-core",
-                          "classifier": "",
-                          "groupId": "ch.qos.logback",
-                          "optional": "false",
-                          "scope": "compile",
-                          "type": "jar",
-                          "version": "1.5.38"
-                        }
-                      ],
-                      "classifier": "",
-                      "groupId": "ch.qos.logback",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "1.5.38"
-                    },
                     {
                       "artifactId": "log4j-to-slf4j",
                       "children": [
@@ -5042,28 +5789,6 @@
         },
         {
           "artifactId": "common-events",
-          "children": [
-            {
-              "artifactId": "jackson-databind",
-              "children": [
-                {
-                  "artifactId": "jackson-core",
-                  "classifier": "",
-                  "groupId": "tools.jackson.core",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "3.1.7"
-                }
-              ],
-              "classifier": "",
-              "groupId": "tools.jackson.core",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "3.1.7"
-            }
-          ],
           "classifier": "",
           "groupId": "com.nigson",
           "optional": "false",
@@ -5712,26 +6437,6 @@
             },
             {
               "artifactId": "micrometer-observation",
-              "children": [
-                {
-                  "artifactId": "jspecify",
-                  "classifier": "",
-                  "groupId": "org.jspecify",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.0.1"
-                },
-                {
-                  "artifactId": "micrometer-commons",
-                  "classifier": "",
-                  "groupId": "io.micrometer",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.17.1"
-                }
-              ],
               "classifier": "",
               "groupId": "io.micrometer",
               "optional": "false",
@@ -5741,28 +6446,6 @@
             },
             {
               "artifactId": "micrometer-jakarta9",
-              "children": [
-                {
-                  "artifactId": "micrometer-core",
-                  "children": [
-                    {
-                      "artifactId": "HdrHistogram",
-                      "classifier": "",
-                      "groupId": "org.hdrhistogram",
-                      "optional": "false",
-                      "scope": "runtime",
-                      "type": "jar",
-                      "version": "2.2.2"
-                    }
-                  ],
-                  "classifier": "",
-                  "groupId": "io.micrometer",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.17.1"
-                }
-              ],
               "classifier": "",
               "groupId": "io.micrometer",
               "optional": "false",
@@ -6847,6 +7530,97 @@
     },
     "shared/common-observability": {
       "artifactId": "common-observability",
+      "children": [
+        {
+          "artifactId": "jackson-databind",
+          "children": [
+            {
+              "artifactId": "jackson-annotations",
+              "classifier": "",
+              "groupId": "com.fasterxml.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.21"
+            },
+            {
+              "artifactId": "jackson-core",
+              "classifier": "",
+              "groupId": "tools.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "3.1.7"
+            }
+          ],
+          "classifier": "",
+          "groupId": "tools.jackson.core",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "3.1.7"
+        },
+        {
+          "artifactId": "opentelemetry-api",
+          "children": [
+            {
+              "artifactId": "opentelemetry-context",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-common",
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "io.opentelemetry",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.62.0"
+        },
+        {
+          "artifactId": "logback-classic",
+          "children": [
+            {
+              "artifactId": "logback-core",
+              "classifier": "",
+              "groupId": "ch.qos.logback",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.5.38"
+            },
+            {
+              "artifactId": "slf4j-api",
+              "classifier": "",
+              "groupId": "org.slf4j",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.0.18"
+            }
+          ],
+          "classifier": "",
+          "groupId": "ch.qos.logback",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.5.38"
+        }
+      ],
       "classifier": "",
       "groupId": "com.nigson",
       "optional": "false",
@@ -6856,6 +7630,37 @@
     },
     "shared/common-problem": {
       "artifactId": "common-problem",
+      "children": [
+        {
+          "artifactId": "jackson-databind",
+          "children": [
+            {
+              "artifactId": "jackson-annotations",
+              "classifier": "",
+              "groupId": "com.fasterxml.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.21"
+            },
+            {
+              "artifactId": "jackson-core",
+              "classifier": "",
+              "groupId": "tools.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "3.1.7"
+            }
+          ],
+          "classifier": "",
+          "groupId": "tools.jackson.core",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "3.1.7"
+        }
+      ],
       "classifier": "",
       "groupId": "com.nigson",
       "optional": "false",
@@ -6866,6 +7671,88 @@
     "shared/common-security": {
       "artifactId": "common-security",
       "children": [
+        {
+          "artifactId": "common-observability",
+          "children": [
+            {
+              "artifactId": "jackson-databind",
+              "children": [
+                {
+                  "artifactId": "jackson-core",
+                  "classifier": "",
+                  "groupId": "tools.jackson.core",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "3.1.7"
+                }
+              ],
+              "classifier": "",
+              "groupId": "tools.jackson.core",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "3.1.7"
+            },
+            {
+              "artifactId": "opentelemetry-api",
+              "children": [
+                {
+                  "artifactId": "opentelemetry-context",
+                  "children": [
+                    {
+                      "artifactId": "opentelemetry-common",
+                      "classifier": "",
+                      "groupId": "io.opentelemetry",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "1.62.0"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "io.opentelemetry",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.62.0"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.opentelemetry",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.62.0"
+            },
+            {
+              "artifactId": "logback-classic",
+              "children": [
+                {
+                  "artifactId": "logback-core",
+                  "classifier": "",
+                  "groupId": "ch.qos.logback",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.5.38"
+                }
+              ],
+              "classifier": "",
+              "groupId": "ch.qos.logback",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.5.38"
+            }
+          ],
+          "classifier": "",
+          "groupId": "com.nigson",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "0.1.0"
+        },
         {
           "artifactId": "twilio",
           "children": [

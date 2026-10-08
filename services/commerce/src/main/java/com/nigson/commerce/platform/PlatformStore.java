@@ -37,6 +37,8 @@ public final class PlatformStore {
     /** Store the full wire envelope in payload, retaining correlation/trace across crashes. */
     public void append(String body, String actor) {
         transactional(); JsonNode event=EventCodec.decode(body);
+        var wire=com.nigson.shared.observability.WireContext.current();
+        if(wire!=null){var copied=(tools.jackson.databind.node.ObjectNode)event.deepCopy();copied.put("correlation_id",wire.correlationId.toString());copied.put("traceparent",com.nigson.shared.observability.WireContext.traceparent());event=copied;body=EventCodec.JSON.writeValueAsString(event);EventCodec.decode(body);}
         if(!event.path("producer").asString().equals(commerce)) throw new IllegalArgumentException("EVENT_PRODUCER_DENIED");
         bounded(actor,200); Instant time=now();
         jdbc.update("INSERT INTO commerce.outbox_event(id,created_by,updated_by,event_id,event_type,schema_version,aggregate_id,aggregate_version,payload,occurred_at,next_attempt_at) VALUES (?,?,?,?,?,1,?,?,?::jsonb,?,?)",
@@ -87,7 +89,7 @@ public final class PlatformStore {
         Map<String,Object> saved=tx.execute(status -> {
             jdbc.update("INSERT INTO commerce.idempotency_record(id,created_by,updated_by,principal_key,operation,request_key,request_hash,state,lease_until,expires_at) VALUES (?,?,?,?,?,?,?,'RUNNING',?,?) ON CONFLICT(principal_key,operation,request_key) DO NOTHING",token,principal,principal,principal,operation,key,hash,stamp(now().plusSeconds(30)),stamp(now().plus(Duration.ofDays(1))));
             var row=jdbc.queryForMap("SELECT * FROM commerce.idempotency_record WHERE principal_key=? AND operation=? AND request_key=? FOR UPDATE",principal,operation,key);
-            if(!row.get("request_hash").equals(hash)) throw new Conflict("IDEMPOTENCY_HASH_MISMATCH");
+            if(!row.get("request_hash").equals(hash)){metrics.counter("nigson.idempotency.conflicts","owner","commerce").increment();throw new Conflict("IDEMPOTENCY_HASH_MISMATCH");}
             if(row.get("state").equals("SUCCEEDED")) return row;
             if(!row.get("id").equals(token)) {
                 var deadline=(java.sql.Timestamp)row.get("lease_until");

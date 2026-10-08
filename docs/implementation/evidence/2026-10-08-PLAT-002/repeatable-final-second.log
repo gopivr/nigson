@@ -1,0 +1,1400 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/gopiravi/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Nigson backend                                                     [pom]
+[INFO] common-observability                                               [jar]
+[INFO] common-security                                                    [jar]
+[INFO] common-events                                                      [jar]
+[INFO] common-problem                                                     [jar]
+[INFO] commerce                                                           [jar]
+[INFO] experience                                                         [jar]
+[INFO] integration                                                        [jar]
+[INFO]
+[INFO] ---------------------< com.nigson:nigson-backend >----------------------
+[INFO] Building Nigson backend 0.1.0                                      [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ nigson-backend ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/target
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ nigson-backend ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.RequireJavaVendor passed
+[INFO] Rule 2: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] ------------------< com.nigson:common-observability >-------------------
+[INFO] Building common-observability 0.1.0                                [2/8]
+[INFO]   from shared/common-observability/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ common-observability ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/shared/common-observability/target
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/common-observability/classes
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-observability ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-observability ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-observability ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 3 source files with javac [debug parameters release 25] to ../../.build/java/common-observability/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-observability ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-observability/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-observability ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-observability ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-observability ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/shared/common-observability/target/common-observability-0.1.0.jar
+[INFO]
+[INFO] ---------------------< com.nigson:common-security >---------------------
+[INFO] Building common-security 0.1.0                                     [3/8]
+[INFO]   from shared/common-security/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ common-security ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/shared/common-security/target
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/common-security/classes
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-security ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-security ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/main/resources
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-security ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug parameters release 25] to ../../.build/java/common-security/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-security ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-security ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-security ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-security ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/shared/common-security/target/common-security-0.1.0.jar
+[INFO]
+[INFO] ----------------------< com.nigson:common-events >----------------------
+[INFO] Building common-events 0.1.0                                       [4/8]
+[INFO]   from shared/common-events/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ common-events ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/shared/common-events/target
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/common-events/classes
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-events ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-events ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-events ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug parameters release 25] to ../../.build/java/common-events/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-events ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-events/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-events ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-events ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-events ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/shared/common-events/target/common-events-0.1.0.jar
+[INFO]
+[INFO] ---------------------< com.nigson:common-problem >----------------------
+[INFO] Building common-problem 0.1.0                                      [5/8]
+[INFO]   from shared/common-problem/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ common-problem ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/shared/common-problem/target
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/common-problem/classes
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-problem ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-problem ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-problem ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 4 source files with javac [debug parameters release 25] to ../../.build/java/common-problem/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-problem ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-problem/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-problem ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-problem ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-problem ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/shared/common-problem/target/common-problem-0.1.0.jar
+[INFO]
+[INFO] ------------------------< com.nigson:commerce >-------------------------
+[INFO] Building commerce 0.1.0                                            [6/8]
+[INFO]   from services/commerce/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ commerce ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/services/commerce/target
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/commerce/classes
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/commerce/test-classes
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ commerce ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ commerce ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/commerce/classes
+[INFO] Copying 59 resources from src/main/resources to ../../.build/java/commerce/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ commerce ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 20 source files with javac [debug parameters release 25] to ../../.build/java/commerce/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ commerce ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/commerce/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ commerce ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 7 source files with javac [debug parameters release 25] to ../../.build/java/commerce/test-classes
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ commerce ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.commerce.OtlpTransportTest
+07:55:47.799 [main] INFO io.micrometer.core.instrument.push.PushMeterRegistry -- Publishing metrics for Registry every 1m to http://127.0.0.1:57533/v1/metrics with resource attributes {}
+07:55:47.909 [main] WARN com.nigson.commerce.OtlpTransportTest$Registry -- A MeterFilter is being configured after a Meter has been registered to this registry. All MeterFilters should be configured before any Meters are registered. If that is not possible or you have a use case where it should be allowed, let the Micrometer maintainers know at https://github.com/micrometer-metrics/micrometer/issues/4920. Enable DEBUG level logging on this logger to see a stack trace of the call configuring this MeterFilter.
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/Users/gopiravi/workspace/nigson/.build/m2/com/google/protobuf/protobuf-java/4.35.1/protobuf-java-4.35.1.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.586 s -- in com.nigson.commerce.OtlpTransportTest
+[INFO] Running com.nigson.commerce.PlatformPersistenceTest
+[WARNING] Tests run: 3, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.014 s -- in com.nigson.commerce.PlatformPersistenceTest
+[INFO] Running com.nigson.commerce.payment.PaystackTransactionGuardTest
+[WARNING] Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.004 s -- in com.nigson.commerce.payment.PaystackTransactionGuardTest
+[INFO] Running com.nigson.commerce.EventTransportTest
+[WARNING] Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.004 s -- in com.nigson.commerce.EventTransportTest
+[INFO] Running com.nigson.commerce.BuildCompatibilityTest
+07:55:48.498 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:55:48 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-1"]
+Oct 08, 2026 7:55:48 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:55:48 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:55:48 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-1"]
+07:55:48.627 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57536 (http) with context path '/'
+Oct 08, 2026 7:55:48 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-1-57536"]
+Oct 08, 2026 7:55:48 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+07:55:49.230 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.2
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.059 s -- in com.nigson.commerce.BuildCompatibilityTest
+[INFO] Running com.nigson.commerce.SafeBoundaryTest
+07:55:51.320 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:55:51 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-2"]
+Oct 08, 2026 7:55:51 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:55:51 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:55:51 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-2"]
+07:55:51.364 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57541 (http) with context path '/'
+07:55:51.384 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.411 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.422 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.425 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.440 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.442 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.449 [http-nio-auto-2-exec-4] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.450 [http-nio-auto-2-exec-4] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.455 [http-nio-auto-2-exec-5] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.456 [http-nio-auto-2-exec-5] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.472 [http-nio-auto-2-exec-6] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.473 [http-nio-auto-2-exec-6] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.479 [http-nio-auto-2-exec-7] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.479 [http-nio-auto-2-exec-7] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.486 [http-nio-auto-2-exec-9] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.487 [http-nio-auto-2-exec-9] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.490 [http-nio-auto-2-exec-8] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.491 [http-nio-auto-2-exec-8] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.499 [http-nio-auto-2-exec-10] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.499 [http-nio-auto-2-exec-10] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.506 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.507 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.511 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.511 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.517 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.517 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.520 [http-nio-auto-2-exec-4] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.521 [http-nio-auto-2-exec-4] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.525 [http-nio-auto-2-exec-5] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.525 [http-nio-auto-2-exec-5] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.529 [http-nio-auto-2-exec-6] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.531 [http-nio-auto-2-exec-6] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.535 [http-nio-auto-2-exec-7] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.536 [http-nio-auto-2-exec-7] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.539 [http-nio-auto-2-exec-9] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.539 [http-nio-auto-2-exec-9] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.541 [http-nio-auto-2-exec-8] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.542 [http-nio-auto-2-exec-8] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.545 [http-nio-auto-2-exec-10] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.545 [http-nio-auto-2-exec-10] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.548 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.548 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.551 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.551 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.556 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.557 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.564 [http-nio-auto-2-exec-4] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.564 [http-nio-auto-2-exec-4] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.567 [http-nio-auto-2-exec-5] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.568 [http-nio-auto-2-exec-5] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.570 [http-nio-auto-2-exec-6] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.570 [http-nio-auto-2-exec-6] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.578 [http-nio-auto-2-exec-7] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.578 [http-nio-auto-2-exec-7] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.584 [http-nio-auto-2-exec-9] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.584 [http-nio-auto-2-exec-9] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.586 [http-nio-auto-2-exec-8] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.586 [http-nio-auto-2-exec-8] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.589 [http-nio-auto-2-exec-10] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.589 [http-nio-auto-2-exec-10] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.591 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.591 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.594 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.594 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:51.597 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:55:51.597 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+Oct 08, 2026 7:55:51 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-2-57541"]
+Oct 08, 2026 7:55:51 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.359 s -- in com.nigson.commerce.SafeBoundaryTest
+[INFO] Running com.nigson.commerce.AuditPersistenceTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.006 s -- in com.nigson.commerce.AuditPersistenceTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 7
+[INFO]
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ commerce ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/services/commerce/target/commerce-0.1.0.jar
+[INFO]
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ commerce ---
+[INFO] Replacing main artifact /Users/gopiravi/workspace/nigson/services/commerce/target/commerce-0.1.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/gopiravi/workspace/nigson/services/commerce/target/commerce-0.1.0.jar.original
+[INFO]
+[INFO] -----------------------< com.nigson:experience >------------------------
+[INFO] Building experience 0.1.0                                          [7/8]
+[INFO]   from services/experience/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ experience ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/services/experience/target
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/experience/classes
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/experience/test-classes
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ experience ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ experience ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/experience/classes
+[INFO] Copying 39 resources from src/main/resources to ../../.build/java/experience/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ experience ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 18 source files with javac [debug parameters release 25] to ../../.build/java/experience/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ experience ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/experience/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ experience ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 4 source files with javac [debug parameters release 25] to ../../.build/java/experience/test-classes
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ experience ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.experience.PlatformPersistenceTest
+[WARNING] Tests run: 3, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.053 s -- in com.nigson.experience.PlatformPersistenceTest
+[INFO] Running com.nigson.experience.BuildCompatibilityTest
+07:55:53.941 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:55:53 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-1"]
+Oct 08, 2026 7:55:53 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:55:53 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:55:54 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-1"]
+07:55:54.024 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57549 (http) with context path '/'
+Oct 08, 2026 7:55:54 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-1-57549"]
+Oct 08, 2026 7:55:54 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+07:55:54.856 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.2
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.051 s -- in com.nigson.experience.BuildCompatibilityTest
+[INFO] Running com.nigson.experience.SafeBoundaryTest
+07:55:56.783 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:55:56 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-2"]
+Oct 08, 2026 7:55:56 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:55:56 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:55:56 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-2"]
+07:55:56.827 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57553 (http) with context path '/'
+07:55:56.865 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.880 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.885 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.885 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.888 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.888 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.890 [http-nio-auto-2-exec-4] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.890 [http-nio-auto-2-exec-4] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.891 [http-nio-auto-2-exec-5] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.892 [http-nio-auto-2-exec-5] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.893 [http-nio-auto-2-exec-6] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.893 [http-nio-auto-2-exec-6] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.894 [http-nio-auto-2-exec-7] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.894 [http-nio-auto-2-exec-7] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.896 [http-nio-auto-2-exec-8] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.896 [http-nio-auto-2-exec-8] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.898 [http-nio-auto-2-exec-9] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.898 [http-nio-auto-2-exec-9] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.900 [http-nio-auto-2-exec-10] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.900 [http-nio-auto-2-exec-10] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.902 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.902 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.903 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.903 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.904 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.904 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.905 [http-nio-auto-2-exec-4] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.906 [http-nio-auto-2-exec-4] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.907 [http-nio-auto-2-exec-5] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.907 [http-nio-auto-2-exec-5] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.908 [http-nio-auto-2-exec-6] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.908 [http-nio-auto-2-exec-6] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.909 [http-nio-auto-2-exec-7] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.909 [http-nio-auto-2-exec-7] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.911 [http-nio-auto-2-exec-8] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.911 [http-nio-auto-2-exec-8] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.912 [http-nio-auto-2-exec-9] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.912 [http-nio-auto-2-exec-9] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.913 [http-nio-auto-2-exec-10] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.914 [http-nio-auto-2-exec-10] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.916 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.916 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.918 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.918 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.920 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.920 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.922 [http-nio-auto-2-exec-4] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.922 [http-nio-auto-2-exec-4] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.923 [http-nio-auto-2-exec-5] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.923 [http-nio-auto-2-exec-5] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.924 [http-nio-auto-2-exec-6] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.924 [http-nio-auto-2-exec-6] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.925 [http-nio-auto-2-exec-7] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.925 [http-nio-auto-2-exec-7] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.926 [http-nio-auto-2-exec-8] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.926 [http-nio-auto-2-exec-8] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.927 [http-nio-auto-2-exec-9] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.927 [http-nio-auto-2-exec-9] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.929 [http-nio-auto-2-exec-10] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.930 [http-nio-auto-2-exec-10] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.931 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.932 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.935 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.935 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:55:56.937 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:55:56.937 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+Oct 08, 2026 7:55:56 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-2-57553"]
+Oct 08, 2026 7:55:56 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.265 s -- in com.nigson.experience.SafeBoundaryTest
+[INFO] Running com.nigson.experience.AuditPersistenceTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.003 s -- in com.nigson.experience.AuditPersistenceTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 5
+[INFO]
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ experience ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/services/experience/target/experience-0.1.0.jar
+[INFO]
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ experience ---
+[INFO] Replacing main artifact /Users/gopiravi/workspace/nigson/services/experience/target/experience-0.1.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/gopiravi/workspace/nigson/services/experience/target/experience-0.1.0.jar.original
+[INFO]
+[INFO] -----------------------< com.nigson:integration >-----------------------
+[INFO] Building integration 0.1.0                                         [8/8]
+[INFO]   from services/integration/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- clean:3.5.0:clean (default-clean) @ integration ---
+[INFO] Deleting /Users/gopiravi/workspace/nigson/services/integration/target
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/integration/classes
+[INFO] Deleting /Users/gopiravi/workspace/nigson/.build/java/integration/test-classes
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ integration ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ integration ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/integration/classes
+[INFO] Copying 27 resources from src/main/resources to ../../.build/java/integration/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ integration ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 22 source files with javac [debug parameters release 25] to ../../.build/java/integration/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ integration ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/integration/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ integration ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 4 source files with javac [debug parameters release 25] to ../../.build/java/integration/test-classes
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ integration ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.integration.PlatformPersistenceTest
+[WARNING] Tests run: 4, Failures: 0, Errors: 0, Skipped: 4, Time elapsed: 0.048 s -- in com.nigson.integration.PlatformPersistenceTest
+[INFO] Running com.nigson.integration.BuildCompatibilityTest
+07:55:59.089 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:55:59 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-1"]
+Oct 08, 2026 7:55:59 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:55:59 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:55:59 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-1"]
+07:55:59.180 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57593 (http) with context path '/'
+Oct 08, 2026 7:55:59 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-1-57593"]
+Oct 08, 2026 7:55:59 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+07:55:59.541 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.2
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.313 s -- in com.nigson.integration.BuildCompatibilityTest
+[INFO] Running com.nigson.integration.SafeBoundaryTest
+07:56:01.218 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:56:01 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-2"]
+Oct 08, 2026 7:56:01 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:56:01 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:56:01 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-2"]
+07:56:01.238 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57602 (http) with context path '/'
+07:56:01.257 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.281 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.286 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.287 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.290 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.290 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.292 [http-nio-auto-2-exec-4] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.292 [http-nio-auto-2-exec-4] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.294 [http-nio-auto-2-exec-5] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.294 [http-nio-auto-2-exec-5] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.295 [http-nio-auto-2-exec-6] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.295 [http-nio-auto-2-exec-6] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.297 [http-nio-auto-2-exec-7] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.297 [http-nio-auto-2-exec-7] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.298 [http-nio-auto-2-exec-8] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.298 [http-nio-auto-2-exec-8] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.300 [http-nio-auto-2-exec-9] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.300 [http-nio-auto-2-exec-9] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.302 [http-nio-auto-2-exec-10] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.302 [http-nio-auto-2-exec-10] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.303 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.303 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.305 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.305 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.306 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.306 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.307 [http-nio-auto-2-exec-4] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.307 [http-nio-auto-2-exec-4] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.308 [http-nio-auto-2-exec-5] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.309 [http-nio-auto-2-exec-5] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.311 [http-nio-auto-2-exec-6] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.311 [http-nio-auto-2-exec-6] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.314 [http-nio-auto-2-exec-7] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.314 [http-nio-auto-2-exec-7] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.317 [http-nio-auto-2-exec-8] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.317 [http-nio-auto-2-exec-8] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.320 [http-nio-auto-2-exec-9] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.320 [http-nio-auto-2-exec-9] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.322 [http-nio-auto-2-exec-10] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.322 [http-nio-auto-2-exec-10] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.324 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.324 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.325 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.325 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.326 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.327 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.328 [http-nio-auto-2-exec-4] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.328 [http-nio-auto-2-exec-4] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.329 [http-nio-auto-2-exec-5] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.329 [http-nio-auto-2-exec-5] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.331 [http-nio-auto-2-exec-6] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.331 [http-nio-auto-2-exec-6] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.332 [http-nio-auto-2-exec-7] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.332 [http-nio-auto-2-exec-7] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.334 [http-nio-auto-2-exec-8] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.334 [http-nio-auto-2-exec-8] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.336 [http-nio-auto-2-exec-9] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.336 [http-nio-auto-2-exec-9] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.337 [http-nio-auto-2-exec-10] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.337 [http-nio-auto-2-exec-10] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.339 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.339 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.340 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.340 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:01.341 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:01.342 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+Oct 08, 2026 7:56:01 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-2-57602"]
+Oct 08, 2026 7:56:01 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.186 s -- in com.nigson.integration.SafeBoundaryTest
+[INFO] Running com.nigson.integration.AuditPersistenceTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.002 s -- in com.nigson.integration.AuditPersistenceTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 6
+[INFO]
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ integration ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/services/integration/target/integration-0.1.0.jar
+[INFO]
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ integration ---
+[INFO] Replacing main artifact /Users/gopiravi/workspace/nigson/services/integration/target/integration-0.1.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/gopiravi/workspace/nigson/services/integration/target/integration-0.1.0.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Nigson backend 0.1.0:
+[INFO]
+[INFO] Nigson backend ..................................... SUCCESS [  0.203 s]
+[INFO] common-observability ............................... SUCCESS [  1.361 s]
+[INFO] common-security .................................... SUCCESS [  0.315 s]
+[INFO] common-events ...................................... SUCCESS [  0.108 s]
+[INFO] common-problem ..................................... SUCCESS [  0.223 s]
+[INFO] commerce ........................................... SUCCESS [  6.753 s]
+[INFO] experience ......................................... SUCCESS [  5.036 s]
+[INFO] integration ........................................ SUCCESS [  4.429 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  18.622 s
+[INFO] Finished at: 2026-10-08T07:56:01-04:00
+[INFO] ------------------------------------------------------------------------
+python3 scripts/check_repository.py
+PASS: TEST-FOUND-TREE — onboarding paths, specification/task registry, scope and tracked credential-pattern checks; no runtime checks implied
+./mvnw -B verify
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/gopiravi/workspace/nigson/.build/maven/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Nigson backend                                                     [pom]
+[INFO] common-observability                                               [jar]
+[INFO] common-security                                                    [jar]
+[INFO] common-events                                                      [jar]
+[INFO] common-problem                                                     [jar]
+[INFO] commerce                                                           [jar]
+[INFO] experience                                                         [jar]
+[INFO] integration                                                        [jar]
+[INFO]
+[INFO] ---------------------< com.nigson:nigson-backend >----------------------
+[INFO] Building Nigson backend 0.1.0                                      [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ nigson-backend ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.RequireJavaVendor passed
+[INFO] Rule 2: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] ------------------< com.nigson:common-observability >-------------------
+[INFO] Building common-observability 0.1.0                                [2/8]
+[INFO]   from shared/common-observability/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-observability ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-observability ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-observability ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-observability ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-observability/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-observability ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-observability ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-observability ---
+[INFO]
+[INFO] ---------------------< com.nigson:common-security >---------------------
+[INFO] Building common-security 0.1.0                                     [3/8]
+[INFO]   from shared/common-security/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-security ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-security ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/main/resources
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-security ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-security ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-security ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-security ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-security ---
+[INFO]
+[INFO] ----------------------< com.nigson:common-events >----------------------
+[INFO] Building common-events 0.1.0                                       [4/8]
+[INFO]   from shared/common-events/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-events ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-events ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-events ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-events ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-events/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-events ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-events ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-events ---
+[INFO]
+[INFO] ---------------------< com.nigson:common-problem >----------------------
+[INFO] Building common-problem 0.1.0                                      [5/8]
+[INFO]   from shared/common-problem/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-problem ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-problem ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-problem ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-problem ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-problem/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-problem ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-problem ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ common-problem ---
+[INFO]
+[INFO] ------------------------< com.nigson:commerce >-------------------------
+[INFO] Building commerce 0.1.0                                            [6/8]
+[INFO]   from services/commerce/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ commerce ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ commerce ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/commerce/classes
+[INFO] Copying 59 resources from src/main/resources to ../../.build/java/commerce/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ commerce ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/commerce/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ commerce ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.commerce.OtlpTransportTest
+07:56:05.200 [main] INFO io.micrometer.core.instrument.push.PushMeterRegistry -- Publishing metrics for Registry every 1m to http://127.0.0.1:57612/v1/metrics with resource attributes {}
+07:56:05.253 [main] WARN com.nigson.commerce.OtlpTransportTest$Registry -- A MeterFilter is being configured after a Meter has been registered to this registry. All MeterFilters should be configured before any Meters are registered. If that is not possible or you have a use case where it should be allowed, let the Micrometer maintainers know at https://github.com/micrometer-metrics/micrometer/issues/4920. Enable DEBUG level logging on this logger to see a stack trace of the call configuring this MeterFilter.
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::arrayBaseOffset has been called by com.google.protobuf.UnsafeUtil (file:/Users/gopiravi/workspace/nigson/.build/m2/com/google/protobuf/protobuf-java/4.35.1/protobuf-java-4.35.1.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.protobuf.UnsafeUtil
+WARNING: sun.misc.Unsafe::arrayBaseOffset will be removed in a future release
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.307 s -- in com.nigson.commerce.OtlpTransportTest
+[INFO] Running com.nigson.commerce.PlatformPersistenceTest
+[WARNING] Tests run: 3, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.011 s -- in com.nigson.commerce.PlatformPersistenceTest
+[INFO] Running com.nigson.commerce.payment.PaystackTransactionGuardTest
+[WARNING] Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.001 s -- in com.nigson.commerce.payment.PaystackTransactionGuardTest
+[INFO] Running com.nigson.commerce.EventTransportTest
+[WARNING] Tests run: 1, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.001 s -- in com.nigson.commerce.EventTransportTest
+[INFO] Running com.nigson.commerce.BuildCompatibilityTest
+07:56:05.611 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:56:05 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-1"]
+Oct 08, 2026 7:56:05 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:56:05 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:56:05 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-1"]
+07:56:05.663 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57615 (http) with context path '/'
+Oct 08, 2026 7:56:05 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-1-57615"]
+Oct 08, 2026 7:56:05 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+07:56:05.954 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.2
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.079 s -- in com.nigson.commerce.BuildCompatibilityTest
+[INFO] Running com.nigson.commerce.SafeBoundaryTest
+07:56:07.559 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:56:07 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-2"]
+Oct 08, 2026 7:56:07 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:56:07 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:56:07 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-2"]
+07:56:07.579 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57622 (http) with context path '/'
+07:56:07.590 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.605 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.611 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.611 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.615 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.615 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.618 [http-nio-auto-2-exec-4] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.619 [http-nio-auto-2-exec-4] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.621 [http-nio-auto-2-exec-5] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.621 [http-nio-auto-2-exec-5] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.624 [http-nio-auto-2-exec-6] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.624 [http-nio-auto-2-exec-6] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.626 [http-nio-auto-2-exec-7] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.626 [http-nio-auto-2-exec-7] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.628 [http-nio-auto-2-exec-8] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.628 [http-nio-auto-2-exec-8] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.630 [http-nio-auto-2-exec-9] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.630 [http-nio-auto-2-exec-9] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.632 [http-nio-auto-2-exec-10] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.632 [http-nio-auto-2-exec-10] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.634 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.634 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.638 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.638 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.644 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.645 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.647 [http-nio-auto-2-exec-4] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.648 [http-nio-auto-2-exec-4] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.649 [http-nio-auto-2-exec-5] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.649 [http-nio-auto-2-exec-5] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.650 [http-nio-auto-2-exec-6] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.650 [http-nio-auto-2-exec-6] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.651 [http-nio-auto-2-exec-7] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.651 [http-nio-auto-2-exec-7] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.652 [http-nio-auto-2-exec-8] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.652 [http-nio-auto-2-exec-8] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.653 [http-nio-auto-2-exec-9] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.653 [http-nio-auto-2-exec-9] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.654 [http-nio-auto-2-exec-10] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.654 [http-nio-auto-2-exec-10] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.655 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.655 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.656 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.656 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.657 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.657 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.658 [http-nio-auto-2-exec-4] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.658 [http-nio-auto-2-exec-4] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.659 [http-nio-auto-2-exec-5] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.659 [http-nio-auto-2-exec-5] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.660 [http-nio-auto-2-exec-6] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.660 [http-nio-auto-2-exec-6] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.661 [http-nio-auto-2-exec-7] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.661 [http-nio-auto-2-exec-7] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.662 [http-nio-auto-2-exec-8] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.662 [http-nio-auto-2-exec-8] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.663 [http-nio-auto-2-exec-9] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.663 [http-nio-auto-2-exec-9] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.663 [http-nio-auto-2-exec-10] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.664 [http-nio-auto-2-exec-10] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.664 [http-nio-auto-2-exec-1] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.664 [http-nio-auto-2-exec-1] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.665 [http-nio-auto-2-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.665 [http-nio-auto-2-exec-2] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:07.666 [http-nio-auto-2-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+07:56:07.666 [http-nio-auto-2-exec-3] INFO com.nigson.commerce.platform.RequestBoundary -- REQUEST_COMPLETE
+Oct 08, 2026 7:56:07 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-2-57622"]
+Oct 08, 2026 7:56:07 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.137 s -- in com.nigson.commerce.SafeBoundaryTest
+[INFO] Running com.nigson.commerce.AuditPersistenceTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.002 s -- in com.nigson.commerce.AuditPersistenceTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 7
+[INFO]
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ commerce ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/services/commerce/target/commerce-0.1.0.jar
+[INFO]
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ commerce ---
+[INFO] Replacing main artifact /Users/gopiravi/workspace/nigson/services/commerce/target/commerce-0.1.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/gopiravi/workspace/nigson/services/commerce/target/commerce-0.1.0.jar.original
+[INFO]
+[INFO] -----------------------< com.nigson:experience >------------------------
+[INFO] Building experience 0.1.0                                          [7/8]
+[INFO]   from services/experience/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ experience ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ experience ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/experience/classes
+[INFO] Copying 39 resources from src/main/resources to ../../.build/java/experience/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ experience ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/experience/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ experience ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.experience.PlatformPersistenceTest
+[WARNING] Tests run: 3, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.037 s -- in com.nigson.experience.PlatformPersistenceTest
+[INFO] Running com.nigson.experience.BuildCompatibilityTest
+07:56:08.819 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:56:08 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-1"]
+Oct 08, 2026 7:56:08 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:56:08 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:56:08 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-1"]
+07:56:08.887 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57627 (http) with context path '/'
+Oct 08, 2026 7:56:09 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-1-57627"]
+Oct 08, 2026 7:56:09 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+07:56:09.174 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.2
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.680 s -- in com.nigson.experience.BuildCompatibilityTest
+[INFO] Running com.nigson.experience.SafeBoundaryTest
+07:56:10.377 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:56:10 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-2"]
+Oct 08, 2026 7:56:10 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:56:10 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:56:10 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-2"]
+07:56:10.395 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57632 (http) with context path '/'
+07:56:10.418 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.436 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.442 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.442 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.446 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.446 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.449 [http-nio-auto-2-exec-4] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.449 [http-nio-auto-2-exec-4] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.452 [http-nio-auto-2-exec-5] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.452 [http-nio-auto-2-exec-5] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.456 [http-nio-auto-2-exec-6] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.456 [http-nio-auto-2-exec-6] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.458 [http-nio-auto-2-exec-7] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.458 [http-nio-auto-2-exec-7] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.460 [http-nio-auto-2-exec-8] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.460 [http-nio-auto-2-exec-8] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.462 [http-nio-auto-2-exec-9] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.462 [http-nio-auto-2-exec-9] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.464 [http-nio-auto-2-exec-10] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.464 [http-nio-auto-2-exec-10] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.465 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.465 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.467 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.467 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.469 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.469 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.471 [http-nio-auto-2-exec-4] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.471 [http-nio-auto-2-exec-4] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.473 [http-nio-auto-2-exec-5] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.473 [http-nio-auto-2-exec-5] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.474 [http-nio-auto-2-exec-6] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.474 [http-nio-auto-2-exec-6] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.476 [http-nio-auto-2-exec-7] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.476 [http-nio-auto-2-exec-7] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.478 [http-nio-auto-2-exec-8] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.478 [http-nio-auto-2-exec-8] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.480 [http-nio-auto-2-exec-9] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.480 [http-nio-auto-2-exec-9] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.483 [http-nio-auto-2-exec-10] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.483 [http-nio-auto-2-exec-10] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.489 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.490 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.493 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.494 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.495 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.495 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.496 [http-nio-auto-2-exec-4] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.496 [http-nio-auto-2-exec-4] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.497 [http-nio-auto-2-exec-5] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.497 [http-nio-auto-2-exec-5] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.498 [http-nio-auto-2-exec-6] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.498 [http-nio-auto-2-exec-6] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.500 [http-nio-auto-2-exec-7] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.501 [http-nio-auto-2-exec-7] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.502 [http-nio-auto-2-exec-8] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.502 [http-nio-auto-2-exec-8] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.504 [http-nio-auto-2-exec-9] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.505 [http-nio-auto-2-exec-9] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.506 [http-nio-auto-2-exec-10] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.506 [http-nio-auto-2-exec-10] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.507 [http-nio-auto-2-exec-1] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.507 [http-nio-auto-2-exec-1] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.508 [http-nio-auto-2-exec-2] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.508 [http-nio-auto-2-exec-2] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:10.509 [http-nio-auto-2-exec-3] WARN com.nigson.experience.platform.ProblemWriter -- REQUEST_FAILED
+07:56:10.509 [http-nio-auto-2-exec-3] INFO com.nigson.experience.platform.RequestBoundary -- REQUEST_COMPLETE
+Oct 08, 2026 7:56:10 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-2-57632"]
+Oct 08, 2026 7:56:10 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.201 s -- in com.nigson.experience.SafeBoundaryTest
+[INFO] Running com.nigson.experience.AuditPersistenceTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.002 s -- in com.nigson.experience.AuditPersistenceTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 5
+[INFO]
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ experience ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/services/experience/target/experience-0.1.0.jar
+[INFO]
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ experience ---
+[INFO] Replacing main artifact /Users/gopiravi/workspace/nigson/services/experience/target/experience-0.1.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/gopiravi/workspace/nigson/services/experience/target/experience-0.1.0.jar.original
+[INFO]
+[INFO] -----------------------< com.nigson:integration >-----------------------
+[INFO] Building integration 0.1.0                                         [8/8]
+[INFO]   from services/integration/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ integration ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ integration ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/integration/classes
+[INFO] Copying 27 resources from src/main/resources to ../../.build/java/integration/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ integration ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ integration ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/integration/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ integration ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ integration ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.integration.PlatformPersistenceTest
+[WARNING] Tests run: 4, Failures: 0, Errors: 0, Skipped: 4, Time elapsed: 0.030 s -- in com.nigson.integration.PlatformPersistenceTest
+[INFO] Running com.nigson.integration.BuildCompatibilityTest
+07:56:11.417 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:56:11 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-1"]
+Oct 08, 2026 7:56:11 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:56:11 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:56:11 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-1"]
+07:56:11.486 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57636 (http) with context path '/'
+Oct 08, 2026 7:56:11 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-1-57636"]
+Oct 08, 2026 7:56:11 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+07:56:11.899 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.2
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.738 s -- in com.nigson.integration.BuildCompatibilityTest
+[INFO] Running com.nigson.integration.SafeBoundaryTest
+07:56:14.033 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 7:56:14 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-2"]
+Oct 08, 2026 7:56:14 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 7:56:14 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 7:56:14 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-2"]
+07:56:14.072 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57639 (http) with context path '/'
+07:56:14.092 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.111 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.118 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.118 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.122 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.123 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.126 [http-nio-auto-2-exec-4] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.126 [http-nio-auto-2-exec-4] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.128 [http-nio-auto-2-exec-5] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.129 [http-nio-auto-2-exec-5] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.130 [http-nio-auto-2-exec-6] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.130 [http-nio-auto-2-exec-6] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.132 [http-nio-auto-2-exec-7] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.132 [http-nio-auto-2-exec-7] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.133 [http-nio-auto-2-exec-8] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.133 [http-nio-auto-2-exec-8] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.135 [http-nio-auto-2-exec-9] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.135 [http-nio-auto-2-exec-9] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.137 [http-nio-auto-2-exec-10] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.137 [http-nio-auto-2-exec-10] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.138 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.138 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.139 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.140 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.141 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.141 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.142 [http-nio-auto-2-exec-4] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.142 [http-nio-auto-2-exec-4] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.143 [http-nio-auto-2-exec-5] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.144 [http-nio-auto-2-exec-5] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.146 [http-nio-auto-2-exec-6] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.146 [http-nio-auto-2-exec-6] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.147 [http-nio-auto-2-exec-7] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.148 [http-nio-auto-2-exec-7] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.149 [http-nio-auto-2-exec-8] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.149 [http-nio-auto-2-exec-8] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.150 [http-nio-auto-2-exec-9] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.150 [http-nio-auto-2-exec-9] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.151 [http-nio-auto-2-exec-10] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.151 [http-nio-auto-2-exec-10] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.152 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.152 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.153 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.154 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.155 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.155 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.156 [http-nio-auto-2-exec-4] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.156 [http-nio-auto-2-exec-4] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.157 [http-nio-auto-2-exec-5] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.157 [http-nio-auto-2-exec-5] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.158 [http-nio-auto-2-exec-6] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.158 [http-nio-auto-2-exec-6] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.159 [http-nio-auto-2-exec-7] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.159 [http-nio-auto-2-exec-7] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.160 [http-nio-auto-2-exec-8] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.160 [http-nio-auto-2-exec-8] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.161 [http-nio-auto-2-exec-9] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.162 [http-nio-auto-2-exec-9] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.163 [http-nio-auto-2-exec-10] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.163 [http-nio-auto-2-exec-10] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.164 [http-nio-auto-2-exec-1] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.165 [http-nio-auto-2-exec-1] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.166 [http-nio-auto-2-exec-2] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.166 [http-nio-auto-2-exec-2] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+07:56:14.167 [http-nio-auto-2-exec-3] WARN com.nigson.integration.platform.ProblemWriter -- REQUEST_FAILED
+07:56:14.167 [http-nio-auto-2-exec-3] INFO com.nigson.integration.platform.RequestBoundary -- REQUEST_COMPLETE
+Oct 08, 2026 7:56:14 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-2-57639"]
+Oct 08, 2026 7:56:14 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.197 s -- in com.nigson.integration.SafeBoundaryTest
+[INFO] Running com.nigson.integration.AuditPersistenceTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.002 s -- in com.nigson.integration.AuditPersistenceTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 6
+[INFO]
+[INFO]
+[INFO] --- jar:3.5.1:jar (default-jar) @ integration ---
+[INFO] Building jar: /Users/gopiravi/workspace/nigson/services/integration/target/integration-0.1.0.jar
+[INFO]
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ integration ---
+[INFO] Replacing main artifact /Users/gopiravi/workspace/nigson/services/integration/target/integration-0.1.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/gopiravi/workspace/nigson/services/integration/target/integration-0.1.0.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Nigson backend 0.1.0:
+[INFO]
+[INFO] Nigson backend ..................................... SUCCESS [  0.142 s]
+[INFO] common-observability ............................... SUCCESS [  0.461 s]
+[INFO] common-security .................................... SUCCESS [  0.070 s]
+[INFO] common-events ...................................... SUCCESS [  0.018 s]
+[INFO] common-problem ..................................... SUCCESS [  0.022 s]
+[INFO] commerce ........................................... SUCCESS [  3.956 s]
+[INFO] experience ......................................... SUCCESS [  2.661 s]
+[INFO] integration ........................................ SUCCESS [  3.659 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  11.293 s
+[INFO] Finished at: 2026-10-08T07:56:14-04:00
+[INFO] ------------------------------------------------------------------------
+./mvnw -B dependency:tree -DoutputType=json -DoutputFile=target/dependencies.json
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/gopiravi/workspace/nigson/.build/maven/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Nigson backend                                                     [pom]
+[INFO] common-observability                                               [jar]
+[INFO] common-security                                                    [jar]
+[INFO] common-events                                                      [jar]
+[INFO] common-problem                                                     [jar]
+[INFO] commerce                                                           [jar]
+[INFO] experience                                                         [jar]
+[INFO] integration                                                        [jar]
+[INFO]
+[INFO] ---------------------< com.nigson:nigson-backend >----------------------
+[INFO] Building Nigson backend 0.1.0                                      [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ nigson-backend ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/target/dependencies.json
+[INFO]
+[INFO] ------------------< com.nigson:common-observability >-------------------
+[INFO] Building common-observability 0.1.0                                [2/8]
+[INFO]   from shared/common-observability/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-observability ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-observability/target/dependencies.json
+[INFO]
+[INFO] ---------------------< com.nigson:common-security >---------------------
+[INFO] Building common-security 0.1.0                                     [3/8]
+[INFO]   from shared/common-security/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-security ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-security/target/dependencies.json
+[INFO]
+[INFO] ----------------------< com.nigson:common-events >----------------------
+[INFO] Building common-events 0.1.0                                       [4/8]
+[INFO]   from shared/common-events/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-events ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-events/target/dependencies.json
+[INFO]
+[INFO] ---------------------< com.nigson:common-problem >----------------------
+[INFO] Building common-problem 0.1.0                                      [5/8]
+[INFO]   from shared/common-problem/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-problem ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-problem/target/dependencies.json
+[INFO]
+[INFO] ------------------------< com.nigson:commerce >-------------------------
+[INFO] Building commerce 0.1.0                                            [6/8]
+[INFO]   from services/commerce/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ commerce ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/services/commerce/target/dependencies.json
+[INFO]
+[INFO] -----------------------< com.nigson:experience >------------------------
+[INFO] Building experience 0.1.0                                          [7/8]
+[INFO]   from services/experience/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ experience ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/services/experience/target/dependencies.json
+[INFO]
+[INFO] -----------------------< com.nigson:integration >-----------------------
+[INFO] Building integration 0.1.0                                         [8/8]
+[INFO]   from services/integration/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ integration ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/services/integration/target/dependencies.json
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Nigson backend 0.1.0:
+[INFO]
+[INFO] Nigson backend ..................................... SUCCESS [  0.427 s]
+[INFO] common-observability ............................... SUCCESS [  0.039 s]
+[INFO] common-security .................................... SUCCESS [  0.053 s]
+[INFO] common-events ...................................... SUCCESS [  0.007 s]
+[INFO] common-problem ..................................... SUCCESS [  0.006 s]
+[INFO] commerce ........................................... SUCCESS [  0.269 s]
+[INFO] experience ......................................... SUCCESS [  0.034 s]
+[INFO] integration ........................................ SUCCESS [  0.034 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.187 s
+[INFO] Finished at: 2026-10-08T07:56:16-04:00
+[INFO] ------------------------------------------------------------------------
+python3 scripts/java_dependency_lock.py --check
+PASS: Java dependency graph and artifact hashes match lock
+python3 -m unittest discover -s tests/contract -v
+test_partial_state_index_literals (test_database_catalog.DatabaseCatalogTest.test_partial_state_index_literals) ... ok
+test_phase_wrappers_are_cumulative_without_contexts (test_database_catalog.DatabaseCatalogTest.test_phase_wrappers_are_cumulative_without_contexts) ... ok
+test_reviewed_artifacts_match_normative_catalog (test_database_catalog.DatabaseCatalogTest.test_reviewed_artifacts_match_normative_catalog) ... ok
+test_all_phases_match_terraform_and_closed_registry (test_event_topology.EventTopologyTests.test_all_phases_match_terraform_and_closed_registry) ... ok
+test_local_provider_mocks_have_no_published_ports (test_event_topology.EventTopologyTests.test_local_provider_mocks_have_no_published_ports) ... ok
+test_down_includes_every_profile_and_retains_volumes (test_local_configuration.LocalIsolationTests.test_down_includes_every_profile_and_retains_volumes) ... ok
+test_explicit_schema_gate_is_validated (test_local_configuration.LocalIsolationTests.test_explicit_schema_gate_is_validated) ... ok
+test_externally_published_port_rejected (test_local_configuration.LocalIsolationTests.test_externally_published_port_rejected) ... ok
+test_fixture_manifest_matches_real_identity_import (test_local_configuration.LocalIsolationTests.test_fixture_manifest_matches_real_identity_import) ... ok
+test_floating_image_rejected (test_local_configuration.LocalIsolationTests.test_floating_image_rejected) ... ok
+test_foundation_make_targets_have_real_entrypoints (test_local_configuration.LocalIsolationTests.test_foundation_make_targets_have_real_entrypoints) ... ok
+test_implicit_provider_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_implicit_provider_profile_rejected_before_docker) ... ok
+test_missing_fixture_password_refused_before_identity (test_local_configuration.LocalIsolationTests.test_missing_fixture_password_refused_before_identity) ... ok
+test_missing_migration_credentials_explained_before_docker (test_local_configuration.LocalIsolationTests.test_missing_migration_credentials_explained_before_docker) ... ok
+test_nonlocal_project_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_nonlocal_project_rejected_before_docker) ... ok
+test_prod_configuration_rejected (test_local_configuration.LocalIsolationTests.test_prod_configuration_rejected) ... ok
+test_prod_environment_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_prod_environment_rejected_before_docker) ... ok
+test_remote_docker_host_refused_before_docker (test_local_configuration.LocalIsolationTests.test_remote_docker_host_refused_before_docker) ... ok
+test_remote_migration_target_rejected (test_local_configuration.LocalIsolationTests.test_remote_migration_target_rejected) ... ok
+test_unapproved_fixture_profile_refused_before_identity (test_local_configuration.LocalIsolationTests.test_unapproved_fixture_profile_refused_before_identity) ... ok
+test_unknown_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_unknown_profile_rejected_before_docker) ... ok
+test_wrong_owner_role_rejected (test_local_configuration.LocalIsolationTests.test_wrong_owner_role_rejected) ... ok
+test_audit_states_remain_closed_and_match_runtime_owners (test_observability_contract.ObservabilityContracts.test_audit_states_remain_closed_and_match_runtime_owners) ... ok
+test_closed_problem_schema_and_java_vocabulary (test_observability_contract.ObservabilityContracts.test_closed_problem_schema_and_java_vocabulary) ... ok
+test_route_catalog_includes_all_declared_apis_and_is_identical (test_observability_contract.ObservabilityContracts.test_route_catalog_includes_all_declared_apis_and_is_identical) ... ok
+test_complete_tracked_tree (test_repository.RepositoryChecks.test_complete_tracked_tree) ... ok
+test_disallowed_deployment_tree_rejected (test_repository.RepositoryChecks.test_disallowed_deployment_tree_rejected) ... ok
+test_duplicate_status_task (test_repository.RepositoryChecks.test_duplicate_status_task) ... ok
+test_manifest_path_escape_rejected (test_repository.RepositoryChecks.test_manifest_path_escape_rejected) ... ok
+test_missing_required_directory (test_repository.RepositoryChecks.test_missing_required_directory) ... ok
+test_missing_status_task (test_repository.RepositoryChecks.test_missing_status_task) ... ok
+test_real_provider_key_pattern_rejected (test_repository.RepositoryChecks.test_real_provider_key_pattern_rejected) ... ok
+test_tracked_runtime_secret_file_rejected (test_repository.RepositoryChecks.test_tracked_runtime_secret_file_rejected) ... ok
+test_untracked_onboarding_file_rejected (test_repository.RepositoryChecks.test_untracked_onboarding_file_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 34 tests in 1.590s
+
+OK
+.build/uv-package/bin/uv --directory services/ai sync --locked --python 3.12.12
+Resolved 87 packages in 12ms
+Audited 84 packages in 22ms
+.build/uv-package/bin/uv --directory services/ai build --no-build-isolation --python /Users/gopiravi/workspace/nigson/.build/ai-env/bin/python --out-dir /Users/gopiravi/workspace/nigson/.build/ai-dist
+Building source distribution...
+Building wheel from source distribution...
+Successfully built /Users/gopiravi/workspace/nigson/.build/ai-dist/nigson_ai-0.1.0.tar.gz
+Successfully built /Users/gopiravi/workspace/nigson/.build/ai-dist/nigson_ai-0.1.0-py3-none-any.whl
+/Users/gopiravi/workspace/nigson/.build/ai-env/bin/python -m pytest services/ai/tests -q
+s...........ss                                                           [100%]
+11 passed, 3 skipped in 1.59s
+/Users/gopiravi/workspace/nigson/.build/ai-env/bin/ruff check services/ai/src services/ai/tests
+All checks passed!
+/Users/gopiravi/workspace/nigson/.build/ai-env/bin/mypy --config-file services/ai/pyproject.toml services/ai/src
+Success: no issues found in 12 source files

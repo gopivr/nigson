@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nigson RFC9457 safe Problem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "title",
+    "status",
+    "detail",
+    "instance",
+    "code",
+    "timestamp",
+    "correlationId",
+    "traceId",
+    "violations"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 300
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "status": {
+      "type": "integer",
+      "minimum": 400,
+      "maximum": 599
+    },
+    "detail": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "instance": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "code": {
+      "enum": [
+        "VALIDATION_ERROR",
+        "AUTH_REQUIRED",
+        "ACCESS_DENIED",
+        "NOT_FOUND",
+        "CONFLICT",
+        "IDEMPOTENCY_HASH_MISMATCH",
+        "IDEMPOTENCY_IN_PROGRESS",
+        "VERSION_MISMATCH",
+        "BUSINESS_RULE_VIOLATION",
+        "INVALID_TRANSITION",
+        "FEATURE_DISABLED",
+        "RATE_LIMITED",
+        "PROVIDER_UNAVAILABLE",
+        "PROVIDER_OUTCOME_UNKNOWN",
+        "INTERNAL_ERROR",
+        "BODY_TOO_LARGE",
+        "UNSUPPORTED_MEDIA_TYPE",
+        "METHOD_NOT_ALLOWED"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^(?!00000000-0000-0000-0000-000000000000$)"
+    },
+    "traceId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-f0-9]{32}$"
+    },
+    "violations": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "field",
+          "code",
+          "message"
+        ],
+        "properties": {
+          "field": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "code": {
+            "const": "INVALID_VALUE"
+          },
+          "message": {
+            "const": "Supply a valid value."
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "VALIDATION_ERROR"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 400
+          },
+          "title": {
+            "const": "Invalid request"
+          },
+          "detail": {
+            "const": "Supply valid request fields."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "AUTH_REQUIRED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 401
+          },
+          "title": {
+            "const": "Authentication required"
+          },
+          "detail": {
+            "const": "Authenticate before continuing."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "ACCESS_DENIED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 403
+          },
+          "title": {
+            "const": "Access denied"
+          },
+          "detail": {
+            "const": "This operation is not permitted."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "NOT_FOUND"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 404
+          },
+          "title": {
+            "const": "Not found"
+          },
+          "detail": {
+            "const": "The requested resource is unavailable."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "CONFLICT"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 409
+          },
+          "title": {
+            "const": "Conflict"
+          },
+          "detail": {
+            "const": "The operation conflicts with current state."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "IDEMPOTENCY_HASH_MISMATCH"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 409
+          },
+          "title": {
+            "const": "Conflicting request"
+          },
+          "detail": {
+            "const": "Use the original request with this key."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "IDEMPOTENCY_IN_PROGRESS"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 409
+          },
+          "title": {
+            "const": "Request in progress"
+          },
+          "detail": {
+            "const": "Retry this request after the current operation finishes."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "VERSION_MISMATCH"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 412
+          },
+          "title": {
+            "const": "Version mismatch"
+          },
+          "detail": {
+            "const": "Refresh the resource before retrying."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "BUSINESS_RULE_VIOLATION"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 422
+          },
+          "title": {
+            "const": "Ineligible operation"
+          },
+          "detail": {
+            "const": "The operation does not meet its requirements."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "INVALID_TRANSITION"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 409
+          },
+          "title": {
+            "const": "Invalid transition"
+          },
+          "detail": {
+            "const": "The requested transition is unavailable."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "FEATURE_DISABLED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 422
+          },
+          "title": {
+            "const": "Feature unavailable"
+          },
+          "detail": {
+            "const": "This feature is not active."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "RATE_LIMITED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 429
+          },
+          "title": {
+            "const": "Rate limit exceeded"
+          },
+          "detail": {
+            "const": "Retry after the permitted interval."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "PROVIDER_UNAVAILABLE"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 503
+          },
+          "title": {
+            "const": "Service unavailable"
+          },
+          "detail": {
+            "const": "Retry a safe read later or inspect the existing operation."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "PROVIDER_OUTCOME_UNKNOWN"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 503
+          },
+          "title": {
+            "const": "Outcome uncertain"
+          },
+          "detail": {
+            "const": "Inspect the existing operation before another attempt."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "INTERNAL_ERROR"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 500
+          },
+          "title": {
+            "const": "Internal error"
+          },
+          "detail": {
+            "const": "The request could not be completed."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "BODY_TOO_LARGE"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 413
+          },
+          "title": {
+            "const": "Request too large"
+          },
+          "detail": {
+            "const": "Reduce the request size."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "UNSUPPORTED_MEDIA_TYPE"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 415
+          },
+          "title": {
+            "const": "Unsupported content type"
+          },
+          "detail": {
+            "const": "Use the specified content type."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "METHOD_NOT_ALLOWED"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 405
+          },
+          "title": {
+            "const": "Method not allowed"
+          },
+          "detail": {
+            "const": "Use a supported request method."
+          }
+        }
+      }
+    }
+  ]
+}

@@ -4,4 +4,5 @@
   <modelVersion>4.0.0</modelVersion>
   <parent><groupId>com.nigson</groupId><artifactId>nigson-backend</artifactId><version>0.1.0</version><relativePath>../../pom.xml</relativePath></parent>
   <artifactId>common-problem</artifactId>
+  <dependencies><dependency><groupId>tools.jackson.core</groupId><artifactId>jackson-databind</artifactId></dependency></dependencies>
 </project>

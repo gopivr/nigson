@@ -1,0 +1,70 @@
+# One receiver per Fargate task, on loopback. No debug exporter or customer bodies.
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 127.0.0.1:4318
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 256
+    spike_limit_mib: 64
+  tail_sampling:
+    decision_wait: 10s
+    num_traces: 10000
+    expected_new_traces_per_sec: 1000
+    policies:
+      - name: errors-and-security-denials
+        type: status_code
+        status_code: {status_codes: [ERROR]}
+      - name: checkout
+        type: boolean_attribute
+        boolean_attribute: {key: nigson.priority, value: true}
+      - name: baseline
+        type: probabilistic
+        probabilistic: {sampling_percentage: 10}
+  filter/owned_metrics:
+    error_mode: propagate
+    metrics:
+      metric:
+        - 'not IsMatch(name, "^nigson[.]")'
+  batch:
+    timeout: 1s
+    send_batch_size: 256
+    send_batch_max_size: 512
+exporters:
+  awsxray:
+    region: ${region}
+    max_retries: 1
+    request_timeout_seconds: 3
+    num_workers: 2
+    index_all_attributes: false
+  awsemf:
+    region: ${region}
+    namespace: ${namespace}
+    log_group_name: ${log_group}
+    log_stream_name: '{TaskId}'
+    dimension_rollup_option: NoDimensionRollup
+    resource_to_telemetry_conversion: {enabled: false}
+    max_retries: 1
+    request_timeout_seconds: 3
+    num_workers: 2
+    metric_declarations:
+      - dimensions: [[owner]]
+        metric_name_selectors: ['^nigson[.](http[.](requests|errors)|outbox[.]|db[.]pool[.]|payment[.]|stock[.]|refund[.]|ai[.])']
+      - dimensions: [[owner, route, method, status]]
+        metric_name_selectors: ['^nigson[.]http[.]server[.]requests']
+      - dimensions: [[owner, operation]]
+        metric_name_selectors: ['^nigson[.]db[.]query']
+service:
+  telemetry:
+    logs: {level: error}
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, tail_sampling, batch]
+      exporters: [awsxray]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, filter/owned_metrics, batch]
+      exporters: [awsemf]

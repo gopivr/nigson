@@ -1,0 +1,326 @@
+[
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-a29132c0aa-postgres-commerce-bp5-pass.log",
+    "rawSha256": "714a083952765e97d65cfa441ed1c247dea9a4bcbc739979fb1997d34d38f461",
+    "retainedSha256": "2e9f1bb798b521ecdf8578d2d34a3a67d2a5c64bde639fae308959e043dd0b79",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-5f9e36290d-postgres-integration-bp1-pass.log",
+    "rawSha256": "8bfd770f91116aed6cb6568f82f3dcdec923d7d89be6f5b626f163456ad11b3a",
+    "retainedSha256": "10d569ca3a4d50cac0f77745161da657d8780fb98ba54c245c7619bacf9fb446",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-a29132c0aa-postgres-integration-bp1-pass.log",
+    "rawSha256": "5a2f5f98a14f1273c90079479e874d1ed2f3d637c6028ad4969400837a2483c5",
+    "retainedSha256": "d257373de07fd42330ebd33a4b690a2bddeb49818e1374669a45b163223bc596",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-4a326118ea-postgres-integration-bp1-pass.log",
+    "rawSha256": "6920c762aab16130312110522a686f832c225e6fcbbd555b352679d7cb281b4d",
+    "retainedSha256": "abf74d3fac3694c3cabd2c66f1bd7221b7f7ed58acdbf935af168f4a5d4fdd27",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/observability-sampling-final.log",
+    "rawSha256": "c92cc6a6de87d62595883edd2f7bbf184b1ed6a196b16b5280c57f7c52fa0da5",
+    "retainedSha256": "e6317f1919ec6f8c0ba278cdaae968a3afaba305a5beda818ac812b403daa2f9",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/repeatable-final-first.log",
+    "rawSha256": "240f00a794df3979c44605ec0f11ea36d8539af6974e0c1622a77800f7812b97",
+    "retainedSha256": "7c53d85e3f364f78ed9aeee6dd38bc053dd2a2197da3bf553ec31ece53371a4c",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/fmt.log",
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retainedSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-4a326118ea-postgres-ai-bp5-pass.log",
+    "rawSha256": "185aceeaeb53c1fa582df777f811a754fc4acfce53155323ea06424eeda6b61a",
+    "retainedSha256": "893670842cd8fd459c60e2481f0302658c0b40751de612d59098d06fb369e459",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-4a326118ea-postgres-commerce-bp5-pass.log",
+    "rawSha256": "3d019322e1c0940016866aeebff3e839bee322efaa640b8d8d7f5c3ecce8497e",
+    "retainedSha256": "46f29654e9a6bb9ff8906bdd33297882dfa05c54b24936e9b7508b94fcdc75af",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-5f9e36290d-postgres-experience-bp1-pass.log",
+    "rawSha256": "b691919d0517ce0379bbe1376871d7bf24689863f48251b6be526bb9e6b16c22",
+    "retainedSha256": "18914959c0fd02eb68573ffd2fb5fd9d04a0077f818675eff7d4c379370a96ca",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/observability-complete-repaired.log",
+    "rawSha256": "f1e886efc2b2e28ac6147f37eb8586691ddd501035ef320bdb4d1ff8cd9c0f35",
+    "retainedSha256": "ee0cc618481e0e70fbe3d1449def13a8cd4741abd887d6e1611e46846c1d1c0b",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-5f9e36290d-postgres-commerce-bp1-pass.log",
+    "rawSha256": "94c3481a790f03ee5fdb31b3d727aa07134245bcf1a45d8e6dd12c9cff8cc904",
+    "retainedSha256": "f8f8634c920c65f31a65f793b028eb93d1b0b1a9ac905f568aedd11931f9b690",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/diff-check.log",
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retainedSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-a29132c0aa-postgres-experience-bp5-pass.log",
+    "rawSha256": "d3f6b7d8831b1bc82883dc3269a8e2d75d9f8ad2a52616907878f60790a0508c",
+    "retainedSha256": "c8a5b58873a9ba15382f4d52ebcd677800ca1bd79680ce4822a3a10037f89d50",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/observability-complete.log",
+    "rawSha256": "6f26a6b043f5866f2f4ae05c7dd1ee1472a7ca409570266f4ef4506158d9d262",
+    "retainedSha256": "f00a0a43e8594d54ffcc3468bad4b7bdcf734bb1b12681a5406fadf06d094ebe",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/build-final.log",
+    "rawSha256": "34ed158233488dd2cffc5981a99be39cd9554adaf44d7d37655077a778480fc8",
+    "retainedSha256": "eadb8be0e83bb3279754a3b5f78b5e872a52a6babbee7c6399957aca7b79d48f",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-4a326118ea-postgres-experience-bp1-pass.log",
+    "rawSha256": "1884511c29c85cea65aaffc4b79467b98e2f325bec5f1b35900059e6d551eb1c",
+    "retainedSha256": "e9ef77328d621e87cb29987aa74ed5bda289c007105900fc1370d10aa5d5b774",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-5f9e36290d-postgres-commerce-bp5-pass.log",
+    "rawSha256": "90a7c9e4010a8bbcc4d82f9f86d38b965c58c0522cfbba66a0508e1a970799af",
+    "retainedSha256": "721b520c0f79187293f799a2bb3ba6dc548e58f225b470d1f13b23c31dc46aa6",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-5f9e36290d-postgres-experience-bp5-pass.log",
+    "rawSha256": "4866d5e9fddc7f0470f19c5ea779c47d0f178dc1a98c37d2cd4e665e3168bf8a",
+    "retainedSha256": "e677e25f18325f1438573a37b281e503dffd676431e215cb10efa61489c64798",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/repeatable-final-second.log",
+    "rawSha256": "3351a3fa1cd4ff55ae743d886bdf481baee1677e1e37ea6fe4a3d02bf0e09144",
+    "retainedSha256": "28a4deec81f4d337f0eff2c868ff1f4d2a3a126322bb09697138d4521d94d964",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-a29132c0aa-postgres-experience-bp1-pass.log",
+    "rawSha256": "93775067a850a5ccbc99ae882c792cf157cb3b9b4a96de7cc9a1538a800bc4eb",
+    "retainedSha256": "4f19ec11fb73b0baeb201fe681cf938e2ca7a588c2464845282a5aa8d9d5d7c6",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-4a326118ea-postgres-experience-bp5-pass.log",
+    "rawSha256": "93b6e392741af9e08ffd662d79213bd9033c91a47076548f3058e8b1b043d5c0",
+    "retainedSha256": "769c9f5fc2569feaf3a1246c59fb3035aa4bc26313cac3dcf8e8e34c38f787af",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-a29132c0aa-postgres-ai-bp5-pass.log",
+    "rawSha256": "4ec44dc05d6e4355ffa86dbd8c392f3ec1bf4430451d00f0f2da1f7cf6b3287a",
+    "retainedSha256": "81a49943c0e0199515c8ebb5fe6e25e2d8349c3f349553803583a180c8e85234",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/build-final-repaired.log",
+    "rawSha256": "82df945807b2b4e2a0139e9321431d030b78e5cc88184b5aa89342259ce1150b",
+    "retainedSha256": "f6f82691e6309a47a5b913f926e54a480a786722296aa0627c99b3ef960d2fdc",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-a29132c0aa-postgres-integration-bp5-pass.log",
+    "rawSha256": "3510b3364ba3c2437be302d54159ad1278a5c7c42b5e7895b806ec60c8d58d1f",
+    "retainedSha256": "a3c3748ef614efa36b7f04f7025fd78db6e3f0cc0d2f76a10210cf9008373ea8",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/cold-start-during-sampling-review.log",
+    "rawSha256": "68e4533c53e8054d4f01b04fe3c422b7519718bb88af7e63761345cef5c4796d",
+    "retainedSha256": "61cb0bea4af01da382d71b56186b1c768ab8b730fd478bc2322a0937a4275bb4",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/terraform-final-qualified.log",
+    "rawSha256": "fffad923a4dd3efe46d523c7fceb13f456907daa77925a88398af529981d9485",
+    "retainedSha256": "33a285aafb977efaf4fba1b80f4a69a0a451ecad1f1d135c7100e33a7599efc6",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-a29132c0aa-postgres-commerce-bp1-pass.log",
+    "rawSha256": "111a92b7ee00071d40c7e6ef2f04ab0642a6a94f280518411f9e979cc2855152",
+    "retainedSha256": "f57d21ad21654be82c9f6d1f70d32a2ffe0ed3289266ccd4666d685dd7fe0248",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-5f9e36290d-postgres-integration-bp5-pass.log",
+    "rawSha256": "43cf5710ffe6e19c5870b7dde117cfed2a1b3300e11d24261c81979b49e1c3db",
+    "retainedSha256": "c102002add76f09f6a441937bf733dc2594534c332cdbc51764994dc29ac5654",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-4a326118ea-postgres-commerce-bp1-pass.log",
+    "rawSha256": "dc97eb3b0a0a87977dab059e7a3bc009cef760b124b77bccd9be435e091d1af8",
+    "retainedSha256": "453272ca7eb7d6b7ce356e394ff89b8f5c38664c3224ff5749eceac9aea51e6f",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-4a326118ea-postgres-integration-bp5-pass.log",
+    "rawSha256": "5280263bd8d4a887d0a3e403bedfe3a9fbfa1a90df3c3c8043b26a5abd854bec",
+    "retainedSha256": "ceaf624ffbfd5e3eda6043608f77e44c48ffbad58ab9ba0bdb0b9429abe5f26f",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/nigson-test-plat-5f9e36290d-postgres-ai-bp5-pass.log",
+    "rawSha256": "75c5216cefe1a49987c661d84caec1ac6d7936e651020138a9e4e1755a67e1a7",
+    "retainedSha256": "6b6eae98a3ff52f2e26feabea9588a033411c17d93c163cdb98baa61c6ec9197",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-08-PLAT-002/provider-regression.log",
+    "rawSha256": "a3e2db6264eb63016a2ff7f96cc1b7a4f2c06037962b26e5dad23dce94e9ffef",
+    "retainedSha256": "8eb7114cd59fa378f5a0f25a69fe703563eeed8882e6c4d68d900ead3209c0f3",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-a9bd869e27-postgres-commerce-bp1-pass.log",
+    "rawSha256": "fa714de552f5d6b9ef71d91cd3f056b77894050a75e87097734f5b771449ae2c",
+    "retainedSha256": "044013fda8e16cd39c862cb1426ccb09bac3dead597253d3b3da773e6b69f2c3",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-511ff0e0ea-postgres-ai-bp5-pass.log",
+    "rawSha256": "223c0ced6a27b0a56d8ff8d30abffaa1fb069f3a5f88d81dffccd81e9e95eb3a",
+    "retainedSha256": "5ff812ee7c2eb671261b191f141e2e20f12840dbe30250a77282bf20a701380d",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-511ff0e0ea-postgres-commerce-bp5-pass.log",
+    "rawSha256": "f83358f3bb14011f3a48acaf8e3f63f1f22c4d8632dd991c28eb4b13c652d2c9",
+    "retainedSha256": "5cb048bd12e2af25d081a4549a11b0df9c79d7ee6dad4d9aec6231f5c661eba2",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-01b9f009ef-postgres-experience-bp5-pass.log",
+    "rawSha256": "60b29810342ffaa5eda8d993ba88e026936f685ce0debc1f70b1f52ec48abb1e",
+    "retainedSha256": "7f199ccb35b0c067f222302aeaa93bec2d7760f2cd6329826561b7607e05d56c",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-01b9f009ef-postgres-integration-bp1-pass.log",
+    "rawSha256": "aced83dc47452c8fbf71cbc04b83f9afb78db4d1e534d3fd999e7239638f4a19",
+    "retainedSha256": "acbf13819c5ae1156ba94164b9ea35148881eb09daa39f408aca94b6240bd3b8",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-01b9f009ef-postgres-ai-bp5-pass.log",
+    "rawSha256": "5416276bf719d039a6bb80320f22d96066c23a61683202e477e26b32d8c11ed1",
+    "retainedSha256": "38d1ed0401a362f9bd9464a6391544498f7ae5c89fa7c6213ba7f5b2dbf86b08",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-a9bd869e27-postgres-integration-bp5-pass.log",
+    "rawSha256": "2ccba8d031b6df43aa5f6e52f54466faada7cc61cc7c27c7bd5691c17499eb17",
+    "retainedSha256": "5b75a6261597651a3e8cafcd5d4e06369fa10b35ee562b020b5e05d1f590d01f",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-01b9f009ef-postgres-commerce-bp1-pass.log",
+    "rawSha256": "d6483918588a70dc83a0447081c1b183cef0a591c6b58483bde5d48a683c5fa6",
+    "retainedSha256": "f78a8263e843a053025f8683c1b74ad2751b25447ba293e6c68792d6fef00164",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-511ff0e0ea-postgres-experience-bp1-pass.log",
+    "rawSha256": "5dac1996da6171f6bc5f27aabb66a40d06475381cc38ee039f649fc2362963f7",
+    "retainedSha256": "60f50deb6e904d9cc47c9990767f65168161829f2f4087654fb73bdb18fd97f8",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-511ff0e0ea-postgres-integration-bp5-pass.log",
+    "rawSha256": "5286b2ecf6f9d655dce1e693f356ffe4ccf4a6462bea223ce61b86042755d8b8",
+    "retainedSha256": "b0b5d6067ca28916408b1dc005e76f6b092a39f007d79b56aae66d7fd5f706e0",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-a9bd869e27-postgres-experience-bp5-pass.log",
+    "rawSha256": "b69d805ed62add294f82d4235a1d6fbd7b2268e4a56feecaf90662652b798c0b",
+    "retainedSha256": "b96c5aa93d29f768e06810c3b09b0124d8ecf153c86ea8fb8600655f9f7f7e06",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-511ff0e0ea-postgres-experience-bp5-pass.log",
+    "rawSha256": "e2bc570082915c2598e5cd9f9b451144c0b6b30c9a79db7c847cd6e0e5bfd8ed",
+    "retainedSha256": "058a3209f64963fbf5d4cb68fb5ff4e1cb3bdfd4eca2eb2145db1abe58db7def",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-511ff0e0ea-postgres-integration-bp1-pass.log",
+    "rawSha256": "b420085e510c36d8f8911116e5ad2e882150c9d0e64a508bc149f321757374a1",
+    "retainedSha256": "cd82d0b05a79d97fa70c7081325e1a0910e599f4db7631b08f1694861fadb002",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-a9bd869e27-postgres-integration-bp1-pass.log",
+    "rawSha256": "9ad23a6c3f69cecf19186c79a68dac9e38402bd9ed2667f584b8188b11bb452e",
+    "retainedSha256": "220fd7d7fb4e3b5c9f7b55d02c0de11ecc8c906376764e400465f3a05d9ec520",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-01b9f009ef-postgres-commerce-bp5-pass.log",
+    "rawSha256": "cc40f099dc5e661e99aea439a289c17dbf560c2e3db391f752b1fec3412bf956",
+    "retainedSha256": "ece85038d3012a32599da2410d97553f02ce717d5d28216275b3cd46858069b5",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-a9bd869e27-postgres-ai-bp5-pass.log",
+    "rawSha256": "0c4e98b13ed2164b633ae9f7543beba601714821b367443b20568092eb7ae287",
+    "retainedSha256": "033529f1aa735ed801190bfe18eb3547ea4d2db66fa3e884b9380564f3614cfb",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-a9bd869e27-postgres-experience-bp1-pass.log",
+    "rawSha256": "81331feed2bf2e73e20e8e4a141be805d7e9366fe98257486dc3061eb08d18c4",
+    "retainedSha256": "3cfacd0e53184d08b7f66c2add9a478a3d0fd668c817701b3db66efb50a3e059",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-a9bd869e27-postgres-commerce-bp5-pass.log",
+    "rawSha256": "f28d6924a1d3384b3b2c65481a1883078519d3fed5dbf3c5a24ae63cc9402ea1",
+    "retainedSha256": "a569b12ad9a9a255d341c6d3bfd1e7a6f9fa8b3beb6ed34c592109f1388bb1b5",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-01b9f009ef-postgres-integration-bp5-pass.log",
+    "rawSha256": "d4ca9f846448a5bcb489c13c45c1d4bb69e75034136c4d3005fa784241c03965",
+    "retainedSha256": "da2c1ef4b64435c17572d694f6b08ccc2cdf7af0fc76f12e20079f42f38e96bd",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-511ff0e0ea-postgres-commerce-bp1-pass.log",
+    "rawSha256": "fecdc33d123804b95bd03cce5196923931c989d4841cc5e5bac64eedfae76d87",
+    "retainedSha256": "9b49ab07c034be0e175088a8cd94202890bddf934d627e0d133c70ec557e824e",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  },
+  {
+    "path": "docs/implementation/evidence/2026-10-07-PLAT-002/nigson-test-plat-01b9f009ef-postgres-experience-bp1-pass.log",
+    "rawSha256": "842be4f602858a4fc4f4ef08ef8ce6f4e7e25796d899de36b641d41d79d6d3ec",
+    "retainedSha256": "ec15fdf17653dc54a31dd59befad7f16988d9c7ef1f0838b9ab0d0358c1e9af3",
+    "normalization": "remove ANSI terminal styling and trailing whitespace; preserve messages/results"
+  }
+]

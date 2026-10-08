@@ -1,0 +1,9 @@
+{
+  "test": "TEST-LOCAL-COLD-START",
+  "project": "nigson-test-cold-5aa656dc8e",
+  "checks": [
+    "setup-pass-1: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions",
+    "all test profile containers stopped; named volumes and original local state retained"
+  ],
+  "result": "FAIL"
+}

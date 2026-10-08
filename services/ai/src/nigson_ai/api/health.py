@@ -3,10 +3,11 @@
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from psycopg import Error
+from psycopg import AsyncConnection, Error
 from psycopg_pool import AsyncConnectionPool, PoolTimeout
 
 
@@ -30,17 +31,41 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         password=required("NIGSON_DB_PASSWORD"),
         options="-csearch_path=ai",
     )
-    pool = AsyncConnectionPool(dsn, min_size=1, max_size=2, timeout=2, open=False)
-    await pool.open()
-    application.state.pool = pool
-    runtime = None
-    if os.environ.get("NIGSON_EVENTS_ENABLED") == "true":
-        from nigson_ai.platform.runtime import EventRuntime
+    import logging
 
-        runtime = EventRuntime(dsn)
-        application.state.events = runtime.pump
-        runtime.start()
+    from nigson_ai.platform.problem import ProblemWriter
+    from nigson_ai.platform.telemetry import SafeFormatter, Telemetry
+
+    telemetry = Telemetry(
+        required("APP_ENV"), os.environ.get("NIGSON_OTEL_ENDPOINT", "")
+    )
+    application.state.telemetry = telemetry
+    application.state.problems = ProblemWriter(
+        required("APP_ENV"), os.environ.get("NIGSON_PROBLEM_TYPE_BASE", "")
+    )
+    handler = logging.StreamHandler()
+    handler.setFormatter(SafeFormatter(required("APP_ENV")))
+    logging.getLogger().handlers = [handler]
+    logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger("uvicorn.access").disabled = True
+
+    async def observe_connection(connection: AsyncConnection[Any]) -> None:
+        telemetry.instrument_connection(connection)
+
+    pool = AsyncConnectionPool(
+        dsn, min_size=1, max_size=2, timeout=2, open=False, configure=observe_connection
+    )
+    runtime = None
     try:
+        await pool.open()
+        application.state.pool = pool
+        if os.environ.get("NIGSON_EVENTS_ENABLED") == "true":
+            from nigson_ai.platform.runtime import EventRuntime
+
+            runtime = EventRuntime(dsn, telemetry)
+            application.state.events = runtime.pump
+            runtime.start()
+        telemetry.observe_pools([pool] + ([runtime.pool] if runtime else []))
         yield
     finally:
         if runtime is not None:
@@ -48,9 +73,13 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
 
             await asyncio.to_thread(runtime.close)
         await pool.close()
+        telemetry.close()
 
 
 app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+from nigson_ai.platform.boundary import install
+
+install(app, lambda: app.state.telemetry, lambda: app.state.problems)
 
 
 @app.get("/health/live")

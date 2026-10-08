@@ -1,0 +1,5 @@
+<configuration>
+ <springProperty scope="context" name="appEnv" source="APP_ENV" defaultValue="UNKNOWN"/>
+ <appender name="SAFE_JSON" class="ch.qos.logback.core.ConsoleAppender"><encoder class="com.nigson.shared.observability.SafeJsonEncoder"><service>nigson-commerce</service><environment>${appEnv}</environment><version>0.1.0</version></encoder></appender>
+ <logger name="com.nigson" level="INFO"/><root level="WARN"><appender-ref ref="SAFE_JSON"/></root>
+</configuration>

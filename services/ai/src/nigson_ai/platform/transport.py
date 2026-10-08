@@ -11,6 +11,7 @@ from psycopg import Connection
 
 from .events import decode
 from .store import PlatformStore
+from .telemetry import Telemetry
 
 
 class EventPump:
@@ -23,7 +24,9 @@ class EventPump:
         queue: str,
         dead: str,
         handlers: dict[str, Callable[[Connection[Any], dict[str, Any]], str]],
+        telemetry: Telemetry | None = None,
     ):
+        self.telemetry = telemetry or Telemetry("test")
         self.store, self.sns, self.sqs = store, sns, sqs
         self.topic, self.queue, self.dead, self.handlers = (
             topic,
@@ -89,7 +92,9 @@ class EventPump:
             handler = self.handlers.get(event["event_type"])
             if handler is None:
                 return False
-            self.store.consume("ai-ingestion-v1", message["Body"], handler)
+            import uuid
+            with self.telemetry.messaging(uuid.UUID(event["correlation_id"]), event["traceparent"], event["event_type"]):
+                self.store.consume("ai-ingestion-v1", message["Body"], handler)
             self.sqs.delete_message(
                 QueueUrl=self.queue, ReceiptHandle=message["ReceiptHandle"]
             )

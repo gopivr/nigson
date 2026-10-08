@@ -2,6 +2,9 @@ package com.nigson.commerce;
 
 import com.nigson.commerce.platform.*;
 import com.nigson.shared.events.EventCodec;
+import com.nigson.shared.observability.WireContext;
+import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
+import io.opentelemetry.api.trace.SpanKind;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,19 +36,25 @@ class EventTransportTest {
    var event=(ObjectNode)EventCodec.JSON.readTree(java.nio.file.Files.readString(java.nio.file.Path.of(System.getenv("NIGSON_EVENT_FIXTURES"),"order.paid.v1.json")));
    String key=UUID.randomUUID().toString();event.put("event_id",EventCodec.uuid7(clock.instant()).toString());event.put("aggregate_id",EventCodec.uuid7(clock.instant()).toString());event.put("occurred_at",clock.instant().toString());String body=EventCodec.JSON.writeValueAsString(event);
    String commandKey="command-"+key,consumerKey="consumer-"+key;var input=EventCodec.JSON.readTree("{\"quantity\":1}");
-   var original=store.executeLocal("subject","transport-test",key,input,db->{
+   var exporter=InMemorySpanExporter.create();try(var telemetry=new Telemetry(new SimpleMeterRegistry(),"test",exporter)){
+   UUID correlation=UUID.randomUUID();String[] upstream={null};
+   PlatformStore.Response original;try(var observed=telemetry.http(correlation,null,"/api/v1/checkout/attempts","POST")){upstream[0]=WireContext.traceparent();
+   original=store.executeLocal("subject","transport-test",key,input,db->{
     db.update("INSERT INTO commerce.feature_configuration(id,created_by,updated_by,key,revision,value) VALUES (?,'test','test',?,1,'{}')",EventCodec.uuid7(clock.instant()),commandKey);
     store.append(body,"test");return new PlatformStore.Response(201,EventCodec.JSON.readTree("{\"accepted\":true}"),null);
    });
+   }
    var claim=store.claim(1,Duration.ofSeconds(120)).getFirst();
+   var stored=EventCodec.decode(claim.body());assertThat(stored.path("correlation_id").asString()).isEqualTo(correlation.toString());assertThat(stored.path("traceparent").asString()).isEqualTo(upstream[0]);
    sns.publish(r->r.topicArn(topic).message(claim.body())); // accepted, then relay dies before DB acknowledgement
    assertThat(jdbc.queryForObject("SELECT state FROM commerce.outbox_event WHERE id=?",String.class,claim.id())).isEqualTo("CLAIMED");
    clock.value=clock.value.plusSeconds(121);
    var handlers=Map.<String,java.util.function.BiFunction<JdbcTemplate,tools.jackson.databind.JsonNode,String>>of("order.paid.v1",(db,e)->{
+    assertThat(WireContext.current().correlationId).isEqualTo(UUID.fromString(e.path("correlation_id").asString()));
     // Business uniqueness also fences different event IDs describing the same effect.
     db.update("INSERT INTO commerce.feature_configuration(id,created_by,updated_by,key,revision,value) VALUES (?,'test','test',?,1,'{}') ON CONFLICT(key,revision) DO NOTHING",EventCodec.uuid7(clock.instant()),consumerKey);return "APPLIED";
    });
-   try(var pump=new EventPump(store,sns,sqs,topic,queue,dead,5,handlers)) {
+   try(var pump=new EventPump(store,sns,sqs,topic,queue,dead,5,handlers,telemetry)) {
     assertThat(pump.relay()).isEqualTo(1);assertThat(store.published(claim)).isFalse();
     for(int n=0;n<10&&jdbc.queryForObject("SELECT count(*) FROM commerce.processed_event WHERE event_id=?",Integer.class,UUID.fromString(event.path("event_id").asString()))==0;n++) pump.poll();
     sqs.sendMessage(r->r.queueUrl(queue).messageBody(body));pump.poll();
@@ -57,6 +66,11 @@ class EventTransportTest {
     // Wrong producer fails the subscription before reaching a consumer.
     event.put("producer","experience");sns.publish(r->r.topicArn(topic).message(EventCodec.JSON.writeValueAsString(event)));
     assertThat(sqs.receiveMessage(r->r.queueUrl(queue).waitTimeSeconds(2)).messages()).isEmpty();
+   }
+   telemetry.flush();var spans=exporter.getFinishedSpanItems();
+   assertThat(spans).anySatisfy(span->{assertThat(span.getKind()).isEqualTo(SpanKind.PRODUCER);assertThat(span.getParentSpanId()).isEqualTo("0000000000000000");assertThat(span.getLinks()).anySatisfy(link->assertThat(link.getSpanContext().getTraceId()).isEqualTo(upstream[0].substring(3,35)));});
+   assertThat(spans).anySatisfy(span->{assertThat(span.getKind()).isEqualTo(SpanKind.CONSUMER);assertThat(span.getParentSpanId()).isEqualTo("0000000000000000");assertThat(span.getLinks()).anySatisfy(link->assertThat(link.getSpanContext().getTraceId()).isEqualTo(upstream[0].substring(3,35)));});
+   assertThat(WireContext.current()).isNull();
    }
   }
  }

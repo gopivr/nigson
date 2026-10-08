@@ -21,11 +21,12 @@ public class FoundationConfiguration {
     }
 
     @Bean
-    SecurityFilterChain foundationSecurity(HttpSecurity http) throws Exception {
+    SecurityFilterChain foundationSecurity(HttpSecurity http,com.nigson.commerce.platform.ProblemWriter problems) throws Exception {
         // No permissive developer bypass. Identity/session/domain authorization is SEC-001.
         return http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/health/liveness", "/actuator/health/readiness").permitAll()
-                .anyRequest().denyAll()).oauth2ResourceServer(resource -> resource.jwt(jwt -> {})).build();
+                .anyRequest().denyAll()).exceptionHandling(errors -> errors.authenticationEntryPoint((request,response,failure)->problems.write(request,response,com.nigson.shared.problem.ProblemCode.AUTH_REQUIRED,java.util.List.of())).accessDeniedHandler((request,response,failure)->problems.write(request,response,com.nigson.shared.problem.ProblemCode.ACCESS_DENIED,java.util.List.of())))
+                .oauth2ResourceServer(resource -> resource.jwt(jwt -> {}).authenticationEntryPoint((request,response,failure)->problems.write(request,response,com.nigson.shared.problem.ProblemCode.AUTH_REQUIRED,java.util.List.of()))).build();
     }
 
     @Bean

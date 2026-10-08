@@ -1,0 +1,3622 @@
+python3 scripts/local/cold_start.py
+Fresh isolated project: nigson-test-cold-1c11cadb14
+python3 scripts/local/dependencies.py up
+ Network nigson-test-cold-1c11cadb14_default  Creating
+ Network nigson-test-cold-1c11cadb14_default  Created
+ Volume "nigson-test-cold-1c11cadb14_nigson-mailpit"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-mailpit"  Created
+ Volume "nigson-test-cold-1c11cadb14_nigson-identity"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-identity"  Created
+ Volume "nigson-test-cold-1c11cadb14_nigson-postgres"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-postgres"  Created
+ Volume "nigson-test-cold-1c11cadb14_nigson-localstack"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-localstack"  Created
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Creating
+ Container nigson-test-cold-1c11cadb14-localstack-1  Creating
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Creating
+ Container nigson-test-cold-1c11cadb14-postgres-1  Creating
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Created
+ Container nigson-test-cold-1c11cadb14-localstack-1  Created
+ Container nigson-test-cold-1c11cadb14-postgres-1  Created
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Created
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Creating
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Created
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Starting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Starting
+ Container nigson-test-cold-1c11cadb14-localstack-1  Starting
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Starting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Started
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Started
+ Container nigson-test-cold-1c11cadb14-localstack-1  Started
+ Container nigson-test-cold-1c11cadb14-postgres-1  Started
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Starting
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Started
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Waiting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-localstack-1  Waiting
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-localstack-1  Healthy
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Healthy
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Healthy
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Volume "nigson-test-cold-1c11cadb14_nigson-vector"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-vector"  Created
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Creating
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Created
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Starting
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Started
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Healthy
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:2790cd02-64b7-4067-a8ae-36c6e0033939"
+}
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:5fcc3a73-6f52-474b-8bd6-d9b92eaa68fd"
+}
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:0cb88806-ba06-4b24-a08a-ec12dff0c66e"
+}
+{
+    "Location": "/nigson-local-quarantine",
+    "BucketArn": "arn:aws:s3:::nigson-local-quarantine"
+}
+{
+    "Location": "/nigson-local-private",
+    "BucketArn": "arn:aws:s3:::nigson-local-private"
+}
+PASS: pinned immutable local mock extension
+ Volume "nigson-test-cold-1c11cadb14_nigson-paystack-mock"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-paystack-mock"  Created
+ Volume "nigson-test-cold-1c11cadb14_nigson-twilio-mock"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-twilio-mock"  Created
+ Volume "nigson-test-cold-1c11cadb14_nigson-fedex-mock"  Creating
+ Volume "nigson-test-cold-1c11cadb14_nigson-fedex-mock"  Created
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Creating
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Creating
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Creating
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Created
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Created
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Created
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Starting
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Starting
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Starting
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Started
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Started
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Started
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Waiting
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Waiting
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Waiting
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Healthy
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Healthy
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Healthy
+Real local Keycloak discovery ready; trust/session qualification is SEC-001
+Local infrastructure bootstrap applied; production/provider activation remains disabled
+python3 scripts/local/dependencies.py migrate
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 31.86kB 0.0s done
+#6 DONE 0.0s
+
+#7 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#7 CACHED
+
+#8 [runtime-base 3/3] WORKDIR /app
+#8 CACHED
+
+#9 [build  6/16] COPY mvnw pom.xml ./
+#9 CACHED
+
+#10 [build 12/16] COPY database/changelog database/changelog
+#10 CACHED
+
+#11 [build  4/16] WORKDIR /workspace
+#11 CACHED
+
+#12 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#12 CACHED
+
+#13 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#13 CACHED
+
+#14 [build 10/16] COPY services/integration services/integration
+#14 CACHED
+
+#15 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#15 CACHED
+
+#16 [build  9/16] COPY services/experience services/experience
+#16 CACHED
+
+#17 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#17 CACHED
+
+#18 [build  8/16] COPY services/commerce services/commerce
+#18 CACHED
+
+#19 [migration 2/6] COPY --from=build /tools /app/tools
+#19 CACHED
+
+#20 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#20 CACHED
+
+#21 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#21 CACHED
+
+#22 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#22 CACHED
+
+#23 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#23 CACHED
+
+#24 [build 11/16] COPY scripts/java scripts/java
+#24 CACHED
+
+#25 [build  7/16] COPY shared shared
+#25 CACHED
+
+#26 [build  5/16] COPY .mvn .mvn
+#26 CACHED
+
+#27 [build 13/16] RUN ./mvnw -B install
+#27 CACHED
+
+#28 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:6973afaa212224348f84bbd65d97a79e34408002896f1eddfd2ce8cd2bff11bd done
+#30 exporting manifest list sha256:59d2484d7913c33fea4be21a8ef163ca71981814b8fe0a8905e7a87e67c2a1b6 done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.1s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Creating database changelog table with name: commerce.databasechangelog
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:01:39 PM liquibase.snapshot
+INFO: Creating snapshot
+No validation errors found.
+Oct 08, 2026 12:01:39 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:01:39 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:01:39 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:01:39 PM liquibase.command
+INFO: Using deploymentId: 1460898956
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform ran successfully in 6ms
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: SQL in file 001-framework-sessions.sql executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform ran successfully in 5ms
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform ran successfully in 12ms
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform ran successfully in 49ms
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform ran successfully in 21ms
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/022-bp1-constraints.yaml::commerce-20261006-014::nigson-platform ran successfully in 14ms
+Oct 08, 2026 12:01:39 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 12:01:39 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:39 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:39 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:01:39 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:39 PM liquibase.command
+INFO: Using deploymentId: 1460898956
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Running Changeset: commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform ran successfully in 3ms
+Running Changeset: commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: SQL in file 001-framework-sessions.sql executed
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: ChangeSet commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform ran successfully in 5ms
+Running Changeset: commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform
+Oct 08, 2026 12:01:39 PM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: ChangeSet commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform ran successfully in 17ms
+Running Changeset: commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: ChangeSet commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform ran successfully in 84ms
+Running Changeset: commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: ChangeSet commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform ran successfully in 63ms
+Running Changeset: commerce/022-bp1-constraints.yaml::commerce-20261006-014::nigson-platform
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: ChangeSet commerce/022-bp1-constraints.yaml::commerce-20261006-014::nigson-platform ran successfully in 33ms
+Oct 08, 2026 12:01:40 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:40 PM liquibase.util
+INFO: Run:                          6
+Oct 08, 2026 12:01:40 PM liquibase.util
+INFO: Previously run:               0
+Oct 08, 2026 12:01:40 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:40 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:40 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:01:40 PM liquibase.util
+INFO: Update summary generated
+Liquibase: Update has been successful. Rows affected: 0
+Oct 08, 2026 12:01:40 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 12:01:40 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:40 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:40 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=6
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: Creating database changelog table with name: experience.databasechangelog
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:01:41 PM liquibase.snapshot
+INFO: Creating snapshot
+No validation errors found.
+Oct 08, 2026 12:01:41 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:01:41 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:01:41 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:01:41 PM liquibase.command
+INFO: Using deploymentId: 1460901059
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: ChangeSet experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform ran successfully in 5ms
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: ChangeSet experience/010-bp1-platform-tables.yaml::experience-20261006-011::nigson-platform ran successfully in 18ms
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: ChangeSet experience/020-bp1-domain-tables.yaml::experience-20261006-012::nigson-platform ran successfully in 22ms
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: ChangeSet experience/021-bp1-indexes.yaml::experience-20261006-013::nigson-platform ran successfully in 8ms
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: ChangeSet experience/022-bp1-constraints.yaml::experience-20261006-014::nigson-platform ran successfully in 1ms
+Oct 08, 2026 12:01:41 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 12:01:41 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:41 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:41 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:41 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:01:42 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:42 PM liquibase.command
+INFO: Using deploymentId: 1460901059
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Running Changeset: experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: ChangeSet experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform ran successfully in 2ms
+Running Changeset: experience/010-bp1-platform-tables.yaml::experience-20261006-011::nigson-platform
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: ChangeSet experience/010-bp1-platform-tables.yaml::experience-20261006-011::nigson-platform ran successfully in 14ms
+Running Changeset: experience/020-bp1-domain-tables.yaml::experience-20261006-012::nigson-platform
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: ChangeSet experience/020-bp1-domain-tables.yaml::experience-20261006-012::nigson-platform ran successfully in 37ms
+Running Changeset: experience/021-bp1-indexes.yaml::experience-20261006-013::nigson-platform
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: ChangeSet experience/021-bp1-indexes.yaml::experience-20261006-013::nigson-platform ran successfully in 21ms
+Running Changeset: experience/022-bp1-constraints.yaml::experience-20261006-014::nigson-platform
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: ChangeSet experience/022-bp1-constraints.yaml::experience-20261006-014::nigson-platform ran successfully in 15ms
+Oct 08, 2026 12:01:42 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:42 PM liquibase.util
+INFO: Run:                          5
+Oct 08, 2026 12:01:42 PM liquibase.util
+INFO: Previously run:               0
+Oct 08, 2026 12:01:42 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:42 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:42 PM liquibase.util
+INFO: Total change sets:            5
+Liquibase: Update has been successful. Rows affected: 0
+Oct 08, 2026 12:01:42 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:01:42 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 12:01:42 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:42 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:42 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=5
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:43 PM liquibase.changelog
+INFO: Creating database changelog table with name: integration.databasechangelog
+Oct 08, 2026 12:01:43 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:01:43 PM liquibase.snapshot
+INFO: Creating snapshot
+No validation errors found.
+Oct 08, 2026 12:01:43 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:43 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:01:43 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:01:43 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:43 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:01:44 PM liquibase.command
+INFO: Using deploymentId: 1460903006
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/000-schema-and-roles.yaml::integration-20261005-001::nigson-platform ran successfully in 5ms
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/010-bp1-platform-tables.yaml::integration-20261006-011::nigson-platform ran successfully in 19ms
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/020-bp1-domain-tables.yaml::integration-20261006-012::nigson-platform ran successfully in 12ms
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/021-bp1-indexes.yaml::integration-20261006-013::nigson-platform ran successfully in 4ms
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/022-bp1-constraints.yaml::integration-20261006-014::nigson-platform ran successfully in 1ms
+Oct 08, 2026 12:01:44 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 12:01:44 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:44 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:44 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:01:44 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:44 PM liquibase.command
+INFO: Using deploymentId: 1460903006
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Running Changeset: integration/000-schema-and-roles.yaml::integration-20261005-001::nigson-platform
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/000-schema-and-roles.yaml::integration-20261005-001::nigson-platform ran successfully in 2ms
+Running Changeset: integration/010-bp1-platform-tables.yaml::integration-20261006-011::nigson-platform
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/010-bp1-platform-tables.yaml::integration-20261006-011::nigson-platform ran successfully in 16ms
+Running Changeset: integration/020-bp1-domain-tables.yaml::integration-20261006-012::nigson-platform
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/020-bp1-domain-tables.yaml::integration-20261006-012::nigson-platform ran successfully in 41ms
+Running Changeset: integration/021-bp1-indexes.yaml::integration-20261006-013::nigson-platform
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/021-bp1-indexes.yaml::integration-20261006-013::nigson-platform ran successfully in 29ms
+Running Changeset: integration/022-bp1-constraints.yaml::integration-20261006-014::nigson-platform
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: ChangeSet integration/022-bp1-constraints.yaml::integration-20261006-014::nigson-platform ran successfully in 13ms
+Oct 08, 2026 12:01:44 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:44 PM liquibase.util
+INFO: Run:                          5
+Oct 08, 2026 12:01:44 PM liquibase.util
+INFO: Previously run:               0
+Oct 08, 2026 12:01:44 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:44 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:44 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:01:44 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:01:44 PM liquibase.command
+INFO: Update command completed successfully.
+Liquibase: Update has been successful. Rows affected: 0
+Oct 08, 2026 12:01:44 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:44 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:44 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=5
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Creating database changelog table with name: ai.databasechangelog
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:01:46 PM liquibase.snapshot
+INFO: Creating snapshot
+No validation errors found.
+Oct 08, 2026 12:01:46 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:01:46 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:01:46 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:01:46 PM liquibase.command
+INFO: Using deploymentId: 1460905240
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: ChangeSet ai/000-schema-and-roles.yaml::ai-20261005-001::nigson-platform ran successfully in 13ms
+Oct 08, 2026 12:01:46 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 12:01:46 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:46 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:46 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:01:46 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:46 PM liquibase.command
+INFO: Using deploymentId: 1460905240
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Running Changeset: ai/000-schema-and-roles.yaml::ai-20261005-001::nigson-platform
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: ChangeSet ai/000-schema-and-roles.yaml::ai-20261005-001::nigson-platform ran successfully in 3ms
+Oct 08, 2026 12:01:46 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:46 PM liquibase.util
+INFO: Run:                          1
+Oct 08, 2026 12:01:46 PM liquibase.util
+INFO: Previously run:               0
+Oct 08, 2026 12:01:46 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:46 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:46 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:01:46 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:01:46 PM liquibase.command
+INFO: Update command completed successfully.
+Liquibase: Update has been successful. Rows affected: 0
+Oct 08, 2026 12:01:46 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:46 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:46 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=1
+python3 scripts/local/dependencies.py seed
+PASS: 13 deterministic Keycloak fixtures and real signed logins; domain seeds pending DATA-001
+python3 scripts/local/dependencies.py run-core
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 31.86kB 0.0s done
+#5 DONE 0.0s
+
+#6 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#6 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#6 DONE 0.0s
+
+#7 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#7 CACHED
+
+#8 [build  8/16] COPY services/commerce services/commerce
+#8 CACHED
+
+#9 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#9 CACHED
+
+#10 [migration 2/6] COPY --from=build /tools /app/tools
+#10 CACHED
+
+#11 [build  6/16] COPY mvnw pom.xml ./
+#11 CACHED
+
+#12 [build  5/16] COPY .mvn .mvn
+#12 CACHED
+
+#13 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#13 CACHED
+
+#14 [build 11/16] COPY scripts/java scripts/java
+#14 CACHED
+
+#15 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#15 CACHED
+
+#16 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#16 CACHED
+
+#17 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#17 CACHED
+
+#18 [build  7/16] COPY shared shared
+#18 CACHED
+
+#19 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#19 CACHED
+
+#20 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#20 CACHED
+
+#21 [build  9/16] COPY services/experience services/experience
+#21 CACHED
+
+#22 [build 13/16] RUN ./mvnw -B install
+#22 CACHED
+
+#23 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#23 CACHED
+
+#24 [build 12/16] COPY database/changelog database/changelog
+#24 CACHED
+
+#25 [build  4/16] WORKDIR /workspace
+#25 CACHED
+
+#26 [runtime-base 3/3] WORKDIR /app
+#26 CACHED
+
+#27 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#27 CACHED
+
+#28 [build 10/16] COPY services/integration services/integration
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:33bd0c313882af142dadf7332f1531a6e999f74469570865f40534fa7bd0ae29 done
+#30 exporting manifest list sha256:e17356ed5ec1fd7a355f79aca4a5f52eb5fd06a5798e7cbc6984817b8a854307 done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.0s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:50 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:01:50 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:50 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:01:50 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:01:50 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:50 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:50 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:01:50 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:50 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:50 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:50 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:50 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:50 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:01:50 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:01:50 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:50 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:50 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:01:50 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:01:50 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:50 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:52 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:01:52 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:52 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:01:52 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:01:52 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:52 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:52 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:01:52 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:52 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:52 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:52 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:52 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:52 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:01:52 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:01:52 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:52 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:52 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:01:52 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:01:52 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:52 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:54 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:01:54 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:54 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:01:54 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:01:54 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:54 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:54 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:01:54 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:54 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:54 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:54 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:54 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:54 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:01:54 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:01:54 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:54 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:54 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:01:54 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:01:54 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:54 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:01:56 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:01:56 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:56 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:01:56 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:01:56 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:01:56 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:56 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:01:56 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:56 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:01:56 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:56 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:01:56 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:01:56 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:01:56 PM liquibase.util
+INFO: Previously run:               1
+Oct 08, 2026 12:01:56 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:01:56 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:01:56 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:01:56 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:01:56 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:01:56 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=0
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.11kB done
+#1 DONE 0.0s
+
+#2 [integration internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.98kB done
+#2 DONE 0.0s
+
+#3 [experience internal] load build definition from Dockerfile
+#3 transferring dockerfile: 2.98kB done
+#3 DONE 0.0s
+
+#4 [commerce internal] load build definition from Dockerfile
+#4 transferring dockerfile: 2.97kB done
+#4 DONE 0.0s
+
+#5 [commerce internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 DONE 0.0s
+
+#6 [commerce internal] load .dockerignore
+#6 transferring context: 190B done
+#6 DONE 0.0s
+
+#7 [experience build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#7 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c done
+#7 DONE 0.0s
+
+#8 [integration internal] load build context
+#8 transferring context: 31.86kB 0.0s done
+#8 DONE 0.0s
+
+#9 [commerce application 2/2] COPY --from=build /workspace/services/commerce/target/commerce-0.1.0.jar /app/application.jar
+#9 CACHED
+
+#10 [integration application 2/2] COPY --from=build /workspace/services/integration/target/integration-0.1.0.jar /app/application.jar
+#10 CACHED
+
+#11 [commerce build  9/16] COPY services/experience services/experience
+#11 CACHED
+
+#12 [commerce build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#12 CACHED
+
+#13 [commerce build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#13 CACHED
+
+#14 [commerce build  8/16] COPY services/commerce services/commerce
+#14 CACHED
+
+#15 [commerce build 12/16] COPY database/changelog database/changelog
+#15 CACHED
+
+#16 [commerce build 10/16] COPY services/integration services/integration
+#16 CACHED
+
+#17 [commerce build  7/16] COPY shared shared
+#17 CACHED
+
+#18 [commerce build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#18 CACHED
+
+#19 [commerce runtime-base 3/3] WORKDIR /app
+#19 CACHED
+
+#20 [commerce build 11/16] COPY scripts/java scripts/java
+#20 CACHED
+
+#21 [commerce runtime-base 2/3] COPY --from=build /jre /opt/java
+#21 CACHED
+
+#22 [commerce application 1/2] COPY --from=build /probe /app/probe
+#22 CACHED
+
+#23 [commerce build  4/16] WORKDIR /workspace
+#23 CACHED
+
+#24 [commerce build 13/16] RUN ./mvnw -B install
+#24 CACHED
+
+#25 [commerce build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#25 CACHED
+
+#26 [commerce build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#26 CACHED
+
+#27 [commerce build  6/16] COPY mvnw pom.xml ./
+#27 CACHED
+
+#28 [commerce build  5/16] COPY .mvn .mvn
+#28 CACHED
+
+#29 [experience application 2/2] COPY --from=build /workspace/services/experience/target/experience-0.1.0.jar /app/application.jar
+#29 CACHED
+
+#30 [commerce] exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:df4a1918159081953e25c32a44acbabb127105edecd3fac22d32f48fe6c925d4 done
+#30 exporting config sha256:170771ed5eec686b48d12f1200879ab473f986a9fda45bd26a71419e531695b2 done
+#30 exporting attestation manifest sha256:5791675e67fc8060f10a9cb2a55bffcc739e2e18ad02495c19f15705aa8b6d95 0.0s done
+#30 exporting manifest list sha256:0c73637c1c3accb0bd58102952d61985eeca721970bdbadbc1592bc99fb21bd3 done
+#30 naming to docker.io/nigson/commerce:local done
+#30 unpacking to docker.io/nigson/commerce:local done
+#30 DONE 0.1s
+
+#31 [integration] exporting to image
+#31 exporting layers done
+#31 exporting manifest sha256:23b39774acaa2f9a0341a906bb38d07ad61b55bf963dfe409dddaf746494fb0a done
+#31 exporting config sha256:6cd1ec11fbfd126268aacbf82d0f9d562424a996e706659f490068fa53b25df1 done
+#31 exporting attestation manifest sha256:eac8c3ce81ad0114e27b7317617352d73d4368a753d48033124d597141055217 0.0s done
+#31 exporting manifest list sha256:05fa06b100df33f4461a7cc7a7c879980faa305ae47a939363ac9d656ac17b7f done
+#31 naming to docker.io/nigson/integration:local done
+#31 unpacking to docker.io/nigson/integration:local done
+#31 DONE 0.1s
+
+#32 [experience] exporting to image
+#32 exporting layers done
+#32 exporting manifest sha256:15d4ee7c6e5c41f9e4aa9dff71ba2135e79cb71baacf4cc75c038cb72594b85a done
+#32 exporting config sha256:7401e144e146164afa4d195a945f9db7491f6ffdeb17d042583bbebb94ee0eff done
+#32 exporting attestation manifest sha256:20f1d128a410c38f744721c6c5824f51c68cd0946aeccc1defb839908e49ad01 0.0s done
+#32 exporting manifest list sha256:2e49d32ee98ec67074d2e3d9723f91bbac651c0dbc404a7a3bec0b5eb75c83f7 done
+#32 naming to docker.io/nigson/experience:local done
+#32 unpacking to docker.io/nigson/experience:local done
+#32 DONE 0.1s
+
+#33 [commerce] resolving provenance for metadata file
+#33 DONE 0.0s
+
+#34 [integration] resolving provenance for metadata file
+#34 DONE 0.0s
+
+#35 [experience] resolving provenance for metadata file
+#35 DONE 0.0s
+ experience  Built
+ integration  Built
+ commerce  Built
+ Container nigson-test-cold-1c11cadb14-postgres-1  Running
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Running
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Creating
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Running
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Creating
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Creating
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Created
+ Container nigson-test-cold-1c11cadb14-commerce-1  Creating
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Created
+ Container nigson-test-cold-1c11cadb14-integration-1  Creating
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Created
+ Container nigson-test-cold-1c11cadb14-experience-1  Creating
+ Container nigson-test-cold-1c11cadb14-commerce-1  Created
+ Container nigson-test-cold-1c11cadb14-integration-1  Created
+ Container nigson-test-cold-1c11cadb14-experience-1  Created
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Starting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Starting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Starting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Exited
+ Container nigson-test-cold-1c11cadb14-integration-1  Starting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Exited
+ Container nigson-test-cold-1c11cadb14-commerce-1  Starting
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Exited
+ Container nigson-test-cold-1c11cadb14-experience-1  Starting
+ Container nigson-test-cold-1c11cadb14-integration-1  Started
+ Container nigson-test-cold-1c11cadb14-commerce-1  Started
+ Container nigson-test-cold-1c11cadb14-experience-1  Started
+ Container nigson-test-cold-1c11cadb14-commerce-1  Waiting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-experience-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Waiting
+ Container nigson-test-cold-1c11cadb14-integration-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Waiting
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Exited
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Exited
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Exited
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Healthy
+ Container nigson-test-cold-1c11cadb14-integration-1  Healthy
+ Container nigson-test-cold-1c11cadb14-experience-1  Healthy
+ Container nigson-test-cold-1c11cadb14-commerce-1  Healthy
+PROFILE=ai python3 scripts/local/dependencies.py run-ai
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 31.86kB 0.0s done
+#6 DONE 0.0s
+
+#7 [build  7/16] COPY shared shared
+#7 CACHED
+
+#8 [build  6/16] COPY mvnw pom.xml ./
+#8 CACHED
+
+#9 [build 11/16] COPY scripts/java scripts/java
+#9 CACHED
+
+#10 [build 12/16] COPY database/changelog database/changelog
+#10 CACHED
+
+#11 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#11 CACHED
+
+#12 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#12 CACHED
+
+#13 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#13 CACHED
+
+#14 [runtime-base 3/3] WORKDIR /app
+#14 CACHED
+
+#15 [build  4/16] WORKDIR /workspace
+#15 CACHED
+
+#16 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#16 CACHED
+
+#17 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#17 CACHED
+
+#18 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#18 CACHED
+
+#19 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#19 CACHED
+
+#20 [build  5/16] COPY .mvn .mvn
+#20 CACHED
+
+#21 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#21 CACHED
+
+#22 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#22 CACHED
+
+#23 [migration 2/6] COPY --from=build /tools /app/tools
+#23 CACHED
+
+#24 [build  9/16] COPY services/experience services/experience
+#24 CACHED
+
+#25 [build 10/16] COPY services/integration services/integration
+#25 CACHED
+
+#26 [build 13/16] RUN ./mvnw -B install
+#26 CACHED
+
+#27 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#27 CACHED
+
+#28 [build  8/16] COPY services/commerce services/commerce
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:3abbce1c71ef7d05fc4261184d2550729643a92c1501be2cf4f0ecb4232b152e done
+#30 exporting manifest list sha256:688279eff139ca5be615de19385842cb85ff0358fa3d64eba9cf146eb3e7b57e done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.1s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:02:17 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:02:17 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:17 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:02:17 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:02:17 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:02:17 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:17 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:02:17 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:17 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:17 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:17 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:17 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:02:17 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:02:17 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:02:17 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:02:17 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:02:17 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:02:17 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:02:17 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:17 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:02:19 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:02:19 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:19 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:02:19 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:02:19 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:02:20 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:20 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:02:20 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:20 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:20 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:20 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:20 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:02:20 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:02:20 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:02:20 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:02:20 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:02:20 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:02:20 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:02:20 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:20 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:02:22 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:02:22 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:22 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:02:22 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:02:22 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:02:22 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:22 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:02:22 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:22 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:22 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:22 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:22 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:02:22 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:02:22 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:02:22 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:02:22 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:02:22 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:02:22 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:02:22 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:22 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:02:25 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:02:25 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:25 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:02:25 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:02:25 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:02:25 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:25 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:02:25 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:25 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:25 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:25 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:25 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:02:25 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:02:25 PM liquibase.util
+INFO: Previously run:               1
+Oct 08, 2026 12:02:25 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:02:25 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:02:25 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:02:25 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:02:25 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:25 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=0
+#1 [internal] load local bake definitions
+#1 reading from stdin 705B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.19kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 77B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 2.78kB done
+#6 DONE 0.0s
+
+#7 [uv 1/1] FROM ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1
+#7 resolve ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1 0.0s done
+#7 DONE 0.0s
+
+#8 [build 1/6] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#8 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.0s done
+#8 DONE 0.0s
+
+#9 [build 2/6] COPY --from=uv /uv /usr/local/bin/uv
+#9 CACHED
+
+#10 [stage-2 2/3] COPY --from=build /build/.venv /build/.venv
+#10 CACHED
+
+#11 [build 3/6] WORKDIR /build
+#11 CACHED
+
+#12 [build 4/6] COPY pyproject.toml uv.lock .python-version ./
+#12 CACHED
+
+#13 [build 5/6] COPY src src
+#13 CACHED
+
+#14 [build 6/6] RUN uv sync --locked && uv build --no-build-isolation --python .venv/bin/python && uv sync --locked --no-dev && uv pip install --python .venv/bin/python --no-deps --reinstall dist/*.whl
+#14 CACHED
+
+#15 [stage-2 3/3] COPY health_probe.py /app/health_probe.py
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:92686105edfa73c324a1f45034387e8f358ad43829f07d33a50d141dcc9d99c3 done
+#16 exporting config sha256:219ac245660b6badaa2ea0df129ea611e2eb56a72e3dff5fe7bfb9151b8dfcb9 done
+#16 exporting attestation manifest sha256:09e91c7975d2e37fd4318e86bbdf5cf93cc004a8255db2e047b2e6a87131a9ab done
+#16 exporting manifest list sha256:1091a6106608ff94d99504be58cc583a3ab0267910a576ef745ed51c2df8913b done
+#16 naming to docker.io/nigson/ai:local done
+#16 unpacking to docker.io/nigson/ai:local done
+#16 DONE 0.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ ai  Built
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Running
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Creating
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Created
+ Container nigson-test-cold-1c11cadb14-ai-1  Creating
+ Container nigson-test-cold-1c11cadb14-ai-1  Created
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Starting
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Exited
+ Container nigson-test-cold-1c11cadb14-ai-1  Starting
+ Container nigson-test-cold-1c11cadb14-ai-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Waiting
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-ai-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Exited
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-ai-1  Healthy
+python3 scripts/local/dependencies.py up
+ Container nigson-test-cold-1c11cadb14-postgres-1  Running
+ Container nigson-test-cold-1c11cadb14-localstack-1  Running
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Running
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Running
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Running
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Waiting
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Waiting
+ Container nigson-test-cold-1c11cadb14-localstack-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Healthy
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Healthy
+ Container nigson-test-cold-1c11cadb14-localstack-1  Healthy
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Running
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Healthy
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:2790cd02-64b7-4067-a8ae-36c6e0033939"
+}
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:5fcc3a73-6f52-474b-8bd6-d9b92eaa68fd"
+}
+{
+    "SubscriptionArn": "arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events:0cb88806-ba06-4b24-a08a-ec12dff0c66e"
+}
+{
+    "Location": "/nigson-local-quarantine",
+    "BucketArn": "arn:aws:s3:::nigson-local-quarantine"
+}
+{
+    "Location": "/nigson-local-private",
+    "BucketArn": "arn:aws:s3:::nigson-local-private"
+}
+PASS: pinned immutable local mock extension
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Running
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Running
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Running
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Waiting
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Waiting
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Waiting
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Healthy
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Healthy
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Healthy
+Real local Keycloak discovery ready; trust/session qualification is SEC-001
+Local infrastructure bootstrap applied; production/provider activation remains disabled
+python3 scripts/local/dependencies.py migrate
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 31.86kB 0.0s done
+#6 DONE 0.0s
+
+#7 [build 13/16] RUN ./mvnw -B install
+#7 CACHED
+
+#8 [build  5/16] COPY .mvn .mvn
+#8 CACHED
+
+#9 [build 10/16] COPY services/integration services/integration
+#9 CACHED
+
+#10 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#10 CACHED
+
+#11 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#11 CACHED
+
+#12 [build  6/16] COPY mvnw pom.xml ./
+#12 CACHED
+
+#13 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#13 CACHED
+
+#14 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#14 CACHED
+
+#15 [build  4/16] WORKDIR /workspace
+#15 CACHED
+
+#16 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#16 CACHED
+
+#17 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#17 CACHED
+
+#18 [build  9/16] COPY services/experience services/experience
+#18 CACHED
+
+#19 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#19 CACHED
+
+#20 [runtime-base 3/3] WORKDIR /app
+#20 CACHED
+
+#21 [build 12/16] COPY database/changelog database/changelog
+#21 CACHED
+
+#22 [build  7/16] COPY shared shared
+#22 CACHED
+
+#23 [build  8/16] COPY services/commerce services/commerce
+#23 CACHED
+
+#24 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#24 CACHED
+
+#25 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#25 CACHED
+
+#26 [build 11/16] COPY scripts/java scripts/java
+#26 CACHED
+
+#27 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#27 CACHED
+
+#28 [migration 2/6] COPY --from=build /tools /app/tools
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:c922416bfb39a94cc39a3a36ee54798818a42dfe055083fbf63d59a9e2e179e3 0.0s done
+#30 exporting manifest list sha256:6fbe6150b91e30f9bd6422ef9264908dc884b3d12948afb82da8cda87a2bba8f done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.1s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:02:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:02:57 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:02:57 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:02:57 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:02:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:02:57 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:57 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:57 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:57 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:02:57 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:02:57 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:02:57 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:02:57 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:02:57 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:02:57 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:02:57 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:02:59 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:02:59 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:59 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:02:59 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:02:59 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:02:59 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:59 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:02:59 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:59 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:02:59 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:59 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:02:59 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:02:59 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:02:59 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:02:59 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:02:59 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:02:59 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:02:59 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:02:59 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:02:59 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:01 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:01 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:01 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:03:01 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:01 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:01 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:01 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:03:01 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:01 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:01 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:01 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:01 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:01 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:01 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:03:01 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:01 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:01 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:03:01 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:01 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:01 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:04 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:04 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:04 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:03:04 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:03:04 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:04 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:04 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:03:04 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:04 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:04 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:04 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:04 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:04 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:04 PM liquibase.util
+INFO: Previously run:               1
+Oct 08, 2026 12:03:04 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:04 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:04 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:03:04 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:04 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:04 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=0
+python3 scripts/local/dependencies.py seed
+PASS: 13 deterministic Keycloak fixtures and real signed logins; domain seeds pending DATA-001
+python3 scripts/local/dependencies.py run-core
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 31.86kB 0.0s done
+#6 DONE 0.0s
+
+#7 [build 10/16] COPY services/integration services/integration
+#7 CACHED
+
+#8 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#8 CACHED
+
+#9 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#9 CACHED
+
+#10 [build  7/16] COPY shared shared
+#10 CACHED
+
+#11 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#11 CACHED
+
+#12 [build  6/16] COPY mvnw pom.xml ./
+#12 CACHED
+
+#13 [migration 2/6] COPY --from=build /tools /app/tools
+#13 CACHED
+
+#14 [runtime-base 3/3] WORKDIR /app
+#14 CACHED
+
+#15 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#15 CACHED
+
+#16 [build  5/16] COPY .mvn .mvn
+#16 CACHED
+
+#17 [build 12/16] COPY database/changelog database/changelog
+#17 CACHED
+
+#18 [build  8/16] COPY services/commerce services/commerce
+#18 CACHED
+
+#19 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#19 CACHED
+
+#20 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#20 CACHED
+
+#21 [build  9/16] COPY services/experience services/experience
+#21 CACHED
+
+#22 [build 13/16] RUN ./mvnw -B install
+#22 CACHED
+
+#23 [build  4/16] WORKDIR /workspace
+#23 CACHED
+
+#24 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#24 CACHED
+
+#25 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#25 CACHED
+
+#26 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#26 CACHED
+
+#27 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#27 CACHED
+
+#28 [build 11/16] COPY scripts/java scripts/java
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:f3a5219edad6b663c4c93e578354e010a4fc51926f5e3c050a47697020dc433e done
+#30 exporting manifest list sha256:15840ef1f7b426128d7bb9b847dd529d53d71c8326198cbc74bb099d3d0a9f16 done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.0s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:09 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:09 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:09 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:03:09 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:09 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:09 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:09 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:03:09 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:09 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:09 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:09 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:09 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:09 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:09 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:03:09 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:09 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:09 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:03:09 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:09 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:09 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:12 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:12 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:12 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:03:12 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:12 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:12 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:12 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:03:12 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:12 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:12 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:12 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:12 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:12 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:12 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:03:12 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:12 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:12 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:03:12 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:12 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:12 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:15 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:15 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:15 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:03:15 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:15 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:15 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:15 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:03:15 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:15 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:15 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:15 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:15 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:15 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:15 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:03:15 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:15 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:15 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:03:15 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:15 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:15 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:18 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:18 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:18 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:03:18 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:03:18 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:18 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:18 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:03:18 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:18 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:18 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:18 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:18 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:18 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:18 PM liquibase.util
+INFO: Previously run:               1
+Oct 08, 2026 12:03:18 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:18 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:18 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:03:18 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:18 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:18 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=0
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.11kB done
+#1 DONE 0.0s
+
+#2 [experience internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.98kB done
+#2 DONE 0.0s
+
+#3 [commerce internal] load build definition from Dockerfile
+#3 transferring dockerfile: 2.97kB done
+#3 DONE 0.0s
+
+#4 [integration internal] load build definition from Dockerfile
+#4 transferring dockerfile: 2.98kB done
+#4 DONE 0.0s
+
+#5 [experience internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 DONE 0.0s
+
+#6 [commerce internal] load .dockerignore
+#6 transferring context: 190B done
+#6 DONE 0.0s
+
+#7 [integration build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#7 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c done
+#7 DONE 0.0s
+
+#8 [experience internal] load build context
+#8 transferring context: 31.86kB 0.0s done
+#8 DONE 0.0s
+
+#9 [commerce application 2/2] COPY --from=build /workspace/services/commerce/target/commerce-0.1.0.jar /app/application.jar
+#9 CACHED
+
+#10 [experience application 2/2] COPY --from=build /workspace/services/experience/target/experience-0.1.0.jar /app/application.jar
+#10 CACHED
+
+#11 [integration build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#11 CACHED
+
+#12 [integration build  7/16] COPY shared shared
+#12 CACHED
+
+#13 [integration build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#13 CACHED
+
+#14 [integration build  8/16] COPY services/commerce services/commerce
+#14 CACHED
+
+#15 [integration build  5/16] COPY .mvn .mvn
+#15 CACHED
+
+#16 [integration build 11/16] COPY scripts/java scripts/java
+#16 CACHED
+
+#17 [integration build  6/16] COPY mvnw pom.xml ./
+#17 CACHED
+
+#18 [integration build 12/16] COPY database/changelog database/changelog
+#18 CACHED
+
+#19 [integration build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#19 CACHED
+
+#20 [integration build  9/16] COPY services/experience services/experience
+#20 CACHED
+
+#21 [integration build 13/16] RUN ./mvnw -B install
+#21 CACHED
+
+#22 [integration runtime-base 2/3] COPY --from=build /jre /opt/java
+#22 CACHED
+
+#23 [integration build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#23 CACHED
+
+#24 [integration build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#24 CACHED
+
+#25 [integration runtime-base 3/3] WORKDIR /app
+#25 CACHED
+
+#26 [integration application 1/2] COPY --from=build /probe /app/probe
+#26 CACHED
+
+#27 [integration build 10/16] COPY services/integration services/integration
+#27 CACHED
+
+#28 [integration build  4/16] WORKDIR /workspace
+#28 CACHED
+
+#29 [integration application 2/2] COPY --from=build /workspace/services/integration/target/integration-0.1.0.jar /app/application.jar
+#29 CACHED
+
+#30 [experience] exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:15d4ee7c6e5c41f9e4aa9dff71ba2135e79cb71baacf4cc75c038cb72594b85a done
+#30 exporting config sha256:7401e144e146164afa4d195a945f9db7491f6ffdeb17d042583bbebb94ee0eff done
+#30 exporting attestation manifest sha256:50fc40cf89e652e49bc551e5fb5da9c1364fb22c9f461adf87b448579c7e3ece 0.0s done
+#30 exporting manifest list sha256:51b4cc1fe938221a12ff6414aa5c125ed5c779b1ba97b901351b62541222b7df
+#30 exporting manifest list sha256:51b4cc1fe938221a12ff6414aa5c125ed5c779b1ba97b901351b62541222b7df done
+#30 naming to docker.io/nigson/experience:local done
+#30 unpacking to docker.io/nigson/experience:local done
+#30 DONE 0.1s
+
+#31 [integration] exporting to image
+#31 exporting layers done
+#31 exporting manifest sha256:23b39774acaa2f9a0341a906bb38d07ad61b55bf963dfe409dddaf746494fb0a done
+#31 exporting config sha256:6cd1ec11fbfd126268aacbf82d0f9d562424a996e706659f490068fa53b25df1 done
+#31 exporting attestation manifest sha256:913747d6aa3ed98765bf5fc194289c22b3ba2d350805b7a89b731d8e69487619 0.0s done
+#31 exporting manifest list sha256:398a2f7e016ac81111012c0749c5bd077bfa5d5e4bf6692d6a2696973d81b849 done
+#31 naming to docker.io/nigson/integration:local done
+#31 unpacking to docker.io/nigson/integration:local done
+#31 DONE 0.1s
+
+#32 [commerce] exporting to image
+#32 exporting layers done
+#32 exporting manifest sha256:df4a1918159081953e25c32a44acbabb127105edecd3fac22d32f48fe6c925d4 done
+#32 exporting config sha256:170771ed5eec686b48d12f1200879ab473f986a9fda45bd26a71419e531695b2 done
+#32 exporting attestation manifest sha256:f80d21fceb0dca566d8782b0ad357615ba88e5cd8453de037ec6390c20b68cc3 0.0s done
+#32 exporting manifest list sha256:45b79dd934c6750b345b8770bf1d41f7f8ad9004a079e343540f949f9a0889e4 done
+#32 naming to docker.io/nigson/commerce:local done
+#32 unpacking to docker.io/nigson/commerce:local done
+#32 DONE 0.1s
+
+#33 [commerce] resolving provenance for metadata file
+#33 DONE 0.1s
+
+#34 [experience] resolving provenance for metadata file
+#34 DONE 0.1s
+
+#35 [integration] resolving provenance for metadata file
+#35 DONE 0.0s
+ commerce  Built
+ experience  Built
+ integration  Built
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Running
+ Container nigson-test-cold-1c11cadb14-postgres-1  Running
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Running
+ Container nigson-test-cold-1c11cadb14-commerce-1  Running
+ Container nigson-test-cold-1c11cadb14-integration-1  Running
+ Container nigson-test-cold-1c11cadb14-experience-1  Running
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Starting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Starting
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Starting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Exited
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Exited
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Exited
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Waiting
+ Container nigson-test-cold-1c11cadb14-experience-1  Waiting
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Waiting
+ Container nigson-test-cold-1c11cadb14-integration-1  Waiting
+ Container nigson-test-cold-1c11cadb14-commerce-1  Waiting
+ Container nigson-test-cold-1c11cadb14-commerce-1  Healthy
+ Container nigson-test-cold-1c11cadb14-integration-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Exited
+ Container nigson-test-cold-1c11cadb14-experience-1  Healthy
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Healthy
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Exited
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Exited
+PROFILE=ai python3 scripts/local/dependencies.py run-ai
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 31.86kB 0.0s done
+#6 DONE 0.0s
+
+#7 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#7 CACHED
+
+#8 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#8 CACHED
+
+#9 [build  9/16] COPY services/experience services/experience
+#9 CACHED
+
+#10 [migration 2/6] COPY --from=build /tools /app/tools
+#10 CACHED
+
+#11 [build  6/16] COPY mvnw pom.xml ./
+#11 CACHED
+
+#12 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#12 CACHED
+
+#13 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#13 CACHED
+
+#14 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#14 CACHED
+
+#15 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#15 CACHED
+
+#16 [build 12/16] COPY database/changelog database/changelog
+#16 CACHED
+
+#17 [build 11/16] COPY scripts/java scripts/java
+#17 CACHED
+
+#18 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#18 CACHED
+
+#19 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#19 CACHED
+
+#20 [runtime-base 3/3] WORKDIR /app
+#20 CACHED
+
+#21 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#21 CACHED
+
+#22 [build 10/16] COPY services/integration services/integration
+#22 CACHED
+
+#23 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#23 CACHED
+
+#24 [build  7/16] COPY shared shared
+#24 CACHED
+
+#25 [build  8/16] COPY services/commerce services/commerce
+#25 CACHED
+
+#26 [build  5/16] COPY .mvn .mvn
+#26 CACHED
+
+#27 [build 13/16] RUN ./mvnw -B install
+#27 CACHED
+
+#28 [build  4/16] WORKDIR /workspace
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:10e50079601df44cbf8de1073b823bc035facfdffe0c59738668e662682e972f done
+#30 exporting manifest list sha256:aa8279f1174d47b5ff4df9cb59e743fee4931b68c5b4f6af30077434d6bd2132 done
+#30 naming to docker.io/nigson/migration:local
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.0s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:30 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:30 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:30 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:03:30 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:30 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:30 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:30 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:03:30 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:30 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:30 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:30 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:30 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:30 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:30 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:03:30 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:30 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:30 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:03:30 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:30 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:30 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:33 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:33 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:33 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:03:33 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:33 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:33 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:33 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:03:33 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:33 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:33 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:33 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:33 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:33 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:33 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:03:33 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:33 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:33 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:03:33 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:33 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:33 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:36 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:36 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:36 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:03:36 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:36 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:36 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:36 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:03:36 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:36 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:36 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:36 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:36 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:36 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:36 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:03:36 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:36 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:36 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:03:36 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:36 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:36 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:40 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:40 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:40 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:03:40 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:03:40 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:40 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:40 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:03:40 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:40 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:40 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:40 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:40 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:40 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:40 PM liquibase.util
+INFO: Previously run:               1
+Oct 08, 2026 12:03:40 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:40 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:40 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:03:40 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:40 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:40 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=0
+#1 [internal] load local bake definitions
+#1 reading from stdin 705B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.19kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 77B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 2.78kB done
+#6 DONE 0.0s
+
+#7 [build 1/6] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#7 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.0s done
+#7 DONE 0.0s
+
+#8 [uv 1/1] FROM ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1
+#8 resolve ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1 0.0s done
+#8 DONE 0.0s
+
+#9 [build 2/6] COPY --from=uv /uv /usr/local/bin/uv
+#9 CACHED
+
+#10 [build 5/6] COPY src src
+#10 CACHED
+
+#11 [stage-2 2/3] COPY --from=build /build/.venv /build/.venv
+#11 CACHED
+
+#12 [build 4/6] COPY pyproject.toml uv.lock .python-version ./
+#12 CACHED
+
+#13 [build 6/6] RUN uv sync --locked && uv build --no-build-isolation --python .venv/bin/python && uv sync --locked --no-dev && uv pip install --python .venv/bin/python --no-deps --reinstall dist/*.whl
+#13 CACHED
+
+#14 [build 3/6] WORKDIR /build
+#14 CACHED
+
+#15 [stage-2 3/3] COPY health_probe.py /app/health_probe.py
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:92686105edfa73c324a1f45034387e8f358ad43829f07d33a50d141dcc9d99c3 done
+#16 exporting config sha256:219ac245660b6badaa2ea0df129ea611e2eb56a72e3dff5fe7bfb9151b8dfcb9 done
+#16 exporting attestation manifest sha256:a7468dfd17f38df1b6dfc87b5a148d9f97b6cd4f7972f59d8f44901b47d8eadf
+#16 exporting attestation manifest sha256:a7468dfd17f38df1b6dfc87b5a148d9f97b6cd4f7972f59d8f44901b47d8eadf done
+#16 exporting manifest list sha256:3fe488ad839689a5958702f567f7daace1c9c3772c37035b034ea148ccc93c9a done
+#16 naming to docker.io/nigson/ai:local done
+#16 unpacking to docker.io/nigson/ai:local done
+#16 DONE 0.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ ai  Built
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Running
+ Container nigson-test-cold-1c11cadb14-ai-1  Running
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Starting
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Started
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Exited
+ Container nigson-test-cold-1c11cadb14-ai-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Waiting
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Waiting
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Exited
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Healthy
+ Container nigson-test-cold-1c11cadb14-ai-1  Healthy
+python3 scripts/local/dependencies.py migrate
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#5 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 31.86kB 0.0s done
+#6 DONE 0.0s
+
+#7 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#7 CACHED
+
+#8 [build  6/16] COPY mvnw pom.xml ./
+#8 CACHED
+
+#9 [migration 2/6] COPY --from=build /tools /app/tools
+#9 CACHED
+
+#10 [build 10/16] COPY services/integration services/integration
+#10 CACHED
+
+#11 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#11 CACHED
+
+#12 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#12 CACHED
+
+#13 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#13 CACHED
+
+#14 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#14 CACHED
+
+#15 [build 11/16] COPY scripts/java scripts/java
+#15 CACHED
+
+#16 [runtime-base 3/3] WORKDIR /app
+#16 CACHED
+
+#17 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#17 CACHED
+
+#18 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#18 CACHED
+
+#19 [build  9/16] COPY services/experience services/experience
+#19 CACHED
+
+#20 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#20 CACHED
+
+#21 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#21 CACHED
+
+#22 [build  4/16] WORKDIR /workspace
+#22 CACHED
+
+#23 [build 13/16] RUN ./mvnw -B install
+#23 CACHED
+
+#24 [build  7/16] COPY shared shared
+#24 CACHED
+
+#25 [build 12/16] COPY database/changelog database/changelog
+#25 CACHED
+
+#26 [build  8/16] COPY services/commerce services/commerce
+#26 CACHED
+
+#27 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#27 CACHED
+
+#28 [build  5/16] COPY .mvn .mvn
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:3156d1bfe3f69dfdfcc9d68242464fc1c03c2737f7d96bbdb14dd39c16efc667 done
+#30 exporting manifest list sha256:777fab2cc54d99e1ac6eddb82db248d69ef2d8606089dd3f5c48099cdf51793b done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.1s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:52 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:03:52 PM liquibase.changelog
+INFO: Change failed validation!
+Oct 08, 2026 12:03:52 PM liquibase.command
+INFO: Logging exception.
+ERROR: Exception Details
+ERROR: Exception Primary Class:  ValidationFailedException
+ERROR: Exception Primary Reason:  Validation Failed:
+     1 changesets check sum
+          commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform was: 9:00000000000000000000000000000000 but is now: 9:672cecc20cecf72ba37775cf47ed12a3
+
+ERROR: Exception Primary Source:  5.0.3
+Oct 08, 2026 12:03:52 PM liquibase.command
+INFO: Command execution complete
+Exception in thread "main" liquibase.exception.CommandExecutionException: liquibase.exception.ValidationFailedException: Validation Failed:
+     1 changesets check sum
+          commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform was: 9:00000000000000000000000000000000 but is now: 9:672cecc20cecf72ba37775cf47ed12a3
+
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:325)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:228)
+	at liquibase.command.CommandScope.execute(CommandScope.java:257)
+	at liquibase.Liquibase.lambda$validate$26(Liquibase.java:1322)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1366)
+	at liquibase.Liquibase.validate(Liquibase.java:1317)
+	at OwnerMigration.main(OwnerMigration.java:64)
+Caused by: liquibase.exception.ValidationFailedException: Validation Failed:
+     1 changesets check sum
+          commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform was: 9:00000000000000000000000000000000 but is now: 9:672cecc20cecf72ba37775cf47ed12a3
+
+	at liquibase.changelog.DatabaseChangeLog.validate(DatabaseChangeLog.java:392)
+	at liquibase.command.core.helpers.DatabaseChangelogCommandStep.run(DatabaseChangelogCommandStep.java:89)
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:269)
+	... 11 more
+
+Local dependency operation failed: CalledProcessError. Check local daemon/configuration.
+make[1]: *** [migrate] Error 1
+python3 scripts/local/dependencies.py migrate
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 31.86kB 0.0s done
+#5 DONE 0.0s
+
+#6 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#6 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#6 DONE 0.0s
+
+#7 [build 13/16] RUN ./mvnw -B install
+#7 CACHED
+
+#8 [build  4/16] WORKDIR /workspace
+#8 CACHED
+
+#9 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#9 CACHED
+
+#10 [build  8/16] COPY services/commerce services/commerce
+#10 CACHED
+
+#11 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#11 CACHED
+
+#12 [build  6/16] COPY mvnw pom.xml ./
+#12 CACHED
+
+#13 [build 10/16] COPY services/integration services/integration
+#13 CACHED
+
+#14 [build  9/16] COPY services/experience services/experience
+#14 CACHED
+
+#15 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#15 CACHED
+
+#16 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#16 CACHED
+
+#17 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#17 CACHED
+
+#18 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#18 CACHED
+
+#19 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#19 CACHED
+
+#20 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#20 CACHED
+
+#21 [runtime-base 3/3] WORKDIR /app
+#21 CACHED
+
+#22 [build  7/16] COPY shared shared
+#22 CACHED
+
+#23 [build  5/16] COPY .mvn .mvn
+#23 CACHED
+
+#24 [build 11/16] COPY scripts/java scripts/java
+#24 CACHED
+
+#25 [build 12/16] COPY database/changelog database/changelog
+#25 CACHED
+
+#26 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#26 CACHED
+
+#27 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#27 CACHED
+
+#28 [migration 2/6] COPY --from=build /tools /app/tools
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:765868f0a32be2ce957cc5ea3a78ba74c915b0439a78e62bfc7bc94d9c88f813 done
+#30 exporting manifest list sha256:c4df9192b40046f03444bfd4af320f65a1725b33e9e49d36678e643e9e70f47a done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local done
+#30 DONE 0.0s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:03:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:03:57 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:03:57 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:03:57 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:03:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:03:57 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:57 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:03:57 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:03:57 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:03:57 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:03:57 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:03:57 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:03:57 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:03:57 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:03:57 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:03:57 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:03:57 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:01 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:04:01 PM liquibase.command
+INFO: Command execution complete
+No validation errors found.
+Oct 08, 2026 12:04:01 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:04:01 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:04:02 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:02 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:02 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:04:02 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:02 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:02 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:02 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:02 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:02 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:02 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:04:02 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:02 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:02 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:04:02 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:02 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:02 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:06 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:04:07 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:07 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:04:07 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:04:07 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:07 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:07 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:04:07 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:07 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:07 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:07 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:07 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:07 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:07 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:04:07 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:07 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:07 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:04:07 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:07 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:07 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:11 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:04:11 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:11 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:04:11 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:04:11 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:11 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:11 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:04:11 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:11 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:11 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:11 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:11 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:11 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:11 PM liquibase.util
+INFO: Previously run:               1
+Oct 08, 2026 12:04:11 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:11 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:11 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:04:11 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:11 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:11 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=0
+python3 scripts/local/dependencies.py migrate
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context:
+#4 transferring context: 190B 0.0s done
+#4 DONE 0.2s
+
+#5 [internal] load build context
+#5 transferring context: 31.86kB 0.0s done
+#5 DONE 0.1s
+
+#6 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#6 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#6 DONE 0.1s
+
+#7 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#7 CACHED
+
+#8 [build  7/16] COPY shared shared
+#8 CACHED
+
+#9 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#9 CACHED
+
+#10 [build 10/16] COPY services/integration services/integration
+#10 CACHED
+
+#11 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#11 CACHED
+
+#12 [build  9/16] COPY services/experience services/experience
+#12 CACHED
+
+#13 [build  6/16] COPY mvnw pom.xml ./
+#13 CACHED
+
+#14 [build  8/16] COPY services/commerce services/commerce
+#14 CACHED
+
+#15 [build 13/16] RUN ./mvnw -B install
+#15 CACHED
+
+#16 [build  4/16] WORKDIR /workspace
+#16 CACHED
+
+#17 [build 12/16] COPY database/changelog database/changelog
+#17 CACHED
+
+#18 [build 11/16] COPY scripts/java scripts/java
+#18 CACHED
+
+#19 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#19 CACHED
+
+#20 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#20 CACHED
+
+#21 [build  5/16] COPY .mvn .mvn
+#21 CACHED
+
+#22 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#22 CACHED
+
+#23 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#23 CACHED
+
+#24 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#24 CACHED
+
+#25 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#25 CACHED
+
+#26 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#26 CACHED
+
+#27 [runtime-base 3/3] WORKDIR /app
+#27 CACHED
+
+#28 [migration 2/6] COPY --from=build /tools /app/tools
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:3b8d84d75fef2fe12b5e4ca356a5b1732709fc631412c550b30735959f73be29 0.0s done
+#30 exporting manifest list sha256:1d5f52bd8e5634ecec45397b8cf18fa5b132ba4ba8074080d648564f871b1d15 0.0s done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local 0.0s done
+#30 DONE 0.2s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:21 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:04:22 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:22 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:04:22 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:04:23 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:23 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:23 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:04:23 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:23 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:23 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:23 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:23 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:23 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:23 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:04:23 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:23 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:23 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:04:23 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:23 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:23 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Exception in thread "main" java.lang.IllegalStateException: Framework session schema drift
+	at OwnerMigration.verifyBootstrap(OwnerMigration.java:125)
+	at OwnerMigration.main(OwnerMigration.java:74)
+
+Local dependency operation failed: CalledProcessError. Check local daemon/configuration.
+make[1]: *** [migrate] Error 1
+python3 scripts/local/dependencies.py migrate
+#1 [internal] load local bake definitions
+#1 reading from stdin 442B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.97kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 31.86kB 0.0s done
+#5 DONE 0.0s
+
+#6 [build  1/16] FROM docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c
+#6 resolve docker.io/library/oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c 0.0s done
+#6 DONE 0.0s
+
+#7 [build 16/16] RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
+#7 CACHED
+
+#8 [build  9/16] COPY services/experience services/experience
+#8 CACHED
+
+#9 [build  3/16] RUN case "arm64" in       arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;;       amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;;       *) exit 1 ;;     esac &&     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz &&     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - &&     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
+#9 CACHED
+
+#10 [build 10/16] COPY services/integration services/integration
+#10 CACHED
+
+#11 [build 14/16] RUN ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
+#11 CACHED
+
+#12 [migration 2/6] COPY --from=build /tools /app/tools
+#12 CACHED
+
+#13 [build 11/16] COPY scripts/java scripts/java
+#13 CACHED
+
+#14 [migration 1/6] COPY --from=build /migration-lib /app/lib
+#14 CACHED
+
+#15 [build  6/16] COPY mvnw pom.xml ./
+#15 CACHED
+
+#16 [build 15/16] RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+#16 CACHED
+
+#17 [migration 4/6] COPY services/commerce/src/main/resources/db/changelog /app/source/services/commerce/src/main/resources/db/changelog
+#17 CACHED
+
+#18 [runtime-base 2/3] COPY --from=build /jre /opt/java
+#18 CACHED
+
+#19 [build 13/16] RUN ./mvnw -B install
+#19 CACHED
+
+#20 [build  5/16] COPY .mvn .mvn
+#20 CACHED
+
+#21 [build  4/16] WORKDIR /workspace
+#21 CACHED
+
+#22 [runtime-base 3/3] WORKDIR /app
+#22 CACHED
+
+#23 [migration 5/6] COPY services/experience/src/main/resources/db/changelog /app/source/services/experience/src/main/resources/db/changelog
+#23 CACHED
+
+#24 [migration 3/6] COPY database/changelog /app/source/database/changelog
+#24 CACHED
+
+#25 [build  7/16] COPY shared shared
+#25 CACHED
+
+#26 [build  2/16] RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
+#26 CACHED
+
+#27 [build  8/16] COPY services/commerce services/commerce
+#27 CACHED
+
+#28 [build 12/16] COPY database/changelog database/changelog
+#28 CACHED
+
+#29 [migration 6/6] COPY services/integration/src/main/resources/db/changelog /app/source/services/integration/src/main/resources/db/changelog
+#29 CACHED
+
+#30 exporting to image
+#30 exporting layers done
+#30 exporting manifest sha256:ff441622737a06e54ddb5b135b0948cd2c13001d2f585f07ab6170c8f0311f99 done
+#30 exporting config sha256:b3c07d634f1c921a258c66fa1d0e68d17880d08e68ee1710332a48db826989dc done
+#30 exporting attestation manifest sha256:7e5e91f825ef3291a79bfc7056ca50d2f6572f185335c60422cc97524313d2ea 0.0s done
+#30 exporting manifest list sha256:67769acfd3ce1b069cd53f00deb3712e3580307d7f99bffc05bf53f8df2da3ff done
+#30 naming to docker.io/nigson/migration:local done
+#30 unpacking to docker.io/nigson/migration:local 0.0s done
+#30 DONE 0.1s
+
+#31 resolving provenance for metadata file
+#31 DONE 0.0s
+ migrate-commerce  Built
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:33 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:04:33 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:33 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:04:33 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:04:33 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:33 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:33 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 12:04:33 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:33 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:33 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:33 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:33 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:33 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:33 PM liquibase.util
+INFO: Previously run:               6
+Oct 08, 2026 12:04:33 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:33 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:33 PM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 12:04:33 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:33 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:33 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:36 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:04:36 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:36 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:04:36 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:04:36 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:36 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:36 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 08, 2026 12:04:36 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:36 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:36 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:36 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:36 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:36 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:36 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:04:36 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:36 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:36 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:04:36 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:36 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:36 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:39 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:04:39 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:39 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:04:39 PM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 12:04:39 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:39 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:39 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 08, 2026 12:04:39 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:39 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:39 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:39 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:39 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:39 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:39 PM liquibase.util
+INFO: Previously run:               5
+Oct 08, 2026 12:04:39 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:39 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:39 PM liquibase.util
+INFO: Total change sets:            5
+Oct 08, 2026 12:04:39 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:39 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:39 PM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Owner migration verified: integration; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 12:04:43 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+No validation errors found.
+Oct 08, 2026 12:04:43 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:43 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:04:43 PM liquibase
+INFO: Parsed changelog file 'database/changelog/ai/master.yaml'
+Oct 08, 2026 12:04:43 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 12:04:43 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:43 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Oct 08, 2026 12:04:43 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:43 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 12:04:43 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:43 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Database is up to date, no changesets to execute
+Oct 08, 2026 12:04:43 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 12:04:43 PM liquibase.util
+INFO: Run:                          0
+Oct 08, 2026 12:04:43 PM liquibase.util
+INFO: Previously run:               1
+Oct 08, 2026 12:04:43 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 12:04:43 PM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 12:04:43 PM liquibase.util
+INFO: Total change sets:            1
+Oct 08, 2026 12:04:43 PM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 12:04:43 PM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 12:04:43 PM liquibase.changelog
+INFO: Reading from ai.databasechangelog
+Owner migration verified: ai; applied=0
+python3 scripts/local/dependencies.py up
+Local dependency operation failed: Local commands require ENV=local|test. Check local daemon/configuration.
+make[1]: *** [local-up] Error 1
+python3 scripts/local/dependencies.py migrate
+Local dependency operation failed: Local commands require ENV=local|test. Check local daemon/configuration.
+make[1]: *** [migrate] Error 1
+python3 scripts/local/dependencies.py seed
+Local dependency operation failed: Local commands require ENV=local|test. Check local daemon/configuration.
+make[1]: *** [seed] Error 1
+python3 scripts/local/dependencies.py run-core
+Local dependency operation failed: Local commands require ENV=local|test. Check local daemon/configuration.
+make[1]: *** [run-core] Error 1
+PROFILE=ai python3 scripts/local/dependencies.py run-ai
+Local dependency operation failed: Local commands require ENV=local|test. Check local daemon/configuration.
+make[1]: *** [run-ai] Error 1
+python3 scripts/local/dependencies.py migrate
+Local dependency operation failed: Missing local credential setting: COMMERCE_MIGRATION_PASSWORD. Check local daemon/configuration.
+make[1]: *** [migrate] Error 1
+python3 scripts/local/dependencies.py seed
+Local dependency operation failed: Missing local KEYCLOAK_FIXTURE_PASSWORD. Check local daemon/configuration.
+make[1]: *** [seed] Error 1
+python3 scripts/local/dependencies.py seed
+Local dependency operation failed: Seed requires explicit FIXTURE_PROFILE=foundation; domain fixtures await DATA-001. Check local daemon/configuration.
+make[1]: *** [seed] Error 1
+ Container nigson-test-cold-1c11cadb14-postgres-1  Stopping
+ Container nigson-test-cold-1c11cadb14-postgres-1  Stopped
+ Container nigson-test-cold-1c11cadb14-postgres-1  Starting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Started
+ Container nigson-test-cold-1c11cadb14-postgres-1  Waiting
+ Container nigson-test-cold-1c11cadb14-postgres-1  Healthy
+ Container nigson-test-cold-1c11cadb14-ai-1  Stopping
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Stopping
+ Container nigson-test-cold-1c11cadb14-integration-1  Stopping
+ Container nigson-test-cold-1c11cadb14-localstack-1  Stopping
+ Container nigson-test-cold-1c11cadb14-commerce-1  Stopping
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Stopping
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Stopping
+ Container nigson-test-cold-1c11cadb14-experience-1  Stopping
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Stopping
+ Container nigson-test-cold-1c11cadb14-ai-1  Stopped
+ Container nigson-test-cold-1c11cadb14-ai-1  Removing
+ Container nigson-test-cold-1c11cadb14-ai-1  Removed
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Stopping
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Stopped
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Removing
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Stopped
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Removing
+ Container nigson-test-cold-1c11cadb14-migrate-ai-1  Removed
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Stopping
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Stopped
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Removing
+ Container nigson-test-cold-1c11cadb14-mailpit-1  Removed
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Stopped
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Removing
+ Container nigson-test-cold-1c11cadb14-fedex-mock-1  Removed
+ Container nigson-test-cold-1c11cadb14-twilio-mock-1  Removed
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Stopped
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Removing
+ Container nigson-test-cold-1c11cadb14-commerce-1  Stopped
+ Container nigson-test-cold-1c11cadb14-commerce-1  Removing
+ Container nigson-test-cold-1c11cadb14-experience-1  Stopped
+ Container nigson-test-cold-1c11cadb14-experience-1  Removing
+ Container nigson-test-cold-1c11cadb14-paystack-mock-1  Removed
+ Container nigson-test-cold-1c11cadb14-integration-1  Stopped
+ Container nigson-test-cold-1c11cadb14-integration-1  Removing
+ Container nigson-test-cold-1c11cadb14-commerce-1  Removed
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Stopping
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Stopped
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Removing
+ Container nigson-test-cold-1c11cadb14-experience-1  Removed
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Stopping
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Stopped
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Removing
+ Container nigson-test-cold-1c11cadb14-integration-1  Removed
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Stopping
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Stopping
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Stopped
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Removing
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Stopped
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Removing
+ Container nigson-test-cold-1c11cadb14-migrate-commerce-1  Removed
+ Container nigson-test-cold-1c11cadb14-migrate-experience-1  Removed
+ Container nigson-test-cold-1c11cadb14-vector-db-1  Removed
+ Container nigson-test-cold-1c11cadb14-migrate-integration-1  Removed
+ Container nigson-test-cold-1c11cadb14-postgres-1  Stopping
+ Container nigson-test-cold-1c11cadb14-postgres-1  Stopped
+ Container nigson-test-cold-1c11cadb14-postgres-1  Removing
+ Container nigson-test-cold-1c11cadb14-postgres-1  Removed
+ Container nigson-test-cold-1c11cadb14-localstack-1  Stopped
+ Container nigson-test-cold-1c11cadb14-localstack-1  Removing
+ Container nigson-test-cold-1c11cadb14-localstack-1  Removed
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Stopped
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Removing
+ Container nigson-test-cold-1c11cadb14-keycloak-1  Removed
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Stopping
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Stopped
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Removing
+ Container nigson-test-cold-1c11cadb14-identity-db-1  Removed
+ Network nigson-test-cold-1c11cadb14_default  Removing
+ Network nigson-test-cold-1c11cadb14_default  Removed
+{
+  "test": "TEST-LOCAL-COLD-START",
+  "project": "nigson-test-cold-1c11cadb14",
+  "checks": [
+    "setup-pass-1: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions",
+    "setup-pass-2: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions",
+    "runtime DDL and all cross-owner reads denied",
+    "session CRUD/cascade and positive interval constraint",
+    "checksum drift refused, restored test checksum and migration recovered",
+    "manual session constraint drift refused and recovery verified",
+    "real signed tokens validated; foundation routes denied; invalid signatures rejected",
+    "production commands, missing credentials and unapproved fixtures refused",
+    "DB outage readiness DOWN, liveness UP, recovery UP",
+    "existing nigson-local container IDs/start times/mounts/volumes preserved",
+    "all test profile containers stopped; named volumes and original local state retained"
+  ],
+  "result": "PASS",
+  "snapshot_sha256": "faf7fd863d452e3d27300f5024adcb1b2b1499366c99ac75ffeda11865d85418"
+}

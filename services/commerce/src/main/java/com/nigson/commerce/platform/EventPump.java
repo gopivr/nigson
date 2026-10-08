@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 /** Network operations happen after owned transaction methods return. */
 public final class EventPump implements AutoCloseable {
     private final PlatformStore store;
+    private final Telemetry telemetry;private final boolean ownsTelemetry;
     private final SnsClient sns;
     private final SqsClient sqs;
     private final String topic, queue, dead;
@@ -24,6 +25,10 @@ public final class EventPump implements AutoCloseable {
     private final ScheduledExecutorService heartbeat=Executors.newSingleThreadScheduledExecutor();
     private final ExecutorService workers=Executors.newVirtualThreadPerTaskExecutor();
     public EventPump(PlatformStore store,SnsClient sns,SqsClient sqs,String topic,String queue,String dead,int release,Map<String,BiFunction<JdbcTemplate,JsonNode,String>> handlers) {
+        this(store,sns,sqs,topic,queue,dead,release,handlers,new Telemetry(new io.micrometer.core.instrument.simple.SimpleMeterRegistry(),"test",""),true);
+    }
+    public EventPump(PlatformStore store,SnsClient sns,SqsClient sqs,String topic,String queue,String dead,int release,Map<String,BiFunction<JdbcTemplate,JsonNode,String>> handlers,Telemetry telemetry){this(store,sns,sqs,topic,queue,dead,release,handlers,telemetry,false);}
+    private EventPump(PlatformStore store,SnsClient sns,SqsClient sqs,String topic,String queue,String dead,int release,Map<String,BiFunction<JdbcTemplate,JsonNode,String>> handlers,Telemetry telemetry,boolean ownsTelemetry){this.telemetry=telemetry;this.ownsTelemetry=ownsTelemetry;
         this.store=store;this.sns=sns;this.sqs=sqs;this.topic=Objects.requireNonNull(topic);this.queue=Objects.requireNonNull(queue);this.dead=Objects.requireNonNull(dead);this.release=release;this.handlers=Map.copyOf(handlers);
         if(release<1||release>5) throw new IllegalArgumentException("RELEASE_INVALID");
     }
@@ -32,10 +37,12 @@ public final class EventPump implements AutoCloseable {
         for(var claim:store.claim(10,Duration.ofSeconds(120))) {
             try {
                 var event=EventCodec.decode(claim.body());
-                sns.publish(r -> r.topicArn(topic).message(claim.body()).messageAttributes(Map.of(
+                try(var observed=telemetry.producer(UUID.fromString(event.path("correlation_id").asString()),event.path("traceparent").asString(null),event.path("event_type").asString())){
+                try{sns.publish(r -> r.topicArn(topic).message(claim.body()).messageAttributes(Map.of(
                     "event_type",MessageAttributeValue.builder().dataType("String").stringValue(event.path("event_type").asString()).build(),
                     "producer",MessageAttributeValue.builder().dataType("String").stringValue(event.path("producer").asString()).build())));
-                if(store.published(claim)) published++;
+                if(store.published(claim)) published++;}catch(RuntimeException failure){telemetry.metrics.counter("nigson.outbox.publish.failures","owner","commerce").increment();observed.failed("OUTBOX_PUBLISH_FAILED");throw failure;}
+                }
             } catch(RuntimeException failure) { store.failed(claim,5); }
         }
         return published;
@@ -59,8 +66,10 @@ public final class EventPump implements AutoCloseable {
             var event=EventCodec.decode(message.body());
             var handler=handlers.get(event.path("event_type").asString());
             if(handler==null) return false;
-            store.consume("commerce-domain-v1",message.body(),release,handler);
-            sqs.deleteMessage(r -> r.queueUrl(queue).receiptHandle(message.receiptHandle()));
+            try(var observed=telemetry.consumer(UUID.fromString(event.path("correlation_id").asString()),event.path("traceparent").asString(null),event.path("event_type").asString())){
+            try{store.consume("commerce-domain-v1",message.body(),release,handler);sqs.deleteMessage(r -> r.queueUrl(queue).receiptHandle(message.receiptHandle()));}
+            catch(RuntimeException failure){observed.failed("EVENT_PROCESS_FAILED");throw failure;}
+            }
             return true;
         } catch(IllegalArgumentException permanent) {
             // Invalid bodies may contain hostile PII. Review receives a digest/code, not raw input.
@@ -73,5 +82,5 @@ public final class EventPump implements AutoCloseable {
             sqs.changeMessageVisibility(r -> r.queueUrl(queue).receiptHandle(message.receiptHandle()).visibilityTimeout(backoff[Math.min(Math.max(delivery-1,0),4)]));return false;
         } finally { lease.cancel(false); }
     }
-    @Override public void close() { heartbeat.shutdownNow();workers.shutdownNow();sns.close();sqs.close(); }
+    @Override public void close() { heartbeat.shutdownNow();workers.shutdownNow();sns.close();sqs.close();if(ownsTelemetry)telemetry.close(); }
 }

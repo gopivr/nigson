@@ -1,0 +1,116 @@
+No validation errors found.
+Running Changeset: commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform
+Running Changeset: commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform
+Running Changeset: commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform
+Running Changeset: commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform
+Running Changeset: commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform
+Running Changeset: commerce/022-bp1-constraints.yaml::commerce-20261006-014::nigson-platform
+Liquibase: Update has been successful. Rows affected: 0
+Owner migration verified: commerce; applied=6
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Creating database changelog table with name: commerce.databasechangelog
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 11:42:19 AM liquibase.snapshot
+INFO: Creating snapshot
+Oct 08, 2026 11:42:19 AM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 11:42:19 AM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 08, 2026 11:42:19 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 11:42:19 AM liquibase.command
+INFO: Using deploymentId: 1459738374
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform ran successfully in 5ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 001-framework-sessions.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform ran successfully in 6ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform ran successfully in 13ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform ran successfully in 48ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform ran successfully in 29ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/022-bp1-constraints.yaml::commerce-20261006-014::nigson-platform ran successfully in 13ms
+Oct 08, 2026 11:42:19 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 11:42:19 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 11:42:19 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 11:42:19 AM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 11:42:19 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 08, 2026 11:42:19 AM liquibase.command
+INFO: Using deploymentId: 1459738374
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/000-schema-and-roles.yaml::commerce-20261005-001::nigson-platform ran successfully in 2ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 001-framework-sessions.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/001-framework-sessions.yaml::commerce-20261005-002::nigson-platform ran successfully in 6ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/010-bp1-platform-tables.yaml::commerce-20261006-011::nigson-platform ran successfully in 12ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/020-bp1-domain-tables.yaml::commerce-20261006-012::nigson-platform ran successfully in 64ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/021-bp1-indexes.yaml::commerce-20261006-013::nigson-platform ran successfully in 55ms
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: ChangeSet commerce/022-bp1-constraints.yaml::commerce-20261006-014::nigson-platform ran successfully in 37ms
+Oct 08, 2026 11:42:19 AM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 08, 2026 11:42:19 AM liquibase.util
+INFO: Run:                          6
+Oct 08, 2026 11:42:19 AM liquibase.util
+INFO: Previously run:               0
+Oct 08, 2026 11:42:19 AM liquibase.util
+INFO: Filtered out:                 0
+Oct 08, 2026 11:42:19 AM liquibase.util
+INFO: -------------------------------
+Oct 08, 2026 11:42:19 AM liquibase.util
+INFO: Total change sets:            6
+Oct 08, 2026 11:42:19 AM liquibase.util
+INFO: Update summary generated
+Oct 08, 2026 11:42:19 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 08, 2026 11:42:19 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 08, 2026 11:42:19 AM liquibase.command
+INFO: Command execution complete
+Oct 08, 2026 11:42:19 AM liquibase.changelog
+INFO: Reading from commerce.databasechangelog

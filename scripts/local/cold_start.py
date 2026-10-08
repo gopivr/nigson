@@ -68,10 +68,20 @@ def snapshot(config: dict) -> dict:
         port = int(config["services"][name]["ports"][0]["published"])
         assert http(port, path) == (200, {"status": "UP"}), name
         if name != "ai":
-            assert http(port, "/protected-foundation-check")[0] == 401
+            problem(port, None, 401, "AUTH_REQUIRED")
     assert sql("SELECT extversion FROM pg_extension WHERE extname='vector'", "vector-db") == "0.8.2"
     assert sql("SELECT '[1,2,3]'::ai.vector <-> '[1,2,4]'::ai.vector", "vector-db", "nigson_ai_app") == "1"
     return result
+
+
+def problem(port: int, token: str | None, expected: int, code: str) -> None:
+    status, body = http(port, "/protected-foundation-check", token)
+    assert status == expected and body["code"] == code and body["status"] == expected
+    assert set(body) == {"type", "title", "status", "detail", "instance", "code", "timestamp", "correlationId", "traceId", "violations"}
+    assert uuid.UUID(body["correlationId"]).int != 0 and len(body["traceId"]) == 32
+    assert body["instance"] == "/" and body["violations"] == []
+    assert token is None or token not in json.dumps(body)
+    assert all(word not in json.dumps(body) for word in ("SQLException", "jwt", "password", "SELECT"))
 
 
 def run(action: str, succeeds: bool = True, overrides: dict | None = None) -> None:
@@ -140,8 +150,8 @@ def main() -> None:
             token = json.load(response)["access_token"]
         for owner in local.OWNERS:
             port = int(config["services"][owner]["ports"][0]["published"])
-            assert http(port, "/protected-foundation-check", token)[0] == 403
-            assert http(port, "/protected-foundation-check", token.rsplit(".", 1)[0] + ".AA")[0] == 401
+            problem(port, token, 403, "ACCESS_DENIED")
+            problem(port, token.rsplit(".", 1)[0] + ".AA", 401, "AUTH_REQUIRED")
         evidence["checks"].append("real signed tokens validated; foundation routes denied; invalid signatures rejected")
         for action in ("local-up", "migrate", "seed", "run-core", "run-ai"):
             run(action, succeeds=False, overrides={"ENV": "prod"})

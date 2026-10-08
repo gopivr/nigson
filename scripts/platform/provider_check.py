@@ -23,7 +23,7 @@ try:
  subprocess.run([sys.executable,str(ROOT/'scripts/platform/build_mocks.py')],check=True)
  subprocess.run([str(ROOT/'mvnw'),'-B','verify','dependency:build-classpath','-Dmdep.outputFile=target/provider-classpath.txt'],cwd=ROOT,check=True,timeout=300)
  cp=(ROOT/'services/integration/target/provider-classpath.txt').read_text().strip()
- cp=':'.join([str(ROOT/'.build/java'/owner/'classes') for owner in ('commerce','integration','common-events','common-security')])+':'+cp
+ cp=':'.join([str(ROOT/'.build/java'/owner/'classes') for owner in ('commerce','integration','common-events','common-security','common-observability','common-problem')])+':'+cp
  target=ROOT/'tests/providers/target';target.mkdir(exist_ok=True)
  java=Path(os.environ['JAVA_HOME'])/'bin'
  subprocess.run([str(java/'javac'),'-cp',cp,'-d',str(target),*map(str,(ROOT/'tests/providers/src').rglob('*.java'))],cwd=ROOT,check=True)

@@ -12,6 +12,7 @@ spring:
     username: ${NIGSON_DB_USER}
     password: ${NIGSON_DB_PASSWORD}
     hikari:
+      pool-name: nigson-commerce
       maximum-pool-size: 5
       connection-timeout: 2000
   session:
@@ -23,6 +24,12 @@ spring:
 server:
   shutdown: graceful
 management:
+  otlp:
+    metrics:
+      export:
+        enabled: ${NIGSON_METRICS_EXPORT_ENABLED:false}
+        url: ${NIGSON_OTLP_METRICS_URL:http://127.0.0.1:4318/v1/metrics}
+        step: 10s
   endpoints:
     web:
       exposure:

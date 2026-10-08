@@ -10,11 +10,12 @@ from botocore.config import Config  # type: ignore[import-untyped]
 from psycopg_pool import ConnectionPool
 
 from .store import PlatformStore
+from .telemetry import Telemetry
 from .transport import EventPump
 
 
 class EventRuntime:
-    def __init__(self, dsn: str):
+    def __init__(self, dsn: str, telemetry: Telemetry):
         if os.environ.get("SCHEMA_RELEASE") != "BP5":
             raise ValueError("AI_EVENTS_REQUIRE_BP5")
         environment = os.environ["APP_ENV"]
@@ -38,7 +39,7 @@ class EventRuntime:
         )
         if environment not in ("local", "test") and ":000000000000:" in topic:
             raise ValueError("PRODUCTION_AWS_CONFIG_INVALID")
-        self.pool = ConnectionPool(dsn, min_size=1, max_size=10, timeout=2)
+        self.pool = ConnectionPool(dsn, min_size=1, max_size=10, timeout=2, configure=telemetry.instrument_connection)
         self.pump = EventPump(
             PlatformStore(self.pool),
             boto3.client(
@@ -61,6 +62,7 @@ class EventRuntime:
             queue,
             dead,
             {},
+            telemetry,
         )
         self.stopped = threading.Event()
         self.threads: list[threading.Thread] = []

@@ -40,7 +40,7 @@ ai-test: ai-sync
 
 ai-lint: ai-sync
 	$(UV_PROJECT_ENVIRONMENT)/bin/ruff check services/ai/src services/ai/tests
-	$(UV_PROJECT_ENVIRONMENT)/bin/mypy services/ai/src
+	$(UV_PROJECT_ENVIRONMENT)/bin/mypy --config-file services/ai/pyproject.toml services/ai/src
 
 local-up:
 	python3 scripts/local/dependencies.py up
@@ -100,3 +100,15 @@ provider-contract-test:
 .PHONY: provider-live-check
 provider-live-check:
 	python3 scripts/platform/provider_live_check.py
+
+.PHONY: observability-check observability-infra-check
+observability-check: ai-sync
+	ENV=test python3 scripts/platform/observability_check.py
+observability-infra-check:
+	terraform -chdir=infrastructure/terraform/modules/observability init -backend=false
+	terraform -chdir=infrastructure/terraform/modules/observability validate
+	terraform -chdir=infrastructure/terraform/modules/observability test
+
+.PHONY: collector-config-check
+collector-config-check:
+	ENV=test python3 scripts/platform/collector_check.py

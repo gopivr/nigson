@@ -1,0 +1,92 @@
+{
+  "VALIDATION_ERROR": {
+    "status": 400,
+    "title": "Invalid request",
+    "detail": "Supply valid request fields."
+  },
+  "AUTH_REQUIRED": {
+    "status": 401,
+    "title": "Authentication required",
+    "detail": "Authenticate before continuing."
+  },
+  "ACCESS_DENIED": {
+    "status": 403,
+    "title": "Access denied",
+    "detail": "This operation is not permitted."
+  },
+  "NOT_FOUND": {
+    "status": 404,
+    "title": "Not found",
+    "detail": "The requested resource is unavailable."
+  },
+  "CONFLICT": {
+    "status": 409,
+    "title": "Conflict",
+    "detail": "The operation conflicts with current state."
+  },
+  "IDEMPOTENCY_HASH_MISMATCH": {
+    "status": 409,
+    "title": "Conflicting request",
+    "detail": "Use the original request with this key."
+  },
+  "IDEMPOTENCY_IN_PROGRESS": {
+    "status": 409,
+    "title": "Request in progress",
+    "detail": "Retry this request after the current operation finishes."
+  },
+  "VERSION_MISMATCH": {
+    "status": 412,
+    "title": "Version mismatch",
+    "detail": "Refresh the resource before retrying."
+  },
+  "BUSINESS_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Ineligible operation",
+    "detail": "The operation does not meet its requirements."
+  },
+  "INVALID_TRANSITION": {
+    "status": 409,
+    "title": "Invalid transition",
+    "detail": "The requested transition is unavailable."
+  },
+  "FEATURE_DISABLED": {
+    "status": 422,
+    "title": "Feature unavailable",
+    "detail": "This feature is not active."
+  },
+  "RATE_LIMITED": {
+    "status": 429,
+    "title": "Rate limit exceeded",
+    "detail": "Retry after the permitted interval."
+  },
+  "PROVIDER_UNAVAILABLE": {
+    "status": 503,
+    "title": "Service unavailable",
+    "detail": "Retry a safe read later or inspect the existing operation."
+  },
+  "PROVIDER_OUTCOME_UNKNOWN": {
+    "status": 503,
+    "title": "Outcome uncertain",
+    "detail": "Inspect the existing operation before another attempt."
+  },
+  "INTERNAL_ERROR": {
+    "status": 500,
+    "title": "Internal error",
+    "detail": "The request could not be completed."
+  },
+  "BODY_TOO_LARGE": {
+    "status": 413,
+    "title": "Request too large",
+    "detail": "Reduce the request size."
+  },
+  "UNSUPPORTED_MEDIA_TYPE": {
+    "status": 415,
+    "title": "Unsupported content type",
+    "detail": "Use the specified content type."
+  },
+  "METHOD_NOT_ALLOWED": {
+    "status": 405,
+    "title": "Method not allowed",
+    "detail": "Use a supported request method."
+  }
+}

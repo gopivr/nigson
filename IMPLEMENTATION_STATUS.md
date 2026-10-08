@@ -1,6 +1,6 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:6 October2026
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:8 October2026
 
 ## Current Phase
 
@@ -8,7 +8,7 @@ EP01 — Owner schemas and reliable platform primitives; BP1 foundation.
 
 ## Current Task
 
-PLAT-001 and MOCK-001 — DONE (engineering acceptance); implementation 5b86b5d161681eb38d91fc1ec68adfd7d6e21971. Complete current-source cold-start, real PostgreSQL/SNS/SQS races, offline actual HTTP/signature/SMTP mocks and repeatable builds pass. Next dependency-ready task: PLAT-002. Genuine provider/cloud release qualification remains NOT_RUN.
+PLAT-002 — IN_PROGRESS. Implement safe RFC9457 errors and bounded validation, transactional owned redacted audit, HTTP/event correlation and OpenTelemetry SDK tracing, bounded metrics and CloudWatch alarms. Native owner audit/error/trace/replay suite, consolidated builds/contracts/lint, provider regression, seven Terraform tests and actual pinned ADOT startup pass. Complete frozen-source isolated cold-start also passes; actual implementation commit being recorded. Original five containers were restored after external Docker interruption with identical IDs/mounts; named volumes preserved. See docs/implementation/2026-10-08-PLAT-002.md.
 
 ## Completed Tasks
 
@@ -25,11 +25,10 @@ PLAT-001 and MOCK-001 — DONE (engineering acceptance); implementation 5b86b5d1
 
 ## In Progress
 
-None. PLAT-002 is dependency-ready.
+- [ ] PLAT-002 — IN_PROGRESS; AC-PLAT-002 / TEST-ERROR-REDACTION / TEST-TRACE.
 
 ## Pending
 
-- [ ] PLAT-002 — Implement errors, validation, audit and observability foundation (EP01)
 - [ ] SEC-001 — Configure identity realms and token/session trust (EP02)
 - [ ] COM-AUTHO-001 — Implement commerce authorization increment (EP02)
 - [ ] COM-PARTY-001 — Implement commerce party increment (EP02)
@@ -94,11 +93,11 @@ None. PLAT-002 is dependency-ready.
 
 ## Build Status
 
-PASS — pinned Java25/Python3.12 make verify PROFILE=ai, identical two clean-build hashes for7 JARs/wheel/sdist, locked dependency graph,31 contracts, Ruff and strict mypy. Messaging Terraform init/fmt/validate pass; AWS apply/IAM qualification NOT_RUN. Current packaged two-pass cold-start passes; no deployment or genuine provider qualification inferred.
+PASS — final PLAT-002 Java25/Python3.12 make verify PROFILE=ai, two frozen clean builds with identical seven JAR/wheel/sdist hashes, locked dependency/convergence checks, 34 contracts, Ruff and explicit strict mypy (12 source files). Observability Terraform init/validate/fmt and seven mock-provider tests pass; pinned ADOT ARM64 startup passes network-disabled. AWS apply/IAM/delivery and AMD64 deployment qualification NOT_RUN.
 
 ## Test Status
 
-PASS — ordinary build6 Java/5 AI/31 contracts; native platform11 Java passed with1 explicit inapplicable producer skip and3 AI passed; real HTTP provider/signature/SMTP/state/mode suite passes.  TEST-DATA-MIGRATE/OWNERSHIP compares 122-table fresh BP5 and FOUND-003/BP1–BP5 upgrades/repeats, exact columns/defaults/checks/indexes/FKs and privileges. Commerce negative/duplicate constraints, actual four-owner Liquibase rollback/reapply and populated-evidence refusal pass. Complete current-source two-pass TEST-LOCAL-COLD-START passed after retrying an interrupted dependency download, whose failure is retained. Original local state remains preserved. Live providers, production infrastructure and domain/API/release tests remain NOT_RUN under pending tasks.
+PASS — ordinary build16 Java/11 AI/34 contracts; ordinary DB-gated skips are covered by native owner qualification:27 Java passed, one explicit inapplicable integration-producer skip,14 AI passed. Safe HTTP errors, unsampled-parent ERROR retention, real SDK OTLP, audit commit/rollback/append grants, DB spans, SNS/SQS context and replay/race/fencing pass. Stateful HTTP/SMTP provider/signature/duplicate/out-of-order/timeout-after-acceptance/regression guards pass with external provider HTTP denied. Complete frozen-source two-pass TEST-LOCAL-COLD-START passes, including real identity, four packaged apps/vector, migration drift/recovery, ownership/session, production/config refusal, DB outage/recovery, cleanup and original local-state preservation. DATA-001 acceptance remains intact; no migration bytes changed. Genuine providers, production infrastructure and pending domain/API/release tests remain NOT_RUN. Initial interrupted/failed checks and remedies are retained in the reports/evidence.
 
 ## Last Successful Commit
 
@@ -129,3 +128,5 @@ FOUND-003 final evidence/report: docs/implementation/2026-10-05-FOUND-003.md and
 DATA-001 report: docs/implementation/2026-10-06-DATA-001.md; accepted schema, previous-version/data preservation, critical constraints, rollback/reapply and cold-start evidence: docs/implementation/evidence/2026-10-06-DATA-001/. Initial index-parser, mount ordering and rollback statement-splitting failures are preserved with fixes.
 
 PLAT-001/MOCK-001 reports and acceptance/failure evidence: docs/implementation/2026-10-06-PLAT-001.md, docs/implementation/2026-10-06-MOCK-001.md and their evidence directories. CF-MOCK-001 records the supporting callback-facade scope conflict and proposed master-task-boundary resolution; full business callbacks remain PAYSTACK-001/MSG-001 before BP1. No genuine provider request occurred.
+
+PLAT-002 resumed report/evidence: docs/implementation/2026-10-08-PLAT-002.md and docs/implementation/evidence/2026-10-08-PLAT-002/. October7 interruption and lost temporary logs are recorded in docs/implementation/2026-10-07-PLAT-002.md. Original containers were restored after the external daemon interruption with the same IDs/mounts; final qualifications preserve start times and all named volumes. No provider/cloud activation is inferred.

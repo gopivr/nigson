@@ -1,0 +1,30 @@
+terraform -chdir=infrastructure/terraform/modules/observability init -backend=false
+Initializing provider plugins...
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/aws v6.15.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+terraform -chdir=infrastructure/terraform/modules/observability validate
+Success! The configuration is valid.
+
+terraform -chdir=infrastructure/terraform/modules/observability test
+tests/phases.tftest.hcl... in progress
+  run "bp1"... pass
+  run "bp5"... pass
+  run "operator_required"... pass
+  run "destination_required"... pass
+  run "policy_required"... pass
+  run "sampling_and_alarm_thresholds"... pass
+  run "encryption_required"... pass
+tests/phases.tftest.hcl... tearing down
+tests/phases.tftest.hcl... pass
+
+Success! 7 passed, 0 failed.

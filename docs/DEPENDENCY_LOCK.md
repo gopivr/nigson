@@ -126,3 +126,25 @@ Primary references: [AWS SDK Java API](https://docs.aws.amazon.com/java/api/late
 [Twilio SDK](https://github.com/twilio/twilio-java),
 [WireMock response extensions](https://wiremock.org/docs/extensibility/transforming-responses/),
 [Testcontainers](https://java.testcontainers.org/).
+
+## PLAT-002 observability additions
+
+Java OpenTelemetry API/SDK/OTLP/testing 1.62.0 and Micrometer OTLP 1.17.1 remain
+selected by the Boot BOM. Python SDK and OTLP HTTP exporter are pinned 1.45.1;
+HTTPX/psycopg instrumentation 0.66b1 and their transitive hashes are in uv.lock.
+The SDK owns instrumentation; no Java agent, global provider registration or
+second ASGI auto-instrumentor is installed. Shared packages contain protocol/value
+utilities, with all SDKs, repository writes and transactions in the owners.
+
+ADOT v0.50.0 (contrib/core 0.158.0) is pinned for collector qualification to
+`sha256:7968fb60db6a2390a47ba6a2df029745638486e285c9b2487da1b722d0855a3e`.
+Actual ARM64 network-disabled startup verifies the rendered configuration;
+CloudWatch/X-Ray/IAM delivery and AMD64 deployment remain NOT_RUN. The Terraform
+AWS provider remains 6.15.0. PLAT-002 refreshed package-version advisory checks
+(Java OSV and Python pip-audit) and retained their timestamped evidence separately.
+See [the operational contract](PLATFORM_OBSERVABILITY.md) and the session report.
+
+The Makefile now explicitly selects services/ai/pyproject.toml for strict mypy
+when invoked from the monorepo root; the previously implicit invocation did not
+load that nested configuration. This session's strict result uses the explicit
+configuration and does not retroactively strengthen earlier evidence.

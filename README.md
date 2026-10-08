@@ -43,6 +43,12 @@ The foundation local workflow is `make local-up`, `make migrate ENV=local`,
 `make seed ENV=local FIXTURE_PROFILE=foundation`, then `make run-core`.
 `make cold-start` qualifies that workflow twice on fresh isolated test volumes
 and preserves the running `nigson-local` stack. Owner migrations and non-root
-application Docker runtimes are executable; business schemas, APIs and stateful
-provider mocks remain pending in DATA-001 and MOCK-001. See the local development
+application Docker runtimes, owner schemas and stateful provider mocks are
+implemented; business APIs remain in their roadmap tasks. See the local development
 guide for guards, health URLs and optional vector/AI qualification.
+
+The [platform observability runbook](docs/PLATFORM_OBSERVABILITY.md) documents safe
+errors, transactional audit, correlation, owned SDK telemetry, bounded ADOT exports
+and CloudWatch alarms. Run `make observability-check`, `make observability-infra-check`
+and `make collector-config-check` for the isolated offline qualifications. Genuine
+cloud delivery and production activation remain separately gated.

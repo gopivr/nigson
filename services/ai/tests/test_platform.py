@@ -155,7 +155,12 @@ def test_bp5_transport_replay_and_poison_quarantine():
         pytest.skip("Run make platform-check for isolated LocalStack/PostgreSQL")
     import boto3
     from botocore.config import Config
+    from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
+        InMemorySpanExporter,
+    )
+    from opentelemetry.trace import SpanKind
 
+    from nigson_ai.platform.telemetry import Telemetry, correlation
     from nigson_ai.platform.transport import EventPump
 
     kwargs = {
@@ -199,7 +204,11 @@ def test_bp5_transport_replay_and_poison_quarantine():
     with ConnectionPool(dsn, min_size=1, max_size=10) as pool:
         store = PlatformStore(pool)
 
+        exporter = InMemorySpanExporter()
+        sdk = Telemetry("test", exporter=exporter)
+
         def apply(db, event):
+            assert correlation.get() == uuid.UUID(event["correlation_id"])
             db.execute(
                 "INSERT INTO ai.feature_configuration(id,created_by,updated_by,key,revision,value) VALUES (%s,'test','test',%s,1,'{}') ON CONFLICT(key,revision) DO NOTHING",
                 (uuid7(), effect),
@@ -207,7 +216,14 @@ def test_bp5_transport_replay_and_poison_quarantine():
             return "APPLIED"
 
         pump = EventPump(
-            store, sns, sqs, topic, queue, dead, {"catalogue.product.changed.v1": apply}
+            store,
+            sns,
+            sqs,
+            topic,
+            queue,
+            dead,
+            {"catalogue.product.changed.v1": apply},
+            sdk,
         )
         sns.publish(TopicArn=topic, Message=body)
         sqs.send_message(QueueUrl=queue, MessageBody=body)
@@ -246,5 +262,16 @@ def test_bp5_transport_replay_and_poison_quarantine():
             "INVALID_EVENT" in quarantine
             and "private@example.invalid" not in quarantine
         )
+    sdk.provider.force_flush()
+    spans = exporter.get_finished_spans()
+    assert any(
+        span.kind == SpanKind.CONSUMER
+        and span.parent is None
+        and span.links[0].context.trace_id
+        == int(event["traceparent"].split("-")[1], 16)
+        for span in spans
+    )
+    assert correlation.get() is None
+    sdk.close()
     sns.close()
     sqs.close()

@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 public class EventRuntime implements AutoCloseable {
  private final ScheduledExecutorService executor=Executors.newScheduledThreadPool(2);
  private final EventPump pump;
- public EventRuntime(PlatformStore store,@Value("${APP_ENV}") String environment,
+ public EventRuntime(PlatformStore store,Telemetry telemetry,@Value("${APP_ENV}") String environment,
    @Value("${NIGSON_EVENT_ENDPOINT:}") String endpoint,@Value("${AWS_REGION:us-east-1}") String region,
    @Value("${NIGSON_EVENT_TOPIC}") String topic,@Value("${NIGSON_EVENT_QUEUE}") String queue,
    @Value("${NIGSON_EVENT_DLQ}") String dead,@Value("${SCHEMA_RELEASE:BP1}") String release,org.springframework.beans.factory.ObjectProvider<EventHandler> handlers) {
@@ -37,11 +37,11 @@ public class EventRuntime implements AutoCloseable {
    // Domain tasks register concrete handlers; no placeholder acknowledgement is installed.
    var registered=new HashMap<String,java.util.function.BiFunction<org.springframework.jdbc.core.JdbcTemplate,tools.jackson.databind.JsonNode,String>>();
    handlers.forEach(h -> {if(registered.putIfAbsent(h.eventType(),h::handle)!=null) throw new IllegalArgumentException("DUPLICATE_EVENT_HANDLER");});
-   pump=new EventPump(store,sns.build(),sqs.build(),topic,queue,dead,Integer.parseInt(release.substring(2)),registered);
+   pump=new EventPump(store,sns.build(),sqs.build(),topic,queue,dead,Integer.parseInt(release.substring(2)),registered,telemetry);
  }
  @EventListener(ApplicationReadyEvent.class) public void start() {
-  executor.scheduleWithFixedDelay(() -> { try {pump.relay();} catch(RuntimeException failure) {System.getLogger(getClass().getName()).log(System.Logger.Level.WARNING,"OUTBOX_RELAY_UNAVAILABLE");} },0,1,TimeUnit.SECONDS);
-  executor.scheduleWithFixedDelay(() -> {try {pump.poll();} catch(RuntimeException failure) {System.getLogger(getClass().getName()).log(System.Logger.Level.WARNING,"EVENT_POLL_UNAVAILABLE");}},0,1,TimeUnit.SECONDS);
+  executor.scheduleWithFixedDelay(() -> { try {pump.relay();} catch(RuntimeException failure) {org.slf4j.LoggerFactory.getLogger(getClass()).warn("OUTBOX_RELAY_UNAVAILABLE");} },0,1,TimeUnit.SECONDS);
+  executor.scheduleWithFixedDelay(() -> {try {pump.poll();} catch(RuntimeException failure) {org.slf4j.LoggerFactory.getLogger(getClass()).warn("EVENT_POLL_UNAVAILABLE");}},0,1,TimeUnit.SECONDS);
  }
  @Override public void close() {executor.shutdownNow();pump.close();}
 }
