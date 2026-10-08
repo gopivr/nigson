@@ -8,7 +8,7 @@ EP01 — Owner schemas and reliable platform primitives; BP1 foundation.
 
 ## Current Task
 
-PLAT-002 — IN_PROGRESS. Implement safe RFC9457 errors and bounded validation, transactional owned redacted audit, HTTP/event correlation and OpenTelemetry SDK tracing, bounded metrics and CloudWatch alarms. Native owner audit/error/trace/replay suite, consolidated builds/contracts/lint, provider regression, seven Terraform tests and actual pinned ADOT startup pass. Complete frozen-source isolated cold-start also passes; actual implementation commit being recorded. Original five containers were restored after external Docker interruption with identical IDs/mounts; named volumes preserved. See docs/implementation/2026-10-08-PLAT-002.md.
+PLAT-002 — DONE (engineering). Safe RFC9457 errors and bounded validation, transactional owned redacted audit, HTTP/event correlation and SDK tracing, bounded metrics and configured CloudWatch alarms are implemented. Mandatory native owner/OTLP/error/audit/race, provider regression, build/contract/lint, Terraform/ADOT and frozen two-pass cold-start checks pass. Implementation cbdf43cfddc4b87a691fa5bf85240888542498a6; report docs/implementation/2026-10-08-PLAT-002.md. Genuine cloud/provider activation remains NOT_RUN. Original five containers and all named volumes remain preserved.
 
 ## Completed Tasks
 
@@ -23,9 +23,11 @@ PLAT-002 — IN_PROGRESS. Implement safe RFC9457 errors and bounded validation, 
 - [x] PLAT-001 — DONE; AC-PLAT-001, native PostgreSQL/SNS/SQS crash/replay/hash/race and complete cold-start PASS. Report: docs/implementation/2026-10-06-PLAT-001.md.
 - [x] MOCK-001 — DONE (engineering); AC-MOCK-001, actual HTTP/signature/SMTP/state/mode qualification PASS with external JVM HTTP denied. Genuine qualification NOT_RUN. Report: docs/implementation/2026-10-06-MOCK-001.md.
 
+- [x] PLAT-002 — DONE (engineering); AC-PLAT-002 / TEST-ERROR-REDACTION / TEST-TRACE PASS; implementation cbdf43cfddc4b87a691fa5bf85240888542498a6. Report: docs/implementation/2026-10-08-PLAT-002.md.
+
 ## In Progress
 
-- [ ] PLAT-002 — IN_PROGRESS; AC-PLAT-002 / TEST-ERROR-REDACTION / TEST-TRACE.
+None. Next dependency-ready task: IDP-001.
 
 ## Pending
 
@@ -101,7 +103,7 @@ PASS — ordinary build16 Java/11 AI/34 contracts; ordinary DB-gated skips are c
 
 ## Last Successful Commit
 
-5b86b5d161681eb38d91fc1ec68adfd7d6e21971 — verified PLAT-001/MOCK-001 code, acceptance and resolved failure evidence. This status metadata follows the actual implementation commit.
+cbdf43cfddc4b87a691fa5bf85240888542498a6 — verified PLAT-002 implementation, contracts, runbook and acceptance/failure evidence. This completion metadata follows the actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -117,7 +119,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-PLAT-002 — implement safe RFC9457 errors, validation, transactional redacted audit and HTTP/SQS observability. Its PLAT-001 dependency is DONE. Provider genuine qualification requires supplied credentials/account/service context and remains NOT_RUN. Preserve the five running nigson-local containers/volumes. Follow section46 product-phase composition; BP1 still requires provider/security/identity/restore gates.
+IDP-001 — implement production Keycloak deployment/configuration and provider-specific identity validation. Its PLAT-002 dependency is DONE; SEC-001 also waits for IDP-001. Continue independent offline work without inventing domains, credentials, account approvals or activation policy. Follow section46 BP1 release composition, including carrier/messaging/identity/security/infrastructure/restore gates. Preserve the original nigson-local containers/volumes.
 
 ## Session Evidence / Protocol
 
