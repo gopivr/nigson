@@ -8,7 +8,7 @@ EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
 
 ## Current Task
 
-COM-AUTHO-001 — IN_PROGRESS; implement API-011/012 staff search and versioned role replacement, current authority/recent MFA, last-active-admin serialization, transactional audit/session revocation and durable replay. Planned verification: native PostgreSQL authorization/race/rollback/security/HTTP contracts, owner migrations, full build and contract checks. SEC-001 dependency is committed/DONE.
+COM-AUTHO-001 — DONE (engineering); implementation 1484e6729ab82e4266d91543e74a730625d0640a; AC-COM-AUTHO-001 PASS offline. API-011/012 current ADMIN/recent-MFA staff search/role replacement, last-active-admin serialization, canonical replay, atomic audit/session revocation and explicit BFF session lifecycle are verified. Genuine cloud/provider/identity/release activation NOT_RUN; next dependency-ready task COM-PARTY-001.
 
 ## Completed Tasks
 
@@ -29,13 +29,14 @@ COM-AUTHO-001 — IN_PROGRESS; implement API-011/012 staff search and versioned 
 
 - [x] SEC-001 — DONE (engineering); implementation 2169afa24e30ce98dd34c63d4be01184c9c6acbd; AC-SEC-001 / TEST-SEC-TOKENS / TEST-ACTOR-TRUST / TEST-LOCAL-COLD-START PASS offline. Report: docs/implementation/2026-10-09-SEC-001.md.
 
+- [x] COM-AUTHO-001 — DONE (engineering); implementation 1484e6729ab82e4266d91543e74a730625d0640a; AC-COM-AUTHO-001 native26/no skips, final actual HTTP packaging smoke, full build/contracts/migrations and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-AUTHO-001.md.
+
 ## In Progress
 
-COM-AUTHO-001 — started 9 October2026; offline implementation and qualification.
+None.
 
 ## Pending
 
-- [ ] COM-AUTHO-001 — Implement commerce authorization increment (EP02)
 - [ ] COM-PARTY-001 — Implement commerce party increment (EP02)
 - [ ] COM-SESSI-001 — Implement commerce session increment (EP02)
 - [ ] COM-CATAL-001 — Implement commerce catalogue increment (EP03)
@@ -97,15 +98,15 @@ COM-AUTHO-001 — started 9 October2026; offline implementation and qualificatio
 
 ## Build Status
 
-PASS — SEC-001 final Java25/Python3.12 make verify PROFILE=ai, matching seven JAR/wheel/sdist hashes,260 locked release artifact hashes,34 contracts,Ruff and strict mypy13 source files. Updated private identity operations image builds and credential-free packaged policy passes. Private-trust Terraform validate/six mock plans pass; no AWS apply. Actual OSV query260 Java packages reports zero known findings. Complete isolated Docker cold-start passes after correcting missing security contract copies in Java Dockerfiles.
+PASS — COM-AUTHO-001 clean Java25/Python3.12 make verify PROFILE=ai; seven JAR plus wheel/sdist hashes reproduce;260 locked Java artifact hashes unchanged;35 contracts,Ruff and strict mypy13 source files pass. No dependency coordinate/version, domain migration, Dockerfile or cloud deployment changed.
 
 ## Test Status
 
-PASS — SEC-001 ordinary verification:31 Java passes/29 explicit native/vendor skips,15 BP5 AI passes/four explicit skips,34 contracts. Separately:18 native security tests/no skips,seven actual Keycloak JWT fixture tests/no skips,one actual OIDC/JDBC session acceptance/no skips,nine identity operational tests and actual replica/refresh/replay/restore acceptance. Complete cold-start PASS: both setup passes, owner/session/drift/security/outage checks and exact original container/volume preservation. First Docker packaging failure is preserved. Domain migrations are unchanged and fresh native BP1→BP5 migrations pass. Genuine cloud/provider/activation qualification NOT_RUN; prior PLAT-002/MOCK-001 checks remain their reports, not new executions.
+PASS — COM-AUTHO-001 native26 tests/no skips and final assembled Boot HTTP/helper packaging smoke one/no skips. Ordinary full verification:32 Java passes/36 explicitly gated skips,15 BP5 AI passes/four skips,35 contracts. Fresh BP1→BP5/repeat owner migrations, role/last-admin/duplicate races, bounded contention, actual audit permission failure and rollback, session continuity/revocation, current organization authority, KMS/protocol and HTTP validation/auth/version/replay pass. Original local state matches the native baseline after starting the initially stopped Docker Desktop daemon; no reset or volume removal. Initial failures are preserved. Genuine cloud/provider/identity/release activation NOT_RUN; prior cold-start/vendor/OSV results remain their original command-scoped evidence.
 
 ## Last Successful Commit
 
-2169afa24e30ce98dd34c63d4be01184c9c6acbd — verified SEC-001 implementation, security contracts, KMS/private configuration, session runbook and acceptance/failure evidence. Completion metadata follows the actual implementation commit.
+1484e6729ab82e4266d91543e74a730625d0640a — verified COM-AUTHO-001 implementation and acceptance/failure evidence. Completion metadata follows the actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -113,7 +114,7 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start are committed/DONE offline. Public BFF/party/role command APIs and last-admin protection remain COM-SESSI-001/COM-PARTY-001/COM-AUTHO-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
+Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start are committed/DONE offline. COM-AUTHO-001 public staff role APIs/last-admin protection and atomic revocation/audit are now DONE offline; public BFF/party APIs remain COM-SESSI-001/COM-PARTY-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
@@ -121,7 +122,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-AUTHO-001 — implement commerce authorization role command APIs011/012, last-admin protection, owned current entitlements and transactional subject-session revocation/audit. SEC-001 dependency is committed/DONE. COM-PARTY-001 and COM-SESSI-001 are also dependency-ready; their public controllers/provisioning remain pending. Continue independent offline work and section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs. Preserve the original nigson-local containers/volumes.
+COM-PARTY-001 — implement commerce mapped party/profile/address API-005–010, current ownership and transactional audited/versioned persistence. SEC-001 dependency is committed/DONE; COM-SESSI-001 is also dependency-ready. COM-AUTHO-001 authorization is committed/DONE. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs. Preserve existing local state.
 
 ## Session Evidence / Protocol
 
@@ -138,3 +139,6 @@ PLAT-002 resumed report/evidence: docs/implementation/2026-10-08-PLAT-002.md and
 IDP-001 report/evidence: docs/implementation/2026-10-09-IDP-001.md and docs/implementation/evidence/2026-10-09-IDP-001/. Actual optimized two-replica identity, vendor token/MFA/restore acceptance and final full cold-start PASS; real cloud deployment and approved activation inputs remain NOT_RUN. Implementation acceptance commit 794f3844a53071894866e8d65ef386305dc4e72f.
 
 SEC-001 report/evidence: docs/implementation/2026-10-09-SEC-001.md and docs/implementation/evidence/2026-10-09-SEC-001/. Eighteen native security tests/no skips, actual Keycloak OIDC/JDBC/workload/MFA/replica/restore acceptance, full repository verification and complete cold-start PASS; nine artifacts reproducible and260 Java packages audited. Actual implementation commit 2169afa24e30ce98dd34c63d4be01184c9c6acbd. Genuine cloud/provider activation NOT_RUN; public role/party/session command APIs remain task-owned pending work. Original containers/start times/mounts/volumes match exactly; initial failures and CF-SEC-001 callback resolution retained.
+
+
+COM-AUTHO-001 report/evidence: docs/implementation/2026-10-09-COM-AUTHO-001.md and docs/implementation/evidence/2026-10-09-COM-AUTHO-001/. Native26/no skips, final actual HTTP packaging smoke, complete Java/BP5 build,35 contracts and nine reproducible artifacts PASS; implementation 1484e6729ab82e4266d91543e74a730625d0640a. Mandatory last-active-admin/duplicate/rollback/audit-permission/lock-contention/current-authority/HTTP invariants pass. Framework request fixation and numeric reason coercion defects were corrected; failure history retained. Genuine activation NOT_RUN. Docker Desktop was initially stopped and started without reset; every native qualification preserves its existing nigson-local IDs/start times/mounts/volumes baseline. No remote push or production apply.

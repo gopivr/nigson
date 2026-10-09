@@ -3,7 +3,7 @@
   "task": "COM-AUTHO-001",
   "acceptance": "AC-COM-AUTHO-001",
   "status": "PASS_OFFLINE",
-  "implementation_commit": null,
+  "implementation_commit": "1484e6729ab82e4266d91543e74a730625d0640a",
   "native": {
     "tests": 26,
     "failures": 0,
