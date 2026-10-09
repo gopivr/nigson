@@ -136,3 +136,7 @@ Production identity does not enable business routes or replace commerce business
 roles/BFF server sessions. SEC-001 and the remaining BP1 infrastructure/provider/
 restore/security release gates remain required; real environment qualification
 must use supplied actual inputs and must not silently use local fixtures.
+
+## SEC-001 executable security foundation
+
+Typed authenticated-encrypted JDBC identity/pending-login records, one-use state, fixation-safe rotation, 30m idle/12h absolute lifetime, guarded refresh/logout and current commerce authority are implemented in `services/commerce/.../security/`. Private Java owner filters enforce compiled workload client/scope/phase, socket ingress and body-bound ES256 actor proof. Production signing uses a dedicated P-256 KMS key; session AES256 key material is separately wrapped and unwrapped only at startup. Public session and authorization endpoint DTOs/commands remain their explicit COM tasks. See [session/private trust runbook](runbooks/session-trust.md) and `contracts/security/actor-assertion.json`.

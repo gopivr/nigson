@@ -19,6 +19,7 @@ public class FoundationConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED",havingValue="false",matchIfMissing=true)
     SecurityFilterChain foundationSecurity(HttpSecurity http,com.nigson.experience.platform.ProblemWriter problems) throws Exception {
         // No permissive developer bypass. Identity/session/domain authorization is SEC-001.
         return http.authorizeHttpRequests(auth -> auth

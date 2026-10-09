@@ -1,0 +1,50 @@
+{
+  "task": "SEC-001",
+  "specification": "1.1.0",
+  "acceptance": {
+    "AC-SEC-001": "PASS",
+    "TEST-SEC-TOKENS": "PASS",
+    "TEST-ACTOR-TRUST": "PASS",
+    "TEST-LOCAL-COLD-START": "PASS"
+  },
+  "ordinaryJava": {
+    "passed": 31,
+    "skipped": 29,
+    "skipReason": "Explicit native/vendor fixtures, qualified separately where task-owned"
+  },
+  "nativeSecurity": {
+    "passed": 18,
+    "skipped": 0
+  },
+  "actualKeycloakJwt": {
+    "passed": 7,
+    "skipped": 0
+  },
+  "actualKeycloakJdbcOidc": {
+    "passed": 1,
+    "skipped": 0
+  },
+  "identityOperations": {
+    "passed": 9
+  },
+  "terraformMockPlans": {
+    "passed": 6,
+    "realCloudApply": "NOT_RUN"
+  },
+  "optionalBp5Ai": {
+    "passed": 15,
+    "skipped": 4
+  },
+  "contracts": 34,
+  "reproducibleArtifacts": 9,
+  "javaAdvisoryAudit": {
+    "packages": 260,
+    "findings": 0
+  },
+  "genuineProviderQualification": "NOT_RUN",
+  "genuineAwsKmsIamPrivateIngress": "NOT_RUN",
+  "productionActivation": "NOT_RUN",
+  "publicBusinessApis": "Downstream COM-AUTHO/COM-PARTY/COM-SESSI tasks remain pending",
+  "originalLocalResources": "PASS: exact IDs/start times/mounts/volumes preserved; isolated stacks cleaned up",
+  "implementationCommit": "PENDING"
+}

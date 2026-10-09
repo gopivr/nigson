@@ -1,0 +1,318 @@
+ENV=test python3 scripts/security/verify.py
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/gopiravi/workspace/nigson/.build/maven/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Nigson backend                                                     [pom]
+[INFO] common-observability                                               [jar]
+[INFO] common-security                                                    [jar]
+[INFO] common-events                                                      [jar]
+[INFO] common-problem                                                     [jar]
+[INFO] commerce                                                           [jar]
+[INFO] experience                                                         [jar]
+[INFO] integration                                                        [jar]
+[INFO]
+[INFO] ---------------------< com.nigson:nigson-backend >----------------------
+[INFO] Building Nigson backend 0.1.0                                      [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ nigson-backend ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.RequireJavaVendor passed
+[INFO] Rule 2: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] ------------------< com.nigson:common-observability >-------------------
+[INFO] Building common-observability 0.1.0                                [2/8]
+[INFO]   from shared/common-observability/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-observability ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-observability ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-observability ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-observability ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-observability/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-observability ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-observability ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ---------------------< com.nigson:common-security >---------------------
+[INFO] Building common-security 0.1.0                                     [3/8]
+[INFO]   from shared/common-security/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-security ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-security ---
+[INFO] Copying 3 resources from ../../contracts/security to ../../.build/java/common-security/classes/security
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-security ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-security ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-security ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-security ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ----------------------< com.nigson:common-events >----------------------
+[INFO] Building common-events 0.1.0                                       [4/8]
+[INFO]   from shared/common-events/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-events ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-events ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-events ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-events ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-events/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-events ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-events ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ---------------------< com.nigson:common-problem >----------------------
+[INFO] Building common-problem 0.1.0                                      [5/8]
+[INFO]   from shared/common-problem/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-problem ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-problem ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-problem ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-problem ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-problem/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-problem ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-problem ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ------------------------< com.nigson:commerce >-------------------------
+[INFO] Building commerce 0.1.0                                            [6/8]
+[INFO]   from services/commerce/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ commerce ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ commerce ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/commerce/classes
+[INFO] Copying 59 resources from src/main/resources to ../../.build/java/commerce/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ commerce ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/commerce/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ commerce ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.commerce.security.HttpTrustBoundaryTest
+23:27:35.599 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat initialized with port 0 (http)
+Oct 08, 2026 11:27:35 PM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-nio-auto-1"]
+Oct 08, 2026 11:27:35 PM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service [Tomcat]
+Oct 08, 2026 11:27:35 PM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet engine: [Apache Tomcat/11.0.26]
+Oct 08, 2026 11:27:35 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-auto-1"]
+23:27:35.702 [main] INFO org.springframework.boot.tomcat.TomcatWebServer -- Tomcat started on port 57779 (http) with context path '/'
+23:27:35.835 [http-nio-auto-1-exec-2] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+23:27:35.851 [http-nio-auto-1-exec-3] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+23:27:35.853 [http-nio-auto-1-exec-4] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+23:27:35.924 [http-nio-auto-1-exec-7] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+23:27:35.926 [http-nio-auto-1-exec-8] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+23:27:35.947 [http-nio-auto-1-exec-9] WARN com.nigson.commerce.platform.ProblemWriter -- REQUEST_FAILED
+Oct 08, 2026 11:27:35 PM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-nio-auto-1-57779"]
+Oct 08, 2026 11:27:35 PM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service [Tomcat]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.823 s -- in com.nigson.commerce.security.HttpTrustBoundaryTest
+[INFO] Running com.nigson.commerce.security.KmsIdentityTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.738 s -- in com.nigson.commerce.security.KmsIdentityTest
+[INFO] Running com.nigson.commerce.security.SecurityProtocolTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.060 s -- in com.nigson.commerce.security.SecurityProtocolTest
+[INFO] Running com.nigson.commerce.security.JdbcSessionTrustTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.854 s -- in com.nigson.commerce.security.JdbcSessionTrustTest
+[INFO] Running com.nigson.commerce.security.SecurityAssemblyTest
+{"timestamp":"2026-10-09T03:27:37.803Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:37.818Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:37.876Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:37.881Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:37.891Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:37.898Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.003Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.067Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.068Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.158Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.364Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.364Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.364Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.365Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.376Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.376Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.427Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.427Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.432Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.433Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.433Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.433Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.433Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:38.433Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.009Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.196Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.205Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.215Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.231Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.373Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.399Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.405Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.444Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.446Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.448Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.448Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.448Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.448Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.448Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.449Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.449Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.468Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.470Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.475Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.478Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.490Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.491Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.497Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.498Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"9ff0c4dda595344d161aed2e8c670ccd","span_id":"7f3762657bf8271e","correlation_id":"9a328c15-8286-4e0a-ab30-a0b9e6e565c9","error_code":null,"message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-09T03:27:39.501Z","severity":"WARN","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"b4fe1d59978d9bdae3dd05d69597f575","span_id":"9cbfce6fdcff14ff","correlation_id":"79a40121-054a-49e5-aba9-dbcaab8fb2cf","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-09T03:27:39.501Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"b4fe1d59978d9bdae3dd05d69597f575","span_id":"9cbfce6fdcff14ff","correlation_id":"79a40121-054a-49e5-aba9-dbcaab8fb2cf","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-09T03:27:39.503Z","severity":"WARN","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"d3ad1dda297d7c40ca2badb1f55f759f","span_id":"a389a3f2c1d371dd","correlation_id":"929022dd-5233-445c-8a7c-55cc4b388160","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-09T03:27:39.504Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"d3ad1dda297d7c40ca2badb1f55f759f","span_id":"a389a3f2c1d371dd","correlation_id":"929022dd-5233-445c-8a7c-55cc4b388160","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-09T03:27:39.505Z","severity":"WARN","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"d4d65683853112d956728cadf9238b35","span_id":"ffb8b701a823720e","correlation_id":"b479c3ec-2163-4f97-87d8-d2d05a0db33f","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-09T03:27:39.505Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"d4d65683853112d956728cadf9238b35","span_id":"ffb8b701a823720e","correlation_id":"b479c3ec-2163-4f97-87d8-d2d05a0db33f","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-09T03:27:39.507Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":"f8687e0045b183547e4409763f857b69","span_id":"7e2f14b82f7da89a","correlation_id":"c5fb9429-7967-40ff-bc35-df02ba93a942","error_code":null,"message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-09T03:27:39.508Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.508Z","severity":"DEBUG","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.510Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-09T03:27:39.511Z","severity":"INFO","service":"nigson-commerce","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.897 s -- in com.nigson.commerce.security.SecurityAssemblyTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] -----------------------< com.nigson:experience >------------------------
+[INFO] Building experience 0.1.0                                          [7/8]
+[INFO]   from services/experience/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ experience ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ experience ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/experience/classes
+[INFO] Copying 39 resources from src/main/resources to ../../.build/java/experience/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ experience ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/experience/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ experience ---
+[INFO]
+[INFO] -----------------------< com.nigson:integration >-----------------------
+[INFO] Building integration 0.1.0                                         [8/8]
+[INFO]   from services/integration/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ integration ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ integration ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/integration/classes
+[INFO] Copying 27 resources from src/main/resources to ../../.build/java/integration/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ integration ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ integration ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/integration/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ integration ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ integration ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Nigson backend 0.1.0:
+[INFO]
+[INFO] Nigson backend ..................................... SUCCESS [  0.136 s]
+[INFO] common-observability ............................... SUCCESS [  0.275 s]
+[INFO] common-security .................................... SUCCESS [  0.100 s]
+[INFO] common-events ...................................... SUCCESS [  0.013 s]
+[INFO] common-problem ..................................... SUCCESS [  0.010 s]
+[INFO] commerce ........................................... SUCCESS [  5.475 s]
+[INFO] experience ......................................... SUCCESS [  0.080 s]
+[INFO] integration ........................................ SUCCESS [  0.075 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  6.311 s
+[INFO] Finished at: 2026-10-08T23:27:40-04:00
+[INFO] ------------------------------------------------------------------------
+PASS: SEC-001 native JDBC one-use state/race, rotation, idle/absolute TTL, encrypted Spring Session compatibility, current commerce policy/audit/revocation and KMS/protocol checks

@@ -1,0 +1,51 @@
+{
+  "task": "SEC-001",
+  "failures": [
+    {
+      "id": "BUILD-RESOLUTION",
+      "failureAndResolution": "Sandbox DNS prevented Maven Central retrieval of KMS/Servlet dependencies. Approved escalated resolution succeeded; pinned versions unchanged."
+    },
+    {
+      "id": "NATIVE-COMPILE",
+      "failureAndResolution": "Spring JDBC concrete session type is package-private; test uses the public SessionRepository contract. A reassigned local variable was captured correctly."
+    },
+    {
+      "id": "PROTOCOL-NEGATIVE",
+      "failureAndResolution": "Negative test incorrectly assumed API-124 method GET; master route is POST. Test now rejects GET and binds exact POST body hash."
+    },
+    {
+      "id": "TERRAFORM",
+      "failureAndResolution": "Required version corrected to installed repository Terraform1.12.2. Initial mock apply assertions passed but teardown conflicted with prevent_destroy; six mock plans now pass with destruction guards retained. No AWS resource was deployed."
+    },
+    {
+      "id": "OIDC-OTP-FORM",
+      "failureAndResolution": "Qualification distinguished enrollment field from normal OTPFormAuthenticator otp input."
+    },
+    {
+      "id": "OIDC-TOTP-REPLAY",
+      "failureAndResolution": "Already-consumed enrollment counter was rejected; qualification waits for the next TOTP step, preserving anti-replay."
+    },
+    {
+      "id": "OIDC-REFRESH-NONCE",
+      "failureAndResolution": "Keycloak refresh ID tokens omit nonce. Generic refreshed ID profile permits absent nonce, while initial code exchange still requires exact pending nonce."
+    },
+    {
+      "id": "OIDC-MFA-AUTH-TIME",
+      "failureAndResolution": "Custom scopes omit the default basic scope. Explicit signed AUTH_TIME user-session-note mapper added; AMR otp and auth_time required, no inferred MFA."
+    },
+    {
+      "id": "PYTHON-BUILD-SANDBOX",
+      "failureAndResolution": "UV panicked in macOS system-configuration sandbox call; identical locked build with approved escalation passed and artifacts match."
+    },
+    {
+      "id": "COLD-START-DOCKER-CONTRACT",
+      "failureAndResolution": "First complete run failed at migrate image build: PRIVATE_CONTRACT_UNAVAILABLE. Java Dockerfiles now explicitly copy contracts/security; complete fresh-stack rerun PASS, preserving original state."
+    },
+    {
+      "id": "DEPENDENCY-GRAPH-AFTER-CLEAN",
+      "failureAndResolution": "Ad hoc hash check after clean build lacked generated target/dependencies.json; full make dependency-check regenerated the graph and passed. No lock changed."
+    }
+  ],
+  "privateRawLogs": ".build/sec001 and .build/idp001; no tokens/credentials/dumps published",
+  "automaticApprovalRejections": 0
+}

@@ -112,7 +112,7 @@ class Qualification:
         self.origin = 'https://localhost:' + str(self.public)
         self.admin_origin = 'https://127.0.0.1:' + str(self.admin_port)
         self.realm = 'nigson-idp-qualification'
-        self.callback = self.origin + '/login/oauth2/code/keycloak'
+        self.callback = self.origin + '/bff/callback'
         self.password = 'test-' + secrets.token_urlsafe(32)
         self.secrets = {x: 'test-' + secrets.token_urlsafe(32) for x in ('nigson-bff','nigson-commerce','nigson-experience','nigson-integration')}
         self.checks = []; self.management = {}
@@ -170,28 +170,37 @@ server {{ listen 9443 ssl; ssl_certificate /cert/server.crt; ssl_certificate_key
 location / {{ proxy_pass https://identity; proxy_ssl_trusted_certificate /cert/ca.crt; proxy_ssl_verify on; proxy_ssl_server_name on; proxy_ssl_name node1; proxy_set_header Host 127.0.0.1:{self.admin_port}; proxy_set_header X-Forwarded-Host 127.0.0.1:{self.admin_port}; proxy_set_header X-Forwarded-Proto https; proxy_set_header X-Forwarded-Port {self.admin_port}; }} }} }}'''
         private(self.work/'nginx.conf',config)
         self.run('proxy',PROXY,[],extra=['-p',f'127.0.0.1:{self.public}:8443','-p',f'127.0.0.1:{self.admin_port}:9443','-v',f'{self.work}:/cert:ro','-v',f'{self.work}/nginx.conf:/etc/nginx/nginx.conf:ro'])
-    def browser_login(self, username, staff=False, invalid_pkce=False, code_replay=False):
-        verifier = secrets.token_urlsafe(48)
-        query = {'client_id':'nigson-bff','redirect_uri':self.callback,'response_type':'code','scope':'openid','state':secrets.token_urlsafe(16),'nonce':secrets.token_urlsafe(16),'code_challenge':base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip('='),'code_challenge_method':'S256'}
+    def browser_login(self, username, staff=False, invalid_pkce=False, code_replay=False, emit_code=False):
+        verifier = secrets.token_urlsafe(32)
+        query = {'client_id':'nigson-bff','redirect_uri':self.callback,'response_type':'code','scope':'openid','state':secrets.token_urlsafe(32),'nonce':secrets.token_urlsafe(32),'code_challenge':base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip('='),'code_challenge_method':'S256'}
         browser = Browser(self.ca,self.callback)
         form = browser.request(self.origin+'/realms/'+self.realm+'/protocol/openid-connect/auth?'+urllib.parse.urlencode(query))
         assert form.action and not browser.location
         form = browser.request(form.action,{**form.inputs,'username':username,'password':self.password})
         if staff:
-            assert not browser.location and 'totp' in form.text.lower(), 'STAFF_PASSWORD_ONLY_BYPASS'
+            assert not browser.location and ('totp' in form.inputs or 'otp' in form.inputs), 'STAFF_PASSWORD_ONLY_BYPASS'
             # Enrollment is required even for a staff principal without an existing OTP credential.
             import re, hmac, struct
             match = re.search(r'name="totpSecret"\s+value="([^"]+)"',form.text)
             if not match: match = re.search(r'value="([^"]+)"\s+name="totpSecret"',form.text)
-            assert match, 'TOTP_ENROLLMENT_SECRET_MISSING'
-            otpkey = match[1].encode()
+            if match:
+                self.staff_secret = match[1]
+            else:
+                assert getattr(self, 'staff_secret', None), 'TOTP_SECRET_MISSING'
+            otpkey = self.staff_secret.encode()
+            if getattr(self, 'staff_counter', None) == int(time.time()) // 30:
+                time.sleep(31 - (time.time() % 30))
+            self.staff_counter = int(time.time()) // 30
             digest = hmac.new(otpkey,struct.pack('>Q',int(time.time())//30),hashlib.sha1).digest(); offset=digest[-1]&15
             otp = str((int.from_bytes(digest[offset:offset+4],'big')&0x7fffffff)%1000000).zfill(6)
-            form = browser.request(form.action,{**form.inputs,'totp':otp,'userLabel':'offline-qualification'})
+            field = 'totp' if 'totpSecret' in form.inputs else 'otp'
+            form = browser.request(form.action,{**form.inputs,field:otp,'userLabel':'offline-qualification'})
         assert browser.location, 'AUTHORIZATION_CODE_MISSING'
         params = urllib.parse.parse_qs(urllib.parse.urlsplit(browser.location).query)
         assert params['state'][0] == query['state'] and 'code' in params
         exchange={'grant_type':'authorization_code','client_id':'nigson-bff','client_secret':self.secrets['nigson-bff'],'redirect_uri':self.callback,'code':params['code'][0],'code_verifier':verifier}
+        if emit_code:
+            return {'code': params['code'][0], 'state': query['state'], 'nonce': query['nonce'], 'verifier': verifier}
         if invalid_pkce:
             exchange.pop('code_verifier')
             try: self.token(exchange);raise AssertionError('PKCE_VERIFIER_BYPASS')
@@ -302,7 +311,19 @@ location / {{ proxy_pass https://identity; proxy_ssl_trusted_certificate /cert/c
             private(self.work/'python-trust.log',result.stdout+result.stderr)
             if result.returncode: raise RuntimeError('PYTHON_IDENTITY_TRUST_FAILED')
             self.passed('TEST-SEC-TOKENS-BP5')
+        if os.environ.get('NIGSON_SEC_IDENTITY') == 'true':
+            self.security_identity()
         self.metrics()
+
+    def security_identity(self):
+        # Codes are issued immediately before the native Java test; raw material stays private.
+        fixture = {'issuer':self.origin+'/realms/'+self.realm, 'ca':self.ca, 'callback':self.callback, 'bff_secret':self.secrets['nigson-bff'], 'workload_secret':self.secrets['nigson-integration'], 'retail':self.browser_login('offline-retail',emit_code=True), 'staff':self.browser_login('offline-staff',staff=True,emit_code=True)}
+        private(self.work/'sec-identity.json',json.dumps(fixture))
+        env={**os.environ,'NIGSON_SEC_IDENTITY_FIXTURE':str(self.work/'sec-identity.json'),'JAVA_HOME':'/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home'}
+        result=subprocess.run([str(ROOT/'mvnw'),'-B','-pl','services/commerce','-am','test','-Dtest=OidcSessionAcceptanceTest','-Dsurefire.failIfNoSpecifiedTests=false'],cwd=ROOT,env=env,capture_output=True,timeout=180)
+        private(self.work/'sec-identity-test.log',result.stdout+result.stderr)
+        if result.returncode:raise RuntimeError('SEC_IDENTITY_ACCEPTANCE_FAILED')
+        self.passed('TEST-SEC-OIDC-JDBC-SESSION')
 
     def metrics(self):
         http=urllib.request.build_opener(urllib.request.ProxyHandler({}),urllib.request.HTTPSHandler(context=ssl.create_default_context(cafile=self.ca)))

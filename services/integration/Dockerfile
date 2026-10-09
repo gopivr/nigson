@@ -16,6 +16,7 @@ WORKDIR /workspace
 COPY .mvn .mvn
 COPY mvnw pom.xml ./
 COPY shared shared
+COPY contracts/security contracts/security
 COPY services/commerce services/commerce
 COPY services/experience services/experience
 COPY services/integration services/integration

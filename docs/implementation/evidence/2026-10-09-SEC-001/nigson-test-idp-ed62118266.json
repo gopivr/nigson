@@ -1,0 +1,88 @@
+{
+  "project": "nigson-test-idp-ed62118266",
+  "checks": [
+    "TEST-KEYCLOAK-DB-ISOLATION",
+    "TEST-KEYCLOAK-AUDIT-POLICY",
+    "TEST-KEYCLOAK-BOOTSTRAP-RETIREMENT",
+    "TEST-KEYCLOAK-PROD-CONFIG",
+    "TEST-KEYCLOAK-ADMIN-ISOLATION",
+    "TEST-KEYCLOAK-PKCE-STAFF-MFA",
+    "TEST-SEC-TOKENS"
+  ],
+  "status": "FAIL",
+  "originalContainersPreserved": true,
+  "original": [
+    {
+      "id": "edd1913f1dc7b69969e8147e84b86cc52c3f181e1f85bcccb020674c9b2fdb25",
+      "name": "/nigson-local-identity-db-1",
+      "started": "2026-10-08T11:47:42.043798841Z",
+      "running": true,
+      "mounts": [
+        {
+          "Type": "volume",
+          "Destination": "/var/lib/postgresql",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-identity/_data"
+        }
+      ]
+    },
+    {
+      "id": "c8c88fb5eda956c1430eff6912863ed9f54b464d5352e592a5e575be4b970787",
+      "name": "/nigson-local-keycloak-1",
+      "started": "2026-10-08T11:47:41.257776882Z",
+      "running": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/opt/keycloak/data/import/nigson-local-realm.json",
+          "Source": "/Users/gopiravi/workspace/nigson/infrastructure/docker/keycloak/nigson-local-realm.json"
+        }
+      ]
+    },
+    {
+      "id": "4d0cbb2f7c669683042f1a8a45fc5c3b48bd4d396085b2fed0c7601a9f3f6649",
+      "name": "/nigson-local-localstack-1",
+      "started": "2026-10-08T11:47:42.167270508Z",
+      "running": true,
+      "mounts": [
+        {
+          "Type": "volume",
+          "Destination": "/var/lib/localstack",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-localstack/_data"
+        }
+      ]
+    },
+    {
+      "id": "d0ef36ecae16f6fe573c024e078759d09bda99e82047098d24cb861fda152bb6",
+      "name": "/nigson-local-mailpit-1",
+      "started": "2026-10-08T11:47:42.325325591Z",
+      "running": true,
+      "mounts": [
+        {
+          "Type": "volume",
+          "Destination": "/data",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-mailpit/_data"
+        }
+      ]
+    },
+    {
+      "id": "28b4e658d9b5d03f802c3c10c49ed34ba895acff6b09018530db81e0e0d3cddf",
+      "name": "/nigson-local-postgres-1",
+      "started": "2026-10-08T11:47:41.878070508Z",
+      "running": true,
+      "mounts": [
+        {
+          "Type": "bind",
+          "Destination": "/docker-entrypoint-initdb.d/10-local-bootstrap.sql",
+          "Source": "/host_mnt/Users/gopiravi/workspace/nigson/infrastructure/docker/postgres/10-local-bootstrap.sql"
+        },
+        {
+          "Type": "volume",
+          "Destination": "/var/lib/postgresql",
+          "Source": "/var/lib/docker/volumes/nigson-local_nigson-postgres/_data"
+        }
+      ]
+    }
+  ],
+  "cloudQualification": "NOT_RUN",
+  "acceptanceComplete": false
+}

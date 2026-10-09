@@ -247,3 +247,7 @@ restore, and cleans only its own containers/network. It compares the original
 credentials/tokens/dumps remain ignored under `.build/idp001/`. BP1 operational
 tooling has its own locked environment; optional `PROFILE=ai` adds BP5 wire tests
 without activating an AI service. See [the runbook](runbooks/keycloak.md).
+
+## Isolated SEC-001 security checks
+
+`make security-check` exercises real owner PostgreSQL, JDBC session one-use/rotation/expiry/revocation/audit and local KMS HTTP protocol. `SEC_IDENTITY_CHECK=true make security-check UV=.build/uv-package/bin/uv` adds the optimized real Keycloak OIDC/MFA/workload/refresh/logout/replica/restore qualification. No AI service is required; `PROFILE=ai` additionally runs existing owned AI wire tests. `make security-infra-check` runs locked backend-free Terraform mock plans. See [session/private trust](runbooks/session-trust.md) for explicit local/test configuration and production refusal rules. Original nigson-local containers/volumes are preserved; only newly generated test namespaces are removed.

@@ -94,4 +94,9 @@ class KeycloakTrustTest {
             assertThrows(BadJwtException.class,()->KeycloakIdentity.decoder(denied,Clock.systemUTC(),tls).decode(token));
         }
     }
+    @Test void idProfileIsSeparateAndRefreshNonceIsOptionalButStrictlyTyped()throws Exception {
+        var p=policy("nigson-bff",Set.of("nigson-bff"),Set.of("openid"));var decoder=KeycloakIdentity.idTokenDecoder(p,clock,null);var good=claims();good.put("azp","nigson-bff");good.put("aud",List.of("nigson-bff"));good.put("typ","ID");good.remove("scope");good.put("nonce","server-one-use-nonce");assertNotNull(decoder.decode(sign(good,false)));good.remove("nonce");assertNotNull(decoder.decode(sign(good,false)));
+        for(var wrong:Map.<String,Object>of("nonce",true,"typ","Bearer","azp","nigson-commerce","aud",List.of("nigson-commerce"),"auth_time","now","amr",List.of(42)).entrySet()){var bad=new HashMap<>(good);bad.put(wrong.getKey(),wrong.getValue());assertThrows(BadJwtException.class,()->decoder.decode(sign(bad,false)));}
+    }
+
 }

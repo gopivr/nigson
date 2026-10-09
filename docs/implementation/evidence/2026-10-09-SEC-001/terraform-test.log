@@ -1,0 +1,11 @@
+tests/security.tftest.hcl... in progress
+  run "separate_keys_and_least_privilege"... pass
+  run "runtime_cannot_administer_keys"... pass
+  run "runtime_cannot_provision_session_keys"... pass
+  run "no_public_ingress_or_unregistered_hops"... pass
+  run "no_wildcard_key_administrator"... pass
+  run "no_ai_before_bp5"... pass
+tests/security.tftest.hcl... tearing down
+tests/security.tftest.hcl... pass
+
+Success! 6 passed, 0 failed.

@@ -8,7 +8,7 @@ EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
 
 ## Current Task
 
-IDP-001 — DONE (engineering); implementation 794f3844a53071894866e8d65ef386305dc4e72f. All offline acceptance, real vendor token/MFA/replica/restore, Terraform security, builds/locks/audits and complete cold-start checks PASS. Original nigson-local containers/volumes preserved; genuine cloud/DNS/activation qualification remains NOT_RUN. SEC-001 is dependency-ready. Report: docs/implementation/2026-10-09-IDP-001.md.
+SEC-001 — IN_PROGRESS; PLAT-002 and IDP-001 dependencies DONE. Implement typed encrypted JDBC session lifecycle, one-use OIDC/PKCE trust, current commerce authority, scoped private workload/ES256 actor delegation and ingress controls. Planned verification: adversarial protocol tests, native JDBC state/rotation/expiry/race checks, actual Keycloak flow, KMS HTTP protocol, Terraform/contract/build/security checks and isolated cold-start. Original nigson-local containers/volumes must remain unchanged.
 
 ## Completed Tasks
 
@@ -29,11 +29,10 @@ IDP-001 — DONE (engineering); implementation 794f3844a53071894866e8d65ef386305
 
 ## In Progress
 
-None.
+- [ ] SEC-001 — IN_PROGRESS; AC-SEC-001 / TEST-SEC-TOKENS / TEST-ACTOR-TRUST.
 
 ## Pending
 
-- [ ] SEC-001 — Configure identity realms and token/session trust (EP02)
 - [ ] COM-AUTHO-001 — Implement commerce authorization increment (EP02)
 - [ ] COM-PARTY-001 — Implement commerce party increment (EP02)
 - [ ] COM-SESSI-001 — Implement commerce session increment (EP02)
@@ -96,11 +95,11 @@ None.
 
 ## Build Status
 
-PASS — IDP-001 final Java25/Python3.12 make verify PROFILE=ai, matching seven JAR/wheel/sdist build hashes, locked dependency checks, 34 contracts, Ruff and strict mypy (13 source files). Both pinned identity images build; optimized Keycloak and packaged operational policy run. Identity Terraform init/validate and seven mock AWS tests pass; no AWS deployment occurred. Corrected OSV audit of 258 Java dependencies and both Python dependency audits report zero known findings.
+PASS — SEC-001 final Java25/Python3.12 make verify PROFILE=ai, matching seven JAR/wheel/sdist hashes,260 locked release artifact hashes,34 contracts,Ruff and strict mypy13 source files. Updated private identity operations image builds and credential-free packaged policy passes. Private-trust Terraform validate/six mock plans pass; no AWS apply. Actual OSV query260 Java packages reports zero known findings. Complete isolated Docker cold-start passes after correcting missing security contract copies in Java Dockerfiles.
 
 ## Test Status
 
-PASS — IDP-001 ordinary build:21 Java passes/19 explicit fixture/native skips,15 AI passes/four explicit fixture/native skips,34 contracts. Actual vendor qualification separately runs six Java and five AI identity tests with zero skips; nine operational tests and token/PKCE/MFA/admin-isolation/bootstrap-retirement/audit/metrics/failover/refresh/replay/restore checks pass. Complete TEST-LOCAL-COLD-START passes with two fresh setup passes, owner/session/drift/security/outage checks and exact original container/volume preservation. Prior PLAT-002 native persistence and MOCK-001 provider qualifications remain documented in their reports; they are not represented as new executions. Domain migration bytes unchanged. Genuine cloud/provider/target-version-upgrade/PITR and pending domain/API/release checks remain NOT_RUN. Failure history is retained in reports/evidence.
+PASS — SEC-001 ordinary verification:31 Java passes/29 explicit native/vendor skips,15 BP5 AI passes/four explicit skips,34 contracts. Separately:18 native security tests/no skips,seven actual Keycloak JWT fixture tests/no skips,one actual OIDC/JDBC session acceptance/no skips,nine identity operational tests and actual replica/refresh/replay/restore acceptance. Complete cold-start PASS: both setup passes, owner/session/drift/security/outage checks and exact original container/volume preservation. First Docker packaging failure is preserved. Domain migrations are unchanged and fresh native BP1→BP5 migrations pass. Genuine cloud/provider/activation qualification NOT_RUN; prior PLAT-002/MOCK-001 checks remain their reports, not new executions.
 
 ## Last Successful Commit
 
@@ -112,7 +111,7 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. Complete BFF/signed actor/recent MFA and commerce authorization remain SEC-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
+Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start pass offline; implementation commit is pending. Public BFF/party/role command APIs and last-admin protection remain COM-SESSI-001/COM-PARTY-001/COM-AUTHO-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 

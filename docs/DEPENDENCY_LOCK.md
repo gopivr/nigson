@@ -178,3 +178,7 @@ adds real Keycloak checks through the owned BP5 adapter after `make ai-sync`.
 See [identity deployment/recovery](runbooks/keycloak.md) for required actual
 inputs and exact commands. October9 public OSV and hash-locked pip-audit checks
 are timestamped evidence, not future security guarantees.
+
+## SEC-001 security additions
+
+Commerce adds AWS KMS SDK2.55.10 from the existing pinned AWS BOM. Shared wire filters use existing Spring Security7.1.1 and the Boot-managed Jakarta Servlet API6.1.0 (provided); owner entities and JDBC session logic remain commerce-owned. No new production domain service or Python dependency is introduced. Terraform private trust retains AWS6.15.0 and uses the installed repository-compatible Terraform1.12.2. Exact graph/hash refresh and advisory results are recorded in the SEC-001 report after execution.

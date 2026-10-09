@@ -39,7 +39,10 @@ public final class KeycloakIdentity {
     private static boolean endpoint(URI u,boolean local){return u.getHost()!=null&&u.getUserInfo()==null&&u.getQuery()==null&&u.getFragment()==null
         && ("https".equals(u.getScheme()) || local&&"http".equals(u.getScheme())&&Set.of("localhost","127.0.0.1","keycloak").contains(u.getHost()));}
     public static JwtDecoder decoder(Policy policy){return decoder(policy,Clock.systemUTC(),null);}
-    public static JwtDecoder decoder(Policy policy,Clock clock,SSLContext tls){
+    public static JwtDecoder decoder(Policy policy,Clock clock,SSLContext tls){return decoder(policy,clock,tls,false);}
+    /** OIDC ID tokens are accepted only in the server-side code flow, never as API credentials. */
+    public static JwtDecoder idTokenDecoder(Policy policy,Clock clock,SSLContext tls){return decoder(policy,clock,tls,true);}
+    private static JwtDecoder decoder(Policy policy,Clock clock,SSLContext tls,boolean idToken){
         var client=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER);
         if(tls!=null)client.sslContext(tls);
         var factory=new JdkClientHttpRequestFactory(client.build());factory.setReadTimeout(Duration.ofSeconds(3));
@@ -67,7 +70,7 @@ public final class KeycloakIdentity {
         var signed=NimbusJwtDecoder.withJwkSetUri(policy.jwks()).restOperations(transport).cache(new KeyCache(clock))
             .jwsAlgorithms(algorithms->{algorithms.clear();algorithms.add(SignatureAlgorithm.RS256);algorithms.add(SignatureAlgorithm.ES256);}).build();
         var time=new JwtTimestampValidator(Duration.ofSeconds(60));time.setClock(clock);
-        signed.setJwtValidator(new DelegatingOAuth2TokenValidator<>(time,new JwtIssuerValidator(policy.issuer()),jwt->validate(jwt,policy,clock)));
+        signed.setJwtValidator(new DelegatingOAuth2TokenValidator<>(time,new JwtIssuerValidator(policy.issuer()),jwt->validate(jwt,policy,clock,idToken)));
         return token->{
             if(token==null||token.length()>16384||!token.matches("[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+"))throw new BadJwtException("IDENTITY_TOKEN_REJECTED");
             try{
@@ -75,26 +78,29 @@ public final class KeycloakIdentity {
                 var header=json().readTree(Base64.getUrlDecoder().decode(parts[0]));
                 var claims=json().readTree(Base64.getUrlDecoder().decode(parts[1]));
                 if(!header.isObject()||header.size()>20||!claims.isObject()||claims.size()>100||header.has("crit")||header.has("b64"))throw new IllegalArgumentException();
-                for(String name:List.of("iss","sub","azp","typ","scope"))if(!claims.has(name)||!claims.get(name).isString())throw new IllegalArgumentException();
+                for(String name:idToken?List.of("iss","sub","azp","typ"):List.of("iss","sub","azp","typ","scope"))if(!claims.has(name)||!claims.get(name).isString())throw new IllegalArgumentException();
                 if(claims.has("client_id")&&!claims.get("client_id").isString())throw new IllegalArgumentException();
                 var audiences=claims.get("aud");
                 if(audiences==null||!audiences.isString()&&(!audiences.isArray()||audiences.size()<1||audiences.size()>10))throw new IllegalArgumentException();
                 if(audiences.isArray())for(var audience:audiences)if(!audience.isString())throw new IllegalArgumentException();
-                for(String date:List.of("iat","exp"))if(!claims.has(date)||!claims.get(date).isIntegralNumber())throw new IllegalArgumentException();
-                if(claims.has("nbf")&&!claims.get("nbf").isIntegralNumber())throw new IllegalArgumentException();
+                for(String date:List.of("iat","exp"))if(!claims.has(date)||(!claims.get(date).isIntegralNumber()||!claims.get(date).canConvertToLong()))throw new IllegalArgumentException();
+                if(idToken&&claims.has("nonce")&&!claims.get("nonce").isString())throw new IllegalArgumentException();
+                if(idToken&&claims.has("auth_time")&&(!claims.get("auth_time").isIntegralNumber()||!claims.get("auth_time").canConvertToLong()))throw new IllegalArgumentException();
+                if(idToken&&claims.has("amr")){if(!claims.get("amr").isArray()||claims.get("amr").size()>10)throw new IllegalArgumentException();for(var method:claims.get("amr"))if(!method.isString())throw new IllegalArgumentException();}
+                if(claims.has("nbf")&&(!claims.get("nbf").isIntegralNumber()||!claims.get("nbf").canConvertToLong()))throw new IllegalArgumentException();
                 return signed.decode(token);
             }catch(RuntimeException failure){throw new BadJwtException("IDENTITY_TOKEN_REJECTED");}
         };
     }
-    private static OAuth2TokenValidatorResult validate(Jwt jwt,Policy p,Clock clock){
+    private static OAuth2TokenValidatorResult validate(Jwt jwt,Policy p,Clock clock,boolean idToken){
         try{
             String azp=jwt.getClaimAsString("azp"),client=jwt.getClaimAsString("client_id"),kind=jwt.getClaimAsString("typ"),scope=jwt.getClaimAsString("scope");
-            boolean valid="Bearer".equals(kind)&&jwt.getHeaders().get("kid") instanceof String kid&&bounded(kid)
+            boolean valid=(idToken?"ID":"Bearer").equals(kind)&&jwt.getHeaders().get("kid") instanceof String kid&&bounded(kid)
                 &&jwt.getExpiresAt()!=null&&jwt.getIssuedAt()!=null&&!jwt.getIssuedAt().isAfter(clock.instant().plusSeconds(60))
                 &&jwt.getExpiresAt().isAfter(jwt.getIssuedAt())&&jwt.getSubject()!=null&&!jwt.getSubject().isEmpty()&&jwt.getSubject().length()<=200
                 &&p.clients().contains(azp)&&(client==null||client.equals(azp))&&jwt.getAudience().contains(p.audience())
-                &&scope!=null&&scope.length()<=4096&&Arrays.stream(scope.split(" ")).allMatch(KeycloakIdentity::bounded)
-                &&new HashSet<>(Arrays.asList(scope.split(" "))).containsAll(p.scopes());
+                &&(idToken?jwt.getAudience().equals(List.of(p.audience())):scope!=null&&scope.length()<=4096&&Arrays.stream(scope.split(" ")).allMatch(KeycloakIdentity::bounded)
+                &&new HashSet<>(Arrays.asList(scope.split(" "))).containsAll(p.scopes()));
             if(valid)return OAuth2TokenValidatorResult.success();
         }catch(RuntimeException rejected){/* Malformed claims are denied without claims/exception text. */}
         return OAuth2TokenValidatorResult.failure(new OAuth2Error("invalid_token","IDENTITY_TOKEN_REJECTED",null));

@@ -17,7 +17,7 @@ from realm_policy import realm_policy
 
 class IdentityOperationsTest(unittest.TestCase):
     def policy(self, phase=1):
-        return realm_policy('isolated-test','https://bff.synthetic.test/login/oauth2/code/keycloak',phase,'synthetic-test-policy','test',3600)
+        return realm_policy('isolated-test','https://bff.synthetic.test/bff/callback',phase,'synthetic-test-policy','test',3600)
     def test_exact_confidential_pkce_and_no_bp1_ai(self):
         policy = self.policy()
         bff = policy['clients'][0]
@@ -46,9 +46,9 @@ class IdentityOperationsTest(unittest.TestCase):
         self.assertEqual(actual,expected)
         self.assertEqual(len(actual),len(rows))
     def test_no_mock_production_configuration(self):
-        for callback in ('https://bff.synthetic.test/login/oauth2/code/keycloak','http://localhost/login/oauth2/code/keycloak','https://approved.invalid/*','https://bff.synthetic.test/login/oauth2/code/keycloak?override=true'):
+        for callback in ('https://bff.synthetic.test/bff/callback','http://localhost/bff/callback','https://approved.invalid/*','https://bff.synthetic.test/bff/callback?override=true'):
             with self.assertRaises(ValueError): realm_policy('isolated-test',callback,1,'synthetic','prod',3600)
-        with self.assertRaises(ValueError): realm_policy('master','https://bff.synthetic.test/login/oauth2/code/keycloak',1,'synthetic','test',3600)
+        with self.assertRaises(ValueError): realm_policy('master','https://bff.synthetic.test/bff/callback',1,'synthetic','test',3600)
     def test_backup_authentication_revision_and_exclusive_target(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);source=root/'dump';key=root/'key';cipher=root/'encrypted';restored=root/'restored'
@@ -73,7 +73,7 @@ class IdentityOperationsTest(unittest.TestCase):
             with self.assertRaises(ValueError): Admin(url,'/not-used')
     def test_audit_policy_is_explicit(self):
         for retention in (0,-1,True):
-            with self.assertRaises(ValueError): realm_policy('isolated-test','https://bff.synthetic.test/login/oauth2/code/keycloak',1,'synthetic','test',retention)
+            with self.assertRaises(ValueError): realm_policy('isolated-test','https://bff.synthetic.test/bff/callback',1,'synthetic','test',retention)
         policy=self.policy();self.assertTrue(policy['eventsEnabled']);self.assertTrue(policy['adminEventsEnabled']);self.assertFalse(policy['adminEventsDetailsEnabled']);self.assertEqual(policy['eventsExpiration'],3600);self.assertEqual(policy['attributes']['adminEventsExpiration'],'3600')
     def test_private_file_permissions_required(self):
         with tempfile.TemporaryDirectory() as directory:

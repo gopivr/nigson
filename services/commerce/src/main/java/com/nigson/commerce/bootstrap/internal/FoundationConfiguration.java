@@ -19,8 +19,9 @@ public class FoundationConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED",havingValue="false",matchIfMissing=true)
     SecurityFilterChain foundationSecurity(HttpSecurity http,com.nigson.commerce.platform.ProblemWriter problems) throws Exception {
-        // No permissive developer bypass. Identity/session/domain authorization is SEC-001.
+        // Explicit security configuration replaces this deny-all foundation when activated.
         return http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/health/liveness", "/actuator/health/readiness").permitAll()
                 .anyRequest().denyAll()).exceptionHandling(errors -> errors.authenticationEntryPoint((request,response,failure)->problems.write(request,response,com.nigson.shared.problem.ProblemCode.AUTH_REQUIRED,java.util.List.of())).accessDeniedHandler((request,response,failure)->problems.write(request,response,com.nigson.shared.problem.ProblemCode.ACCESS_DENIED,java.util.List.of())))

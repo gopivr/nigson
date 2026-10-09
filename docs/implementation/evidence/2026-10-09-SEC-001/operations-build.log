@@ -1,0 +1,67 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Operations.Dockerfile
+#1 transferring dockerfile: 1.08kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#3 DONE 0.6s
+
+#2 [internal] load metadata for ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1
+#2 DONE 1.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 190B done
+#4 DONE 0.0s
+
+#5 [uv 1/1] FROM ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1
+#5 resolve ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1 0.0s done
+#5 DONE 0.0s
+
+#6 [build 1/5] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#6 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 16.17kB done
+#7 DONE 0.0s
+
+#8 [build 3/5] WORKDIR /identity
+#8 CACHED
+
+#9 [build 4/5] COPY scripts/identity/pyproject.toml scripts/identity/uv.lock ./
+#9 CACHED
+
+#10 [build 5/5] RUN uv sync --locked --no-dev
+#10 CACHED
+
+#11 [build 2/5] COPY --from=uv /uv /usr/local/bin/uv
+#11 CACHED
+
+#12 [stage-2 2/5] COPY --from=build /identity/.venv /identity/.venv
+#12 CACHED
+
+#13 [stage-2 3/5] COPY scripts/identity/admin.py scripts/identity/backup.py scripts/identity/database.py scripts/identity/provision.py scripts/identity/realm_policy.py scripts/identity/retire_bootstrap.py /app/scripts/identity/
+#13 DONE 0.1s
+
+#14 [stage-2 4/5] COPY contracts/security/workload-scopes.json /app/contracts/security/workload-scopes.json
+#14 DONE 0.0s
+
+#15 [stage-2 5/5] WORKDIR /app/scripts/identity
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 exporting manifest sha256:3973ab22e40be8dafafe9f549fe9bb6d5b4d663f867d170f0dac4b04da00ff9f
+#16 exporting manifest sha256:3973ab22e40be8dafafe9f549fe9bb6d5b4d663f867d170f0dac4b04da00ff9f done
+#16 exporting config sha256:eab943322d90728b91c6e8474ff4fa18c86b3548c7e47528a080b40a1dba296a done
+#16 exporting attestation manifest sha256:35d987adc7eefb3c1c991564d22982194dba507c25762f6fafb3886d09250d51 0.0s done
+#16 exporting manifest list sha256:47cf5805f882690fe89b9973b053fa4bd19b258f0f6c2af750df8be7cd0ef16e done
+#16 naming to docker.io/nigson/identity-operations:qualification done
+#16 unpacking to docker.io/nigson/identity-operations:qualification 0.0s done
+#16 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/r64a6uzwzp3ut4un7llz9kc8d

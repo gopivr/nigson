@@ -124,3 +124,11 @@ identity-infra-check:
 	terraform -chdir=infrastructure/terraform/modules/identity init -backend=false
 	terraform -chdir=infrastructure/terraform/modules/identity validate
 	terraform -chdir=infrastructure/terraform/modules/identity test
+
+.PHONY: security-check security-infra-check
+security-check:
+	ENV=test python3 scripts/security/verify.py
+security-infra-check:
+	terraform -chdir=infrastructure/terraform/modules/private-trust init -backend=false
+	terraform -chdir=infrastructure/terraform/modules/private-trust validate
+	terraform -chdir=infrastructure/terraform/modules/private-trust test

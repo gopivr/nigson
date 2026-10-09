@@ -1,0 +1,100 @@
+./mvnw -B dependency:tree -DoutputType=json -DoutputFile=target/dependencies.json
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/gopiravi/workspace/nigson/.build/maven/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Nigson backend                                                     [pom]
+[INFO] common-observability                                               [jar]
+[INFO] common-security                                                    [jar]
+[INFO] common-events                                                      [jar]
+[INFO] common-problem                                                     [jar]
+[INFO] commerce                                                           [jar]
+[INFO] experience                                                         [jar]
+[INFO] integration                                                        [jar]
+[INFO]
+[INFO] ---------------------< com.nigson:nigson-backend >----------------------
+[INFO] Building Nigson backend 0.1.0                                      [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ nigson-backend ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/target/dependencies.json
+[INFO]
+[INFO] ------------------< com.nigson:common-observability >-------------------
+[INFO] Building common-observability 0.1.0                                [2/8]
+[INFO]   from shared/common-observability/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-observability ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-observability/target/dependencies.json
+[INFO]
+[INFO] ---------------------< com.nigson:common-security >---------------------
+[INFO] Building common-security 0.1.0                                     [3/8]
+[INFO]   from shared/common-security/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-security ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-security/target/dependencies.json
+[INFO]
+[INFO] ----------------------< com.nigson:common-events >----------------------
+[INFO] Building common-events 0.1.0                                       [4/8]
+[INFO]   from shared/common-events/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-events ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-events/target/dependencies.json
+[INFO]
+[INFO] ---------------------< com.nigson:common-problem >----------------------
+[INFO] Building common-problem 0.1.0                                      [5/8]
+[INFO]   from shared/common-problem/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ common-problem ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/shared/common-problem/target/dependencies.json
+[INFO]
+[INFO] ------------------------< com.nigson:commerce >-------------------------
+[INFO] Building commerce 0.1.0                                            [6/8]
+[INFO]   from services/commerce/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ commerce ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/services/commerce/target/dependencies.json
+[INFO]
+[INFO] -----------------------< com.nigson:experience >------------------------
+[INFO] Building experience 0.1.0                                          [7/8]
+[INFO]   from services/experience/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ experience ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/services/experience/target/dependencies.json
+[INFO]
+[INFO] -----------------------< com.nigson:integration >-----------------------
+[INFO] Building integration 0.1.0                                         [8/8]
+[INFO]   from services/integration/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- dependency:3.8.1:tree (default-cli) @ integration ---
+[INFO] Wrote dependency tree to: /Users/gopiravi/workspace/nigson/services/integration/target/dependencies.json
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Nigson backend 0.1.0:
+[INFO]
+[INFO] Nigson backend ..................................... SUCCESS [  0.501 s]
+[INFO] common-observability ............................... SUCCESS [  0.056 s]
+[INFO] common-security .................................... SUCCESS [  0.098 s]
+[INFO] common-events ...................................... SUCCESS [  0.010 s]
+[INFO] common-problem ..................................... SUCCESS [  0.007 s]
+[INFO] commerce ........................................... SUCCESS [  0.378 s]
+[INFO] experience ......................................... SUCCESS [  0.022 s]
+[INFO] integration ........................................ SUCCESS [  0.039 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.693 s
+[INFO] Finished at: 2026-10-08T23:36:55-04:00
+[INFO] ------------------------------------------------------------------------
+python3 scripts/java_dependency_lock.py --check
+PASS: Java dependency graph and artifact hashes match lock

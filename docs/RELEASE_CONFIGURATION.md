@@ -189,3 +189,7 @@ approved permanent MFA administration succeeds. See
 [Keycloak deployment/recovery](runbooks/keycloak.md). BP1 live carrier/messaging/
 payment/identity/security/infrastructure/restore gates remain independent of
 engineering task numbering and require genuine qualification evidence.
+
+## SEC-001 private/session deployment inputs
+
+Use the explicit configuration and key-rotation procedure in [session/private trust](runbooks/session-trust.md). `infrastructure/terraform/modules/private-trust/` supplies distinct KMS signing/session keys, scoped commerce task permissions and source-security-group private ingress; it does not create another service. Real ECS roles, key administrators/provisioner, private source/target security groups, DNS/client/callback/secret/public-key references and approved policy revision must be supplied. KMS/ALB/IAM qualification is NOT_RUN until that deployment exists. The BFF callback must be exactly `/bff/callback` per API-002; replace the earlier IDP tooling `/login/oauth2/code/keycloak` redirect in the environment realm/client revision before activation. No existing nigson-local realm/container/volume is rewritten by isolated qualification.

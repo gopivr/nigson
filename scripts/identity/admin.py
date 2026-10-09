@@ -144,4 +144,10 @@ class Admin:
                     self.request(prefix + "/authentication/config/" + execution["authenticationConfig"], "PUT", desired)
                 else:
                     self.request(prefix + "/authentication/executions/" + execution["id"] + "/config", "POST", desired)
+            if provider == "auth-otp-form":
+                desired = {"alias": "nigson-otp-reference", "config": {"default.reference.value": "otp", "default.reference.maxAge": "900"}}
+                if execution.get("authenticationConfig"):
+                    self.request(prefix + "/authentication/config/" + execution["authenticationConfig"], "PUT", desired)
+                else:
+                    self.request(prefix + "/authentication/executions/" + execution["id"] + "/config", "POST", desired)
         self.request(prefix, "PUT", {"browserFlow": alias})

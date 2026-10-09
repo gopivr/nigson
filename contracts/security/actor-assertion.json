@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "issuer": "nigson-commerce-bff",
+  "algorithm": "ES256",
+  "type": "nigson-actor+jwt",
+  "max_lifetime_seconds": 60,
+  "expiry_grace_seconds": 0,
+  "future_issuance_skew_seconds": 5,
+  "max_bytes": 8192,
+  "public_key_source": "pinned deployment configuration; up to four P-256 public keys",
+  "mandatory_claims": ["iss", "aud", "sub", "identity_issuer", "identity_subject", "roles", "scopes", "operation", "http_method", "resource", "body_sha256", "iat", "exp", "jti", "correlation_id"],
+  "optional_claims": ["organization_id", "mfa_at"],
+  "resource_binding": "exact registered method and undecoded path plus SHA-256 of the exact bounded request body bytes",
+  "scope_source": "current verified commerce policy and the compiled target route; never request role flags",
+  "requires": "separate permitted workload token and private socket ingress; owner object and organization policy still applies",
+  "recent_staff_mfa_seconds": 900,
+  "replay": "read replay permitted; mutations retain domain durable idempotency and ownership guards",
+  "phase": "AI client and routes require BP5"
+}

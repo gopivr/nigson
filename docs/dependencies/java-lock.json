@@ -78,6 +78,7 @@
     "jakarta.inject:jakarta.inject-api:jar::2.0.1": "f7dc98062fccf14126abb751b64fab12c312566e8cbdc8483598bffcea93af7c",
     "jakarta.mail:jakarta.mail-api:jar::2.1.5": "aa493753acb7a8c45ba8f4c9cf1230a74e20237056dd5b5c8bc86c583e8cfa0e",
     "jakarta.persistence:jakarta.persistence-api:jar::3.2.0": "be8a26b0e75c84c1b7600f759256fbc68d60333d89ec0ce3f784fc3ffa09aa8c",
+    "jakarta.servlet:jakarta.servlet-api:jar::6.1.0": "8a31f465f3593bf2351531a5c952014eb839da96a605b5825b93dd54714c48c4",
     "jakarta.transaction:jakarta.transaction-api:jar::2.0.1": "50c0a7c760c13ae6c042acf182b28f0047413db95b4636fb8879bcffab5ba875",
     "jakarta.validation:jakarta.validation-api:jar::3.1.1": "63ce00156388c365f3ac1be71fcfaf114682fc0c452020b5df6e7ec236e142ab",
     "jakarta.xml.bind:jakarta.xml.bind-api:jar::4.0.5": "5e489b6c874c4119e003ff1403db523ee3a8959ec499f3de29e77245efccf216",
@@ -242,6 +243,7 @@
     "software.amazon.awssdk:http-client-spi:jar::2.55.10": "9beb831aef50d4952407ad5b8af72fbdada47f2fe16246e12583e8d6ae2b47b5",
     "software.amazon.awssdk:identity-spi:jar::2.55.10": "0f66546a886eb41fa4e058de3ab9acf3f102524f51473d2aa6158a00b075a4df",
     "software.amazon.awssdk:json-utils:jar::2.55.10": "cd8576ace09ccc6c7400b9f1a0529e2d012fdfcfb5cf8be6d22bb98706a460ef",
+    "software.amazon.awssdk:kms:jar::2.55.10": "4943e7d43ba5de1f9db9fb01e9be8dd68b7f6e80b51d47315024259b74a6a383",
     "software.amazon.awssdk:metrics-spi:jar::2.55.10": "11526262bb145033ba0a3eeaf8cb6143ff76d36dec1af3c548d415371833ee4a",
     "software.amazon.awssdk:netty-nio-client:jar::2.55.10": "688ade35f6291887b50fcd5f24f1041430d7c3b7610a0f3d61dd48f024a9b9e1",
     "software.amazon.awssdk:profiles:jar::2.55.10": "1c5aedc2c769871783d0900697a914b00fc1414bbcd4bb554c33d7cd554fc526",
@@ -870,6 +872,15 @@
               "scope": "compile",
               "type": "jar",
               "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-security-web",
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
             }
           ],
           "classifier": "",
@@ -1296,7 +1307,7 @@
           "version": "2.55.10"
         },
         {
-          "artifactId": "sqs",
+          "artifactId": "kms",
           "children": [
             {
               "artifactId": "aws-json-protocol",
@@ -1308,6 +1319,15 @@
               "version": "2.55.10"
             }
           ],
+          "classifier": "",
+          "groupId": "software.amazon.awssdk",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.55.10"
+        },
+        {
+          "artifactId": "sqs",
           "classifier": "",
           "groupId": "software.amazon.awssdk",
           "optional": "false",
@@ -1697,15 +1717,6 @@
               "children": [
                 {
                   "artifactId": "spring-security-config",
-                  "classifier": "",
-                  "groupId": "org.springframework.security",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.1.1"
-                },
-                {
-                  "artifactId": "spring-security-web",
                   "classifier": "",
                   "groupId": "org.springframework.security",
                   "optional": "false",
@@ -3316,6 +3327,15 @@
               "scope": "compile",
               "type": "jar",
               "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-security-web",
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
             }
           ],
           "classifier": "",
@@ -4143,15 +4163,6 @@
               "children": [
                 {
                   "artifactId": "spring-security-config",
-                  "classifier": "",
-                  "groupId": "org.springframework.security",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.1.1"
-                },
-                {
-                  "artifactId": "spring-security-web",
                   "classifier": "",
                   "groupId": "org.springframework.security",
                   "optional": "false",
@@ -5865,6 +5876,15 @@
               "scope": "compile",
               "type": "jar",
               "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-security-web",
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
             }
           ],
           "classifier": "",
@@ -6603,15 +6623,6 @@
               "children": [
                 {
                   "artifactId": "spring-security-config",
-                  "classifier": "",
-                  "groupId": "org.springframework.security",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.1.1"
-                },
-                {
-                  "artifactId": "spring-security-web",
                   "classifier": "",
                   "groupId": "org.springframework.security",
                   "optional": "false",
@@ -8090,6 +8101,24 @@
           "scope": "compile",
           "type": "jar",
           "version": "7.0.9"
+        },
+        {
+          "artifactId": "spring-security-web",
+          "classifier": "",
+          "groupId": "org.springframework.security",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "7.1.1"
+        },
+        {
+          "artifactId": "jakarta.servlet-api",
+          "classifier": "",
+          "groupId": "jakarta.servlet",
+          "optional": "false",
+          "scope": "provided",
+          "type": "jar",
+          "version": "6.1.0"
         }
       ],
       "classifier": "",

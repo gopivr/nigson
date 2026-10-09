@@ -15,7 +15,7 @@ def realm_policy(name: str, callback: str, phase: int, revision: str, environmen
     parsed = urlsplit(callback)
     if not re.fullmatch(r"[a-z][a-z0-9-]{1,62}", name) or name == "master" or phase not in range(1, 6) or not revision:
         raise ValueError("IDENTITY_POLICY_REQUIRED")
-    if environment not in {"test", "dev", "qa", "stage", "prod"} or parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.query or parsed.fragment or parsed.path != "/login/oauth2/code/keycloak":
+    if environment not in {"test", "dev", "qa", "stage", "prod"} or parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.query or parsed.fragment or parsed.path != "/bff/callback":
         raise ValueError("EXACT_BFF_HTTPS_CALLBACK_REQUIRED")
     if environment != "test" and (parsed.hostname in {"localhost", "127.0.0.1"} or parsed.hostname.endswith((".test", ".example", ".invalid"))):
         raise ValueError("APPROVED_BFF_HOST_REQUIRED")
@@ -23,8 +23,8 @@ def realm_policy(name: str, callback: str, phase: int, revision: str, environmen
                 "clientAuthenticatorType": "client-secret", "standardFlowEnabled": True, "implicitFlowEnabled": False,
                 "directAccessGrantsEnabled": False, "serviceAccountsEnabled": False, "fullScopeAllowed": False,
                 "redirectUris": [callback], "webOrigins": [],
-                "attributes": {"pkce.code.challenge.method": "S256", "post.logout.redirect.uris": callback.rsplit("/login/", 1)[0] + "/"},
-                "protocolMappers": [subject_mapper(), audience_mapper("nigson-commerce")]}]
+                "attributes": {"pkce.code.challenge.method": "S256", "post.logout.redirect.uris": callback.rsplit("/bff/", 1)[0] + "/"},
+                "protocolMappers": [subject_mapper(), audience_mapper("nigson-commerce"), {"name": "auth_time", "protocol": "openid-connect", "protocolMapper": "oidc-usersessionmodel-note-mapper", "config": {"user.session.note": "AUTH_TIME", "claim.name": "auth_time", "jsonType.label": "long", "id.token.claim": "true", "access.token.claim": "true"}}, {"name": "amr", "protocol": "openid-connect", "protocolMapper": "oidc-amr-mapper", "config": {"access.token.claim": "true", "id.token.claim": "true"}}]}]
     active = [row for row in BINDINGS if row["phase"] <= phase and ((row["client"] != "nigson-ai" and row["owner"] != "ai") or phase == 5)]
     scopes = []
     for scope in sorted({row["scope"] for row in active}):
