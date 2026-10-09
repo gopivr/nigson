@@ -1,7 +1,7 @@
 {
   "task": "COM-SESSI-001",
   "acceptance": "AC-COM-SESSI-001",
-  "implementation_commit": null,
+  "implementation_commit": "c29766c9de8c4ff9b6370b66cd3556b32cef7805",
   "native": {
     "tests": 23,
     "failures": 0,
@@ -29,5 +29,6 @@
   },
   "pending_changes": "Common200-character query bound awaits final HTTP rerun",
   "previous_overall_verify": "FAIL: cached mypy after disk-full write",
-  "current_reproducible_artifacts": "PASS: current-artifacts-first.json equals current-artifacts-second.json after repeated Java/Python builds"
+  "current_reproducible_artifacts": "PASS: current-artifacts-first.json equals current-artifacts-second.json after repeated Java/Python builds",
+  "task_status": "IN_PROGRESS"
 }

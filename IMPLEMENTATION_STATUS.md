@@ -35,9 +35,9 @@ COM-SESSI-001 — IN_PROGRESS; public API-001–004 BFF login/callback/session/l
 
 ## In Progress
 
-COM-SESSI-001 — started9 October2026; final23 native/no skips and real Keycloak/restore PASS. Full uncached repository verification PASS (38 Java/43 gated skips,38 contracts,15 AI/four skips). Cold-start interrupted by host disk exhaustion/Docker metadata I/O failure; final native query-bound rerun still required. Critical Docker recovery approval requested; no task marked DONE on incomplete checks.
+COM-SESSI-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; final23 native/no skips and real Keycloak/restore PASS. Full uncached repository verification PASS (38 Java/43 gated skips,38 contracts,15 AI/four skips). Cold-start interrupted by host disk exhaustion/Docker metadata I/O failure; final native query-bound rerun still required. Critical Docker recovery approval requested; no task marked DONE on incomplete checks.
 
-COM-CATAL-001 — started9 October2026; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains pending Docker recovery.
+COM-CATAL-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains pending Docker recovery.
 
 ## Pending
 
