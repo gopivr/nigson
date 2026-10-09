@@ -1,0 +1,43 @@
+test_reviewed_generation_and_exact_implemented_routes (test_authorization_contract.AuthorizationContracts.test_reviewed_generation_and_exact_implemented_routes) ... PASS: API-005–012 generated OpenAPI matches reviewed contract
+ok
+test_partial_state_index_literals (test_database_catalog.DatabaseCatalogTest.test_partial_state_index_literals) ... ok
+test_phase_wrappers_are_cumulative_without_contexts (test_database_catalog.DatabaseCatalogTest.test_phase_wrappers_are_cumulative_without_contexts) ... ok
+test_reviewed_artifacts_match_normative_catalog (test_database_catalog.DatabaseCatalogTest.test_reviewed_artifacts_match_normative_catalog) ... ok
+test_all_phases_match_terraform_and_closed_registry (test_event_topology.EventTopologyTests.test_all_phases_match_terraform_and_closed_registry) ... ok
+test_local_provider_mocks_have_no_published_ports (test_event_topology.EventTopologyTests.test_local_provider_mocks_have_no_published_ports) ... ok
+test_down_includes_every_profile_and_retains_volumes (test_local_configuration.LocalIsolationTests.test_down_includes_every_profile_and_retains_volumes) ... ok
+test_explicit_schema_gate_is_validated (test_local_configuration.LocalIsolationTests.test_explicit_schema_gate_is_validated) ... ok
+test_externally_published_port_rejected (test_local_configuration.LocalIsolationTests.test_externally_published_port_rejected) ... ok
+test_fixture_manifest_matches_real_identity_import (test_local_configuration.LocalIsolationTests.test_fixture_manifest_matches_real_identity_import) ... ok
+test_floating_image_rejected (test_local_configuration.LocalIsolationTests.test_floating_image_rejected) ... ok
+test_foundation_make_targets_have_real_entrypoints (test_local_configuration.LocalIsolationTests.test_foundation_make_targets_have_real_entrypoints) ... ok
+test_implicit_provider_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_implicit_provider_profile_rejected_before_docker) ... ok
+test_missing_fixture_password_refused_before_identity (test_local_configuration.LocalIsolationTests.test_missing_fixture_password_refused_before_identity) ... ok
+test_missing_migration_credentials_explained_before_docker (test_local_configuration.LocalIsolationTests.test_missing_migration_credentials_explained_before_docker) ... ok
+test_nonlocal_project_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_nonlocal_project_rejected_before_docker) ... ok
+test_prod_configuration_rejected (test_local_configuration.LocalIsolationTests.test_prod_configuration_rejected) ... ok
+test_prod_environment_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_prod_environment_rejected_before_docker) ... ok
+test_remote_docker_host_refused_before_docker (test_local_configuration.LocalIsolationTests.test_remote_docker_host_refused_before_docker) ... ok
+test_remote_migration_target_rejected (test_local_configuration.LocalIsolationTests.test_remote_migration_target_rejected) ... ok
+test_unapproved_fixture_profile_refused_before_identity (test_local_configuration.LocalIsolationTests.test_unapproved_fixture_profile_refused_before_identity) ... ok
+test_unknown_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_unknown_profile_rejected_before_docker) ... ok
+test_wrong_owner_role_rejected (test_local_configuration.LocalIsolationTests.test_wrong_owner_role_rejected) ... ok
+test_audit_states_remain_closed_and_match_runtime_owners (test_observability_contract.ObservabilityContracts.test_audit_states_remain_closed_and_match_runtime_owners) ... ok
+test_closed_problem_schema_and_java_vocabulary (test_observability_contract.ObservabilityContracts.test_closed_problem_schema_and_java_vocabulary) ... ok
+test_route_catalog_includes_all_declared_apis_and_is_identical (test_observability_contract.ObservabilityContracts.test_route_catalog_includes_all_declared_apis_and_is_identical) ... ok
+test_closed_address_policy_schema (test_party_contract.PartyContracts.test_closed_address_policy_schema) ... ok
+test_exact_owned_contracts (test_party_contract.PartyContracts.test_exact_owned_contracts) ... ok
+test_complete_tracked_tree (test_repository.RepositoryChecks.test_complete_tracked_tree) ... ok
+test_disallowed_deployment_tree_rejected (test_repository.RepositoryChecks.test_disallowed_deployment_tree_rejected) ... ok
+test_duplicate_status_task (test_repository.RepositoryChecks.test_duplicate_status_task) ... ok
+test_manifest_path_escape_rejected (test_repository.RepositoryChecks.test_manifest_path_escape_rejected) ... ok
+test_missing_required_directory (test_repository.RepositoryChecks.test_missing_required_directory) ... ok
+test_missing_status_task (test_repository.RepositoryChecks.test_missing_status_task) ... ok
+test_real_provider_key_pattern_rejected (test_repository.RepositoryChecks.test_real_provider_key_pattern_rejected) ... ok
+test_tracked_runtime_secret_file_rejected (test_repository.RepositoryChecks.test_tracked_runtime_secret_file_rejected) ... ok
+test_untracked_onboarding_file_rejected (test_repository.RepositoryChecks.test_untracked_onboarding_file_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 37 tests in 1.844s
+
+OK

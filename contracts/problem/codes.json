@@ -93,5 +93,10 @@
     "status": 422,
     "title": "Authorization rule violation",
     "detail": "Retain an active administrator before removing this role."
+  },
+  "PARTY_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Party rule violation",
+    "detail": "The profile or address does not meet current rules."
   }
 }

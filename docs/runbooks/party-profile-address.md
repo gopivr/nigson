@@ -1,0 +1,13 @@
+# Owned profiles and addresses
+
+API-005–010 require a current mapped CUSTOMER session, exact closed JSON and no query parameters. Mutation requests require CSRF and a durable Idempotency-Key; PATCH and DELETE also require a quoted If-Match revision. Profile revision belongs to Party; address revision belongs to Address. Email and emailVerified come only from verified OIDC identity and cannot be patched. Phone is contact information and grants no marketing consent or channel proof.
+
+Mapping uses the exact issuer/subject pair and never merges identities by email. PartyService.provision is an internal verified-identity port; the public OIDC callback integration is owned by COM-SESSI-001. Suspended identities cannot be provisioned or accessed. No public provisioning endpoint exists.
+
+Address mutations lock the owner Party and release all locks when their transaction ends. Changing a default increments the previous default address revision and audits it in the same transaction. Deletion removes the default flag and soft deletes; snapshots on historical commerce records are untouched. Owned active addresses are bounded at 100. This is an engineering request/storage bound, not a retention decision.
+
+Country rules are read from enabled market destinations. Missing configuration fails FEATURE_DISABLED; conflicting rules fail PARTY_RULE_VIOLATION. Rules use contracts/rules/address-rules.schema.json, RE2/J syntax, full-string postal matching and bounded input/program lengths. Only approved country policy may be activated. No real market, tax, pricing, retention, or route approval is inferred from synthetic tests. Organization-linked addresses require BP3 and current active membership plus an active organization; ownership stays with the Party and denied resources return 404.
+
+All mutations use the platform idempotency ledger. Matching replay returns the saved result; different input returns 409 and stale revisions return 412. Current identity is checked before replay. Audits record resource/revisions only; request contact/address values are redacted. Database/audit failure rolls back the mutation and permits a later retry. No provider HTTP is called and no domain event is declared. Shared observability supplies trace/correlation, route/status metrics and safe problem counters.
+
+Qualification: JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home make party-check. The harness creates and removes its own isolated PostgreSQL and local SNS/SQS containers, migrates BP1→BP5 and repeats BP5, and checks existing local containers/volumes remained unchanged. Genuine identity and country-policy activation remains a separately owned release gate.

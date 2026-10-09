@@ -58,7 +58,8 @@
         "BODY_TOO_LARGE",
         "UNSUPPORTED_MEDIA_TYPE",
         "METHOD_NOT_ALLOWED",
-        "AUTHORIZATION_RULE_VIOLATION"
+        "AUTHORIZATION_RULE_VIOLATION",
+        "PARTY_RULE_VIOLATION"
       ]
     },
     "timestamp": {

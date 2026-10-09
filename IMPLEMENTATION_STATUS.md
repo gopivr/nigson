@@ -8,7 +8,7 @@ EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
 
 ## Current Task
 
-COM-AUTHO-001 — DONE (engineering); implementation 1484e6729ab82e4266d91543e74a730625d0640a; AC-COM-AUTHO-001 PASS offline. API-011/012 current ADMIN/recent-MFA staff search/role replacement, last-active-admin serialization, canonical replay, atomic audit/session revocation and explicit BFF session lifecycle are verified. Genuine cloud/provider/identity/release activation NOT_RUN; next dependency-ready task COM-PARTY-001.
+COM-PARTY-001 — IN_PROGRESS; API-005–010 mapped profile/address ownership, exact validation, configured country rules, versioned transactional mutation/default serialization/soft deletion and native HTTP/race qualification. User authorized completing every remaining pending task on9 October2026; continue dependency-ready offline work and stop dependent work only for critical approval/required input.
 
 ## Completed Tasks
 
@@ -33,7 +33,7 @@ COM-AUTHO-001 — DONE (engineering); implementation 1484e6729ab82e4266d91543e74
 
 ## In Progress
 
-None.
+COM-PARTY-001 — started9 October2026.
 
 ## Pending
 

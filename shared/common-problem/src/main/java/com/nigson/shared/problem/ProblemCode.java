@@ -10,6 +10,7 @@ public enum ProblemCode {
  IDEMPOTENCY_HASH_MISMATCH(409,"Conflicting request","Use the original request with this key."),
  IDEMPOTENCY_IN_PROGRESS(409,"Request in progress","Retry this request after the current operation finishes."),
  VERSION_MISMATCH(412,"Version mismatch","Refresh the resource before retrying."),
+ PARTY_RULE_VIOLATION(422,"Party rule violation","The profile or address does not meet current rules."),
  AUTHORIZATION_RULE_VIOLATION(422,"Authorization rule violation","Retain an active administrator before removing this role."),
  BUSINESS_RULE_VIOLATION(422,"Ineligible operation","The operation does not meet its requirements."),
  INVALID_TRANSITION(409,"Invalid transition","The requested transition is unavailable."),

@@ -18,6 +18,7 @@
     "com.google.code.gson:gson:jar::2.13.2": "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0",
     "com.google.errorprone:error_prone_annotations:jar::2.41.0": "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc",
     "com.google.protobuf:protobuf-java:jar::4.35.1": "a4345ba2aa009912ff6f90467fea2d104605256b72c50840d75f13256638a472",
+    "com.google.re2j:re2j:jar::1.8": "7b52c72156dd7f98b3237a5b35c1d34fba381b21048c89208913ad80a45dfbd7",
     "com.jayway.jsonpath:json-path:jar::2.10.0": "890daa95dd3892d34d9fabc27cd5153656e6f369358625c88f4dc7b79cbd6c5a",
     "com.nimbusds:content-type:jar::2.3": "60349793e006fba96b532cb0c21e10e969fe0db8d87f91c3b9eaf82ba2998895",
     "com.nimbusds:lang-tag:jar::1.7": "e8c1c594e2425bdbea2d860de55c69b69fc5d59454452449a0f0913c2a5b8a31",
@@ -275,6 +276,15 @@
     "services/commerce": {
       "artifactId": "commerce",
       "children": [
+        {
+          "artifactId": "re2j",
+          "classifier": "",
+          "groupId": "com.google.re2j",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "1.8"
+        },
         {
           "artifactId": "common-problem",
           "children": [

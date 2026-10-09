@@ -5,6 +5,7 @@
   <parent><groupId>com.nigson</groupId><artifactId>nigson-backend</artifactId><version>0.1.0</version><relativePath>../../pom.xml</relativePath></parent>
   <artifactId>commerce</artifactId>
   <dependencies>
+    <dependency><groupId>com.google.re2j</groupId><artifactId>re2j</artifactId><version>1.8</version></dependency>
     <dependency><groupId>com.nigson</groupId><artifactId>common-problem</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.nigson</groupId><artifactId>common-observability</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>io.opentelemetry</groupId><artifactId>opentelemetry-sdk</artifactId></dependency>

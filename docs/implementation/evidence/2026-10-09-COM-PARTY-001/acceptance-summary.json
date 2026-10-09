@@ -1,0 +1,23 @@
+{
+  "task": "COM-PARTY-001",
+  "acceptance": "AC-COM-PARTY-001",
+  "implementation_commit": null,
+  "native": {
+    "tests": 24,
+    "skipped": 0,
+    "failures": 0
+  },
+  "ordinary_java": {
+    "passed": 35,
+    "skipped": 42
+  },
+  "ai": {
+    "passed": 15,
+    "skipped": 4
+  },
+  "contracts": 37,
+  "osv_maven_packages": 261,
+  "osv_findings": 0,
+  "repeatable_artifacts": 9,
+  "genuine_activation": "NOT_RUN"
+}

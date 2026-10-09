@@ -30,19 +30,21 @@ def contract():
         parameter('X-CSRF-TOKEN', 'header', {'type': 'string', 'minLength': 43, 'maxLength': 43}, True)])
     put['requestBody'] = {'required': True, 'content': {'application/json': {'schema': REF('StaffRoleChange')}}}
     put['responses']['200']['headers'] = {'ETag': {'description': 'Quoted aggregate revision', 'schema': {'type': 'string'}}}
-    return {'openapi': '3.1.0', 'info': {'title': 'Nigson commerce implemented authorization contracts', 'version': '1.1.0', 'description': 'Incremental implemented endpoints; pending roadmap APIs remain in docs/API_CONTRACT.md.'},
+    result = {'openapi': '3.1.0', 'info': {'title': 'Nigson commerce implemented authorization contracts', 'version': '1.1.0', 'description': 'Incremental implemented endpoints; pending roadmap APIs remain in docs/API_CONTRACT.md.'},
             'paths': {'/api/v1/staff/users': {'get': get}, '/api/v1/staff/users/{id}/roles': {'put': put}},
             'components': {'securitySchemes': {'bffSession': {'type': 'apiKey', 'in': 'cookie', 'name': '__Host-nigson-session', 'description': 'Encrypted JDBC BFF session. Explicit insecure local profile uses nigson-local-session. Browser bearer tokens are denied by SEC-001.'}},
                            'schemas': {'Role': {'type': 'string', 'enum': ROLES},
                                        'StaffDTO': object_schema({'id': UUID, 'displayName': {'type': 'string', 'maxLength': 160}, 'email': {'type': 'string', 'format': 'email', 'maxLength': 254}, 'roles': roles, 'version': VERSION}),
                                        'StaffRoleChange': object_schema({'roles': roles, 'reason': {'type': 'string', 'minLength': 10, 'maxLength': 500, 'description': 'At least 10 non-padding characters; no control characters.'}}),
                                        'StaffPage': object_schema({'items': {'type': 'array', 'maxItems': 100, 'items': REF('StaffDTO')}, 'page': {'type': 'integer', 'minimum': 0}, 'size': {'type': 'integer', 'minimum': 1, 'maximum': 100}, 'totalElements': VERSION, 'totalPages': VERSION})}}}
+    from party import extend
+    return extend(result)
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
     target = ROOT / 'contracts/openapi/commerce.yaml'; expected = json.dumps(contract(), indent=2) + '\n'
     if args.check:
         if not target.exists() or target.read_text() != expected: raise SystemExit('FAIL: reviewed authorization OpenAPI drift')
-        print('PASS: API-011/012 generated OpenAPI matches reviewed contract')
+        print('PASS: API-005–012 generated OpenAPI matches reviewed contract')
     else:
         target.parent.mkdir(parents=True, exist_ok=True); target.write_text(expected)
 if __name__ == '__main__': main()

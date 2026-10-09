@@ -1,0 +1,21 @@
+{
+  "failures": [
+    {
+      "step": "Initial combined file-write/compile escalation",
+      "result": "Automatic approval review timed out; no writes executed. Split writes from compile; allowed retry compiled missing sources successfully."
+    },
+    {
+      "step": "Initial compile",
+      "result": "Missing PartyService and PARTY_RULE_VIOLATION after unexecuted writes; restored declarations and compile passed."
+    },
+    {
+      "step": "First native qualification",
+      "result": "Default Java17 rejected by pinned Java25 enforcer before tests. Re-executed with explicit JAVA_HOME;24 native tests passed."
+    }
+  ],
+  "raw_ignored_logs": [
+    ".build/party-compile-first.log",
+    ".build/party-native-first.log"
+  ],
+  "resolved": true
+}

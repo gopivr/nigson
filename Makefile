@@ -137,3 +137,7 @@ security-infra-check:
 authorization-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/authorization/verify.py
+
+.PHONY: party-check
+party-check:
+	ENV=test python3 scripts/party/verify.py

@@ -41,6 +41,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "PARTY_RULE_VIOLATION": (
+        422,
+        "Party rule violation",
+        "The profile or address does not meet current rules.",
+    ),
     "AUTHORIZATION_RULE_VIOLATION": (
         422,
         "Authorization rule violation",

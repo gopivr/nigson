@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AddressRules v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requiredFields",
+    "postalPattern",
+    "regionCodes"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "requiredFields": {
+      "type": "array",
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "RECIPIENT",
+          "PHONE",
+          "LINE1",
+          "CITY",
+          "REGION",
+          "POSTAL_CODE"
+        ]
+      }
+    },
+    "postalPattern": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "RE2/J syntax; bounded compiled program; full-string match against at most 24 postal characters."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "regionCodes": {
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+      }
+    }
+  }
+}
