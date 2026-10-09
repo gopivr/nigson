@@ -46,5 +46,10 @@
   "productionActivation": "NOT_RUN",
   "publicBusinessApis": "Downstream COM-AUTHO/COM-PARTY/COM-SESSI tasks remain pending",
   "originalLocalResources": "PASS: exact IDs/start times/mounts/volumes preserved; isolated stacks cleaned up",
-  "implementationCommit": "PENDING"
+  "implementationCommit": "2169afa24e30ce98dd34c63d4be01184c9c6acbd",
+  "status": "DONE (engineering)",
+  "finalSessionStartBaselineComparison": {
+    "status": "PASS",
+    "originalRunningContainers": 5
+  }
 }

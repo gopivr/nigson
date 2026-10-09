@@ -8,7 +8,7 @@ EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
 
 ## Current Task
 
-SEC-001 — IN_PROGRESS; PLAT-002 and IDP-001 dependencies DONE. Implement typed encrypted JDBC session lifecycle, one-use OIDC/PKCE trust, current commerce authority, scoped private workload/ES256 actor delegation and ingress controls. Planned verification: adversarial protocol tests, native JDBC state/rotation/expiry/race checks, actual Keycloak flow, KMS HTTP protocol, Terraform/contract/build/security checks and isolated cold-start. Original nigson-local containers/volumes must remain unchanged.
+SEC-001 — DONE (engineering); implementation 2169afa24e30ce98dd34c63d4be01184c9c6acbd; AC-SEC-001 / TEST-SEC-TOKENS / TEST-ACTOR-TRUST and complete TEST-LOCAL-COLD-START PASS offline. Typed encrypted JDBC sessions, actual OIDC/PKCE/MFA refresh/logout, current commerce authority and private workload/KMS ES256 actor trust are implemented and verified. Original nigson-local containers/volumes preserved. Genuine cloud/provider/activation qualification NOT_RUN; next dependency-ready task COM-AUTHO-001.
 
 ## Completed Tasks
 
@@ -27,9 +27,11 @@ SEC-001 — IN_PROGRESS; PLAT-002 and IDP-001 dependencies DONE. Implement typed
 
 - [x] IDP-001 — DONE (engineering); implementation 794f3844a53071894866e8d65ef386305dc4e72f; AC-IDP-001 / TEST-KEYCLOAK-PROD-CONFIG / TEST-KEYCLOAK-REPLICA / TEST-SEC-TOKENS / TEST-IDENTITY-RESTORE PASS offline. Report: docs/implementation/2026-10-09-IDP-001.md.
 
+- [x] SEC-001 — DONE (engineering); implementation 2169afa24e30ce98dd34c63d4be01184c9c6acbd; AC-SEC-001 / TEST-SEC-TOKENS / TEST-ACTOR-TRUST / TEST-LOCAL-COLD-START PASS offline. Report: docs/implementation/2026-10-09-SEC-001.md.
+
 ## In Progress
 
-- [ ] SEC-001 — IN_PROGRESS; AC-SEC-001 / TEST-SEC-TOKENS / TEST-ACTOR-TRUST.
+None.
 
 ## Pending
 
@@ -103,7 +105,7 @@ PASS — SEC-001 ordinary verification:31 Java passes/29 explicit native/vendor 
 
 ## Last Successful Commit
 
-794f3844a53071894866e8d65ef386305dc4e72f — verified IDP-001 implementation, contracts, production configuration, runbook and acceptance/failure evidence. This completion metadata follows the actual implementation commit.
+2169afa24e30ce98dd34c63d4be01184c9c6acbd — verified SEC-001 implementation, security contracts, KMS/private configuration, session runbook and acceptance/failure evidence. Completion metadata follows the actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -111,7 +113,7 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start pass offline; implementation commit is pending. Public BFF/party/role command APIs and last-admin protection remain COM-SESSI-001/COM-PARTY-001/COM-AUTHO-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
+Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start are committed/DONE offline. Public BFF/party/role command APIs and last-admin protection remain COM-SESSI-001/COM-PARTY-001/COM-AUTHO-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
@@ -119,7 +121,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-SEC-001 — complete private workload/signed actor and BFF/session/commerce authorization security. PLAT-002 and IDP-001 dependencies are DONE. Continue independent offline work without inventing domains, credentials, account approvals or activation policy. Follow section46 BP1 release composition, including carrier/messaging/payment/identity/security/infrastructure/restore gates. Preserve the original nigson-local containers/volumes.
+COM-AUTHO-001 — implement commerce authorization role command APIs011/012, last-admin protection, owned current entitlements and transactional subject-session revocation/audit. SEC-001 dependency is committed/DONE. COM-PARTY-001 and COM-SESSI-001 are also dependency-ready; their public controllers/provisioning remain pending. Continue independent offline work and section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs. Preserve the original nigson-local containers/volumes.
 
 ## Session Evidence / Protocol
 
@@ -134,3 +136,5 @@ PLAT-001/MOCK-001 reports and acceptance/failure evidence: docs/implementation/2
 PLAT-002 resumed report/evidence: docs/implementation/2026-10-08-PLAT-002.md and docs/implementation/evidence/2026-10-08-PLAT-002/. October7 interruption and lost temporary logs are recorded in docs/implementation/2026-10-07-PLAT-002.md. Original containers were restored after the external daemon interruption with the same IDs/mounts; final qualifications preserve start times and all named volumes. No provider/cloud activation is inferred.
 
 IDP-001 report/evidence: docs/implementation/2026-10-09-IDP-001.md and docs/implementation/evidence/2026-10-09-IDP-001/. Actual optimized two-replica identity, vendor token/MFA/restore acceptance and final full cold-start PASS; real cloud deployment and approved activation inputs remain NOT_RUN. Implementation acceptance commit 794f3844a53071894866e8d65ef386305dc4e72f.
+
+SEC-001 report/evidence: docs/implementation/2026-10-09-SEC-001.md and docs/implementation/evidence/2026-10-09-SEC-001/. Eighteen native security tests/no skips, actual Keycloak OIDC/JDBC/workload/MFA/replica/restore acceptance, full repository verification and complete cold-start PASS; nine artifacts reproducible and260 Java packages audited. Actual implementation commit 2169afa24e30ce98dd34c63d4be01184c9c6acbd. Genuine cloud/provider activation NOT_RUN; public role/party/session command APIs remain task-owned pending work. Original containers/start times/mounts/volumes match exactly; initial failures and CF-SEC-001 callback resolution retained.
