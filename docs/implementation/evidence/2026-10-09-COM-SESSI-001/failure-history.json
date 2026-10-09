@@ -1,0 +1,48 @@
+{
+  "failures": [
+    {
+      "step": "First native suite",
+      "result": "Test compilation failed on ambiguous java.security.interfaces.ECKey/Nimbus ECKey wildcard imports. Explicit key imports fixed it; no runtime acceptance claimed on the failed command."
+    },
+    {
+      "step": "Second native suite",
+      "result": "Mock timeout selector compared two nulls and delayed normal refresh. Corrected to require a nonnull configured timeout code; no production retry behavior weakened."
+    },
+    {
+      "step": "Third native suite",
+      "result": "Actual audit INSERT denial returned204. HTTP Spring Session had cleared its principal index; added typed current Party/pending index resolver. Audit rollback and staff subject revocation after HTTP now pass."
+    },
+    {
+      "step": "First vendor qualification",
+      "result": "Harness required exactly five running unrelated local containers. Replaced unnecessary precondition with unchanged full before/after snapshots; preserved actual stopped/running state and vendor check passed."
+    },
+    {
+      "step": "First local cold start",
+      "result": "Pinned public Oracle metadata fetch stalled in the default Docker credential helper. Stopped only owned stalled fetch/build children; harness cleaned its owned test project and preserved original local resources. Credential-free temporary public registry configuration fetched the exact approved digest; startup rerun proceeds without changing user Docker settings."
+    },
+    {
+      "step": "Final repository-port native suite",
+      "result": "Incremental Maven left old test bytecode referring to removed JdbcSessionTrust.Login after extracting SessionStore.Login. Clean all module outputs and recompile the unchanged tests; no failed discovery result is claimed as runtime acceptance."
+    },
+    {
+      "step": "Final cold start and full verification",
+      "result": "Host filesystem exhausted during Docker build. BuildKit metadata_v2.db commit reported input/output error; cold-start cleanup could not complete while Docker became unresponsive. Mypy cached run failed; deleting only regenerable repository caches and running mypy with --cache-dir /dev/null passed13 files. Contract generation was interrupted before intended bound edits and regenerated successfully after space recovery. Docker recovery approval is pending because unrelated workloads cannot be inspected."
+    },
+    {
+      "step": "Repeat Python artifact build inside macOS sandbox",
+      "result": "uv panicked in SystemConfiguration with attempted NULL object before sync. Identical authorized command outside sandbox exited0; all nine current Java/Python artifact hashes matched repeated builds. No dependency/version change."
+    }
+  ],
+  "raw_ignored_logs": [
+    ".build/session-native-first.log",
+    ".build/session-native-second.log",
+    ".build/session-native-third.log",
+    ".build/session-native-vendor.log",
+    ".build/session-cold-start.log",
+    ".build/session-port-native.log",
+    ".build/session-cold-start-second.log",
+    ".build/session-verify-final.log",
+    ".build/session-current-python-repeat.log"
+  ],
+  "latest_status": "Native23/no skips and genuine Keycloak/restore PASS before final query-bound edit. Full uncached repository verification PASS; final Java verification PASS; nine current reproducible artifacts PASS. Cold-start FAIL from disk/Docker metadata I/O; final query-bound HTTP rerun NOT_RUN. Critical Docker recovery approval pending."
+}

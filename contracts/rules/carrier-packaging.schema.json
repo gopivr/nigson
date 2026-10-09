@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CarrierPackaging v1",
+  "description": "Staff-managed approved server packaging rule. Runtime additionally enforces SKU quantity scale and full-carton numeric(12,3) weight representability; this schema supplies no production packaging values.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "maximumUnitsPerPackage",
+    "unitWeightKg",
+    "tareWeightKg",
+    "lengthCm",
+    "widthCm",
+    "heightCm"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "maximumUnitsPerPackage": {
+      "type": "string",
+      "maxLength": 21,
+      "pattern": "^(?=.*[1-9])[0-9]{1,17}(\\.[0-9]{1,3})?$"
+    },
+    "unitWeightKg": {
+      "type": "string",
+      "maxLength": 13,
+      "pattern": "^(?=.*[1-9])[0-9]{1,9}(\\.[0-9]{1,3})?$"
+    },
+    "tareWeightKg": {
+      "type": "string",
+      "maxLength": 13,
+      "pattern": "^[0-9]{1,9}(\\.[0-9]{1,3})?$"
+    },
+    "lengthCm": {
+      "type": "string",
+      "maxLength": 13,
+      "pattern": "^(?=.*[1-9])[0-9]{1,9}(\\.[0-9]{1,3})?$"
+    },
+    "widthCm": {
+      "type": "string",
+      "maxLength": 13,
+      "pattern": "^(?=.*[1-9])[0-9]{1,9}(\\.[0-9]{1,3})?$"
+    },
+    "heightCm": {
+      "type": "string",
+      "maxLength": 13,
+      "pattern": "^(?=.*[1-9])[0-9]{1,9}(\\.[0-9]{1,3})?$"
+    }
+  }
+}

@@ -23,8 +23,8 @@ def realm_policy(name: str, callback: str, phase: int, revision: str, environmen
                 "clientAuthenticatorType": "client-secret", "standardFlowEnabled": True, "implicitFlowEnabled": False,
                 "directAccessGrantsEnabled": False, "serviceAccountsEnabled": False, "fullScopeAllowed": False,
                 "redirectUris": [callback], "webOrigins": [],
-                "attributes": {"pkce.code.challenge.method": "S256", "post.logout.redirect.uris": callback.rsplit("/bff/", 1)[0] + "/"},
-                "protocolMappers": [subject_mapper(), audience_mapper("nigson-commerce"), {"name": "auth_time", "protocol": "openid-connect", "protocolMapper": "oidc-usersessionmodel-note-mapper", "config": {"user.session.note": "AUTH_TIME", "claim.name": "auth_time", "jsonType.label": "long", "id.token.claim": "true", "access.token.claim": "true"}}, {"name": "amr", "protocol": "openid-connect", "protocolMapper": "oidc-amr-mapper", "config": {"access.token.claim": "true", "id.token.claim": "true"}}]}]
+                "attributes": {"pkce.code.challenge.method": "S256", "exclude.issuer.from.auth.response": "true", "exclude.session.state.from.auth.response": "true", "post.logout.redirect.uris": callback.rsplit("/bff/", 1)[0] + "/"},
+                "protocolMappers": [subject_mapper(), audience_mapper("nigson-commerce"), *profile_mappers(), {"name": "auth_time", "protocol": "openid-connect", "protocolMapper": "oidc-usersessionmodel-note-mapper", "config": {"user.session.note": "AUTH_TIME", "claim.name": "auth_time", "jsonType.label": "long", "id.token.claim": "true", "access.token.claim": "true"}}, {"name": "amr", "protocol": "openid-connect", "protocolMapper": "oidc-amr-mapper", "config": {"access.token.claim": "true", "id.token.claim": "true"}}]}]
     active = [row for row in BINDINGS if row["phase"] <= phase and ((row["client"] != "nigson-ai" and row["owner"] != "ai") or phase == 5)]
     scopes = []
     for scope in sorted({row["scope"] for row in active}):
@@ -51,6 +51,12 @@ def realm_policy(name: str, callback: str, phase: int, revision: str, environmen
             "browserSecurityHeaders": {"contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
                                       "xContentTypeOptions": "nosniff", "strictTransportSecurity": "max-age=31536000; includeSubDomains",
                                       "xFrameOptions": "SAMEORIGIN", "referrerPolicy": "no-referrer"}}
+
+
+def profile_mappers() -> list[dict]:
+    return [{"name": "email", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-property-mapper", "config": {"user.attribute": "email", "claim.name": "email", "jsonType.label": "String", "id.token.claim": "true", "access.token.claim": "false"}},
+            {"name": "email_verified", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-property-mapper", "config": {"user.attribute": "emailVerified", "claim.name": "email_verified", "jsonType.label": "boolean", "id.token.claim": "true", "access.token.claim": "false"}},
+            {"name": "name", "protocol": "openid-connect", "protocolMapper": "oidc-full-name-mapper", "config": {"id.token.claim": "true", "access.token.claim": "false"}}]
 
 
 def subject_mapper() -> dict:

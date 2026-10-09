@@ -48,6 +48,7 @@ public final class AuthorizationHttpAcceptance {
                 assertThat(send(http, mutation(command, cookie.get(admin), csrf.get(admin), "0", UUID.randomUUID().toString(), bad)).statusCode()).as("invalid JSON %s", bad).isEqualTo(400);
             var missing = mutation(command, cookie.get(admin), csrf.get(admin), "0", "missing-version", body); missing.setHeader("If-Match", "W/\"0\"");
             assertThat(send(http, missing).statusCode()).isEqualTo(400);
+            assertThat(send(http, HttpRequest.newBuilder(URI.create(base + "/api/v1/me")).header("Cookie", cookie.get(target)).GET()).statusCode()).isEqualTo(200);
             String key = UUID.randomUUID().toString();
             var changed = send(http, mutation(command, cookie.get(admin), csrf.get(admin), "0", key, body));
             assertThat(changed.statusCode()).isEqualTo(200); assertThat(changed.headers().firstValue("ETag")).hasValue("\"1\"");

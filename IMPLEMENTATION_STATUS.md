@@ -35,7 +35,9 @@ COM-SESSI-001 — IN_PROGRESS; public API-001–004 BFF login/callback/session/l
 
 ## In Progress
 
-COM-SESSI-001 — started9 October2026.
+COM-SESSI-001 — started9 October2026; final23 native/no skips and real Keycloak/restore PASS. Full uncached repository verification PASS (38 Java/43 gated skips,38 contracts,15 AI/four skips). Cold-start interrupted by host disk exhaustion/Docker metadata I/O failure; final native query-bound rerun still required. Critical Docker recovery approval requested; no task marked DONE on incomplete checks.
+
+COM-CATAL-001 — started9 October2026; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains pending Docker recovery.
 
 ## Pending
 
@@ -115,7 +117,7 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start are committed/DONE offline. COM-AUTHO-001 public staff role APIs/last-admin protection and atomic revocation/audit are now DONE offline; public BFF/party APIs remain COM-SESSI-001/COM-PARTY-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. All original nigson-local vendor containers/volumes remain running/preserved; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
+Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start are committed/DONE offline. COM-AUTHO-001 public staff role APIs/last-admin protection and atomic revocation/audit are now DONE offline; public BFF/party APIs remain COM-SESSI-001/COM-PARTY-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. Original nigson-local vendor containers/volumes preserved; all five were observed stopped at the final vendor qualification baseline; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
@@ -123,7 +125,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-PARTY-001 — implement commerce mapped party/profile/address API-005–010, current ownership and transactional audited/versioned persistence. SEC-001 dependency is committed/DONE; COM-SESSI-001 is also dependency-ready. COM-AUTHO-001 authorization is committed/DONE. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs. Preserve existing local state.
+COM-SESSI-001 — finish final native query-bound acceptance and cold-start after critical Docker recovery approval; continue COM-CATAL-001 owned persistence/API acceptance. COM-PARTY-001 and SEC-001 are committed/DONE. COM-AUTHO-001 authorization is committed/DONE. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs. Preserve existing local state.
 
 ## Session Evidence / Protocol
 

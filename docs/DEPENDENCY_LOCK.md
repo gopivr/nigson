@@ -182,3 +182,6 @@ are timestamped evidence, not future security guarantees.
 ## SEC-001 security additions
 
 Commerce adds AWS KMS SDK2.55.10 from the existing pinned AWS BOM. Shared wire filters use existing Spring Security7.1.1 and the Boot-managed Jakarta Servlet API6.1.0 (provided); owner entities and JDBC session logic remain commerce-owned. No new production domain service or Python dependency is introduced. Terraform private trust retains AWS6.15.0 and uses the installed repository-compatible Terraform1.12.2. Exact graph/hash refresh and advisory results are recorded in the SEC-001 report after execution.
+
+
+COM-PARTY-001 adds com.google.re2j:re2j:1.8 for bounded configured postal patterns, preserving the existing BOM selections. The graph locks 261 release artifact hashes. All 261 public Maven coordinates were queried against OSV with zero findings on 9 October 2026; see docs/implementation/evidence/2026-10-09-COM-PARTY-001/java-osv-audit.json. RE2/J upstream release/source: https://github.com/google/re2j/releases and https://github.com/google/re2j. COM-SESSI-001 changes no dependency coordinate; its Java and Python build hashes are regenerated for the implemented session/audit behavior.

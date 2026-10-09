@@ -38,13 +38,14 @@ def contract():
                                        'StaffRoleChange': object_schema({'roles': roles, 'reason': {'type': 'string', 'minLength': 10, 'maxLength': 500, 'description': 'At least 10 non-padding characters; no control characters.'}}),
                                        'StaffPage': object_schema({'items': {'type': 'array', 'maxItems': 100, 'items': REF('StaffDTO')}, 'page': {'type': 'integer', 'minimum': 0}, 'size': {'type': 'integer', 'minimum': 1, 'maximum': 100}, 'totalElements': VERSION, 'totalPages': VERSION})}}}
     from party import extend
-    return extend(result)
+    from session import extend as session_extend
+    return session_extend(extend(result))
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
     target = ROOT / 'contracts/openapi/commerce.yaml'; expected = json.dumps(contract(), indent=2) + '\n'
     if args.check:
         if not target.exists() or target.read_text() != expected: raise SystemExit('FAIL: reviewed authorization OpenAPI drift')
-        print('PASS: API-005–012 generated OpenAPI matches reviewed contract')
+        print('PASS: API-001–012 generated OpenAPI matches reviewed contract')
     else:
         target.parent.mkdir(parents=True, exist_ok=True); target.write_text(expected)
 if __name__ == '__main__': main()

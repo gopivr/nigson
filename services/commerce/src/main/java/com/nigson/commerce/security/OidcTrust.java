@@ -12,7 +12,7 @@ import com.nigson.shared.security.*;
 
 /** Real confidential Keycloak HTTP adapter. No provider calls inside owner transactions. */
 public final class OidcTrust {
-    public record Tokens(String access,String refresh,Instant expires,String issuer,String subject,Instant mfaAt) {
+    public record Tokens(String access,String refresh,Instant expires,String issuer,String subject,Instant mfaAt,String email,boolean emailVerified,String displayName) {
         @Override public String toString(){return "Tokens[protected]";}
     }
     private final String issuer,client,secret,callback;private final HttpClient http;private final JwtDecoder access,id;private final Clock clock;
@@ -24,7 +24,7 @@ public final class OidcTrust {
         access=KeycloakIdentity.decoder(policy,clock,tls);id=KeycloakIdentity.idTokenDecoder(new KeycloakIdentity.Policy(environment,issuer,policy.jwks(),client,Set.of(client),Set.of("openid")),clock,tls);
     }
     public URI authorization(PendingLogin flow,boolean stepUp) {
-        try{var q=new LinkedHashMap<String,String>();q.put("client_id",client);q.put("redirect_uri",callback);q.put("response_type","code");q.put("scope","openid");q.put("state",flow.state());q.put("nonce",flow.nonce());q.put("code_challenge",Base64.getUrlEncoder().withoutPadding().encodeToString(MessageDigest.getInstance("SHA-256").digest(flow.verifier().getBytes(StandardCharsets.US_ASCII))));q.put("code_challenge_method","S256");if(stepUp){q.put("max_age","0");q.put("prompt","login");}return URI.create(issuer+"/protocol/openid-connect/auth?"+form(q));}catch(Exception e){throw rejected();}
+        try{var q=new LinkedHashMap<String,String>();q.put("client_id",client);q.put("redirect_uri",callback);q.put("response_type","code");q.put("scope","openid profile email");q.put("state",flow.state());q.put("nonce",flow.nonce());q.put("code_challenge",Base64.getUrlEncoder().withoutPadding().encodeToString(MessageDigest.getInstance("SHA-256").digest(flow.verifier().getBytes(StandardCharsets.US_ASCII))));q.put("code_challenge_method","S256");if(stepUp){q.put("max_age","0");q.put("prompt","login");}return URI.create(issuer+"/protocol/openid-connect/auth?"+form(q));}catch(Exception e){throw rejected();}
     }
     public Tokens exchange(String code,PendingLogin flow) {
         if(code==null||code.length()>2048||code.isBlank()||!clock.instant().isBefore(flow.expiresAt()))throw rejected();
@@ -49,7 +49,9 @@ public final class OidcTrust {
             if(amr instanceof List<?> methods&&methods.stream().allMatch(v->v instanceof String)&&methods.contains("otp")&&time instanceof Number number){Instant t=Instant.ofEpochSecond(number.longValue());if(t.isAfter(clock.instant().plusSeconds(5))||!t.isAfter(clock.instant().minusSeconds(900)))throw rejected();mfa=t;}
             // Refresh cannot create a new MFA event or extend the original absolute lifetime.
             if(previous!=null)mfa=previous.mfaAt();
-            return new Tokens(a,r,accessJwt.getExpiresAt(),accessJwt.getIssuer().toString(),accessJwt.getSubject(),mfa);
+            Object email=idJwt.getClaims().get("email"),verified=idJwt.getClaims().get("email_verified"),name=idJwt.getClaims().get("name");
+            if(!(email instanceof String e)||!(verified instanceof Boolean v)||!(name instanceof String n)||e.isBlank()||e.length()>254||n.isBlank()||n.length()>160)throw rejected();
+            return new Tokens(a,r,accessJwt.getExpiresAt(),accessJwt.getIssuer().toString(),accessJwt.getSubject(),mfa,e,v,n);
         }catch(Exception e){org.slf4j.LoggerFactory.getLogger(OidcTrust.class).warn("OIDC_TRUST_DENIED category={}",stage);throw rejected();}
     }
     private tools.jackson.databind.JsonNode request(String operation,Map<String,String> values) {

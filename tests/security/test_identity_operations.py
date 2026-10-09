@@ -24,8 +24,17 @@ class IdentityOperationsTest(unittest.TestCase):
         self.assertFalse(bff['publicClient']);self.assertFalse(bff['directAccessGrantsEnabled'])
         self.assertEqual(bff['attributes']['pkce.code.challenge.method'],'S256')
         self.assertEqual(len(bff['redirectUris']),1)
+        self.assertEqual(bff['attributes']['exclude.issuer.from.auth.response'],'true')
+        self.assertEqual(bff['attributes']['exclude.session.state.from.auth.response'],'true')
         self.assertNotIn('nigson-ai',{c['clientId'] for c in policy['clients']})
         self.assertIn('nigson-ai',{c['clientId'] for c in self.policy(5)['clients']})
+    def test_signed_profile_mappers_are_explicit_and_id_token_only(self):
+        mappers={m['name']:m for m in self.policy()['clients'][0]['protocolMappers']}
+        for name in ('email','email_verified','name'):
+            self.assertEqual(mappers[name]['config']['id.token.claim'],'true')
+            self.assertEqual(mappers[name]['config']['access.token.claim'],'false')
+        self.assertEqual(mappers['email_verified']['config']['jsonType.label'],'boolean')
+        self.assertEqual(mappers['email']['config']['user.attribute'],'email')
     def test_scopes_are_authoritative_operation_grants(self):
         rows = json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())
         policy = self.policy()

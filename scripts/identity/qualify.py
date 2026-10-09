@@ -104,8 +104,7 @@ class Qualification:
         if not context['Endpoints']['docker']['Host'].startswith('unix://'):
             raise ValueError('LOCAL_DOCKER_REQUIRED')
         self.before = snapshot()
-        if len(self.before) != 5 or not all(x['running'] for x in self.before):
-            raise ValueError('ORIGINAL_LOCAL_STATE_MUST_BE_RUNNING')
+        # Snapshot and preserve any existing local state, including stopped containers.
         self.name = 'nigson-test-idp-' + secrets.token_hex(5)
         self.work = ROOT / '.build/idp001' / self.name; self.work.mkdir(parents=True); self.work.chmod(0o700)
         self.containers = []; self.public, self.admin_port, self.dbport = port(), port(), port()
@@ -197,7 +196,7 @@ location / {{ proxy_pass https://identity; proxy_ssl_trusted_certificate /cert/c
             form = browser.request(form.action,{**form.inputs,field:otp,'userLabel':'offline-qualification'})
         assert browser.location, 'AUTHORIZATION_CODE_MISSING'
         params = urllib.parse.parse_qs(urllib.parse.urlsplit(browser.location).query)
-        assert params['state'][0] == query['state'] and 'code' in params
+        assert params['state'][0] == query['state'] and set(params)=={'state','code'},'EXACT_BFF_CALLBACK_QUERY_REQUIRED'
         exchange={'grant_type':'authorization_code','client_id':'nigson-bff','client_secret':self.secrets['nigson-bff'],'redirect_uri':self.callback,'code':params['code'][0],'code_verifier':verifier}
         if emit_code:
             return {'code': params['code'][0], 'state': query['state'], 'nonce': query['nonce'], 'verifier': verifier}
@@ -371,7 +370,9 @@ location / {{ proxy_pass https://identity; proxy_ssl_trusted_certificate /cert/c
         try: docker('network','rm',self.name)
         except Exception: pass
         after=snapshot();assert after==self.before,'ORIGINAL_LOCAL_STATE_CHANGED'
-        evidence=ROOT/'docs/implementation/evidence/2026-10-09-IDP-001';evidence.mkdir(parents=True,exist_ok=True)
+        evidence=Path(os.environ.get('NIGSON_IDENTITY_EVIDENCE',str(ROOT/'docs/implementation/evidence/2026-10-09-IDP-001'))).resolve()
+        if not evidence.is_relative_to(ROOT/'docs/implementation/evidence'):raise ValueError('LOCAL_QUALIFICATION_EVIDENCE_REQUIRED')
+        evidence.mkdir(parents=True,exist_ok=True)
         (evidence/(self.name+'.json')).write_text(json.dumps({'project':self.name,'checks':self.checks,'status':'PASS' if 'TEST-IDENTITY-RESTORE' in self.checks else 'FAIL','originalContainersPreserved':True,'original':after,'cloudQualification':'NOT_RUN','acceptanceComplete':'TEST-IDENTITY-RESTORE' in self.checks},indent=2)+'\n')
         print('PASS ORIGINAL-NIGSON-LOCAL-PRESERVED',flush=True)
 

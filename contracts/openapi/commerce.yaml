@@ -1207,6 +1207,540 @@
           }
         }
       }
+    },
+    "/bff/login": {
+      "get": {
+        "operationId": "API-001",
+        "description": "No body. Creates encrypted pending state/nonce/PKCE S256 verifier with five-minute expiry. Only configured return paths allowed. Twenty unexpired pending flows per keyed socket-IP fingerprint and 10000 globally; shared owner transaction budget across replicas. Browser credentials are not accepted.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "returnTo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "default": "/account"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "302": {
+            "description": "Redirect; no response body",
+            "headers": {
+              "Location": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Configured identity target for login; allowlisted relative return path for callback"
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Secure HttpOnly host-only SameSite=Lax session cookie; explicit local exception only"
+              }
+            }
+          },
+          "429": {
+            "description": "Shared pending-flow abuse budget exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bff/callback": {
+      "get": {
+        "operationId": "API-002",
+        "description": "No body. Pending cookie plus exact one-use state required. Consume before confidential provider exchange; signature, audience, nonce, issuer, subject and PKCE verified. Provision signed issuer/subject identity; rotate cookie and redirect to stored allowlisted return path. Failed or uncertain exchange invalidates flow; never automatically retry code. Never expose provider tokens.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{43}$"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "302": {
+            "description": "Redirect; no response body",
+            "headers": {
+              "Location": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Configured identity target for login; allowlisted relative return path for callback"
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Secure HttpOnly host-only SameSite=Lax session cookie; explicit local exception only"
+              }
+            }
+          },
+          "429": {
+            "description": "Shared pending-flow abuse budget exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bff/session": {
+      "get": {
+        "operationId": "API-003",
+        "description": "No query or body. Anonymous/expired/revoked sessions return authenticated=false with empty roles/memberships and null protected fields. Current commerce roles/membership resolve on every request. Refresh near-expiry tokens with CAS; uncertain refresh deletes local session without retry. ExpiresAt is current idle/absolute expiry. No provider tokens returned. Cache-Control:no-store.",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bff/logout": {
+      "post": {
+        "operationId": "API-004",
+        "description": "Exact empty JSON object and session-bound CSRF. Atomically audit and delete JDBC session before provider revocation HTTP. Always clear cookie after valid request. Provider failure returns 503 with local session already deleted; no fabricated provider success. No domain event.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{43}$"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Local deletion and supported provider revocation complete; no body"
+          },
+          "503": {
+            "description": "Provider unavailable; local session already deleted",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1737,6 +2271,113 @@
           },
           "isDefault": {
             "type": "boolean"
+          }
+        }
+      },
+      "SessionDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "authenticated",
+          "partyId",
+          "displayName",
+          "roles",
+          "organizationMemberships",
+          "expiresAt",
+          "csrfToken"
+        ],
+        "properties": {
+          "authenticated": {
+            "type": "boolean"
+          },
+          "partyId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "displayName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "maxItems": 8,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "CUSTOMER",
+                "ADMIN",
+                "CONTENT_EDITOR",
+                "CONTENT_PUBLISHER",
+                "SALES",
+                "OPERATIONS",
+                "FINANCE",
+                "ANALYST"
+              ]
+            }
+          },
+          "organizationMemberships": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "organizationId",
+                "role"
+              ],
+              "properties": {
+                "organizationId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "OWNER",
+                    "BUYER"
+                  ]
+                }
+              }
+            }
+          },
+          "expiresAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "csrfToken": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{43}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       }

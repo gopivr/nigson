@@ -141,3 +141,7 @@ authorization-check:
 .PHONY: party-check
 party-check:
 	ENV=test python3 scripts/party/verify.py
+
+.PHONY: session-check
+session-check:
+	ENV=test python3 scripts/session/verify.py

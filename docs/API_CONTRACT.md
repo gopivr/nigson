@@ -44,7 +44,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `none`.
 - **Response:** `302 Location: configured OIDC authorization endpoint`.
 - **Statuses:** 302 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Generate state, nonce and PKCE verifier in server session; return path must be allowlisted.
+- **Validation / business rules:** Generate state, nonce and PKCE verifier in encrypted server session; return path must be allowlisted. Implemented API-001–004: contracts/openapi/commerce.yaml and docs/runbooks/bff-session-endpoints.md. Pending-flow capacity is shared across replicas; no unknown/repeated query or body accepted.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, SESSION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -59,7 +59,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `none`.
 - **Response:** `302 Location: allowlisted return path`.
 - **Statuses:** 302 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Validate one-use state/nonce, code and PKCE; rotate session; provision issuer/subject mapping.
+- **Validation / business rules:** Validate one-use state/nonce, code and PKCE; rotate session; provision issuer/subject mapping from signed ID-token profile claims. Fixed Keycloak client suppresses additional authentication-response parameters to match the closed code/state contract. Consume before provider HTTP; uncertain exchange requires a new login.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, SESSION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -74,7 +74,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `none`.
 - **Response:** `SessionDTO{authenticated:boolean,partyId:UUID|null,displayName:string|null,roles:[Role],organizationMemberships:[{organizationId:UUID,role:OWNER|BUYER}],expiresAt:Instant|null,csrfToken:string|null}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Return no provider access or refresh tokens.
+- **Validation / business rules:** Return no provider access or refresh tokens. Resolve current commerce authority/membership; near-expiry refresh uses a CAS before provider HTTP and preserves original login/MFA/absolute expiry. Anonymous/expired/revoked sessions return the exact unauthenticated DTO.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, SESSION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -89,7 +89,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `{}`.
 - **Response:** `none`.
 - **Statuses:** 204 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** CSRF required; delete JDBC session; revoke refresh token where supported.
+- **Validation / business rules:** CSRF required; exact {} body, no query. Audit and delete JDBC session before supported provider revocation HTTP. Always clear cookie after a valid logout request; provider failure is 503 after local deletion and audit/database failure rolls back before HTTP.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, SESSION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -104,7 +104,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `none`.
 - **Response:** `ProfileDTO{id:UUID,displayName:string,email:string,emailVerified:boolean,phone:string|null,locale:string,version:int64}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Return the mapped authenticated subject only.
+- **Validation / business rules:** Return the mapped authenticated subject only. Implemented API-005–010: contracts/openapi/commerce.yaml and docs/runbooks/party-profile-address.md; Party version governs profile changes.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, PARTY_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -119,7 +119,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `{displayName?:string[1..160],phone?:string|null,locale?:BCP47}`.
 - **Response:** `ProfileDTO as API-005`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Email changes use identity provider workflow, not this endpoint.
+- **Validation / business rules:** Email changes use identity provider workflow, not this endpoint. Exact nonempty allowlisted patch, quoted If-Match, CSRF and durable Idempotency-Key required; normalize display name/locale, preserve explicit nullable phone, and audit revisions without contact values.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, PARTY_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 

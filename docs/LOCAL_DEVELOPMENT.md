@@ -251,3 +251,10 @@ without activating an AI service. See [the runbook](runbooks/keycloak.md).
 ## Isolated SEC-001 security checks
 
 `make security-check` exercises real owner PostgreSQL, JDBC session one-use/rotation/expiry/revocation/audit and local KMS HTTP protocol. `SEC_IDENTITY_CHECK=true make security-check UV=.build/uv-package/bin/uv` adds the optimized real Keycloak OIDC/MFA/workload/refresh/logout/replica/restore qualification. No AI service is required; `PROFILE=ai` additionally runs existing owned AI wire tests. `make security-infra-check` runs locked backend-free Terraform mock plans. See [session/private trust](runbooks/session-trust.md) for explicit local/test configuration and production refusal rules. Original nigson-local containers/volumes are preserved; only newly generated test namespaces are removed.
+
+
+## Implemented BFF session routes
+
+COM-SESSI-001 implements /bff/login, /bff/callback, /bff/session and /bff/logout with the same confidential Keycloak adapter in every environment. The local realm BFF client now registers http://localhost:8081/bff/callback and a bounded test-only confidential secret rather than the old framework callback. Profile/subject/audience mappers and closed callback response parameters match the optimized realm. Existing long-lived realm volumes are preserved: creating a fresh isolated local environment imports current configuration; updating an existing realm requires a reviewed client configuration update through Keycloak administration, never overwriting users or roles through a generic seed.
+
+Security remains an explicit configured profile. Enable NIGSON_SECURITY_ENABLED only with all required identity, callback, session encryption, origin, return-path, workload and KMS actor settings; production cannot use the local key/cookie exception. See docs/runbooks/bff-session-endpoints.md. Native endpoint/vendor acceptance uses isolated test configuration and does not supply real identity or deployment approval.

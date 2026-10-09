@@ -1,0 +1,16 @@
+{
+  "project": "nigson-test-idp-f023e3c5b2",
+  "command": "./mvnw -B -pl services/commerce -am test -Dtest=OidcSessionAcceptanceTest -Dsurefire.failIfNoSpecifiedTests=false",
+  "private_log_sha256": "b59308abba553811f0e182137f789f544b0eef1d30964eb6f91f4b4a63c03c42",
+  "tests": 1,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "profile_claims_signed": true,
+  "raw_tokens_and_credentials_retained_only_in_private_ignored_fixture": true,
+  "observed_authorization_code_lengths": {
+    "retail": 98,
+    "staff": 98
+  },
+  "public_query_maximum": 200
+}

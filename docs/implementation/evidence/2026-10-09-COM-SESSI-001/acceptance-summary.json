@@ -1,0 +1,33 @@
+{
+  "task": "COM-SESSI-001",
+  "acceptance": "AC-COM-SESSI-001",
+  "implementation_commit": null,
+  "native": {
+    "tests": 23,
+    "failures": 0,
+    "skipped": 0
+  },
+  "vendor_oidc_jdbc_tests": 1,
+  "identity_policy_tests": 10,
+  "ordinary_java": {
+    "passed": 38,
+    "skipped": 43,
+    "includes_catalogue_draft_tests": 3
+  },
+  "ai": {
+    "passed": 15,
+    "skipped": 4
+  },
+  "contracts": 38,
+  "repeatable_artifacts": 9,
+  "genuine_cloud_staging_activation": "NOT_RUN",
+  "cold_start": "FAIL: host disk exhaustion and Docker metadata I/O error",
+  "final_overall_verify": "PASS: uncached make verify including final session query bound; Docker-gated tests skipped",
+  "uncached_mypy": {
+    "status": "PASS",
+    "source_files": 13
+  },
+  "pending_changes": "Common200-character query bound awaits final HTTP rerun",
+  "previous_overall_verify": "FAIL: cached mypy after disk-full write",
+  "current_reproducible_artifacts": "PASS: current-artifacts-first.json equals current-artifacts-second.json after repeated Java/Python builds"
+}
