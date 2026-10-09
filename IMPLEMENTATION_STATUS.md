@@ -8,7 +8,7 @@ EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
 
 ## Current Task
 
-SEC-001 — DONE (engineering); implementation 2169afa24e30ce98dd34c63d4be01184c9c6acbd; AC-SEC-001 / TEST-SEC-TOKENS / TEST-ACTOR-TRUST and complete TEST-LOCAL-COLD-START PASS offline. Typed encrypted JDBC sessions, actual OIDC/PKCE/MFA refresh/logout, current commerce authority and private workload/KMS ES256 actor trust are implemented and verified. Original nigson-local containers/volumes preserved. Genuine cloud/provider/activation qualification NOT_RUN; next dependency-ready task COM-AUTHO-001.
+COM-AUTHO-001 — IN_PROGRESS; implement API-011/012 staff search and versioned role replacement, current authority/recent MFA, last-active-admin serialization, transactional audit/session revocation and durable replay. Planned verification: native PostgreSQL authorization/race/rollback/security/HTTP contracts, owner migrations, full build and contract checks. SEC-001 dependency is committed/DONE.
 
 ## Completed Tasks
 
@@ -31,7 +31,7 @@ SEC-001 — DONE (engineering); implementation 2169afa24e30ce98dd34c63d4be01184c
 
 ## In Progress
 
-None.
+COM-AUTHO-001 — started 9 October2026; offline implementation and qualification.
 
 ## Pending
 

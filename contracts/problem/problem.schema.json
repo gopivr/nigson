@@ -57,7 +57,8 @@
         "INTERNAL_ERROR",
         "BODY_TOO_LARGE",
         "UNSUPPORTED_MEDIA_TYPE",
-        "METHOD_NOT_ALLOWED"
+        "METHOD_NOT_ALLOWED",
+        "AUTHORIZATION_RULE_VIOLATION"
       ]
     },
     "timestamp": {

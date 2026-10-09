@@ -132,3 +132,8 @@ security-infra-check:
 	terraform -chdir=infrastructure/terraform/modules/private-trust init -backend=false
 	terraform -chdir=infrastructure/terraform/modules/private-trust validate
 	terraform -chdir=infrastructure/terraform/modules/private-trust test
+
+.PHONY: authorization-check
+authorization-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/authorization/verify.py

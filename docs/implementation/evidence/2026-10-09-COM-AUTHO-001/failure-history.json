@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-09",
+  "history": [
+    {
+      "attempt": "native-first",
+      "result": "FAIL",
+      "cause": "Sandbox denied local Docker socket",
+      "resolution": "Authorized escalated local Docker access"
+    },
+    {
+      "attempt": "native-second",
+      "result": "FAIL",
+      "cause": "Docker Desktop daemon stopped before session",
+      "resolution": "Started Docker Desktop; no reset or volume removal"
+    },
+    {
+      "attempt": "native-third",
+      "result": "FAIL",
+      "cause": "Reviewed OpenAPI generator missing closing brace",
+      "resolution": "Corrected generator syntax and generated/check-tested contract"
+    },
+    {
+      "attempt": "verify-first",
+      "result": "FAIL",
+      "cause": "Sandbox denied loopback HTTP; module test detected security-to-authorization test-helper cycle",
+      "resolution": "Use authorized local HTTP access; place cross-module acceptance helper in root test package"
+    },
+    {
+      "attempt": "native-fourth/sixth",
+      "result": "FAIL",
+      "cause": "HTTP invalid query returned401 after first successful query",
+      "resolution": "Direct DB assertions proved normal requests rotated session IDs; configure explicit NullAuthenticatedSessionStrategy; preserve existing explicit OIDC rotation"
+    },
+    {
+      "attempt": "native-fifth",
+      "result": "FAIL",
+      "cause": "Jackson3 EnumFeature flag initially referenced legacy DeserializationFeature location",
+      "resolution": "Inspected installed Jackson3 class; corrected flag; later replaced broad scalar policy with endpoint-specific exact JSON decoding"
+    },
+    {
+      "attempt": "native-seventh/eighth",
+      "result": "FAIL",
+      "cause": "Session read and DB session-row assertions confirmed disappearance of original cookie ID after successful HTTP query",
+      "resolution": "Explicit BFF session lifecycle configuration; no ordinary-request cookie rotation; same-cookie HTTP continuity now passes"
+    },
+    {
+      "attempt": "native-ninth/tenth",
+      "result": "FAIL",
+      "cause": "Numeric JSON reason was coerced to text and accepted",
+      "resolution": "Strict Staff.Change JSON creator validates exact object/array/string types; numeric roles/reason and unknown fields now deny"
+    },
+    {
+      "attempt": "native-eleventh",
+      "result": "PASS",
+      "scope": "15 native tests/no skips; all API and owner migration/state checks passed before final expanded regression"
+    },
+    {
+      "attempt": "native-final-first",
+      "result": "FAIL",
+      "cause": "PostgreSQL advisory lock timeout translated outside generic lock exception mapping and returned safe INTERNAL_ERROR instead of CONFLICT",
+      "resolution": "Owned repository maps PostgreSQL SQLSTATE55P03 explicitly to safe CONFLICT; no exception text exposure"
+    },
+    {
+      "attempt": "full-verify-first",
+      "result": "FAIL",
+      "cause": "Modulith treated cross-module HTTP helper in application root as root production code, introducing a test-only root/security cycle",
+      "resolution": "Place acceptance helper outside commerce application scan in com.nigson.acceptance; retain all module checks and no production boundary changes"
+    }
+  ],
+  "raw_logs": "Ignored .build/com-autho-*.log; no failures erased"
+}

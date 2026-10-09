@@ -190,11 +190,11 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Authorization:** ADMIN; resource/organization/market checks required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
-- **Query:** q:string<=200; page,size,sort
+- **Query:** q:string<=200; page,size,sort; sort allowlist `createdAt,asc|desc`, `displayName,asc|desc`, `email,asc|desc`; default `createdAt,desc` with id tie-break.
 - **Request:** `none`.
 - **Response:** `Page<StaffDTO{id:UUID,displayName:string,email:string,roles:[Role],version:int64}>`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Search mapped staff subjects only.
+- **Validation / business rules:** Search mapped staff subjects only, including historical role assignments; no retail-only identities. `StaffDTO.version` uses the Party aggregate revision. Implemented OpenAPI: `contracts/openapi/commerce.yaml` (API-011/012 increment).
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, AUTHORIZATION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -209,7 +209,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `{roles:[Role],reason:string[10..500]}`.
 - **Response:** `StaffDTO`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Require recent MFA; prevent removal of last active ADMIN; audit and invalidate sessions.
+- **Validation / business rules:** Require recent MFA; prevent removal of last active ADMIN; audit and invalidate sessions. Required quoted `If-Match` and `Idempotency-Key`; canonical key input includes target/revision/roles/reason. Actor authority is current commerce state, target must be active mapped staff. Replace roles atomically; role changes increment Party revision and revoke all target sessions. Empty roles removes staff privileges; a no-op preserves revision/sessions. Matching replay returns the original result, including ETag; conflicting key input returns409 and stale revision412. Free-text reason is validated and redacted from audit under the existing policy; audit retains typed operator reason and individual role transitions.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, AUTHORIZATION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 

@@ -41,6 +41,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "AUTHORIZATION_RULE_VIOLATION": (
+        422,
+        "Authorization rule violation",
+        "Retain an active administrator before removing this role.",
+    ),
     "BUSINESS_RULE_VIOLATION": (
         422,
         "Ineligible operation",

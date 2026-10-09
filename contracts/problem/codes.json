@@ -88,5 +88,10 @@
     "status": 405,
     "title": "Method not allowed",
     "detail": "Use a supported request method."
+  },
+  "AUTHORIZATION_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Authorization rule violation",
+    "detail": "Retain an active administrator before removing this role."
   }
 }
