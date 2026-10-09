@@ -148,3 +148,33 @@ The Makefile now explicitly selects services/ai/pyproject.toml for strict mypy
 when invoked from the monorepo root; the previously implicit invocation did not
 load that nested configuration. This session's strict result uses the explicit
 configuration and does not retroactively strengthen earlier evidence.
+
+## IDP-001 identity additions
+
+Production Keycloak uses the existing official26.8.0 manifest digest, an optimized
+PostgreSQL/health/metrics/event-metrics build, and non-root read-only runtime. The
+identity qualification PostgreSQL18.6 digest is the existing FOUND-003 pin. The
+test-only TLS proxy pins nginx1.30.5-alpine at
+`sha256:0985e772fb9f729e6fa0980da05fca5d9c468e870eed43071545afa9d2e27d94`;
+it is not shipped as an additional production service. Terraform retains the
+AWS6.15.0 provider lock. Optimized Fargate ARM64 is the module target; genuine
+region/RDS/ACM/DNS/ALB/WAF/upgrade qualification is separately NOT_RUN.
+
+BP1 private identity operational scripts use their own uv0.9.3/Python3.12.12
+lock at `scripts/identity/uv.lock` with cryptography50.0.2 and
+psycopg-binary3.3.6. They do not resolve/start the BP5 AI service. The optional BP5
+owned JWT adapter adds PyJWT[crypto]2.15.1 and its locked cryptography/cffi
+transitives. Public PyPI metadata and actual locked installs establish those
+versions; no provider/model credentials are needed. The Java JWT adapter reuses
+Boot-managed Spring Security/Nimbus/Jackson artifacts: Java public artifact
+hashes are unchanged; the reviewed lock graph now includes the shared wire
+adapter's explicit Spring dependencies. The operational Docker image pins the
+same uv/Python base manifests as the existing AI foundation and excludes test
+fixtures/harnesses.
+
+`make identity-sync`, `make identity-policy-check`, `make identity-check` and
+`make identity-infra-check` are independent of AI; `PROFILE=ai identity-check`
+adds real Keycloak checks through the owned BP5 adapter after `make ai-sync`.
+See [identity deployment/recovery](runbooks/keycloak.md) for required actual
+inputs and exact commands. October9 public OSV and hash-locked pip-audit checks
+are timestamped evidence, not future security guarantees.

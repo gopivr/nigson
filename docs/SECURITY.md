@@ -122,3 +122,17 @@ This is the requested engineering checklist, not a legal certification or proof 
 - [ ] Carrier label is private; booking cannot dispatch stock; package/currency/mode binding and UNKNOWN reconciliation tested.
 - [ ] Keycloak prod uses supported persistent DB/TLS/private admin/MFA/tested replicas and restore; no start-dev/default admin credentials.
 
+
+## IDP-001 implemented identity boundary
+
+The [Keycloak runbook](runbooks/keycloak.md) describes the optimized two-replica
+private/admin/public deployment, dedicated identity database, explicitly supplied
+secrets and retention, TOTP/admin retirement, backup/restore and version upgrade
+procedure. `contracts/security/workload-scopes.json` derives exact client grants
+from the authoritative master API contracts, including launch carrier/messaging
+operations. Java and BP5 Python validators enforce Keycloak access-token trust
+with bounded fail-closed JWKS caching. No Cognito-specific claim is authority.
+Production identity does not enable business routes or replace commerce business
+roles/BFF server sessions. SEC-001 and the remaining BP1 infrastructure/provider/
+restore/security release gates remain required; real environment qualification
+must use supplied actual inputs and must not silently use local fixtures.

@@ -1,0 +1,32 @@
+UV_PROJECT_ENVIRONMENT=/Users/gopiravi/workspace/nigson/.build/identity-env .build/uv-package/bin/uv --directory scripts/identity sync --locked --python 3.12.12
+Resolved 8 packages in 19ms
+Audited 6 packages in 3ms
+/Users/gopiravi/workspace/nigson/.build/identity-env/bin/python -m unittest discover -s tests/security -v
+test_audit_policy_is_explicit (test_identity_operations.IdentityOperationsTest.test_audit_policy_is_explicit) ... ok
+test_backup_authentication_revision_and_exclusive_target (test_identity_operations.IdentityOperationsTest.test_backup_authentication_revision_and_exclusive_target) ... ok
+test_exact_confidential_pkce_and_no_bp1_ai (test_identity_operations.IdentityOperationsTest.test_exact_confidential_pkce_and_no_bp1_ai) ... ok
+test_no_mock_production_configuration (test_identity_operations.IdentityOperationsTest.test_no_mock_production_configuration) ... ok
+test_optimized_wrapper_fails_closed_before_network (test_identity_operations.IdentityOperationsTest.test_optimized_wrapper_fails_closed_before_network) ... ok
+test_private_admin_target_has_no_redirect_or_userinfo (test_identity_operations.IdentityOperationsTest.test_private_admin_target_has_no_redirect_or_userinfo) ... ok
+test_private_file_permissions_required (test_identity_operations.IdentityOperationsTest.test_private_file_permissions_required) ... ok
+test_registry_matches_master_internal_contracts (test_identity_operations.IdentityOperationsTest.test_registry_matches_master_internal_contracts) ... ok
+test_scopes_are_authoritative_operation_grants (test_identity_operations.IdentityOperationsTest.test_scopes_are_authoritative_operation_grants) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.063s
+
+OK
+ENV=test /Users/gopiravi/workspace/nigson/.build/identity-env/bin/python scripts/identity/qualify.py
+PASS TEST-KEYCLOAK-DB-ISOLATION
+PASS TEST-KEYCLOAK-AUDIT-POLICY
+PASS TEST-KEYCLOAK-BOOTSTRAP-RETIREMENT
+PASS TEST-KEYCLOAK-PROD-CONFIG
+PASS TEST-KEYCLOAK-ADMIN-ISOLATION
+PASS TEST-KEYCLOAK-PKCE-STAFF-MFA
+PASS TEST-SEC-TOKENS
+PASS TEST-SEC-TOKENS-BP5
+PASS TEST-KEYCLOAK-PRIVATE-METRICS
+PASS TEST-KEYCLOAK-REPLICA
+PASS TEST-KEYCLOAK-ROLLING-REPLACEMENT
+PASS TEST-IDENTITY-RESTORE
+PASS ORIGINAL-NIGSON-LOCAL-PRESERVED

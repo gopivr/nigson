@@ -1,0 +1,38 @@
+[
+  {
+    "name": "foundation-audience-commerce",
+    "protocol": "openid-connect",
+    "protocolMapper": "oidc-audience-mapper",
+    "config": {
+      "id.token.claim": "false",
+      "access.token.claim": "true",
+      "introspection.token.claim": "true",
+      "included.custom.audience": "nigson-commerce",
+      "userinfo.token.claim": "false"
+    }
+  },
+  {
+    "name": "foundation-audience-integration",
+    "protocol": "openid-connect",
+    "protocolMapper": "oidc-audience-mapper",
+    "config": {
+      "id.token.claim": "false",
+      "access.token.claim": "true",
+      "introspection.token.claim": "true",
+      "included.custom.audience": "nigson-integration",
+      "userinfo.token.claim": "false"
+    }
+  },
+  {
+    "name": "foundation-audience-experience",
+    "protocol": "openid-connect",
+    "protocolMapper": "oidc-audience-mapper",
+    "config": {
+      "id.token.claim": "false",
+      "access.token.claim": "true",
+      "introspection.token.claim": "true",
+      "included.custom.audience": "nigson-experience",
+      "userinfo.token.claim": "false"
+    }
+  }
+]

@@ -781,6 +781,95 @@
               "scope": "compile",
               "type": "jar",
               "version": "13.0.2"
+            },
+            {
+              "artifactId": "spring-security-oauth2-jose",
+              "children": [
+                {
+                  "artifactId": "spring-security-core",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-crypto",
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-oauth2-core",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "nimbus-jose-jwt",
+                  "classifier": "",
+                  "groupId": "com.nimbusds",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "10.9.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
+            },
+            {
+              "artifactId": "spring-web",
+              "children": [
+                {
+                  "artifactId": "spring-beans",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-context",
+              "children": [
+                {
+                  "artifactId": "spring-expression",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
             }
           ],
           "classifier": "",
@@ -1396,15 +1485,6 @@
                   "scope": "compile",
                   "type": "jar",
                   "version": "4.1.1"
-                },
-                {
-                  "artifactId": "spring-web",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
                 }
               ],
               "classifier": "",
@@ -1428,17 +1508,6 @@
                 },
                 {
                   "artifactId": "spring-webmvc",
-                  "children": [
-                    {
-                      "artifactId": "spring-expression",
-                      "classifier": "",
-                      "groupId": "org.springframework",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.0.9"
-                    }
-                  ],
                   "classifier": "",
                   "groupId": "org.springframework",
                   "optional": "false",
@@ -1654,17 +1723,6 @@
             },
             {
               "artifactId": "spring-aop",
-              "children": [
-                {
-                  "artifactId": "spring-beans",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
-                }
-              ],
               "classifier": "",
               "groupId": "org.springframework",
               "optional": "false",
@@ -2118,55 +2176,6 @@
               "scope": "compile",
               "type": "jar",
               "version": "4.1.1"
-            },
-            {
-              "artifactId": "spring-security-oauth2-jose",
-              "children": [
-                {
-                  "artifactId": "spring-security-core",
-                  "children": [
-                    {
-                      "artifactId": "spring-security-crypto",
-                      "classifier": "",
-                      "groupId": "org.springframework.security",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.1.1"
-                    }
-                  ],
-                  "classifier": "",
-                  "groupId": "org.springframework.security",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.1.1"
-                },
-                {
-                  "artifactId": "spring-security-oauth2-core",
-                  "classifier": "",
-                  "groupId": "org.springframework.security",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.1.1"
-                },
-                {
-                  "artifactId": "nimbus-jose-jwt",
-                  "classifier": "",
-                  "groupId": "com.nimbusds",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "10.9.1"
-                }
-              ],
-              "classifier": "",
-              "groupId": "org.springframework.security",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "7.1.1"
             }
           ],
           "classifier": "",
@@ -2259,15 +2268,6 @@
                   "scope": "runtime",
                   "type": "jar",
                   "version": "1.4.2"
-                },
-                {
-                  "artifactId": "spring-context",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
                 }
               ],
               "classifier": "",
@@ -3227,6 +3227,95 @@
               "scope": "compile",
               "type": "jar",
               "version": "13.0.2"
+            },
+            {
+              "artifactId": "spring-security-oauth2-jose",
+              "children": [
+                {
+                  "artifactId": "spring-security-core",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-crypto",
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-oauth2-core",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "nimbus-jose-jwt",
+                  "classifier": "",
+                  "groupId": "com.nimbusds",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "10.9.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
+            },
+            {
+              "artifactId": "spring-web",
+              "children": [
+                {
+                  "artifactId": "spring-beans",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-context",
+              "children": [
+                {
+                  "artifactId": "spring-expression",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
             }
           ],
           "classifier": "",
@@ -3842,15 +3931,6 @@
                   "scope": "compile",
                   "type": "jar",
                   "version": "4.1.1"
-                },
-                {
-                  "artifactId": "spring-web",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
                 }
               ],
               "classifier": "",
@@ -3874,17 +3954,6 @@
                 },
                 {
                   "artifactId": "spring-webmvc",
-                  "children": [
-                    {
-                      "artifactId": "spring-expression",
-                      "classifier": "",
-                      "groupId": "org.springframework",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.0.9"
-                    }
-                  ],
                   "classifier": "",
                   "groupId": "org.springframework",
                   "optional": "false",
@@ -4074,28 +4143,6 @@
               "children": [
                 {
                   "artifactId": "spring-security-config",
-                  "children": [
-                    {
-                      "artifactId": "spring-security-core",
-                      "children": [
-                        {
-                          "artifactId": "spring-security-crypto",
-                          "classifier": "",
-                          "groupId": "org.springframework.security",
-                          "optional": "false",
-                          "scope": "compile",
-                          "type": "jar",
-                          "version": "7.1.1"
-                        }
-                      ],
-                      "classifier": "",
-                      "groupId": "org.springframework.security",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.1.1"
-                    }
-                  ],
                   "classifier": "",
                   "groupId": "org.springframework.security",
                   "optional": "false",
@@ -4122,17 +4169,6 @@
             },
             {
               "artifactId": "spring-aop",
-              "children": [
-                {
-                  "artifactId": "spring-beans",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
-                }
-              ],
               "classifier": "",
               "groupId": "org.springframework",
               "optional": "false",
@@ -4154,35 +4190,6 @@
             {
               "artifactId": "spring-boot-security-oauth2-resource-server",
               "children": [
-                {
-                  "artifactId": "spring-security-oauth2-jose",
-                  "children": [
-                    {
-                      "artifactId": "spring-security-oauth2-core",
-                      "classifier": "",
-                      "groupId": "org.springframework.security",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.1.1"
-                    },
-                    {
-                      "artifactId": "nimbus-jose-jwt",
-                      "classifier": "",
-                      "groupId": "com.nimbusds",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "10.9.1"
-                    }
-                  ],
-                  "classifier": "",
-                  "groupId": "org.springframework.security",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.1.1"
-                },
                 {
                   "artifactId": "spring-security-oauth2-resource-server",
                   "classifier": "",
@@ -4585,15 +4592,6 @@
                   "scope": "runtime",
                   "type": "jar",
                   "version": "1.4.2"
-                },
-                {
-                  "artifactId": "spring-context",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
                 }
               ],
               "classifier": "",
@@ -5778,6 +5776,95 @@
               "scope": "compile",
               "type": "jar",
               "version": "13.0.2"
+            },
+            {
+              "artifactId": "spring-security-oauth2-jose",
+              "children": [
+                {
+                  "artifactId": "spring-security-core",
+                  "children": [
+                    {
+                      "artifactId": "spring-security-crypto",
+                      "classifier": "",
+                      "groupId": "org.springframework.security",
+                      "optional": "false",
+                      "scope": "compile",
+                      "type": "jar",
+                      "version": "7.1.1"
+                    }
+                  ],
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "spring-security-oauth2-core",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                },
+                {
+                  "artifactId": "nimbus-jose-jwt",
+                  "classifier": "",
+                  "groupId": "com.nimbusds",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "10.9.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
+            },
+            {
+              "artifactId": "spring-web",
+              "children": [
+                {
+                  "artifactId": "spring-beans",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-context",
+              "children": [
+                {
+                  "artifactId": "spring-expression",
+                  "classifier": "",
+                  "groupId": "org.springframework",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.0.9"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
             }
           ],
           "classifier": "",
@@ -6306,17 +6393,6 @@
             },
             {
               "artifactId": "spring-boot-http-converter",
-              "children": [
-                {
-                  "artifactId": "spring-web",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
-                }
-              ],
               "classifier": "",
               "groupId": "org.springframework.boot",
               "optional": "false",
@@ -6338,17 +6414,6 @@
                 },
                 {
                   "artifactId": "spring-webmvc",
-                  "children": [
-                    {
-                      "artifactId": "spring-expression",
-                      "classifier": "",
-                      "groupId": "org.springframework",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.0.9"
-                    }
-                  ],
                   "classifier": "",
                   "groupId": "org.springframework",
                   "optional": "false",
@@ -6538,28 +6603,6 @@
               "children": [
                 {
                   "artifactId": "spring-security-config",
-                  "children": [
-                    {
-                      "artifactId": "spring-security-core",
-                      "children": [
-                        {
-                          "artifactId": "spring-security-crypto",
-                          "classifier": "",
-                          "groupId": "org.springframework.security",
-                          "optional": "false",
-                          "scope": "compile",
-                          "type": "jar",
-                          "version": "7.1.1"
-                        }
-                      ],
-                      "classifier": "",
-                      "groupId": "org.springframework.security",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.1.1"
-                    }
-                  ],
                   "classifier": "",
                   "groupId": "org.springframework.security",
                   "optional": "false",
@@ -6586,17 +6629,6 @@
             },
             {
               "artifactId": "spring-aop",
-              "children": [
-                {
-                  "artifactId": "spring-beans",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
-                }
-              ],
               "classifier": "",
               "groupId": "org.springframework",
               "optional": "false",
@@ -6618,35 +6650,6 @@
             {
               "artifactId": "spring-boot-security-oauth2-resource-server",
               "children": [
-                {
-                  "artifactId": "spring-security-oauth2-jose",
-                  "children": [
-                    {
-                      "artifactId": "spring-security-oauth2-core",
-                      "classifier": "",
-                      "groupId": "org.springframework.security",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "7.1.1"
-                    },
-                    {
-                      "artifactId": "nimbus-jose-jwt",
-                      "classifier": "",
-                      "groupId": "com.nimbusds",
-                      "optional": "false",
-                      "scope": "compile",
-                      "type": "jar",
-                      "version": "10.9.1"
-                    }
-                  ],
-                  "classifier": "",
-                  "groupId": "org.springframework.security",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.1.1"
-                },
                 {
                   "artifactId": "spring-security-oauth2-resource-server",
                   "classifier": "",
@@ -7031,15 +7034,6 @@
                   "scope": "runtime",
                   "type": "jar",
                   "version": "1.4.2"
-                },
-                {
-                  "artifactId": "spring-context",
-                  "classifier": "",
-                  "groupId": "org.springframework",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "7.0.9"
                 }
               ],
               "classifier": "",
@@ -7949,6 +7943,153 @@
           "scope": "compile",
           "type": "jar",
           "version": "13.0.2"
+        },
+        {
+          "artifactId": "spring-security-oauth2-jose",
+          "children": [
+            {
+              "artifactId": "spring-security-core",
+              "children": [
+                {
+                  "artifactId": "spring-security-crypto",
+                  "classifier": "",
+                  "groupId": "org.springframework.security",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "7.1.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
+            },
+            {
+              "artifactId": "spring-security-oauth2-core",
+              "classifier": "",
+              "groupId": "org.springframework.security",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.1.1"
+            },
+            {
+              "artifactId": "spring-core",
+              "children": [
+                {
+                  "artifactId": "commons-logging",
+                  "classifier": "",
+                  "groupId": "commons-logging",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.3.6"
+                },
+                {
+                  "artifactId": "jspecify",
+                  "classifier": "",
+                  "groupId": "org.jspecify",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.0.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "nimbus-jose-jwt",
+              "classifier": "",
+              "groupId": "com.nimbusds",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "10.9.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework.security",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "7.1.1"
+        },
+        {
+          "artifactId": "spring-web",
+          "children": [
+            {
+              "artifactId": "spring-beans",
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "micrometer-observation",
+              "children": [
+                {
+                  "artifactId": "micrometer-commons",
+                  "classifier": "",
+                  "groupId": "io.micrometer",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.17.1"
+                }
+              ],
+              "classifier": "",
+              "groupId": "io.micrometer",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.17.1"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "7.0.9"
+        },
+        {
+          "artifactId": "spring-context",
+          "children": [
+            {
+              "artifactId": "spring-aop",
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            },
+            {
+              "artifactId": "spring-expression",
+              "classifier": "",
+              "groupId": "org.springframework",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "7.0.9"
+            }
+          ],
+          "classifier": "",
+          "groupId": "org.springframework",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "7.0.9"
         }
       ],
       "classifier": "",

@@ -255,10 +255,22 @@ def seed(config: dict) -> None:
         request(admin + "/clients", "POST", desired, token)
     elif any(clients[0].get(key) != value for key, value in desired.items()):
         raise ValueError("Fixture client drift")
+    # Bounded fixture-only audiences allow foundation denial tests for all three owners.
+    fixture_client = request(admin + "/clients?clientId=nigson-local-fixtures", token=token)[0]
+    mappers = request(admin + "/clients/" + fixture_client["id"] + "/protocol-mappers/models", token=token)
+    for owner in OWNERS:
+        name = "foundation-audience-" + owner
+        wanted = {"name": name, "protocol": "openid-connect", "protocolMapper": "oidc-audience-mapper",
+                  "config": {"included.custom.audience": "nigson-" + owner, "access.token.claim": "true", "id.token.claim": "false", "introspection.token.claim": "true", "userinfo.token.claim": "false"}}
+        found = [mapper for mapper in mappers if mapper["name"] == name]
+        if not found:
+            request(admin + "/clients/" + fixture_client["id"] + "/protocol-mappers/models", "POST", wanted, token)
+        elif any(found[0].get(k) != v for k, v in wanted.items()):
+            raise ValueError("Fixture audience mapper drift")
     for fixture in realm["users"]:
         signed = request("/realms/nigson-local/protocol/openid-connect/token", "POST", {
             "grant_type": "password", "client_id": "nigson-local-fixtures",
-            "username": fixture["username"], "password": password}, form=True)
+            "username": fixture["username"], "password": password, "scope": "openid"}, form=True)
         if not signed.get("access_token"):
             raise ValueError("Real local identity fixture login failed")
     print("PASS: 13 deterministic Keycloak fixtures and real signed logins; domain seeds pending DATA-001")

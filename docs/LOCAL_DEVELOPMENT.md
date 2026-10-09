@@ -235,3 +235,15 @@ and database checks. It compiles a test-only Liquibase probe using the locked lo
 JARs, verifies empty additive rollback and BP5 reapply for every owner, and verifies
 that populated audit/platform tables refuse rollback before any drop. The normal
 migration launcher remains forward-only; this command targets fresh test containers.
+
+## Production identity qualification in isolation
+
+Build `infrastructure/docker/keycloak/Dockerfile`, then run
+`make identity-check ENV=test UV=.build/uv-package/bin/uv`. The test creates its
+own PostgreSQL/TLS/two optimized Keycloak replicas and test proxy, checks private
+administration, browser PKCE/TOTP, signed access-token trust, failover and encrypted
+restore, and cleans only its own containers/network. It compares the original
+`nigson-local` IDs/start times/mounts and preserves original volumes. Private test
+credentials/tokens/dumps remain ignored under `.build/idp001/`. BP1 operational
+tooling has its own locked environment; optional `PROFILE=ai` adds BP5 wire tests
+without activating an AI service. See [the runbook](runbooks/keycloak.md).

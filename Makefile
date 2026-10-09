@@ -112,3 +112,15 @@ observability-infra-check:
 .PHONY: collector-config-check
 collector-config-check:
 	ENV=test python3 scripts/platform/collector_check.py
+
+.PHONY: identity-sync identity-check identity-policy-check identity-infra-check
+identity-sync:
+	UV_PROJECT_ENVIRONMENT=$(CURDIR)/.build/identity-env $(UV) --directory scripts/identity sync --locked --python 3.12.12
+identity-policy-check: identity-sync
+	$(CURDIR)/.build/identity-env/bin/python -m unittest discover -s tests/security -v
+identity-check: identity-policy-check
+	ENV=test $(CURDIR)/.build/identity-env/bin/python scripts/identity/qualify.py
+identity-infra-check:
+	terraform -chdir=infrastructure/terraform/modules/identity init -backend=false
+	terraform -chdir=infrastructure/terraform/modules/identity validate
+	terraform -chdir=infrastructure/terraform/modules/identity test

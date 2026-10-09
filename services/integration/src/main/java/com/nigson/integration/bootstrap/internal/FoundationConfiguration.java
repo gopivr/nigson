@@ -9,8 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
 @Configuration(proxyBeanMethods = false)
 public class FoundationConfiguration {
@@ -30,11 +28,14 @@ public class FoundationConfiguration {
     }
 
     @Bean
-    JwtDecoder foundationDecoder(@Value("${NIGSON_OIDC_ISSUER}") String issuer,
-                                 @Value("${NIGSON_OIDC_JWKS}") String jwks) {
-        var decoder = NimbusJwtDecoder.withJwkSetUri(jwks).build();
-        decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(issuer));
-        return decoder;
+    JwtDecoder foundationDecoder(@Value("${APP_ENV}") String environment,
+                                 @Value("${NIGSON_OIDC_ISSUER}") String issuer,
+                                 @Value("${NIGSON_OIDC_JWKS}") String jwks,
+                                 @Value("${NIGSON_OIDC_AUDIENCE:nigson-integration}") String audience,
+                                 @Value("${NIGSON_OIDC_AUTHORIZED_CLIENTS:nigson-bff,nigson-local-fixtures}") String clients,
+                                 @Value("${NIGSON_OIDC_REQUIRED_SCOPES:openid}") String scopes) {
+        return com.nigson.shared.security.KeycloakIdentity.decoder(new com.nigson.shared.security.KeycloakIdentity.Policy(
+            environment,issuer,jwks,audience,java.util.Set.of(clients.split(",")),java.util.Set.of(scopes.split(","))));
     }
 
     @Bean

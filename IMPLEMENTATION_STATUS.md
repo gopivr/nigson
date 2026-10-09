@@ -1,14 +1,14 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:8 October2026
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:9 October2026 (UTC)
 
 ## Current Phase
 
-EP01 — Owner schemas and reliable platform primitives; BP1 foundation.
+EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
 
 ## Current Task
 
-PLAT-002 — DONE (engineering). Safe RFC9457 errors and bounded validation, transactional owned redacted audit, HTTP/event correlation and SDK tracing, bounded metrics and configured CloudWatch alarms are implemented. Mandatory native owner/OTLP/error/audit/race, provider regression, build/contract/lint, Terraform/ADOT and frozen two-pass cold-start checks pass. Implementation cbdf43cfddc4b87a691fa5bf85240888542498a6; report docs/implementation/2026-10-08-PLAT-002.md. Genuine cloud/provider activation remains NOT_RUN. Original five containers and all named volumes remain preserved.
+IDP-001 — IN_PROGRESS; all offline acceptance, real vendor token/MFA/replica/restore, Terraform security, builds/locks/audits and complete cold-start checks PASS. Recording the required implementation commit before DONE. Original nigson-local containers/volumes preserved; genuine cloud/DNS/activation inputs remain NOT_RUN. Report: docs/implementation/2026-10-09-IDP-001.md.
 
 ## Completed Tasks
 
@@ -27,7 +27,7 @@ PLAT-002 — DONE (engineering). Safe RFC9457 errors and bounded validation, tra
 
 ## In Progress
 
-None. Next dependency-ready task: IDP-001.
+- [ ] IDP-001 — IN_PROGRESS; AC-IDP-001 / TEST-KEYCLOAK-PROD-CONFIG / TEST-KEYCLOAK-REPLICA / TEST-SEC-TOKENS / TEST-IDENTITY-RESTORE.
 
 ## Pending
 
@@ -87,7 +87,6 @@ None. Next dependency-ready task: IDP-001.
 - [ ] INFRA-001 — Implement ECS reference infrastructure and immutable delivery pipeline (EP10)
 - [ ] OPS-002 — Verify resilience, restore and measured capacity (EP10)
 - [ ] REL-001 — Qualify each product phase and hand over documented release (EP13)
-- [ ] IDP-001 — Deploy production Keycloak identity and migrate provider-specific validation (EP02)
 - [ ] NGN-001 — Seed and validate approved Nigeria NGN market (EP04)
 - [ ] PAYSTACK-001 — Complete exclusive Paystack launch adapter and mock qualification (EP05)
 - [ ] CARRIER-001 — Implement required FedEx rate booking cancellation and tracking (EP05)

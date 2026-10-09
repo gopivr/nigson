@@ -1,0 +1,290 @@
+[
+  {
+    "api": "API-117",
+    "method": "POST",
+    "path": "/internal/v1/distributor-entitlements",
+    "owner": "commerce",
+    "client": "nigson-experience",
+    "scope": "entitlement.write",
+    "phase": 3
+  },
+  {
+    "api": "API-118",
+    "method": "POST",
+    "path": "/internal/v1/payments/reconciliation",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "payment.reconcile",
+    "phase": 1
+  },
+  {
+    "api": "API-119",
+    "method": "GET",
+    "path": "/internal/v1/shipments/{id}/provider-context",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "logistics.read",
+    "phase": 4
+  },
+  {
+    "api": "API-120",
+    "method": "POST",
+    "path": "/internal/v1/shipments/{id}/provider-result",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "logistics.write",
+    "phase": 4
+  },
+  {
+    "api": "API-121",
+    "method": "POST",
+    "path": "/internal/v1/purchase-proofs",
+    "owner": "commerce",
+    "client": "nigson-experience",
+    "scope": "purchase-proof.read",
+    "phase": 1
+  },
+  {
+    "api": "API-122",
+    "method": "GET",
+    "path": "/internal/v1/notification-context/{orderId}",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "notification.read",
+    "phase": 1
+  },
+  {
+    "api": "API-123",
+    "method": "GET",
+    "path": "/internal/v1/catalogue/knowledge/{id}",
+    "owner": "commerce",
+    "client": "nigson-ai",
+    "scope": "knowledge.read",
+    "phase": 5
+  },
+  {
+    "api": "API-124",
+    "method": "POST",
+    "path": "/internal/v1/ai/order-status",
+    "owner": "commerce",
+    "client": "nigson-ai",
+    "scope": "order-status.read_WITH_SIGNED_ACTOR",
+    "phase": 5
+  },
+  {
+    "api": "API-125",
+    "method": "POST",
+    "path": "/internal/v1/content/revision-validation",
+    "owner": "experience",
+    "client": "nigson-ai",
+    "scope": "knowledge.validate",
+    "phase": 5
+  },
+  {
+    "api": "API-126",
+    "method": "GET",
+    "path": "/internal/v1/content/knowledge/{id}",
+    "owner": "experience",
+    "client": "nigson-ai",
+    "scope": "knowledge.read",
+    "phase": 5
+  },
+  {
+    "api": "API-127",
+    "method": "POST",
+    "path": "/internal/v1/communication-eligibility",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "consent.read",
+    "phase": 1
+  },
+  {
+    "api": "API-128",
+    "method": "GET",
+    "path": "/internal/v1/career-applications/{id}/sheet-context",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "sheets.read",
+    "phase": 2
+  },
+  {
+    "api": "API-129",
+    "method": "GET",
+    "path": "/internal/v1/leads/{id}/notification-context",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "notification.read",
+    "phase": 1
+  },
+  {
+    "api": "API-130",
+    "method": "GET",
+    "path": "/internal/v1/leads/{id}/quote-context",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "quote.read",
+    "phase": 3
+  },
+  {
+    "api": "API-131",
+    "method": "POST",
+    "path": "/internal/v1/leads/{id}/quote-association",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "quote.write",
+    "phase": 3
+  },
+  {
+    "api": "API-132",
+    "method": "POST",
+    "path": "/internal/v1/files/{id}/scan-result",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "files.scan.write",
+    "phase": 1
+  },
+  {
+    "api": "API-133",
+    "method": "POST",
+    "path": "/internal/v1/notification-deliveries",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "notification.write",
+    "phase": 1
+  },
+  {
+    "api": "API-136",
+    "method": "POST",
+    "path": "/internal/v1/files/{id}/scan-result",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "files.scan.write",
+    "phase": 1
+  },
+  {
+    "api": "API-137",
+    "method": "POST",
+    "path": "/internal/v1/notification-deliveries",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "notification.write",
+    "phase": 1
+  },
+  {
+    "api": "API-140",
+    "method": "GET",
+    "path": "/internal/v1/jobs",
+    "owner": "integration",
+    "client": "nigson-commerce",
+    "scope": "jobs.read",
+    "phase": 1
+  },
+  {
+    "api": "API-141",
+    "method": "POST",
+    "path": "/internal/v1/jobs/{id}/retry",
+    "owner": "integration",
+    "client": "nigson-commerce",
+    "scope": "jobs.retry_WITH_SIGNED_STAFF",
+    "phase": 1
+  },
+  {
+    "api": "API-142",
+    "method": "POST",
+    "path": "/internal/v1/templates",
+    "owner": "integration",
+    "client": "nigson-commerce",
+    "scope": "templates.write_WITH_SIGNED_ADMIN",
+    "phase": 1
+  },
+  {
+    "api": "API-146",
+    "method": "POST",
+    "path": "/internal/v1/knowledge/reindex",
+    "owner": "ai",
+    "client": "nigson-commerce",
+    "scope": "ai.manage_WITH_SIGNED_ADMIN",
+    "phase": 5
+  },
+  {
+    "api": "API-147",
+    "method": "POST",
+    "path": "/internal/v1/evaluations",
+    "owner": "ai",
+    "client": "nigson-commerce",
+    "scope": "ai.manage_WITH_SIGNED_ADMIN",
+    "phase": 5
+  },
+  {
+    "api": "API-158",
+    "method": "POST",
+    "path": "/internal/v1/newsletter-subscriptions/{id}/notification-context",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "notification.read",
+    "phase": 2
+  },
+  {
+    "api": "API-159",
+    "method": "POST",
+    "path": "/internal/v1/cart-recovery/{id}/eligibility",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "recovery.read",
+    "phase": 4
+  },
+  {
+    "api": "API-175",
+    "method": "POST",
+    "path": "/internal/v1/communication-suppressions",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "consent.write",
+    "phase": 1
+  },
+  {
+    "api": "API-182",
+    "method": "POST",
+    "path": "/internal/v1/carrier/quotes",
+    "owner": "integration",
+    "client": "nigson-commerce",
+    "scope": "carrier.quote_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-187",
+    "method": "POST",
+    "path": "/internal/v1/communication-verifications/{id}/notification-context",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "notification.read",
+    "phase": 1
+  },
+  {
+    "api": "API-189",
+    "method": "POST",
+    "path": "/internal/v1/notification-provider-receipts",
+    "owner": "integration",
+    "client": "nigson-commerce",
+    "scope": "notification.feedback.write",
+    "phase": 1
+  },
+  {
+    "api": "API-193",
+    "method": "POST",
+    "path": "/internal/v1/notification-commands",
+    "owner": "integration",
+    "client": "nigson-experience",
+    "scope": "notification.send_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-194",
+    "method": "GET",
+    "path": "/internal/v1/leads/{id}/messaging-context",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "notification.read_WITH_SIGNED_ACTOR",
+    "phase": 1
+  }
+]

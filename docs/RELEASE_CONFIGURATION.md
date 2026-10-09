@@ -174,3 +174,18 @@ Production profile rejects mock/sandbox targets or dummy credentials for enabled
 5. Record actual provider checkout/refund/rate/book/cancel/track/SMS/WhatsApp/callback evidence. Verify FedEx services cover approved routes/currency; keys alone cannot establish service availability. Fix account/config gaps without pretending mocks prove live support.
 6. Switch configuration to live secrets/endpoints/senders/templates; no adapter/domain source rewrite. Production validation refuses dummy/mock targets. Run approved bounded live smoke and record commit/config revisions, mode/account and receipts without raw credentials.
 7. Verify alerts/reconciliation/backup/rollback and update IMPLEMENTATION_STATUS.md with actual results. Existing project deployment authority governs release, no new permission workflow introduced here.
+
+## Identity deployment artifact and policy inputs
+
+IDP-001 supplies a digest-pinned optimized Keycloak image and an identity
+Terraform module with private administration, two replicas, dedicated encrypted
+RDS, trusted TLS proxy settings, scoped secrets and operator alerts. The default
+service count is zero until explicit bootstrap/provisioning. Use actual approved
+DNS/callback/realm/certificates/CA/KMS/secret references, database minor version,
+operator/destinations and backup/log/audit retention. The module's mock-provider
+fixtures are synthetic test metadata and confer no production approval. Private
+bootstrap credentials belong only to the one-off task and must be retired after
+approved permanent MFA administration succeeds. See
+[Keycloak deployment/recovery](runbooks/keycloak.md). BP1 live carrier/messaging/
+payment/identity/security/infrastructure/restore gates remain independent of
+engineering task numbering and require genuine qualification evidence.

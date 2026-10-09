@@ -145,7 +145,7 @@ def main() -> None:
         identity_port = int(config["services"]["keycloak"]["ports"][0]["published"])
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
         form = urllib.parse.urlencode({"grant_type": "password", "client_id": "nigson-local-fixtures",
-                                      "username": "retailA", "password": local.settings()["KEYCLOAK_FIXTURE_PASSWORD"]}).encode()
+                                      "username": "retailA", "password": local.settings()["KEYCLOAK_FIXTURE_PASSWORD"], "scope": "openid"}).encode()
         with opener.open(urllib.request.Request(f"http://127.0.0.1:{identity_port}/realms/nigson-local/protocol/openid-connect/token", data=form), timeout=10) as response:
             token = json.load(response)["access_token"]
         for owner in local.OWNERS:

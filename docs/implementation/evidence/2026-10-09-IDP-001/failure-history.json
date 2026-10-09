@@ -1,0 +1,82 @@
+[
+  {
+    "check": "optimized-startup",
+    "failure": "Build-time health setting mismatch; management scheme accepts inherited, not https.",
+    "resolution": "Persist health setting at build time and inherit HTTPS management."
+  },
+  {
+    "check": "preservation-comparison",
+    "failure": "Unsorted mount metadata caused a false preservation assertion.",
+    "resolution": "Sort mounts; original IDs/start times/mounts verified unchanged."
+  },
+  {
+    "check": "staff-TOTP-enrollment",
+    "failure": "Hidden enrollment secret treated as base32 instead of raw secret.",
+    "resolution": "Compute OTP from the actual raw hidden secret; real enrollment succeeds."
+  },
+  {
+    "check": "access-token-subject",
+    "failure": "Custom realm/client policy omitted Keycloak subject mapper.",
+    "resolution": "Explicit vendor subject mapper; valid real signed access tokens pass."
+  },
+  {
+    "check": "JWKS-Python",
+    "failure": "Keycloak publishes encryption keys as well as signature keys.",
+    "resolution": "Bound/validate all public keys and select only supported signature keys."
+  },
+  {
+    "check": "Java-build",
+    "failure": "Jackson3 JsonFactory namespace mismatch.",
+    "resolution": "Use tools.jackson.core.json.JsonFactory; final clean builds pass."
+  },
+  {
+    "check": "Terraform-tests",
+    "failure": "Sandbox plugin bind and unknown/invalid synthetic computed attributes.",
+    "resolution": "Approved mock-only provider execution and valid synthetic computed ARNs; seven tests pass."
+  },
+  {
+    "check": "replica-failure",
+    "failure": "Test proxy default timeout exceeded bounded admin request timeout during failure detection.",
+    "resolution": "Bound proxy timeouts; allow bounded health/cluster convergence before continuity check."
+  },
+  {
+    "check": "restore-helper",
+    "failure": "Private test artifact helper did not accept bytearray tamper fixture.",
+    "resolution": "Handle binary fixture input; authenticated tamper rejection and real restore pass."
+  },
+  {
+    "check": "event-metrics",
+    "failure": "User event metrics enablement is a build-time option.",
+    "resolution": "Persist at optimized build; actual private counters verified."
+  },
+  {
+    "check": "replay-regression",
+    "failure": "Negative code/refresh replay invalidated the session also used for continuity.",
+    "resolution": "Independent negative fixtures; a separate unrevoked continuity session survives failover and restore."
+  },
+  {
+    "check": "dependency-audit",
+    "failure": "First OSV request used Maven artifact type as version and yielded irrelevant findings.",
+    "resolution": "Extract actual final coordinate version; corrected 258-version query yields zero findings."
+  },
+  {
+    "check": "scope-contract-extraction",
+    "failure": "Greedy multiline path regex consumed the API block.",
+    "resolution": "Bound path to a single line; all 32 bindings exactly match master APIs and product phases."
+  },
+  {
+    "check": "TEST-LOCAL-COLD-START repeated seed",
+    "failure": "Exact mapper comparison omitted vendor-canonical introspection.token.claim=true/userinfo.token.claim=false; first setup passed and second seed rejected drift.",
+    "resolution": "Read actual metadata from the failed isolated identity volume; declare the two canonical settings explicitly and retain exact audience/config drift checks. Full cold-start rerun required."
+  },
+  {
+    "check": "final skew/type review",
+    "failure": "Issued-at guard had a one-second wider boundary; raw claim conversion could accept incorrect types.",
+    "resolution": "Enforce exact <=60s and required raw string/integer/audience types; signed wrong-type and 60/61-second boundary tests pass."
+  },
+  {
+    "check": "vendor administrative audit retention",
+    "failure": "Vendor user event TTL does not set the separate administrative event TTL.",
+    "resolution": "Set approved adminEventsExpiration attribute in business/master realms; actual vendor readback and persisted audit records without representations verified."
+  }
+]
