@@ -8,7 +8,7 @@ EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
 
 ## Current Task
 
-COM-PARTY-001 — IN_PROGRESS; API-005–010 mapped profile/address ownership, exact validation, configured country rules, versioned transactional mutation/default serialization/soft deletion and native HTTP/race qualification. User authorized completing every remaining pending task on9 October2026; continue dependency-ready offline work and stop dependent work only for critical approval/required input.
+COM-SESSI-001 — IN_PROGRESS; public API-001–004 BFF login/callback/session/logout and verified identity provisioning. User authorized completing every remaining pending task on9 October2026; continue dependency-ready offline work and stop dependent work only for critical approval/required input.
 
 ## Completed Tasks
 
@@ -31,13 +31,14 @@ COM-PARTY-001 — IN_PROGRESS; API-005–010 mapped profile/address ownership, e
 
 - [x] COM-AUTHO-001 — DONE (engineering); implementation 1484e6729ab82e4266d91543e74a730625d0640a; AC-COM-AUTHO-001 native26/no skips, final actual HTTP packaging smoke, full build/contracts/migrations and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-AUTHO-001.md.
 
+- [x] COM-PARTY-001 — DONE (engineering); implementation ab308ae6380ada183239361ced25363e6eb13a16; native24/no skips, full build/contracts, owner migrations, OSV261/zero findings and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-PARTY-001.md.
+
 ## In Progress
 
-COM-PARTY-001 — started9 October2026.
+COM-SESSI-001 — started9 October2026.
 
 ## Pending
 
-- [ ] COM-PARTY-001 — Implement commerce party increment (EP02)
 - [ ] COM-SESSI-001 — Implement commerce session increment (EP02)
 - [ ] COM-CATAL-001 — Implement commerce catalogue increment (EP03)
 - [ ] COM-FILES-001 — Implement commerce files increment (EP03)

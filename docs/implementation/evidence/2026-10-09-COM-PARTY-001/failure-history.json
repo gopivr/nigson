@@ -11,6 +11,10 @@
     {
       "step": "First native qualification",
       "result": "Default Java17 rejected by pinned Java25 enforcer before tests. Re-executed with explicit JAVA_HOME;24 native tests passed."
+    },
+    {
+      "step": "Staged whitespace check",
+      "result": "Maven log blank prefixes contained trailing spaces. Implementation commit was made before inspecting the check result; completion metadata strips log-only trailing spaces and repeats staged check."
     }
   ],
   "raw_ignored_logs": [

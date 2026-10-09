@@ -1,7 +1,7 @@
 {
   "task": "COM-PARTY-001",
   "acceptance": "AC-COM-PARTY-001",
-  "implementation_commit": null,
+  "implementation_commit": "ab308ae6380ada183239361ced25363e6eb13a16",
   "native": {
     "tests": 24,
     "skipped": 0,
