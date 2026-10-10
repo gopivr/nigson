@@ -1,7 +1,7 @@
 {
   "task": "NGN-001",
   "criterion": "AC-NGN-001",
-  "engineering": "IN_PROGRESS",
+  "engineering": "DONE",
   "native": {
     "tests": 27,
     "failures": 0,
@@ -30,8 +30,8 @@
     "testContainersStopped": true,
     "namedVolumesRetained": true
   },
-  "implementationCommit": null,
+  "implementationCommit": "c087ad6d649bc4702c5a0e25b2251a4f0643dd10",
   "liveActivation": "NOT_RUN",
-  "verification": "PASS; actual implementation commit pending",
+  "verification": "PASS",
   "evidenceNormalization": "Copied diagnostic logs strip trailing whitespace; ignored raw .build logs retain original bytes and all failures/results are preserved."
 }

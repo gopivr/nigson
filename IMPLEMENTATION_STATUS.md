@@ -8,9 +8,11 @@ EP04 — Owned inventory and market/pricing foundations; BP1 launch composition 
 
 ## Current Task
 
-NGN-001 — IN_PROGRESS; approved NG/Nigeria/NGN2/destination metadata, deterministic production-safe disabled baseline and kobo validation. No tax/returns/book/origin/route policy invented. DATA-001/SEC-001 and COM-MARKE-001 complete.
+COM-PRICI-001 — IN_PROGRESS; SEC-001/DATA-001 complete, owned catalogue/market/inventory and approved disabled NGN baseline ready. Exact API-026/027/028/036/150/151, effective immutable books/tiers, exact minor units and frozen quote precedence; no commercial prices or tax/route approvals invented.
 
 ## Completed Tasks
+
+- [x] NGN-001 — DONE (engineering); implementation c087ad6d649bc4702c5a0e25b2251a4f0643dd10; approved deterministic NG/Nigeria/NGN2/destination metadata with selling/delivery disabled, native27/no skips, actual HTTP kobo/wrong-currency checks, previous upgrade/checksum/policy preservation/actual rollback/conflict guards, two-round cold-start, full65 Java/116 gated,51 contracts,15 AI/five gated and nine reproduced artifacts. Actual policies/provider/caller release qualification NOT_RUN. Report docs/implementation/2026-10-10-NGN-001.md.
 
 - [x] COM-MARKE-001 — DONE (engineering); implementation d6e318033308f10922ed3aaeafe9d067c409df48; native24/no skips, full63 Java/115 gated,51 contracts,15 AI/five gated,268 unchanged dependencies/nine reproduced artifacts. Exact API-029/031/162/169 with current policy/roles/MFA, draft suppression and trusted local checkout gate. Live provider/caller composition/actual policies/staging separately NOT_RUN. Report docs/implementation/2026-10-10-COM-MARKE-001.md.
 
@@ -50,7 +52,7 @@ NGN-001 — IN_PROGRESS; approved NG/Nigeria/NGN2/destination metadata, determin
 
 ## In Progress
 
-NGN-001 — started10 October2026. Approved launch metadata only, selling disabled. Next foundation for exact NGN minor units and mock-first Paystack workflow.
+COM-PRICI-001 — started10 October2026. Exact pricing and frozen price quote foundation; live values and carrier/provider qualification remain separate launch gates.
 
 ## Pending
 
@@ -99,14 +101,13 @@ NGN-001 — started10 October2026. Approved launch metadata only, selling disabl
 - [ ] INFRA-001 — Implement ECS reference infrastructure and immutable delivery pipeline (EP10)
 - [ ] OPS-002 — Verify resilience, restore and measured capacity (EP10)
 - [ ] REL-001 — Qualify each product phase and hand over documented release (EP13)
-- [ ] NGN-001 — Seed and validate approved Nigeria NGN market (EP04)
 - [ ] PAYSTACK-001 — Complete exclusive Paystack launch adapter and mock qualification (EP05)
 - [ ] CARRIER-001 — Implement required FedEx rate booking cancellation and tracking (EP05)
 - [ ] MSG-001 — Implement SMS WhatsApp consent proof callbacks and mock qualification (EP05)
 
 ## Build Status
 
-PASS — NGN-001 full65 Java/116 gated,51 contracts,15 AI/five gated,Ruff/mypy13 and268 unchanged locked Maven artifacts. Nine final artifacts reproduce. Source acceptance commit pending; no live activation inferred.
+PASS — NGN-001 full65 Java/116 gated,51 contracts,15 AI/five gated,Ruff/mypy13 and268 unchanged locked Maven artifacts. Nine final artifacts reproduce. Engineering acceptance committed; no live activation inferred.
 
 ## Test Status
 
@@ -114,7 +115,7 @@ PASS — NGN-001 native27/no skips, actual HTTP NGN kobo and wrong-currency reje
 
 ## Last Successful Commit
 
-d6e318033308f10922ed3aaeafe9d067c409df48 — verified COM-MARKE-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
+c087ad6d649bc4702c5a0e25b2251a4f0643dd10 — approved Nigeria baseline with actual native/migration/cold-start/full acceptance evidence. Completion metadata follows actual source commit.
 
 ## Confirmed Inputs
 
@@ -130,7 +131,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-NGN-001 — approved deterministic NG/Nigeria/NGN2/destination baseline, dependency-ready after DATA-001/SEC-001. Selling disabled until separate real policies/providers qualify. COM-PRICI-001 follows; all independent work remains authorized.
+COM-PRICI-001 — dependency-ready exact pricing/books/tiers and immutable checkout quotes. NGN baseline/market/catalogue/inventory foundation accepted; no actual business values invented. CARRIER/PAYSTACK/MSG/experience/infrastructure launch work remains authorized independently.
 
 ## Session Evidence / Protocol
 
