@@ -8,9 +8,11 @@ EP03 — Owned catalogue/configuration increments; BP1 launch composition remain
 
 ## Current Task
 
-COM-NOTIF-001 — IN_PROGRESS; API-122/133/165 minimal notification context, durable delivery accounting and compiled signed ADMIN template proxy. Current authority/MFA/CSRF, escaped template variable allowlist, durable intent and UNKNOWN acknowledgement reconciliation. Provider job proxy committed/DONE engineering; all remaining work authorized.
+COM-INVEN-001 — IN_PROGRESS; SEC-001/DATA-001 complete. Implement exact API-045/046/170, zero-stock location creation, scaled quantities, immutable movements and ordered reservation/allocation transitions in the commerce transaction boundary. All remaining work authorized.
 
 ## Completed Tasks
+
+- [x] COM-NOTIF-001 — DONE (engineering); implementation f20bc413565bdc8fec0a3df7a51c0f3d5416f968; native36/no skips, full56 Java/89 gated,47 contracts,15 AI/five gated, nine reproduced artifacts. API-122/133/165 minimal context, job/state receipts and signed ADMIN templates; production metric correction verified. Integration dispatch/consent and live messaging qualification separately NOT_RUN. Report docs/implementation/2026-10-10-COM-NOTIF-001.md.
 
 - [x] COM-PROVI-001 — DONE (engineering); API-163/164 current OPERATIONS/MFA, compiled real HTTP/JWT/KMS and durable UNKNOWN acknowledgement proxy. Native20/no skips, full50 Java/79 gated,45 contracts,15 AI/five gated, nine reproduced artifacts; report docs/implementation/2026-10-10-COM-PROVI-001.md; implementation a470f6c1335cd6f761357db5c4354098a817967a. Live worker/provider/staging and initial version discovery contract gap separately NOT_RUN.
 
@@ -44,11 +46,10 @@ COM-NOTIF-001 — IN_PROGRESS; API-122/133/165 minimal notification context, dur
 
 ## In Progress
 
-COM-NOTIF-001 — verified10 October2026, awaiting actual implementation commit. Native36/no skips, final full56 Java/89 gated,47 contracts,15 AI/five gated, nine reproduced artifacts PASS. Production metric allowlist correction verified in assembled HTTP; failures retained. No arbitrary URL, cross-owner SQL or invented consent/provider approvals.
+COM-INVEN-001 — started10 October2026. Dependency-ready after SEC-001/DATA-001; launch stock invariants unlock checkout implementation. No invented initial stock or actual location data; explicit synthetic fixtures only.
 
 ## Pending
 
-- [ ] COM-NOTIF-001 — Implement commerce notification increment (EP03)
 - [ ] EXP-CONTE-001 — Implement experience content increment (EP03)
 - [ ] EXP-FILES-001 — Implement experience files increment (EP03)
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
@@ -111,7 +112,7 @@ PASS — COM-PROVI-001 native20/no skips (real workload JWT/JWKS/KMS/private gua
 
 ## Last Successful Commit
 
-a470f6c1335cd6f761357db5c4354098a817967a — verified COM-PROVI-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
+f20bc413565bdc8fec0a3df7a51c0f3d5416f968 — verified COM-NOTIF-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -127,7 +128,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-NOTIF-001 — exact notification context/delivery/template proxy, dependency-ready after SEC-001. Catalogue, files, configuration and provider job proxy committed/DONE engineering. User authorization to complete all remaining tasks persists; cache cleanup/restart already approved/completed and application Docker assets preserved. Continue section46 release composition; live activation inputs remain separately NOT_RUN.
+COM-INVEN-001 — exact inventory operations and local stock accounting; dependency-ready after SEC-001/DATA-001 and prioritized to unlock checkout launch guarantees. EP phases are not sequential release gates. Remaining experience/provider work continues independently; genuine activation inputs remain separately NOT_RUN.
 
 ## Session Evidence / Protocol
 

@@ -1,7 +1,7 @@
 {
   "task": "COM-NOTIF-001",
   "criterion": "AC-COM-NOTIF-001",
-  "engineering": "Verified; awaiting actual implementation commit",
+  "engineering": "DONE",
   "native": {
     "passed": 36,
     "skipped": 0,
@@ -23,5 +23,5 @@
   "integrationDispatchConsentComposition": "NOT_RUN; integration/experience-owned increments pending; commerce does not send or grant consent",
   "liveProviderStaging": "NOT_RUN",
   "templateCreateVersion": "Optional supplied If-Match forwarded exactly; no invented version; active revisions immutable in worker",
-  "implementationCommit": null
+  "implementationCommit": "f20bc413565bdc8fec0a3df7a51c0f3d5416f968"
 }
