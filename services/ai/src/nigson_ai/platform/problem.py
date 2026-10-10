@@ -41,6 +41,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "MARKET_RULE_VIOLATION": (
+        422,
+        "Market rule violation",
+        "The market operation does not meet approved selling rules.",
+    ),
     "INVENTORY_RULE_VIOLATION": (
         422,
         "Inventory rule violation",

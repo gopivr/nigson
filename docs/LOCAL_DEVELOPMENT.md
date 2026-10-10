@@ -268,3 +268,5 @@ Security remains an explicit configured profile. Enable NIGSON_SECURITY_ENABLED 
 Notification acceptance: `make notification-check ENV=test` supplies isolated owner PostgreSQL and stateful loopback integration JWT/KMS/template fixtures, preserving other Docker workloads. Production notification template commands are disabled until explicit `NIGSON_NOTIFICATION_TEMPLATES_ENABLED=true` and an approved private `NIGSON_INTEGRATION_BASE_URL` are configured. Context and delivery APIs still require the compiled integration workload scopes; they never send a message.
 
 `make inventory-check ENV=test` qualifies the owned stock operations and local transaction port with isolated PostgreSQL and actual BFF HTTP. It preserves original Docker resources. Synthetic fixture stock/order/payment rows are test-only and do not authorize actual warehouse, initial stock, tax, prices or provider accounts.
+
+`make market-check ENV=test` qualifies exact API-029/031/162/169 and owned policy/race/rollback/BFF behavior against isolated local containers. Synthetic policy/provider proofs confer no live activation.

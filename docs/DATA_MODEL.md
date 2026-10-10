@@ -3963,3 +3963,7 @@ constraint and ownership qualification; `make schema-check` alone is not
 runtime acceptance.
 
 COM-INVEN-001 implements application-scale stock values, append-only movement conservation and caller-owned transaction transitions over the existing four inventory tables. A full unshipped allocation cancellation marks its reservation RELEASED without claiming dispatch; mixed dispatch/cancellation completes DISPATCHED only when dispatched units exist. A released pre-payment reservation may be reused for eligible late settlement, but prior settlement/dispatch/return evidence forbids reusing an allocated-and-cancelled reservation. Stable return business key is command UUID plus immutable order line. No inventory schema changed.
+
+## COM-MARKE-001 owned policy implementation —10 October2026
+
+Existing currency/market/destination/eligibility/book tables are reused without DDL. NGN scale2 is verified, not editable by market API; NGN-001 owns its approved seed. Explicit eligibility increments Product version/public revision plus its own row version, with reason retained only in owned state. Flat TaxPolicy is closed and requires explicit approvalReference (NONE requires decimal zero); empty draft{} fails selling. AddressRules reuses the existing Party/RE2-J contract. Current market/destination/tax/returns/retail book and supplied trusted provider qualification proof are rechecked inside checkout before reservation; no network under locks. No commercial policy values or actual provider approvals are seeded.

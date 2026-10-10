@@ -172,3 +172,8 @@ notification-check:
 inventory-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/inventory/verify.py
+
+.PHONY: market-check
+market-check:
+	$(MAKE) status-check
+	ENV=test python3 scripts/market/verify.py

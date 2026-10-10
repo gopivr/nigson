@@ -105,11 +105,11 @@ COM-MARKE-001 — started10 October2026. Dependency-ready SEC-001/DATA-001; stoc
 
 ## Build Status
 
-PASS — final COM-FILES-001 full verification;268 locked Maven artifacts/zero OSV findings,43 contracts,Ruff/mypy13; nine artifact hashes reproduce. Two-round cold-start includes new migration/dependencies. Genuine release activation separately NOT_RUN.
+PASS — final COM-MARKE-001 full verification;63 Java/115 environment-gated skips,51 contracts,15 AI/five gated, Ruff/mypy13 and268 unchanged locked Maven artifacts. Nine final Java/Python artifacts reproduce. Acceptance commit pending; genuine release activation separately NOT_RUN.
 
 ## Test Status
 
-PASS — COM-PROVI-001 native20/no skips (real workload JWT/JWKS/KMS/private guard, role/CSRF/MFA/version/UNKNOWN/audit/races); full50 Java/79 gated skips,45 contracts,15 AI/five gated skips, Ruff/mypy13, unchanged268 dependencies and nine reproduced artifacts. No schema changes; fresh/repeated owner BP1/BP5 migrations and original local state preserved. Prior catalogue/files/schema/cold-start evidence retained. Live worker/provider/staging and initial job version discovery NOT_RUN; exact contract conflicts recorded.
+PASS — COM-MARKE-001 native24/no skips: current FINANCE/MFA and CONTENT_PUBLISHER BFF/CSRF, draft suppression, current market/product/policy/provider proof, bounded RE2/J addresses, replay/stale/foreign currency, audit rollback and competing books. Fresh/repeated owned BP1/BP5 migrations and original local state preserved;123 tables unchanged. Source engineering verification complete, actual commit pending. Prior accepted inventory/notification/provider/catalogue/files/identity evidence remains valid. Caller composition/live activation/staging/frontend NOT_RUN.
 
 ## Last Successful Commit
 

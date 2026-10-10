@@ -28,6 +28,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.provider.JobHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.notification.NotificationHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.inventory.InventoryHttpAcceptance.run(app,http,base);
+   com.nigson.acceptance.market.MarketHttpAcceptance.run(app,http,base);
    assertThat(http.send(HttpRequest.newBuilder(URI.create(base+"/actuator/health/readiness")).GET().build(),HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
    for(String path:List.of("/api/v1/staff/roles","/bff/logout","/internal/v1/payments/reconciliation")){var response=http.send(HttpRequest.newBuilder(URI.create(base+path)).GET().build(),HttpResponse.BodyHandlers.ofString());assertThat(response.statusCode()).isIn(401,403);assertThat(response.body()).doesNotContain("synthetic-bff-credential",publicKey,"mock-commerce-runtime");}
    var origin=http.send(HttpRequest.newBuilder(URI.create(base+"/api/v1/owned-fixture")).method("OPTIONS",HttpRequest.BodyPublishers.noBody()).header("Origin","https://bff.synthetic.test").header("Access-Control-Request-Method","POST").header("Access-Control-Request-Headers","content-type,x-csrf-token").build(),HttpResponse.BodyHandlers.ofString());assertThat(origin.statusCode()).isEqualTo(204);assertThat(origin.headers().firstValue("Access-Control-Allow-Origin")).hasValue("https://bff.synthetic.test");

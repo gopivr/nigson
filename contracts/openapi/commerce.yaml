@@ -6200,6 +6200,645 @@
           }
         }
       }
+    },
+    "/api/v1/markets": {
+      "get": {
+        "operationId": "API-029",
+        "description": "Public bounded replica rate budget and repeatable-read list. Only enabled NG/NGN2 and enabled NG destinations; international policy is unavailable until BP5. No query/body, browser bearer or actor proof. No-store prevents stale enabled policy.",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicMarkets"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Market rule violation or disabled policy; no commercial activation from draft inputs",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Bounded replica read budget exceeded"
+          }
+        }
+      }
+    },
+    "/api/v1/staff/markets": {
+      "post": {
+        "operationId": "API-169",
+        "description": "Current FINANCE/no organization/recent MFA15m and CSRF. Supported active ISO currency must already exist; NGN scale2 immutable. Creates disabled market, policyRevision1/version0, taxPolicy{}, empty destinations/null returns and book. No approval, price or destination guessed. Atomic audit/idempotency; current role/MFA before replay. NGN-001 owns approved currency seed.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 43,
+              "maxLength": 43
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Market rule violation or disabled policy; no commercial activation from draft inputs",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketDTO"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewMarket"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/markets/{id}/retail-price-book": {
+      "put": {
+        "operationId": "API-162",
+        "description": "Current FINANCE/recent MFA/CSRF/If-Match. Require active RETAIL book of matching approved currency and current effective interval. Lock Party/market/currency/book; atomically increment market version/policy revision with EVT-008/audit/response. Assignment never enables a market.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 43,
+              "maxLength": 43
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketDTO"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Market rule violation or disabled policy; no commercial activation from draft inputs",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketBookSelection"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/products/{id}/markets/{marketId}": {
+      "put": {
+        "operationId": "API-031",
+        "description": "Current CONTENT_PUBLISHER/CSRF/If-Match. Product aggregate version governs first and subsequent restrictions. Missing eligibility denies selling. Shared commerce transaction locks Party/product/market, stores explicit restriction and reason, increments product version/public revision and emits EVT-006 with current eligible market codes. Current authority precedes cached replay.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "marketId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 43,
+              "maxLength": 43
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductMarketDTO"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Market rule violation or disabled policy; no commercial activation from draft inputs",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketEligibility"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8723,6 +9362,361 @@
             "minLength": 10,
             "maxLength": 500,
             "description": "At least10 nonpadding characters, no control/format characters; retained in owned immutable movement, redacted from public DTO/audit."
+          }
+        }
+      },
+      "TaxPolicy": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "mode",
+          "rate",
+          "rounding",
+          "approvalReference"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "mode": {
+            "enum": [
+              "NONE",
+              "EXCLUSIVE",
+              "INCLUSIVE"
+            ]
+          },
+          "rate": {
+            "type": "string",
+            "pattern": "^(0(\\.[0-9]{1,18})?|1(\\.0{1,18})?)$"
+          },
+          "rounding": {
+            "const": "HALF_UP"
+          },
+          "approvalReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "mode": {
+                  "const": "NONE"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "rate": {
+                  "type": "string",
+                  "pattern": "^0(\\.0{1,18})?$"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AddressRules": {
+        "title": "AddressRules v1",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "requiredFields",
+          "postalPattern",
+          "regionCodes"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "requiredFields": {
+            "type": "array",
+            "maxItems": 6,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "RECIPIENT",
+                "PHONE",
+                "LINE1",
+                "CITY",
+                "REGION",
+                "POSTAL_CODE"
+              ]
+            }
+          },
+          "postalPattern": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "RE2/J syntax; bounded compiled program; full-string match against at most 24 postal characters."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "regionCodes": {
+            "type": "array",
+            "maxItems": 100,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        }
+      },
+      "MarketDestination": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "countryCode",
+          "addressRules",
+          "deliveryEnabled"
+        ],
+        "properties": {
+          "countryCode": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "addressRules": {
+            "$ref": "#/components/schemas/AddressRules"
+          },
+          "deliveryEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "NewMarket": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "name",
+          "currency"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_-]{1,31}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          }
+        }
+      },
+      "MarketDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "code",
+          "name",
+          "currency",
+          "enabled",
+          "destinations",
+          "taxPolicy",
+          "returnsPolicyRevision",
+          "retailPriceBookId",
+          "policyRevision",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_-]{1,31}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "destinations": {
+            "type": "array",
+            "maxItems": 250,
+            "items": {
+              "$ref": "#/components/schemas/MarketDestination"
+            }
+          },
+          "taxPolicy": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [],
+                "properties": {}
+              },
+              {
+                "$ref": "#/components/schemas/TaxPolicy"
+              }
+            ],
+            "description": "Empty object only for a disabled draft; it is never an approved zero tax policy."
+          },
+          "returnsPolicyRevision": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 80
+          },
+          "retailPriceBookId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "policyRevision": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      },
+      "PublicMarket": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "code",
+          "currency",
+          "destinations",
+          "policyRevision"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "code": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "destinations": {
+            "type": "array",
+            "uniqueItems": true,
+            "maxItems": 250,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            }
+          },
+          "policyRevision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "PublicMarkets": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "$ref": "#/components/schemas/PublicMarket"
+        }
+      },
+      "MarketBookSelection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "priceBookId",
+          "reason"
+        ],
+        "properties": {
+          "priceBookId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 300
+          }
+        }
+      },
+      "MarketEligibility": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "eligible",
+          "reason"
+        ],
+        "properties": {
+          "eligible": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 300
+          }
+        }
+      },
+      "ProductMarketDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "marketId",
+          "eligible",
+          "version"
+        ],
+        "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "marketId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "eligible": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
           }
         }
       }

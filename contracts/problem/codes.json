@@ -133,5 +133,10 @@
     "status": 422,
     "title": "Inventory rule violation",
     "detail": "The stock operation does not meet current inventory rules."
+  },
+  "MARKET_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Market rule violation",
+    "detail": "The market operation does not meet approved selling rules."
   }
 }

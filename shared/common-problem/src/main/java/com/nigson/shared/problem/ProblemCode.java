@@ -10,6 +10,7 @@ public enum ProblemCode {
  IDEMPOTENCY_HASH_MISMATCH(409,"Conflicting request","Use the original request with this key."),
  IDEMPOTENCY_IN_PROGRESS(409,"Request in progress","Retry this request after the current operation finishes."),
  VERSION_MISMATCH(412,"Version mismatch","Refresh the resource before retrying."),
+ MARKET_RULE_VIOLATION(422,"Market rule violation","The market operation does not meet approved selling rules."),
  INVENTORY_RULE_VIOLATION(422,"Inventory rule violation","The stock operation does not meet current inventory rules."),
  NOTIFICATION_RULE_VIOLATION(422,"Notification rule violation","The notification operation does not meet current rules."),
  PROVIDER_RULE_VIOLATION(422,"Provider rule violation","The provider operation does not meet current rules."),

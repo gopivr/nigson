@@ -1,0 +1,39 @@
+{
+  "task": "COM-MARKE-001",
+  "criterion": "AC-COM-MARKE-001",
+  "engineering": "IN_PROGRESS",
+  "implementationCommit": null,
+  "native": {
+    "tests": 24,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "commandExit": 0
+  },
+  "contracts": 51,
+  "schema": "unchanged123 owned tables; actual fresh/repeated BP1/BP5 native migrations",
+  "dependencyArtifacts": 268,
+  "liveActivation": "NOT_RUN",
+  "providerCallerComposition": "NOT_RUN",
+  "frontendStagingLoad": "NOT_RUN",
+  "priorFailuresPreserved": [
+    "market-compile-second.log",
+    "market-native-first.log",
+    "market-contract-first.log"
+  ],
+  "full": {
+    "javaPassed": 63,
+    "javaGatedSkips": 115,
+    "contracts": 51,
+    "aiPassed": 15,
+    "aiGatedSkips": 5,
+    "ruff": "PASS",
+    "mypyFiles": 13,
+    "commandExit": 0
+  },
+  "artifacts": {
+    "count": 9,
+    "reproduced": true
+  },
+  "verification": "PASS; implementation commit pending"
+}
