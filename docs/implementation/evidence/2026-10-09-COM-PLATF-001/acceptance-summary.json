@@ -1,7 +1,7 @@
 {
   "task": "COM-PLATF-001",
   "status": "IN_PROGRESS",
-  "implementation_commit": null,
+  "implementation_commit": "eb717118e05adc073f00cb2ba6e189ac1d0b818c",
   "ledger_regression": {
     "java_passed": 14,
     "java_skipped": 1,

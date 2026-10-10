@@ -1,7 +1,7 @@
 {
   "task": "COM-SESSI-001",
   "acceptance": "AC-COM-SESSI-001",
-  "implementation_commit": "c29766c9de8c4ff9b6370b66cd3556b32cef7805",
+  "implementation_commit": "eb717118e05adc073f00cb2ba6e189ac1d0b818c",
   "native": {
     "tests": 23,
     "failures": 0,
@@ -30,7 +30,7 @@
   "pending_changes": "None: final200-character query-bound HTTP checks passed in recovered native suite",
   "previous_overall_verify": "FAIL: cached mypy after disk-full write",
   "current_reproducible_artifacts": "PASS: nine final repaired-source hashes match final-repaired-artifacts-first.json and final-repaired-artifacts-second.json",
-  "task_status": "ACCEPTANCE_PASSED_AWAITING_ACTUAL_COMMIT",
+  "task_status": "DONE (engineering)",
   "recovered_native": {
     "status": "PASS",
     "tests": 23,

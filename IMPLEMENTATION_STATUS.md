@@ -4,11 +4,11 @@ Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:9 October2026 
 
 ## Current Phase
 
-EP02 — Identity, BFF, authorization and private trust; BP1 foundation.
+EP03 — Owned catalogue/configuration increments; BP1 launch composition remains section46.
 
 ## Current Task
 
-COM-SESSI-001 — IN_PROGRESS; public API-001–004 BFF login/callback/session/logout and verified identity provisioning. User authorized completing every remaining pending task on9 October2026; continue dependency-ready offline work and stop dependent work only for critical approval/required input.
+COM-PLATF-001 — IN_PROGRESS; typed configuration API-135, followed by COM-CATAL-001 catalogue persistence/APIs. COM-SESSI-001 acceptance is committed/DONE. User authorization to complete all remaining tasks persists; only critical broader cache cleanup approval is pending.
 
 ## Completed Tasks
 
@@ -33,17 +33,16 @@ COM-SESSI-001 — IN_PROGRESS; public API-001–004 BFF login/callback/session/l
 
 - [x] COM-PARTY-001 — DONE (engineering); implementation ab308ae6380ada183239361ced25363e6eb13a16; native24/no skips, full build/contracts, owner migrations, OSV261/zero findings and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-PARTY-001.md.
 
-## In Progress
+- [x] COM-SESSI-001 — DONE (engineering); implementation eb717118e05adc073f00cb2ba6e189ac1d0b818c; final native23/no skips, real Keycloak/restore, two-round cold-start/recovery/local preservation, full verification and nine final reproducible artifacts PASS. Prior disk-full/classification failures preserved. Report: docs/implementation/2026-10-09-COM-SESSI-001.md.
 
-COM-SESSI-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; final23 native/no skips and real Keycloak/restore PASS. Full uncached repository verification PASS (38 Java/43 gated skips,38 contracts,15 AI/four skips). Cold-start interrupted by host disk exhaustion/Docker metadata I/O failure; recovered final native suite23/no skips PASS including query bounds. User approved Docker restart, engine recovered; failed task project containers cleaned with volumes retained. Cold-start rerun failed again from disk exhaustion/read-only containerd; failure preserved. Approved restart repeated;13 exact unused private Nigson cache records reclaimed2.454GB without image/volume deletion. Locked dependency-cache build and cold-start two-pass/recovery/preservation checks PASS; final repaired-source session/reproducible checks IN_PROGRESS before DONE. Broader unused-cache cleanup approval pending because space remains below1GB.
+## In Progress
 
 COM-CATAL-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains IN_PROGRESS; Docker recovered after approved restart.
 
-COM-PLATF-001 — started9 October2026; dependency SEC-001 DONE. Owner ledger wait repair PASS:14 Java/one declared nonapplicable skip and four Python native tests; full verification38 Java/46 gated skips,38 contracts,15 AI/five skips. Typed owner configuration API-135 remains implementation-owned pending work.
+COM-PLATF-001 — started9 October2026; verified ledger/build repair implementation eb717118e05adc073f00cb2ba6e189ac1d0b818c; dependency SEC-001 DONE. Owner ledger wait repair PASS:14 Java/one declared nonapplicable skip and four Python native tests; full verification38 Java/46 gated skips,38 contracts,15 AI/five skips. Typed owner configuration API-135 remains implementation-owned pending work.
 
 ## Pending
 
-- [ ] COM-SESSI-001 — Implement commerce session increment (EP02)
 - [ ] COM-CATAL-001 — Implement commerce catalogue increment (EP03)
 - [ ] COM-FILES-001 — Implement commerce files increment (EP03)
 - [ ] COM-NOTIF-001 — Implement commerce notification increment (EP03)
@@ -119,7 +118,7 @@ Nigeria countryNG / marketNG / Nigerian NairaNGN2; Paystack only at launch; requ
 
 ## Known Issues / Remaining Activation Inputs
 
-Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start are committed/DONE offline. COM-AUTHO-001 public staff role APIs/last-admin protection and atomic revocation/audit are now DONE offline; public BFF/party APIs remain COM-SESSI-001/COM-PARTY-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. Original nigson-local vendor containers/volumes preserved; all five were observed stopped at the final vendor qualification baseline; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
+Foundation and DATA-001 schema acceptance checks complete. All declared tables are implemented behind product-phase gates; domain APIs remain task-owned pending work; stateful provider mocks and actual adapters are implemented and qualified offline. Local seed covers identity only; approved NG/NGN metadata is NGN-001 and no tax/campaign/provider policies are invented. Section40 contract/load/restore workflows remain task-owned future outputs, documented without placeholder success targets. Production Keycloak deployment configuration, provider-specific JWT validation, phase-scoped clients and identity MFA/restore are implemented and qualified offline in IDP-001. SEC-001 session/private actor/workload/current authorization foundation and final cold-start are committed/DONE offline. COM-AUTHO-001 public staff role APIs/last-admin protection and atomic revocation/audit are now DONE offline; public BFF/party APIs are now committed/DONE in COM-SESSI-001/COM-PARTY-001; exact phase/producer SNS filters and scoped consumer IAM are implemented in PLAT-001; genuine AWS IAM qualification remains NOT_RUN. Original nigson-local vendor containers/volumes preserved; all five were observed stopped at the final vendor qualification baseline; isolated test stacks stopped and their volumes retained. No production market/provider/model activation occurred.
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
@@ -127,7 +126,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-SESSI-001 — finish final native query-bound acceptance and cold-start after critical Docker recovery approval; continue COM-CATAL-001 owned persistence/API acceptance. COM-PARTY-001 and SEC-001 are committed/DONE. COM-AUTHO-001 authorization is committed/DONE. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs. Preserve existing local state.
+COM-PLATF-001 — complete typed configuration API-135 and its native/HTTP/version/audit/MFA acceptance, then finish COM-CATAL-001 catalogue APIs. SEC-001, COM-AUTHO-001, COM-PARTY-001 and COM-SESSI-001 are committed/DONE offline. Broader unused Docker cache cleanup approval is pending under preservation of unrelated work; less than1GB remains. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs.
 
 ## Session Evidence / Protocol
 
