@@ -26,9 +26,11 @@ public final class TrustFilter extends OncePerRequestFilter {
             if(internal){if(req.getCookies()!=null&&cookies.read(req)!=null)throw ActorAssertion.denied();String authorization=single(req,"Authorization"),actor=single(req,"X-Nigson-Actor");UUID correlation=com.nigson.shared.observability.WireContext.current()==null?com.nigson.shared.observability.WireContext.correlation(req.getHeader("X-Correlation-ID")):com.nigson.shared.observability.WireContext.current().correlationId;
                 var body=new PrivateBody(req);forwarded=body;proof=privateTrust.verify(req.getRemoteAddr(),req.getMethod(),req.getRequestURI(),authorization,actor,correlation,body.hash());
             } else {
-                if(single(req,"X-Nigson-Actor")!=null||single(req,"Authorization")!=null)throw ActorAssertion.denied();String id=cookies.read(req);
+                if(single(req,"X-Nigson-Actor")!=null||single(req,"Authorization")!=null)throw ActorAssertion.denied();
+                boolean publicCatalogue=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}"));
+                String id=publicCatalogue?null:cookies.read(req);
                 // Login/callback/session public controllers (next task) explicitly invoke their own typed flow.
-                if(id!=null&&!Set.of("/bff/login","/bff/callback","/bff/session").contains(req.getRequestURI())){
+                if(id!=null&&!publicCatalogue&&!Set.of("/bff/login","/bff/callback","/bff/session").contains(req.getRequestURI())){
                     var record=sessions.read(id,true);if(Set.of("POST","PUT","PATCH","DELETE").contains(req.getMethod()))sessions.csrf(record,single(req,"X-CSRF-TOKEN"));proof=authority.resolve(record,null,Set.of());
                 }
             }

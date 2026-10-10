@@ -1,0 +1,21 @@
+{
+  "task": "COM-CATAL-001",
+  "status": "IN_PROGRESS",
+  "implementation_commit": null,
+  "native_java_pass": 23,
+  "native_skips": 0,
+  "ordinary_java_pass": 38,
+  "ordinary_java_gated_skips": 65,
+  "contracts_pass": 41,
+  "ai_pass": 15,
+  "ai_gated_skips": 5,
+  "configuration_regression_java_pass": 27,
+  "configuration_regression_nonapplicable_skip": 1,
+  "configuration_regression_python_pass": 4,
+  "reproduced_artifacts": 9,
+  "activation": "NOT_RUN",
+  "failures_preserved": [
+    "lexical hyphen search mismatch corrected without weakening rank expectations",
+    "obsolete exact OpenAPI inventory corrected to 23 paths/27 operations"
+  ]
+}

@@ -213,6 +213,8 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, AUTHORIZATION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
+Implemented API-013–025/149 catalogue behavior, current-role policy, publication/outbox boundaries and public cache/search rules: `contracts/openapi/commerce.yaml`, `docs/runbooks/catalogue.md`. No wholesale prices or shipping labels in catalogue DTOs; approved metadata/CDN/market inputs remain activation gates.
+
 ### API-013 GET /api/v1/catalogue/products
 
 - **Service / module / phase:** commerce / catalogue / BP1.

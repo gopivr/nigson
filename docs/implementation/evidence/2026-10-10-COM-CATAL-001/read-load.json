@@ -1,0 +1,1 @@
+{"scope":"local native source query; not staging30m checkout/provider qualification","readers":100,"p99_ms":97.550459,"products":10000,"skus":20000,"scheduled_rps":20,"requests":100,"errors":0,"p95_ms":88.907667,"p50_ms":85.058417}

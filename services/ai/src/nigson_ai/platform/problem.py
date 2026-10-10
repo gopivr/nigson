@@ -41,6 +41,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "CATALOGUE_RULE_VIOLATION": (
+        422,
+        "Catalogue rule violation",
+        "The catalogue change does not meet current rules.",
+    ),
     "PLATFORM_RULE_VIOLATION": (
         422,
         "Configuration rule violation",

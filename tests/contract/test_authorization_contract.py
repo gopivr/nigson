@@ -8,7 +8,8 @@ class AuthorizationContracts(unittest.TestCase):
     def test_reviewed_generation_and_exact_implemented_routes(self):
         subprocess.run([sys.executable, 'scripts/contracts/authorization.py', '--check'], cwd=ROOT, check=True)
         spec = json.loads((ROOT / 'contracts/openapi/commerce.yaml').read_text())
-        self.assertEqual(set(spec['paths']), {'/api/v1/staff/users', '/api/v1/staff/users/{id}/roles', '/api/v1/me', '/api/v1/me/addresses', '/api/v1/me/addresses/{id}', '/bff/login', '/bff/callback', '/bff/session', '/bff/logout', '/api/v1/commerce/staff/configuration/{key}'})
+        self.assertEqual(len(spec['paths']), 23)
+        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()}, {f'API-{n:03}' for n in range(1,26)} | {'API-135', 'API-149'})
         put = spec['paths']['/api/v1/staff/users/{id}/roles']['put']
         self.assertEqual({p['name'] for p in put['parameters'] if p['required']}, {'id', 'If-Match', 'Idempotency-Key', 'X-CSRF-TOKEN'})
         self.assertIn('412', put['responses'])

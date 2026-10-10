@@ -89,10 +89,10 @@ class ConfigurationPersistenceTest {
         try{
             var metrics=new SimpleMeterRegistry();var manager=new DataSourceTransactionManager(jdbc.getDataSource());
             var metadataService=new OwnerConfiguration(new JdbcConfigurationRepository(jdbc,clock),new PlatformStore(jdbc,manager,clock,metrics),new AuditWriter(jdbc,clock,metrics),clock,List.of(new CatalogueMetadataPolicy()));
-            var value=EventCodec.JSON.readTree("{\"schemaVersion\":1,\"units\":[{\"code\":\"SYNTHETIC\",\"scales\":[2]}],\"divisions\":[{\"code\":\"synthetic\",\"attributes\":[{\"key\":\"synthetic\",\"type\":\"DECIMAL\",\"unit\":\"SYNTHETIC\",\"maximumLength\":20}]}]}");
+            var value=EventCodec.JSON.readTree("{\"schemaVersion\":1,\"units\":[{\"code\":\"SYNTHETIC\",\"scales\":[0,2]}],\"divisions\":[{\"code\":\"synthetic\",\"attributes\":[{\"key\":\"synthetic\",\"type\":\"DECIMAL\",\"unit\":\"SYNTHETIC\",\"maximumLength\":20}]}]}");
             var input=EventCodec.JSON.valueToTree(Map.of("value",value,"active",true,"reason","Synthetic metadata qualification"));
             assertThat(metadataService.put(actor(clock.instant()),"catalogue.metadata",0,input,"metadata-create",UUID.randomUUID()).active()).isTrue();
-            var incompatible=EventCodec.JSON.readTree(EventCodec.JSON.writeValueAsString(input).replace("[2]","[0]"));
+            var incompatible=EventCodec.JSON.readTree(EventCodec.JSON.writeValueAsString(input).replace("[0,2]","[0]"));
             assertThatThrownBy(()->metadataService.put(actor(clock.instant()),"catalogue.metadata",1,incompatible,"metadata-incompatible",UUID.randomUUID())).isInstanceOf(Problem.Failure.class);
             assertThat(jdbc.queryForObject("SELECT count(*) FROM commerce.feature_configuration WHERE key='catalogue.metadata' AND created_by=?",Integer.class,admin.toString())).isEqualTo(1);
             var disabled=EventCodec.JSON.valueToTree(Map.of("value",value,"active",false,"reason","Synthetic metadata deactivation"));

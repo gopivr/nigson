@@ -103,5 +103,10 @@
     "status": 422,
     "title": "Configuration rule violation",
     "detail": "The configuration does not meet registered owner rules."
+  },
+  "CATALOGUE_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Catalogue rule violation",
+    "detail": "The catalogue change does not meet current rules."
   }
 }

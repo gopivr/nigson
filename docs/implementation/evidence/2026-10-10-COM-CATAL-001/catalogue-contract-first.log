@@ -1,0 +1,14 @@
+PASS: API-001–025/API-135/149 generated OpenAPI matches reviewed contract
+======================================================================
+FAIL: test_reviewed_generation_and_exact_implemented_routes (test_authorization_contract.AuthorizationContracts.test_reviewed_generation_and_exact_implemented_routes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_authorization_contract.py", line 11, in test_reviewed_generation_and_exact_implemented_routes
+    self.assertEqual(len(spec['paths']), 21)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 23 != 21
+
+----------------------------------------------------------------------
+Ran 39 tests in 1.824s
+
+FAILED (failures=1)

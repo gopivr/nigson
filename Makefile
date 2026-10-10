@@ -145,3 +145,10 @@ party-check:
 .PHONY: session-check
 session-check:
 	ENV=test python3 scripts/session/verify.py
+
+.PHONY: configuration-check catalogue-check
+configuration-check:
+	ENV=test python3 scripts/configuration/verify.py
+catalogue-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/catalogue/verify.py
