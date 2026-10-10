@@ -1,7 +1,7 @@
 {
   "task": "COM-PROVI-001",
   "criterion": "AC-COM-PROVI-001",
-  "engineering": "VERIFIED_PENDING_COMMIT",
+  "engineering": "DONE",
   "native": {
     "passed": 20,
     "skipped": 0,
@@ -23,5 +23,5 @@
   "integrationWorker": "NOT_RUN; INT-PROVI-001 pending",
   "liveProviderStaging": "NOT_RUN",
   "initialJobVersionDiscovery": "Contract gap: specified closed JobDTO has no version; no guessed values or undeclared field",
-  "implementationCommit": null
+  "implementationCommit": "a470f6c1335cd6f761357db5c4354098a817967a"
 }

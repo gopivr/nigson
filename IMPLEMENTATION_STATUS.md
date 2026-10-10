@@ -8,9 +8,11 @@ EP03 — Owned catalogue/configuration increments; BP1 launch composition remain
 
 ## Current Task
 
-COM-PROVI-001 — IN_PROGRESS; exact API-163/164 staff operations job list/retry proxy to registered private integration APIs140/141, with current authority, signed staff/MFA for retry, durable command identity and UNKNOWN reconciliation. Planned verification: closed inputs/DTOs, object/role/CSRF/MFA denial, actual scoped HTTP/mock upstream, timeout/dedup/races/audit, contracts/build/migrations. Catalogue/files committed/DONE engineering; all remaining work authorized.
+COM-NOTIF-001 — IN_PROGRESS; API-122/133/165 minimal notification context, durable delivery accounting and compiled signed ADMIN template proxy. Current authority/MFA/CSRF, escaped template variable allowlist, durable intent and UNKNOWN acknowledgement reconciliation. Provider job proxy committed/DONE engineering; all remaining work authorized.
 
 ## Completed Tasks
+
+- [x] COM-PROVI-001 — DONE (engineering); API-163/164 current OPERATIONS/MFA, compiled real HTTP/JWT/KMS and durable UNKNOWN acknowledgement proxy. Native20/no skips, full50 Java/79 gated,45 contracts,15 AI/five gated, nine reproduced artifacts; report docs/implementation/2026-10-10-COM-PROVI-001.md; implementation a470f6c1335cd6f761357db5c4354098a817967a. Live worker/provider/staging and initial version discovery contract gap separately NOT_RUN.
 
 - [x] FOUND-001 — DONE; AC-FOUND-001 / TEST-FOUND-TREE passed against fresh clone of 65da3bd17c1f73a1570c69cd1e0c2796768daba0. No backend feature completed.
 - Report: docs/implementation/2026-10-05-FOUND-001.md
@@ -42,12 +44,11 @@ COM-PROVI-001 — IN_PROGRESS; exact API-163/164 staff operations job list/retry
 
 ## In Progress
 
-COM-PROVI-001 — started10 October2026. SEC-001 complete; compiled proxy contracts and owned uncertainty primitives ready. No arbitrary upstream URL, cross-owner SQL or invented provider configuration.
+COM-NOTIF-001 — started10 October2026. SEC-001 complete; exact templates/context/delivery APIs ready for owned implementation. No arbitrary URL, cross-owner SQL or invented consent/provider approvals.
 
 ## Pending
 
 - [ ] COM-NOTIF-001 — Implement commerce notification increment (EP03)
-- [ ] COM-PROVI-001 — Implement commerce provider increment (EP03)
 - [ ] EXP-CONTE-001 — Implement experience content increment (EP03)
 - [ ] EXP-FILES-001 — Implement experience files increment (EP03)
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
@@ -106,11 +107,11 @@ PASS — final COM-FILES-001 full verification;268 locked Maven artifacts/zero O
 
 ## Test Status
 
-PASS — COM-FILES-001 native20/no skips, real BFF/file HTTP/workload JWT/JWKS and TLS/SigV4 stateful storage, ownership/quarantine/job/checksum/rollback/uncertainty/races, exact123-table owner fresh/incremental migrations and previous-BP1 upgrade/empty/populated rollback gates. Full43 Java/73 gated skips,43 contracts,15 AI/five gated skips. Two cold-start rounds/security/drift/outage/local preservation PASS; all failure history retained. Real scanner/cloud/CDN/retention/frontend gates NOT_RUN.
+PASS — COM-PROVI-001 native20/no skips (real workload JWT/JWKS/KMS/private guard, role/CSRF/MFA/version/UNKNOWN/audit/races); full50 Java/79 gated skips,45 contracts,15 AI/five gated skips, Ruff/mypy13, unchanged268 dependencies and nine reproduced artifacts. No schema changes; fresh/repeated owner BP1/BP5 migrations and original local state preserved. Prior catalogue/files/schema/cold-start evidence retained. Live worker/provider/staging and initial job version discovery NOT_RUN; exact contract conflicts recorded.
 
 ## Last Successful Commit
 
-4104c1ae9d143a5f318a05ba63b7ef925a0d4fcd — verified COM-FILES-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
+a470f6c1335cd6f761357db5c4354098a817967a — verified COM-PROVI-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -126,7 +127,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-PROVI-001 — compiled staff job list/retry proxy, dependency-ready after SEC-001. Catalogue, files and typed configuration committed/DONE engineering. User authorization to complete all remaining tasks persists; cache cleanup/restart already approved/completed and application Docker assets preserved. Continue section46 release composition; live activation inputs remain separately NOT_RUN.
+COM-NOTIF-001 — exact notification context/delivery/template proxy, dependency-ready after SEC-001. Catalogue, files, configuration and provider job proxy committed/DONE engineering. User authorization to complete all remaining tasks persists; cache cleanup/restart already approved/completed and application Docker assets preserved. Continue section46 release composition; live activation inputs remain separately NOT_RUN.
 
 ## Session Evidence / Protocol
 
