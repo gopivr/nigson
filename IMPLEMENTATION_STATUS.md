@@ -8,7 +8,7 @@ EP03 — Owned catalogue/configuration increments; BP1 launch composition remain
 
 ## Current Task
 
-COM-PLATF-001 — IN_PROGRESS; typed configuration API-135, followed by COM-CATAL-001 catalogue persistence/APIs. COM-SESSI-001 acceptance is committed/DONE. User authorization to complete all remaining tasks persists; unused Docker cache cleanup explicitly approved and complete; 35GiB free, application images/containers/volumes preserved.
+COM-CATAL-001 — IN_PROGRESS; owned catalogue persistence/APIs, publication/search/races. COM-PLATF-001 API-135 and COM-SESSI-001 are committed/DONE engineering. User authorization to complete all remaining tasks persists; unused Docker cache cleanup explicitly approved and complete; 35GiB free, application images/containers/volumes preserved.
 
 ## Completed Tasks
 
@@ -33,20 +33,20 @@ COM-PLATF-001 — IN_PROGRESS; typed configuration API-135, followed by COM-CATA
 
 - [x] COM-PARTY-001 — DONE (engineering); implementation ab308ae6380ada183239361ced25363e6eb13a16; native24/no skips, full build/contracts, owner migrations, OSV261/zero findings and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-PARTY-001.md.
 
+- [x] COM-PLATF-001 — DONE (engineering); implementation ed0e8ef55544c3a6c728219e0c909d00706b613f; API-135 current ADMIN/MFA/CSRF/version/history/replay/atomic audit, closed catalogue metadata registry. Native27 Java/one documented nonapplicable skip/four Python pass; full38 Java/52 gated skips,39 contracts,15 AI/five skips and nine reproduced artifacts. Report: docs/implementation/2026-10-10-COM-PLATF-001.md.
 - [x] COM-SESSI-001 — DONE (engineering); implementation eb717118e05adc073f00cb2ba6e189ac1d0b818c; final native23/no skips, real Keycloak/restore, two-round cold-start/recovery/local preservation, full verification and nine final reproducible artifacts PASS. Prior disk-full/classification failures preserved. Report: docs/implementation/2026-10-09-COM-SESSI-001.md.
 
 ## In Progress
 
 COM-CATAL-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains IN_PROGRESS; Docker recovered after approved restart.
 
-COM-PLATF-001 — started9 October2026; verified ledger/build repair implementation eb717118e05adc073f00cb2ba6e189ac1d0b818c; dependency SEC-001 DONE. Owner ledger wait repair PASS:14 Java/one declared nonapplicable skip and four Python native tests; full verification38 Java/46 gated skips,38 contracts,15 AI/five skips. Typed owner configuration API-135 remains implementation-owned pending work.
+COM-CATAL-001 — ongoing owned catalogue persistence/APIs after committed typed configuration. Approved units/divisions/public asset delivery remain activation inputs; no invented business metadata.
 
 ## Pending
 
 - [ ] COM-CATAL-001 — Implement commerce catalogue increment (EP03)
 - [ ] COM-FILES-001 — Implement commerce files increment (EP03)
 - [ ] COM-NOTIF-001 — Implement commerce notification increment (EP03)
-- [ ] COM-PLATF-001 — Implement commerce platform increment (EP03)
 - [ ] COM-PROVI-001 — Implement commerce provider increment (EP03)
 - [ ] EXP-CONTE-001 — Implement experience content increment (EP03)
 - [ ] EXP-FILES-001 — Implement experience files increment (EP03)
@@ -126,7 +126,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-PLATF-001 — complete typed configuration API-135 and its native/HTTP/version/audit/MFA acceptance, then finish COM-CATAL-001 catalogue APIs. SEC-001, COM-AUTHO-001, COM-PARTY-001 and COM-SESSI-001 are committed/DONE offline. Broader unused Docker build cache cleanup explicitly approved/completed; 52.12GB reclaimed and 35GiB free; application images, container identities/exit states and volumes verified preserved. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs.
+COM-CATAL-001 — finish owned catalogue APIs/persistence/publication/search and native/HTTP/race/load acceptance. COM-PLATF-001 typed configuration API-135 is committed/DONE engineering. SEC-001, COM-AUTHO-001, COM-PARTY-001 and COM-SESSI-001 are committed/DONE offline. Broader unused Docker build cache cleanup explicitly approved/completed; 52.12GB reclaimed and 35GiB free; application images, container identities/exit states and volumes verified preserved. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs.
 
 ## Session Evidence / Protocol
 

@@ -1,7 +1,7 @@
 {
   "task": "COM-PLATF-001",
   "acceptance": "AC-COM-PLATF-001",
-  "status": "IN_PROGRESS pending actual implementation commit",
+  "status": "DONE engineering",
   "api": "API-135",
   "native_java": {
     "passed": 27,
@@ -30,5 +30,6 @@
     "Initial HTTP suite correctly denied unregistered exact route; added only API-135 PUT authenticated matcher and reran.",
     "Contract fixture expected only prior twelve operation IDs; extended exact inventory to API-135.",
     "Initial container-preservation string comparison failed on relative elapsed text only; normalized exited codes/IDs/names and verified unchanged."
-  ]
+  ],
+  "implementation_commit": "ed0e8ef55544c3a6c728219e0c909d00706b613f"
 }
