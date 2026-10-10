@@ -14,7 +14,7 @@ EVIDENCE=ROOT/'docs/implementation/evidence/2026-10-06-PLAT-001'
 EVIDENCE.mkdir(parents=True,exist_ok=True)
 database_verify.EVIDENCE=EVIDENCE
 
-def main(java_tests="PlatformPersistenceTest,EventTransportTest,PaystackTransactionGuardTest", python_tests=None, evidence=None, run_python=True, completion=None, qualification=None):
+def main(java_tests="PlatformPersistenceTest,EventTransportTest,PaystackTransactionGuardTest", python_tests=None, evidence=None, run_python=True, completion=None, qualification=None, java_environment=None):
  global EVIDENCE
  if evidence is not None:
   EVIDENCE=evidence;EVIDENCE.mkdir(parents=True,exist_ok=True);database_verify.EVIDENCE=EVIDENCE
@@ -24,6 +24,8 @@ def main(java_tests="PlatformPersistenceTest,EventTransportTest,PaystackTransact
  endpoint=docker('context','inspect','--format','{{json .Endpoints.docker.Host}}')[0]
  import json
  if not json.loads(endpoint).startswith('unix://'):raise ValueError('Local Docker endpoint required')
+ from contextlib import ExitStack
+ resources=ExitStack()
  before=preserved();network='nigson-test-plat-'+uuid.uuid4().hex[:10];docker('network','create',network)
  db=Database.__new__(Database);db.network=network;db.name=network+'-postgres'
  try:
@@ -44,6 +46,7 @@ def main(java_tests="PlatformPersistenceTest,EventTransportTest,PaystackTransact
    except AssertionError:time.sleep(1)
   eventport=docker('port',stack,'4566/tcp')[0].split(':')[-1]
   env={**os.environ,'NIGSON_TEST_EVENT_ENDPOINT':'http://127.0.0.1:'+eventport,'NIGSON_TEST_JDBC_URL':'jdbc:postgresql://127.0.0.1:'+port+'/nigson','NIGSON_EVENT_FIXTURES':str(ROOT/'tests/platform/events')}
+  if java_environment is not None:env.update(resources.enter_context(java_environment(env)))
   subprocess.run(['./mvnw','-B','-pl','services/commerce,services/experience,services/integration','-am','-Dtest='+java_tests,'-Dsurefire.failIfNoSpecifiedTests=false','test'],cwd=ROOT,env=env,check=True,timeout=300)
   env['NIGSON_TEST_AI_DSN']='host=127.0.0.1 port='+port+' dbname=nigson user=nigson_ai_app password=mock-ai-runtime options=-csearch_path=ai'
   if run_python:
@@ -52,6 +55,7 @@ def main(java_tests="PlatformPersistenceTest,EventTransportTest,PaystackTransact
    qualification(env)
   print(completion or 'PASS: real PostgreSQL concurrent replay, canonical request hashes, rollback, consumer dedup and stale lease fencing for all Java owners')
  finally:
+  resources.close()
   docker('rm','-f','-v',network+'-localstack',db.name);docker('network','rm',network)
   assert before==preserved(),'Original local state changed'
 if __name__=='__main__':main()

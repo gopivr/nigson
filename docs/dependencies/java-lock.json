@@ -96,6 +96,8 @@
     "org.apache.httpcomponents.client5:httpclient5:jar::5.6.4": "bdef5f8841145cd76c4c605ff301bc840eea0d5292332b7b892a93316c0d8ee1",
     "org.apache.httpcomponents.core5:httpcore5-h2:jar::5.4.3": "c7db7026b8e2dea39132b04a6069f6671e2858309b20a146ec5c7dd6ed73a0b6",
     "org.apache.httpcomponents.core5:httpcore5:jar::5.4.3": "18bfbbabb478dfb67f31aeaf428c387f3c3df654582e1309f708ee1f3086830a",
+    "org.apache.httpcomponents:httpclient:jar::4.5.13": "6fe9026a566c6a5001608cf3fc32196641f6c1e5e1986d1037ccdbd5f31ef743",
+    "org.apache.httpcomponents:httpcore:jar::4.4.16": "6c9b3dd142a09dc468e23ad39aad6f75a0f2b85125104469f026e52a474e464f",
     "org.apache.logging.log4j:log4j-api:jar::2.25.5": "64777f73ea0b3104c04eb82befbdccc30a425a19e83ad06cb2f93aa303511863",
     "org.apache.logging.log4j:log4j-to-slf4j:jar::2.25.5": "b68e8b47342dbc9b35644a14fe2efc0b7bf18da703910cd05ad5501ffe07bba1",
     "org.apache.tomcat.embed:tomcat-embed-core:jar::11.0.26": "062cf4191139c08aef678673039e41ed9d69b6c1b9b30b44820e5a83d0c09cb6",
@@ -229,13 +231,17 @@
     "org.xmlunit:xmlunit-core:jar::2.11.0": "50970e6069c21182689eb44ae9f8193970e080b6f37fc13f22aa4201cca2dfe4",
     "org.yaml:snakeyaml:jar::2.6": "c8f7a98e7394adda02f6317249710e4d1b4c7a25aa8c7eace0c2eea52eb8bf85",
     "software.amazon.awssdk:annotations:jar::2.55.10": "79be18c0713b37c0f24ae80541d037a1ade96d2b6fc783030e95f3e44098b4db",
+    "software.amazon.awssdk:apache-client:jar::2.55.10": "3d3fc7dc66a35673bc46db9a91fc3c0488f6c30cea7b308b7fdc718967995a2e",
     "software.amazon.awssdk:apache5-client:jar::2.55.10": "5673d633879087354b75d0ba32e55f9ba5c2a8cf3a0f3fc6ba159ba67d4bae23",
+    "software.amazon.awssdk:arns:jar::2.55.10": "b89102e00193c5ec5101e85906b7ab92eebf8b4956435b1528f2c182082ffc8f",
     "software.amazon.awssdk:auth:jar::2.55.10": "7107a49e8c2af851d9cf02ca28829679e62fb5af356c7a16828942b2caf4cd85",
     "software.amazon.awssdk:aws-core:jar::2.55.10": "b66b399578ae923e42ed317c72b3492c401769a45f25c894a125728dd6a40075",
     "software.amazon.awssdk:aws-json-protocol:jar::2.55.10": "1df3349557299f168636afd822786aabb75b7301801c6b64aba9267faf309226",
     "software.amazon.awssdk:aws-query-protocol:jar::2.55.10": "af526a7a044028a88125fb41ee042f26f1ad2fec32ea33a95fe0c13eb8c7fe66",
+    "software.amazon.awssdk:aws-xml-protocol:jar::2.55.10": "b94ac1c8af49ad1bcd6239ac0fef0a44310a5fc09a1cecd778eccdfcdc4dd243",
     "software.amazon.awssdk:checksums-spi:jar::2.55.10": "4564e44b982f9a6fc945f6f953a34719826059370decbb8ae3c0935c5169c663",
     "software.amazon.awssdk:checksums:jar::2.55.10": "ff47945abd1f3de66dc3d39a59974a739cbad8af675dc5f35d72a583da8295ac",
+    "software.amazon.awssdk:crt-core:jar::2.55.10": "c51183303a430d3f2e74493a6642306821f247c5519fc68a611363843e999086",
     "software.amazon.awssdk:endpoints-spi:jar::2.55.10": "50f32e3488d780d83c3fd1fff676e68eb86f1c0a61c01012d008408412336717",
     "software.amazon.awssdk:http-auth-aws-eventstream:jar::2.55.10": "ec90f5c7bdb8be3f0cfd24f0b5e50b3a014908faefe47d3bc08ea82633cd2151",
     "software.amazon.awssdk:http-auth-aws:jar::2.55.10": "fa57d2a2ce775073c661757306a11a7a5e96a98ed9d58464886dad5bfa275c95",
@@ -252,6 +258,7 @@
     "software.amazon.awssdk:regions:jar::2.55.10": "43e26a634fb00962ff130bf507c84eaa32103888fd1e95ad1ae7de6e690e5b06",
     "software.amazon.awssdk:retries-spi:jar::2.55.10": "93dae465331ae4388ba0bec4afe510d50d16b54aa4c1d41af7175e0a4bc320ed",
     "software.amazon.awssdk:retries:jar::2.55.10": "3ae4440759c9b90729009af7f510099c72447f80835d78ff9d10a0ec31b8c240",
+    "software.amazon.awssdk:s3:jar::2.55.10": "671d4175b639929559fa1116bd0f605d2a4f890fee3357b39768b0d224358cca",
     "software.amazon.awssdk:sdk-core:jar::2.55.10": "c3937ea05cd2976eadbfbf5dca4bdd51d51889936121b72422c4549f6944ab17",
     "software.amazon.awssdk:sns:jar::2.55.10": "9dbbaf1cd5ab8e62e156786c501efa27a4375e1a37be081ee55a8f34afcd9e47",
     "software.amazon.awssdk:sqs:jar::2.55.10": "0825025a96d8b100f787b54dd58cbcacf2f273e5220239d6953391f6c099a97f",
@@ -619,15 +626,6 @@
               "artifactId": "twilio",
               "children": [
                 {
-                  "artifactId": "commons-codec",
-                  "classifier": "",
-                  "groupId": "commons-codec",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.21.0"
-                },
-                {
                   "artifactId": "commons-io",
                   "classifier": "",
                   "groupId": "commons-io",
@@ -910,10 +908,106 @@
           "version": "0.1.0"
         },
         {
-          "artifactId": "sns",
+          "artifactId": "apache-client",
           "children": [
             {
-              "artifactId": "aws-query-protocol",
+              "artifactId": "http-client-spi",
+              "children": [
+                {
+                  "artifactId": "reactive-streams",
+                  "classifier": "",
+                  "groupId": "org.reactivestreams",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.0.4"
+                }
+              ],
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "metrics-spi",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "utils",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "annotations",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "httpclient",
+              "children": [
+                {
+                  "artifactId": "commons-logging",
+                  "classifier": "",
+                  "groupId": "commons-logging",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.3.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.apache.httpcomponents",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.5.13"
+            },
+            {
+              "artifactId": "httpcore",
+              "classifier": "",
+              "groupId": "org.apache.httpcomponents",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.4.16"
+            },
+            {
+              "artifactId": "commons-codec",
+              "classifier": "",
+              "groupId": "commons-codec",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.21.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "software.amazon.awssdk",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.55.10"
+        },
+        {
+          "artifactId": "s3",
+          "children": [
+            {
+              "artifactId": "aws-xml-protocol",
               "classifier": "",
               "groupId": "software.amazon.awssdk",
               "optional": "false",
@@ -931,27 +1025,88 @@
               "version": "2.55.10"
             },
             {
+              "artifactId": "arns",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "profiles",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "crt-core",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "http-auth",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "identity-spi",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "http-auth-spi",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
               "artifactId": "http-auth-aws",
-              "children": [
-                {
-                  "artifactId": "checksums-spi",
-                  "classifier": "",
-                  "groupId": "software.amazon.awssdk",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.55.10"
-                },
-                {
-                  "artifactId": "checksums",
-                  "classifier": "",
-                  "groupId": "software.amazon.awssdk",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.55.10"
-                }
-              ],
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "checksums",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "checksums-spi",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "retries-spi",
               "classifier": "",
               "groupId": "software.amazon.awssdk",
               "optional": "false",
@@ -963,15 +1118,6 @@
               "artifactId": "sdk-core",
               "children": [
                 {
-                  "artifactId": "profiles",
-                  "classifier": "",
-                  "groupId": "software.amazon.awssdk",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.55.10"
-                },
-                {
                   "artifactId": "retries",
                   "classifier": "",
                   "groupId": "software.amazon.awssdk",
@@ -979,15 +1125,6 @@
                   "scope": "compile",
                   "type": "jar",
                   "version": "2.55.10"
-                },
-                {
-                  "artifactId": "reactive-streams",
-                  "classifier": "",
-                  "groupId": "org.reactivestreams",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.0.4"
                 }
               ],
               "classifier": "",
@@ -1027,61 +1164,7 @@
               "version": "2.55.10"
             },
             {
-              "artifactId": "http-auth-spi",
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
-              "artifactId": "http-auth",
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
-              "artifactId": "identity-spi",
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
-              "artifactId": "http-client-spi",
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
               "artifactId": "regions",
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
-              "artifactId": "annotations",
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
-              "artifactId": "utils",
               "classifier": "",
               "groupId": "software.amazon.awssdk",
               "optional": "false",
@@ -1102,15 +1185,6 @@
                   "version": "2.55.10"
                 }
               ],
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
-              "artifactId": "metrics-spi",
               "classifier": "",
               "groupId": "software.amazon.awssdk",
               "optional": "false",
@@ -1140,15 +1214,6 @@
             },
             {
               "artifactId": "endpoints-spi",
-              "classifier": "",
-              "groupId": "software.amazon.awssdk",
-              "optional": "false",
-              "scope": "compile",
-              "type": "jar",
-              "version": "2.55.10"
-            },
-            {
-              "artifactId": "retries-spi",
               "classifier": "",
               "groupId": "software.amazon.awssdk",
               "optional": "false",
@@ -1305,6 +1370,26 @@
               "groupId": "software.amazon.awssdk",
               "optional": "false",
               "scope": "runtime",
+              "type": "jar",
+              "version": "2.55.10"
+            }
+          ],
+          "classifier": "",
+          "groupId": "software.amazon.awssdk",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.55.10"
+        },
+        {
+          "artifactId": "sns",
+          "children": [
+            {
+              "artifactId": "aws-query-protocol",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
               "type": "jar",
               "version": "2.55.10"
             }
@@ -2614,17 +2699,6 @@
             },
             {
               "artifactId": "spring-core",
-              "children": [
-                {
-                  "artifactId": "commons-logging",
-                  "classifier": "",
-                  "groupId": "commons-logging",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.3.6"
-                }
-              ],
               "classifier": "",
               "groupId": "org.springframework",
               "optional": "false",

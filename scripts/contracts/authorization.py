@@ -41,13 +41,14 @@ def contract():
     from session import extend as session_extend
     from configuration import extend as configuration_extend
     from catalogue import extend as catalogue_extend
-    return catalogue_extend(configuration_extend(session_extend(extend(result))))
+    from files import extend as files_extend
+    return files_extend(catalogue_extend(configuration_extend(session_extend(extend(result)))))
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
     target = ROOT / 'contracts/openapi/commerce.yaml'; expected = json.dumps(contract(), indent=2) + '\n'
     if args.check:
         if not target.exists() or target.read_text() != expected: raise SystemExit('FAIL: reviewed authorization OpenAPI drift')
-        print('PASS: API-001–025/API-135/149 generated OpenAPI matches reviewed contract')
+        print('PASS: API-001–025/111–113/132/135/149 generated OpenAPI matches reviewed contract')
     else:
         target.parent.mkdir(parents=True, exist_ok=True); target.write_text(expected)
 if __name__ == '__main__': main()

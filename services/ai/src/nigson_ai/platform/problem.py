@@ -41,6 +41,16 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "PROVIDER_MODE_MISMATCH": (
+        422,
+        "Provider mode mismatch",
+        "The configured provider target does not match this environment.",
+    ),
+    "FILES_RULE_VIOLATION": (
+        422,
+        "File rule violation",
+        "The file does not meet its purpose and safety requirements.",
+    ),
     "CATALOGUE_RULE_VIOLATION": (
         422,
         "Catalogue rule violation",

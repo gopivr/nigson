@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "checks": [
+    "Previous BP1 without new increment applied",
+    "Existing marker product and all prior checksums preserved during upgrade",
+    "Repeated upgrade leaves schema unchanged",
+    "Actual Liquibase empty new-increment rollback/reapply preserves prior BP1 data",
+    "Populated transfer rollback refuses before any drop"
+  ],
+  "local_state_preserved": true
+}

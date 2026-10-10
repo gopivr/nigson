@@ -10,6 +10,8 @@ public enum ProblemCode {
  IDEMPOTENCY_HASH_MISMATCH(409,"Conflicting request","Use the original request with this key."),
  IDEMPOTENCY_IN_PROGRESS(409,"Request in progress","Retry this request after the current operation finishes."),
  VERSION_MISMATCH(412,"Version mismatch","Refresh the resource before retrying."),
+ PROVIDER_MODE_MISMATCH(422,"Provider mode mismatch","The configured provider target does not match this environment."),
+ FILES_RULE_VIOLATION(422,"File rule violation","The file does not meet its purpose and safety requirements."),
  CATALOGUE_RULE_VIOLATION(422,"Catalogue rule violation","The catalogue change does not meet current rules."),
  PLATFORM_RULE_VIOLATION(422,"Configuration rule violation","The configuration does not meet registered owner rules."),
  PARTY_RULE_VIOLATION(422,"Party rule violation","The profile or address does not meet current rules."),

@@ -1,0 +1,54 @@
+Rolling Back Changeset: commerce/023-bp1-file-transfer.yaml::commerce-20261010-files-001::nigson-files
+Running Changeset: commerce/023-bp1-file-transfer.yaml::commerce-20261010-files-001::nigson-files
+Liquibase: Update has been successful. Rows affected: 0
+No validation errors found.
+PASS: only new file increment rolled back/reapplied; prior BP1 product preserved
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 10, 2026 2:14:53 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 2:14:53 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 10, 2026 2:14:53 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 2:14:53 PM liquibase.command
+INFO: Rollback command completed successfully.
+Oct 10, 2026 2:14:53 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 10, 2026 2:14:53 PM liquibase.command
+INFO: Command execution complete
+Oct 10, 2026 2:14:53 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 2:14:53 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 10, 2026 2:14:53 PM liquibase.command
+INFO: Using deploymentId: 1641692666
+Oct 10, 2026 2:14:53 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 2:14:53 PM liquibase.changelog
+INFO: SQL in file 023-bp1-file-transfer.sql executed
+Oct 10, 2026 2:14:53 PM liquibase.changelog
+INFO: ChangeSet commerce/023-bp1-file-transfer.yaml::commerce-20261010-files-001::nigson-files ran successfully in 16ms
+Oct 10, 2026 2:14:53 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 10, 2026 2:14:53 PM liquibase.util
+INFO: Run:                          1
+Oct 10, 2026 2:14:53 PM liquibase.util
+INFO: Previously run:               6
+Oct 10, 2026 2:14:53 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 10, 2026 2:14:53 PM liquibase.util
+INFO: -------------------------------
+Oct 10, 2026 2:14:53 PM liquibase.util
+INFO: Total change sets:            7
+Oct 10, 2026 2:14:53 PM liquibase.util
+INFO: Update summary generated
+Oct 10, 2026 2:14:53 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 10, 2026 2:14:53 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 10, 2026 2:14:53 PM liquibase.command
+INFO: Command execution complete
+Oct 10, 2026 2:14:53 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 2:14:53 PM liquibase.command
+INFO: Command execution complete

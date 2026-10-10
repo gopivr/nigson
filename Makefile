@@ -152,3 +152,8 @@ configuration-check:
 catalogue-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/catalogue/verify.py
+
+.PHONY: files-check
+files-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/files/verify.py

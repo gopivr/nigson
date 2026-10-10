@@ -83,6 +83,11 @@ public final class PlatformStore {
         authoritativeRefresh.run();
         return Boolean.TRUE.equals(tx.execute(status -> jdbc.update("INSERT INTO commerce.processed_event(id,created_by,consumer,event_id,event_type,outcome,processed_at) VALUES (?,?,?,?,?,'IGNORED',?) ON CONFLICT(consumer,event_id) DO NOTHING",EventCodec.uuid7(now()),consumer,consumer,UUID.fromString(event.path("event_id").asString()),event.path("event_type").asString(),stamp(now()))==1));
     }
+    /** Preflight only; executeLocal still verifies canonical hash and serializes the response. */
+    public boolean completed(String principal,String operation,String key) {
+        bounded(principal,200);bounded(operation,120);bounded(key,100);
+        return Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM commerce.idempotency_record WHERE principal_key=? AND operation=? AND request_key=? AND state='SUCCEEDED')",Boolean.class,principal,operation,key));
+    }
     public Response executeLocal(String principal,String operation,String key,JsonNode request,Function<JdbcTemplate,Response> command) {
         bounded(principal,200); bounded(operation,120); bounded(key,100); String hash=EventCodec.hash(request);
         UUID token=EventCodec.uuid7(now());

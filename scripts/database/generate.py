@@ -13,6 +13,7 @@ import re
 from catalog import ROOT, catalog
 
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
+ADDITIVE_TABLES = {'commerce.file_transfer'}
 SESSION_TABLES = {'commerce.spring_session', 'commerce.spring_session_attributes'}
 
 
@@ -68,7 +69,7 @@ def generate():
         base = Path('database/changelog/ai') if owner == 'ai' else Path(f'services/{owner}/src/main/resources/db/changelog')
         sequence = 10
         for phase in range(1, 6):
-            selected = {name: table for name, table in tables.items() if table['owner'] == owner and table['phase'] == phase and name not in SESSION_TABLES}
+            selected = {name: table for name, table in tables.items() if table['owner'] == owner and table['phase'] == phase and name not in SESSION_TABLES and name not in ADDITIVE_TABLES}
             groups = []
             # Platform creation is its own increment (BP5 for AI), before domain creation.
             for category, subset in [('platform', {n:t for n,t in selected.items() if t['module']=='platform'}),
@@ -131,7 +132,7 @@ def generate():
                 groups.append(('indexes', statements))
             statements = []
             for fullname, table in tables.items():
-                if table['owner'] != owner or fullname in SESSION_TABLES:
+                if table['owner'] != owner or fullname in SESSION_TABLES or fullname in ADDITIVE_TABLES:
                     continue
                 for field in table['fields']:
                     if not field['foreign']:
@@ -176,6 +177,40 @@ def generate():
                             table['creation_file']=str(sqlpath)
             chain = [] if phase==1 else [{'include':{'file':f'BP{phase-1}.yaml','relativeToChangelogFile':True}}]
             files[base/'releases'/f'BP{phase}.yaml'] = json.dumps({'databaseChangeLog':chain+includes},indent=2)+'\n'
+    # New owned durability tables are separate increments; never rewrite applied DATA-001 DDL.
+    for fullname in ADDITIVE_TABLES:
+        table = tables[fullname]
+        owner, name = fullname.split('.')
+        base = Path(f'services/{owner}/src/main/resources/db/changelog')
+        fields = [column(field) for field in table['fields']]
+        fields.append(f'CONSTRAINT {name}_id_pk PRIMARY KEY (id)')
+        fields.append(f'CONSTRAINT {name}_version_ck CHECK (version >= 0)')
+        for field in table['fields']:
+            if field['type'] == 'uuid':
+                fields.append(f"CONSTRAINT {name}_{field['name']}_nonnil_ck CHECK ({field['name']} <> '00000000-0000-0000-0000-000000000000'::uuid)")
+        for i, check in enumerate(table['checks'].split(';'), 1):
+            fields.append(f'CONSTRAINT {name}_rule_{i}_ck CHECK ({predicate(check.strip())})')
+        statements = [f'CREATE TABLE {fullname} (\n    ' + ',\n    '.join(fields) + '\n);']
+        statements.append(f'GRANT SELECT, INSERT, UPDATE, DELETE ON {fullname} TO nigson_{owner}_app;')
+        for kind, columns in re.findall(r'(UQ|IX)\(([^)]+)\)', table['keys']):
+            suffix = '_'.join(columns.split(',')) + ('_uq' if kind == 'UQ' else '_ix')
+            statements.append(f"CREATE {'UNIQUE ' if kind == 'UQ' else ''}INDEX {name}_{suffix} ON {fullname} ({columns});")
+        for field in table['fields']:
+            if field['foreign']:
+                target = field['foreign'].split('.')[0]
+                statements.append(f"ALTER TABLE {fullname} ADD CONSTRAINT {name}_{field['name']}_fk FOREIGN KEY ({field['name']}) REFERENCES {owner}.{target} (id) ON DELETE RESTRICT;")
+        stem = '023-bp1-file-transfer'
+        change = 'commerce-20261010-files-001'
+        files[base/(stem+'.sql')] = '-- ADR-009: additive owned file transfer intent; existing migrations preserved.\n' + '\n\n'.join(statements)+'\n'
+        files[base/(stem+'-rollback.sql')] = rollback_sql(owner, statements)
+        guard = "SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+        payload = {'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-files','logicalFilePath':owner+'/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+        files[base/(stem+'.yaml')] = json.dumps(payload,indent=2)+'\n'
+        wrapper = base/'releases'/'BP1.yaml'
+        payload = json.loads(files[wrapper]); payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}})
+        files[wrapper] = json.dumps(payload,indent=2)+'\n'
+        table['creation_changeset']=change
+        table['creation_file']=str(base/(stem+'.sql'))
     for name in SESSION_TABLES:
         tables[name]['creation_changeset'] = 'commerce-20261005-002'
         tables[name]['creation_file'] = 'services/commerce/src/main/resources/db/changelog/001-framework-sessions.sql'

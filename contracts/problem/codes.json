@@ -108,5 +108,15 @@
     "status": 422,
     "title": "Catalogue rule violation",
     "detail": "The catalogue change does not meet current rules."
+  },
+  "FILES_RULE_VIOLATION": {
+    "status": 422,
+    "title": "File rule violation",
+    "detail": "The file does not meet its purpose and safety requirements."
+  },
+  "PROVIDER_MODE_MISMATCH": {
+    "status": 422,
+    "title": "Provider mode mismatch",
+    "detail": "The configured provider target does not match this environment."
   }
 }

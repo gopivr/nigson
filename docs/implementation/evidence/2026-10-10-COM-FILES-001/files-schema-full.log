@@ -1,0 +1,16 @@
+{
+  "test": "TEST-DATA-MIGRATE / TEST-DATA-OWNERSHIP",
+  "result": "PASS",
+  "checks": [
+    "Accepted FOUND-003 masters applied before DATA-001 upgrades",
+    "incremental BP1: production masters applied/repeated; exact phase table inventory",
+    "incremental BP2: production masters applied/repeated; exact phase table inventory",
+    "incremental BP3: production masters applied/repeated; exact phase table inventory",
+    "incremental BP4: production masters applied/repeated; exact phase table inventory",
+    "incremental BP5: production masters applied/repeated; exact phase table inventory",
+    "incremental: catalog fields/types/nullability/default presence/FKs/privileges; cross-owner SELECT/write/FK and runtime DDL denied; append-only/audit roles; invalid/duplicate rows; downgrade refused",
+    "fresh BP5: production masters applied/repeated; exact phase table inventory",
+    "fresh: catalog fields/types/nullability/default presence/FKs/privileges; cross-owner SELECT/write/FK and runtime DDL denied; append-only/audit roles; invalid/duplicate rows; downgrade refused"
+  ],
+  "local_state_preserved": true
+}

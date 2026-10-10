@@ -23,6 +23,12 @@
         "file": "../022-bp1-constraints.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../023-bp1-file-transfer.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

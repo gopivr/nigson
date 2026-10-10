@@ -1,0 +1,1 @@
+Initial additive generation review FAIL: the existing FK-generation pass included the new increment and would change applied 022-bp1 constraints files. Excluded additive tables from that pass; regenerate and compare all prior migration files with HEAD before acceptance. No affected migration was executed.

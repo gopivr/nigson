@@ -1,0 +1,19 @@
+{
+  "task": "COM-FILES-001",
+  "status": "IN_PROGRESS",
+  "native_java_pass": 20,
+  "native_skips": 0,
+  "ordinary_java_pass": 43,
+  "ordinary_java_gated_skips": 73,
+  "contracts_pass": 43,
+  "ai_pass": 15,
+  "ai_gated_skips": 5,
+  "locked_maven_artifacts": 268,
+  "osv_findings": 0,
+  "reproduced_artifacts": 9,
+  "native_scanner_qualification": "NOT_RUN",
+  "genuine_cloud_storage": "NOT_RUN",
+  "cold_start": "PASS_TWO_ROUNDS",
+  "schema_full": "PASS",
+  "previous_bp1_upgrade_and_rollback": "PASS"
+}

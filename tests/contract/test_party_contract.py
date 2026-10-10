@@ -6,7 +6,7 @@ class PartyContracts(unittest.TestCase):
     def test_exact_owned_contracts(self):
         spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
         operations=[op for path in spec['paths'].values() for op in path.values()]
-        self.assertEqual({op['operationId'] for op in operations},{f'API-{n:03}' for n in range(1,26)} | {'API-135', 'API-149'})
+        self.assertEqual({op['operationId'] for op in operations},{f'API-{n:03}' for n in range(1,26)} | {'API-111', 'API-112', 'API-113', 'API-132', 'API-135', 'API-149'})
         self.assertFalse(spec['components']['schemas']['ProfilePatch']['additionalProperties'])
         self.assertEqual(set(spec['components']['schemas']['ProfilePatch']['properties']),{'displayName','phone','locale'})
         self.assertNotIn('partyId',spec['components']['schemas']['AddressInput']['properties'])

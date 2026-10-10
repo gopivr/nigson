@@ -1,0 +1,4 @@
+
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Exception in thread "main" java.lang.IllegalStateException: Schema release downgrade refused
+	at OwnerMigration.main(OwnerMigration.java:58)
