@@ -1,8 +1,8 @@
 {
   "task": "COM-MARKE-001",
   "criterion": "AC-COM-MARKE-001",
-  "engineering": "IN_PROGRESS",
-  "implementationCommit": null,
+  "engineering": "DONE",
+  "implementationCommit": "d6e318033308f10922ed3aaeafe9d067c409df48",
   "native": {
     "tests": 24,
     "failures": 0,
@@ -35,5 +35,6 @@
     "count": 9,
     "reproduced": true
   },
-  "verification": "PASS; implementation commit pending"
+  "verification": "PASS",
+  "evidenceNormalization": "Trailing whitespace stripped from copied logs; raw ignored .build logs retained; all diagnostic content/results preserved."
 }

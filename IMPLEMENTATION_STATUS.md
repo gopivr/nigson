@@ -8,9 +8,11 @@ EP04 — Owned inventory and market/pricing foundations; BP1 launch composition 
 
 ## Current Task
 
-COM-MARKE-001 — IN_PROGRESS; SEC-001/DATA-001 complete. Implement exact API-029/031/162/169, disabled market creation, NG/NGN approved currency facts, typed deny-by-default eligibility and retail book selection with FINANCE MFA. No tax/returns/prices/routes invented.
+NGN-001 — IN_PROGRESS; approved NG/Nigeria/NGN2/destination metadata, deterministic production-safe disabled baseline and kobo validation. No tax/returns/book/origin/route policy invented. DATA-001/SEC-001 and COM-MARKE-001 complete.
 
 ## Completed Tasks
+
+- [x] COM-MARKE-001 — DONE (engineering); implementation d6e318033308f10922ed3aaeafe9d067c409df48; native24/no skips, full63 Java/115 gated,51 contracts,15 AI/five gated,268 unchanged dependencies/nine reproduced artifacts. Exact API-029/031/162/169 with current policy/roles/MFA, draft suppression and trusted local checkout gate. Live provider/caller composition/actual policies/staging separately NOT_RUN. Report docs/implementation/2026-10-10-COM-MARKE-001.md.
 
 - [x] COM-INVEN-001 — DONE (engineering); implementation 883d6379a3da9f1e263a8585052d05bd84de4380; native23/no skips, full59 Java/102 gated,49 contracts,15 AI/five gated, nine reproduced artifacts. API-045/046/170 plus atomic local stock ledger, movement conservation, sorted races, rollback, verified allocation/returns and actual BFF/metrics. Real initial stock/provider/caller staging separately NOT_RUN. Report docs/implementation/2026-10-10-COM-INVEN-001.md.
 
@@ -48,7 +50,7 @@ COM-MARKE-001 — IN_PROGRESS; SEC-001/DATA-001 complete. Implement exact API-02
 
 ## In Progress
 
-COM-MARKE-001 — started10 October2026. Dependency-ready SEC-001/DATA-001; stock foundation complete. Next launch guarantee: no selling without explicit market/product/currency/book/policy eligibility.
+NGN-001 — started10 October2026. Approved launch metadata only, selling disabled. Next foundation for exact NGN minor units and mock-first Paystack workflow.
 
 ## Pending
 
@@ -57,7 +59,6 @@ COM-MARKE-001 — started10 October2026. Dependency-ready SEC-001/DATA-001; stoc
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
 - [ ] EXP-NOTIF-001 — Implement experience notification increment (EP03)
 - [ ] EXP-PLATF-001 — Implement experience platform increment (EP03)
-- [ ] COM-MARKE-001 — Implement commerce market increment (EP04)
 - [ ] COM-PRICI-001 — Implement commerce pricing increment (EP04)
 - [ ] COM-CART-001 — Implement commerce cart increment (EP05)
 - [ ] COM-FULFI-001 — Implement commerce fulfillment increment (EP05)
@@ -105,15 +106,15 @@ COM-MARKE-001 — started10 October2026. Dependency-ready SEC-001/DATA-001; stoc
 
 ## Build Status
 
-PASS — final COM-MARKE-001 full verification;63 Java/115 environment-gated skips,51 contracts,15 AI/five gated, Ruff/mypy13 and268 unchanged locked Maven artifacts. Nine final Java/Python artifacts reproduce. Acceptance commit pending; genuine release activation separately NOT_RUN.
+PASS — final COM-MARKE-001 full verification;63 Java/115 environment-gated skips,51 contracts,15 AI/five gated, Ruff/mypy13 and268 unchanged locked Maven artifacts. Nine final Java/Python artifacts reproduce. Engineering acceptance committed; genuine release activation separately NOT_RUN.
 
 ## Test Status
 
-PASS — COM-MARKE-001 native24/no skips: current FINANCE/MFA and CONTENT_PUBLISHER BFF/CSRF, draft suppression, current market/product/policy/provider proof, bounded RE2/J addresses, replay/stale/foreign currency, audit rollback and competing books. Fresh/repeated owned BP1/BP5 migrations and original local state preserved;123 tables unchanged. Source engineering verification complete, actual commit pending. Prior accepted inventory/notification/provider/catalogue/files/identity evidence remains valid. Caller composition/live activation/staging/frontend NOT_RUN.
+PASS — COM-MARKE-001 native24/no skips: current FINANCE/MFA and CONTENT_PUBLISHER BFF/CSRF, draft suppression, current market/product/policy/provider proof, bounded RE2/J addresses, replay/stale/foreign currency, audit rollback and competing books. Fresh/repeated owned BP1/BP5 migrations and original local state preserved;123 tables unchanged. Engineering acceptance committed. Prior accepted inventory/notification/provider/catalogue/files/identity evidence remains valid. Caller composition/live activation/staging/frontend NOT_RUN.
 
 ## Last Successful Commit
 
-883d6379a3da9f1e263a8585052d05bd84de4380 — verified COM-INVEN-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
+d6e318033308f10922ed3aaeafe9d067c409df48 — verified COM-MARKE-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -129,7 +130,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-MARKE-001 — exact market operations and approved NG/NGN facts, ready after SEC-001/DATA-001. Pricing/checkout/launch carrier/messaging remain section46 composition. All other independent work continues; genuine activation inputs remain separately NOT_RUN.
+NGN-001 — approved deterministic NG/Nigeria/NGN2/destination baseline, dependency-ready after DATA-001/SEC-001. Selling disabled until separate real policies/providers qualify. COM-PRICI-001 follows; all independent work remains authorized.
 
 ## Session Evidence / Protocol
 
