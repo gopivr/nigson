@@ -1,7 +1,7 @@
 {
   "task": "COM-INVEN-001",
   "criterion": "AC-COM-INVEN-001",
-  "engineering": "Verified; awaiting actual implementation commit",
+  "engineering": "DONE",
   "native": {
     "passed": 23,
     "skipped": 0,
@@ -22,5 +22,5 @@
   "originalLocalResources": "Preserved",
   "checkoutPaymentFulfillmentStaging": "NOT_RUN; respective orchestration tasks pending. StockLedger is caller-authorized, local and requires caller transaction; no provider HTTP",
   "actualInitialStockAndLocationPriority": "NOT_RUN; no real stock/location data seeded",
-  "implementationCommit": null
+  "implementationCommit": "883d6379a3da9f1e263a8585052d05bd84de4380"
 }

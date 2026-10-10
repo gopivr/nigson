@@ -8,9 +8,11 @@ EP04 — Owned inventory and market/pricing foundations; BP1 launch composition 
 
 ## Current Task
 
-COM-INVEN-001 — IN_PROGRESS; SEC-001/DATA-001 complete. Implement exact API-045/046/170, zero-stock location creation, scaled quantities, immutable movements and ordered reservation/allocation transitions in the commerce transaction boundary. All remaining work authorized.
+COM-MARKE-001 — IN_PROGRESS; SEC-001/DATA-001 complete. Implement exact API-029/031/162/169, disabled market creation, NG/NGN approved currency facts, typed deny-by-default eligibility and retail book selection with FINANCE MFA. No tax/returns/prices/routes invented.
 
 ## Completed Tasks
+
+- [x] COM-INVEN-001 — DONE (engineering); implementation 883d6379a3da9f1e263a8585052d05bd84de4380; native23/no skips, full59 Java/102 gated,49 contracts,15 AI/five gated, nine reproduced artifacts. API-045/046/170 plus atomic local stock ledger, movement conservation, sorted races, rollback, verified allocation/returns and actual BFF/metrics. Real initial stock/provider/caller staging separately NOT_RUN. Report docs/implementation/2026-10-10-COM-INVEN-001.md.
 
 - [x] COM-NOTIF-001 — DONE (engineering); implementation f20bc413565bdc8fec0a3df7a51c0f3d5416f968; native36/no skips, full56 Java/89 gated,47 contracts,15 AI/five gated, nine reproduced artifacts. API-122/133/165 minimal context, job/state receipts and signed ADMIN templates; production metric correction verified. Integration dispatch/consent and live messaging qualification separately NOT_RUN. Report docs/implementation/2026-10-10-COM-NOTIF-001.md.
 
@@ -46,7 +48,7 @@ COM-INVEN-001 — IN_PROGRESS; SEC-001/DATA-001 complete. Implement exact API-04
 
 ## In Progress
 
-COM-INVEN-001 — verified10 October2026, awaiting reproducibility/actual implementation commit. Native23/no skips, full59 Java/102 gated,49 contracts,15 AI/five gated PASS. Actual BFF authority, transaction rollback, last-unit/reversed locks, settlement uncertainty/hold, partial dispatch/capped returns and movement conservation verified. No invented initial stock/location data.
+COM-MARKE-001 — started10 October2026. Dependency-ready SEC-001/DATA-001; stock foundation complete. Next launch guarantee: no selling without explicit market/product/currency/book/policy eligibility.
 
 ## Pending
 
@@ -55,7 +57,6 @@ COM-INVEN-001 — verified10 October2026, awaiting reproducibility/actual implem
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
 - [ ] EXP-NOTIF-001 — Implement experience notification increment (EP03)
 - [ ] EXP-PLATF-001 — Implement experience platform increment (EP03)
-- [ ] COM-INVEN-001 — Implement commerce inventory increment (EP04)
 - [ ] COM-MARKE-001 — Implement commerce market increment (EP04)
 - [ ] COM-PRICI-001 — Implement commerce pricing increment (EP04)
 - [ ] COM-CART-001 — Implement commerce cart increment (EP05)
@@ -112,7 +113,7 @@ PASS — COM-PROVI-001 native20/no skips (real workload JWT/JWKS/KMS/private gua
 
 ## Last Successful Commit
 
-f20bc413565bdc8fec0a3df7a51c0f3d5416f968 — verified COM-NOTIF-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
+883d6379a3da9f1e263a8585052d05bd84de4380 — verified COM-INVEN-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -128,7 +129,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-INVEN-001 — exact inventory operations and local stock accounting; dependency-ready after SEC-001/DATA-001 and prioritized to unlock checkout launch guarantees. EP phases are not sequential release gates. Remaining experience/provider work continues independently; genuine activation inputs remain separately NOT_RUN.
+COM-MARKE-001 — exact market operations and approved NG/NGN facts, ready after SEC-001/DATA-001. Pricing/checkout/launch carrier/messaging remain section46 composition. All other independent work continues; genuine activation inputs remain separately NOT_RUN.
 
 ## Session Evidence / Protocol
 
