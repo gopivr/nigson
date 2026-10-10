@@ -1,7 +1,7 @@
 {
   "task": "COM-CATAL-001",
-  "status": "IN_PROGRESS",
-  "implementation_commit": null,
+  "status": "DONE_ENGINEERING",
+  "implementation_commit": "d1d80e1d2e65324a2f1860517d50448a78ad697f",
   "native_java_pass": 23,
   "native_skips": 0,
   "ordinary_java_pass": 38,

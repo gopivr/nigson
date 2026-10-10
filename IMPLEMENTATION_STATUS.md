@@ -1,6 +1,6 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:9 October2026 (UTC)
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:10 October2026 (UTC)
 
 ## Current Phase
 
@@ -8,7 +8,7 @@ EP03 — Owned catalogue/configuration increments; BP1 launch composition remain
 
 ## Current Task
 
-COM-CATAL-001 — IN_PROGRESS; owned catalogue persistence/APIs, publication/search/races. COM-PLATF-001 API-135 and COM-SESSI-001 are committed/DONE engineering. User authorization to complete all remaining tasks persists; unused Docker cache cleanup explicitly approved and complete; 35GiB free, application images/containers/volumes preserved.
+COM-FILES-001 — IN_PROGRESS; API-111/112/113/132 owned uploads, quarantine, authenticated clean downloads and trusted scan results. Planned verification: validation/role/purpose/ownership, provider HTTP outside transactions, durable replay/uncertainty, scan checksum/job binding, actual local storage HTTP, rollback/races, migrations/contracts/builds. Catalogue completed and committed. All remaining work remains authorized; Docker recovery/cleanup approvals completed.
 
 ## Completed Tasks
 
@@ -36,15 +36,14 @@ COM-CATAL-001 — IN_PROGRESS; owned catalogue persistence/APIs, publication/sea
 - [x] COM-PLATF-001 — DONE (engineering); implementation ed0e8ef55544c3a6c728219e0c909d00706b613f; API-135 current ADMIN/MFA/CSRF/version/history/replay/atomic audit, closed catalogue metadata registry. Native27 Java/one documented nonapplicable skip/four Python pass; full38 Java/52 gated skips,39 contracts,15 AI/five skips and nine reproduced artifacts. Report: docs/implementation/2026-10-10-COM-PLATF-001.md.
 - [x] COM-SESSI-001 — DONE (engineering); implementation eb717118e05adc073f00cb2ba6e189ac1d0b818c; final native23/no skips, real Keycloak/restore, two-round cold-start/recovery/local preservation, full verification and nine final reproducible artifacts PASS. Prior disk-full/classification failures preserved. Report: docs/implementation/2026-10-09-COM-SESSI-001.md.
 
+- [x] COM-CATAL-001 — DONE (engineering); implementation d1d80e1d2e65324a2f1860517d50448a78ad697f;14 catalogue APIs/EVT-006, native23/no skips, full38 Java/65 gated skips,41 contracts,15 AI/five gated skips, owner migrations and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-10-COM-CATAL-001.md.
+
 ## In Progress
 
-COM-CATAL-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains IN_PROGRESS; Docker recovered after approved restart.
-
-COM-CATAL-001 — ongoing owned catalogue persistence/APIs after committed typed configuration. Approved units/divisions/public asset delivery remain activation inputs; no invented business metadata.
+COM-FILES-001 — started10 October2026 after SEC-001 and catalogue local asset-port acceptance. No real storage/CDN/account/retention approval invented; offline implementation proceeds.
 
 ## Pending
 
-- [ ] COM-CATAL-001 — Implement commerce catalogue increment (EP03)
 - [ ] COM-FILES-001 — Implement commerce files increment (EP03)
 - [ ] COM-NOTIF-001 — Implement commerce notification increment (EP03)
 - [ ] COM-PROVI-001 — Implement commerce provider increment (EP03)
@@ -102,15 +101,15 @@ COM-CATAL-001 — ongoing owned catalogue persistence/APIs after committed typed
 
 ## Build Status
 
-PASS — COM-AUTHO-001 clean Java25/Python3.12 make verify PROFILE=ai; seven JAR plus wheel/sdist hashes reproduce;260 locked Java artifact hashes unchanged;35 contracts,Ruff and strict mypy13 source files pass. No dependency coordinate/version, domain migration, Dockerfile or cloud deployment changed.
+PASS — final COM-CATAL-001 make verify PROFILE=ai;261 unchanged locked dependency artifacts,41 contracts,Ruff/mypy13; seven JARs plus wheel/sdist reproduce exactly. No deployment/provider activation claimed.
 
 ## Test Status
 
-PASS — COM-AUTHO-001 native26 tests/no skips and final assembled Boot HTTP/helper packaging smoke one/no skips. Ordinary full verification:32 Java passes/36 explicitly gated skips,15 BP5 AI passes/four skips,35 contracts. Fresh BP1→BP5/repeat owner migrations, role/last-admin/duplicate races, bounded contention, actual audit permission failure and rollback, session continuity/revocation, current organization authority, KMS/protocol and HTTP validation/auth/version/replay pass. Original local state matches the native baseline after starting the initially stopped Docker Desktop daemon; no reset or volume removal. Initial failures are preserved. Genuine cloud/provider/identity/release activation NOT_RUN; prior cold-start/vendor/OSV results remain their original command-scoped evidence.
+PASS — COM-CATAL-001 native23/no skips, actual Boot HTTP14 APIs, owner migrations/rollback/races/local preservation; full38 Java/65 gated skips and15 AI/five gated skips. Configuration regression27 Java/one nonapplicable skip/four Python pass. Source-read workload100 requests/100 readers/20 RPS,10k products/20k SKUs,p95=88.907667ms,p99=97.550459ms/errors0. Separate30m staging/provider/cloud/frontend qualification NOT_RUN. Initial failures preserved.
 
 ## Last Successful Commit
 
-1484e6729ab82e4266d91543e74a730625d0640a — verified COM-AUTHO-001 implementation and acceptance/failure evidence. Completion metadata follows the actual implementation commit.
+d1d80e1d2e65324a2f1860517d50448a78ad697f — verified COM-CATAL-001 implementation and command-scoped acceptance evidence. Completion metadata follows this actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -126,7 +125,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-CATAL-001 — finish owned catalogue APIs/persistence/publication/search and native/HTTP/race/load acceptance. COM-PLATF-001 typed configuration API-135 is committed/DONE engineering. SEC-001, COM-AUTHO-001, COM-PARTY-001 and COM-SESSI-001 are committed/DONE offline. Broader unused Docker build cache cleanup explicitly approved/completed; 52.12GB reclaimed and 35GiB free; application images, container identities/exit states and volumes verified preserved. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs.
+COM-FILES-001 — owned uploads/quarantine/download/scan APIs, dependency-ready after SEC-001. Catalogue and typed configuration committed/DONE engineering. User authorization to complete all remaining tasks persists; cache cleanup/restart already approved/completed and application Docker assets preserved. Continue section46 release composition; live activation inputs remain separately NOT_RUN.
 
 ## Session Evidence / Protocol
 
