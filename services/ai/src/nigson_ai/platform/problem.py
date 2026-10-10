@@ -41,6 +41,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "NOTIFICATION_RULE_VIOLATION": (
+        422,
+        "Notification rule violation",
+        "The notification operation does not meet current rules.",
+    ),
     "PROVIDER_RULE_VIOLATION": (
         422,
         "Provider rule violation",

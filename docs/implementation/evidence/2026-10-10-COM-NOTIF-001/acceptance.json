@@ -1,0 +1,27 @@
+{
+  "task": "COM-NOTIF-001",
+  "criterion": "AC-COM-NOTIF-001",
+  "engineering": "Verified; awaiting actual implementation commit",
+  "native": {
+    "passed": 36,
+    "skipped": 0,
+    "log": "notification-native-metrics-final.log"
+  },
+  "full": {
+    "javaPassed": 56,
+    "javaEnvironmentSkips": 89,
+    "contractPassed": 47,
+    "aiPassed": 15,
+    "aiEnvironmentSkips": 5,
+    "ruff": "PASS",
+    "mypySourceFiles": 13,
+    "dependencyArtifactsUnchanged": 268
+  },
+  "reproducibleArtifacts": 9,
+  "ownerMigrations": "Fresh/repeated BP1/BP5 all owners PASS; no migration changed",
+  "originalLocalResources": "Preserved",
+  "integrationDispatchConsentComposition": "NOT_RUN; integration/experience-owned increments pending; commerce does not send or grant consent",
+  "liveProviderStaging": "NOT_RUN",
+  "templateCreateVersion": "Optional supplied If-Match forwarded exactly; no invented version; active revisions immutable in worker",
+  "implementationCommit": null
+}

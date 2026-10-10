@@ -44,7 +44,7 @@ COM-NOTIF-001 — IN_PROGRESS; API-122/133/165 minimal notification context, dur
 
 ## In Progress
 
-COM-NOTIF-001 — started10 October2026. SEC-001 complete; exact templates/context/delivery APIs ready for owned implementation. No arbitrary URL, cross-owner SQL or invented consent/provider approvals.
+COM-NOTIF-001 — verified10 October2026, awaiting actual implementation commit. Native36/no skips, final full56 Java/89 gated,47 contracts,15 AI/five gated, nine reproduced artifacts PASS. Production metric allowlist correction verified in assembled HTTP; failures retained. No arbitrary URL, cross-owner SQL or invented consent/provider approvals.
 
 ## Pending
 

@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.*;
 public final class JobHttpAcceptance {
     private JobHttpAcceptance(){}
     public static final class Fixture implements AutoCloseable {
+        public final AtomicInteger templateEffects=new AtomicInteger();public volatile boolean templateAfterAccept;final Map<String,com.nigson.commerce.notification.TemplatePort.Accepted> templateCommands=new HashMap<>();final Map<String,String> templateHashes=new HashMap<>();final Set<String> activeTemplates=new HashSet<>();
         final HttpServer server;final ExecutorService threads=Executors.newVirtualThreadPerTaskExecutor();final KeyPair signing,rsa;final PrivateWorkload guard;
         public final String issuer,endpoint;public final UUID job=UUID.randomUUID(),unknown=UUID.randomUUID();
         public final AtomicInteger effects=new AtomicInteger(),signs=new AtomicInteger(),reads=new AtomicInteger(),retries=new AtomicInteger();public volatile boolean afterAccept;long version;final Map<String,IntegrationJobs.Accepted> commands=new HashMap<>();final Map<String,String> hashes=new HashMap<>();
@@ -35,13 +36,32 @@ public final class JobHttpAcceptance {
             server.createContext("/",this::handle);server.start();
         }
         void respond(HttpExchange x,int status,Object body)throws java.io.IOException{byte[] bytes=EventCodec.JSON.writeValueAsBytes(body);x.getResponseHeaders().set("Content-Type",status>=400?"application/problem+json":"application/json");x.sendResponseHeaders(status,bytes.length);x.getResponseBody().write(bytes);x.close();}
-        String token()throws Exception{var jwt=new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256).keyID("jobs-http").build(),new JWTClaimsSet.Builder().issuer(issuer).subject("synthetic-commerce-workload").audience("nigson-integration").issueTime(Date.from(Instant.now())).expirationTime(Date.from(Instant.now().plusSeconds(120))).claim("typ","Bearer").claim("azp","nigson-commerce").claim("client_id","nigson-commerce").claim("scope","jobs.read jobs.retry_WITH_SIGNED_STAFF").build());jwt.sign(new RSASSASigner(rsa.getPrivate()));return jwt.serialize();}
+        String token()throws Exception{return workload("jobs.read jobs.retry_WITH_SIGNED_STAFF templates.write_WITH_SIGNED_ADMIN","nigson-commerce","nigson-integration");}
+        public String workload(String scope,String client,String audience)throws Exception{var jwt=new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256).keyID("jobs-http").build(),new JWTClaimsSet.Builder().issuer(issuer).subject("synthetic-"+client).audience(audience).issueTime(Date.from(Instant.now())).expirationTime(Date.from(Instant.now().plusSeconds(120))).claim("typ","Bearer").claim("azp",client).claim("client_id",client).claim("scope",scope).build());jwt.sign(new RSASSASigner(rsa.getPrivate()));return jwt.serialize();}
+        void template(HttpExchange x,PrivateWorkload.Proof proof,byte[] body)throws Exception{
+            assertThat(proof.actor().roles()).contains("ADMIN");ActorAssertion.recentMfa(proof.actor(),Clock.systemUTC());
+            var value=com.nigson.commerce.notification.TemplateValues.template(EventCodec.JSON.readTree(body),1);String match=x.getRequestHeaders().getFirst("If-Match");Long expected=match==null?null:ApiValues.version(match);String key=ApiValues.idempotencyKey(x.getRequestHeaders().getFirst("Idempotency-Key"));ApiValues.uuid(key);String hash=EventCodec.digest(String.valueOf(expected)+":"+new String(body,java.nio.charset.StandardCharsets.UTF_8));
+            com.nigson.commerce.notification.TemplatePort.Accepted saved;
+            synchronized(this){
+                saved=templateCommands.get(key);
+                if(saved!=null){assertThat(templateHashes.get(key)).isEqualTo(hash);}
+                else{
+                    if(expected!=null&&expected!=0){respond(x,412,Map.of("code","VERSION_MISMATCH"));return;}
+                    String revision=value.code()+":"+value.locale()+":"+value.channel()+":"+value.revision();
+                    if(activeTemplates.contains(revision)){respond(x,422,Map.of("code","NOTIFICATION_RULE_VIOLATION","detail","protected template payload"));return;}
+                    saved=new com.nigson.commerce.notification.TemplatePort.Accepted(UUID.randomUUID(),value.code(),value.revision(),value.active(),1L);templateCommands.put(key,saved);templateHashes.put(key,hash);if(value.active())activeTemplates.add(revision);templateEffects.incrementAndGet();
+                }
+            }
+            if(templateAfterAccept){templateAfterAccept=false;x.getResponseHeaders().set("Content-Type","application/json");x.sendResponseHeaders(201,100);x.getResponseBody().write(123);x.getResponseBody().flush();Thread.sleep(7500);x.close();return;}
+            x.getResponseHeaders().set("ETag","\""+saved.version()+"\"");respond(x,201,Map.of("id",saved.id(),"code",saved.code(),"revision",saved.revision(),"active",saved.active()));
+        }
         void handle(HttpExchange x){try{
             String path=x.getRequestURI().getPath();byte[] body=x.getRequestBody().readNBytes(65537);if(body.length>65536)throw ApiValues.invalid();
             if(path.endsWith("/certs")){respond(x,200,Map.of("keys",List.of(new RSAKey.Builder((RSAPublicKey)rsa.getPublic()).keyID("jobs-http").algorithm(JWSAlgorithm.RS256).keyUse(com.nimbusds.jose.jwk.KeyUse.SIGNATURE).build().toJSONObject())));return;}
             if(path.endsWith("/token")){assertThat(new String(body,java.nio.charset.StandardCharsets.UTF_8)).contains("grant_type=client_credentials","client_id=nigson-commerce","synthetic-workload-credential-with-at-least-32-bytes");respond(x,200,Map.of("access_token",token(),"token_type","Bearer","expires_in",120));return;}
             if(path.equals("/")){assertThat(x.getRequestHeaders().getFirst("Authorization")).contains("Credential=mock-local-kms/");var request=EventCodec.JSON.readTree(body);assertThat(request.get("MessageType").asString()).isEqualTo("DIGEST");assertThat(request.get("SigningAlgorithm").asString()).isEqualTo("ECDSA_SHA_256");var signer=Signature.getInstance("NONEwithECDSA");signer.initSign(signing.getPrivate());signer.update(Base64.getDecoder().decode(request.get("Message").asString()));signs.incrementAndGet();respond(x,200,Map.of("KeyId",request.get("KeyId").asString(),"SigningAlgorithm","ECDSA_SHA_256","Signature",Base64.getEncoder().encodeToString(signer.sign())));return;}
             UUID correlation=ApiValues.uuid(x.getRequestHeaders().getFirst("X-Correlation-ID"));var proof=guard.verify("127.0.0.1",x.getRequestMethod(),path,x.getRequestHeaders().getFirst("Authorization"),x.getRequestHeaders().getFirst("X-Nigson-Actor"),correlation,ActorAssertion.Binding.bodyHash(body));
+            if(path.equals("/internal/v1/templates")){template(x,proof,body);return;}
             if(path.equals("/internal/v1/jobs")){assertThat(proof.actor()).isNull();reads.incrementAndGet();String query=x.getRequestURI().getRawQuery();assertThat(query).contains("page=0","size=20");respond(x,200,new JobValues.Page(List.of(dto(job,version==0?"FAILED":"PENDING")),0,20,1,1));return;}
             assertThat(proof.actor().roles()).contains("OPERATIONS");ActorAssertion.recentMfa(proof.actor(),Clock.systemUTC());JobValues.retry(EventCodec.JSON.readTree(body));long expected=ApiValues.version(x.getRequestHeaders().getFirst("If-Match"));String key=ApiValues.idempotencyKey(x.getRequestHeaders().getFirst("Idempotency-Key"));ApiValues.uuid(key);retries.incrementAndGet();UUID id=ApiValues.uuid(path.split("/")[4]);String hash=EventCodec.digest(id+":"+expected+":"+new String(body,java.nio.charset.StandardCharsets.UTF_8));
             synchronized(this){

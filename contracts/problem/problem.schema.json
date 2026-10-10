@@ -64,7 +64,8 @@
         "CATALOGUE_RULE_VIOLATION",
         "FILES_RULE_VIOLATION",
         "PROVIDER_MODE_MISMATCH",
-        "PROVIDER_RULE_VIOLATION"
+        "PROVIDER_RULE_VIOLATION",
+        "NOTIFICATION_RULE_VIOLATION"
       ]
     },
     "timestamp": {

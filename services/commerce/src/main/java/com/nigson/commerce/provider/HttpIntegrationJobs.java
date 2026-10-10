@@ -21,13 +21,7 @@ public final class HttpIntegrationJobs implements IntegrationJobs {
     public HttpIntegrationJobs(String env,String target,Function<PrivateWorkload.Route,String> credentials){
         base=target(env,target);this.credentials=Objects.requireNonNull(credentials);http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER).build();
     }
-    public static URI target(String env,String input){
-        if(!Set.of("local","test","dev","qa","stage","prod").contains(env))throw new IllegalArgumentException("INTEGRATION_TARGET_REQUIRED");
-        try{URI uri=URI.create(input);boolean local=Set.of("local","test").contains(env);
-            if(uri.getHost()==null||uri.getUserInfo()!=null||uri.getRawQuery()!=null||uri.getFragment()!=null||!Set.of("","/").contains(uri.getRawPath())||uri.getPort()==0||uri.getPort()<-1||uri.getPort()>65535||!(local?Set.of("http","https").contains(uri.getScheme())&&Set.of("localhost","127.0.0.1","integration","integration-mock").contains(uri.getHost()):"https".equals(uri.getScheme())&&uri.getHost().matches("[a-z0-9]+(?:[.-][a-z0-9]+)*\\.internal")))throw new IllegalArgumentException();
-            return URI.create(uri.getScheme()+"://"+uri.getRawAuthority());
-        }catch(RuntimeException invalid){throw new IllegalArgumentException("INTEGRATION_TARGET_REQUIRED");}
-    }
+    public static URI target(String env,String input){return com.nigson.commerce.security.IntegrationTarget.of(env,input);}
     public boolean configured(){return true;}
     public JobValues.Page list(JobValues.Query q,UUID correlation){
         String query="?page="+q.page()+"&size="+q.size()+"&sort="+URLEncoder.encode(q.sort(),StandardCharsets.UTF_8)+(q.state()==null?"":"&state="+q.state());

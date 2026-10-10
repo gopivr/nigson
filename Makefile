@@ -162,3 +162,8 @@ files-check:
 integration-jobs-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/provider/verify.py
+
+.PHONY: notification-check
+notification-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/notification/verify.py

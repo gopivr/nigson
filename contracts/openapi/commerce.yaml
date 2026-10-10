@@ -5242,6 +5242,461 @@
           }
         }
       }
+    },
+    "/internal/v1/notification-context/{orderId}": {
+      "get": {
+        "operationId": "API-122",
+        "description": "Private exact nigson-integration workload notification.read, no signed user actor. Current active verified email recipient and minimal owned order context. No customer profile or dispatch. Integration validates the allowed job/order and rechecks current experience communication eligibility immediately before actual sending; context is never consent authorization. Unknown query/body rejected.",
+        "security": [
+          {
+            "integrationWorkload": [
+              "notification.read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationContext"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Notification rule violation or feature disabled",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/notification-deliveries": {
+      "post": {
+        "operationId": "API-133",
+        "description": "Private exact nigson-integration notification.write, no signed user actor. Immutable minimal job/state dedup and job/order binding, atomic audit and acknowledgement. Contradictory same-state receipt409; out-of-order states retained. SENT never changes order fulfillment. Failed work is exposed through the separately registered operations worker job proxy. No provider dispatch.",
+        "security": [
+          {
+            "integrationWorkload": [
+              "notification.write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationAcknowledged"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Notification rule violation or feature disabled",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationDelivery"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/notification-templates": {
+      "post": {
+        "operationId": "API-165",
+        "description": "Current ADMIN, no organization, recent MFA within15 minutes and cookie CSRF. Closed plain escaped placeholders with exact flat data schema; no expression evaluation. Compiled API-142 with templates.write_WITH_SIGNED_ADMIN assertion bound to exact body/method/path/correlation. Owned intent commits before unlocked KMS/token/HTTP. UNKNOWN retains the same private command UUID for acknowledgement reconciliation; never sends a message. Activated revisions immutable in the worker. Optional create If-Match is forwarded exactly when supplied, never guessed; actual upstream ETag is returned when supplied. Sender/template approvals and fresh dispatch consent remain separate activation/worker gates.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 43,
+              "maxLength": 43
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationTemplateView"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Actual upstream quoted version if provided"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Notification rule violation or feature disabled",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable or uncertain acknowledgement; reconcile identical command identity",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationTemplate"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5258,7 +5713,9 @@
           "clientCredentials": {
             "tokenUrl": "/realms/nigson/protocol/openid-connect/token",
             "scopes": {
-              "files.scan.write": "Integration-owned scan-result application"
+              "files.scan.write": "Integration-owned scan-result application",
+              "notification.read": "Minimal order notification context",
+              "notification.write": "Minimal job/state delivery accounting"
             }
           }
         },
@@ -7322,6 +7779,271 @@
             "minLength": 1,
             "maxLength": 500,
             "description": "Nonblank and no control/format characters. Never copied into audit or errors."
+          }
+        }
+      },
+      "NotificationContext": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "orderNumber",
+          "recipient",
+          "total",
+          "currency",
+          "trackingUrl"
+        ],
+        "properties": {
+          "orderNumber": {
+            "type": "string"
+          },
+          "recipient": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "partyId",
+              "email"
+            ],
+            "properties": {
+              "partyId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              }
+            }
+          },
+          "total": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d{2}$"
+          },
+          "currency": {
+            "const": "NGN"
+          },
+          "trackingUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "NotificationDelivery": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "jobId",
+          "resourceId",
+          "state"
+        ],
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "resourceId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "state": {
+            "enum": [
+              "SENT",
+              "FAILED",
+              "SUPPRESSED",
+              "UNKNOWN"
+            ]
+          },
+          "providerReference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9:_-]{0,159}$"
+          }
+        }
+      },
+      "NotificationAcknowledged": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "acknowledged"
+        ],
+        "properties": {
+          "acknowledged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "NotificationTemplate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "revision",
+          "locale",
+          "channel",
+          "classification",
+          "body",
+          "variablesSchema",
+          "active"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "CONTACT_VERIFICATION",
+              "ORDER_PENDING",
+              "ORDER_PAID",
+              "ORDER_SHIPPED",
+              "ORDER_DELIVERED",
+              "ORDER_CANCELLED",
+              "REFUND_STATUS",
+              "LEAD_CREATED",
+              "DISTRIBUTOR_APPLICATION",
+              "DISTRIBUTOR_DECISION",
+              "QUOTE_OFFERED",
+              "NEWSLETTER_CONFIRMATION",
+              "CAREER_APPLICATION",
+              "STAFF_LEAD_REPLY",
+              "CART_RECOVERY"
+            ]
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2147483647
+          },
+          "locale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16
+          },
+          "channel": {
+            "enum": [
+              "EMAIL",
+              "SMS",
+              "WHATSAPP"
+            ]
+          },
+          "classification": {
+            "enum": [
+              "TRANSACTIONAL",
+              "MARKETING"
+            ]
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16384
+          },
+          "providerTemplateId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9:_-]{0,159}$"
+          },
+          "variablesSchema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "additionalProperties",
+              "properties",
+              "required"
+            ],
+            "properties": {
+              "type": {
+                "const": "object"
+              },
+              "additionalProperties": {
+                "const": false
+              },
+              "properties": {
+                "type": "object",
+                "maxProperties": 20,
+                "propertyNames": {
+                  "enum": [
+                    "code",
+                    "expiresAt",
+                    "orderNumber",
+                    "total",
+                    "currency",
+                    "trackingUrl",
+                    "refundStatus",
+                    "amount",
+                    "leadNumber",
+                    "displayName",
+                    "applicationNumber",
+                    "opportunityTitle",
+                    "confirmationUrl",
+                    "quoteNumber",
+                    "status",
+                    "message"
+                  ]
+                },
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "maxLength"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "string"
+                    },
+                    "maxLength": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 2000
+                    }
+                  }
+                }
+              },
+              "required": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "NotificationTemplateView": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "revision"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
           }
         }
       }

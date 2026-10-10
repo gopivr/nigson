@@ -123,5 +123,10 @@
     "status": 422,
     "title": "Provider rule violation",
     "detail": "The provider operation does not meet current rules."
+  },
+  "NOTIFICATION_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Notification rule violation",
+    "detail": "The notification operation does not meet current rules."
   }
 }

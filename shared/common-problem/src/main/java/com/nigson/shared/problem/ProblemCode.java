@@ -10,6 +10,7 @@ public enum ProblemCode {
  IDEMPOTENCY_HASH_MISMATCH(409,"Conflicting request","Use the original request with this key."),
  IDEMPOTENCY_IN_PROGRESS(409,"Request in progress","Retry this request after the current operation finishes."),
  VERSION_MISMATCH(412,"Version mismatch","Refresh the resource before retrying."),
+ NOTIFICATION_RULE_VIOLATION(422,"Notification rule violation","The notification operation does not meet current rules."),
  PROVIDER_RULE_VIOLATION(422,"Provider rule violation","The provider operation does not meet current rules."),
  PROVIDER_MODE_MISMATCH(422,"Provider mode mismatch","The configured provider target does not match this environment."),
  FILES_RULE_VIOLATION(422,"File rule violation","The file does not meet its purpose and safety requirements."),

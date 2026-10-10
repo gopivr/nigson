@@ -118,3 +118,5 @@ SDK and collector configuration references: [Java SDK](https://opentelemetry.io/
 [ADOT release](https://github.com/aws-observability/aws-otel-collector/releases/tag/v0.50.0),
 [pinned X-Ray exporter settings](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.158.0/exporter/awsxrayexporter/README.md),
 [CloudWatch EMF exporter](https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v0.158.0/exporter/awsemfexporter/README.md).
+
+Commerce registers nigson.notification.outcomes with state SENT/FAILED/SUPPRESSED/UNKNOWN after immutable receipt commit, and nigson.notification.templates plus nigson.provider.commands with outcome ACKNOWLEDGED/UNKNOWN. nigson.files.transfer permits CLEAN/REJECTED/UNKNOWN. MetricPolicy rejects other state/outcome values and arbitrary names or labels; no recipient, job UUID or provider reference labels. Assembled notification acceptance verifies these counters survive the actual production filter.
