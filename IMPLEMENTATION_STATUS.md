@@ -4,7 +4,7 @@ Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:10 October2026
 
 ## Current Phase
 
-EP03 — Owned catalogue/configuration increments; BP1 launch composition remains section46.
+EP04 — Owned inventory and market/pricing foundations; BP1 launch composition remains section46.
 
 ## Current Task
 
@@ -46,7 +46,7 @@ COM-INVEN-001 — IN_PROGRESS; SEC-001/DATA-001 complete. Implement exact API-04
 
 ## In Progress
 
-COM-INVEN-001 — started10 October2026. Dependency-ready after SEC-001/DATA-001; launch stock invariants unlock checkout implementation. No invented initial stock or actual location data; explicit synthetic fixtures only.
+COM-INVEN-001 — verified10 October2026, awaiting reproducibility/actual implementation commit. Native23/no skips, full59 Java/102 gated,49 contracts,15 AI/five gated PASS. Actual BFF authority, transaction rollback, last-unit/reversed locks, settlement uncertainty/hold, partial dispatch/capped returns and movement conservation verified. No invented initial stock/location data.
 
 ## Pending
 

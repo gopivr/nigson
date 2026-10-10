@@ -3961,3 +3961,5 @@ requires a backward-compatible schema and an approved expand/contract plan.
 Run `make database-check` for actual isolated PostgreSQL catalog, upgrade,
 constraint and ownership qualification; `make schema-check` alone is not
 runtime acceptance.
+
+COM-INVEN-001 implements application-scale stock values, append-only movement conservation and caller-owned transaction transitions over the existing four inventory tables. A full unshipped allocation cancellation marks its reservation RELEASED without claiming dispatch; mixed dispatch/cancellation completes DISPATCHED only when dispatched units exist. A released pre-payment reservation may be reused for eligible late settlement, but prior settlement/dispatch/return evidence forbids reusing an allocated-and-cancelled reservation. Stable return business key is command UUID plus immutable order line. No inventory schema changed.

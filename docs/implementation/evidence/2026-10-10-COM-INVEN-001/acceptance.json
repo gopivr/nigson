@@ -1,0 +1,26 @@
+{
+  "task": "COM-INVEN-001",
+  "criterion": "AC-COM-INVEN-001",
+  "engineering": "Verified; awaiting actual implementation commit",
+  "native": {
+    "passed": 23,
+    "skipped": 0,
+    "log": "inventory-native-metrics-final.log"
+  },
+  "full": {
+    "javaPassed": 59,
+    "javaEnvironmentSkips": 102,
+    "contractPassed": 49,
+    "aiPassed": 15,
+    "aiEnvironmentSkips": 5,
+    "ruff": "PASS",
+    "mypySourceFiles": 13,
+    "dependencyArtifactsUnchanged": 268
+  },
+  "reproducibleArtifacts": 9,
+  "ownerMigrations": "Fresh/repeated BP1/BP5 all owners PASS; no migration changed",
+  "originalLocalResources": "Preserved",
+  "checkoutPaymentFulfillmentStaging": "NOT_RUN; respective orchestration tasks pending. StockLedger is caller-authorized, local and requires caller transaction; no provider HTTP",
+  "actualInitialStockAndLocationPriority": "NOT_RUN; no real stock/location data seeded",
+  "implementationCommit": null
+}

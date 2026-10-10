@@ -167,3 +167,8 @@ integration-jobs-check:
 notification-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/notification/verify.py
+
+.PHONY: inventory-check
+inventory-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/inventory/verify.py

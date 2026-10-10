@@ -128,5 +128,10 @@
     "status": 422,
     "title": "Notification rule violation",
     "detail": "The notification operation does not meet current rules."
+  },
+  "INVENTORY_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Inventory rule violation",
+    "detail": "The stock operation does not meet current inventory rules."
   }
 }
