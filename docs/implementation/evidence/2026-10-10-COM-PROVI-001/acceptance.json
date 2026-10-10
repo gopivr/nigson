@@ -1,0 +1,27 @@
+{
+  "task": "COM-PROVI-001",
+  "criterion": "AC-COM-PROVI-001",
+  "engineering": "VERIFIED_PENDING_COMMIT",
+  "native": {
+    "passed": 20,
+    "skipped": 0,
+    "log": "provider-native-final-second.log"
+  },
+  "full": {
+    "javaPassed": 50,
+    "javaEnvironmentSkips": 79,
+    "contractPassed": 45,
+    "aiPassed": 15,
+    "aiEnvironmentSkips": 5,
+    "ruff": "PASS",
+    "mypySourceFiles": 13,
+    "dependencyArtifactsUnchanged": 268
+  },
+  "reproducibleArtifacts": 9,
+  "ownerMigrations": "Fresh/repeated BP1/BP5 all owners PASS; no migration changed",
+  "originalLocalResources": "Preserved",
+  "integrationWorker": "NOT_RUN; INT-PROVI-001 pending",
+  "liveProviderStaging": "NOT_RUN",
+  "initialJobVersionDiscovery": "Contract gap: specified closed JobDTO has no version; no guessed values or undeclared field",
+  "implementationCommit": null
+}

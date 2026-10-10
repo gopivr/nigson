@@ -157,3 +157,8 @@ catalogue-check:
 files-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/files/verify.py
+
+.PHONY: integration-jobs-check
+integration-jobs-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/provider/verify.py

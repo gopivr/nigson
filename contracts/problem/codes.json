@@ -118,5 +118,10 @@
     "status": 422,
     "title": "Provider mode mismatch",
     "detail": "The configured provider target does not match this environment."
+  },
+  "PROVIDER_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Provider rule violation",
+    "detail": "The provider operation does not meet current rules."
   }
 }

@@ -41,6 +41,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "PROVIDER_RULE_VIOLATION": (
+        422,
+        "Provider rule violation",
+        "The provider operation does not meet current rules.",
+    ),
     "PROVIDER_MODE_MISMATCH": (
         422,
         "Provider mode mismatch",
