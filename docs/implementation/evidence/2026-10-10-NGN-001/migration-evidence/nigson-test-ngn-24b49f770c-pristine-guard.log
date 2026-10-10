@@ -1,0 +1,22 @@
+Rolling Back Changeset: commerce/024-bp1-nigeria-metadata.yaml::commerce-20261010-ngn-001::nigson-ngn
+ERROR: Exception Details
+ERROR: Exception Primary Class:  PSQLException
+ERROR: Exception Primary Reason:  ERROR: POPULATED_NG_METADATA_USE_FORWARD_CORRECTION
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE
+ERROR: Exception Primary Source:  PostgreSQL 18.4 (Debian 18.4-1.pgdg12+1)
+PASS: actual BP1 Liquibase Nigeria populated rollback guard
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 10, 2026 8:30:21 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:22 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 10, 2026 8:30:22 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:22 PM liquibase.command
+INFO: rollbackCount command encountered an exception.
+Oct 10, 2026 8:30:22 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 10, 2026 8:30:22 PM liquibase.command
+INFO: Logging exception.
+Oct 10, 2026 8:30:22 PM liquibase.command
+INFO: Command execution complete

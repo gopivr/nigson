@@ -1,0 +1,261 @@
+No validation errors found.
+Running Changeset: commerce/024-bp1-nigeria-metadata.yaml::commerce-20261010-ngn-001::nigson-ngn
+ERROR: Exception Details
+ERROR: Exception Primary Class:  PSQLException
+ERROR: Exception Primary Reason:  ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE
+ERROR: Exception Primary Source:  PostgreSQL 18.4 (Debian 18.4-1.pgdg12+1)
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Command execution complete
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:45 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 10, 2026 8:30:45 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Using deploymentId: 1664244587
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: SQL in file 024-bp1-nigeria-metadata.sql executed
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: ChangeSet commerce/024-bp1-nigeria-metadata.yaml::commerce-20261010-ngn-001::nigson-ngn ran successfully in 10ms
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Update command completed successfully.
+Oct 10, 2026 8:30:45 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 10, 2026 8:30:45 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Command execution complete
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:45 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Using deploymentId: 1664244587
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 10, 2026 8:30:45 PM liquibase.changelog
+SEVERE: ChangeSet commerce/024-bp1-nigeria-metadata.yaml::commerce-20261010-ngn-001::nigson-ngn encountered an exception.
+liquibase.exception.DatabaseException: ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE [Failed SQL: (0) -- NGN-001 / ADR-008: country/currency facts approved 4 October2026; no selling policy.
+DO $$ BEGIN
+ IF EXISTS(SELECT 1 FROM commerce.currency WHERE code='NGN' AND minor_unit<>2) THEN RAISE EXCEPTION 'NGN_METADATA_CONFLICT'; END IF;
+ IF EXISTS(SELECT 1 FROM commerce.market WHERE code='NG' AND currency_code<>'NGN') THEN RAISE EXCEPTION 'NG_MARKET_METADATA_CONFLICT'; END IF;
+ INSERT INTO commerce.currency(id,created_by,updated_by,code,minor_unit,active)
+ VALUES ('99ac5083-bb88-5dab-a5cd-64492a9353da','approved-launch:ADR-008','approved-launch:ADR-008','NGN',2,true)
+ ON CONFLICT(code) DO UPDATE SET active=true,version=commerce.currency.version+1,updated_by='approved-launch:ADR-008',updated_at=now() WHERE NOT commerce.currency.active;
+ INSERT INTO commerce.market(id,created_by,updated_by,code,name,currency_code,enabled,policy_revision,tax_policy)
+ VALUES ('29b78d62-ec0d-5ff9-8319-b485ecb093d6','approved-launch:ADR-008','approved-launch:ADR-008','NG','Nigeria','NGN',false,1,'{}'::jsonb)
+ ON CONFLICT(code) DO NOTHING;
+ INSERT INTO commerce.market_destination(id,created_by,updated_by,market_id,country_code,address_rules,delivery_enabled)
+ SELECT 'fa95263f-cc97-5907-8948-c913030ecfa8','approved-launch:ADR-008','approved-launch:ADR-008',id,'NG','{}'::jsonb,false FROM commerce.market WHERE code='NG'
+ ON CONFLICT(market_id,country_code) DO NOTHING;
+END $$]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:525)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:85)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:188)
+	at liquibase.executor.AbstractExecutor.execute(AbstractExecutor.java:148)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1198)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:860)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:127)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:71)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$0(ChangeLogIterator.java:133)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$1(ChangeLogIterator.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Scope.child(Scope.java:309)
+	at liquibase.Scope.child(Scope.java:313)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:91)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$1(AbstractUpdateCommandStep.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:120)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:100)
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:269)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:228)
+	at liquibase.command.CommandScope.execute(CommandScope.java:257)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:216)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1366)
+	at liquibase.Liquibase.update(Liquibase.java:205)
+	at liquibase.Liquibase.update(Liquibase.java:188)
+	at OwnerMigration.main(OwnerMigration.java:70)
+Caused by: org.postgresql.util.PSQLException: ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:327)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:517)
+	... 40 more
+
+Oct 10, 2026 8:30:45 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 10, 2026 8:30:45 PM liquibase.util
+INFO: Run:                          0
+Oct 10, 2026 8:30:45 PM liquibase.util
+INFO: Previously run:               7
+Oct 10, 2026 8:30:45 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 10, 2026 8:30:45 PM liquibase.util
+INFO: -------------------------------
+Oct 10, 2026 8:30:45 PM liquibase.util
+INFO: Total change sets:            8
+Oct 10, 2026 8:30:45 PM liquibase.util
+INFO: Update summary generated
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Update command encountered an exception.
+Oct 10, 2026 8:30:45 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Logging exception.
+Oct 10, 2026 8:30:45 PM liquibase.command
+INFO: Command execution complete
+Exception in thread "main" liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset commerce/024-bp1-nigeria-metadata.yaml::commerce-20261010-ngn-001::nigson-ngn:
+     Reason: liquibase.exception.DatabaseException: ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE [Failed SQL: (0) -- NGN-001 / ADR-008: country/currency facts approved 4 October2026; no selling policy.
+DO $$ BEGIN
+ IF EXISTS(SELECT 1 FROM commerce.currency WHERE code='NGN' AND minor_unit<>2) THEN RAISE EXCEPTION 'NGN_METADATA_CONFLICT'; END IF;
+ IF EXISTS(SELECT 1 FROM commerce.market WHERE code='NG' AND currency_code<>'NGN') THEN RAISE EXCEPTION 'NG_MARKET_METADATA_CONFLICT'; END IF;
+ INSERT INTO commerce.currency(id,created_by,updated_by,code,minor_unit,active)
+ VALUES ('99ac5083-bb88-5dab-a5cd-64492a9353da','approved-launch:ADR-008','approved-launch:ADR-008','NGN',2,true)
+ ON CONFLICT(code) DO UPDATE SET active=true,version=commerce.currency.version+1,updated_by='approved-launch:ADR-008',updated_at=now() WHERE NOT commerce.currency.active;
+ INSERT INTO commerce.market(id,created_by,updated_by,code,name,currency_code,enabled,policy_revision,tax_policy)
+ VALUES ('29b78d62-ec0d-5ff9-8319-b485ecb093d6','approved-launch:ADR-008','approved-launch:ADR-008','NG','Nigeria','NGN',false,1,'{}'::jsonb)
+ ON CONFLICT(code) DO NOTHING;
+ INSERT INTO commerce.market_destination(id,created_by,updated_by,market_id,country_code,address_rules,delivery_enabled)
+ SELECT 'fa95263f-cc97-5907-8948-c913030ecfa8','approved-launch:ADR-008','approved-launch:ADR-008',id,'NG','{}'::jsonb,false FROM commerce.market WHERE code='NG'
+ ON CONFLICT(market_id,country_code) DO NOTHING;
+END $$]
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:325)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:228)
+	at liquibase.command.CommandScope.execute(CommandScope.java:257)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:216)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1366)
+	at liquibase.Liquibase.update(Liquibase.java:205)
+	at liquibase.Liquibase.update(Liquibase.java:188)
+	at OwnerMigration.main(OwnerMigration.java:70)
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset commerce/024-bp1-nigeria-metadata.yaml::commerce-20261010-ngn-001::nigson-ngn:
+     Reason: liquibase.exception.DatabaseException: ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE [Failed SQL: (0) -- NGN-001 / ADR-008: country/currency facts approved 4 October2026; no selling policy.
+DO $$ BEGIN
+ IF EXISTS(SELECT 1 FROM commerce.currency WHERE code='NGN' AND minor_unit<>2) THEN RAISE EXCEPTION 'NGN_METADATA_CONFLICT'; END IF;
+ IF EXISTS(SELECT 1 FROM commerce.market WHERE code='NG' AND currency_code<>'NGN') THEN RAISE EXCEPTION 'NG_MARKET_METADATA_CONFLICT'; END IF;
+ INSERT INTO commerce.currency(id,created_by,updated_by,code,minor_unit,active)
+ VALUES ('99ac5083-bb88-5dab-a5cd-64492a9353da','approved-launch:ADR-008','approved-launch:ADR-008','NGN',2,true)
+ ON CONFLICT(code) DO UPDATE SET active=true,version=commerce.currency.version+1,updated_by='approved-launch:ADR-008',updated_at=now() WHERE NOT commerce.currency.active;
+ INSERT INTO commerce.market(id,created_by,updated_by,code,name,currency_code,enabled,policy_revision,tax_policy)
+ VALUES ('29b78d62-ec0d-5ff9-8319-b485ecb093d6','approved-launch:ADR-008','approved-launch:ADR-008','NG','Nigeria','NGN',false,1,'{}'::jsonb)
+ ON CONFLICT(code) DO NOTHING;
+ INSERT INTO commerce.market_destination(id,created_by,updated_by,market_id,country_code,address_rules,delivery_enabled)
+ SELECT 'fa95263f-cc97-5907-8948-c913030ecfa8','approved-launch:ADR-008','approved-launch:ADR-008',id,'NG','{}'::jsonb,false FROM commerce.market WHERE code='NG'
+ ON CONFLICT(market_id,country_code) DO NOTHING;
+END $$]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:155)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$1(AbstractUpdateCommandStep.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:120)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:100)
+	at liquibase.command.CommandScope.lambda$execute$5(CommandScope.java:269)
+	... 12 more
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset commerce/024-bp1-nigeria-metadata.yaml::commerce-20261010-ngn-001::nigson-ngn:
+     Reason: liquibase.exception.DatabaseException: ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE [Failed SQL: (0) -- NGN-001 / ADR-008: country/currency facts approved 4 October2026; no selling policy.
+DO $$ BEGIN
+ IF EXISTS(SELECT 1 FROM commerce.currency WHERE code='NGN' AND minor_unit<>2) THEN RAISE EXCEPTION 'NGN_METADATA_CONFLICT'; END IF;
+ IF EXISTS(SELECT 1 FROM commerce.market WHERE code='NG' AND currency_code<>'NGN') THEN RAISE EXCEPTION 'NG_MARKET_METADATA_CONFLICT'; END IF;
+ INSERT INTO commerce.currency(id,created_by,updated_by,code,minor_unit,active)
+ VALUES ('99ac5083-bb88-5dab-a5cd-64492a9353da','approved-launch:ADR-008','approved-launch:ADR-008','NGN',2,true)
+ ON CONFLICT(code) DO UPDATE SET active=true,version=commerce.currency.version+1,updated_by='approved-launch:ADR-008',updated_at=now() WHERE NOT commerce.currency.active;
+ INSERT INTO commerce.market(id,created_by,updated_by,code,name,currency_code,enabled,policy_revision,tax_policy)
+ VALUES ('29b78d62-ec0d-5ff9-8319-b485ecb093d6','approved-launch:ADR-008','approved-launch:ADR-008','NG','Nigeria','NGN',false,1,'{}'::jsonb)
+ ON CONFLICT(code) DO NOTHING;
+ INSERT INTO commerce.market_destination(id,created_by,updated_by,market_id,country_code,address_rules,delivery_enabled)
+ SELECT 'fa95263f-cc97-5907-8948-c913030ecfa8','approved-launch:ADR-008','approved-launch:ADR-008',id,'NG','{}'::jsonb,false FROM commerce.market WHERE code='NG'
+ ON CONFLICT(market_id,country_code) DO NOTHING;
+END $$]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:918)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:127)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:71)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$0(ChangeLogIterator.java:133)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.changelog.ChangeLogIterator.lambda$run$1(ChangeLogIterator.java:122)
+	at liquibase.Scope.lambda$child$0(Scope.java:243)
+	at liquibase.Scope.child(Scope.java:252)
+	at liquibase.Scope.child(Scope.java:242)
+	at liquibase.Scope.child(Scope.java:221)
+	at liquibase.Scope.child(Scope.java:309)
+	at liquibase.Scope.child(Scope.java:313)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:91)
+	... 20 more
+Caused by: liquibase.exception.DatabaseException: ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE [Failed SQL: (0) -- NGN-001 / ADR-008: country/currency facts approved 4 October2026; no selling policy.
+DO $$ BEGIN
+ IF EXISTS(SELECT 1 FROM commerce.currency WHERE code='NGN' AND minor_unit<>2) THEN RAISE EXCEPTION 'NGN_METADATA_CONFLICT'; END IF;
+ IF EXISTS(SELECT 1 FROM commerce.market WHERE code='NG' AND currency_code<>'NGN') THEN RAISE EXCEPTION 'NG_MARKET_METADATA_CONFLICT'; END IF;
+ INSERT INTO commerce.currency(id,created_by,updated_by,code,minor_unit,active)
+ VALUES ('99ac5083-bb88-5dab-a5cd-64492a9353da','approved-launch:ADR-008','approved-launch:ADR-008','NGN',2,true)
+ ON CONFLICT(code) DO UPDATE SET active=true,version=commerce.currency.version+1,updated_by='approved-launch:ADR-008',updated_at=now() WHERE NOT commerce.currency.active;
+ INSERT INTO commerce.market(id,created_by,updated_by,code,name,currency_code,enabled,policy_revision,tax_policy)
+ VALUES ('29b78d62-ec0d-5ff9-8319-b485ecb093d6','approved-launch:ADR-008','approved-launch:ADR-008','NG','Nigeria','NGN',false,1,'{}'::jsonb)
+ ON CONFLICT(code) DO NOTHING;
+ INSERT INTO commerce.market_destination(id,created_by,updated_by,market_id,country_code,address_rules,delivery_enabled)
+ SELECT 'fa95263f-cc97-5907-8948-c913030ecfa8','approved-launch:ADR-008','approved-launch:ADR-008',id,'NG','{}'::jsonb,false FROM commerce.market WHERE code='NG'
+ ON CONFLICT(market_id,country_code) DO NOTHING;
+END $$]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:525)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:85)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:188)
+	at liquibase.executor.AbstractExecutor.execute(AbstractExecutor.java:148)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1198)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:860)
+	... 35 more
+Caused by: org.postgresql.util.PSQLException: ERROR: NGN_METADATA_CONFLICT
+  Where: PL/pgSQL function inline_code_block line 2 at RAISE
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:327)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:517)
+	... 40 more

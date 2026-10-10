@@ -1,0 +1,12 @@
+{
+  "services/commerce/src/main/resources/db/changelog/023-bp1-file-transfer-rollback.sql": "cb33a453fb2c70498746e6c48d8352d314117b12a6d04b7330e7c3499fbfa336",
+  "services/commerce/src/main/resources/db/changelog/021-bp1-indexes.sql": "aaeeb3012bebb528226dd7550f17b10894561f983619e8a1a1373aed49f87035",
+  "services/commerce/src/main/resources/db/changelog/010-bp1-platform-tables-rollback.sql": "a35eda7e0e96bcf12c3582e1e21335252bb63ba69b5798b6cc1d0232521b3e85",
+  "services/commerce/src/main/resources/db/changelog/020-bp1-domain-tables.sql": "5876fc948bb051d67c889060b00449dcfc87367ef8fab57a1375a2fdfebaa885",
+  "services/commerce/src/main/resources/db/changelog/021-bp1-indexes-rollback.sql": "47059e974d12080fefd6b7ebf6776407246c3e9df52ad2847f4ba83d0b8be348",
+  "services/commerce/src/main/resources/db/changelog/020-bp1-domain-tables-rollback.sql": "e56d3e5661cb131330e41e8802a033a642fc8d232338b1517e3bc63421988146",
+  "services/commerce/src/main/resources/db/changelog/010-bp1-platform-tables.sql": "25f1bd30d2ba456ea0d24cda816d2587634dd7667b932c3a7f4ec72c50d0ec6d",
+  "services/commerce/src/main/resources/db/changelog/022-bp1-constraints.sql": "71745d0dd864b9b4698150ee74c29d5c03f41f4a016246f5ab2611ef663166f1",
+  "services/commerce/src/main/resources/db/changelog/023-bp1-file-transfer.sql": "b95074beb41e8a56cef8931c79f20ab932dc6bedd68a5ee291fa9a325eeeae0c",
+  "services/commerce/src/main/resources/db/changelog/022-bp1-constraints-rollback.sql": "45ba547fbbc2ddd62a9d2242e0dcaf100194e96c2450fab906231b4c72d32d39"
+}

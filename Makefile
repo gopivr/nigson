@@ -177,3 +177,8 @@ inventory-check:
 market-check:
 	$(MAKE) status-check
 	ENV=test python3 scripts/market/verify.py
+
+.PHONY: nigeria-check
+nigeria-check:
+	$(MAKE) status-check
+	ENV=test python3 scripts/nigeria/verify.py

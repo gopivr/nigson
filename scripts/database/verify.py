@@ -226,7 +226,7 @@ class Database:
             self.sql('INSERT INTO commerce.' + table + '(' + ','.join(values) + ') VALUES (' + ','.join(literal(v) for v in values.values()) + ')', 'nigson_commerce_app', expected)
             return values['id']
         party = row('party', {'identity_subject':'financial-fixture','identity_issuer':'https://identity.example.invalid','email':'fixture@example.invalid','display_name':'Fixture'})
-        row('currency', {'code':'NGN','minor_unit':2})
+        assert self.sql("SELECT minor_unit FROM commerce.currency WHERE code='NGN'") == '2', 'Approved NGN2 baseline missing'
         market = row('market', {'code':'OFFLINE_TEST','name':'Offline test, disabled','currency_code':'NGN'})
         cart = row('cart', {'party_id':party,'market_id':market,'last_activity_at':'2026-10-06T00:00:00Z'})
         row('cart', {'party_id':party,'market_id':market,'last_activity_at':'2026-10-06T00:00:00Z'}, False)

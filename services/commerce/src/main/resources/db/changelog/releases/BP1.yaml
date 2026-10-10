@@ -29,6 +29,12 @@
         "file": "../023-bp1-file-transfer.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../024-bp1-nigeria-metadata.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

@@ -211,6 +211,12 @@ def generate():
         files[wrapper] = json.dumps(payload,indent=2)+'\n'
         table['creation_changeset']=change
         table['creation_file']=str(base/(stem+'.sql'))
+    # Explicitly approved country/currency metadata is an additive data changeset, not domain DDL.
+    from nigeria import files as nigeria_files, BASE as nigeria_base, STEM as nigeria_stem
+    files.update(nigeria_files())
+    wrapper=nigeria_base/'releases'/'BP1.yaml'
+    payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+nigeria_stem+'.yaml','relativeToChangelogFile':True}})
+    files[wrapper]=json.dumps(payload,indent=2)+'\n'
     for name in SESSION_TABLES:
         tables[name]['creation_changeset'] = 'commerce-20261005-002'
         tables[name]['creation_file'] = 'services/commerce/src/main/resources/db/changelog/001-framework-sessions.sql'

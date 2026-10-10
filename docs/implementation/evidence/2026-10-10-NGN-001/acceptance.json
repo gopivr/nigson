@@ -1,0 +1,37 @@
+{
+  "task": "NGN-001",
+  "criterion": "AC-NGN-001",
+  "engineering": "IN_PROGRESS",
+  "native": {
+    "tests": 27,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "full": {
+    "javaPassed": 65,
+    "gatedJavaSkips": 116,
+    "contracts": 51,
+    "aiPassed": 15,
+    "gatedAiSkips": 5,
+    "ruff": "PASS",
+    "mypyFiles": 13
+  },
+  "migration": "PASS fresh/previous/actual rollback/reapply/populated/conflict/checksum/policy/ID/inactive-approved support/repeat",
+  "artifacts": {
+    "count": 9,
+    "reproduced": true
+  },
+  "coldStart": {
+    "result": "PASS",
+    "rounds": 2,
+    "project": "nigson-test-cold-017c858638",
+    "originalStatePreserved": true,
+    "testContainersStopped": true,
+    "namedVolumesRetained": true
+  },
+  "implementationCommit": null,
+  "liveActivation": "NOT_RUN",
+  "verification": "PASS; actual implementation commit pending",
+  "evidenceNormalization": "Copied diagnostic logs strip trailing whitespace; ignored raw .build logs retain original bytes and all failures/results are preserved."
+}

@@ -3967,3 +3967,7 @@ COM-INVEN-001 implements application-scale stock values, append-only movement co
 ## COM-MARKE-001 owned policy implementation —10 October2026
 
 Existing currency/market/destination/eligibility/book tables are reused without DDL. NGN scale2 is verified, not editable by market API; NGN-001 owns its approved seed. Explicit eligibility increments Product version/public revision plus its own row version, with reason retained only in owned state. Flat TaxPolicy is closed and requires explicit approvalReference (NONE requires decimal zero); empty draft{} fails selling. AddressRules reuses the existing Party/RE2-J contract. Current market/destination/tax/returns/retail book and supplied trusted provider qualification proof are rechecked inside checkout before reservation; no network under locks. No commercial policy values or actual provider approvals are seeded.
+
+## NGN-001 additive approved metadata —10 October2026
+
+Changeset commerce-20261010-ngn-001 seeds approved currencyNGN2/marketNG-Nigeria/destinationNG into the existing owned tables, with selling/delivery disabled and unresolved policies empty/null. No DDL/FK/entity added; older SQL checksums preserved. UUIDv5 metadata IDs deterministic; exact actual IDs and previous policy-preservation/rollback evidence recorded by the task. An existing compatible inactive NGN row retains ID and is supported by the prior explicit approval, version increment once. Wrong NGN scale or NG currency fails atomically. Rollback cannot delete modified/referenced evidence or alter preexisting policy.

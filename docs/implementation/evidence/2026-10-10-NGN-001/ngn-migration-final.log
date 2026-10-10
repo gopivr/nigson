@@ -1,0 +1,18 @@
+{
+  "test": "TEST-NGN-MARKET",
+  "result": "PASS",
+  "checks": [
+    "fresh deterministic approved disabled metadata",
+    "actual Liquibase last-change rollback/reapply",
+    "populated metadata rollback guard preserves data",
+    "previous BP1 checksums and explicit existing policy/IDs preserved on upgrade/repeat",
+    "previous supported inactive NGN activates only already-approved currency facts, preserves ID and increments version once",
+    "wrong NGN minor unit and wrong NG currency fail atomically",
+    "original local Docker state preserved"
+  ],
+  "ids": {
+    "currency-NGN": "99ac5083-bb88-5dab-a5cd-64492a9353da",
+    "market-NG": "29b78d62-ec0d-5ff9-8319-b485ecb093d6",
+    "destination-NG": "fa95263f-cc97-5907-8948-c913030ecfa8"
+  }
+}
