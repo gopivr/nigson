@@ -54,6 +54,26 @@ class PlatformPersistenceTest {
   String stale=UUID.randomUUID().toString();jdbc.update("INSERT INTO integration.idempotency_record(id,created_by,updated_by,principal_key,operation,request_key,request_hash,state,lease_until,expires_at) VALUES (?,'test','test','subject','test-operation',?,?,'RUNNING',?,?)",EventCodec.uuid7(clock.instant()),stale,EventCodec.hash(request),java.sql.Timestamp.from(clock.instant().minusSeconds(86400)),java.sql.Timestamp.from(clock.instant().plusSeconds(86400)));
   assertThat(store.executeLocal("subject","test-operation",stale,request,db -> new PlatformStore.Response(200,request,null)).status()).isEqualTo(200);
  }
+ @Test void lockedLedgerAndUncommittedUniqueKeyReturnBoundedConflictWithoutCommand() throws Exception {
+  var request=EventCodec.JSON.readTree("{\"synthetic\":true}");var calls=new AtomicInteger();
+  java.util.function.Function<JdbcTemplate,PlatformStore.Response> command=db->{calls.incrementAndGet();return new PlatformStore.Response(200,request,null);};
+  String key=UUID.randomUUID().toString();store.executeLocal("bounded-subject","bounded-operation",key,request,command);
+  try(var connection=jdbc.getDataSource().getConnection()) {
+   connection.setAutoCommit(false);var held=new JdbcTemplate(new SingleConnectionDataSource(connection,true));
+   held.queryForObject("SELECT id FROM integration.idempotency_record WHERE principal_key='bounded-subject' AND operation='bounded-operation' AND request_key=? FOR UPDATE",UUID.class,key);
+   long start=System.nanoTime();assertThatThrownBy(()->store.executeLocal("bounded-subject","bounded-operation",key,request,command)).isInstanceOf(PlatformStore.Conflict.class).hasMessage("IDEMPOTENCY_IN_PROGRESS");
+   assertThat(Duration.ofNanos(System.nanoTime()-start)).isLessThan(Duration.ofSeconds(1));assertThat(calls.get()).isEqualTo(1);connection.rollback();
+  }
+  assertThat(store.executeLocal("bounded-subject","bounded-operation",key,request,command).body()).isEqualTo(request);assertThat(calls.get()).isEqualTo(1);
+  String uncommitted=UUID.randomUUID().toString();
+  try(var connection=jdbc.getDataSource().getConnection()) {
+   connection.setAutoCommit(false);var held=new JdbcTemplate(new SingleConnectionDataSource(connection,true));
+   held.update("INSERT INTO integration.idempotency_record(id,created_by,updated_by,principal_key,operation,request_key,request_hash,state,response_status,response_body,expires_at) VALUES (?,'test','test','bounded-subject','bounded-operation',?,?,'SUCCEEDED',200,?::jsonb,?)",EventCodec.uuid7(clock.instant()),uncommitted,EventCodec.hash(request),EventCodec.JSON.writeValueAsString(request),java.sql.Timestamp.from(clock.instant().plusSeconds(86400)));
+   long start=System.nanoTime();assertThatThrownBy(()->store.executeLocal("bounded-subject","bounded-operation",uncommitted,request,command)).isInstanceOf(PlatformStore.Conflict.class).hasMessage("IDEMPOTENCY_IN_PROGRESS");
+   assertThat(Duration.ofNanos(System.nanoTime()-start)).isLessThan(Duration.ofSeconds(1));assertThat(calls.get()).isEqualTo(1);connection.commit();
+  }
+  assertThat(store.executeLocal("bounded-subject","bounded-operation",uncommitted,request,command).body()).isEqualTo(request);assertThat(calls.get()).isEqualTo(1);
+ }
  @Test void duplicateEventHasOneEffectAndFailedTransactionCanReplay() throws Exception {
   String type=integration.equals("experience")?"distributor.entitlement.changed.v1":integration.equals("commerce")?"order.paid.v1":"order.pending.v1";
   String body=java.nio.file.Files.readString(java.nio.file.Path.of(System.getenv("NIGSON_EVENT_FIXTURES"),type+".json"));

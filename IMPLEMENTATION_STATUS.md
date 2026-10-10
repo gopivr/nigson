@@ -35,9 +35,11 @@ COM-SESSI-001 — IN_PROGRESS; public API-001–004 BFF login/callback/session/l
 
 ## In Progress
 
-COM-SESSI-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; final23 native/no skips and real Keycloak/restore PASS. Full uncached repository verification PASS (38 Java/43 gated skips,38 contracts,15 AI/four skips). Cold-start interrupted by host disk exhaustion/Docker metadata I/O failure; final native query-bound rerun still required. Critical Docker recovery approval requested; no task marked DONE on incomplete checks.
+COM-SESSI-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; final23 native/no skips and real Keycloak/restore PASS. Full uncached repository verification PASS (38 Java/43 gated skips,38 contracts,15 AI/four skips). Cold-start interrupted by host disk exhaustion/Docker metadata I/O failure; recovered final native suite23/no skips PASS including query bounds. User approved Docker restart, engine recovered; failed task project containers cleaned with volumes retained. Cold-start rerun failed again from disk exhaustion/read-only containerd; failure preserved. Approved restart repeated;13 exact unused private Nigson cache records reclaimed2.454GB without image/volume deletion. Locked dependency-cache build and cold-start two-pass/recovery/preservation checks PASS; final repaired-source session/reproducible checks IN_PROGRESS before DONE. Broader unused-cache cleanup approval pending because space remains below1GB.
 
-COM-CATAL-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains pending Docker recovery.
+COM-CATAL-001 — started9 October2026; implementation checkpoint c29766c9de8c4ff9b6370b66cd3556b32cef7805; closed values, reviewed-metadata validation and FedEx packaging validation implemented; three standalone tests PASS/no skips. Persistence/API/native acceptance remains IN_PROGRESS; Docker recovered after approved restart.
+
+COM-PLATF-001 — started9 October2026; dependency SEC-001 DONE. Owner ledger wait repair PASS:14 Java/one declared nonapplicable skip and four Python native tests; full verification38 Java/46 gated skips,38 contracts,15 AI/five skips. Typed owner configuration API-135 remains implementation-owned pending work.
 
 ## Pending
 

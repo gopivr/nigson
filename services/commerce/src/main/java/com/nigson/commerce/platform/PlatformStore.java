@@ -86,7 +86,11 @@ public final class PlatformStore {
     public Response executeLocal(String principal,String operation,String key,JsonNode request,Function<JdbcTemplate,Response> command) {
         bounded(principal,200); bounded(operation,120); bounded(key,100); String hash=EventCodec.hash(request);
         UUID token=EventCodec.uuid7(now());
-        Map<String,Object> saved=tx.execute(status -> {
+        Map<String,Object> saved;
+        try { saved=tx.execute(status -> {
+            // Bound both speculative uniqueness and row-lock waits before domain callbacks.
+            jdbc.execute("SET LOCAL lock_timeout='350ms'");
+            jdbc.execute("SET LOCAL statement_timeout='800ms'");
             jdbc.update("INSERT INTO commerce.idempotency_record(id,created_by,updated_by,principal_key,operation,request_key,request_hash,state,lease_until,expires_at) VALUES (?,?,?,?,?,?,?,'RUNNING',?,?) ON CONFLICT(principal_key,operation,request_key) DO NOTHING",token,principal,principal,principal,operation,key,hash,stamp(now().plusSeconds(30)),stamp(now().plus(Duration.ofDays(1))));
             var row=jdbc.queryForMap("SELECT * FROM commerce.idempotency_record WHERE principal_key=? AND operation=? AND request_key=? FOR UPDATE",principal,operation,key);
             if(!row.get("request_hash").equals(hash)){metrics.counter("nigson.idempotency.conflicts","owner","commerce").increment();throw new Conflict("IDEMPOTENCY_HASH_MISMATCH");}
@@ -98,7 +102,11 @@ public final class PlatformStore {
                 row.put("version",((Number)row.get("version")).longValue()+1);
             }
             return row;
-        });
+        }); } catch(org.springframework.dao.DataAccessException busy) {
+            if(!ledgerTimeout(busy))throw busy;
+            metrics.counter("nigson.idempotency.conflicts","owner",commerce).increment();
+            throw new Conflict("IDEMPOTENCY_IN_PROGRESS");
+        }
         if(saved.get("state").equals("SUCCEEDED")) return replay(saved);
         UUID id=(UUID)saved.get("id"); long generation=((Number)saved.get("version")).longValue();
         try {
@@ -112,6 +120,12 @@ public final class PlatformStore {
         } catch(RuntimeException failure) {
             jdbc.update("UPDATE commerce.idempotency_record SET state='FAILED_RETRYABLE',lease_until=NULL,version=version+1,updated_at=?,updated_by=? WHERE id=? AND version=? AND state='RUNNING'",stamp(now()),principal,id,generation); throw failure;
         }
+    }
+    private static boolean ledgerTimeout(Throwable failure) {
+        for(int n=0;n<8&&failure!=null;n++,failure=failure.getCause()) {
+            if(failure instanceof java.sql.SQLException sql&&("55P03".equals(sql.getSQLState())||"57014".equals(sql.getSQLState())))return true;
+        }
+        return false;
     }
     private Response replay(Map<String,Object> row) {
         metrics.counter("nigson.idempotency.replay","owner",commerce).increment();

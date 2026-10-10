@@ -275,3 +275,58 @@ def test_bp5_transport_replay_and_poison_quarantine():
     sdk.close()
     sns.close()
     sqs.close()
+
+
+def test_held_ledger_and_uncommitted_key_return_bounded_conflict():
+    dsn = os.environ.get("NIGSON_TEST_AI_DSN")
+    if not dsn:
+        pytest.skip("Run configuration-check for real PostgreSQL qualification")
+    with ConnectionPool(dsn, min_size=1, max_size=4) as pool:
+        store = PlatformStore(pool)
+        request = {"synthetic": True}
+        calls = []
+
+        def command(db):
+            calls.append(1)
+            return Response(200, request)
+
+        key = str(uuid.uuid4())
+        store.execute_local(
+            "bounded-subject", "bounded-operation", key, request, command
+        )
+        with pool.connection() as held:
+            held.execute(
+                "SELECT id FROM ai.idempotency_record WHERE principal_key='bounded-subject' AND operation='bounded-operation' AND request_key=%s FOR UPDATE",
+                (key,),
+            )
+            started = time.monotonic()
+            with pytest.raises(Conflict, match="IDEMPOTENCY_IN_PROGRESS"):
+                store.execute_local(
+                    "bounded-subject", "bounded-operation", key, request, command
+                )
+            assert time.monotonic() - started < 1
+            assert len(calls) == 1
+        assert store.execute_local(
+            "bounded-subject", "bounded-operation", key, request, command
+        ) == Response(200, request)
+        uncommitted = str(uuid.uuid4())
+        with pool.connection() as held:
+            held.execute(
+                "INSERT INTO ai.idempotency_record(id,created_by,updated_by,principal_key,operation,request_key,request_hash,state,response_status,response_body,expires_at) VALUES (%s,'test','test','bounded-subject','bounded-operation',%s,%s,'SUCCEEDED',200,%s,now()+interval '1 day')",
+                (uuid7(), uncommitted, request_hash(request), Jsonb(request)),
+            )
+            started = time.monotonic()
+            with pytest.raises(Conflict, match="IDEMPOTENCY_IN_PROGRESS"):
+                store.execute_local(
+                    "bounded-subject",
+                    "bounded-operation",
+                    uncommitted,
+                    request,
+                    command,
+                )
+            assert time.monotonic() - started < 1
+            assert len(calls) == 1
+        assert store.execute_local(
+            "bounded-subject", "bounded-operation", uncommitted, request, command
+        ) == Response(200, request)
+        assert len(calls) == 1

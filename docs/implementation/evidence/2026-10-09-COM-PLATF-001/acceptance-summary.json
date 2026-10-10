@@ -1,0 +1,25 @@
+{
+  "task": "COM-PLATF-001",
+  "status": "IN_PROGRESS",
+  "implementation_commit": null,
+  "ledger_regression": {
+    "java_passed": 14,
+    "java_skipped": 1,
+    "skip_reason": "Integration produces no v1 event; preexisting publisher-lease scenario is not applicable",
+    "python_passed": 4,
+    "python_skipped": 0,
+    "owner_held_row_and_uncommitted_key_cases": "PASS in all four owner schemas; <1s, no callback effect, original replay after release"
+  },
+  "full_verify": {
+    "java_passed": 38,
+    "java_skipped": 46,
+    "contracts": 38,
+    "ai_passed": 15,
+    "ai_skipped": 5,
+    "ruff": "PASS",
+    "mypy_source_files": 13,
+    "dependency_coordinates": 261
+  },
+  "initial_failure": "PostgreSQL55P03 translated to UncategorizedSQLException; expected Conflict assertion failed; exact SQLSTATE cause classification repaired and rerun passed",
+  "api135": "NOT_IMPLEMENTED; typed configuration/current ADMIN/MFA/audit/version/idempotency/HTTP acceptance remains"
+}

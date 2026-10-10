@@ -175,17 +175,21 @@ def main() -> None:
         evidence["result"] = "PASS"
     finally:
         if evidence["result"] != "PASS":
-            output = ROOT / ".build/evidence" / (project + "-startup.log")
-            output.parent.mkdir(parents=True, exist_ok=True)
-            diagnostic = local.command("--profile", "*", "logs", "--no-color", "--tail", "100", capture=True)
-            for key, value in local.settings().items():
-                if value and any(part in key for part in ("PASSWORD", "SECRET", "TOKEN")):
-                    diagnostic = diagnostic.replace(value, "[REDACTED]")
-            ids = docker("ps", "-aq", "--filter", "label=com.docker.compose.project=" + project).split()
-            if ids:
-                health = json.loads(docker("inspect", *ids))
-                diagnostic += "\n" + json.dumps({c["Name"]: c["State"].get("Health", {}) for c in health}, indent=2)
-            output.write_text(diagnostic)
+            try:
+                output = ROOT / ".build/evidence" / (project + "-startup.log")
+                output.parent.mkdir(parents=True, exist_ok=True)
+                diagnostic = local.command("--profile", "*", "logs", "--no-color", "--tail", "100", capture=True)
+                for key, value in local.settings().items():
+                    if value and any(part in key for part in ("PASSWORD", "SECRET", "TOKEN")):
+                        diagnostic = diagnostic.replace(value, "[REDACTED]")
+                ids = docker("ps", "-aq", "--filter", "label=com.docker.compose.project=" + project).split()
+                if ids:
+                    health = json.loads(docker("inspect", *ids))
+                    diagnostic += "\n" + json.dumps({c["Name"]: c["State"].get("Health", {}) for c in health}, indent=2)
+                output.write_text(diagnostic)
+            except (subprocess.SubprocessError, OSError, ValueError) as unavailable:
+                # A failed engine/disk must not bypass scoped cleanup and result evidence.
+                evidence["checks"].append("failure diagnostics unavailable: " + type(unavailable).__name__)
         # Deliberately retain test volumes, even on failure, for inspection. Stop only this generated namespace.
         try:
             local.command("--profile", "*", "down", "--timeout", "30")
@@ -198,7 +202,9 @@ def main() -> None:
         finally:
             output = ROOT / ".build/evidence/found003-cold-start.json"
             output.parent.mkdir(parents=True, exist_ok=True)
-            output.write_text(json.dumps(evidence, indent=2) + "\n")
+            serialized = json.dumps(evidence, indent=2) + "\n"
+            (output.parent / (project + "-cold-start.json")).write_text(serialized)
+            output.write_text(serialized)
             print(json.dumps(evidence, indent=2), flush=True)
 
 

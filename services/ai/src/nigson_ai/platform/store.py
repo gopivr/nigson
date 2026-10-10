@@ -7,6 +7,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any, NamedTuple
 
 from psycopg import Connection
+from psycopg.errors import LockNotAvailable, QueryCanceled
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 from psycopg_pool import ConnectionPool
@@ -157,49 +158,54 @@ class PlatformStore:
         bounded(operation, 120)
         bounded(key, 100)
         digest, token, now = request_hash(request), uuid7(), self.clock()
-        with (
-            self.pool.connection() as connection,
-            connection.transaction(),
-            connection.cursor(row_factory=dict_row) as cur,
-        ):
-            cur.execute(
-                "INSERT INTO ai.idempotency_record(id,created_by,updated_by,principal_key,operation,request_key,request_hash,state,lease_until,expires_at) VALUES (%s,%s,%s,%s,%s,%s,%s,'RUNNING',%s,%s) ON CONFLICT(principal_key,operation,request_key) DO NOTHING",
-                (
-                    token,
-                    principal,
-                    principal,
-                    principal,
-                    operation,
-                    key,
-                    digest,
-                    now + timedelta(seconds=30),
-                    now + timedelta(days=1),
-                ),
-            )
-            cur.execute(
-                "SELECT * FROM ai.idempotency_record WHERE principal_key=%s AND operation=%s AND request_key=%s FOR UPDATE",
-                (principal, operation, key),
-            )
-            row = cur.fetchone()
-            assert row is not None
-            if row["request_hash"] != digest:
-                raise Conflict("IDEMPOTENCY_HASH_MISMATCH")
-            if row["state"] == "SUCCEEDED":
-                return Response(
-                    row["response_status"], row["response_body"], row["resource_id"]
-                )
-            if row["id"] != token:
-                if (
-                    row["state"] == "RUNNING"
-                    and row["lease_until"]
-                    and row["lease_until"] > now
-                ):
-                    raise Conflict("IDEMPOTENCY_IN_PROGRESS")
+        try:
+            with (
+                self.pool.connection() as connection,
+                connection.transaction(),
+                connection.cursor(row_factory=dict_row) as cur,
+            ):
+                cur.execute("SET LOCAL lock_timeout='350ms'")
+                cur.execute("SET LOCAL statement_timeout='800ms'")
                 cur.execute(
-                    "UPDATE ai.idempotency_record SET state='RUNNING',lease_until=%s,version=version+1,updated_at=%s,updated_by=%s WHERE id=%s",
-                    (now + timedelta(seconds=30), now, principal, row["id"]),
+                    "INSERT INTO ai.idempotency_record(id,created_by,updated_by,principal_key,operation,request_key,request_hash,state,lease_until,expires_at) VALUES (%s,%s,%s,%s,%s,%s,%s,'RUNNING',%s,%s) ON CONFLICT(principal_key,operation,request_key) DO NOTHING",
+                    (
+                        token,
+                        principal,
+                        principal,
+                        principal,
+                        operation,
+                        key,
+                        digest,
+                        now + timedelta(seconds=30),
+                        now + timedelta(days=1),
+                    ),
                 )
-                row["version"] += 1
+                cur.execute(
+                    "SELECT * FROM ai.idempotency_record WHERE principal_key=%s AND operation=%s AND request_key=%s FOR UPDATE",
+                    (principal, operation, key),
+                )
+                row = cur.fetchone()
+                assert row is not None
+                if row["request_hash"] != digest:
+                    raise Conflict("IDEMPOTENCY_HASH_MISMATCH")
+                if row["state"] == "SUCCEEDED":
+                    return Response(
+                        row["response_status"], row["response_body"], row["resource_id"]
+                    )
+                if row["id"] != token:
+                    if (
+                        row["state"] == "RUNNING"
+                        and row["lease_until"]
+                        and row["lease_until"] > now
+                    ):
+                        raise Conflict("IDEMPOTENCY_IN_PROGRESS")
+                    cur.execute(
+                        "UPDATE ai.idempotency_record SET state='RUNNING',lease_until=%s,version=version+1,updated_at=%s,updated_by=%s WHERE id=%s",
+                        (now + timedelta(seconds=30), now, principal, row["id"]),
+                    )
+                    row["version"] += 1
+        except (LockNotAvailable, QueryCanceled):
+            raise Conflict("IDEMPOTENCY_IN_PROGRESS") from None
         try:
             with (
                 self.pool.connection() as connection,

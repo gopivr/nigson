@@ -31,6 +31,10 @@
     {
       "step": "Repeat Python artifact build inside macOS sandbox",
       "result": "uv panicked in SystemConfiguration with attempted NULL object before sync. Identical authorized command outside sandbox exited0; all nine current Java/Python artifact hashes matched repeated builds. No dependency/version change."
+    },
+    {
+      "step": "Cold-start after first approved recovery",
+      "result": "nigson-test-cold-29c197e7ed failed exporting rebuilt commerce images: containerd tmpmount read-only filesystem and copy-range I/O error after host disk filled again. Diagnostic collection itself failed before cleanup/evidence; no final cold-start success was inferred. Approved restart repeated, only regenerable Maven target outputs removed, only failed task project containers/network cleaned with named volumes retained. Exact-ID shared cache prune returned0 bytes; 13 revalidated unused private Nigson artifact-cache records reclaimed2.454GB. No image/volume or unrelated-cache deletion."
     }
   ],
   "raw_ignored_logs": [
@@ -42,7 +46,10 @@
     ".build/session-port-native.log",
     ".build/session-cold-start-second.log",
     ".build/session-verify-final.log",
-    ".build/session-current-python-repeat.log"
+    ".build/session-current-python-repeat.log",
+    ".build/session-recovery-cold-start.log",
+    ".build/nigson-owned-cache-prune.log",
+    ".build/nigson-owned-cache-prune-final.log"
   ],
-  "latest_status": "Native23/no skips and genuine Keycloak/restore PASS before final query-bound edit. Full uncached repository verification PASS; final Java verification PASS; nine current reproducible artifacts PASS. Cold-start FAIL from disk/Docker metadata I/O; final query-bound HTTP rerun NOT_RUN. Critical Docker recovery approval pending."
+  "latest_status": "Final native23/no skips PASS; owner-ledger repair native14 Java/one nonapplicable skipped plus four Python passes; full verification PASS. New locked-download-cache Dockerfiles and robust per-project cold-start evidence are under qualification in fresh project nigson-test-cold-05f7132025; cold-start remains IN_PROGRESS."
 }
