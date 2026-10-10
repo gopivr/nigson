@@ -98,5 +98,10 @@
     "status": 422,
     "title": "Party rule violation",
     "detail": "The profile or address does not meet current rules."
+  },
+  "PLATFORM_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Configuration rule violation",
+    "detail": "The configuration does not meet registered owner rules."
   }
 }

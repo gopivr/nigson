@@ -7,7 +7,7 @@ from verify import main
 
 if __name__ == "__main__":
     main(
-        java_tests="PlatformPersistenceTest,EventTransportTest,PaystackTransactionGuardTest",
+        java_tests="ConfigurationPersistenceTest,SecurityAssemblyTest,BuildCompatibilityTest,PlatformPersistenceTest,EventTransportTest,PaystackTransactionGuardTest",
         evidence=ROOT / ".build/configuration001/database-evidence",
         completion="PASS: native owner ledger acquisition bounds, replay/hash/rollback/event races and transaction guard; migrations and original local state preserved",
     )

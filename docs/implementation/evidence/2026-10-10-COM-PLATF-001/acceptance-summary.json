@@ -1,0 +1,34 @@
+{
+  "task": "COM-PLATF-001",
+  "acceptance": "AC-COM-PLATF-001",
+  "status": "IN_PROGRESS pending actual implementation commit",
+  "api": "API-135",
+  "native_java": {
+    "passed": 27,
+    "skipped": 1,
+    "skip_reason": "Integration has no v1 produced event for publisher lease scenario"
+  },
+  "native_python": {
+    "passed": 4,
+    "skipped": 0
+  },
+  "configuration_native_scenarios": 6,
+  "full_java": {
+    "passed": 38,
+    "gated_skips": 52
+  },
+  "full_python": {
+    "passed": 15,
+    "gated_skips": 5
+  },
+  "contracts": 39,
+  "dependency_hashes": 261,
+  "reproducible_artifacts": 9,
+  "provider_cloud_business_activation": "NOT_RUN",
+  "failure_history": [
+    "Missing registered PLATFORM_RULE_VIOLATION vocabulary caused initial compile failure; added mirrored contract/Java/Python code.",
+    "Initial HTTP suite correctly denied unregistered exact route; added only API-135 PUT authenticated matcher and reran.",
+    "Contract fixture expected only prior twelve operation IDs; extended exact inventory to API-135.",
+    "Initial container-preservation string comparison failed on relative elapsed text only; normalized exited codes/IDs/names and verified unchanged."
+  ]
+}

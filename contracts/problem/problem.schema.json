@@ -59,7 +59,8 @@
         "UNSUPPORTED_MEDIA_TYPE",
         "METHOD_NOT_ALLOWED",
         "AUTHORIZATION_RULE_VIOLATION",
-        "PARTY_RULE_VIOLATION"
+        "PARTY_RULE_VIOLATION",
+        "PLATFORM_RULE_VIOLATION"
       ]
     },
     "timestamp": {

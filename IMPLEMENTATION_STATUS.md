@@ -8,7 +8,7 @@ EP03 — Owned catalogue/configuration increments; BP1 launch composition remain
 
 ## Current Task
 
-COM-PLATF-001 — IN_PROGRESS; typed configuration API-135, followed by COM-CATAL-001 catalogue persistence/APIs. COM-SESSI-001 acceptance is committed/DONE. User authorization to complete all remaining tasks persists; only critical broader cache cleanup approval is pending.
+COM-PLATF-001 — IN_PROGRESS; typed configuration API-135, followed by COM-CATAL-001 catalogue persistence/APIs. COM-SESSI-001 acceptance is committed/DONE. User authorization to complete all remaining tasks persists; unused Docker cache cleanup explicitly approved and complete; 35GiB free, application images/containers/volumes preserved.
 
 ## Completed Tasks
 
@@ -126,7 +126,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-PLATF-001 — complete typed configuration API-135 and its native/HTTP/version/audit/MFA acceptance, then finish COM-CATAL-001 catalogue APIs. SEC-001, COM-AUTHO-001, COM-PARTY-001 and COM-SESSI-001 are committed/DONE offline. Broader unused Docker cache cleanup approval is pending under preservation of unrelated work; less than1GB remains. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs.
+COM-PLATF-001 — complete typed configuration API-135 and its native/HTTP/version/audit/MFA acceptance, then finish COM-CATAL-001 catalogue APIs. SEC-001, COM-AUTHO-001, COM-PARTY-001 and COM-SESSI-001 are committed/DONE offline. Broader unused Docker build cache cleanup explicitly approved/completed; 52.12GB reclaimed and 35GiB free; application images, container identities/exit states and volumes verified preserved. Continue section46 BP1 carrier/messaging/payment/identity/security/infrastructure/restore gates without inventing activation inputs.
 
 ## Session Evidence / Protocol
 

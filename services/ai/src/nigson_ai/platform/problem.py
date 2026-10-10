@@ -41,6 +41,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "PLATFORM_RULE_VIOLATION": (
+        422,
+        "Configuration rule violation",
+        "The configuration does not meet registered owner rules.",
+    ),
     "PARTY_RULE_VIOLATION": (
         422,
         "Party rule violation",

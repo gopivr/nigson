@@ -2054,7 +2054,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `{value:object,active:boolean,reason:string}; If-Match`.
 - **Response:** `{key:string,revision:int64,active:boolean,version:int64}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Typed allowlisted configuration keys only; do not store secrets; sensitive activation requires recent MFA.
+- **Validation / business rules:** Typed allowlisted configuration keys only; do not store secrets; sensitive activation requires recent MFA. Implemented key catalogue.metadata uses closed metadata shape with no business values seeded. First If-Match:"0" creates revision/version1; later writes append history and atomic redacted audit. Current ADMIN and activation MFA checked before replay and under Party lock. See contracts/openapi/commerce.yaml and docs/runbooks/commerce-configuration.md.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, PLATFORM_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
