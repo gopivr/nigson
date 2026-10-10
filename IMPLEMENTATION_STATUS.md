@@ -8,7 +8,7 @@ EP03 — Owned catalogue/configuration increments; BP1 launch composition remain
 
 ## Current Task
 
-COM-FILES-001 — IN_PROGRESS; API-111/112/113/132 owned uploads, quarantine, authenticated clean downloads and trusted scan results. Planned verification: validation/role/purpose/ownership, provider HTTP outside transactions, durable replay/uncertainty, scan checksum/job binding, actual local storage HTTP, rollback/races, migrations/contracts/builds. Catalogue completed and committed. All remaining work remains authorized; Docker recovery/cleanup approvals completed.
+COM-PROVI-001 — IN_PROGRESS; exact API-163/164 staff operations job list/retry proxy to registered private integration APIs140/141, with current authority, signed staff/MFA for retry, durable command identity and UNKNOWN reconciliation. Planned verification: closed inputs/DTOs, object/role/CSRF/MFA denial, actual scoped HTTP/mock upstream, timeout/dedup/races/audit, contracts/build/migrations. Catalogue/files committed/DONE engineering; all remaining work authorized.
 
 ## Completed Tasks
 
@@ -38,13 +38,14 @@ COM-FILES-001 — IN_PROGRESS; API-111/112/113/132 owned uploads, quarantine, au
 
 - [x] COM-CATAL-001 — DONE (engineering); implementation d1d80e1d2e65324a2f1860517d50448a78ad697f;14 catalogue APIs/EVT-006, native23/no skips, full38 Java/65 gated skips,41 contracts,15 AI/five gated skips, owner migrations and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-10-COM-CATAL-001.md.
 
+- [x] COM-FILES-001 — DONE (engineering); implementation 4104c1ae9d143a5f318a05ba63b7ef925a0d4fcd; API-111/112/113/132 and EVT-025, owned pinned S3 transfers/UNKNOWN/no blind retry, native20/no skips, full43 Java/73 gated skips,43 contracts,15 AI/five gated skips,268 locked artifacts/zero OSV findings, fresh/previous-BP1 upgrade/rollback, nine reproducible artifacts and two-round cold-start PASS. Real scanner/cloud/retention activation NOT_RUN. Report: docs/implementation/2026-10-10-COM-FILES-001.md.
+
 ## In Progress
 
-COM-FILES-001 — started10 October2026 after SEC-001 and catalogue local asset-port acceptance. No real storage/CDN/account/retention approval invented; offline implementation proceeds.
+COM-PROVI-001 — started10 October2026. SEC-001 complete; compiled proxy contracts and owned uncertainty primitives ready. No arbitrary upstream URL, cross-owner SQL or invented provider configuration.
 
 ## Pending
 
-- [ ] COM-FILES-001 — Implement commerce files increment (EP03)
 - [ ] COM-NOTIF-001 — Implement commerce notification increment (EP03)
 - [ ] COM-PROVI-001 — Implement commerce provider increment (EP03)
 - [ ] EXP-CONTE-001 — Implement experience content increment (EP03)
@@ -101,15 +102,15 @@ COM-FILES-001 — started10 October2026 after SEC-001 and catalogue local asset-
 
 ## Build Status
 
-PASS — final COM-CATAL-001 make verify PROFILE=ai;261 unchanged locked dependency artifacts,41 contracts,Ruff/mypy13; seven JARs plus wheel/sdist reproduce exactly. No deployment/provider activation claimed.
+PASS — final COM-FILES-001 full verification;268 locked Maven artifacts/zero OSV findings,43 contracts,Ruff/mypy13; nine artifact hashes reproduce. Two-round cold-start includes new migration/dependencies. Genuine release activation separately NOT_RUN.
 
 ## Test Status
 
-PASS — COM-CATAL-001 native23/no skips, actual Boot HTTP14 APIs, owner migrations/rollback/races/local preservation; full38 Java/65 gated skips and15 AI/five gated skips. Configuration regression27 Java/one nonapplicable skip/four Python pass. Source-read workload100 requests/100 readers/20 RPS,10k products/20k SKUs,p95=88.907667ms,p99=97.550459ms/errors0. Separate30m staging/provider/cloud/frontend qualification NOT_RUN. Initial failures preserved.
+PASS — COM-FILES-001 native20/no skips, real BFF/file HTTP/workload JWT/JWKS and TLS/SigV4 stateful storage, ownership/quarantine/job/checksum/rollback/uncertainty/races, exact123-table owner fresh/incremental migrations and previous-BP1 upgrade/empty/populated rollback gates. Full43 Java/73 gated skips,43 contracts,15 AI/five gated skips. Two cold-start rounds/security/drift/outage/local preservation PASS; all failure history retained. Real scanner/cloud/CDN/retention/frontend gates NOT_RUN.
 
 ## Last Successful Commit
 
-d1d80e1d2e65324a2f1860517d50448a78ad697f — verified COM-CATAL-001 implementation and command-scoped acceptance evidence. Completion metadata follows this actual implementation commit.
+4104c1ae9d143a5f318a05ba63b7ef925a0d4fcd — verified COM-FILES-001 implementation and command-scoped acceptance evidence. Completion metadata follows actual implementation commit.
 
 ## Confirmed Inputs
 
@@ -125,7 +126,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-FILES-001 — owned uploads/quarantine/download/scan APIs, dependency-ready after SEC-001. Catalogue and typed configuration committed/DONE engineering. User authorization to complete all remaining tasks persists; cache cleanup/restart already approved/completed and application Docker assets preserved. Continue section46 release composition; live activation inputs remain separately NOT_RUN.
+COM-PROVI-001 — compiled staff job list/retry proxy, dependency-ready after SEC-001. Catalogue, files and typed configuration committed/DONE engineering. User authorization to complete all remaining tasks persists; cache cleanup/restart already approved/completed and application Docker assets preserved. Continue section46 release composition; live activation inputs remain separately NOT_RUN.
 
 ## Session Evidence / Protocol
 

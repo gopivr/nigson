@@ -1,6 +1,6 @@
 {
   "task": "COM-FILES-001",
-  "status": "IN_PROGRESS",
+  "status": "DONE_ENGINEERING",
   "native_java_pass": 20,
   "native_skips": 0,
   "ordinary_java_pass": 43,
@@ -15,5 +15,6 @@
   "genuine_cloud_storage": "NOT_RUN",
   "cold_start": "PASS_TWO_ROUNDS",
   "schema_full": "PASS",
-  "previous_bp1_upgrade_and_rollback": "PASS"
+  "previous_bp1_upgrade_and_rollback": "PASS",
+  "implementation_commit": "4104c1ae9d143a5f318a05ba63b7ef925a0d4fcd"
 }
