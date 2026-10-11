@@ -41,6 +41,12 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
+    "CHECKOUT_REPRICE_REQUIRED": (409, "Checkout quote changed", "Refresh the checkout quote before continuing."),
+    "CART_RULE_VIOLATION": (
+        422,
+        "Cart rule violation",
+        "The cart operation does not meet current shopping rules.",
+    ),
     "PRICING_RULE_VIOLATION": (
         422,
         "Pricing rule violation",

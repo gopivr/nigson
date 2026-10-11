@@ -1,0 +1,1 @@
+PASS: all seven Java JARs and Python wheel/sdist match two builds byte-for-byte.

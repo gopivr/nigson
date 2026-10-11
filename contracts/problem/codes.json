@@ -143,5 +143,15 @@
     "status": 422,
     "title": "Pricing rule violation",
     "detail": "The pricing operation does not meet current commercial rules."
+  },
+  "CART_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Cart rule violation",
+    "detail": "The cart operation does not meet current shopping rules."
+  },
+  "CHECKOUT_REPRICE_REQUIRED": {
+    "status": 409,
+    "title": "Checkout quote changed",
+    "detail": "Refresh the checkout quote before continuing."
   }
 }

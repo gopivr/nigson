@@ -8,7 +8,7 @@ EP05 — Owned cart/checkout foundations; pricing/market/inventory accepted, BP1
 
 ## Current Task
 
-COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including final pricing 59f5f1decfcd4a6ca105274cbd50ee867f6d0770. Exact API-032/033/034/035, current customer/context uniqueness, versioned SKU/wholesale quantities and safe expiry/recovery foundation. No cart source changes yet.
+COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including final pricing 59f5f1decfcd4a6ca105274cbd50ee867f6d0770. Exact API-032/033/034/035, current customer/context uniqueness, versioned SKU/wholesale quantities and safe expiry/recovery foundation. Complete cart source/native22/full75 Java,56 contracts/AI lint and nine reproduced artifacts PASS; actual source commit/acceptance pending.
 
 ## Completed Tasks
 
@@ -54,7 +54,7 @@ COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including fina
 
 ## In Progress
 
-COM-CART-001 — started10 October2026; pricing final corrections 59f5f1decfcd4a6ca105274cbd50ee867f6d0770 accepted. Exact four cart APIs and current quantity/context lifecycle foundation; no cart source changes yet.
+COM-CART-001 — started10 October2026; pricing final corrections 59f5f1decfcd4a6ca105274cbd50ee867f6d0770 accepted. Exact four cart APIs and current quantity/context lifecycle foundation; Complete cart/native22/full75 Java/56 contracts/nine reproduced artifacts PASS; actual commit acceptance pending.
 
 ## Pending
 

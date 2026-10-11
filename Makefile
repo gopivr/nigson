@@ -187,3 +187,8 @@ pricing-check:
 nigeria-check:
 	$(MAKE) status-check
 	ENV=test python3 scripts/nigeria/verify.py
+
+.PHONY: cart-check
+cart-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/cart/verify.py
