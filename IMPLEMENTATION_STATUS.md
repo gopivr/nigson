@@ -8,11 +8,11 @@ EP05 — Owned cart/checkout foundations; pricing/market/inventory accepted, BP1
 
 ## Current Task
 
-COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including pricing 40b0eb99600f50a7c03fa04d0cd118c0186fd93a. Exact API-032/033/034/035, owned cart/context uniqueness/versioning, SKU/wholesale quantity guards, expiry/recovery eligibility and no shared cache. No cart source changes yet.
+COM-PRICI-001 — IN_PROGRESS correction: master section13 common nested arrays cap100; first acceptance used500 for book entries/parcels without an endpoint exception. Aligned to100, exact response minor scale and PostgreSQL expiry; native28/no skips, full73 Java/129 gated,54 contracts,15 AI/five gated and nine reproduced correction artifacts PASS. Required correction source commit pending. COM-CART-001 remains started/read-only; no cart source edits or critical approval pending.
 
 ## Completed Tasks
 
-- [x] COM-PRICI-001 — DONE (engineering); implementation 40b0eb99600f50a7c03fa04d0cd118c0186fd93a; native26/no skips, full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged dependencies/nine reproduced artifacts. Exact six APIs, immutable book revisions/current tiers/frozen offers/carrier-bound quotes, current authority before replay/atomic audit/EVT-007/SQL races and actual BFF. Live commercial/provider/downstream/staging activation NOT_RUN; report docs/implementation/2026-10-10-COM-PRICI-001.md.
+- [ ] COM-PRICI-001 — prior acceptance preserved; array-cap correction IN_PROGRESS; implementation 40b0eb99600f50a7c03fa04d0cd118c0186fd93a; native26/no skips, full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged dependencies/nine reproduced artifacts. Exact six APIs, immutable book revisions/current tiers/frozen offers/carrier-bound quotes, current authority before replay/atomic audit/EVT-007/SQL races and actual BFF. Live commercial/provider/downstream/staging activation NOT_RUN; report docs/implementation/2026-10-10-COM-PRICI-001.md.
 
 - [x] NGN-001 — DONE (engineering); implementation c087ad6d649bc4702c5a0e25b2251a4f0643dd10; approved deterministic NG/Nigeria/NGN2/destination metadata with selling/delivery disabled, native27/no skips, actual HTTP kobo/wrong-currency checks, previous upgrade/checksum/policy preservation/actual rollback/conflict guards, two-round cold-start, full65 Java/116 gated,51 contracts,15 AI/five gated and nine reproduced artifacts. Actual policies/provider/caller release qualification NOT_RUN. Report docs/implementation/2026-10-10-NGN-001.md.
 

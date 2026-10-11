@@ -8,7 +8,7 @@ def extend(spec):
     currency={'type':'string','pattern':'^[A-Z]{3}$'}
     segment={'type':'string','enum':['RETAIL','DISTRIBUTOR']}
     s['PriceEntry']=object_schema({'skuId':UUID,'minimumQuantity':quantity,'unitAmount':money})
-    entries={'type':'array','minItems':1,'maxItems':500,'items':REF('PriceEntry')}
+    entries={'type':'array','minItems':1,'maxItems':100,'items':REF('PriceEntry')}
     properties={'currency':currency,'segment':segment,'effectiveFrom':instant,'effectiveUntil':instant,'entries':entries}
     revision=object_schema(properties);revision['required'].remove('effectiveUntil');s['PriceRevision']=revision
     new=object_schema({'code':{'type':'string','minLength':1,'maxLength':60},**properties});new['required'].remove('effectiveUntil');s['NewPriceBook']=new

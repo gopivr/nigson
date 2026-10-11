@@ -7,6 +7,8 @@ class PricingContracts(unittest.TestCase):
         spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());schemas=spec['components']['schemas']
         self.assertEqual(set(schemas['NewCheckoutQuote']['properties']),{'cartId','addressId','carrierQuoteId','couponCode'})
         self.assertFalse(schemas['NewCheckoutQuote']['additionalProperties'])
+        self.assertEqual(schemas['NewPriceBook']['properties']['entries']['maxItems'],100)
+        self.assertEqual(schemas['PriceBookDTO']['properties']['entries']['maxItems'],100)
         self.assertEqual(set(schemas['CheckoutQuoteTotals']['properties']),{'subtotal','discount','tax','delivery','grandTotal'})
         self.assertEqual(set(schemas['PriceDTO']['properties']),{'skuId','unitAmount','currency','minimumQuantity','packMultiple','priceBookRevision','validUntil'})
     def test_copy_on_write_and_activation_use_parent_version_but_creates_do_not(self):
