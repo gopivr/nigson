@@ -15,6 +15,7 @@ class SecurityAssemblyTest {
   var workload=System.getenv("NIGSON_TEST_STORAGE_FIXTURE")==null?null:new com.nigson.acceptance.files.FileHttpAcceptance.Workload();
   com.nigson.acceptance.files.FileHttpAcceptance.configure(properties);
   com.nigson.acceptance.pricing.PricingHttpAcceptance.configure(properties);
+  com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.configure(properties);
   if(workload!=null){properties.put("NIGSON_OIDC_ISSUER",workload.issuer);properties.put("NIGSON_OIDC_JWKS",workload.issuer+"/protocol/openid-connect/certs");}
   var jobs=System.getenv("NIGSON_TEST_JOBS")==null?null:new com.nigson.acceptance.provider.JobHttpAcceptance.Fixture(keys);
   if(jobs!=null)jobs.configure(properties);
@@ -32,6 +33,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.market.MarketHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.pricing.PricingHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.cart.CartHttpAcceptance.run(app,http,base);
+   com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.run(app,http,base);
    assertThat(http.send(HttpRequest.newBuilder(URI.create(base+"/actuator/health/readiness")).GET().build(),HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
    for(String path:List.of("/api/v1/staff/roles","/bff/logout","/internal/v1/payments/reconciliation")){var response=http.send(HttpRequest.newBuilder(URI.create(base+path)).GET().build(),HttpResponse.BodyHandlers.ofString());assertThat(response.statusCode()).isIn(401,403);assertThat(response.body()).doesNotContain("synthetic-bff-credential",publicKey,"mock-commerce-runtime");}
    var origin=http.send(HttpRequest.newBuilder(URI.create(base+"/api/v1/owned-fixture")).method("OPTIONS",HttpRequest.BodyPublishers.noBody()).header("Origin","https://bff.synthetic.test").header("Access-Control-Request-Method","POST").header("Access-Control-Request-Headers","content-type,x-csrf-token").build(),HttpResponse.BodyHandlers.ofString());assertThat(origin.statusCode()).isEqualTo(204);assertThat(origin.headers().firstValue("Access-Control-Allow-Origin")).hasValue("https://bff.synthetic.test");

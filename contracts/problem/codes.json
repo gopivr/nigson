@@ -153,5 +153,10 @@
     "status": 409,
     "title": "Checkout quote changed",
     "detail": "Refresh the checkout quote before continuing."
+  },
+  "FULFILLMENT_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Fulfillment rule violation",
+    "detail": "The delivery or shipment operation does not meet current rules."
   }
 }

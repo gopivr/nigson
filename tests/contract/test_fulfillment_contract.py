@@ -1,0 +1,19 @@
+import json
+from pathlib import Path
+import unittest
+ROOT=Path(__file__).resolve().parents[2]
+class FulfillmentContracts(unittest.TestCase):
+    def test_exact_six_owned_mutations(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());paths=spec['paths']
+        expected={'/api/v1/staff/delivery-rules':('post','API-171','201'),'/api/v1/staff/delivery-rules/{id}':('put','API-047','200'),'/api/v1/staff/orders/{id}/shipments':('post','API-048','201'),'/api/v1/staff/shipments/{id}/dispatch':('post','API-049','200'),'/api/v1/staff/shipments/{id}/delivery':('post','API-050','200'),'/api/v1/staff/orders/{id}/stock-returns':('post','API-174','201')}
+        for route,(method,api,status) in expected.items():
+            op=paths[route][method];self.assertEqual(op['operationId'],api);self.assertEqual(op['security'],[{'bffSession':[]}]);self.assertIn(status,op['responses']);self.assertEqual(op['responses'][status]['headers']['Cache-Control']['schema'],{'const':'no-store'})
+            self.assertTrue({'Idempotency-Key','X-CSRF-TOKEN'}.issubset({p['name'] for p in op['parameters'] if p.get('required')}))
+            if api in {'API-047','API-049','API-050'}:self.assertIn('If-Match',{p['name'] for p in op['parameters'] if p.get('required')})
+    def test_closed_bounded_commands_and_minimal_shipping_responses(self):
+        s=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())['components']['schemas']
+        for name in ['DeliveryRuleInput','ShipmentInput','StockReturnInput','ShipmentReason','ShipmentDelivery']:self.assertFalse(s[name]['additionalProperties'])
+        for name in ['ShipmentInput','StockReturnInput']:self.assertEqual(s[name]['properties']['lines']['maxItems'],100)
+        self.assertEqual(s['DeliveryRuleInput']['properties']['countryCode'],{'const':'NG'})
+        self.assertNotIn('labelAssetId',s['ShipmentDTO']['properties']);self.assertNotIn('packageSnapshot',s['ShipmentDTO']['properties']);self.assertNotIn('balanceId',s['ShipmentLineDTO']['properties'])
+        self.assertEqual(set(s['StockReturnDTO']['properties']),{'returnId','orderId','lines'})

@@ -1,0 +1,536 @@
+[
+  {
+    "raw_path": ".build/fulfillment-artifacts-first.json",
+    "raw_sha256": "9be4e622d1de20ba453a8237ca0b2130d9f25497392cc6f235efe6c972b71b37",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-artifacts-first.json",
+    "evidence_sha256": "9be4e622d1de20ba453a8237ca0b2130d9f25497392cc6f235efe6c972b71b37"
+  },
+  {
+    "raw_path": ".build/fulfillment-artifacts-second.json",
+    "raw_sha256": "9be4e622d1de20ba453a8237ca0b2130d9f25497392cc6f235efe6c972b71b37",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-artifacts-second.json",
+    "evidence_sha256": "9be4e622d1de20ba453a8237ca0b2130d9f25497392cc6f235efe6c972b71b37"
+  },
+  {
+    "raw_path": ".build/fulfillment-contract-compatibility.log",
+    "raw_sha256": "2d086ccbf7eb47e8db673bb8751da36e5c2851b90d07166ff2c59aa37db00865",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-contract-compatibility.log",
+    "evidence_sha256": "2d086ccbf7eb47e8db673bb8751da36e5c2851b90d07166ff2c59aa37db00865"
+  },
+  {
+    "raw_path": ".build/fulfillment-contract-first.log",
+    "raw_sha256": "8a9767b1a6fbe1f2cbe8de8ad5cfb8020e3b15c5fabe07e69685f77d903c95e4",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-contract-first.log",
+    "evidence_sha256": "8a9767b1a6fbe1f2cbe8de8ad5cfb8020e3b15c5fabe07e69685f77d903c95e4"
+  },
+  {
+    "raw_path": ".build/fulfillment-contract-second.log",
+    "raw_sha256": "f908e76527232ea7083fa3c77f53fb431dded1451f3c0540f12311ef256e500c",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-contract-second.log",
+    "evidence_sha256": "f908e76527232ea7083fa3c77f53fb431dded1451f3c0540f12311ef256e500c"
+  },
+  {
+    "raw_path": ".build/fulfillment-full-junit-counts.json",
+    "raw_sha256": "13d2b26d9ef7018f774ac13e231a63c030dc3cf2b99767c4a14d426bd42ea3e2",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-full-junit-counts.json",
+    "evidence_sha256": "13d2b26d9ef7018f774ac13e231a63c030dc3cf2b99767c4a14d426bd42ea3e2"
+  },
+  {
+    "raw_path": ".build/fulfillment-full-verify-first.log",
+    "raw_sha256": "6c12f3ee96e736eb4ba4e4b4b8b287a681275e499b07ad7a026128bd0cf038d4",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-full-verify-first.log",
+    "evidence_sha256": "6f6c979a78765e43f4358e0b800643dd6efffb792ad741a97c7034d235f73424"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-final.log",
+    "raw_sha256": "622b3839d4749e4583ae640d05f061fae99a09f5007c3112aafc00ad3b73b376",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-final.log",
+    "evidence_sha256": "03acd5dfd6b6fe806117df2815543347e9dd5a1a1958bd467ac9d2a115339f16"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-http-first.log",
+    "raw_sha256": "de316e48c64d90100c89c9222d0c576784b5b7e4d351c19a989bbff6123c41b3",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-http-first.log",
+    "evidence_sha256": "1aac80cb45a77fde89ba23af70daa432b7d5200bcab7d34fc40ad338db6fc574"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-junit-counts.json",
+    "raw_sha256": "241140c4fda18a6171966fd227cdd2ff762a5c6d0a42229c84c4718e21d51af7",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-junit-counts.json",
+    "evidence_sha256": "241140c4fda18a6171966fd227cdd2ff762a5c6d0a42229c84c4718e21d51af7"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-net-quantity-corrected.log",
+    "raw_sha256": "84b4b61286553ca978a138dd834333b369e0d5444d58dd3b520c088e760b2649",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-net-quantity-corrected.log",
+    "evidence_sha256": "4fe16a04a5bb8b25560d1e86023917cf293540b3c39e4e2f60e57e6596bea9b5"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-net-quantity.log",
+    "raw_sha256": "47c6e967d691a97f559fef3d218ed0a848bf6dac8de430b7f8653cc5ec533d25",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-net-quantity.log",
+    "evidence_sha256": "3bb25171f4dfd101466801624d3a7f382db20360d0af049fa77bfd6ee6e61345"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-races-first.log",
+    "raw_sha256": "d5c4d72348f96d4c0918d5888b15603c96b599a22c2550757bb320a6e211de7e",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-races-first.log",
+    "evidence_sha256": "caae41106995aee964d9dc1c688cfc6d55fef9e4dbd5c53436234e6a6e315229"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-rules-first.log",
+    "raw_sha256": "fcf1570a03f9a15877c5186eae7d17083aa9e4e7d4b0ea7337971dca61a6d2d3",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-rules-first.log",
+    "evidence_sha256": "7f4e698f415480fbaf4ded0d1ac3ce04b60b46a4a47ae5a9c7ebeda1b781c12f"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-rules-second.log",
+    "raw_sha256": "3bab8aecc115f81bd6d61376e66506f8d7f6fc0526e3c58c3d85fb48790c9ca7",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-rules-second.log",
+    "evidence_sha256": "564ad4e8172bf9eb55afea8f4401347db538d6f7ff34278a78d34b9d853c34da"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-shipment-first.log",
+    "raw_sha256": "8cd841f0171db1a14414adae037521ecd75ceffa48590fc7228ae5b9e81623b5",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-shipment-first.log",
+    "evidence_sha256": "04266eb3452debc8e68d7532b678d8d2e0a79113f77650eb521222f87d3196b9"
+  },
+  {
+    "raw_path": ".build/fulfillment-native-shipment-second.log",
+    "raw_sha256": "43796dde0bdf7029cf365d9b23ce40a672f6de4a3cfb9da1045f0bbf33d34556",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-native-shipment-second.log",
+    "evidence_sha256": "9f8b48f0ed27e1c3f566b545d3e7b34f5906f1bef85a67d74198740d025bb169"
+  },
+  {
+    "raw_path": ".build/fulfillment-repro-ai.log",
+    "raw_sha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-repro-ai.log",
+    "evidence_sha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce"
+  },
+  {
+    "raw_path": ".build/fulfillment-repro-check.log",
+    "raw_sha256": "07fd1f76e6077698a59f854233d84fa7d6856c972cd933059e2b0b32fb8135b2",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-repro-check.log",
+    "evidence_sha256": "07fd1f76e6077698a59f854233d84fa7d6856c972cd933059e2b0b32fb8135b2"
+  },
+  {
+    "raw_path": ".build/fulfillment-repro-java.log",
+    "raw_sha256": "b967f061eab65f59dea10ac62e0a9bfb319f5c39fa07c1a5f50a37dffa38eec2",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-repro-java.log",
+    "evidence_sha256": "6c30fae1464ff6e598be13700936691984a93b2fbb1c8ea6673d4948d74a1bd6"
+  },
+  {
+    "raw_path": ".build/fulfillment-values-controller.log",
+    "raw_sha256": "6820509dd932dc5d8e4de37b46c188d619f9149f17a6eff1bfe82f40cc41dad7",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-values-controller.log",
+    "evidence_sha256": "8c86ff01448a841c014979a2e2242b374cf14047d1e3b6a4ef614e73c024ea63"
+  },
+  {
+    "raw_path": ".build/fulfillment-values-first.log",
+    "raw_sha256": "4397b690a2ecb3d3d915c49c5b905dd681e41c37f15a733545dfcdd2d0277c7a",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-values-first.log",
+    "evidence_sha256": "54533eb777f052465ac05adfe7128c2ed17533d7c5ba88492b72b082e8e5d0b4"
+  },
+  {
+    "raw_path": ".build/fulfillment-values-repository.log",
+    "raw_sha256": "013f118c5bf3e3dda422d11163f044860d6813e2203695af65d466f454cdd827",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-values-repository.log",
+    "evidence_sha256": "05f7afdc23b53ad8a126c53271566d6b68d0d3e05575b796661e01ddf8886820"
+  },
+  {
+    "raw_path": ".build/fulfillment-values-second.log",
+    "raw_sha256": "018b1a72bc19c298029076abf31e46d3550ac77ea9b34e101ff7a24c1c4e5807",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-values-second.log",
+    "evidence_sha256": "5532f9d55c37f08466309a9abe742c59f16ed34fc258f535ed127a33b87a44b5"
+  },
+  {
+    "raw_path": ".build/fulfillment-values-services.log",
+    "raw_sha256": "9cb34466466cfe7ea17c02e931805886d6e6b7d0f2ea9a2b5fd8d798b916f9c2",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-values-services.log",
+    "evidence_sha256": "a57f0a570deb9b451f00f8c13147e0799dbd582fa89e2b341ebfe5daeb950e10"
+  },
+  {
+    "raw_path": ".build/fulfillment-values-shipment.log",
+    "raw_sha256": "00f05401e6d03eb90a58008fcb27e36b1cac4884c1e78fb627d7294f6030122b",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/fulfillment-values-shipment.log",
+    "evidence_sha256": "0559014a1b6c171eb2e9e0899bd4c193393081208cd0c88883c56c083012e0af"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-163a54f47a-postgres-ai-bp5-pass.log",
+    "raw_sha256": "176958c7d4b3e931cf2bd1bbf35ac41cade9bca716827a791740de0eb5ca740c",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-163a54f47a-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "7124b9205669d3c0f123ea5cea29b1ad10c052deba77b774f0065670b5b1f0a0"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-163a54f47a-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "244392c7e289f08d954889cb50e9fb96e6a7a0667128ff11a8ec8279be9fe46b",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-163a54f47a-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "ab7c6a48f53d2e79b8d228d8cb215b698727623b52afa0c6baaee805d2cfe144"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-163a54f47a-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "15c61a74b57c503ef43f8609d89fa3424db4abb76185a0c68ec550df10d9acbd",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-163a54f47a-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "bac750c70f3076866753717afd4b2a0317dbdb17e7d035422abd9c7b2d0b4841"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-163a54f47a-postgres-experience-bp1-pass.log",
+    "raw_sha256": "29da15a681ce0b628116dcc8846790c6b67d80a6be6e174d09b4d3b56d53550c",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-163a54f47a-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "35090e0816c81a5169a596f49c603d4f798e9bc5619626a8cc761a9246086b22"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-163a54f47a-postgres-experience-bp5-pass.log",
+    "raw_sha256": "cba630d4382e978dd87a5985af23eb7298f8eb897f524d0fcbfad891b53ebbb7",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-163a54f47a-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "a3faa2587d294f483863a2e6f59d5763c31db8900a828b0981cf1deb1c2f3e7b"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-163a54f47a-postgres-integration-bp1-pass.log",
+    "raw_sha256": "afeecb56abef7a631bda1a1ffc6bc6bbcf64f933ca6c1287a320ae70f281b1de",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-163a54f47a-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "74bd51b200a811dbdccb4a454b936c9405b6f048ba4c4ada079b1d6131d0a824"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-163a54f47a-postgres-integration-bp5-pass.log",
+    "raw_sha256": "0686a17a6c3072745e71bae29aee6ef0d45f12af8ea9311086894958d61ca765",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-163a54f47a-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "617cc98f0b92e1fbc480101a8703965f01a196e266457cf78efce393bd205943"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5497e67ce4-postgres-ai-bp5-pass.log",
+    "raw_sha256": "ca71aa801d90e544995689c81028da1b9c04b39e6cff69dfe370f5ae1bceffb0",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5497e67ce4-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "029a765029190e1aefa72caa1963cf7adb3a072c1c57099efa1b68f685899e43"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5497e67ce4-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "97b1f9e2c7bd6b734e8cb098f181ebcc092d642b90e4b3fe929f60622f9104b1",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5497e67ce4-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "b44489c678f10d7bbf803e5c81271fdc94566077888b01e748ed89a5f6cef835"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5497e67ce4-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "9676cd42e4c29b3af73111883149c3d7f1a9b62a587453da7fb7fbd9458cc93c",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5497e67ce4-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "3d7133a9284b5e690162b6844807c6fadb22cd831692bc2adabfff5d2c219176"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5497e67ce4-postgres-experience-bp1-pass.log",
+    "raw_sha256": "cae7e88bd904e0637422378319dd2c36b98af9e3ed504e8287b7f36858d45f7b",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5497e67ce4-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "44347aee6387ed7aa38ce27f88a722d6e79e4bad4ac6c310dd40ecca7d385ab9"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5497e67ce4-postgres-experience-bp5-pass.log",
+    "raw_sha256": "c60b0d6e2c46380cc547a8532b4b658d3d8fff54828ebb6710897db2ff0c5222",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5497e67ce4-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "66ee1eb8162cf13c2330b69e2326ee4da9007872d2705c7e917fcaa36c9c378e"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5497e67ce4-postgres-integration-bp1-pass.log",
+    "raw_sha256": "6d54952194a44bbf2f4ef08ec5d2d3830dc16724c2205678273d73190fb64f76",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5497e67ce4-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "34710e468183d87567b917f2c978788d9ef221e041921b9ac1ef592314fa3b43"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5497e67ce4-postgres-integration-bp5-pass.log",
+    "raw_sha256": "744e1e8ee78a2e7afbdcbe2f2bdaff1815bfbc37c1a667808ff1cff164dbf32f",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5497e67ce4-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "6086afb0daa112765bb0c9cbbc548732dcdcbb41193bfd9aee7d4a679aed14aa"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5cfa920bf8-postgres-ai-bp5-pass.log",
+    "raw_sha256": "8ee7f5a7fe445166c844510bf4b5bfc3d1392abf2850505f730e27eff0e897a3",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5cfa920bf8-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "2bda3f014fa8d1127a3f5f78e85916c6ce7dbc6cc45bbed77aa66831fe2e762b"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5cfa920bf8-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "082381114b887e7170623cf6ff25848317dbc08d55b562e4406d41a01f61ac56",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5cfa920bf8-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "6869e9c7bc858620a1ce4f3dc091bcc66ebf62176e82d8886352a5c0d3b6e9da"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5cfa920bf8-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "cf91bed00cfee90eaf631607b73ef5108e2e58442a0709e71a8b66bcbb347295",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5cfa920bf8-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "a99818a1e4eefa1ddcf386788cb3ea2300b543be6bfcae6aa6e5ba1fa5a51d22"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5cfa920bf8-postgres-experience-bp1-pass.log",
+    "raw_sha256": "75474cb55f530be9496ae0696e4cf43437c9e4f5b1ae3235ff10b3c569035e06",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5cfa920bf8-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "c33cbc73f6cfd4740149d0c9f8d65e041df917a4506e489375a31681e748e902"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5cfa920bf8-postgres-experience-bp5-pass.log",
+    "raw_sha256": "7a76d02325717037ffb9c218fb4552a13eb921d5abb0bfd56bab699dd11e37bb",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5cfa920bf8-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "c4a949c09313eeb771816b05d43fd348a332d4213ba1a368f59ca69f4558c649"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5cfa920bf8-postgres-integration-bp1-pass.log",
+    "raw_sha256": "edafa84beb166f47563c6983c71b7222cc8af84bfa14ca1c9d5194dc2965ef12",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5cfa920bf8-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "805fbd6c68854d3112b634faf7511dd330de1278766d62d7dbe5a914bf10e0cd"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-5cfa920bf8-postgres-integration-bp5-pass.log",
+    "raw_sha256": "f04602b0598074209d75dfe31de543c9ee6a595c284002fe7a5c2604b8424382",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-5cfa920bf8-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "c65d52d8476f22e4d077c316cd22640eaad44f51ae6b92251f648768b7268296"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-6b486390a3-postgres-ai-bp5-pass.log",
+    "raw_sha256": "de50b182a9b19d61ab2c26fe6dedc802ee2a13660893eef2f43b14504d5ab01c",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-6b486390a3-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "d60879932d93e144ab763c600c0ae360eeed01864721171910d4cd38692f2bc2"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-6b486390a3-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "59906c53006465574d3fcb02bc8443f30caccc8127c72c10e66176f4bb63d7a9",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-6b486390a3-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "0b0a5f01d223fb055cbccdbe9e4475f0cba2ac609b5cdaaedeacc27557ef6cf0"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-6b486390a3-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "262c0d3e24bfa99edf3bce932357c8fd9f915e76e38148fb964b11744481938e",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-6b486390a3-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "3df638b364184c58b4fc7dbf7c2170d2caa1c4c2d52187382700ecbe3ebd0fa2"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-6b486390a3-postgres-experience-bp1-pass.log",
+    "raw_sha256": "90a8275d28231bf036118c309d13e49c2351dde1953366e3a79f9f7afdc6a6ff",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-6b486390a3-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "ce677e1c101cff80f1bb63f14277674e26babd5b85f3fa824811fc43d26a8924"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-6b486390a3-postgres-experience-bp5-pass.log",
+    "raw_sha256": "bc4bd28d38ac255099c11f2310503564e1c51d85049420612ca86f94a0368381",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-6b486390a3-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "39723a4ac3f0782c40f9fc42cc7da3ca682fd0a1255dc3b26f1015dc25b9511f"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-6b486390a3-postgres-integration-bp1-pass.log",
+    "raw_sha256": "f7bf93a6f73dd8b111a3526449701d1fab44b4b19171af26d5268253ddd685a1",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-6b486390a3-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "c748c80ef889938df35a6a1c2ee6684ffa7df7a547bb373dc962125e64e86a67"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-6b486390a3-postgres-integration-bp5-pass.log",
+    "raw_sha256": "7386b9492a0e52e5f5712b5baff578069d22f2bf02e87a52499d6b65d85a9762",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-6b486390a3-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "15d45bfa0aa03db40ecc18c819b24724a3440666483a484bc5ae7733d1f80835"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-8d3d5f96f0-postgres-ai-bp5-pass.log",
+    "raw_sha256": "3f979a4457871ef2ad697bcf79f809ddd3e1b4c8fc63d314248381a82009b9ee",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-8d3d5f96f0-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "a9acd410d1ee690968654bf614fb41a608b0d1f67a06ba3c9e52aa1847339cff"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-8d3d5f96f0-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "bb1ace9d53d68ce619f8a1ab86642231cb4d9c36599df665fbbaea018fb72eb8",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-8d3d5f96f0-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "4222a6f44c3e52986e2af494d8693981a21aa698c0a352e3829254cb88304dd7"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-8d3d5f96f0-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "6ff84b54ddc65fba1f008bc4365f7791fe5b836e913ca3724d86c4da75adad35",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-8d3d5f96f0-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "325b02f317261a70ca79697ef8fec04d00955bc4f476808cf25974d899a31a2f"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-8d3d5f96f0-postgres-experience-bp1-pass.log",
+    "raw_sha256": "dde08fcbe1de8bc5392b3911299f5f18f78c38fe1a9198030ebee7f673190327",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-8d3d5f96f0-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "eaefcf8d6cb22705e8b63016eeb650d5186850df9357eed30712cd27845066bc"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-8d3d5f96f0-postgres-experience-bp5-pass.log",
+    "raw_sha256": "56c52e9acac0b4f3dc7a8ca0bed7ab3b7690564583c9686797a5ecd0fa4d17c3",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-8d3d5f96f0-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "a06fea5990f91d3aca3ee6ae2b64d93b21f8b26ef26fb47558abfdda9aacd0a3"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-8d3d5f96f0-postgres-integration-bp1-pass.log",
+    "raw_sha256": "dcd42ab7d393f526fa036d6185a6708e8403ba01da69f4c27a4a90d422432639",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-8d3d5f96f0-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "3e16b379eaca9b689e1316e7db31573e16ece60d436b0bfe098f807ecf5e00ac"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-8d3d5f96f0-postgres-integration-bp5-pass.log",
+    "raw_sha256": "cfc0883c3efc30b782ffcfd6908e12695afefc719d6972daf5a01e205625bf0d",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-8d3d5f96f0-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "518121240af01b16bd87e1d4065942aabd102aaf083da964c00d6af8bb5a7eed"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-9b8864f9aa-postgres-ai-bp5-pass.log",
+    "raw_sha256": "6a55ac65a57d1f09229749a945be2f4b0f0139b1f7a9d8d8cdd508202460b378",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-9b8864f9aa-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "adec9c34a2fbbdde2465849f87e9491d7e3df609643dee6a8f10f2e09fa05057"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-9b8864f9aa-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "eebe3163c4f6026512d4ca4b16c639c7f9a01baf6edf8577c3a9bc07f1262638",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-9b8864f9aa-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "306f954d14102ab09d45c1f5829fb49194ce03a857af90af84e5e07e76101c41"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-9b8864f9aa-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "9b1c9c47c16fc0a9852016a3b08a401dd30a96b1af75c60bbd1a12c466c62f09",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-9b8864f9aa-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "258954006a12375f6ba8725757f75c8c4cf0c60b7d0dd04a965d87a23aface91"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-9b8864f9aa-postgres-experience-bp1-pass.log",
+    "raw_sha256": "02aa9be62c73826493742e1145498d2954f6c9746c798ba0a7f5f3c9c4e4053e",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-9b8864f9aa-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "20bde12a261bbf0bfbe7435078046b2db6e65bb6ef44b81ec7623fa4526fc336"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-9b8864f9aa-postgres-experience-bp5-pass.log",
+    "raw_sha256": "6239a603d2989e0c92a32666532bb197088ae66045cbaa42a10310a41ef325ab",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-9b8864f9aa-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "e313c167ad64df4815ebfd1883d7890756eaad5586835942e6eb45aa2f191db8"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-9b8864f9aa-postgres-integration-bp1-pass.log",
+    "raw_sha256": "0953fae6942c6cf411b9711a77ac73af0c6a3ee2541e8bb9703f63458415fa32",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-9b8864f9aa-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "c5155f50f35fb6767bff336f319403e197d6b53b11c2d18b36d293dc059f0c57"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-9b8864f9aa-postgres-integration-bp5-pass.log",
+    "raw_sha256": "c671dd83e7212ec5298b2dea5bc8b02f09d95634b2632c3a740adf8c674add2a",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-9b8864f9aa-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "24744c8f6e8e90af94cd26b7906707bbe21609570c5ef9cd045ba72dcf871bdf"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-bede8d4dd1-postgres-ai-bp5-pass.log",
+    "raw_sha256": "e8126f9c5b0a9cb56c4a7130641e6da4d4586f78a101d5f21c7cce64c53533b9",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-bede8d4dd1-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "39bed20fadc13cc91b99d7c5bfa2ce38a58d3bc97b9592d425161df26bd87646"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-bede8d4dd1-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "587eb6afc48ddc60cc19d06b2e34a61c9df5d0099d4766b0fc3a06837eb80cf1",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-bede8d4dd1-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "15dae148b00a6b31b72a0cbaf77d54d71d767c8aab9067faeafd411bf861199e"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-bede8d4dd1-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "3e14230ad9a2dd9295e91c0cb2b3c1101ec7cd549cccdb530d2d6e7838e2b090",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-bede8d4dd1-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "bfa5fee799db15d61dc82cc58e6e801f14be5aff8cba8ca15d87748f6d600d5d"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-bede8d4dd1-postgres-experience-bp1-pass.log",
+    "raw_sha256": "674f035f775b29c05cb532b015dac0d845e1344a65d95d3c6070e50e773a7b87",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-bede8d4dd1-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "9d9e50fd2b6fa96ed995f6feb67ca8a6efe02aec6c85324caeeed44a8a7ac688"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-bede8d4dd1-postgres-experience-bp5-pass.log",
+    "raw_sha256": "126141d309a5e02649554d427c101d890c4e8c31e567406649b471fbb5d1934d",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-bede8d4dd1-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "4d16998f630886304494bab26302c9b94615fd3f04cb76fe5218cb3173e6f903"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-bede8d4dd1-postgres-integration-bp1-pass.log",
+    "raw_sha256": "4ae0c658cfbca91662363085dfcc3ca7f4d2699c17bb5dfc9252848d928d3630",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-bede8d4dd1-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "7da48048ed4be5ca2f1c7d2b317dc895da4d1a88f7be9fff1e60f01a96f9708f"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-bede8d4dd1-postgres-integration-bp5-pass.log",
+    "raw_sha256": "69d5a103ea1fa8d4bf43efc5bc70116bbe62630e1d519d7849e9defd4a706112",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-bede8d4dd1-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "f6e3260a3c008606bdbbb10ed7983fd69036865449a7eea81ee27164f1a73d2a"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-d16adcc841-postgres-ai-bp5-pass.log",
+    "raw_sha256": "83ba32a6a036f9f157da05713add50ef80951b8caa0b27b10fffdfd99e88d7df",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-d16adcc841-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "ae8e644c44ab6486dff8441731ba1e52f53bbc78286bd23f57aa0d290041954b"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-d16adcc841-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "243a3fe12b342fab4a8c0896a091a8aa70bf1e70ea4e712baa25db9f96f30c42",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-d16adcc841-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "e0b0398247175cc928eb12838c3eab6dc593792e1c7e248d93dc4e09c49504ba"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-d16adcc841-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "613b12e141a2f86c90bbd10cee1b7118d3d1b2cab55916e7c320d8de769e5eed",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-d16adcc841-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "f38b62199b3c51f1fd35064291b630ee16ae8259514cdd7b4e408e6a4e2e302b"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-d16adcc841-postgres-experience-bp1-pass.log",
+    "raw_sha256": "b33b2988cfa0bd2db1e192e8d5a477b19ba18e3d2454bddbaa0bf2811311ec1a",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-d16adcc841-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "bfdb20b1cb2bc0d22f750291150baef54307a527763602ac4a9fe08500acaf11"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-d16adcc841-postgres-experience-bp5-pass.log",
+    "raw_sha256": "37bddd8ae7a63fcbfcb2d69dd206e3625b26723afcd399a3caf902d186a1dd3f",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-d16adcc841-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "9eb368c2b932b35eb2eecc08d5b502407cd0a8a203694a0142033814fd5ae0a4"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-d16adcc841-postgres-integration-bp1-pass.log",
+    "raw_sha256": "d843194e02488d90a7ea5eda916907b6af3c7a50fa38515e45b5e24025fdb1d3",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-d16adcc841-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "03b7e220f87cbf169bc49c6731150774235a21b5842d531c98765d0d927a6fc1"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-d16adcc841-postgres-integration-bp5-pass.log",
+    "raw_sha256": "7e7e29519a8dafc2c192162c4dc351eb7cdf1b779d50564547aed1a797e2db91",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-d16adcc841-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "247e1629276ecf8a0b3593f52d5cbd1e7aa1300fd754a1998c8e68b6488c92c0"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-f1cf3c50a7-postgres-ai-bp5-pass.log",
+    "raw_sha256": "a454a9ee4a184939d790912f4a8cf70995bcb752b58fec63d638f0e0ca63fac5",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-f1cf3c50a7-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "c91c6b028c727b9bd24fded1f252308041ff30fc653bda5bbaf3fcf468775b4f"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-f1cf3c50a7-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "279341b1d23fbc09c2e85929e15e2993c9766ec2524056ce23f6c062b46f144a",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-f1cf3c50a7-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "25ab7673d6b6ccb8e69cd6a9d3d88d9487057d5355d897e7539ecfe3ec04386a"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-f1cf3c50a7-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "96f40be46a8f360b88d319a8f7594727829140bfff9ae7f831102515dd834a8a",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-f1cf3c50a7-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "88d962feee58557ffff18dff59dd6d7e19159cbd327944da848bb1857d774732"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-f1cf3c50a7-postgres-experience-bp1-pass.log",
+    "raw_sha256": "c9ed8b4a873df6d44a9f264d53355bf83ab343555153b9ce6cffbb9265f4647b",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-f1cf3c50a7-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "87b59d6a6104620e03905b93a6735a97f002d821413b835688025ab86d4b916a"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-f1cf3c50a7-postgres-experience-bp5-pass.log",
+    "raw_sha256": "3b96012bd7bd18571a2d770fb5c389d6f197b600af30c55147c3f00b7a630cf9",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-f1cf3c50a7-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "a5b092f7175053d00dd716799b0ee05628da3f579b0716db087956ab243ec2f6"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-f1cf3c50a7-postgres-integration-bp1-pass.log",
+    "raw_sha256": "3c3dd8cb6f5aa6197fcd15e1dff84b6fd4394820fb7aa46411ca802175a776cb",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-f1cf3c50a7-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "01de3312082cf36a5ecc467e6da387a58d2c57a359fb4ddf4b5695376884ccba"
+  },
+  {
+    "raw_path": ".build/fulfillment001/database-evidence/nigson-test-plat-f1cf3c50a7-postgres-integration-bp5-pass.log",
+    "raw_sha256": "c4d0bbe6a78e11d045ddda65f00e589c5c2ca1c3b15039af2727ac6c1a7728ec",
+    "evidence_path": "docs/implementation/evidence/2026-10-10-COM-FULFI-001/nigson-test-plat-f1cf3c50a7-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "817a12839c330e5a9531cdb92a35dcb9f288db133fa0eb208d098546420af412"
+  }
+]

@@ -8,7 +8,7 @@ EP05 — Owned fulfillment/shipment conservation; cart/pricing/market/inventory 
 
 ## Current Task
 
-COM-FULFI-001 — IN_PROGRESS; accepted platform/catalogue/pricing/market/inventory dependencies. Read exact six delivery/shipment/return APIs and owned schemas/transaction/event rules before implementing. Cart source b4dabed1b4a7a5a89de0cfc852152ea175f8fca1 accepted; no fulfillment source changes yet.
+COM-FULFI-001 — IN_PROGRESS; complete six delivery/shipment/return APIs, current OPERATIONS authority, frozen approved booking intent and stock/receipt conservation implemented. Corrected final native acceptance PASS25/no skips; full PASS79 Java/156 gated,58 contracts,15 AI/five gated, Ruff/mypy13 and nine reproduced artifacts; actual commit evidence pending. Genuine carrier qualification remains NOT_RUN and CARRIER-001 remains mandatory BP1 work.
 
 ## Completed Tasks
 
@@ -56,7 +56,7 @@ COM-FULFI-001 — IN_PROGRESS; accepted platform/catalogue/pricing/market/invent
 
 ## In Progress
 
-COM-FULFI-001 — started10 October2026 after cart acceptance; exact API-047/048/049/050/171/174, current OPERATIONS authority, owned delivery specificity and shipment/dispatch/physical-return conservation. Source not yet changed.
+COM-FULFI-001 — started10 October2026; resumed11 October. Exact API-047/048/049/050/171/174 and owned transactions/audit/outbox implemented; final native PASS25/no skips after retaining and correcting fixture/history failures. Full acceptance/commit pending.
 
 ## Pending
 

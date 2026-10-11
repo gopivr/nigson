@@ -192,3 +192,8 @@ nigeria-check:
 cart-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/cart/verify.py
+
+.PHONY: fulfillment-check
+fulfillment-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/fulfillment/verify.py

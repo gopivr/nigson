@@ -70,7 +70,8 @@
         "MARKET_RULE_VIOLATION",
         "PRICING_RULE_VIOLATION",
         "CART_RULE_VIOLATION",
-        "CHECKOUT_REPRICE_REQUIRED"
+        "CHECKOUT_REPRICE_REQUIRED",
+        "FULFILLMENT_RULE_VIOLATION"
       ]
     },
     "timestamp": {

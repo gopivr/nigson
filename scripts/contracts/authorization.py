@@ -48,7 +48,8 @@ def contract():
     from market import extend as market_extend
     from pricing import extend as pricing_extend
     from cart import extend as cart_extend
-    return cart_extend(pricing_extend(market_extend(inventory_extend(notification_extend(provider_extend(files_extend(catalogue_extend(configuration_extend(session_extend(extend(result)))))))))))
+    from fulfillment import extend as fulfillment_extend
+    return fulfillment_extend(cart_extend(pricing_extend(market_extend(inventory_extend(notification_extend(provider_extend(files_extend(catalogue_extend(configuration_extend(session_extend(extend(result))))))))))))
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
     target = ROOT / 'contracts/openapi/commerce.yaml'; expected = json.dumps(contract(), indent=2) + '\n'
