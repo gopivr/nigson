@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-COM-ORDER-001 — IN_PROGRESS; accepted cart/pricing/market/inventory/platform dependencies. Exact API-037/038/039/040/043/044/121 and trusted pricing revalidation/atomic frozen order/after-commit Paystack initiation/verified local lifecycle implemented. Native26/no skips,60 contracts and final offline provider regression PASS, including actual seven-route BFF/private proof, organization authority, stock races, lost responses, existing holds and malformed provider timestamps. Full81 Java/173 gated,15 AI/five gated,Ruff/mypy13 and nine reproduced artifacts PASS; actual source acceptance commit pending.
+COM-PAYME-001 — IN_PROGRESS; order source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a accepted. Reading exact API-041/042/052/053/054/118, payment/refund/webhook schema and section17 before implementing durable signed receipts, bounded reconciliation and reserved partial refunds. Verification NOT_RUN for this task. No critical approval blocks offline engineering.
 
 ## Completed Tasks
 
@@ -67,7 +67,7 @@ COM-ORDER-001 — started11 October2026 after fulfillment acceptance; exact seve
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
 - [ ] EXP-NOTIF-001 — Implement experience notification increment (EP03)
 - [ ] EXP-PLATF-001 — Implement experience platform increment (EP03)
-- [ ] COM-ORDER-001 — Implement commerce order increment (EP05)
+- [x] COM-ORDER-001 — Implement commerce order increment (EP05)
 - [ ] COM-PAYME-001 — Implement commerce payment increment (EP05)
 - [ ] INT-NOTIF-001 — Implement integration notification increment (EP05)
 - [ ] INT-PROVI-001 — Implement integration provider increment (EP05)
@@ -110,15 +110,15 @@ COM-ORDER-001 — started11 October2026 after fulfillment acceptance; exact seve
 
 ## Build Status
 
-PASS — COM-PRICI-001 full73 Java/129 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Previous baseline acceptance retained; task scope evidence is command-specific.
+PASS — COM-ORDER-001 full81 Java/173 gated (254 total/no failures/errors),60 contracts,15 AI/five gated,Ruff/mypy13, unchanged locked dependencies and nine exactly reproduced artifacts. Command-specific prior acceptance retained.
 
 ## Test Status
 
-PASS — COM-PRICI-001 native28/no skips: actual owned PostgreSQL pricing/quote/current authorization/atomic rollback/races, all six actual BFF APIs and production metrics; fresh/repeat BP1/BP5 migrations and module checks. Prior NGN pristine/previous-data migration/rollback/conflict/cold-start evidence retained (no DDL changes). Task/provider/business/end-to-end release qualification separately NOT_RUN; CF-MARKET-001 disabled initial metadata-read and explicit distributor entitlement mapping remain recorded.
+PASS — COM-ORDER-001 native26/no skips: actual PostgreSQL atomic checkout/frozen orders/current authority/organization/history, all seven actual BFF/private APIs, stock races/audit rollback and stateful Paystack HTTP uncertainty/reconciliation. Final all-provider regression and fresh/repeat all-owner migrations PASS. Genuine provider/commercial/end-to-end release qualification remains NOT_RUN.
 
 ## Last Successful Commit
 
-59f5f1decfcd4a6ca105274cbd50ee867f6d0770 — final pricing common array caps, exact monetary responses and immutable quote timestamps; actual native/full/contracts/reproduced-artifact acceptance. No remote deployment.
+c1ecf1217225bc92c5aaf4704e74d53ebf155f8a — actual accepted order implementation, scoped evidence and reproduced artifacts. No remote deployment.
 
 ## Confirmed Inputs
 
@@ -134,7 +134,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-ORDER-001 — dependency-ready atomic checkout/frozen snapshots/order history, accepted cart/catalogue/pricing/market/inventory/platform. Carrier/payment/integration/experience/infrastructure launch work continues independently. No critical approval blocks offline engineering.
+COM-PAYME-001 — durable signed receipts, independent reconciliation, reserved partial refunds and callback/expiry uncertainty using accepted local order/stock lifecycle. Required launch carrier/messaging/integration/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
 
 ## Session Evidence / Protocol
 
@@ -158,3 +158,5 @@ COM-AUTHO-001 report/evidence: docs/implementation/2026-10-09-COM-AUTHO-001.md a
 COM-CART-001 accepted source b4dabed1b4a7a5a89de0cfc852152ea175f8fca1; report/runbook/scoped evidence native22/full75 Java/56 contracts/nine reproduced artifacts. All failure history retained. COM-FULFI-001 now IN_PROGRESS.
 
 COM-FULFI-001 accepted source 24c07b27f0bc3cac711fa505bf34943a5a72c122; native25/full79 Java/58 contracts/nine reproduced artifacts and retained failure history. COM-ORDER-001 now IN_PROGRESS; no critical approval blocks offline engineering.
+
+COM-ORDER-001 accepted source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a; native26/full81 Java/60 contracts/final provider regression/nine reproduced artifacts. Report/evidence preserve all failures. COM-PAYME-001 now IN_PROGRESS.
