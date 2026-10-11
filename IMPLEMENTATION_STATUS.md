@@ -1,6 +1,6 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:10 October2026 (UTC)
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:11 October2026 UTC (10 October local session)
 
 ## Current Phase
 
@@ -8,11 +8,11 @@ EP05 — Owned cart/checkout foundations; pricing/market/inventory accepted, BP1
 
 ## Current Task
 
-COM-PRICI-001 — IN_PROGRESS correction: master section13 common nested arrays cap100; first acceptance used500 for book entries/parcels without an endpoint exception. Aligned to100, exact response minor scale and PostgreSQL expiry; native28/no skips, full73 Java/129 gated,54 contracts,15 AI/five gated and nine reproduced correction artifacts PASS. Required correction source commit pending. COM-CART-001 remains started/read-only; no cart source edits or critical approval pending.
+COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including final pricing 59f5f1decfcd4a6ca105274cbd50ee867f6d0770. Exact API-032/033/034/035, current customer/context uniqueness, versioned SKU/wholesale quantities and safe expiry/recovery foundation. No cart source changes yet.
 
 ## Completed Tasks
 
-- [ ] COM-PRICI-001 — prior acceptance preserved; array-cap correction IN_PROGRESS; implementation 40b0eb99600f50a7c03fa04d0cd118c0186fd93a; native26/no skips, full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged dependencies/nine reproduced artifacts. Exact six APIs, immutable book revisions/current tiers/frozen offers/carrier-bound quotes, current authority before replay/atomic audit/EVT-007/SQL races and actual BFF. Live commercial/provider/downstream/staging activation NOT_RUN; report docs/implementation/2026-10-10-COM-PRICI-001.md.
+- [x] COM-PRICI-001 — DONE (engineering); initial implementation 40b0eb99600f50a7c03fa04d0cd118c0186fd93a, final correction 59f5f1decfcd4a6ca105274cbd50ee867f6d0770 (common100 array cap, currency-scale responses and PostgreSQL expiry precision). Native28/no skips, full73 Java/129 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 dependencies/nine reproduced artifacts. All six actual BFF APIs/current authority/frozen precedence/atomic audit/EVT-007/SQL races. Prior failure and acceptance history retained; live business/provider/downstream/staging NOT_RUN. Report docs/implementation/2026-10-10-COM-PRICI-001.md.
 
 - [x] NGN-001 — DONE (engineering); implementation c087ad6d649bc4702c5a0e25b2251a4f0643dd10; approved deterministic NG/Nigeria/NGN2/destination metadata with selling/delivery disabled, native27/no skips, actual HTTP kobo/wrong-currency checks, previous upgrade/checksum/policy preservation/actual rollback/conflict guards, two-round cold-start, full65 Java/116 gated,51 contracts,15 AI/five gated and nine reproduced artifacts. Actual policies/provider/caller release qualification NOT_RUN. Report docs/implementation/2026-10-10-NGN-001.md.
 
@@ -41,7 +41,7 @@ COM-PRICI-001 — IN_PROGRESS correction: master section13 common nested arrays 
 
 - [x] SEC-001 — DONE (engineering); implementation 2169afa24e30ce98dd34c63d4be01184c9c6acbd; AC-SEC-001 / TEST-SEC-TOKENS / TEST-ACTOR-TRUST / TEST-LOCAL-COLD-START PASS offline. Report: docs/implementation/2026-10-09-SEC-001.md.
 
-- [x] COM-AUTHO-001 — DONE (engineering); implementation 1484e6729ab82e4266d91543e74a730625d0640a; AC-COM-AUTHO-001 native26/no skips, final actual HTTP packaging smoke, full build/contracts/migrations and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-AUTHO-001.md.
+- [x] COM-AUTHO-001 — DONE (engineering); implementation 1484e6729ab82e4266d91543e74a730625d0640a; AC-COM-AUTHO-001 native28/no skips, final actual HTTP packaging smoke, full build/contracts/migrations and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-AUTHO-001.md.
 
 - [x] COM-PARTY-001 — DONE (engineering); implementation ab308ae6380ada183239361ced25363e6eb13a16; native24/no skips, full build/contracts, owner migrations, OSV261/zero findings and nine reproducible artifacts PASS. Report: docs/implementation/2026-10-09-COM-PARTY-001.md.
 
@@ -54,7 +54,7 @@ COM-PRICI-001 — IN_PROGRESS correction: master section13 common nested arrays 
 
 ## In Progress
 
-COM-CART-001 — started10 October2026 after pricing acceptance. Exact four cart APIs and owned atomic/current quantity/context lifecycle foundation; no cart source changes yet.
+COM-CART-001 — started10 October2026; pricing final corrections 59f5f1decfcd4a6ca105274cbd50ee867f6d0770 accepted. Exact four cart APIs and current quantity/context lifecycle foundation; no cart source changes yet.
 
 ## Pending
 
@@ -108,15 +108,15 @@ COM-CART-001 — started10 October2026 after pricing acceptance. Exact four cart
 
 ## Build Status
 
-PASS — COM-PRICI-001 full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Previous baseline acceptance retained; task scope evidence is command-specific.
+PASS — COM-PRICI-001 full73 Java/129 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Previous baseline acceptance retained; task scope evidence is command-specific.
 
 ## Test Status
 
-PASS — COM-PRICI-001 native26/no skips: actual owned PostgreSQL pricing/quote/current authorization/atomic rollback/races, all six actual BFF APIs and production metrics; fresh/repeat BP1/BP5 migrations and module checks. Prior NGN pristine/previous-data migration/rollback/conflict/cold-start evidence retained (no DDL changes). Task/provider/business/end-to-end release qualification separately NOT_RUN; CF-MARKET-001 disabled initial metadata-read and explicit distributor entitlement mapping remain recorded.
+PASS — COM-PRICI-001 native28/no skips: actual owned PostgreSQL pricing/quote/current authorization/atomic rollback/races, all six actual BFF APIs and production metrics; fresh/repeat BP1/BP5 migrations and module checks. Prior NGN pristine/previous-data migration/rollback/conflict/cold-start evidence retained (no DDL changes). Task/provider/business/end-to-end release qualification separately NOT_RUN; CF-MARKET-001 disabled initial metadata-read and explicit distributor entitlement mapping remain recorded.
 
 ## Last Successful Commit
 
-40b0eb99600f50a7c03fa04d0cd118c0186fd93a — exact pricing books/immutable carrier-bound quotes with actual full/native/contract/race/reproducibility acceptance. Local source commit; no remote deployment.
+59f5f1decfcd4a6ca105274cbd50ee867f6d0770 — final pricing common array caps, exact monetary responses and immutable quote timestamps; actual native/full/contracts/reproduced-artifact acceptance. No remote deployment.
 
 ## Confirmed Inputs
 
