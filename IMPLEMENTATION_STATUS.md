@@ -8,9 +8,13 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-COM-PAYME-001 — IN_PROGRESS; accepted order source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a. Native64/no skips PASS through six real BFF/private HTTP payment APIs, encrypted signed durable callbacks, current FINANCE/MFA/replay, partial/full/unknown refund reconciliation, grace expiry and late stock recovery;62 contracts and whole-provider regression PASS. Actual worker/concurrent ingress/KMS/race/SNS-SQS refund dispatch, final full91 Java/203 gated,15 AI/five gated,Ruff/mypy13,268 locked dependencies and nine reproduced artifacts PASS;145 safe evidence files indexed. Actual source commit/section54 acceptance pending. No critical approval blocks offline engineering.
+PAYSTACK-001 — IN_PROGRESS; qualify the exclusive launch adapter and owned financial pipeline using accepted COM-PAYME-001 source a7e5f9a18998988e36fa64c1a6b4c03f7f062d26. Review mode/credential isolation, release readiness and actual stateful HTTP evidence. Genuine account qualification remains NOT_RUN; no critical approval blocks offline engineering.
 
 ## Completed Tasks
+
+- [x] COM-PAYME-001 — DONE (engineering); implementation a7e5f9a18998988e36fa64c1a6b4c03f7f062d26; six payment APIs, encrypted durable receipts, partial/full/UNKNOWN refunds, grace expiry/late settlement, actual worker and EVT-011 SNS/SQS consumer. Native64/no skips, full91 Java/203 gated,62 contracts,15 AI/five gated,Ruff/mypy13,268 locked dependencies and nine reproduced artifacts PASS. Genuine provider/release qualification NOT_RUN. Report docs/implementation/2026-10-11-COM-PAYME-001.md.
+
+- [x] COM-ORDER-001 — DONE (engineering); implementation c1ecf1217225bc92c5aaf4704e74d53ebf155f8a; native26/no skips, full81 Java/173 gated,60 contracts and nine reproduced artifacts PASS. Report docs/implementation/2026-10-11-COM-ORDER-001.md.
 
 - [x] COM-FULFI-001 — DONE (engineering); implementation 24c07b27f0bc3cac711fa505bf34943a5a72c122; six owned delivery/shipment/return APIs, booked/private-label gates and stock/receipt conservation, native25/no skips, full79 Java/156 gated,58 contracts,15 AI/five gated,Ruff/mypy13 and nine reproduced artifacts. Fresh/repeat all-owner migrations/current OPERATIONS/CSRF/atomic audit/races PASS. Genuine carrier/private booking/payment/release composition NOT_RUN. Report docs/implementation/2026-10-10-COM-FULFI-001.md.
 
@@ -58,7 +62,7 @@ COM-PAYME-001 — IN_PROGRESS; accepted order source c1ecf1217225bc92c5aaf4704e7
 
 ## In Progress
 
-COM-PAYME-001 — complete the pending worker/race and final acceptance checks; COM-ORDER-001 accepted source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a.
+- [ ] PAYSTACK-001 — exclusive launch adapter qualification and configuration isolation.
 
 ## Pending
 
@@ -67,8 +71,6 @@ COM-PAYME-001 — complete the pending worker/race and final acceptance checks; 
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
 - [ ] EXP-NOTIF-001 — Implement experience notification increment (EP03)
 - [ ] EXP-PLATF-001 — Implement experience platform increment (EP03)
-- [x] COM-ORDER-001 — Implement commerce order increment (EP05)
-- [ ] COM-PAYME-001 — Implement commerce payment increment (EP05)
 - [ ] INT-NOTIF-001 — Implement integration notification increment (EP05)
 - [ ] INT-PROVI-001 — Implement integration provider increment (EP05)
 - [ ] COM-PROMO-001 — Implement commerce promotion increment (EP06)
@@ -104,21 +106,20 @@ COM-PAYME-001 — complete the pending worker/race and final acceptance checks; 
 - [ ] INFRA-001 — Implement ECS reference infrastructure and immutable delivery pipeline (EP10)
 - [ ] OPS-002 — Verify resilience, restore and measured capacity (EP10)
 - [ ] REL-001 — Qualify each product phase and hand over documented release (EP13)
-- [ ] PAYSTACK-001 — Complete exclusive Paystack launch adapter and mock qualification (EP05)
 - [ ] CARRIER-001 — Implement required FedEx rate booking cancellation and tracking (EP05)
 - [ ] MSG-001 — Implement SMS WhatsApp consent proof callbacks and mock qualification (EP05)
 
 ## Build Status
 
-PASS — COM-ORDER-001 full81 Java/173 gated (254 total/no failures/errors),60 contracts,15 AI/five gated,Ruff/mypy13, unchanged locked dependencies and nine exactly reproduced artifacts. Command-specific prior acceptance retained.
+PASS — COM-PAYME-001 full91 Java/203 gated (294 total/no failures/errors),62 contracts,15 AI/five gated,Ruff/mypy13, unchanged locked dependencies and nine exactly reproduced artifacts. Command-specific prior acceptance retained.
 
 ## Test Status
 
-PASS — COM-ORDER-001 native26/no skips: actual PostgreSQL atomic checkout/frozen orders/current authority/organization/history, all seven actual BFF/private APIs, stock races/audit rollback and stateful Paystack HTTP uncertainty/reconciliation. Final all-provider regression and fresh/repeat all-owner migrations PASS. Genuine provider/commercial/end-to-end release qualification remains NOT_RUN.
+PASS — COM-PAYME-001 native64/no skips: actual owned PostgreSQL and six BFF/private HTTP APIs, encrypted signed receipt replay, finance/MFA/two-actor approvals, partial/full/UNKNOWN provider refunds, expiry/settlement races, real KMS SDK and SNS/SQS handler/inbox/ack. All-provider regression and fresh/repeat owner migrations PASS. Genuine provider/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
-c1ecf1217225bc92c5aaf4704e74d53ebf155f8a — actual accepted order implementation, scoped evidence and reproduced artifacts. No remote deployment.
+a7e5f9a18998988e36fa64c1a6b4c03f7f062d26 — actual accepted payment implementation, scoped evidence and reproduced artifacts. No remote deployment.
 
 ## Confirmed Inputs
 
@@ -130,11 +131,11 @@ Foundation and DATA-001 schema acceptance checks complete. All declared tables a
 
 Actual Paystack test/live keys/merchant account; FedEx client/account/shipper/service-area eligibility; Twilio account/auth/sender/WhatsApp templates/permissions; Keycloak deployment/client secrets/domain/DB. Remaining Nigeria tax/returns/retail book/origin/delivery-area policies, campaign budgets/thresholds, retention and unchanged BP5 model approvals. These are not unresolved country/currency/provider selection decisions.
 
-Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol/signature/SMTP tests are implemented in MOCK-001; application financial/messaging callback inbox and workflow acceptance remain PAYSTACK-001/MSG-001. Genuine sandbox/live smoke remains BLOCKED/NOT_RUN until actual configuration exists; never pass from mock evidence alone.
+Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol/signature/SMTP tests are implemented in MOCK-001; owned financial callback inbox/workflows are accepted in COM-PAYME-001; dedicated Paystack qualification and messaging workflows remain PAYSTACK-001/MSG-001. Genuine sandbox/live smoke remains BLOCKED/NOT_RUN until actual configuration exists; never pass from mock evidence alone.
 
 ## Next Recommended Task
 
-COM-PAYME-001 — durable signed receipts, independent reconciliation, reserved partial refunds and callback/expiry uncertainty using accepted local order/stock lifecycle. Required launch carrier/messaging/integration/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
+PAYSTACK-001 — exclusive adapter configuration isolation and launch qualification using the accepted order/payment lifecycle. Required launch carrier/messaging/integration/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
 
 ## Session Evidence / Protocol
 
@@ -160,3 +161,5 @@ COM-CART-001 accepted source b4dabed1b4a7a5a89de0cfc852152ea175f8fca1; report/ru
 COM-FULFI-001 accepted source 24c07b27f0bc3cac711fa505bf34943a5a72c122; native25/full79 Java/58 contracts/nine reproduced artifacts and retained failure history. COM-ORDER-001 now IN_PROGRESS; no critical approval blocks offline engineering.
 
 COM-ORDER-001 accepted source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a; native26/full81 Java/60 contracts/final provider regression/nine reproduced artifacts. Report/evidence preserve all failures. COM-PAYME-001 now IN_PROGRESS.
+
+COM-PAYME-001 accepted source a7e5f9a18998988e36fa64c1a6b4c03f7f062d26; native64/no skips, full91 Java/203 gated,62 contracts, final provider regression and nine reproduced artifacts. Encrypted durable callbacks, actual EVT-011 transport/worker and financial races accepted;145 indexed evidence files. PAYSTACK-001 now IN_PROGRESS. Prior failures and earlier in-progress entries remain historical.
