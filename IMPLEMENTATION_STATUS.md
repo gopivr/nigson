@@ -8,7 +8,7 @@ EP04 — Owned inventory and market/pricing foundations; BP1 launch composition 
 
 ## Current Task
 
-COM-PRICI-001 — IN_PROGRESS; SEC-001/DATA-001 complete, owned catalogue/market/inventory and approved disabled NGN baseline ready. Exact API-026/027/028/036/150/151, effective immutable books/tiers, exact minor units and frozen quote precedence; no commercial prices or tax/route approvals invented.
+COM-PRICI-001 — IN_PROGRESS; implementation and final native26/no skips, full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,nine reproduced artifacts PASS. Exact six pricing/quote APIs and current/frozen authority/races verified. Local source commit and acceptance metadata remain; no actual prices/provider approval invented.
 
 ## Completed Tasks
 

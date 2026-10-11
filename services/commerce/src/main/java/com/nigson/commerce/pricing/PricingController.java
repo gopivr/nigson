@@ -1,0 +1,28 @@
+package com.nigson.commerce.pricing;
+import java.util.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import tools.jackson.databind.JsonNode;
+import com.nigson.shared.problem.*;
+import com.nigson.shared.security.ActorAssertion;
+import com.nigson.shared.observability.WireContext;
+@RestController
+@ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED",havingValue="true")
+public final class PricingController {
+ private final PriceBookService books;private final PriceQueryService prices;private final CheckoutQuoteService quotes;public PricingController(PriceBookService books,PriceQueryService prices,CheckoutQuoteService quotes){this.books=books;this.prices=prices;this.quotes=quotes;}
+ private ActorAssertion.Actor actor(boolean required){var auth=SecurityContextHolder.getContext().getAuthentication();if(auth!=null&&auth.isAuthenticated()&&auth.getPrincipal() instanceof ActorAssertion.Actor actor)return actor;if(required)throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);return null;}
+ private Map<String,String> query(HttpServletRequest r,Set<String> allowed,boolean read)throws java.io.IOException{if(!allowed.containsAll(r.getParameterMap().keySet()))throw ApiValues.invalid();var values=new HashMap<String,String>();for(var entry:r.getParameterMap().entrySet()){if(entry.getValue().length!=1||entry.getValue()[0].length()>100)throw ApiValues.invalid();values.put(entry.getKey(),entry.getValue()[0]);}if(read&&r.getInputStream().read()!=-1)throw ApiValues.invalid();return values;}
+ private int integer(Map<String,String> q,String key,int fallback){var value=q.get(key);if(value==null)return fallback;if(!value.matches("0|[1-9][0-9]{0,8}"))throw ApiValues.invalid();try{return Integer.parseInt(value);}catch(NumberFormatException invalid){throw ApiValues.invalid();}}
+ private String header(HttpServletRequest r,String name){var values=Collections.list(r.getHeaders(name));if(values.size()!=1)throw ApiValues.invalid();return values.getFirst();}
+ private UUID correlation(){return WireContext.current()==null?WireContext.correlation(null):WireContext.current().correlationId;}
+ private ResponseEntity<PricingValues.Book> created(PricingValues.Book b){return ResponseEntity.status(201).header("Cache-Control","no-store").header("ETag","\""+b.version()+"\"").body(b);}
+ @GetMapping(value="/api/v1/catalogue/skus/{id}/price",produces="application/json")public ResponseEntity<PricingValues.Price> price(HttpServletRequest r,@PathVariable String id)throws java.io.IOException{var q=query(r,Set.of("market","quantity","organizationId"),true);return ResponseEntity.ok().header("Cache-Control","no-store").body(prices.price(actor(false),ApiValues.uuid(id),q.get("market"),q.get("quantity"),q.containsKey("organizationId")?ApiValues.uuid(q.get("organizationId")):null));}
+ @GetMapping(value="/api/v1/staff/price-books",produces="application/json")public ResponseEntity<PricingValues.Page> list(HttpServletRequest r)throws java.io.IOException{var q=query(r,Set.of("segment","currency","page","size","sort"),true);return ResponseEntity.ok().header("Cache-Control","no-store").body(books.list(actor(true),new PricingValues.Query(q.get("segment"),q.get("currency"),integer(q,"page",0),integer(q,"size",20),q.getOrDefault("sort","code,asc"))));}
+ @PostMapping(value="/api/v1/staff/price-books",consumes="application/json",produces="application/json")public ResponseEntity<PricingValues.Book> create(HttpServletRequest r,@RequestBody JsonNode body)throws java.io.IOException{query(r,Set.of(),false);return created(books.create(actor(true),PricingValues.input(body,true),header(r,"Idempotency-Key"),correlation()));}
+ @PostMapping(value="/api/v1/staff/price-books/{id}/revisions",consumes="application/json",produces="application/json")public ResponseEntity<PricingValues.Book> revise(HttpServletRequest r,@PathVariable String id,@RequestBody JsonNode body)throws java.io.IOException{query(r,Set.of(),false);return created(books.revise(actor(true),ApiValues.uuid(id),ApiValues.version(header(r,"If-Match")),PricingValues.input(body,false),header(r,"Idempotency-Key"),correlation()));}
+ @PostMapping(value="/api/v1/staff/price-books/{id}/activation",consumes="application/json",produces="application/json")public ResponseEntity<PricingValues.Book> activate(HttpServletRequest r,@PathVariable String id,@RequestBody JsonNode body)throws java.io.IOException{query(r,Set.of(),false);return created(books.activate(actor(true),ApiValues.uuid(id),ApiValues.version(header(r,"If-Match")),PricingValues.reason(body),header(r,"Idempotency-Key"),correlation()));}
+ @PostMapping(value="/api/v1/checkout/quotes",consumes="application/json",produces="application/json")public ResponseEntity<PricingValues.Quote> quote(HttpServletRequest r,@RequestBody JsonNode body)throws java.io.IOException{query(r,Set.of(),false);return ResponseEntity.status(201).header("Cache-Control","no-store").body(quotes.create(actor(true),PricingValues.quoteInput(body),header(r,"Idempotency-Key"),correlation()));}
+}

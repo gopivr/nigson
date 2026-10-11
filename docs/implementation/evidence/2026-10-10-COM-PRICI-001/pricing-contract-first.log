@@ -1,0 +1,21 @@
+PASS: API-001–025/029/031/162/169/045–046/111–113/122/132–133/135/149/163–165/170 generated OpenAPI matches reviewed contract
+......................................F............
+======================================================================
+FAIL: test_exact_owned_contracts (test_party_contract.PartyContracts.test_exact_owned_contracts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_party_contract.py", line 9, in test_exact_owned_contracts
+    self.assertEqual({op['operationId'] for op in operations},{f'API-{n:03}' for n in range(1,26)} | {'API-111', 'API-112', 'API-113', 'API-132', 'API-135', 'API-149', 'API-163', 'API-164', 'API-122', 'API-133', 'API-165', 'API-045', 'API-046', 'API-170', 'API-029', 'API-031', 'API-162', 'API-169'})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Items in the first set but not the second:
+'API-026'
+'API-028'
+'API-150'
+'API-027'
+'API-036'
+'API-151'
+
+----------------------------------------------------------------------
+Ran 51 tests in 2.345s
+
+FAILED (failures=1)

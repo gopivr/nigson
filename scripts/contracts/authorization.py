@@ -46,13 +46,14 @@ def contract():
     from notification import extend as notification_extend
     from inventory import extend as inventory_extend
     from market import extend as market_extend
-    return market_extend(inventory_extend(notification_extend(provider_extend(files_extend(catalogue_extend(configuration_extend(session_extend(extend(result)))))))))
+    from pricing import extend as pricing_extend
+    return pricing_extend(market_extend(inventory_extend(notification_extend(provider_extend(files_extend(catalogue_extend(configuration_extend(session_extend(extend(result))))))))))
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
     target = ROOT / 'contracts/openapi/commerce.yaml'; expected = json.dumps(contract(), indent=2) + '\n'
     if args.check:
         if not target.exists() or target.read_text() != expected: raise SystemExit('FAIL: reviewed authorization OpenAPI drift')
-        print('PASS: API-001–025/029/031/162/169/045–046/111–113/122/132–133/135/149/163–165/170 generated OpenAPI matches reviewed contract')
+        print('PASS: API-001–029/031/036/150–151/162/169/045–046/111–113/122/132–133/135/149/163–165/170 generated OpenAPI matches reviewed contract')
     else:
         target.parent.mkdir(parents=True, exist_ok=True); target.write_text(expected)
 if __name__ == '__main__': main()

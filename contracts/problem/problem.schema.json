@@ -67,7 +67,8 @@
         "PROVIDER_RULE_VIOLATION",
         "NOTIFICATION_RULE_VIOLATION",
         "INVENTORY_RULE_VIOLATION",
-        "MARKET_RULE_VIOLATION"
+        "MARKET_RULE_VIOLATION",
+        "PRICING_RULE_VIOLATION"
       ]
     },
     "timestamp": {

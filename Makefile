@@ -178,6 +178,11 @@ market-check:
 	$(MAKE) status-check
 	ENV=test python3 scripts/market/verify.py
 
+.PHONY: pricing-check
+pricing-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/pricing/verify.py
+
 .PHONY: nigeria-check
 nigeria-check:
 	$(MAKE) status-check
