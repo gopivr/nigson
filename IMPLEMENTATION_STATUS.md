@@ -4,13 +4,15 @@ Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:11 October2026
 
 ## Current Phase
 
-EP05 — Owned cart/checkout foundations; pricing/market/inventory accepted, BP1 launch composition remains section46.
+EP05 — Owned fulfillment/shipment conservation; cart/pricing/market/inventory accepted, BP1 launch composition remains section46.
 
 ## Current Task
 
-COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including final pricing 59f5f1decfcd4a6ca105274cbd50ee867f6d0770. Exact API-032/033/034/035, current customer/context uniqueness, versioned SKU/wholesale quantities and safe expiry/recovery foundation. Complete cart source/native22/full75 Java,56 contracts/AI lint and nine reproduced artifacts PASS; actual source commit/acceptance pending.
+COM-FULFI-001 — IN_PROGRESS; accepted platform/catalogue/pricing/market/inventory dependencies. Read exact six delivery/shipment/return APIs and owned schemas/transaction/event rules before implementing. Cart source b4dabed1b4a7a5a89de0cfc852152ea175f8fca1 accepted; no fulfillment source changes yet.
 
 ## Completed Tasks
+
+- [x] COM-CART-001 — DONE (engineering); implementation b4dabed1b4a7a5a89de0cfc852152ea175f8fca1; four owned BFF APIs, transactional lifecycle/recovery guard ports, native22/no skips, full75 Java/142 gated,56 contracts,15 AI/five gated,Ruff/mypy13 and nine reproduced artifacts. Existing-context uniqueness/current authority/atomic audit/12-way replay/competing versions/quote invalidation/UNKNOWN preservation verified. Real order/payment/provider/release composition separately NOT_RUN. Report docs/implementation/2026-10-10-COM-CART-001.md.
 
 - [x] COM-PRICI-001 — DONE (engineering); initial implementation 40b0eb99600f50a7c03fa04d0cd118c0186fd93a, final correction 59f5f1decfcd4a6ca105274cbd50ee867f6d0770 (common100 array cap, currency-scale responses and PostgreSQL expiry precision). Native28/no skips, full73 Java/129 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 dependencies/nine reproduced artifacts. All six actual BFF APIs/current authority/frozen precedence/atomic audit/EVT-007/SQL races. Prior failure and acceptance history retained; live business/provider/downstream/staging NOT_RUN. Report docs/implementation/2026-10-10-COM-PRICI-001.md.
 
@@ -54,7 +56,7 @@ COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including fina
 
 ## In Progress
 
-COM-CART-001 — started10 October2026; pricing final corrections 59f5f1decfcd4a6ca105274cbd50ee867f6d0770 accepted. Exact four cart APIs and current quantity/context lifecycle foundation; Complete cart/native22/full75 Java/56 contracts/nine reproduced artifacts PASS; actual commit acceptance pending.
+COM-FULFI-001 — started10 October2026 after cart acceptance; exact API-047/048/049/050/171/174, current OPERATIONS authority, owned delivery specificity and shipment/dispatch/physical-return conservation. Source not yet changed.
 
 ## Pending
 
@@ -63,7 +65,6 @@ COM-CART-001 — started10 October2026; pricing final corrections 59f5f1decfcd4a
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
 - [ ] EXP-NOTIF-001 — Implement experience notification increment (EP03)
 - [ ] EXP-PLATF-001 — Implement experience platform increment (EP03)
-- [ ] COM-CART-001 — Implement commerce cart increment (EP05)
 - [ ] COM-FULFI-001 — Implement commerce fulfillment increment (EP05)
 - [ ] COM-ORDER-001 — Implement commerce order increment (EP05)
 - [ ] COM-PAYME-001 — Implement commerce payment increment (EP05)
@@ -132,7 +133,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-CART-001 — dependency-ready exact owned cart APIs/current context/quantity/version/expiry foundation. Pricing accepted; carrier/payment/integration/experience/infrastructure launch work continues independently. No critical approval blocks offline engineering.
+COM-FULFI-001 — dependency-ready delivery/shipment/dispatch/physical-return conservation, accepted catalogue/pricing/market/inventory/platform. Carrier/payment/integration/experience/infrastructure launch work continues independently. No critical approval blocks offline engineering.
 
 ## Session Evidence / Protocol
 
@@ -152,3 +153,5 @@ SEC-001 report/evidence: docs/implementation/2026-10-09-SEC-001.md and docs/impl
 
 
 COM-AUTHO-001 report/evidence: docs/implementation/2026-10-09-COM-AUTHO-001.md and docs/implementation/evidence/2026-10-09-COM-AUTHO-001/. Native26/no skips, final actual HTTP packaging smoke, complete Java/BP5 build,35 contracts and nine reproducible artifacts PASS; implementation 1484e6729ab82e4266d91543e74a730625d0640a. Mandatory last-active-admin/duplicate/rollback/audit-permission/lock-contention/current-authority/HTTP invariants pass. Framework request fixation and numeric reason coercion defects were corrected; failure history retained. Genuine activation NOT_RUN. Docker Desktop was initially stopped and started without reset; every native qualification preserves its existing nigson-local IDs/start times/mounts/volumes baseline. No remote push or production apply.
+
+COM-CART-001 accepted source b4dabed1b4a7a5a89de0cfc852152ea175f8fca1; report/runbook/scoped evidence native22/full75 Java/56 contracts/nine reproduced artifacts. All failure history retained. COM-FULFI-001 now IN_PROGRESS.
