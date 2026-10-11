@@ -4,13 +4,15 @@ Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:10 October2026
 
 ## Current Phase
 
-EP04 — Owned inventory and market/pricing foundations; BP1 launch composition remains section46.
+EP05 — Owned cart/checkout foundations; pricing/market/inventory accepted, BP1 launch composition remains section46.
 
 ## Current Task
 
-COM-PRICI-001 — IN_PROGRESS; implementation and final native26/no skips, full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,nine reproduced artifacts PASS. Exact six pricing/quote APIs and current/frozen authority/races verified. Local source commit and acceptance metadata remain; no actual prices/provider approval invented.
+COM-CART-001 — IN_PROGRESS; all declared dependencies accepted, including pricing 40b0eb99600f50a7c03fa04d0cd118c0186fd93a. Exact API-032/033/034/035, owned cart/context uniqueness/versioning, SKU/wholesale quantity guards, expiry/recovery eligibility and no shared cache. No cart source changes yet.
 
 ## Completed Tasks
+
+- [x] COM-PRICI-001 — DONE (engineering); implementation 40b0eb99600f50a7c03fa04d0cd118c0186fd93a; native26/no skips, full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged dependencies/nine reproduced artifacts. Exact six APIs, immutable book revisions/current tiers/frozen offers/carrier-bound quotes, current authority before replay/atomic audit/EVT-007/SQL races and actual BFF. Live commercial/provider/downstream/staging activation NOT_RUN; report docs/implementation/2026-10-10-COM-PRICI-001.md.
 
 - [x] NGN-001 — DONE (engineering); implementation c087ad6d649bc4702c5a0e25b2251a4f0643dd10; approved deterministic NG/Nigeria/NGN2/destination metadata with selling/delivery disabled, native27/no skips, actual HTTP kobo/wrong-currency checks, previous upgrade/checksum/policy preservation/actual rollback/conflict guards, two-round cold-start, full65 Java/116 gated,51 contracts,15 AI/five gated and nine reproduced artifacts. Actual policies/provider/caller release qualification NOT_RUN. Report docs/implementation/2026-10-10-NGN-001.md.
 
@@ -52,7 +54,7 @@ COM-PRICI-001 — IN_PROGRESS; implementation and final native26/no skips, full7
 
 ## In Progress
 
-COM-PRICI-001 — started10 October2026. Exact pricing and frozen price quote foundation; live values and carrier/provider qualification remain separate launch gates.
+COM-CART-001 — started10 October2026 after pricing acceptance. Exact four cart APIs and owned atomic/current quantity/context lifecycle foundation; no cart source changes yet.
 
 ## Pending
 
@@ -61,7 +63,6 @@ COM-PRICI-001 — started10 October2026. Exact pricing and frozen price quote fo
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
 - [ ] EXP-NOTIF-001 — Implement experience notification increment (EP03)
 - [ ] EXP-PLATF-001 — Implement experience platform increment (EP03)
-- [ ] COM-PRICI-001 — Implement commerce pricing increment (EP04)
 - [ ] COM-CART-001 — Implement commerce cart increment (EP05)
 - [ ] COM-FULFI-001 — Implement commerce fulfillment increment (EP05)
 - [ ] COM-ORDER-001 — Implement commerce order increment (EP05)
@@ -107,15 +108,15 @@ COM-PRICI-001 — started10 October2026. Exact pricing and frozen price quote fo
 
 ## Build Status
 
-PASS — NGN-001 full65 Java/116 gated,51 contracts,15 AI/five gated,Ruff/mypy13 and268 unchanged locked Maven artifacts. Nine final artifacts reproduce. Engineering acceptance committed; no live activation inferred.
+PASS — COM-PRICI-001 full72 Java/128 gated,54 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Previous baseline acceptance retained; task scope evidence is command-specific.
 
 ## Test Status
 
-PASS — NGN-001 native27/no skips, actual HTTP NGN kobo and wrong-currency rejection; fresh/previous BP1 data migration, checksum/ID/policy preservation, actual Liquibase pristine rollback/reapply, populated/conflict guards and repeat. Two-round cold-start nigson-test-cold-017c858638 PASS; actual NGN2/disabled selling/delivery/unresolved-policy read, identity/security/outage recovery and original state preserved, named volumes retained. Prior engineering acceptance evidence retained. Live provider/policy/frontend qualification and CF-MARKET-001 disabled market initial metadata-read gap separately NOT_RUN.
+PASS — COM-PRICI-001 native26/no skips: actual owned PostgreSQL pricing/quote/current authorization/atomic rollback/races, all six actual BFF APIs and production metrics; fresh/repeat BP1/BP5 migrations and module checks. Prior NGN pristine/previous-data migration/rollback/conflict/cold-start evidence retained (no DDL changes). Task/provider/business/end-to-end release qualification separately NOT_RUN; CF-MARKET-001 disabled initial metadata-read and explicit distributor entitlement mapping remain recorded.
 
 ## Last Successful Commit
 
-c087ad6d649bc4702c5a0e25b2251a4f0643dd10 — approved Nigeria baseline with actual native/migration/cold-start/full acceptance evidence. Completion metadata follows actual source commit.
+40b0eb99600f50a7c03fa04d0cd118c0186fd93a — exact pricing books/immutable carrier-bound quotes with actual full/native/contract/race/reproducibility acceptance. Local source commit; no remote deployment.
 
 ## Confirmed Inputs
 
@@ -131,7 +132,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-COM-PRICI-001 — dependency-ready exact pricing/books/tiers and immutable checkout quotes. NGN baseline/market/catalogue/inventory foundation accepted; no actual business values invented. CARRIER/PAYSTACK/MSG/experience/infrastructure launch work remains authorized independently.
+COM-CART-001 — dependency-ready exact owned cart APIs/current context/quantity/version/expiry foundation. Pricing accepted; carrier/payment/integration/experience/infrastructure launch work continues independently. No critical approval blocks offline engineering.
 
 ## Session Evidence / Protocol
 
