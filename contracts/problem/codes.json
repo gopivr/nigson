@@ -163,5 +163,10 @@
     "status": 422,
     "title": "Order rule violation",
     "detail": "The order operation does not meet current purchase rules."
+  },
+  "PAYMENT_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Payment rule violation",
+    "detail": "The payment or refund operation does not meet verified financial rules."
   }
 }

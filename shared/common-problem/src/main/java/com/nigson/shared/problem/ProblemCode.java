@@ -11,6 +11,7 @@ public enum ProblemCode {
  IDEMPOTENCY_IN_PROGRESS(409,"Request in progress","Retry this request after the current operation finishes."),
  VERSION_MISMATCH(412,"Version mismatch","Refresh the resource before retrying."),
  CHECKOUT_REPRICE_REQUIRED(409,"Checkout quote changed","Refresh the checkout quote before continuing."),
+ PAYMENT_RULE_VIOLATION(422,"Payment rule violation","The payment or refund operation does not meet verified financial rules."),
  ORDER_RULE_VIOLATION(422,"Order rule violation","The order operation does not meet current purchase rules."),
  FULFILLMENT_RULE_VIOLATION(422,"Fulfillment rule violation","The delivery or shipment operation does not meet current rules."),
  CART_RULE_VIOLATION(422,"Cart rule violation","The cart operation does not meet current shopping rules."),

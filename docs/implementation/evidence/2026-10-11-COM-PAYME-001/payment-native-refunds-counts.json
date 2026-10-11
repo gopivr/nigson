@@ -1,0 +1,15 @@
+{
+  "selected_classes": [
+    "BuildCompatibilityTest",
+    "OrderPersistenceTest",
+    "PaymentPayloadCipherTest",
+    "PaymentPersistenceTest",
+    "PaymentValuesTest",
+    "PaystackWebhookProtocolTest",
+    "SecurityAssemblyTest"
+  ],
+  "tests": 45,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0
+}

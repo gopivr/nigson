@@ -11,7 +11,7 @@ import java.util.*;
 public final class CallbackSignatures {
  private CallbackSignatures(){}
  public static boolean paystack(byte[] raw,String signature,String key) {
-  if(raw==null||raw.length>65536||signature==null||!signature.matches("[a-fA-F0-9]{128}"))return false;
+  if(raw==null||raw.length>262144||signature==null||!signature.matches("[a-fA-F0-9]{128}"))return false;
   try {var mac=Mac.getInstance("HmacSHA512");mac.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8),"HmacSHA512"));return MessageDigest.isEqual(mac.doFinal(raw),HexFormat.of().parseHex(signature));}catch(Exception failure){return false;}
  }
  /** externalUrl is the configured public callback URL, never Host/X-Forwarded-* supplied by a caller. */

@@ -17,7 +17,7 @@ make provider-contract-test PROVIDER=all MODE=mock
 ```
 
 `success`, `decline`, `rate-limit`, `unavailable`, `timeout-after-acceptance`,
-`booking-response-lost`, `duplicate-status`, `out-of-order-status` and `invalid-verification` (Paystack malformed settlement timestamp) are bounded
+`booking-response-lost`, `duplicate-status`, `out-of-order-status` and `invalid-verification, invalid-refund-verification` (Paystack malformed settlement timestamp) are bounded
 registered scenarios. Progress/reset/state/callback controls are test-only. A
 lost response occurs after persisted acceptance; verify/status/state inspection
 reconciles it rather than resending. Refund and message sends do not pretend to

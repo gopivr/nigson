@@ -40,7 +40,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
    if(path.equals("/__scenario/state")&&method.equals("GET"))return reply(200,state,0);
    if(path.equals("/__scenario/configure")&&method.equals("POST")){
     var input=JSON.readTree(request.getBodyAsString());String scenario=input.path("scenario").asText();
-    if(!Set.of("success","decline","rate-limit","unavailable","timeout-after-acceptance","booking-response-lost","duplicate-status","out-of-order-status","invalid-verification").contains(scenario))return reply(400,Map.of("code","SCENARIO_INVALID"),0);
+    if(!Set.of("success","decline","rate-limit","unavailable","timeout-after-acceptance","booking-response-lost","duplicate-status","out-of-order-status","invalid-verification","invalid-refund-verification").contains(scenario))return reply(400,Map.of("code","SCENARIO_INVALID"),0);
     state.put("scenario",scenario);save();return reply(200,Map.of("scenario",scenario),0);
    }
    if(path.equals("/__scenario/progress")&&method.equals("POST")){
@@ -64,13 +64,13 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
    String scenario=state.path("scenario").asText();if(scenario.equals("booking-response-lost"))scenario="timeout-after-acceptance";if(method.equals("POST")&&!path.equals("/oauth/token")&&Set.of("decline","rate-limit","unavailable").contains(scenario)){
     int code=scenario.equals("rate-limit")?429:scenario.equals("unavailable")?503:422;save();return reply(code,Map.of("status",false,"code","MOCK_"+scenario.toUpperCase(Locale.ROOT)),0);
    }
-   ResponseDefinition response=provider.equals("paystack")?paystack(method,path,request.getBodyAsString(),scenario):provider.equals("fedex")?fedex(method,path,request.getBodyAsString(),scenario):twilio(method,path,request.getBodyAsString(),scenario);
+   ResponseDefinition response=provider.equals("paystack")?paystack(method,path,request.getUrl(),request.getBodyAsString(),scenario):provider.equals("fedex")?fedex(method,path,request.getBodyAsString(),scenario):twilio(method,path,request.getBodyAsString(),scenario);
    save();return response;
   } catch(wiremock.com.fasterxml.jackson.core.JsonProcessingException|IllegalArgumentException invalid){return new ResponseDefinitionBuilder().withStatus(400).withHeader("Content-Type","application/json").withBody("{\"code\":\"MOCK_REQUEST_INVALID\"}").build();}
    catch(Exception unavailable){return new ResponseDefinitionBuilder().withStatus(503).withHeader("Content-Type","application/json").withBody("{\"code\":\"MOCK_STATE_OR_TRANSPORT_UNAVAILABLE\"}").build();}
  }
  private String route(String path){if(path.startsWith("/refund/"))return "/refund/{id}";if(path.startsWith("/transaction/verify/"))return "/transaction/verify/{reference}";if(path.matches("/2010-04-01/Accounts/[^/]+/Messages/[^/]+.json"))return "/2010-04-01/Accounts/{account}/Messages/{sid}.json";if(path.startsWith("/2010-04-01/Accounts/"))return "/2010-04-01/Accounts/{account}/Messages.json";return Set.of("/transaction/initialize","/refund","/oauth/token","/rate/v1/rates/quotes","/ship/v1/shipments","/ship/v1/shipments/cancel","/track/v1/trackingnumbers").contains(path)?path:"UNKNOWN";}
- private ResponseDefinition paystack(String method,String path,String body,String scenario) throws Exception {
+ private ResponseDefinition paystack(String method,String path,String url,String body,String scenario) throws Exception {
   if(method.equals("POST")&&path.equals("/transaction/initialize")){
    var input=JSON.readTree(body);String ref=input.path("reference").asText();long amount=input.path("amount").asLong();
    if(!ref.matches("[a-zA-Z0-9.=_-]{1,100}")||amount<=0||!input.path("currency").asText().equals("NGN")||!input.path("email").asText().contains("@"))return reply(400,Map.of("status",false,"message","Invalid initialization"),0);
@@ -82,13 +82,13 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
   if(method.equals("POST")&&path.equals("/refund")){
    var input=JSON.readTree(body);var transaction=operations().get(input.path("transaction").asText());long amount=input.path("amount").asLong();
    if(transaction==null||!transaction.path("status").asText().equals("success")||amount<=0)return reply(422,Map.of("status",false),0);
-   long refunded=0;for(var op:operations())if(op.path("transaction").asText().equals(input.path("transaction").asText()))refunded+=op.path("amount").asLong();
+   long refunded=0;for(var op:operations())if(op.path("transaction").asText().equals(transaction.path("id").asText()))refunded+=op.path("amount").asLong();
    if(refunded+amount>transaction.path("amount").asLong())return reply(422,Map.of("status",false),0);
-   String id=next("RF");var op=JSON.createObjectNode().put("id",id).put("transaction",input.path("transaction").asText()).put("amount",amount).put("currency","NGN").put("status","pending");operations().set(id,op);
+   String id=next("RF");var op=JSON.createObjectNode().put("id",id).put("transaction",transaction.path("id").asText()).put("amount",amount).put("currency","NGN").put("domain","test").put("integration",1).put("merchant_note",input.path("merchant_note").asText()).put("status","pending");operations().set(id,op);
    return reply(200,Map.of("status",true,"data",op),scenario.equals("timeout-after-acceptance")?12000:0);
   }
-  if(method.equals("GET")&&path.startsWith("/refund/")){var op=operations().get(path.substring(8));return reply(op==null?404:200,op==null?Map.of("status",false):Map.of("status",true,"data",op),0);}
-  if(method.equals("GET")&&path.equals("/refund")){var list=JSON.createArrayNode();for(var op:operations())if(op.has("transaction"))list.add(op);return reply(200,Map.of("status",true,"data",list),0);}
+  if(method.equals("GET")&&path.startsWith("/refund/")){var op=operations().get(path.substring(8));if(op!=null&&scenario.equals("invalid-refund-verification")){op=op.deepCopy();((ObjectNode)op).put("amount",op.path("amount").asLong()+1);}return reply(op==null?404:200,op==null?Map.of("status",false):Map.of("status",true,"data",op),0);}
+  if(method.equals("GET")&&path.equals("/refund")){var params=form(Objects.toString(URI.create(url).getRawQuery(),""));int page=Integer.parseInt(params.getOrDefault("page","1")),perPage=Integer.parseInt(params.getOrDefault("perPage","50"));if(page<1||page>10||perPage<1||perPage>100)return reply(400,Map.of("status",false),0);var matches=JSON.createArrayNode();for(var op:operations())if(op.has("transaction")&&(!params.containsKey("transaction")||op.path("transaction").asText().equals(params.get("transaction"))))matches.add(op);var list=JSON.createArrayNode();for(int n=(page-1)*perPage;n<Math.min(matches.size(),page*perPage);n++){var op=matches.get(n);if(scenario.equals("invalid-refund-verification")){op=op.deepCopy();((ObjectNode)op).put("amount",op.path("amount").asLong()+1);}list.add(op);}return reply(200,Map.of("status",true,"data",list),0);}
   return reply(404,Map.of("code","NOT_FOUND"),0);
  }
  private ResponseDefinition fedex(String method,String path,String body,String scenario) throws Exception {

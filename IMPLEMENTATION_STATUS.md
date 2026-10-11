@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-COM-PAYME-001 — IN_PROGRESS; order source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a accepted. Reading exact API-041/042/052/053/054/118, payment/refund/webhook schema and section17 before implementing durable signed receipts, bounded reconciliation and reserved partial refunds. Verification NOT_RUN for this task. No critical approval blocks offline engineering.
+COM-PAYME-001 — IN_PROGRESS; accepted order source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a. Native64/no skips PASS through six real BFF/private HTTP payment APIs, encrypted signed durable callbacks, current FINANCE/MFA/replay, partial/full/unknown refund reconciliation, grace expiry and late stock recovery;62 contracts and whole-provider regression PASS. Actual worker/concurrent ingress/KMS/race/SNS-SQS refund dispatch, final full91 Java/203 gated,15 AI/five gated,Ruff/mypy13,268 locked dependencies and nine reproduced artifacts PASS;145 safe evidence files indexed. Actual source commit/section54 acceptance pending. No critical approval blocks offline engineering.
 
 ## Completed Tasks
 
@@ -58,7 +58,7 @@ COM-PAYME-001 — IN_PROGRESS; order source c1ecf1217225bc92c5aaf4704e74d53ebf15
 
 ## In Progress
 
-COM-ORDER-001 — started11 October2026 after fulfillment acceptance; exact seven order/private-proof APIs and section17 checkout/order lifecycle invariants being read before implementation. Verification NOT_RUN.
+COM-PAYME-001 — complete the pending worker/race and final acceptance checks; COM-ORDER-001 accepted source c1ecf1217225bc92c5aaf4704e74d53ebf155f8a.
 
 ## Pending
 

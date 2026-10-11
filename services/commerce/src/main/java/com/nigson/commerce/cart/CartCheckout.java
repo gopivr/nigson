@@ -6,5 +6,6 @@ public interface CartCheckout {
  CartValues.Cart pending(UUID party,UUID cart,long expected,UUID quote,String quoteHash,UUID order,UUID correlation);
  CartValues.Cart converted(UUID order,UUID correlation);
  CartValues.Cart expired(UUID order,UUID correlation);
+ CartValues.Cart uncertainExpired(UUID order,int graceSeconds,UUID correlation);
  boolean recoveryEligible(UUID party,UUID cart);
 }

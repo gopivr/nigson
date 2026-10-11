@@ -1,0 +1,18 @@
+package com.nigson.acceptance.payment;
+import java.util.*;
+import java.nio.charset.StandardCharsets;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+import com.nigson.commerce.payment.PaystackWebhookProtocol;
+import com.nigson.shared.security.CallbackSignatures;
+class PaystackWebhookProtocolTest {
+ private String signature(byte[] body)throws Exception{var mac=Mac.getInstance("HmacSHA512");mac.init(new SecretKeySpec("sk_mock_nigson".getBytes(StandardCharsets.UTF_8),"HmacSHA512"));return HexFormat.of().formatHex(mac.doFinal(body));}
+ private String digest(byte[] body){try{var mac=Mac.getInstance("HmacSHA256");mac.init(new SecretKeySpec("sk_mock_nigson".getBytes(StandardCharsets.UTF_8),"HmacSHA256"));return HexFormat.of().formatHex(mac.doFinal(body));}catch(Exception failure){throw new AssertionError(failure);}}
+ private PaystackWebhookProtocol protocol=new PaystackWebhookProtocol((raw,sig)->CallbackSignatures.paystack(raw,sig,"sk_mock_nigson"),this::digest,"MOCK");
+ @Test void authenticationPrecedesParsingAndStableEventIdentitySurvivesPayloadVariants()throws Exception{byte[] raw="{\"event\":\"charge.success\",\"data\":{\"id\":123,\"domain\":\"test\",\"amount\":100}}".getBytes(StandardCharsets.UTF_8);var event=protocol.authenticate(raw,signature(raw));assertThat(event.recognized()).isTrue();assertThat(event.matchingMode()).isTrue();byte[] changed=new String(raw,StandardCharsets.UTF_8).replace("100","200").getBytes(StandardCharsets.UTF_8);var variant=protocol.authenticate(changed,signature(changed));assertThat(variant.eventKey()).isEqualTo(event.eventKey());assertThat(variant.bodyHash()).isNotEqualTo(event.bodyHash());assertThatThrownBy(()->protocol.authenticate(changed,signature(raw))).hasMessage("AUTH_REQUIRED");assertThatThrownBy(()->protocol.authenticate("malformed".getBytes(StandardCharsets.UTF_8),"0".repeat(128))).hasMessage("AUTH_REQUIRED");assertThatThrownBy(()->protocol.authenticate("{\"event\":\"x\",\"event\":\"y\",\"data\":{}}".getBytes(StandardCharsets.UTF_8),signature("{\"event\":\"x\",\"event\":\"y\",\"data\":{}}".getBytes(StandardCharsets.UTF_8)))).hasMessage("VALIDATION_ERROR");}
+ @Test void fullContractSizeAndUnknownEventsAreBoundedWithoutFinancialTrust()throws Exception{String prefix="{\"event\":\"synthetic.unknown\",\"data\":{\"domain\":\"live\",\"padding\":\"";String suffix="\"}}";byte[] raw=(prefix+"x".repeat(262144-prefix.length()-suffix.length())+suffix).getBytes(StandardCharsets.UTF_8);var event=protocol.authenticate(raw,signature(raw));assertThat(event.recognized()).isFalse();assertThat(event.matchingMode()).isFalse();assertThat(event.eventKey().length()).isLessThanOrEqualTo(200);assertThatThrownBy(()->protocol.authenticate(new byte[262145],"0".repeat(128))).hasMessage("BODY_TOO_LARGE");assertThat(CallbackSignatures.paystack(raw,signature(raw),"sk_mock_nigson")).isTrue();}
+ @Test void canonicalFallbackDeduplicatesPropertyOrderAndRejectsTrailingJson()throws Exception{byte[] first="{\"event\":\"charge.success\",\"data\":{\"domain\":\"test\",\"reference\":\"nigson-synthetic\"}}".getBytes(StandardCharsets.UTF_8);byte[] second="{\"data\":{\"reference\":\"nigson-synthetic\",\"domain\":\"test\"},\"event\":\"charge.success\"}".getBytes(StandardCharsets.UTF_8);assertThat(protocol.authenticate(first,signature(first)).eventKey()).isEqualTo(protocol.authenticate(second,signature(second)).eventKey());byte[] trailing=(new String(first,StandardCharsets.UTF_8)+" {}").getBytes(StandardCharsets.UTF_8);assertThatThrownBy(()->protocol.authenticate(trailing,signature(trailing))).hasMessage("VALIDATION_ERROR");}
+
+}

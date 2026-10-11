@@ -1,0 +1,20 @@
+package com.nigson.commerce.payment;
+import java.util.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import com.nigson.commerce.platform.EventHandler;
+import com.nigson.commerce.order.OrderPolicy;
+import com.nigson.shared.problem.ApiValues;
+import tools.jackson.databind.JsonNode;
+
+/** EVT-011 acknowledges only the matching, already durable authorized dispatch intent. */
+public final class RefundApprovedHandler implements EventHandler {
+ private final PaymentPolicy policy;private final OrderPolicy binding;
+ public RefundApprovedHandler(PaymentPolicy policy,OrderPolicy binding){this.policy=policy;this.binding=binding;}
+ public String eventType(){return "refund.approved.v1";}
+ public String handle(JdbcTemplate jdbc,JsonNode event){policy.require();if(!TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("LOCAL_TRANSACTION_REQUIRED");if(!event.path("event_type").asString().equals(eventType()))throw PaymentValues.rule();var payload=event.path("payload");UUID order=ApiValues.uuid(payload.path("order_id").asString()),refund=ApiValues.uuid(payload.path("refund_id").asString());if(!refund.toString().equals(event.path("aggregate_id").asString()))throw PaymentValues.rule();jdbc.execute("SET LOCAL lock_timeout='500ms'");jdbc.execute("SET LOCAL statement_timeout='2s'");var owned=jdbc.queryForList("SELECT carrier_snapshot->>'mode' AS mode,currency_code,grand_total,organization_id FROM commerce.sales_order WHERE id=? FOR UPDATE",order);if(owned.size()!=1)throw PaymentValues.rule();binding.require(owned.getFirst().get("mode").toString());UUID organization=event.path("organization_id").isNull()?null:ApiValues.uuid(event.path("organization_id").asString());if(!Objects.equals(organization,owned.getFirst().get("organization_id")))throw PaymentValues.rule();var rows=jdbc.queryForList("SELECT r.*,a.provider,a.merchant_account,a.provider_mode,a.expected_amount,a.currency_code AS attempt_currency,a.state AS attempt_state,a.verified_at,t.provider_mode AS settled_mode,t.provider_status,t.settled_amount,t.currency_code AS settled_currency FROM commerce.refund r JOIN commerce.payment_attempt a ON a.id=r.attempt_id JOIN commerce.payment_transaction t ON t.attempt_id=a.id WHERE r.id=? AND r.order_id=? AND a.order_id=r.order_id FOR UPDATE OF r,a",refund,order);if(rows.size()!=1)throw PaymentValues.rule();var r=rows.getFirst();long version=event.path("aggregate_version").asLong();if(version<1||version>((Number)r.get("version")).longValue()||r.get("approved_by")==null||policy.twoPerson()&&r.get("approved_by").equals(r.get("requested_by"))||!Set.of("APPROVED","SUBMITTING","PENDING","UNKNOWN","SUCCEEDED","FAILED").contains(r.get("state"))||!r.get("provider").equals("PAYSTACK")||!r.get("merchant_account").equals(binding.merchantAccount())||!r.get("provider_mode").equals(binding.mode())||!r.get("settled_mode").equals(binding.mode())||!r.get("attempt_state").equals("SUCCEEDED")||r.get("verified_at")==null||!r.get("provider_status").equals("success")||!r.get("currency_code").equals("NGN")||!r.get("attempt_currency").equals("NGN")||!r.get("settled_currency").equals("NGN")||!owned.getFirst().get("currency_code").equals("NGN")||((java.math.BigDecimal)r.get("expected_amount")).compareTo((java.math.BigDecimal)owned.getFirst().get("grand_total"))!=0||((java.math.BigDecimal)r.get("settled_amount")).compareTo((java.math.BigDecimal)r.get("expected_amount"))!=0||r.get("provider_reference")==null||((java.math.BigDecimal)r.get("amount")).compareTo((java.math.BigDecimal)r.get("settled_amount"))>0)throw PaymentValues.rule();if(jdbc.queryForObject("SELECT coalesce(sum(amount),0) FROM commerce.refund WHERE order_id=? AND state NOT IN ('FAILED','REJECTED')",java.math.BigDecimal.class,order).compareTo((java.math.BigDecimal)r.get("settled_amount"))>0)throw PaymentValues.rule();
+  // Approval committed the unique refund intent together with EVT-011. Polling recovers it
+  // even if publication/receipt crashes; the surrounding inbox commits its durable dedup.
+  return "APPLIED";
+ }
+}

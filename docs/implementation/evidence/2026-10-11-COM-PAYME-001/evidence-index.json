@@ -1,0 +1,872 @@
+[
+  {
+    "raw_path": ".build/payment-artifacts-final-first.json",
+    "raw_sha256": "63fa8cff081a66008b00c655214d3977732ac533415a6ce6bcfaefa0e00c486b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-artifacts-final-first.json",
+    "evidence_sha256": "63fa8cff081a66008b00c655214d3977732ac533415a6ce6bcfaefa0e00c486b"
+  },
+  {
+    "raw_path": ".build/payment-artifacts-final-second.json",
+    "raw_sha256": "63fa8cff081a66008b00c655214d3977732ac533415a6ce6bcfaefa0e00c486b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-artifacts-final-second.json",
+    "evidence_sha256": "63fa8cff081a66008b00c655214d3977732ac533415a6ce6bcfaefa0e00c486b"
+  },
+  {
+    "raw_path": ".build/payment-contract-compatibility-final.json",
+    "raw_sha256": "1064feb6c55dbed22693ce267672956c757f85549be1dfc5d566e4c040a6dd08",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-contract-compatibility-final.json",
+    "evidence_sha256": "1064feb6c55dbed22693ce267672956c757f85549be1dfc5d566e4c040a6dd08"
+  },
+  {
+    "raw_path": ".build/payment-contract-first.log",
+    "raw_sha256": "f89748cc7a611b02be22ecbf65e4039f53230906e135c773b1d0ef99d84e4782",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-contract-first.log",
+    "evidence_sha256": "f89748cc7a611b02be22ecbf65e4039f53230906e135c773b1d0ef99d84e4782"
+  },
+  {
+    "raw_path": ".build/payment-contract-second.log",
+    "raw_sha256": "78ab5db40b2c5657158cf8786e79a38886a832c911c04adc5ca1287da2f05879",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-contract-second.log",
+    "evidence_sha256": "78ab5db40b2c5657158cf8786e79a38886a832c911c04adc5ca1287da2f05879"
+  },
+  {
+    "raw_path": ".build/payment-full-final-java-counts.json",
+    "raw_sha256": "d84d9623de97c63259193871108f4da2367daa8e92676a675239da312787bb49",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-full-final-java-counts.json",
+    "evidence_sha256": "d84d9623de97c63259193871108f4da2367daa8e92676a675239da312787bb49"
+  },
+  {
+    "raw_path": ".build/payment-full-java-counts.json",
+    "raw_sha256": "d5aba6677750e9542074c9372038ab9183beb60fbef2c4be22d170156304d46f",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-full-java-counts.json",
+    "evidence_sha256": "d5aba6677750e9542074c9372038ab9183beb60fbef2c4be22d170156304d46f"
+  },
+  {
+    "raw_path": ".build/payment-full-verify-final.log",
+    "raw_sha256": "30085987632e75c5bdfad2f654f5a9af4edf74a4cda46b2b3a28dda16213c453",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-full-verify-final.log",
+    "evidence_sha256": "adc7f3fd8420e6557c44564c2c7f8eaa5a3d768742ff536be2171f2b42833eb8"
+  },
+  {
+    "raw_path": ".build/payment-full-verify-first.log",
+    "raw_sha256": "904c753452ca7f891c6888910732c8de7457ad1b16c1e52450cab5596740b3fe",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-full-verify-first.log",
+    "evidence_sha256": "bdca33e5fcd77e38d1a0ee1030ab33965a449742175d1528aa9908f007640160"
+  },
+  {
+    "raw_path": ".build/payment-native-acceptance-counts.json",
+    "raw_sha256": "492e3d23e77df9ddf519fec9fd23f22fccd5cc570a25f2138cdd2d011fd89699",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-acceptance-counts.json",
+    "evidence_sha256": "492e3d23e77df9ddf519fec9fd23f22fccd5cc570a25f2138cdd2d011fd89699"
+  },
+  {
+    "raw_path": ".build/payment-native-event-final.log",
+    "raw_sha256": "6fa60f362d70ab67a8042de9dd4bfae1390fd9176c35ebc2133e0ca344c5c10b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-event-final.log",
+    "evidence_sha256": "214096df58929c1b360462aca8b6160b3cd73323a98fe176f3f1f418eb307cb2"
+  },
+  {
+    "raw_path": ".build/payment-native-event-transport-final.log",
+    "raw_sha256": "bc266a98c332f96e8e5524d5b0e52e9c193c1cc6a2c6a7f721cdf6caef9c809a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-event-transport-final.log",
+    "evidence_sha256": "0271ba7caa2783b304b6ad66a45e3dd1240d8d73cf2c8ea89d2129e3018eefd9"
+  },
+  {
+    "raw_path": ".build/payment-native-expiry-first.log",
+    "raw_sha256": "ed51881c1c70cb22aa30f6e050932b2589b2500e52ac2f0d2a41d7ed021853e9",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-expiry-first.log",
+    "evidence_sha256": "83f0b1df2a143e4f8379e5aac0abd64f53c3eeec3e6664c003ad697b1ef44deb"
+  },
+  {
+    "raw_path": ".build/payment-native-final-counts.json",
+    "raw_sha256": "2313a7897840d89530f7eeece4df6c6ddc930353ad6ec3fe96b3729286ca08d2",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-final-counts.json",
+    "evidence_sha256": "2313a7897840d89530f7eeece4df6c6ddc930353ad6ec3fe96b3729286ca08d2"
+  },
+  {
+    "raw_path": ".build/payment-native-http-first.log",
+    "raw_sha256": "4a5c68945aa6c126a7093553940faaa5e01f3b0afdabd3ee0c5f3281f29f9fd7",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-http-first.log",
+    "evidence_sha256": "66bc56142848bf3af68aedeea316bbc704ed66c417ca9831fdbba9b4e4512ab5"
+  },
+  {
+    "raw_path": ".build/payment-native-race-final.log",
+    "raw_sha256": "f4aa9eef7c8f1a19382e65a7e92db34a68a65121771c48d1a5436362ee39fb77",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-race-final.log",
+    "evidence_sha256": "93d7d082fe9672f5d1b3764af13c7f238cf1a248d7cdfc8d58c71ac27f0544fc"
+  },
+  {
+    "raw_path": ".build/payment-native-receipts-counts.json",
+    "raw_sha256": "3fc84e4a16d9045d28f72c4406a4f80918172ca592d9c42e61ee91f7c260334b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-receipts-counts.json",
+    "evidence_sha256": "3fc84e4a16d9045d28f72c4406a4f80918172ca592d9c42e61ee91f7c260334b"
+  },
+  {
+    "raw_path": ".build/payment-native-receipts-first.log",
+    "raw_sha256": "46691a5ee9cf4db939e951874d0f76f67dad3d718a83c3538d5a90f034ae62c7",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-receipts-first.log",
+    "evidence_sha256": "22444d187268031fc184aa540f7242b52f24fa9614a0f257a9e4deb6f35b2028"
+  },
+  {
+    "raw_path": ".build/payment-native-receipts-second.log",
+    "raw_sha256": "589a53b29344bdfd7638717665ee32c72f2758f9851e1bbfbeebaae8418606d3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-receipts-second.log",
+    "evidence_sha256": "7b246e4a732513d8ed894012b861fb5540c7b70a54d50a8d771afb0bc98a7f70"
+  },
+  {
+    "raw_path": ".build/payment-native-reconciliation-first.log",
+    "raw_sha256": "60aabde42ec19e2084b271b832e4b9bc99261db656b6da6b1a25e113d6de7cfa",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-reconciliation-first.log",
+    "evidence_sha256": "bdf7c6fbb03a89190f3321fc961134b83c69770165096a9f553c425a4515d5b4"
+  },
+  {
+    "raw_path": ".build/payment-native-refunds-counts.json",
+    "raw_sha256": "a36bed8133853a657bbdb115c70381f5908b14651682521b77f9f27d5d168a43",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-refunds-counts.json",
+    "evidence_sha256": "a36bed8133853a657bbdb115c70381f5908b14651682521b77f9f27d5d168a43"
+  },
+  {
+    "raw_path": ".build/payment-native-refunds-first.log",
+    "raw_sha256": "ddde9d5158c023567fc86472f93fb2482e0300e48dcf20152dbe4493c8622389",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-refunds-first.log",
+    "evidence_sha256": "3016391bc017bfbcd62f1aeed8b99719fe2aae472286ce623885ee23d1387b89"
+  },
+  {
+    "raw_path": ".build/payment-native-reservations-counts.json",
+    "raw_sha256": "7e2816d6cf129c0bdcfc57a30825cb6de496c1bec088d9c1f962235f8e0cb4ca",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-reservations-counts.json",
+    "evidence_sha256": "7e2816d6cf129c0bdcfc57a30825cb6de496c1bec088d9c1f962235f8e0cb4ca"
+  },
+  {
+    "raw_path": ".build/payment-native-reservations-first.log",
+    "raw_sha256": "c3778a4ffa883a526cf9b57c4196dd65a3f82fdc82589fde3e4176cdac57074a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-reservations-first.log",
+    "evidence_sha256": "31e489827a8178140d44667b8ebd65b73a254d4752aa2a367ed9d9945a2c45b8"
+  },
+  {
+    "raw_path": ".build/payment-native-reservations-second.log",
+    "raw_sha256": "b25a1dd5d01cc66018e13f50b0ef308f1d630a67c332541c8df5d833416b06a2",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-reservations-second.log",
+    "evidence_sha256": "f63f6ed13c4fe612771f716a4e2da308bff7de55ba5e300cefad70643a6f74d4"
+  },
+  {
+    "raw_path": ".build/payment-native-service-first.log",
+    "raw_sha256": "93a6d69aa6c38388ca9bf26c80472d6b0b82217c00c01c2a25d1b291115a7312",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-service-first.log",
+    "evidence_sha256": "876f6aca27143c85384e06f11d3170cd0aac2c9fac3ca235395e1c796fde8624"
+  },
+  {
+    "raw_path": ".build/payment-native-worker-first.log",
+    "raw_sha256": "a44d9cd2b048b3092bcbaeecdfdb805edba7173457ec596468c5ac5bbec0975b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-worker-first.log",
+    "evidence_sha256": "d19ea3d3105804eef09d636b61f009ccf65d8b956ce80bddedda79a2e2fb0d18"
+  },
+  {
+    "raw_path": ".build/payment-native-worker-ingress-kms-first.log",
+    "raw_sha256": "8add2b2ec5f5e98af176e753b5a5783e07250ea9786869d73fb1b36e73702d1e",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-native-worker-ingress-kms-first.log",
+    "evidence_sha256": "014638e317282c57c2bdcdaf4cdab6dfc7e7a0987f6b4e27041aa6ee331cb2b4"
+  },
+  {
+    "raw_path": ".build/payment-provider-regression-first.log",
+    "raw_sha256": "faf35e595c2351431692a665bdd43b96162d40b742ff4bc06b0c86ee27bf4d03",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-provider-regression-first.log",
+    "evidence_sha256": "49cebce67d407c2893f4c2d05ea6bd5687de07662998944033777efeebaeb9e7"
+  },
+  {
+    "raw_path": ".build/payment-refund-coordinator-compile.log",
+    "raw_sha256": "b065ca310962c1217cbac6fc2161bd23139fa234cb24e91cbb5a6d00fbc70cea",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-refund-coordinator-compile.log",
+    "evidence_sha256": "036607a345b82635607e0e31b7914af40db8a263f7427dacac1837c7ca6b90b4"
+  },
+  {
+    "raw_path": ".build/payment-refund-coordinator-final-compile.log",
+    "raw_sha256": "ffa494235b69edadcc0729a25b89b32cc53be846d714f534cd0aa4f1babea950",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-refund-coordinator-final-compile.log",
+    "evidence_sha256": "c42ea502d358f9ca9991dad0cfb3de4f440c137002b4f00f49376d812129030a"
+  },
+  {
+    "raw_path": ".build/payment-refund-mock-compile.log",
+    "raw_sha256": "a68ffd70ac47ab1545b1ea8c4f7211f36398a45485e324bc2a6274d7d6f062af",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-refund-mock-compile.log",
+    "evidence_sha256": "a68ffd70ac47ab1545b1ea8c4f7211f36398a45485e324bc2a6274d7d6f062af"
+  },
+  {
+    "raw_path": ".build/payment-repro-ai.log",
+    "raw_sha256": "a2aa39ce19e758d66af2d6e93a5b4d4e34338991be655a6c79b8fb879922c41d",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-repro-ai.log",
+    "evidence_sha256": "a2aa39ce19e758d66af2d6e93a5b4d4e34338991be655a6c79b8fb879922c41d"
+  },
+  {
+    "raw_path": ".build/payment-repro-final-ai.log",
+    "raw_sha256": "a2aa39ce19e758d66af2d6e93a5b4d4e34338991be655a6c79b8fb879922c41d",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-repro-final-ai.log",
+    "evidence_sha256": "a2aa39ce19e758d66af2d6e93a5b4d4e34338991be655a6c79b8fb879922c41d"
+  },
+  {
+    "raw_path": ".build/payment-repro-final-java.log",
+    "raw_sha256": "1b87a2ff43f50f4cc2c94ff9e096711fb4c3ce48c1d8ef423e30109e926e6c91",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-repro-final-java.log",
+    "evidence_sha256": "cb2cf6c4cd1504d921cd0b00fa9123274446e5fc18a829715ed8da961b7d54c5"
+  },
+  {
+    "raw_path": ".build/payment-repro-first.json",
+    "raw_sha256": "4fda221d77b7432ab81506a839573cdf3a4c137a423fffd86afcfc9d0487eb3a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-repro-first.json",
+    "evidence_sha256": "4fda221d77b7432ab81506a839573cdf3a4c137a423fffd86afcfc9d0487eb3a"
+  },
+  {
+    "raw_path": ".build/payment-repro-java.log",
+    "raw_sha256": "bd60465aab0b83a238881c93117eb6c52ad9b5ff4fab996ac25c063633815a1d",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-repro-java.log",
+    "evidence_sha256": "dfb819f9a38ae03861a2e0f0f13f2f5b02238dd4639179eaf4e117f0b0767bd6"
+  },
+  {
+    "raw_path": ".build/payment-repro-second.json",
+    "raw_sha256": "4fda221d77b7432ab81506a839573cdf3a4c137a423fffd86afcfc9d0487eb3a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-repro-second.json",
+    "evidence_sha256": "4fda221d77b7432ab81506a839573cdf3a4c137a423fffd86afcfc9d0487eb3a"
+  },
+  {
+    "raw_path": ".build/payment-service-compile-first.log",
+    "raw_sha256": "3f9d82d6ea0b0a614cfa4415ba7381765a52801a9e671ac46a51f894229cf760",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-service-compile-first.log",
+    "evidence_sha256": "b3741a19951cd6b0cb2c18c01a46462ce7193748f087bc163dd084140ba75166"
+  },
+  {
+    "raw_path": ".build/payment-source-paths.json",
+    "raw_sha256": "4b900a93734ab44e85f6edc51b499f3b5b997bc64f959d55b99e3d3ed7551b47",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-source-paths.json",
+    "evidence_sha256": "4b900a93734ab44e85f6edc51b499f3b5b997bc64f959d55b99e3d3ed7551b47"
+  },
+  {
+    "raw_path": ".build/payment-values-cipher-first.log",
+    "raw_sha256": "cc766c37e642a2bf9a0f3343244a24aadd5ef2bcb1fcbcac3dac8666a78b74fe",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-values-cipher-first.log",
+    "evidence_sha256": "1fdfb443dbb81e8e3ce11683e2facf94a900d1bcca155f877f9c8643a9177281"
+  },
+  {
+    "raw_path": ".build/payment-values-cipher-second.log",
+    "raw_sha256": "8b2ade7f0fd01a0450bf9769368c83a80de7f577b92f33f4976de9f7e5545f47",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-values-cipher-second.log",
+    "evidence_sha256": "d2bb98ad5bc3157e7c544dec36df65b95aef15df26b65b56762aee508303faa8"
+  },
+  {
+    "raw_path": ".build/payment-values-first.log",
+    "raw_sha256": "a28b0fbc58380047bb53c593dd57dc73c99ca014905c9fd934c7671fed29b859",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-values-first.log",
+    "evidence_sha256": "4c0c81e084c60f69b482ca5b91c8444fdeb9f495582f95a0ce327fe3fa3155e2"
+  },
+  {
+    "raw_path": ".build/payment-values-protocol-first.log",
+    "raw_sha256": "563c5bfc26e12d5f6f5cfac6bb315ccedf9470013c01131cd7211a1ef3da4364",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-values-protocol-first.log",
+    "evidence_sha256": "933707698ebbb7aefe61edf9c63f1a6e8db9934f6d95f05ac22b49fe0ef74b89"
+  },
+  {
+    "raw_path": ".build/payment-values-protocol-second.log",
+    "raw_sha256": "6effcc035be1d5bcb434e59f43fa5c26a4aa1fc85953c45681c3dd137bc26d1d",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-values-protocol-second.log",
+    "evidence_sha256": "3d9d95575f57943149a64782397af5c3749bd93777451d66578fa3c269bff635"
+  },
+  {
+    "raw_path": ".build/payment-values-protocol-third.log",
+    "raw_sha256": "67c7ba8fb52902ced9c71ff30e1e5d917ebf24bb146e7c81a5a9e4c6c7f5c54e",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-values-protocol-third.log",
+    "evidence_sha256": "93e094dadfcb3e9746a9be26ac4276413adc63afdcbc0b30edb67939234f11ae"
+  },
+  {
+    "raw_path": ".build/payment-values-second.log",
+    "raw_sha256": "cba835b096ff3b67e6bcda980603818207de47c2b405b704aae7ea0e14161245",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/payment-values-second.log",
+    "evidence_sha256": "0328f0c204766782179e0d22119c14c7a3bd259a9ab2c9f8ba7d372d5de4cbf8"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-02f3ed8e45-postgres-ai-bp5-pass.log",
+    "raw_sha256": "0d9f0aa854aed28cf675db6d7eadfc860f95003bf89e496175ca616b24cf0759",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-02f3ed8e45-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "37b00d2c9b8352d81f580b07235a9f5d4b2cf263d33275bb694bcd5f96c21b87"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-02f3ed8e45-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "70c6988e851acde301287a0fad2fbd683a288af85fa3da51225cc77718ebb0d8",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-02f3ed8e45-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "b167277f4030910d4ae2e5edd7613e6af736fade71959906a19490016f400e9a"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-02f3ed8e45-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "f5930d440023e4f1aff1bc4546b1ebb31267d5f3c5441e02341ecf7d2eb67b04",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-02f3ed8e45-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "fab272d0839e0b69141e745e4f2438d2459e3a4600edd52490533c08357e87fc"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-02f3ed8e45-postgres-experience-bp1-pass.log",
+    "raw_sha256": "9a966ef5731a01bcf8031bb5ad3d2252ad8702d09d64a37af6f729aa572754e8",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-02f3ed8e45-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "63d8313eeaa1761faa0f167c07d44971903ea2abf8a581f6a8a0668d4d05928b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-02f3ed8e45-postgres-experience-bp5-pass.log",
+    "raw_sha256": "1c027c0938af78b90ebf2cedadcbd9fcc1aa60920f2699320c790976147a2693",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-02f3ed8e45-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "5644bbae7344bab95c1659ce6013d90a9212d8748d7d9712e8576672a466c014"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-02f3ed8e45-postgres-integration-bp1-pass.log",
+    "raw_sha256": "934a8d5e3e13cef2b8a3b918d15dba1530025bddd784041a05d5d408a75ad458",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-02f3ed8e45-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "5442db663edd563d5b4d02bdbf152c6f34ca914c4b86b98ae2b88f18b1e44f75"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-02f3ed8e45-postgres-integration-bp5-pass.log",
+    "raw_sha256": "c1309d6104acd2b20dfa4f703d7480ab96aa8fd0b25dd092de75b1c4eaf43de2",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-02f3ed8e45-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "043afacdb6e8a51bfdd2a4a098a5586599d351df0098b333eb70b53cc46d0b01"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-0c9fdbf54a-postgres-ai-bp5-pass.log",
+    "raw_sha256": "0b5bed0d79d694d065cd950d6973c8dc4299670048fbd8e1ada49884d19d6cee",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-0c9fdbf54a-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "b36567454e3b1ddc5e169e236f56031a6a684692add2d853ee94231207d54922"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-0c9fdbf54a-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "3da868e35ca83e2f1be897aecc66afdc5404665a745eee91801a9d473d3893e8",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-0c9fdbf54a-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "4a29ada763997c0a8fd0098a36c46a94a2ca6d9ae63f2602d00c1483dc44cf69"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-0c9fdbf54a-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "5b570278b65d1263b68d24f801d5c937aa464bd81a09b1b6b3fecf0e9eac3d52",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-0c9fdbf54a-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "75a2342dec731d2a0e4c7c9fcd099bc84a03914d02c1f555ed1c0606c8969caa"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-0c9fdbf54a-postgres-experience-bp1-pass.log",
+    "raw_sha256": "529a99bbbb50636ddd0aebedefb5689abd4a52831c2555bfd1da5fb98b8ce721",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-0c9fdbf54a-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "ca2e103893c0a845b9e86531211b32185f9d7325fd9bbd78ab25b1c7259b1864"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-0c9fdbf54a-postgres-experience-bp5-pass.log",
+    "raw_sha256": "e1ae9681ab32f8139465563e5c10d538f4250d4185e61650c9abce9de54062b7",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-0c9fdbf54a-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "e9d56169f0b3383678794ab3a048a92dbdf857625f80b8682da53b66a96d28a0"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-0c9fdbf54a-postgres-integration-bp1-pass.log",
+    "raw_sha256": "270b9c5aad05823d12f5fb311ebc758635c1e5b62aa2a9686c60c861421efb61",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-0c9fdbf54a-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "a953e2aace2cfb49a4b36501c88108a94ca659b07a637d89625efba879993562"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-0c9fdbf54a-postgres-integration-bp5-pass.log",
+    "raw_sha256": "fa9dd08eb5e0f827b3aa3e8d76c7890ff085476adf8fb8adbb4e4fdee1f1f597",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-0c9fdbf54a-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "4e6661fa721957567d53047edd9b017eab364e2fc3782c0e27ab00b6071eca88"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-13b6fd81c2-postgres-ai-bp5-pass.log",
+    "raw_sha256": "f4f9fcd1019afdf747a9ec04ffa36a411243ef3f35feaf42b369447636ff07bc",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-13b6fd81c2-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "70d9728d55ef93684f7d1108358d327ccea154de55841e78899581f2575dc582"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-13b6fd81c2-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "5981c5fd8f89de0d5963096b704e8e4a2b1f542507c24f4c230e00dda864cdad",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-13b6fd81c2-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "f8d876417fdbeff8771793da1899631103700a4af62a3a1acbac791a6260c230"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-13b6fd81c2-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "9c31971fc91a75a184aaacd03048b4b4e790ea72f9b018a59b44efe5d904ce81",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-13b6fd81c2-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "5cfd4917c84f5be36eb96164dc16330446a912123fd66bf127cb52b62409709c"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-13b6fd81c2-postgres-experience-bp1-pass.log",
+    "raw_sha256": "f1cf666f0000a05486a079cf9f8dff2711db66f8aab67a429a5dfa2dfc31de13",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-13b6fd81c2-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "613bac8785547e2bb668134eed56814c3e70ccd17ddb4d9a0b6b85c1b85dc38d"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-13b6fd81c2-postgres-experience-bp5-pass.log",
+    "raw_sha256": "de926ddd435345d8a377bf016a50c66a8992667b68ad8e8d80a067141379f838",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-13b6fd81c2-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "a9bb73844435dd3c2013f1a04956a0d6325d7ff224da7cd836b8268c33c5febf"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-13b6fd81c2-postgres-integration-bp1-pass.log",
+    "raw_sha256": "51b64443be8591e3cd11d2462e120a4d38ebe2bb8b6835f57b002c830abb2cb7",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-13b6fd81c2-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "aeac6d1d06d886cf70042eb19d2293aefc5f21a61eecd567c4dbc57497e24700"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-13b6fd81c2-postgres-integration-bp5-pass.log",
+    "raw_sha256": "deb7d990b1c0d01503ef68ccfd5b9cd889f7e56ec7cc434711539f22d2e35447",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-13b6fd81c2-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "ffb1e5d0e62c5cf8bcc3b33d063240a82d1789d54b866b5e1f4fc98edbea7a60"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-2279ed23bd-postgres-ai-bp5-pass.log",
+    "raw_sha256": "5262f077f36b120c528463e9fee5fa612f0e697c33604ba1d6b3058d16ad202a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-2279ed23bd-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "7c4925ca246ac97ead07a12bcecb93fdbd81549163da6442d6117d85b7824906"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-2279ed23bd-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "950aa298920fd6bd81697a287b203477c2e76b586f5306e37ba150df744c89d7",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-2279ed23bd-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "f53ebed6db362e831c48e86dcd41c09faf6f6444e36612d653de25442e5b19ae"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-2279ed23bd-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "b2e27cd20ad2e0c74fd2126ffc27de0654b59d7ec2008b5435b75bce9870ce56",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-2279ed23bd-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "2d0f3168e0ffbfb63ca8e7f02f9cd35129e1d4de7ff61b949f84bfcbcb29430e"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-2279ed23bd-postgres-experience-bp1-pass.log",
+    "raw_sha256": "cd7df5460bf4f73198b4ba6044ac9bfcf65616b8b02b4b9e53b2ca45c0169d82",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-2279ed23bd-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "b74689563ba3573846d7119ee760cac586200283debe165d488272f130661fb2"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-2279ed23bd-postgres-experience-bp5-pass.log",
+    "raw_sha256": "8f23d1b7cfe10a0a98fc6cc47c7e4e2e038f4eee46f5b20b055091cc280cb2b9",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-2279ed23bd-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "825db60aaf8ffabc341d54b26b4e21487553f232f4dcfbb9841027907001b17b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-2279ed23bd-postgres-integration-bp1-pass.log",
+    "raw_sha256": "c5562d26ea37726c73aa08136a32a214733dae0bd3cdd40b1b7c14c5e74288fd",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-2279ed23bd-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "56fc90f31308fedb390d380ed1d8a9ddc50cebb021067103dd37fcee286d263a"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-2279ed23bd-postgres-integration-bp5-pass.log",
+    "raw_sha256": "93068906e86d6d8f36c2405455f27d2a65961018d58d749c61ad4111716bdb5d",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-2279ed23bd-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "ff0c60ddaf094181a1a23a41c8345c31ba0ffd163f32b1a6b2dae0da7917382a"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-401ed8d69e-postgres-ai-bp5-pass.log",
+    "raw_sha256": "875a56cf3f3ef56a0a731cb834fb14bb09e3e78f3b4eae3399ce07697dd850f1",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-401ed8d69e-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "99edfe89b6bfd4bda4ddbdb539e95133377588543819f4a1870d173245087d62"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-401ed8d69e-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "d864f35be626cbad439c4e3868599bc4e867606e6c64f4aa535d1aaef199ede9",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-401ed8d69e-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "d89a4fa11c8539b4b80d4dacaf0ac13473c6210f5c42aa129c2d9926632f457e"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-401ed8d69e-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "554fa898080959d2964154bcc05c10e754cc09f9d5e0491267fb0650437b61e1",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-401ed8d69e-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "be709e87077ccf67d4292884a000f8b8cf2a3f1f7a1a7c3f01df2cb948b68d25"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-401ed8d69e-postgres-experience-bp1-pass.log",
+    "raw_sha256": "edb8de6a57550db3a7b263384884aaeb316a1bfbafd7f54f76a128cd70a381b7",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-401ed8d69e-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "f452104d9e1a286523bce54529239e46030c266d4f54640fc52ee9cb993badbe"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-401ed8d69e-postgres-experience-bp5-pass.log",
+    "raw_sha256": "84d465d6c5744c84793ab6bc3dfd74fede4dad002aee0a8bff0a9be1efbc7bbb",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-401ed8d69e-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "e5f9bdd60191e10ead0d7906686db632492fc59b9883c1953c9db458c1712b43"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-401ed8d69e-postgres-integration-bp1-pass.log",
+    "raw_sha256": "d7a4b46c231989caa63625929d77fd9490bc5cc3340572e52679107971552fd4",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-401ed8d69e-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "81f5edd830065bc09b53d4a3385203138686ca733636b8cda4bd25bb01e7ef77"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-401ed8d69e-postgres-integration-bp5-pass.log",
+    "raw_sha256": "f23decce3948cce58975d4a4ec304e24a95f874f9e56256bd460f65c7e3adf74",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-401ed8d69e-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "3da40200d7d41498dfd94ad199f57ad9c6d76f69dc19a967dd1f3e2f762170de"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-438a166320-postgres-ai-bp5-pass.log",
+    "raw_sha256": "864dd87f44053a43c086beb1d6f482af7e72e89a0c018c60e6d4e2441359c581",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-438a166320-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "b81fc8f4ea0363fcb8694417661eda50fd44195d1981cf8c97b6cd9f18bafe6b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-438a166320-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "e59fad47b047d9b6db8aa9512e42e58db23f49133567c6c357e9cd985e809b3e",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-438a166320-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "f3a8ff3f3f3e09ae3f781662946ae1a33655659d300e2581314671075e553ff4"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-438a166320-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "296a945b414b1f351c6d67d88706f19fbbc8dea3c6b5fcd999b86ff7fc558e11",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-438a166320-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "2e56e9045f7fb571a9ca2caca9723158d1981085c9a81d484fa15df34df42d89"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-438a166320-postgres-experience-bp1-pass.log",
+    "raw_sha256": "3a7ddb87a6de68ed110623d7dd4f44b76279309d921b798f347f5b6fd34ba641",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-438a166320-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "857b7ba95ff5acd0b0c03ebd11fa13e43ff704714e37fd2da04f06aec4e8ed6e"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-438a166320-postgres-experience-bp5-pass.log",
+    "raw_sha256": "a7ed0f1947e86a59b3ecf18138111d8ef0b70cee9ab5cafb436ec8a2b21a7d6d",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-438a166320-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "aff182b38b36ae54e1f61f8ffec72ad01f4bc423f0b34c565944c6292d0fd5c8"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-438a166320-postgres-integration-bp1-pass.log",
+    "raw_sha256": "432c6eb44268505cfbf3ad4d9cc54d5119ba1c831a9a6c0672f1ab0b3ed8ac5e",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-438a166320-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "e2e3d622e0911c0e89b94f967d4ab57460932049c38347f62fa85f39123ced55"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-438a166320-postgres-integration-bp5-pass.log",
+    "raw_sha256": "d2ff1477aa5b2f69ebe91cf14197e2eb446dfac9d8fdd33914a77c751bab8424",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-438a166320-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "7a21e4234eab7b5debe83f90fc8a0f6708ba164349b161ce5cdbc113bc383b23"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-73fa7133a6-postgres-ai-bp5-pass.log",
+    "raw_sha256": "fea0a214d2a18e4bfa8590941d18f59e38286f65145edd6090ebddf87e15c4fe",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-73fa7133a6-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "f2cd5b5699e0e30e7aec076b467940ab9e87a66619208d5ddd02879652cdc573"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-73fa7133a6-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "92bd8d3fc30d58be1fbff24074ac4779518047364a5e64dc73516f5677a15e55",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-73fa7133a6-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "93e887b3c2042b72c6de5b60e910d3c0eb57129271d703c160fb4242faf3918d"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-73fa7133a6-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "724548c502bad0babb16d0697d67ab5ef915c16c18f090763ad3d652c4d3d04c",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-73fa7133a6-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "4ab64a99cea16ed6ef2d9bce956ca84f0a303a0ed28106d27dc9b18a716c9c52"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-73fa7133a6-postgres-experience-bp1-pass.log",
+    "raw_sha256": "bfe82a3b448e4717a3849612aa30fbfe6c907b02c0ac2056919d5f2dcc3ac0df",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-73fa7133a6-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "58a40f06395504ebe9c130a4ade8f1a3093698dcd32e699f95bfe92d5d029b59"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-73fa7133a6-postgres-experience-bp5-pass.log",
+    "raw_sha256": "443733a64978ae9f7629e3a303cdc2322c79f7c00c0f7bfbfbf4ca96880cafad",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-73fa7133a6-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "46afe9be8c4ad290056bd71f689268b0e5293c0df050498eb6f5a6e16b999a6d"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-73fa7133a6-postgres-integration-bp1-pass.log",
+    "raw_sha256": "349b9cd0e57c39a818521004116017fca465707aeeb53fe777af59b5468ece97",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-73fa7133a6-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "acdf7254d58c62394332f8ac31aaf3c3447dd1c661e9f277ae8eef3537659b60"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-73fa7133a6-postgres-integration-bp5-pass.log",
+    "raw_sha256": "37b58183781e97ff30d342b91e7e5d3e48c7bdbd96f2598a8188df7c62352f83",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-73fa7133a6-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "40009b1e215cb028f39fd9f0f6bd38184270f20258960548283b1ab63cca7d3d"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-7557ed054e-postgres-ai-bp5-pass.log",
+    "raw_sha256": "174f591516fba407dc044b6ff49ed784f77048097a02e6f294871ca2d81bb8c3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-7557ed054e-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "3b06211da699225cc7d73f643cffe7ba8f301578cf4c27aa5c2e3f811f6ad83f"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-7557ed054e-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "5f0d9d4c8b23a6ee6c10f6730a526072e6d5f1f48f026f668b512597e8c62cfb",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-7557ed054e-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "e67dd6449040511191a2a1ebf060ace623fa567a9f7caafa431ba5a90091ecd1"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-7557ed054e-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "b50cdfb74e7227aef07de52f2efcbe1e6c583f3477af76db0154e8ab89fbfec3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-7557ed054e-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "83274b4cc8bc35a35c48fbba6b06ce20141a7df02bf43a9638ccdafe77e293b0"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-7557ed054e-postgres-experience-bp1-pass.log",
+    "raw_sha256": "b5237303aa3a3106f0175ca1e65af77ff743def27264c1def574f5dd4c6437e7",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-7557ed054e-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "bc260db26bdae72d646273b534c213acd7c4e53c5262e9e1c7be1643de5c71b4"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-7557ed054e-postgres-experience-bp5-pass.log",
+    "raw_sha256": "9781b6a45256a14f99f7c65a4431787227fa355121975cd16141f3f868a3f3fd",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-7557ed054e-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "546860b5c092303f8b3125e684ec5b21972b28bcdb0231e89d42ad6953802a2b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-7557ed054e-postgres-integration-bp1-pass.log",
+    "raw_sha256": "22f32988f43ac7cc729f3ee135f4cef3319b3b2c262bc2baddcddd93b4f05c6b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-7557ed054e-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "d203500a41983a5965046ba1882ebc6a496ef39d10c0b923b3fe48273ff9831e"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-7557ed054e-postgres-integration-bp5-pass.log",
+    "raw_sha256": "8c44ed9ddc35637bd624834e104e54a3e6def42f82a04ccc348e4f532fc59438",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-7557ed054e-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "913d3878897d60fec92c368311ec991992d49c465cf284ad53d5f5b3770c6829"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-91f0a7c57a-postgres-ai-bp5-pass.log",
+    "raw_sha256": "06bdbb4ac6f38ad57dac7397a63f65cd120049080776ccd6fa7d3caa2144871a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-91f0a7c57a-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "5a6ade1fbde73364a615dd8556aaa242c73c1d4eafde9d306cb4f25e3c5d052d"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-91f0a7c57a-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "87c2bdb39f72916ae794457f2fe6ff039bccf4f1d4d03e25824a36805f06a91a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-91f0a7c57a-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "70ef0e4e0d50f72d3610e8985f752538a3ee4bdf6a9b7649b1009d21b3916856"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-91f0a7c57a-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "e6c6f8aa362e4de614a531fe0d111003070b9d71595f4cb4a342f44ff16d8db3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-91f0a7c57a-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "227fcc8cf5070c1d80f33ce00ca86b52677f2325a1e81027a84bf82d8fb81095"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-91f0a7c57a-postgres-experience-bp1-pass.log",
+    "raw_sha256": "4eb3d56d8ef4faeb0d0b82a87cbd5373c538707c344d608ea7db44b543c4876b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-91f0a7c57a-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "2b6e14d6fcce1d6f4c66dcd4237371bee0e41c4dbcf62a2d5f10140999a9adff"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-91f0a7c57a-postgres-experience-bp5-pass.log",
+    "raw_sha256": "2f1939a710703a9cc35eb2b21d06566c57fa588758e013e3c255a78aa381c74a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-91f0a7c57a-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "b658e0321a450ae92b1d103e091c7dd17f978b1efa965613aea835084e1bdda3"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-91f0a7c57a-postgres-integration-bp1-pass.log",
+    "raw_sha256": "9a3adab69db175991e6b3e4035e25acccda2dade877cbb5c7713657055f70738",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-91f0a7c57a-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "1646c4a08c11bfc1185c4e6132db16893e785ad79e097f869bafb44f86752186"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-91f0a7c57a-postgres-integration-bp5-pass.log",
+    "raw_sha256": "bbcbe8ad085a809467cfdb5fbe2f7f1787afec00c6af120b793ef6765eee5928",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-91f0a7c57a-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "f9ba462f278b05df41243b25e917e9ca995b193c4d7fa4fbb9999e3bf40c38e4"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b0d6b48bcd-postgres-ai-bp5-pass.log",
+    "raw_sha256": "92139e968ce78c229ecdb1566f26d3ddc252e0e48d978dde96c46f319a5f1fd4",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b0d6b48bcd-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "c363ee11b7c82fe0cc59204532f77161a4cff50ef9714fd718ad01e2452c5dc9"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b0d6b48bcd-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "73831af6e0afcde1735d4157c53e1842ac2cbd53bbff9f3b1aa4cf796b0ee981",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b0d6b48bcd-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "e56fd0bf65cc1ceff96328c8ea2df046507a328ba55a8b856e6a7e4c53e64b23"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b0d6b48bcd-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "143940f2f6d3706bb843911755ed422bb9c43f9094019f91c3e145e4eb26d9c8",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b0d6b48bcd-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "e5eec4c199139e08cbbfeaae25089108c15c9e8f004f273a80e83e99fdbc3202"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b0d6b48bcd-postgres-experience-bp1-pass.log",
+    "raw_sha256": "5dd91e1d74a913046f46888429d19e8c09141207e1c80937e486e5495266595a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b0d6b48bcd-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "b94fd3d5c32ff14048e7ffd56598480562b0f6ad19531e2231873748570aedd3"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b0d6b48bcd-postgres-experience-bp5-pass.log",
+    "raw_sha256": "9f16680311cbeb6cee73a9bad2233acc1e393406a618a7fe31d2fdad24facda3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b0d6b48bcd-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "95126284cdf73cd554c2f7a65e553a2839d332a95fee0b553e4da82e7ac20a59"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b0d6b48bcd-postgres-integration-bp1-pass.log",
+    "raw_sha256": "7d8ab9174b117ea9f625da3d208263415d1b19e277dcc2041c8513ddc0ef1b8a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b0d6b48bcd-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "60169c4ab7d0fabfd7458b139bb75baf08752c18f2d3dc48f4bef597c64319ab"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b0d6b48bcd-postgres-integration-bp5-pass.log",
+    "raw_sha256": "a15b63dcadcb1ba623aa04abdc9fda2625b4b55cd9f898d1d1e47379ccc07633",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b0d6b48bcd-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "5dccb6cac569fb96f1e6a6b44093e3a1637de458ec0e31769534c9aaef1fe41f"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b239b5d204-postgres-ai-bp5-pass.log",
+    "raw_sha256": "32894a6353763a1e8e9d021cee44f37409790535395b3364ac76dc491e2b5e2c",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b239b5d204-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "da33a342d61c8b180658cb4f7fefbcc5c8b2c823314ca32ce502982e5db9202b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b239b5d204-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "4f9bf9e5420316ccd24a0e8578c5f79df29792f205366830f904632ca15b6d44",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b239b5d204-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "9ef380643d970cb92e5ecc307dc818da434dff39c81de725dcfebc81e4cfc77b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b239b5d204-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "ee470e00151d52e859d2a2d6299821ae4c4c0507d0bb90a7d50c36ec0e5bb6c3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b239b5d204-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "3dc4b829d911463c041930b02b2e66c3a9cc2c2303f32b9cb0bec5e8880e6a83"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b239b5d204-postgres-experience-bp1-pass.log",
+    "raw_sha256": "5e5fd20fa65bbfb9eed008161f230dea011ab29dee375dc0325fe64231efdbd1",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b239b5d204-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "68f30409feb2522b80335309d7b6d43441f6084772d2317a2e3e1cf921e1cd2b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b239b5d204-postgres-experience-bp5-pass.log",
+    "raw_sha256": "ef045cb78ea81c2745748735ffd5c7cde48b31620cc78e23791d8326ad6a6de8",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b239b5d204-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "48f281a2c46a34550fdc7c75d94fa6d05c970e5fe337bd61ee5792ea1441c717"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b239b5d204-postgres-integration-bp1-pass.log",
+    "raw_sha256": "88e347c5198b56938c7fe4d20b6832cc1a9600dea37670466ceeb5108dbdf829",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b239b5d204-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "bcc51d5ef7d21a7951ecfff83a22c37540326ab47b55d29978f05be8d779a399"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b239b5d204-postgres-integration-bp5-pass.log",
+    "raw_sha256": "b892bb6428051ceb89e092caa296a24ecb0929096fe401a0f6753a71e0ee776a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b239b5d204-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "48177643b18471134098921a621b1ef3ec538f084ed64f25e91a86767151a06e"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b7e31cb8f6-postgres-ai-bp5-pass.log",
+    "raw_sha256": "dc7706a7c93feaf8a3a397591fd2090fb823caad4b59a147995701c64f40465e",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b7e31cb8f6-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "9538506dfd02f0a0ceb7d10b9a9fed3327bac47377168839e33a6b01c24cbe35"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b7e31cb8f6-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "8606c7f79c596ece017d73541d0afa7b0575721c1583d6f6cdc99833548bf0ff",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b7e31cb8f6-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "fd0972f19a7982b251e0e55624b2911e837a71e94ba2bd320b88f04e7b83cd62"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b7e31cb8f6-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "e31ea0e9dee410d9a38375e4c6aa77fe71bd8e006cd7df6ac8f28a3a9e0fb0b6",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b7e31cb8f6-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "6c35c291d5529254a0d333700752641894f673495e1c6113af110d2703d23168"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b7e31cb8f6-postgres-experience-bp1-pass.log",
+    "raw_sha256": "5b6e2b24817c7ef30327455d1790cdd105d8744f798f299c8700a97d94a537c0",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b7e31cb8f6-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "1c3407940cb3d864df7d941878f943618a895a6b725e79c455222a7b9dc9522d"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b7e31cb8f6-postgres-experience-bp5-pass.log",
+    "raw_sha256": "5545a349f89ead0b82b0d6cbf5a523d32e7fccce299bc2356bbed3e4dc9d5840",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b7e31cb8f6-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "4cdfef7726b75c29070cdb9aa6f32d9ae0e0afcbc82d6c33bd8779203c3da45c"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b7e31cb8f6-postgres-integration-bp1-pass.log",
+    "raw_sha256": "aac16e29e2fa3fb0271610a46b71634786ce8a4d1b5e4b41bcb7e6c54216ff45",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b7e31cb8f6-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "255219ed87d40fa3ea65ef6a01b8488dee0f4c235cdb785364ad044c5c5f09de"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-b7e31cb8f6-postgres-integration-bp5-pass.log",
+    "raw_sha256": "97d6ede91d01ef9b68a6ace5c53263c3454a76b55aeb0f20111e9cd6b013a31b",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-b7e31cb8f6-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "6cbb531b91594a207ec496e9fd232a9191285d45d59ba4762bde042ab49db9b3"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-d30c94613e-postgres-ai-bp5-pass.log",
+    "raw_sha256": "07521f43e8174ce978ede7a0b4d994b0e07287a649289658575e072fd20efbb1",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-d30c94613e-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "2fb67282736ec2d5c6da4eba419b0e5652d14b956f2214325d1181d5fcce2082"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-d30c94613e-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "73d7b6374c126c6a653e9c85d5c081ca59befbd5938360d667b91fda961504ed",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-d30c94613e-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "1fa2439d98b8a13647ca190955b0099a5a6aaa461487707f732f3ad1ced78b73"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-d30c94613e-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "0b215c2afd501cbbe3b46b042e19025caca1047c7c716894d9260d6d66508a4a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-d30c94613e-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "91cfa002de72804bc05805c6c5f18392d2ffd1ecc514d5096427545d23c4c23a"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-d30c94613e-postgres-experience-bp1-pass.log",
+    "raw_sha256": "29e3063d911c39494db6478636149553b795d9ee9f2f92d5f6f51e36150f51c6",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-d30c94613e-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "92d3a4925c05fe53a95f73e58c174635cfd62e9400e2a04d5dcb9e6fe92d560f"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-d30c94613e-postgres-experience-bp5-pass.log",
+    "raw_sha256": "5486e80f579ac91623d2ab3c1523e6e763379cbe450a85275cc8bdcc29290a71",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-d30c94613e-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "3fb2cbfecab43e665741c85bd1a5f7ee705978bdafe9220e8018de7ed37c1bb0"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-d30c94613e-postgres-integration-bp1-pass.log",
+    "raw_sha256": "aa774109895368357b2dbbd5249918f2a76f158955d69e43aecbf09cb05fecb3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-d30c94613e-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "0334217ca9d0836204d405babd526dd11aa6180b21df549a4912ea1e08e8a524"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-d30c94613e-postgres-integration-bp5-pass.log",
+    "raw_sha256": "2134dc0536943e6ec6e684f9e33ac2399a3c9f1ce3d1dee59c050f047d725f32",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-d30c94613e-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "5bb1b6e8765d1ab780961747ce7c3bb26e2e24612e6de5d13b94000003ebf65e"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-e8f978ba1e-postgres-ai-bp5-pass.log",
+    "raw_sha256": "291d6cfb8723999854f55ef84a9dca09ec358239a4890018ee06c34ab2ec0a2a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-e8f978ba1e-postgres-ai-bp5-pass.log",
+    "evidence_sha256": "eca736716917adbcbc4da297be7c66c4072de9a695976d596afd87446f024a6a"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-e8f978ba1e-postgres-commerce-bp1-pass.log",
+    "raw_sha256": "2627eedc701db555e115f56edcb3fda4da822ac267d753e6d8270fd7afb6b2c3",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-e8f978ba1e-postgres-commerce-bp1-pass.log",
+    "evidence_sha256": "4a9029aadb51043a6fd2d7584a7fa0d1c5089dd33a31c2f265723acf6c0cda2b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-e8f978ba1e-postgres-commerce-bp5-pass.log",
+    "raw_sha256": "16256fc072217622aacc15c78ee4897c066e7db414ba6321f1d5a78b49ae2d04",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-e8f978ba1e-postgres-commerce-bp5-pass.log",
+    "evidence_sha256": "1fb24bc1bed83281ebacbe4f994d7d4bb08092aa3f1b0974dad809ced98b216d"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-e8f978ba1e-postgres-experience-bp1-pass.log",
+    "raw_sha256": "807d71fa4812e68a660fbee56893938970aafc31383f1ece021f5acc5ade2811",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-e8f978ba1e-postgres-experience-bp1-pass.log",
+    "evidence_sha256": "27ad2a6bc19bbde14163eb2373187169a47ad9885f3cdaabbb3f9c403ced6f2b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-e8f978ba1e-postgres-experience-bp5-pass.log",
+    "raw_sha256": "08d314bb334c60a335eb745ffe07abb6b5e62a9fd65bd9ec6aaa9d44e156918f",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-e8f978ba1e-postgres-experience-bp5-pass.log",
+    "evidence_sha256": "15a1f3ae2ca92195d2f690723e9f845f567e289ddee509b192fcf1679679f40b"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-e8f978ba1e-postgres-integration-bp1-pass.log",
+    "raw_sha256": "49a71b9d5c847a1b0c36d521477d1b83de3201456b0b18269ea45465f927f1c1",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-e8f978ba1e-postgres-integration-bp1-pass.log",
+    "evidence_sha256": "5376e8020f6d0ce1ac6e4b257d2d567ef56e9401c7c0875e835866db282a0fdd"
+  },
+  {
+    "raw_path": ".build/payment001/database-evidence/nigson-test-plat-e8f978ba1e-postgres-integration-bp5-pass.log",
+    "raw_sha256": "3a9ded1ffe5fcd8edd4b171d7588c2f207bd34808bf3d108d6ef9f04623b9e9f",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-COM-PAYME-001/nigson-test-plat-e8f978ba1e-postgres-integration-bp5-pass.log",
+    "evidence_sha256": "2456edaa6421507036a02f240c4cfbd6bfe8f3efecb93823c1220a2442849cb3"
+  }
+]

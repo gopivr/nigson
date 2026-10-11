@@ -28,7 +28,8 @@ public final class TrustFilter extends OncePerRequestFilter {
             } else {
                 if(single(req,"X-Nigson-Actor")!=null||single(req,"Authorization")!=null)throw ActorAssertion.denied();
                 boolean publicCatalogue=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}"));
-                String id=publicCatalogue?null:cookies.read(req);
+                boolean providerCallback=req.getMethod().equals("POST")&&req.getRequestURI().equals("/api/v1/webhooks/payments/paystack");
+                String id=publicCatalogue||providerCallback?null:cookies.read(req);
                 // Login/callback/session public controllers (next task) explicitly invoke their own typed flow.
                 if(id!=null&&!publicCatalogue&&!Set.of("/bff/login","/bff/callback","/bff/session").contains(req.getRequestURI())){
                     var record=sessions.read(id,true);if(Set.of("POST","PUT","PATCH","DELETE").contains(req.getMethod()))sessions.csrf(record,single(req,"X-CSRF-TOKEN"));proof=authority.resolve(record,null,Set.of());

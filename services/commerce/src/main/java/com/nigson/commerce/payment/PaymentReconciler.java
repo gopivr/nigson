@@ -1,0 +1,29 @@
+package com.nigson.commerce.payment;
+
+import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.time.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import com.nigson.commerce.order.*;
+import com.nigson.commerce.platform.PlatformStore;
+import com.nigson.shared.events.EventCodec;
+import com.nigson.shared.problem.*;
+import com.nigson.shared.security.PrivateWorkload;
+
+/** Immutable owned batch plans precede read-only provider HTTP; final results survive replay. */
+public final class PaymentReconciler {
+ private final JdbcTemplate jdbc;private final PlatformStore commands;private final OrderPolicy binding;private final PaymentPolicy policy;private final CheckoutPayments payments;private final RefundOperations refunds;private final PaymentReceiptProcessor receipts;private final Clock clock;
+ public PaymentReconciler(JdbcTemplate jdbc,PlatformStore commands,OrderPolicy binding,PaymentPolicy policy,CheckoutPayments payments,RefundOperations refunds,PaymentReceiptProcessor receipts,Clock clock){this.jdbc=jdbc;this.commands=commands;this.binding=binding;this.policy=policy;this.payments=payments;this.refunds=refunds;this.receipts=receipts;this.clock=clock;}
+ private String cursor(String raw){if(raw==null)return "0:00000000-0000-0000-0000-000000000000";try{String decoded=new String(Base64.getUrlDecoder().decode(raw),StandardCharsets.US_ASCII);if(!decoded.matches("[1-3]:[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}")||!encode(decoded).equals(raw))throw ApiValues.invalid();return decoded;}catch(IllegalArgumentException invalid){throw ApiValues.invalid();}}
+ private String encode(String value){return Base64.getUrlEncoder().withoutPadding().encodeToString(value.getBytes(StandardCharsets.US_ASCII));}
+ private String principal(PrivateWorkload.Proof proof){if(proof==null||proof.actor()!=null||!"nigson-integration".equals(proof.client())||proof.subject()==null||!proof.subject().matches("[A-Za-z0-9._:-]{1,100}")||!PrivateWorkload.ROUTES.stream().anyMatch(r->r.api().equals("API-118")&&r.equals(proof.route())))throw new Problem.Failure(ProblemCode.ACCESS_DENIED);return proof.client()+":"+proof.subject();}
+ public PaymentValues.ReconciliationResult reconcile(PrivateWorkload.Proof proof,PaymentValues.Reconciliation input,String key,UUID correlation){String principal=principal(proof);policy.require();if(!binding.enabled())throw new Problem.Failure(ProblemCode.FEATURE_DISABLED);ApiValues.idempotencyKey(key);ApiValues.uuid(correlation==null?null:correlation.toString());if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");String after=cursor(input.cursor());var request=EventCodec.JSON.valueToTree(Map.of("input",input,"key",key));String planKey=input.jobId()+":"+EventCodec.hash(EventCodec.JSON.valueToTree(Map.of("cursor",after))).substring(0,32);
+  commands.executeLocal(principal,"API-118.intent",key,request,db->new PlatformStore.Response(202,EventCodec.JSON.valueToTree(Map.of("jobId",input.jobId())),input.jobId()));
+  var plan=commands.executeLocal(principal,"API-118.plan",planKey,request,db->{var rows=db.queryForList("SELECT kind,id,position FROM (SELECT 1 AS kind,id,'1:'||id::text AS position FROM commerce.webhook_receipt WHERE provider='PAYSTACK' AND merchant_account=? AND state IN ('RECEIVED','RETRY') UNION ALL SELECT 2 AS kind,order_id AS id,'2:'||order_id::text AS position FROM commerce.payment_attempt WHERE provider='PAYSTACK' AND merchant_account=? AND provider_mode=? AND state IN ('INITIATING','PENDING','UNKNOWN') AND (next_reconcile_at IS NULL OR next_reconcile_at<=?) UNION ALL SELECT 3 AS kind,r.id,'3:'||r.id::text AS position FROM commerce.refund r JOIN commerce.payment_attempt a ON a.id=r.attempt_id WHERE a.provider='PAYSTACK' AND a.merchant_account=? AND a.provider_mode=? AND r.state IN ('SUBMITTING','PENDING','UNKNOWN')) work WHERE position>? ORDER BY position LIMIT ?",binding.merchantAccount(),binding.merchantAccount(),binding.mode(),java.sql.Timestamp.from(clock.instant()),binding.merchantAccount(),binding.mode(),after,input.limit()+1);boolean more=rows.size()>input.limit();var selected=rows.subList(0,Math.min(rows.size(),input.limit()));return new PlatformStore.Response(202,EventCodec.JSON.valueToTree(Map.of("items",selected,"more",more)),input.jobId());});
+  if(commands.completed(principal,"API-118",key)){var replay=commands.executeLocal(principal,"API-118",key,request,db->{throw new IllegalStateException("RECONCILIATION_RESULT_REQUIRED");});return result(replay);}
+  int processed=0,mismatches=0;String position=after;long deadline=System.nanoTime()+Duration.ofSeconds(20).toNanos();var items=plan.body().path("items");for(var item:items){if(System.nanoTime()>=deadline)break;UUID id=ApiValues.uuid(item.path("id").asString());int kind=item.path("kind").asInt();if(kind==1){String state=receipts.process(id,correlation);if(state.equals("REJECTED"))mismatches++;}else if(kind==2)payments.inspect(id,correlation);else if(kind==3)refunds.inspect(id,correlation);else throw PaymentValues.rule();processed++;position=item.path("position").asString();}
+  String next=processed<items.size()||plan.body().path("more").asBoolean()?encode(position):null;var outcome=new PaymentValues.ReconciliationResult(processed,next,mismatches);return result(commands.executeLocal(principal,"API-118",key,request,db->new PlatformStore.Response(202,EventCodec.JSON.valueToTree(outcome),input.jobId())));
+ }
+ private PaymentValues.ReconciliationResult result(PlatformStore.Response response){var body=response.body();return new PaymentValues.ReconciliationResult(body.path("processed").asInt(),body.path("nextCursor").isNull()?null:body.path("nextCursor").asString(),body.path("mismatches").asInt());}
+}

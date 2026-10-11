@@ -1,0 +1,13 @@
+{
+  "paths": 66,
+  "operations": 72,
+  "new_operations": [
+    "API-041",
+    "API-042",
+    "API-052",
+    "API-053",
+    "API-054",
+    "API-118"
+  ],
+  "prior_operations_preserved": 66
+}

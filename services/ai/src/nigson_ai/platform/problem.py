@@ -42,6 +42,7 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Refresh the resource before retrying.",
     ),
     "CHECKOUT_REPRICE_REQUIRED": (409, "Checkout quote changed", "Refresh the checkout quote before continuing."),
+    "PAYMENT_RULE_VIOLATION": (422, "Payment rule violation", "The payment or refund operation does not meet verified financial rules."),
     "ORDER_RULE_VIOLATION": (422, "Order rule violation", "The order operation does not meet current purchase rules."),
     "FULFILLMENT_RULE_VIOLATION": (
         422,

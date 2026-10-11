@@ -1,0 +1,98 @@
+{
+  "suites": [
+    {
+      "file": "services/experience/target/surefire-reports/TEST-com.nigson.experience.BuildCompatibilityTest.xml",
+      "suite": "com.nigson.experience.BuildCompatibilityTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.commerce.BuildCompatibilityTest.xml",
+      "suite": "com.nigson.commerce.BuildCompatibilityTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.payment.PaystackWebhookProtocolTest.xml",
+      "suite": "com.nigson.acceptance.payment.PaystackWebhookProtocolTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.payment.PaymentReceiptKeysTest.xml",
+      "suite": "com.nigson.acceptance.payment.PaymentReceiptKeysTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.payment.PaymentActivationTest.xml",
+      "suite": "com.nigson.acceptance.payment.PaymentActivationTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.order.OrderPersistenceTest.xml",
+      "suite": "com.nigson.acceptance.order.OrderPersistenceTest",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.payment.PaymentPayloadCipherTest.xml",
+      "suite": "com.nigson.acceptance.payment.PaymentPayloadCipherTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.payment.PaymentValuesTest.xml",
+      "suite": "com.nigson.acceptance.payment.PaymentValuesTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.commerce.security.SecurityAssemblyTest.xml",
+      "suite": "com.nigson.commerce.security.SecurityAssemblyTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.payment.PaymentPersistenceTest.xml",
+      "suite": "com.nigson.acceptance.payment.PaymentPersistenceTest",
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/integration/target/surefire-reports/TEST-com.nigson.integration.BuildCompatibilityTest.xml",
+      "suite": "com.nigson.integration.BuildCompatibilityTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 64,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

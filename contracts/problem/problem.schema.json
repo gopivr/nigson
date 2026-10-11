@@ -72,7 +72,8 @@
         "CART_RULE_VIOLATION",
         "CHECKOUT_REPRICE_REQUIRED",
         "FULFILLMENT_RULE_VIOLATION",
-        "ORDER_RULE_VIOLATION"
+        "ORDER_RULE_VIOLATION",
+        "PAYMENT_RULE_VIOLATION"
       ]
     },
     "timestamp": {

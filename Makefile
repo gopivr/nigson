@@ -202,3 +202,8 @@ fulfillment-check:
 order-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/order/verify.py
+
+.PHONY: payment-check
+payment-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/payment/verify.py
