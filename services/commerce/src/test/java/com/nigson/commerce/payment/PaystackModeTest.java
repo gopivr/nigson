@@ -24,8 +24,8 @@ class PaystackModeTest {
   assertThat(new PaystackAdapter("test",ProviderHttp.Mode.MOCK,"http://127.0.0.1:1","sk_mock_nigson")).isNotNull();
   // Only syntactic mode/endpoint/key validation is exercised here. No genuine qualification implied.
   assertThat(new PaystackAdapter("stage",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_test_abcdef0123456789abcdef0123456789abcdef01")).isNotNull();
-  assertThat(new PaystackAdapter("prod",ProviderHttp.Mode.LIVE,"https://api.paystack.co","sk_live_abcdef0123456789abcdef0123456789abcdef01")).isNotNull();
-  assertThatThrownBy(()->new PaystackAdapter("stage",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_live_abcdef0123456789abcdef0123456789abcdef01")).hasMessage("PAYSTACK_KEY_MODE_INVALID");
+  assertThat(new PaystackAdapter("prod",ProviderHttp.Mode.LIVE,"https://api.paystack.co","sk_live_ab12")).isNotNull();
+  assertThatThrownBy(()->new PaystackAdapter("stage",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_live_ab12")).hasMessage("PAYSTACK_KEY_MODE_INVALID");
  }
  @Test void koboConversionNeverRoundsOrAcceptsThirdFractionalZeros(){
   assertThat(PaystackAdapter.kobo("1234.56")).isEqualTo(123456);

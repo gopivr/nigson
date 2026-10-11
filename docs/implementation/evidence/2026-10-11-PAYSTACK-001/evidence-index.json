@@ -124,5 +124,29 @@
     "raw_sha256": "bbd30dc32eb42e52e6f828e2d98d27334288578a0d0e7c96f997ee3b5c5b9b5f",
     "evidence_path": "docs/implementation/evidence/2026-10-11-PAYSTACK-001/database-evidence/nigson-test-plat-2a1bbbb6db-postgres-integration-bp5-pass.log",
     "evidence_sha256": "906912f4d6a5f57851896c88aa05a44a32853738736bae324d356a4a11802e96"
+  },
+  {
+    "raw_path": ".build/paystack-contract-tracked-final.log",
+    "raw_sha256": "5c9b5be7622a85fb40dbf163eae76fbd6cabece07e75e5ead661a996edeca90c",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-PAYSTACK-001/paystack-contract-tracked-final.log",
+    "evidence_sha256": "5c9b5be7622a85fb40dbf163eae76fbd6cabece07e75e5ead661a996edeca90c"
+  },
+  {
+    "raw_path": ".build/paystack-mode-tracked-final.log",
+    "raw_sha256": "fab2b5ba2fc446e5c52b7700ddfe0141c324d686a37b0f052d58d6b94c35b31c",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-PAYSTACK-001/paystack-mode-tracked-final.log",
+    "evidence_sha256": "fc6d686b2bbef3b213dc3c2fc2a91fa0862a21b941bee2d4c9ad0395edc1edd8"
+  },
+  {
+    "raw_path": ".build/paystack-readiness-tracked-final.log",
+    "raw_sha256": "2b8a5c7e7bfdde85bf100dde94d4f0d07df6f886aca0c69849d08d8bb7a0973a",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-PAYSTACK-001/paystack-readiness-tracked-final.log",
+    "evidence_sha256": "2b8a5c7e7bfdde85bf100dde94d4f0d07df6f886aca0c69849d08d8bb7a0973a"
+  },
+  {
+    "raw_path": ".build/paystack-repository-tracked-final.log",
+    "raw_sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8",
+    "evidence_path": "docs/implementation/evidence/2026-10-11-PAYSTACK-001/paystack-repository-tracked-final.log",
+    "evidence_sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8"
   }
 ]

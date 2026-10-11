@@ -38,7 +38,7 @@ class PaystackReadiness(unittest.TestCase):
                 env = self.config(); env[setting] = ''; self.blocked(env)
 
     def test_known_fixture_credentials_cannot_reach_provider(self):
-        for value in ('sk_mock_nigson', 'sk_test_configuration_validation_only', 'sk_test_synthetic', 'sk_test_fixture', 'sk_test_shape_only', 'sk_test_dummy', 'sk_test_placeholder', 'sk_test_changeme', 'sk_test_your_secret', 'sk_test_0000000000000', 'sk_test_value\n', 'sk_live_abcdef0123456789'):
+        for value in ('sk_mock_nigson', 'sk_test_configuration_validation_only', 'sk_test_synthetic', 'sk_test_fixture', 'sk_test_shape_only', 'sk_test_dummy', 'sk_test_placeholder', 'sk_test_changeme', 'sk_test_your_secret', 'sk_test_0000000000000', 'sk_test_value\n', 'sk_live_ab12'):
             with self.subTest(value=value):
                 env = self.config(); env['PAYSTACK_SECRET_KEY'] = value; self.blocked(env)
 
