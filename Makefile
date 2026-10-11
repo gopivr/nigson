@@ -207,3 +207,10 @@ order-check:
 payment-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/payment/verify.py
+
+.PHONY: paystack-check
+paystack-check:
+	python3 scripts/contracts/authorization.py --check
+	python3 -m unittest discover -s tests/providers/paystack
+	ENV=test python3 scripts/platform/provider_check.py
+	ENV=test python3 scripts/paystack/verify.py

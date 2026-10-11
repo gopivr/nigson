@@ -10,6 +10,10 @@ import java.util.*;
 /** Explicit operator-invoked genuine, read-only HTTP qualification. No invented account/reference. */
 public final class ProviderLiveQualification {
  private static String setting(String key){String value=System.getenv(key);if(value==null||value.isBlank())throw new IllegalArgumentException("MISSING_"+key);return value;}
+ static void verifiedSettlement(tools.jackson.databind.JsonNode result){
+  if(!result.path("status").asString().equals("success")||!result.path("id").isIntegralNumber()||result.path("id").asLong()<=0)throw new IllegalArgumentException("PAYSTACK_QUALIFICATION_REQUIRES_VERIFIED_SETTLEMENT");
+  try{java.time.Instant.parse(result.path("paid_at").asString());}catch(RuntimeException invalid){throw new IllegalArgumentException("PAYSTACK_QUALIFICATION_SETTLEMENT_TIME_INVALID");}
+ }
  public static void main(String[] args)throws Exception{
   if(!setting("ENV").equals("stage"))throw new IllegalArgumentException("LIVE_QUALIFICATION_REQUIRES_STAGE");
   String selected=System.getenv().getOrDefault("PROVIDER","all");
@@ -17,7 +21,8 @@ public final class ProviderLiveQualification {
   if(selected.equals("all")||selected.equals("paystack")){
    var mode=ProviderHttp.Mode.valueOf(setting("PAYSTACK_MODE"));if(mode!=ProviderHttp.Mode.TEST)throw new IllegalArgumentException("PAYSTACK_QUALIFICATION_REQUIRES_TEST_KEY");
    var client=new PaystackAdapter("stage",mode,setting("PAYSTACK_BASE_URL"),setting("PAYSTACK_SECRET_KEY"));
-   client.verify(setting("PAYSTACK_QUALIFICATION_REFERENCE"),Long.parseLong(setting("PAYSTACK_QUALIFICATION_KOBO")));
+   var result=client.verify(setting("PAYSTACK_QUALIFICATION_REFERENCE"),Long.parseLong(setting("PAYSTACK_QUALIFICATION_KOBO")));
+   verifiedSettlement(result);
   }
   if(selected.equals("all")||selected.equals("fedex")){
    var mode=ProviderHttp.Mode.valueOf(setting("FEDEX_MODE"));if(mode!=ProviderHttp.Mode.TEST)throw new IllegalArgumentException("FEDEX_QUALIFICATION_REQUIRES_SANDBOX");

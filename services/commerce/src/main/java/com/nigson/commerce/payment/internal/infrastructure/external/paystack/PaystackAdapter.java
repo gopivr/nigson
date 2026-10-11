@@ -11,6 +11,7 @@ public final class PaystackAdapter {
  private final ProviderHttp http;private final String key;private final ProviderHttp.Mode mode;
  public PaystackAdapter(String environment,ProviderHttp.Mode mode,String endpoint,String key){
   if(key==null)throw new IllegalArgumentException("PAYSTACK_KEY_MISSING");
+  if(mode!=ProviderHttp.Mode.MOCK&&(key.toLowerCase(Locale.ROOT).matches(".*(synthetic|fixture|configuration_validation|shape_only|changeme|your_secret|test_key).*" )||key.matches("sk_(test|live)_0+")))throw new IllegalArgumentException("PAYSTACK_SYNTHETIC_KEY_DENIED");
   if(mode==ProviderHttp.Mode.MOCK&&!key.equals("sk_mock_nigson")||mode==ProviderHttp.Mode.TEST&&!key.startsWith("sk_test_")||mode==ProviderHttp.Mode.LIVE&&!key.startsWith("sk_live_"))throw new IllegalArgumentException("PAYSTACK_KEY_MODE_INVALID");
   http=new ProviderHttp(environment,mode,endpoint,"paystack-mock",Set.of("api.paystack.co"),key);this.key=key;this.mode=mode;
  }

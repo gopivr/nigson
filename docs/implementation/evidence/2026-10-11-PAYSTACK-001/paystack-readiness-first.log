@@ -1,0 +1,17 @@
+......F
+======================================================================
+FAIL: test_required_settings_fail_before_build (test_readiness.PaystackReadiness.test_required_settings_fail_before_build) (setting='PAYSTACK_SECRET_KEY')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/providers/paystack/test_readiness.py", line 37, in test_required_settings_fail_before_build
+    env = self.config(); env[setting] = ''; self.blocked(env)
+                                            ~~~~~~~~~~~~^^^^^
+  File "/Users/gopiravi/workspace/nigson/tests/providers/paystack/test_readiness.py", line 31, in blocked
+    self.assertNotIn(env.get('PAYSTACK_SECRET_KEY', 'redacted'), message)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' unexpectedly found in 'BLOCKED: genuine PAYSTACK_SECRET_KEY required; no provider call made'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.021s
+
+FAILED (failures=1)

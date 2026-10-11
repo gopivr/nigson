@@ -1,0 +1,18 @@
+[
+  "IMPLEMENTATION_STATUS.md",
+  "Makefile",
+  "contracts/providers/paystack/qualification.json",
+  "docs/RELEASE_CONFIGURATION.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-11-PAYSTACK-001.md",
+  "docs/runbooks/paystack-qualification.md",
+  "docs/runbooks/providers.md",
+  "scripts/paystack/verify.py",
+  "scripts/platform/provider_live_check.py",
+  "scripts/platform/provider_readiness.py",
+  "services/commerce/src/main/java/com/nigson/commerce/payment/internal/infrastructure/external/paystack/PaystackAdapter.java",
+  "services/commerce/src/test/java/com/nigson/commerce/payment/PaystackModeTest.java",
+  "tests/providers/paystack/test_readiness.py",
+  "tests/providers/src/com/nigson/providers/ProviderLiveQualification.java",
+  "tests/providers/src/com/nigson/providers/ProviderQualification.java"
+]

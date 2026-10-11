@@ -197,3 +197,7 @@ Use the explicit configuration and key-rotation procedure in [session/private tr
 ## NGN-001 approved metadata baseline —10 October2026
 
 Additive BP1 migration024 seeds deterministic NG/Nigeria, active NGN2 and disabled destination NG; new market/delivery remain disabled with unresolved tax/address/returns/book. Country/currency approval is complete. Existing compatible policies/IDs are preserved; incompatible scale/currency fails before writes. No service-area/tax/price/provider approval is fabricated. See docs/runbooks/nigeria-baseline.md. Currency support never implies permission to sell.
+
+## Paystack qualification gate
+
+Use [Paystack qualification](runbooks/paystack-qualification.md) for the exact offline command and genuine read-only prerequisites. Known configuration-only/synthetic credentials are rejected before HTTP; missing or invalid stage/TEST/official endpoint/reference/kobo configuration stops before builds. A matching successful verification response does not establish hosted checkout/refund/callback/account or whole BP1 release qualification. Actual merchant/key association and integration metadata remain required activation inputs.

@@ -73,3 +73,5 @@ an operator-supplied FedEx shipment-request file, or an existing Twilio message
 SID. Missing/dummy input is refused before a provider call. No live check runs
 automatically. Read-only success does not qualify financial settlement, route
 eligibility, template/sender approval or the complete release workflow.
+
+Paystack launch adapter and financial qualification: [offline and genuine qualification](paystack-qualification.md). `make paystack-check` adds native owned financial workflows and fail-closed release preflight to the provider HTTP regression. Genuine qualification remains independent of synthetic acceptance.

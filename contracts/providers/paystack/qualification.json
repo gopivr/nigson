@@ -1,0 +1,31 @@
+{
+  "specification": "1.1.0",
+  "task": "PAYSTACK-001",
+  "provider": "PAYSTACK",
+  "scope": "offline stateful HTTP and owned financial acceptance; genuine account/release qualification NOT_RUN",
+  "adapter": "services/commerce/src/main/java/com/nigson/commerce/payment/internal/infrastructure/external/paystack/PaystackAdapter.java",
+  "financial_source_commit": "a7e5f9a18998988e36fa64c1a6b4c03f7f062d26",
+  "apis": [
+    "API-041",
+    "API-042",
+    "API-052",
+    "API-053",
+    "API-054",
+    "API-118"
+  ],
+  "command": "ENV=test make paystack-check",
+  "tests": {
+    "TEST-WEBHOOK-DUP": "PaymentPersistenceTest and PaystackWebhookProtocolTest",
+    "TEST-PAYMENT-UNKNOWN": "OrderPersistenceTest and PaymentPersistenceTest",
+    "TEST-PARTIAL-REFUND": "PaymentPersistenceTest",
+    "TEST-NGN-KOBO": "PaystackModeTest and actual provider HTTP qualification",
+    "TEST-PAYSTACK-MODE-SWITCH": "PaystackModeTest and tests/providers/paystack/test_readiness.py"
+  },
+  "modes": {
+    "MOCK": "local/test stateful HTTP only; synthetic credentials",
+    "TEST": "official HTTPS with genuine test credentials; production denied",
+    "LIVE": "official HTTPS with genuine live credentials; production requires complete activation inputs"
+  },
+  "genuine_read_only": "scripts/platform/provider_live_check.py; explicit stage/TEST/actual reference/kobo; verified success required; no create/refund",
+  "runbook": "docs/runbooks/paystack-qualification.md"
+}
