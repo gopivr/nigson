@@ -40,13 +40,13 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
    if(path.equals("/__scenario/state")&&method.equals("GET"))return reply(200,state,0);
    if(path.equals("/__scenario/configure")&&method.equals("POST")){
     var input=JSON.readTree(request.getBodyAsString());String scenario=input.path("scenario").asText();
-    if(!Set.of("success","decline","rate-limit","unavailable","timeout-after-acceptance","booking-response-lost","duplicate-status","out-of-order-status").contains(scenario))return reply(400,Map.of("code","SCENARIO_INVALID"),0);
+    if(!Set.of("success","decline","rate-limit","unavailable","timeout-after-acceptance","booking-response-lost","duplicate-status","out-of-order-status","invalid-verification").contains(scenario))return reply(400,Map.of("code","SCENARIO_INVALID"),0);
     state.put("scenario",scenario);save();return reply(200,Map.of("scenario",scenario),0);
    }
    if(path.equals("/__scenario/progress")&&method.equals("POST")){
     var input=JSON.readTree(request.getBodyAsString());var op=operations().get(input.path("id").asText());String status=input.path("status").asText();
     if(op==null||!Set.of("success","failed","pending","processed","queued","sent","delivered","undelivered","cancelled","in_transit").contains(status))return reply(400,Map.of("code","PROGRESSION_INVALID"),0);
-    ((ObjectNode)op).put("status",status);save();return reply(200,op,0);
+    ((ObjectNode)op).put("status",status);if(provider.equals("paystack")&&status.equals("success")&&!op.has("transaction")&&!op.has("paid_at"))((ObjectNode)op).put("paid_at",java.time.Instant.now().toString());save();return reply(200,op,0);
    }
    if(path.equals("/__scenario/inbound")&&method.equals("POST")){
     if(!provider.equals("twilio")||operations().size()>=128)return reply(400,Map.of("code","INBOUND_SCENARIO_INVALID"),0);
@@ -78,7 +78,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
    var op=JSON.createObjectNode().put("id",next("TX")).put("reference",ref).put("domain","test").put("amount",amount).put("currency","NGN").put("status","pending");operations().set(ref,op);
    return reply(200,Map.of("status",true,"message","Authorization URL created","data",Map.of("reference",ref,"access_code","mock-access-"+state.path("sequence").asInt(),"authorization_url","http://paystack-mock:8080/hosted/"+ref)),scenario.equals("timeout-after-acceptance")?12000:0);
   }
-  if(method.equals("GET")&&path.startsWith("/transaction/verify/")){var op=operations().get(path.substring(20));return reply(op==null?404:200,op==null?Map.of("status",false):Map.of("status",true,"data",op),0);}
+  if(method.equals("GET")&&path.startsWith("/transaction/verify/")){var op=operations().get(path.substring(20));if(op!=null&&op.path("status").asText().equals("success")&&scenario.equals("invalid-verification")){op=op.deepCopy();((ObjectNode)op).put("paid_at","invalid-offline-timestamp");}return reply(op==null?404:200,op==null?Map.of("status",false):Map.of("status",true,"data",op),0);}
   if(method.equals("POST")&&path.equals("/refund")){
    var input=JSON.readTree(body);var transaction=operations().get(input.path("transaction").asText());long amount=input.path("amount").asLong();
    if(transaction==null||!transaction.path("status").asText().equals("success")||amount<=0)return reply(422,Map.of("status",false),0);

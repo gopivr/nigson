@@ -1,0 +1,36 @@
+FAIL: reviewed authorization OpenAPI drift
+E........................................EE.................
+======================================================================
+ERROR: test_reviewed_generation_and_exact_implemented_routes (test_authorization_contract.AuthorizationContracts.test_reviewed_generation_and_exact_implemented_routes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_authorization_contract.py", line 9, in test_reviewed_generation_and_exact_implemented_routes
+    subprocess.run([sys.executable, 'scripts/contracts/authorization.py', '--check'], cwd=ROOT, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/opt/homebrew/opt/python@3.14/bin/python3.14', 'scripts/contracts/authorization.py', '--check']' returned non-zero exit status 1.
+
+======================================================================
+ERROR: test_exact_seven_operations_and_security_headers (test_order_contract.OrderContracts.test_exact_seven_operations_and_security_headers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_order_contract.py", line 10, in test_exact_seven_operations_and_security_headers
+    op=paths[route][method];self.assertEqual(op['operationId'],api);self.assertEqual(op['responses'][status]['headers']['Cache-Control']['schema'],{'const':'no-store'})
+       ~~~~~^^^^^^^
+KeyError: '/api/v1/checkout/attempts'
+
+======================================================================
+ERROR: test_frozen_values_are_closed_and_private_proof_is_boolean_only (test_order_contract.OrderContracts.test_frozen_values_are_closed_and_private_proof_is_boolean_only)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_order_contract.py", line 17, in test_frozen_values_are_closed_and_private_proof_is_boolean_only
+    for name in ['CheckoutInput','OrderDTO','OrderLineDTO','OrderTotals','ProofDTO','PurchaseProofInput','OrderAddressSnapshot']:self.assertFalse(s[name]['additionalProperties'])
+                                                                                                                                                  ~^^^^^^
+KeyError: 'CheckoutInput'
+
+----------------------------------------------------------------------
+Ran 60 tests in 1.928s
+
+FAILED (errors=3)

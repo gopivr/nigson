@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-COM-ORDER-001 — IN_PROGRESS; accepted cart/pricing/market/inventory/platform dependencies. Read exact API-037/038/039/040/043/044/121 and immutable owned order/payment/reservation contracts before source edits; implement atomic checkout, frozen totals and current owned queries/history with actual native/BFF/race/provider uncertainty evidence.
+COM-ORDER-001 — IN_PROGRESS; accepted cart/pricing/market/inventory/platform dependencies. Exact API-037/038/039/040/043/044/121 and trusted pricing revalidation/atomic frozen order/after-commit Paystack initiation/verified local lifecycle implemented. Native26/no skips,60 contracts and final offline provider regression PASS, including actual seven-route BFF/private proof, organization authority, stock races, lost responses, existing holds and malformed provider timestamps. Full81 Java/173 gated,15 AI/five gated,Ruff/mypy13 and nine reproduced artifacts PASS; actual source acceptance commit pending.
 
 ## Completed Tasks
 

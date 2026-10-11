@@ -197,3 +197,8 @@ cart-check:
 fulfillment-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/fulfillment/verify.py
+
+.PHONY: order-check
+order-check:
+	python3 scripts/contracts/authorization.py --check
+	ENV=test python3 scripts/order/verify.py

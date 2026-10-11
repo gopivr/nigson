@@ -158,5 +158,10 @@
     "status": 422,
     "title": "Fulfillment rule violation",
     "detail": "The delivery or shipment operation does not meet current rules."
+  },
+  "ORDER_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Order rule violation",
+    "detail": "The order operation does not meet current purchase rules."
   }
 }
