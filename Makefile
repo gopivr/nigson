@@ -214,3 +214,8 @@ paystack-check:
 	python3 -m unittest discover -s tests/providers/paystack
 	ENV=test python3 scripts/platform/provider_check.py
 	ENV=test python3 scripts/paystack/verify.py
+
+.PHONY: integration-provider-check
+integration-provider-check:
+	python3 scripts/contracts/integration.py --check
+	ENV=test python3 scripts/integration-provider/verify.py

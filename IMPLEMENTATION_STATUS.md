@@ -1,6 +1,6 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:11 October2026 UTC (10 October local session)
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:12 October2026 UTC
 
 ## Current Phase
 
@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-INT-PROVI-001 — IN_PROGRESS; implement private owned job query/retry, stable execution keys, uncertainty reconciliation and cursor recovery. Accepted Paystack source 438162f4900b8b631a57cd73bf5cb198e3922686. Read supporting owner schemas/private contracts; no critical approval blocks offline engineering.
+INT-PROVI-001 — IN_PROGRESS; native22/no skips and64 contracts PASS for private job APIs/current signed staff/atomic replay, actual registered scoped HTTP payment worker, lease fencing, UNKNOWN/page recovery and inbox dedup. Final transport/observability/security/full100 Java/218 gated/AI/repro checks PASS; source acceptance commit pending. Accepted Paystack source 438162f4900b8b631a57cd73bf5cb198e3922686. Read supporting owner schemas/private contracts; no critical approval blocks offline engineering.
 
 ## Completed Tasks
 

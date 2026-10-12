@@ -1,0 +1,58 @@
+{
+  "suites": [
+    {
+      "file": "services/experience/target/surefire-reports/TEST-com.nigson.experience.BuildCompatibilityTest.xml",
+      "suite": "com.nigson.experience.BuildCompatibilityTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.commerce.BuildCompatibilityTest.xml",
+      "suite": "com.nigson.commerce.BuildCompatibilityTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/commerce/target/surefire-reports/TEST-com.nigson.acceptance.provider.JobValuesTest.xml",
+      "suite": "com.nigson.acceptance.provider.JobValuesTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/integration/target/surefire-reports/TEST-com.nigson.integration.BuildCompatibilityTest.xml",
+      "suite": "com.nigson.integration.BuildCompatibilityTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/integration/target/surefire-reports/TEST-com.nigson.acceptance.provider.JobValuesTest.xml",
+      "suite": "com.nigson.acceptance.provider.JobValuesTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "services/integration/target/surefire-reports/TEST-com.nigson.acceptance.provider.IntegrationJobPersistenceTest.xml",
+      "suite": "com.nigson.acceptance.provider.IntegrationJobPersistenceTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

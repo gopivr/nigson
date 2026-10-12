@@ -1,0 +1,579 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/gopiravi/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Nigson backend                                                     [pom]
+[INFO] common-observability                                               [jar]
+[INFO] common-security                                                    [jar]
+[INFO] common-events                                                      [jar]
+[INFO] common-problem                                                     [jar]
+[INFO] commerce                                                           [jar]
+[INFO] experience                                                         [jar]
+[INFO] integration                                                        [jar]
+[INFO]
+[INFO] ---------------------< com.nigson:nigson-backend >----------------------
+[INFO] Building Nigson backend 0.1.0                                      [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ nigson-backend ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.RequireJavaVendor passed
+[INFO] Rule 2: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] ------------------< com.nigson:common-observability >-------------------
+[INFO] Building common-observability 0.1.0                                [2/8]
+[INFO]   from shared/common-observability/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-observability ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-observability ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-observability ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-observability ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-observability/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-observability ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-observability ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ---------------------< com.nigson:common-security >---------------------
+[INFO] Building common-security 0.1.0                                     [3/8]
+[INFO]   from shared/common-security/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-security ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-security ---
+[INFO] Copying 3 resources from ../../contracts/security to ../../.build/java/common-security/classes/security
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-security ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-security ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-security ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-security ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ----------------------< com.nigson:common-events >----------------------
+[INFO] Building common-events 0.1.0                                       [4/8]
+[INFO]   from shared/common-events/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-events ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-events ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-events ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-events ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-events/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-events ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-events ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ---------------------< com.nigson:common-problem >----------------------
+[INFO] Building common-problem 0.1.0                                      [5/8]
+[INFO]   from shared/common-problem/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-problem ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-problem ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-problem ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-problem ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-problem/src/test/resources
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-problem ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ common-problem ---
+[INFO] No tests to run.
+[INFO]
+[INFO] ------------------------< com.nigson:commerce >-------------------------
+[INFO] Building commerce 0.1.0                                            [6/8]
+[INFO]   from services/commerce/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ commerce ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ commerce ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/commerce/classes
+[INFO] Copying 65 resources from src/main/resources to ../../.build/java/commerce/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ commerce ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/commerce/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ commerce ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.acceptance.provider.JobValuesTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.167 s -- in com.nigson.acceptance.provider.JobValuesTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] -----------------------< com.nigson:experience >------------------------
+[INFO] Building experience 0.1.0                                          [7/8]
+[INFO]   from services/experience/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ experience ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ experience ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/experience/classes
+[INFO] Copying 39 resources from src/main/resources to ../../.build/java/experience/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ experience ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/experience/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ experience ---
+[INFO]
+[INFO] -----------------------< com.nigson:integration >-----------------------
+[INFO] Building integration 0.1.0                                         [8/8]
+[INFO]   from services/integration/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ integration ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO]
+[INFO] --- resources:3.5.0:resources (default-resources) @ integration ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/integration/classes
+[INFO] Copying 27 resources from src/main/resources to ../../.build/java/integration/classes
+[INFO]
+[INFO] --- compiler:3.15.0:compile (default-compile) @ integration ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 36 source files with javac [debug parameters release 25] to ../../.build/java/integration/classes
+[INFO]
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ integration ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/integration/test-classes
+[INFO]
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ integration ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 9 source files with javac [debug parameters release 25] to ../../.build/java/integration/test-classes
+[INFO]
+[INFO] --- surefire:3.5.6:test (default-test) @ integration ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.integration.provider.PrivateHttpTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.483 s -- in com.nigson.integration.provider.PrivateHttpTest
+[INFO] Running com.nigson.acceptance.provider.IntegrationJobExecutionTest
+[ERROR] Tests run: 5, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 9.015 s <<< FAILURE! -- in com.nigson.acceptance.provider.IntegrationJobExecutionTest
+[ERROR] com.nigson.acceptance.provider.IntegrationJobExecutionTest.actualSnsSqsDeliveryCommitsOwnedIntentBeforeAcknowledgement -- Time elapsed: 1.677 s <<< ERROR!
+java.lang.IllegalStateException: Connection pool shut down
+	at org.apache.hc.core5.util.Asserts.check(Asserts.java:38)
+	at org.apache.hc.core5.pool.StrictConnPool.lease(StrictConnPool.java:170)
+	at software.amazon.awssdk.http.apache5.internal.conn.SafeStrictConnPool.lease(SafeStrictConnPool.java:52)
+	at software.amazon.awssdk.http.apache5.internal.conn.SafeStrictConnPool.lease(SafeStrictConnPool.java:36)
+	at org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager.lease(PoolingHttpClientConnectionManager.java:366)
+	at software.amazon.awssdk.http.apache5.internal.conn.ClientConnectionManagerFactory$DelegatingHttpClientConnectionManager.lease(ClientConnectionManagerFactory.java:80)
+	at software.amazon.awssdk.http.apache5.internal.conn.ClientConnectionManagerFactory$InstrumentedHttpClientConnectionManager.lease(ClientConnectionManagerFactory.java:60)
+	at org.apache.hc.client5.http.impl.classic.InternalExecRuntime.acquireEndpoint(InternalExecRuntime.java:105)
+	at org.apache.hc.client5.http.impl.classic.ConnectExec.execute(ConnectExec.java:127)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.ProtocolExec.execute(ProtocolExec.java:192)
+	at org.apache.hc.client5.http.impl.classic.ExecChainElement.execute(ExecChainElement.java:51)
+	at org.apache.hc.client5.http.impl.classic.InternalHttpClient.doExecute(InternalHttpClient.java:186)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:87)
+	at org.apache.hc.client5.http.impl.classic.CloseableHttpClient.execute(CloseableHttpClient.java:55)
+	at org.apache.hc.client5.http.classic.HttpClient.executeOpen(HttpClient.java:183)
+	at software.amazon.awssdk.http.apache5.internal.impl.Apache5SdkHttpClient.executeOpen(Apache5SdkHttpClient.java:70)
+	at software.amazon.awssdk.http.apache5.Apache5HttpClient.execute(Apache5HttpClient.java:295)
+	at software.amazon.awssdk.http.apache5.Apache5HttpClient.access$700(Apache5HttpClient.java:132)
+	at software.amazon.awssdk.http.apache5.Apache5HttpClient$1.call(Apache5HttpClient.java:271)
+	at software.amazon.awssdk.http.apache5.Apache5HttpClient$1.call(Apache5HttpClient.java:268)
+	at software.amazon.awssdk.core.internal.util.MetricUtils.measureDurationUnsafe(MetricUtils.java:101)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.MakeHttpRequestStage.executeHttpRequest(MakeHttpRequestStage.java:92)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.MakeHttpRequestStage.execute(MakeHttpRequestStage.java:68)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.MakeHttpRequestStage.execute(MakeHttpRequestStage.java:50)
+	at software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+	at software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+	at software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+	at software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallAttemptTimeoutTrackingStage.execute(ApiCallAttemptTimeoutTrackingStage.java:74)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallAttemptTimeoutTrackingStage.execute(ApiCallAttemptTimeoutTrackingStage.java:43)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.TimeoutExceptionHandlingStage.execute(TimeoutExceptionHandlingStage.java:79)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.TimeoutExceptionHandlingStage.execute(TimeoutExceptionHandlingStage.java:41)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallAttemptMetricCollectionStage.execute(ApiCallAttemptMetricCollectionStage.java:58)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallAttemptMetricCollectionStage.execute(ApiCallAttemptMetricCollectionStage.java:41)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.RetryableStage.executeRequest(RetryableStage.java:106)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.RetryableStage.execute(RetryableStage.java:62)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.RetryableStage.execute(RetryableStage.java:39)
+	at software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+	at software.amazon.awssdk.core.internal.http.StreamManagingStage.execute(StreamManagingStage.java:53)
+	at software.amazon.awssdk.core.internal.http.StreamManagingStage.execute(StreamManagingStage.java:35)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallTimeoutTrackingStage.executeWithTimer(ApiCallTimeoutTrackingStage.java:82)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallTimeoutTrackingStage.execute(ApiCallTimeoutTrackingStage.java:62)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ApiCallTimeoutTrackingStage.execute(ApiCallTimeoutTrackingStage.java:43)
+	at software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+	at software.amazon.awssdk.core.internal.http.pipeline.RequestPipelineBuilder$ComposingRequestPipelineStage.execute(RequestPipelineBuilder.java:206)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ExecutionFailureExceptionReportingStage.execute(ExecutionFailureExceptionReportingStage.java:37)
+	at software.amazon.awssdk.core.internal.http.pipeline.stages.ExecutionFailureExceptionReportingStage.execute(ExecutionFailureExceptionReportingStage.java:26)
+	at software.amazon.awssdk.core.internal.http.AmazonSyncHttpClient$RequestExecutionBuilderImpl.execute(AmazonSyncHttpClient.java:213)
+	at software.amazon.awssdk.core.internal.handler.BaseSyncClientHandler.invoke(BaseSyncClientHandler.java:105)
+	at software.amazon.awssdk.core.internal.handler.BaseSyncClientHandler.doExecute(BaseSyncClientHandler.java:176)
+	at software.amazon.awssdk.core.internal.handler.BaseSyncClientHandler.lambda$execute$1(BaseSyncClientHandler.java:82)
+	at software.amazon.awssdk.core.internal.handler.BaseSyncClientHandler.measureApiCall(BaseSyncClientHandler.java:200)
+	at software.amazon.awssdk.core.internal.handler.BaseSyncClientHandler.execute(BaseSyncClientHandler.java:76)
+	at software.amazon.awssdk.core.client.handler.SdkSyncClientHandler.execute(SdkSyncClientHandler.java:45)
+	at software.amazon.awssdk.awscore.client.handler.AwsSyncClientHandler.execute(AwsSyncClientHandler.java:53)
+	at software.amazon.awssdk.services.sqs.DefaultSqsClient.deleteQueue(DefaultSqsClient.java:1201)
+	at software.amazon.awssdk.services.sqs.SqsClient.deleteQueue(SqsClient.java:1664)
+	at com.nigson.acceptance.provider.IntegrationJobExecutionTest.actualSnsSqsDeliveryCommitsOwnedIntentBeforeAcknowledgement(IntegrationJobExecutionTest.java:59)
+
+[INFO] Running com.nigson.acceptance.provider.IntegrationJobPersistenceTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.372 s -- in com.nigson.acceptance.provider.IntegrationJobPersistenceTest
+[INFO] Running com.nigson.acceptance.provider.JobValuesTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in com.nigson.acceptance.provider.JobValuesTest
+[INFO] Running com.nigson.acceptance.provider.IntegrationJobHttpTest
+{"timestamp":"2026-10-12T11:08:03.382Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.402Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.459Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.467Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.482Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.482Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.487Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.499Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.501Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.502Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.502Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.502Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.688Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.688Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.689Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.689Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.689Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:03.795Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.039Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.039Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.039Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.050Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.079Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.079Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.119Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.119Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.128Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.129Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.129Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.129Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.129Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.977Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.979Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.979Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.979Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.994Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:04.995Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.038Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.049Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.061Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.079Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.169Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.196Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.201Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.234Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.236Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.238Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.238Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.241Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.241Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.245Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.246Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.246Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.246Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.289Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.289Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.289Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.290Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.290Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.290Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.290Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.309Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.310Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.317Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.317Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.325Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.326Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.332Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.332Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.334Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.334Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.340Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.342Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.346Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.347Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"3985f4ad2a727ce4e8941610b779f5fa","span_id":"8d65b0671f05a09d","correlation_id":"53ef2750-81b5-4122-b974-108079191e8b","error_code":null,"message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.354Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"5fd641255ebe8a2c0af419695ac294d7","span_id":"6e58c5639f719245","correlation_id":"b6eaf714-3758-4faf-8b8f-a90778ef1715","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.356Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"5fd641255ebe8a2c0af419695ac294d7","span_id":"6e58c5639f719245","correlation_id":"b6eaf714-3758-4faf-8b8f-a90778ef1715","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.359Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"34b5aa9c198f2157655c478b0c3406c4","span_id":"9926ca0ea52159f2","correlation_id":"e8e60520-8920-4cbe-bc18-345a4a299b3b","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.360Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"34b5aa9c198f2157655c478b0c3406c4","span_id":"9926ca0ea52159f2","correlation_id":"e8e60520-8920-4cbe-bc18-345a4a299b3b","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.363Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"fc59890da5e440043e8d04bdcd94e2f8","span_id":"481884cc61cbf385","correlation_id":"94afb78c-d2d3-40da-b74a-1862c1be40f2","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.364Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"fc59890da5e440043e8d04bdcd94e2f8","span_id":"481884cc61cbf385","correlation_id":"94afb78c-d2d3-40da-b74a-1862c1be40f2","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.364Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"fc59890da5e440043e8d04bdcd94e2f8","span_id":"481884cc61cbf385","correlation_id":"94afb78c-d2d3-40da-b74a-1862c1be40f2","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.365Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"fc59890da5e440043e8d04bdcd94e2f8","span_id":"481884cc61cbf385","correlation_id":"94afb78c-d2d3-40da-b74a-1862c1be40f2","error_code":"VALIDATION_ERROR","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.365Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"fc59890da5e440043e8d04bdcd94e2f8","span_id":"481884cc61cbf385","correlation_id":"94afb78c-d2d3-40da-b74a-1862c1be40f2","error_code":"VALIDATION_ERROR","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.365Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"fc59890da5e440043e8d04bdcd94e2f8","span_id":"481884cc61cbf385","correlation_id":"94afb78c-d2d3-40da-b74a-1862c1be40f2","error_code":"VALIDATION_ERROR","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.366Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"fc59890da5e440043e8d04bdcd94e2f8","span_id":"481884cc61cbf385","correlation_id":"94afb78c-d2d3-40da-b74a-1862c1be40f2","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.370Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"2e2d72a6d9c925e34d30768c6a995332","span_id":"14a984d9c71f2b7d","correlation_id":"fc6f7074-22d0-4e04-8ef8-5d04e10fe583","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.370Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"2e2d72a6d9c925e34d30768c6a995332","span_id":"14a984d9c71f2b7d","correlation_id":"fc6f7074-22d0-4e04-8ef8-5d04e10fe583","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.370Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"2e2d72a6d9c925e34d30768c6a995332","span_id":"14a984d9c71f2b7d","correlation_id":"fc6f7074-22d0-4e04-8ef8-5d04e10fe583","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.370Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"2e2d72a6d9c925e34d30768c6a995332","span_id":"14a984d9c71f2b7d","correlation_id":"fc6f7074-22d0-4e04-8ef8-5d04e10fe583","error_code":"VALIDATION_ERROR","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.370Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"2e2d72a6d9c925e34d30768c6a995332","span_id":"14a984d9c71f2b7d","correlation_id":"fc6f7074-22d0-4e04-8ef8-5d04e10fe583","error_code":"VALIDATION_ERROR","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.370Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"2e2d72a6d9c925e34d30768c6a995332","span_id":"14a984d9c71f2b7d","correlation_id":"fc6f7074-22d0-4e04-8ef8-5d04e10fe583","error_code":"VALIDATION_ERROR","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.371Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"2e2d72a6d9c925e34d30768c6a995332","span_id":"14a984d9c71f2b7d","correlation_id":"fc6f7074-22d0-4e04-8ef8-5d04e10fe583","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.375Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"319d30d1873b1447c54435ac21d4913d","span_id":"82b05105d4c9406f","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.375Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"319d30d1873b1447c54435ac21d4913d","span_id":"82b05105d4c9406f","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.376Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"319d30d1873b1447c54435ac21d4913d","span_id":"82b05105d4c9406f","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.377Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"319d30d1873b1447c54435ac21d4913d","span_id":"82b05105d4c9406f","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.378Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"319d30d1873b1447c54435ac21d4913d","span_id":"82b05105d4c9406f","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.379Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"319d30d1873b1447c54435ac21d4913d","span_id":"82b05105d4c9406f","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.385Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a62cd00e023565665908fed035549bed","span_id":"acab942ba68d74e1","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.385Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a62cd00e023565665908fed035549bed","span_id":"acab942ba68d74e1","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.391Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"49b381a0dc62fd63a3ce12d790d36216","span_id":"0c9c25939e43cbc3","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.392Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"49b381a0dc62fd63a3ce12d790d36216","span_id":"0c9c25939e43cbc3","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.397Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"91e78ef6880414822eca901c2238af03","span_id":"19b35e6b87425333","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"AUTH_REQUIRED","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.397Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"91e78ef6880414822eca901c2238af03","span_id":"19b35e6b87425333","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.402Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.403Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.409Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.410Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.411Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.412Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.412Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.414Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.414Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.417Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.417Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.418Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.418Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.419Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.419Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.421Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.421Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.423Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.423Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"VERSION_MISMATCH","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.423Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"VERSION_MISMATCH","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.423Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"VERSION_MISMATCH","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.423Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"4c23b5a308eb75f091ad5ae9e952c3ce","span_id":"15f7c48a4c689ca2","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.428Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.428Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.429Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.429Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.430Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.430Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.430Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.431Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.432Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.434Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.434Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.435Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.435Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.436Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.436Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.437Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.437Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.440Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.440Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.440Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.441Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.442Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.442Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.445Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.445Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.446Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.446Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"0b16eee54ed60dd81123b318b91d6c84","span_id":"c5edf064964c2031","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.450Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.450Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.450Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.451Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.452Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.452Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.452Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.453Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.453Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.455Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.455Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.456Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.456Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"a31461232008819a2cf6d2b8f062c08a","span_id":"f1c7f27556c5c55a","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.456Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.456Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.457Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.457Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.461Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.461Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.461Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.462Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.462Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.463Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.463Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.464Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.464Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.465Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.465Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.466Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.466Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.467Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.467Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.469Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.469Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.470Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.470Z","severity":"WARN","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"PROVIDER_OUTCOME_UNKNOWN","message":"REQUEST_FAILED"}
+{"timestamp":"2026-10-12T11:08:05.470Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"PROVIDER_OUTCOME_UNKNOWN","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.470Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"PROVIDER_OUTCOME_UNKNOWN","message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.471Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":"192b00e9d54046db06778600ba4b8196","span_id":"0ee35bc800e4dfa0","correlation_id":"059138de-86ce-4fc0-8f3d-58b273a4b88f","error_code":"REQUEST_REJECTED","message":"REQUEST_COMPLETE"}
+{"timestamp":"2026-10-12T11:08:05.471Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.471Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.472Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.473Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.473Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.474Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.474Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.474Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.475Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.475Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.476Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.476Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.477Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.477Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.478Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.478Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.479Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.479Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.484Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.484Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.485Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.485Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.488Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.488Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.489Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.489Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.489Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.489Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.490Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.490Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.491Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.491Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.493Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.493Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.494Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.494Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.495Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.495Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.496Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.496Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.497Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.497Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.498Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.498Z","severity":"DEBUG","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.499Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-12T11:08:05.500Z","severity":"INFO","service":"nigson-integration","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.373 s -- in com.nigson.acceptance.provider.IntegrationJobHttpTest
+[INFO]
+[INFO] Results:
+[INFO]
+[ERROR] Errors:
+[ERROR]   IntegrationJobExecutionTest.actualSnsSqsDeliveryCommitsOwnedIntentBeforeAcknowledgement:59 » IllegalState Connection pool shut down
+[INFO]
+[ERROR] Tests run: 18, Failures: 0, Errors: 1, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Nigson backend 0.1.0:
+[INFO]
+[INFO] Nigson backend ..................................... SUCCESS [  0.129 s]
+[INFO] common-observability ............................... SUCCESS [  0.240 s]
+[INFO] common-security .................................... SUCCESS [  0.088 s]
+[INFO] common-events ...................................... SUCCESS [  0.017 s]
+[INFO] common-problem ..................................... SUCCESS [  0.012 s]
+[INFO] commerce ........................................... SUCCESS [  1.030 s]
+[INFO] experience ......................................... SUCCESS [  0.066 s]
+[INFO] integration ........................................ FAILURE [ 15.495 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  17.230 s
+[INFO] Finished at: 2026-10-12T07:08:05-04:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.6:test (default-test) on project integration:
+[ERROR]
+[ERROR] See /Users/gopiravi/workspace/nigson/services/integration/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR]
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR]
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR]
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :integration
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/scripts/integration-provider/verify.py", line 8, in <module>
+    main(java_tests='PrivateHttpTest,IntegrationJobExecutionTest,IntegrationJobHttpTest,IntegrationJobPersistenceTest,JobValuesTest',evidence=ROOT/'.build/integration-provider001/database-evidence',run_python=False,completion='PASS: scoped owned job query/retry/stable keys/current signed proof/audit/races; complete provider execution, cursor and private HTTP acceptance not implied')
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/platform/verify.py", line 50, in main
+    subprocess.run(['./mvnw','-B','-pl','services/commerce,services/experience,services/integration','-am','-Dtest='+java_tests,'-Dsurefire.failIfNoSpecifiedTests=false','test'],cwd=ROOT,env=env,check=True,timeout=300)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['./mvnw', '-B', '-pl', 'services/commerce,services/experience,services/integration', '-am', '-Dtest=PrivateHttpTest,IntegrationJobExecutionTest,IntegrationJobHttpTest,IntegrationJobPersistenceTest,JobValuesTest', '-Dsurefire.failIfNoSpecifiedTests=false', 'test']' returned non-zero exit status 1.

@@ -1,0 +1,107 @@
+No validation errors found.
+Running Changeset: experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform
+Running Changeset: experience/010-bp1-platform-tables.yaml::experience-20261006-011::nigson-platform
+Running Changeset: experience/020-bp1-domain-tables.yaml::experience-20261006-012::nigson-platform
+Running Changeset: experience/021-bp1-indexes.yaml::experience-20261006-013::nigson-platform
+Running Changeset: experience/022-bp1-constraints.yaml::experience-20261006-014::nigson-platform
+Liquibase: Update has been successful. Rows affected: 0
+Owner migration verified: experience; applied=5
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Creating database changelog table with name: experience.databasechangelog
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 12, 2026 3:03:48 AM liquibase.snapshot
+INFO: Creating snapshot
+Oct 12, 2026 3:03:48 AM liquibase.command
+INFO: Command execution complete
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 12, 2026 3:03:48 AM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 12, 2026 3:03:48 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 12, 2026 3:03:48 AM liquibase.command
+INFO: Using deploymentId: 1774227603
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform ran successfully in 4ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/010-bp1-platform-tables.yaml::experience-20261006-011::nigson-platform ran successfully in 17ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/020-bp1-domain-tables.yaml::experience-20261006-012::nigson-platform ran successfully in 17ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/021-bp1-indexes.yaml::experience-20261006-013::nigson-platform ran successfully in 11ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/022-bp1-constraints.yaml::experience-20261006-014::nigson-platform ran successfully in 2ms
+Oct 12, 2026 3:03:48 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 12, 2026 3:03:48 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 12, 2026 3:03:48 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 12, 2026 3:03:48 AM liquibase.command
+INFO: Command execution complete
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 12, 2026 3:03:48 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 12, 2026 3:03:48 AM liquibase.command
+INFO: Using deploymentId: 1774227603
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/000-schema-and-roles.yaml::experience-20261005-001::nigson-platform ran successfully in 2ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/010-bp1-platform-tables.yaml::experience-20261006-011::nigson-platform ran successfully in 13ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/020-bp1-domain-tables.yaml::experience-20261006-012::nigson-platform ran successfully in 29ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/021-bp1-indexes.yaml::experience-20261006-013::nigson-platform ran successfully in 18ms
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: ChangeSet experience/022-bp1-constraints.yaml::experience-20261006-014::nigson-platform ran successfully in 6ms
+Oct 12, 2026 3:03:48 AM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 12, 2026 3:03:48 AM liquibase.util
+INFO: Run:                          5
+Oct 12, 2026 3:03:48 AM liquibase.util
+INFO: Previously run:               0
+Oct 12, 2026 3:03:48 AM liquibase.util
+INFO: Filtered out:                 0
+Oct 12, 2026 3:03:48 AM liquibase.util
+INFO: -------------------------------
+Oct 12, 2026 3:03:48 AM liquibase.util
+INFO: Total change sets:            5
+Oct 12, 2026 3:03:48 AM liquibase.util
+INFO: Update summary generated
+Oct 12, 2026 3:03:48 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 12, 2026 3:03:48 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 12, 2026 3:03:48 AM liquibase.command
+INFO: Command execution complete
+Oct 12, 2026 3:03:48 AM liquibase.changelog
+INFO: Reading from experience.databasechangelog

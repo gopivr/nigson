@@ -19,3 +19,21 @@ class ProviderContracts(unittest.TestCase):
         self.assertEqual(registry['API-140']['scope'],'jobs.read')
         self.assertEqual(registry['API-141']['scope'],'jobs.retry_WITH_SIGNED_STAFF')
         self.assertEqual(registry['API-141']['owner'],'integration')
+
+    def test_private_integration_job_contract_preserves_safe_shapes_and_exact_scopes(self):
+        spec=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
+        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry'})
+        self.assertEqual(set(spec['components']['schemas']['JobDTO']['properties']),{'id','state','attemptCount','nextAttemptAt','lastErrorCode'})
+        self.assertFalse(spec['components']['schemas']['JobDTO']['additionalProperties'])
+        get=spec['paths']['/internal/v1/jobs']['get'];retry=spec['paths']['/internal/v1/jobs/{id}/retry']['post']
+        self.assertEqual(get['operationId'],'API-140');self.assertEqual(retry['operationId'],'API-141')
+        self.assertEqual(get['security'],[{'workload':[]}])
+        self.assertEqual(retry['security'],[{'workload':[],'signedActor':[]}])
+        self.assertIn('ETag',retry['responses']['202']['headers'])
+        self.assertIn('503',retry['responses'])
+        self.assertEqual({p['name'] for p in retry['parameters'] if p['required']},{'id','If-Match','Idempotency-Key','X-Correlation-ID'})
+
+    def test_private_integration_generator_emits_only_reviewed_implemented_routes(self):
+        import subprocess
+        result=subprocess.run(['python3',str(ROOT/'scripts/contracts/integration.py'),'--check'],cwd=ROOT,capture_output=True,text=True,check=True)
+        self.assertIn('PASS:',result.stdout)
