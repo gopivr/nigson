@@ -8,9 +8,11 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-INT-PROVI-001 — IN_PROGRESS; native22/no skips and64 contracts PASS for private job APIs/current signed staff/atomic replay, actual registered scoped HTTP payment worker, lease fencing, UNKNOWN/page recovery and inbox dedup. Final transport/observability/security/full100 Java/218 gated/AI/repro checks PASS; source acceptance commit pending. Accepted Paystack source 438162f4900b8b631a57cd73bf5cb198e3922686. Read supporting owner schemas/private contracts; no critical approval blocks offline engineering.
+CARRIER-001 — IN_PROGRESS; implement bound FedEx quotes, durable private booking/reconciliation/tracking and scoped commerce acknowledgements. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7. No critical approval blocks offline engineering.
 
 ## Completed Tasks
+
+- [x] INT-PROVI-001 — DONE (engineering); implementation 7c02b3b63db4e9909d8239be24305208e9ec23d7; native22/no skips, full100 Java/218 gated,64 contracts,15 AI/five gated and nine reproduced artifacts PASS. Private APIs, actual registered scoped payment worker, UNKNOWN/lease fencing, cursors, audit and SNS/SQS inbox qualified offline. Genuine provider/release qualification NOT_RUN. Report docs/implementation/2026-10-12-INT-PROVI-001.md.
 
 - [x] PAYSTACK-001 — DONE (engineering); implementation 438162f4900b8b631a57cd73bf5cb198e3922686; tracked fixture correction 8e9a037e15c1f8a883328bc601e1f0f2cef75d3d; same exclusive adapter, stateful financial pipeline and fail-closed genuine preflight. Native68/no skips, seven readiness tests, final all-provider HTTP regression, full95 Java/203 gated,62 contracts,15 AI/five gated and nine reproduced artifacts PASS. Genuine account/release qualification NOT_RUN. Report docs/implementation/2026-10-11-PAYSTACK-001.md.
 
@@ -64,7 +66,7 @@ INT-PROVI-001 — IN_PROGRESS; native22/no skips and64 contracts PASS for privat
 
 ## In Progress
 
-- [ ] INT-PROVI-001 — private owned job query/retry, stable keys and uncertainty reconciliation.
+- [ ] CARRIER-001 — bound quotes and durable carrier booking/reconciliation/tracking.
 
 ## Pending
 
@@ -107,20 +109,19 @@ INT-PROVI-001 — IN_PROGRESS; native22/no skips and64 contracts PASS for privat
 - [ ] INFRA-001 — Implement ECS reference infrastructure and immutable delivery pipeline (EP10)
 - [ ] OPS-002 — Verify resilience, restore and measured capacity (EP10)
 - [ ] REL-001 — Qualify each product phase and hand over documented release (EP13)
-- [ ] CARRIER-001 — Implement required FedEx rate booking cancellation and tracking (EP05)
 - [ ] MSG-001 — Implement SMS WhatsApp consent proof callbacks and mock qualification (EP05)
 
 ## Build Status
 
-PASS — PAYSTACK-001 full95 Java/203 gated (298 total/no failures/errors),62 contracts,15 AI/five gated,Ruff/mypy13, unchanged locked dependencies and nine exactly reproduced artifacts. Command-specific prior acceptance retained.
+PASS — INT-PROVI-001 full100 Java/218 gated,64 contracts,15 AI/five gated,Ruff/mypy13, unchanged locked dependencies and nine exactly reproduced artifacts.
 
 ## Test Status
 
-PASS — COM-PAYME-001 native64/no skips: actual owned PostgreSQL and six BFF/private HTTP APIs, encrypted signed receipt replay, finance/MFA/two-actor approvals, partial/full/UNKNOWN provider refunds, expiry/settlement races, real KMS SDK and SNS/SQS handler/inbox/ack. All-provider regression and fresh/repeat owner migrations PASS. Genuine provider/release qualification NOT_RUN.
+PASS — INT-PROVI-001 native22/no skips, all-owner fresh/repeat migrations, actual private HTTP/JWT/worker/event delivery, atomic audit rollback and concurrency. Genuine provider/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
-8e9a037e15c1f8a883328bc601e1f0f2cef75d3d — actual accepted Paystack tracked fixture correction; runtime/source 438162f4900b8b631a57cd73bf5cb198e3922686. No remote deployment.
+7c02b3b63db4e9909d8239be24305208e9ec23d7 — accepted integration implementation and command-scoped acceptance evidence. No remote deployment.
 
 ## Confirmed Inputs
 
@@ -136,7 +137,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-INT-PROVI-001 — private integration-owned job management and durable recovery using accepted workload trust and owner schemas. Required launch carrier/messaging/integration/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
+CARRIER-001 — dependency-ready required launch FedEx work. Messaging/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
 
 ## Session Evidence / Protocol
 
