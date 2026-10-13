@@ -1,0 +1,626 @@
+[
+  {
+    "source": ".build/carrier-adapter-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-adapter-first.log",
+    "rawSha256": "a2cc769d6137a04ede24e8550a49c3547761309c4a5f717a1990742a3b215dec",
+    "evidenceSha256": "f9dd481da1183681be5845637984e37b4835438a2e5b8b1b7102f5f8479e61e2"
+  },
+  {
+    "source": ".build/carrier-all-provider-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-all-provider-first.log",
+    "rawSha256": "548879f3a6c6f2ef84009a4e1bac39ed88225cfa7beac8b68c55f0cbb59c873d",
+    "evidenceSha256": "24a2d76364437f59a7b04e67c7943c4e16e7886efca8b5ee890007d9ca72d975"
+  },
+  {
+    "source": ".build/carrier-all-provider-second-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-all-provider-second-counts.json",
+    "rawSha256": "dc98ed52b2955507765319964feb6c7c2a229f3df89782a3d604d4b3fe36ba1a",
+    "evidenceSha256": "dc98ed52b2955507765319964feb6c7c2a229f3df89782a3d604d4b3fe36ba1a"
+  },
+  {
+    "source": ".build/carrier-all-provider-second.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-all-provider-second.log",
+    "rawSha256": "306c2e79f51994902f087a9a370c09465dc9bd63c7a2f6cd35c52b394e1be105",
+    "evidenceSha256": "74e98eff937f08eca1bcae4db0eac06c7161b595037446eceacc4b607800134c"
+  },
+  {
+    "source": ".build/carrier-commerce-port-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-commerce-port-first.log",
+    "rawSha256": "afcaf9e7315a5abaac2cf5db16c75f8517cb9bc1dd81d1a5dc02bd27275d3de7",
+    "evidenceSha256": "fccd21f403c5c55eec5111e4d81979dfe7d758baf9bf02d2b658403f92d3a4c5"
+  },
+  {
+    "source": ".build/carrier-contract-fifth.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-contract-fifth.log",
+    "rawSha256": "69b4a7089aa41c737a9cf2cb8121b086eb415cda741cc80680c7daacbc9a160b",
+    "evidenceSha256": "69b4a7089aa41c737a9cf2cb8121b086eb415cda741cc80680c7daacbc9a160b"
+  },
+  {
+    "source": ".build/carrier-contract-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-contract-first.log",
+    "rawSha256": "06d31a9468f2af56322bbe094d7650afb323a04f420bb73caa3c17e141af142b",
+    "evidenceSha256": "06d31a9468f2af56322bbe094d7650afb323a04f420bb73caa3c17e141af142b"
+  },
+  {
+    "source": ".build/carrier-contract-fourth.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-contract-fourth.log",
+    "rawSha256": "db82fd1c828b86a5b7864e410c9113433a233c0f2d1631d493d9bcbcf9d148db",
+    "evidenceSha256": "db82fd1c828b86a5b7864e410c9113433a233c0f2d1631d493d9bcbcf9d148db"
+  },
+  {
+    "source": ".build/carrier-contract-second.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-contract-second.log",
+    "rawSha256": "53bb3be33eb1a9d0a47e5d8076614d6504e956d39e408747d0cd028ea1942657",
+    "evidenceSha256": "53bb3be33eb1a9d0a47e5d8076614d6504e956d39e408747d0cd028ea1942657"
+  },
+  {
+    "source": ".build/carrier-contract-third.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-contract-third.log",
+    "rawSha256": "3d9d0d77778981d0bc8d86c775f91beae0787eea9fbdf396166c215c99d0ce03",
+    "evidenceSha256": "3d9d0d77778981d0bc8d86c775f91beae0787eea9fbdf396166c215c99d0ce03"
+  },
+  {
+    "source": ".build/carrier-mode-activation-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-mode-activation-first.log",
+    "rawSha256": "f581bd5939e160ae8ced00f6de35b6592b519b9f0f71539b07284839327a56a3",
+    "evidenceSha256": "be00d98c31af156f3cd5d226609741d7cfe65de9584515aa286125c457595d3b"
+  },
+  {
+    "source": ".build/carrier-native-bff-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-bff-first.log",
+    "rawSha256": "375caccecf301a902e88f42fbafd25b46edb425d7c198778259f58a4d0589f80",
+    "evidenceSha256": "da7320f1cb2676a5a1745a63f29c376a0b3aaf592a62af642d6f2e3b7353fa1a"
+  },
+  {
+    "source": ".build/carrier-native-bff-second.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-bff-second.log",
+    "rawSha256": "ea2b0ca8e78959b5059cb2adc604104ed3cd282f1aef2cecdd65c5f3c47797f1",
+    "evidenceSha256": "1803a643c13a37e799673727eb1b291417ba1009d37d2863dd70a79f73b9354c"
+  },
+  {
+    "source": ".build/carrier-native-bff-third-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-bff-third-counts.json",
+    "rawSha256": "7a8c948635d881d05df7ab0c26a5ba1e02bc782dcfe2c19aab77597369e01778",
+    "evidenceSha256": "7a8c948635d881d05df7ab0c26a5ba1e02bc782dcfe2c19aab77597369e01778"
+  },
+  {
+    "source": ".build/carrier-native-bff-third.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-bff-third.log",
+    "rawSha256": "9abd7cfd67170f591eb8276587ebef8e455425b5bbb1d9c9ac0ceb2409af0484",
+    "evidenceSha256": "5f3d713e7026a0dd93e6f83f89911bef312189b5f248d17eb3d5eb862c919cda"
+  },
+  {
+    "source": ".build/carrier-native-binding-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-binding-first.log",
+    "rawSha256": "28af364f8ab544f0dc4a2c968f2bb27c228b6e776e9eef195eb04efa55a6e8d8",
+    "evidenceSha256": "eac1dae769efe66d3300361585f57d0e9b8e03383cfa1212f42aa54c0f69dde2"
+  },
+  {
+    "source": ".build/carrier-native-mode-bff-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-mode-bff-first-counts.json",
+    "rawSha256": "7a8c948635d881d05df7ab0c26a5ba1e02bc782dcfe2c19aab77597369e01778",
+    "evidenceSha256": "7a8c948635d881d05df7ab0c26a5ba1e02bc782dcfe2c19aab77597369e01778"
+  },
+  {
+    "source": ".build/carrier-native-mode-bff-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-mode-bff-first.log",
+    "rawSha256": "80cde03e5e7b6b43449b9e699894450da903d8dad5519b7c4264f9f9c4107762",
+    "evidenceSha256": "825f79abc46b35aa62a7a73e06d4c71a68dd7bbc4484d573d1b5d275c87c5f2c"
+  },
+  {
+    "source": ".build/carrier-native-quotes-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-quotes-first.log",
+    "rawSha256": "8c8790acc55d680cf8f23d8fdc7095cb815372afe3ddf5deb459c351651d826b",
+    "evidenceSha256": "a8e7180842dcdfa81d65072086c4bbf31b054a2943afaefa6e9e67d8a4117ffa"
+  },
+  {
+    "source": ".build/carrier-native-quotes-fourth.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-quotes-fourth.log",
+    "rawSha256": "87ab30a7b80fce5b4aa761a6caf0946013d410af8506d248498afbf3403e25d3",
+    "evidenceSha256": "8770388a75e4a4d030e385e769b7055322194f50abcb21920b8b2c3931f4426e"
+  },
+  {
+    "source": ".build/carrier-native-quotes-second.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-quotes-second.log",
+    "rawSha256": "0555710ebc2f2e22cf3be0c2e4efad06996b4d68fa29fa55e68e5925d7fef5e6",
+    "evidenceSha256": "4db0dc31049027851db83f7f44a8704085d3383b54badf22f75619487cf50da0"
+  },
+  {
+    "source": ".build/carrier-native-quotes-third.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-native-quotes-third.log",
+    "rawSha256": "749f66864b52d93791e9b8c6ec18ec3cbe14a6730ab8bddd0fc1a1759c8bd495",
+    "evidenceSha256": "275fe1655e9fd8a79ff0c82e41c9422faae74b02da3542dbe70014e5b0a79309"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-ai-bp5-pass.log",
+    "rawSha256": "3a091356ac2a7d7e3b443bb8480ebb6b80d121f5ee6a022e1c0d7c62d4993f3b",
+    "evidenceSha256": "cf0b76ce272ae8951dac1a8b4280cd06fba7b8c4c0f663df979aa29ae30cae81"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-commerce-bp1-pass.log",
+    "rawSha256": "1bb16d43628d935e512975624932ba804f104f149db3dd247a12cec2ef17c337",
+    "evidenceSha256": "e59091a4cb05c443ffa7e2584b07ea6230df1c5045899c4deba26671c5a9f96e"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-commerce-bp5-pass.log",
+    "rawSha256": "80824dbe46b2c5b2a48f54f888dbca950e0594bfc3a5da442b48b9b4aec25e25",
+    "evidenceSha256": "0b4a08a4d4473feedb2a1583f508120dcd612a516da6ea182b69b58c6c58e523"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-experience-bp1-pass.log",
+    "rawSha256": "71c3a3d379e08b0d533fc6f20cbe77f62237ea422633e29843299a782a6f0508",
+    "evidenceSha256": "823ecb8bbe88f4d6bd80aad3606f5bf49033da7918360af78ea7f07564c2a987"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-experience-bp5-pass.log",
+    "rawSha256": "711104d3edfcae1a6acfa1a1521a80877955f68e5391582279982c9e9d051a84",
+    "evidenceSha256": "0b0a1c9687d7d35b5190a566fbe905a2d337eacef94227c053668c4994461379"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-integration-bp1-pass.log",
+    "rawSha256": "cb2ec299b8bb22c6c787730c60af256e23f4a12016f783e780ab961a0189856d",
+    "evidenceSha256": "6828cae93bb7541d560a8c2f0b19abc2355618eebe9e48268da5014870d6ac47"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-36bf234615-postgres-integration-bp5-pass.log",
+    "rawSha256": "dfcb27786823785eb0dad0864c1e9d370afc5fdeb6aa99fa1a98eea27db4b267",
+    "evidenceSha256": "fe87d9a567f8aa75a478899a29b1275ad3f982d15e83d916275a3a48dba0bad8"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-ai-bp5-pass.log",
+    "rawSha256": "6537c2edc80e854264bb765959791881282a59efedae96aff5445e341ecbf858",
+    "evidenceSha256": "8f6b26b4c4414e43301a64249872241159432754dd6e04e5d56040e01f5b804c"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-commerce-bp1-pass.log",
+    "rawSha256": "862ce2cb2b20da7063832d78599459ecab131ac9a46038112801bbef2aab3f89",
+    "evidenceSha256": "ff0fd0ceeff275be4fd50edd7ba31fd538a71264f7f0946a2846caeece498730"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-commerce-bp5-pass.log",
+    "rawSha256": "6be1b097357c34815be30043e01c4db5030d521c8cb4579bbee6054cd848ae97",
+    "evidenceSha256": "2ceb642360f6f29f5b5e524d7d67c903532f4acc0a15f91dd98d2c9fa24f926b"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-experience-bp1-pass.log",
+    "rawSha256": "54b0047203e84aa2ee143f3169f56e5dfb69281851818612c208576168a40de9",
+    "evidenceSha256": "30cf825d1c9dd837e0ddb77921fa04c8004156a6c8d261e99a4764040e768c63"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-experience-bp5-pass.log",
+    "rawSha256": "9934f87ae9b97dee743fd947b8e852f0b6852fc009ac083803bf623c7ba6b5e0",
+    "evidenceSha256": "0e50592ad6be9ad92fc833706bf676ba3856045e2154af44366dbbd62018eac6"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-integration-bp1-pass.log",
+    "rawSha256": "c5d29f0c59664efdfcb4c3666933dc24c1fdce019becf71793e748780f220cdc",
+    "evidenceSha256": "fd264623e3ebee9861b3c48809f27a127f3d7328a320c14687166d5bf88ca389"
+  },
+  {
+    "source": ".build/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression/database-evidence/nigson-test-plat-37c95d3fe3-postgres-integration-bp5-pass.log",
+    "rawSha256": "1cd651973c52cbc597a129b00b741cba5001258408179f1d2112c1a54527b03b",
+    "evidenceSha256": "321330cd2282e8fc5f0a568457052c66ba4f30038e7dea44b13d93dd53a0e886"
+  },
+  {
+    "source": ".build/carrier-payment-regression-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression-first.log",
+    "rawSha256": "7453c3493d7cd6129cb07395e5fca067d4096e72def4ddc53f8423c2f9704f6e",
+    "evidenceSha256": "599d55f4c3f9d2ebf11e55f929cc71acc04f3a201e20cc96afecb02c8cb67a39"
+  },
+  {
+    "source": ".build/carrier-payment-regression-second-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression-second-counts.json",
+    "rawSha256": "dd322216b8d17fd08a840044547b7e6d76f755287047d37dada78715d1587bb5",
+    "evidenceSha256": "dd322216b8d17fd08a840044547b7e6d76f755287047d37dada78715d1587bb5"
+  },
+  {
+    "source": ".build/carrier-payment-regression-second.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-payment-regression-second.log",
+    "rawSha256": "3ae3c037b6f727a83b31c06ea9fd517bd2d90644d712d35088b624190da4e14b",
+    "evidenceSha256": "6b6dceebb4f607d8f6084cea8e1582b8a2fb25d1cb7536f86ab45433f5cc8980"
+  },
+  {
+    "source": ".build/carrier-quotes-artifacts-first.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-quotes-artifacts-first.json",
+    "rawSha256": "f14c03241efd04b8ede7d84669d148bd12baf1b98085917cb0a94c0be1fdb63b",
+    "evidenceSha256": "f14c03241efd04b8ede7d84669d148bd12baf1b98085917cb0a94c0be1fdb63b"
+  },
+  {
+    "source": ".build/carrier-quotes-artifacts-second.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-quotes-artifacts-second.json",
+    "rawSha256": "f14c03241efd04b8ede7d84669d148bd12baf1b98085917cb0a94c0be1fdb63b",
+    "evidenceSha256": "f14c03241efd04b8ede7d84669d148bd12baf1b98085917cb0a94c0be1fdb63b"
+  },
+  {
+    "source": ".build/carrier-quotes-full-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-quotes-full-first-counts.json",
+    "rawSha256": "a85ba26217b535fbad3bc8b4fc7e79014d576b67eaf9a7c54c429cd7e435aa44",
+    "evidenceSha256": "a85ba26217b535fbad3bc8b4fc7e79014d576b67eaf9a7c54c429cd7e435aa44"
+  },
+  {
+    "source": ".build/carrier-quotes-full-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-quotes-full-first.log",
+    "rawSha256": "20156932936d3aa6eec12378e7e66dd228be785c86c642a4bbf6d24e65053020",
+    "evidenceSha256": "5f96eb194763be243dd4fd46fd4c0ff611e170111e8e5e98f6251d96c42711b5"
+  },
+  {
+    "source": ".build/carrier-quotes-repro-ai.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-quotes-repro-ai.log",
+    "rawSha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce",
+    "evidenceSha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce"
+  },
+  {
+    "source": ".build/carrier-quotes-repro-java.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-quotes-repro-java.log",
+    "rawSha256": "9e8cd00341c20b820417cf6354e5ce8c2db1fd0f112aefac590ea49be45a3355",
+    "evidenceSha256": "44dcbe13b9caac0b4c8a4da5fa1a36765151247bbee1476f64e92fdc40c5227d"
+  },
+  {
+    "source": ".build/carrier-repository-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-repository-first.log",
+    "rawSha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8",
+    "evidenceSha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8"
+  },
+  {
+    "source": ".build/carrier-values-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-values-first.log",
+    "rawSha256": "5940331a1f49722e5eb5a0a279c322dd42ab3be8502844f00c5a848e751af79f",
+    "evidenceSha256": "05101d9c05e5749d1c0acd43e628cf3599f4b3cdcaf1e390eac25a626eff61e3"
+  },
+  {
+    "source": ".build/carrier-values-second.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier-values-second.log",
+    "rawSha256": "b0b6d96ec4e076a25e70c4e039a544383a74f54860df1bb005e800a8d95289c5",
+    "evidenceSha256": "0e0c0bcabca0251ba67104cbce94dff0ba1071eae902473bad30a2b497cef4ad"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-ai-bp5-pass.log",
+    "rawSha256": "b772a9a9d68770b9a09e6ca033e8d7878c93af5ed1a03e89f560f39c1996ad7a",
+    "evidenceSha256": "57eb811a1f7dee8b1633cedaa4d092068014d0b6bbad61739a1f21ae7a103a63"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-commerce-bp1-pass.log",
+    "rawSha256": "fcac58793a2c5f9fb2c738f985524739d5bef8945bccdb1c5f8560a095dbcddf",
+    "evidenceSha256": "ed91e99d5722dba074f509168a953bdf886b3b2e4921ba1e61a2d2122540c474"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-commerce-bp5-pass.log",
+    "rawSha256": "1af6bcc9666b44f077f89a4663ad717f28d1eaf6737fc9a757cc9082a69c7c8a",
+    "evidenceSha256": "7811fc6075977221f221c2edc966d46117d35311e8a541300d571f1f55415d38"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-experience-bp1-pass.log",
+    "rawSha256": "316be1de479d6bd30e2941bd4d657fc0c3b6f324c748d3be46626bc4daf2b09b",
+    "evidenceSha256": "6017c1c8729a7c2c7e0c576dbaf2dda9c936d22f7ba8957fc3b8078b95a6b47d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-experience-bp5-pass.log",
+    "rawSha256": "46b0c69721d6f4c42f0f7db0e565b70ec1e6e71044d4bd020e9540bd505256f2",
+    "evidenceSha256": "da018ca44f6b4a1d466440ca15477590121f30dcc635b1c1ae725acfb7dd408e"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-integration-bp1-pass.log",
+    "rawSha256": "834c609224ee944157345a3e1fe2589037778070f572c4c189ce833f10899c8d",
+    "evidenceSha256": "99a3ad6ffc6337174952218752bbb29c1fe59ce0e9cba45aef623a5b5b89f023"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-31d2481e7a-postgres-integration-bp5-pass.log",
+    "rawSha256": "9691d9b3362539ec7f1705008bb2b7daee561ba626df34c2ce504e2620468ad5",
+    "evidenceSha256": "bdea02dac44515ccad390c6329ced3c71014cdc542deae853be7b0453d9c6ab7"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-ai-bp5-pass.log",
+    "rawSha256": "7a7a30018cbf47b4865c3f96e225ae82227fd25edb44c57b0c8a0536e6243bf3",
+    "evidenceSha256": "2e8ae154424ccf78a5eb0857b553e6f432f927c23926cfb520056c68af094856"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-commerce-bp1-pass.log",
+    "rawSha256": "88f24db2283288cff8c79a51cbfc2920a38a9cc5f57538a61d30ec9d572efe87",
+    "evidenceSha256": "dd5b0f6e213dc9a745ed5804f6a0589fb85a0c45abf47d12ffd59825d2321073"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-commerce-bp5-pass.log",
+    "rawSha256": "268948b9dcf2ca23efc5357013f4f32443bd4a66a1742283c70a60636afd47f7",
+    "evidenceSha256": "1f74f4244ae86702594a79e2ea74964ba488960f7a6e4c376fd063870be7033a"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-experience-bp1-pass.log",
+    "rawSha256": "f8160e7c13e9c7e6d3eaaaa9f7976d410ae714fd888d3568e6f5c300ed2c9ded",
+    "evidenceSha256": "2b7057d1947642e2b623a633115b84bc6b4112b891d236e866b041647b068d69"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-experience-bp5-pass.log",
+    "rawSha256": "af00f212ba91eeb3a5292908646240de4cfc9d304222bc8f97d220c9562789c9",
+    "evidenceSha256": "d36f93f7faf58f1a01c402dd3f38780cedf52842b14437ad1d349603f934544a"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-integration-bp1-pass.log",
+    "rawSha256": "4fc1a0b989927b6a24428ddfb818a33086c7f23d841ded31f9bb9394331e1d56",
+    "evidenceSha256": "e2c053eac998159f16504f7e9dea9d5b7925b05534f76429f3a357f690b58b07"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-585108ef31-postgres-integration-bp5-pass.log",
+    "rawSha256": "6c8bd87c75e6af9ef6e9c899ccc23b2630f57ea960e2489522fd6e1f474990e2",
+    "evidenceSha256": "417ba5276a2003b62eed0d76e8c8c1a30353aaabe19c1360f1b6f6f3bd0d9fb0"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-ai-bp5-pass.log",
+    "rawSha256": "fa7e0e41b41f5ab80068baa93c57c83de0a10f223954d8c7fae0b33defe3bdbd",
+    "evidenceSha256": "7a33aa367ed1283521a3b1af916cc62253489f753d3327292ecec0edf07eb278"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-commerce-bp1-pass.log",
+    "rawSha256": "eacbe00fade919273e4f8a320b59fd02ef02c3b0cb41c70818ee81bab0112b7f",
+    "evidenceSha256": "77542799426c28ff4b26d989afb07da76f25d21af446d593861f39ec74f7f017"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-commerce-bp5-pass.log",
+    "rawSha256": "caa83daf445af51da79c3010e490ff8a2cca93bf6d5e89deb523c50cdebdc08c",
+    "evidenceSha256": "3b5f9e070e56be72cff30c565fdc2795773892f3e9cba02aec71a7fa2f2d0a0e"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-experience-bp1-pass.log",
+    "rawSha256": "1178c28e1683a43f8f897e4823225271cdd88a82ef87308e94026000e42fe921",
+    "evidenceSha256": "6323272d17a164298443821fed07414622aa67b2c865ef79fe51f9f4e1b8a566"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-experience-bp5-pass.log",
+    "rawSha256": "b120935935196ac90e46f624bb4138e65b066c7f8286bb6bc88201dcb4bb5fa8",
+    "evidenceSha256": "e80fd86039e5449143cf70653a827fd4bb48ae4435b93393371f4c97b652759f"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-integration-bp1-pass.log",
+    "rawSha256": "0b1ca1760879d5b82e7c9dc79229ac35be869136f4e5b294b2bdbbf9a7c8442a",
+    "evidenceSha256": "feb047014a2e7f12520c96d1b6c8fd40b234850c216335a64d06c035fa36fcdf"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-5c5449e06f-postgres-integration-bp5-pass.log",
+    "rawSha256": "97371cf066be2b5d141d73a9ba5bee0e7c056bb6d3b0b714519fb95a852c79a1",
+    "evidenceSha256": "752a779d629123cbcb1655aa9b5ea75990dbb885b4af177fd68491c1d36acb9d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-ai-bp5-pass.log",
+    "rawSha256": "51f4cba23be4f97259021ddda50eabe8cfa3a1002abc4d39e6b0a2f5e8311176",
+    "evidenceSha256": "0bf28aa916d01b6c20915fd215bf5c78aee762c74bc3f90b4ac1c6ef884fdc39"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-commerce-bp1-pass.log",
+    "rawSha256": "6c8a2f6a5716c30990dbadd22a7cf5b9fd8bb4e6e46654dbdbd85162d043bde4",
+    "evidenceSha256": "10b83a632099823bfe5ff51ccfe06e02033ee3fd43e9b81c3e29753961e6a49c"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-commerce-bp5-pass.log",
+    "rawSha256": "c58082677a5fb7eb4d0a773fce5f13cf982167b3645fc0e95c8e2d97358a5a2b",
+    "evidenceSha256": "bdf3647a5aee59fa0abcdf0b92f3c36982161f44e5bb771a882909bbbda54e28"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-experience-bp1-pass.log",
+    "rawSha256": "2329ea0d0f9c04518ae6473fe3d656d449f64a29d84b9c6d87239c8f5bc4ee20",
+    "evidenceSha256": "d33fe74246d18f344ec8106310c1285a57769462ebe90fd967d6b4640fb2c73d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-experience-bp5-pass.log",
+    "rawSha256": "cc8e273a18f28a039555c6e4982af139b8287bc2d82dd30220e017baaa763936",
+    "evidenceSha256": "568ab03d7028b8e13306c0c716761f31a813898ffb75224396fde8047b2cad71"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-integration-bp1-pass.log",
+    "rawSha256": "03cecb496a67df9a9fc57a9469b8420d743ac78edc1c31097d22539c85f9b51e",
+    "evidenceSha256": "d3c26bfdd11a5a65f1cd86439ef72332d520af0f3968cd4c7675c7f25fe8c81d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-7786db5316-postgres-integration-bp5-pass.log",
+    "rawSha256": "bc48a313d7f14095763193c61bfeb0d32f4903bc9e6512d4db6df2019ac9088f",
+    "evidenceSha256": "7b00d9c5edc37ee59e87203cc3c2e44d8821b0c8e5e092146e0ac0001c340f1b"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-ai-bp5-pass.log",
+    "rawSha256": "006db5ebfc79c923a788ecd71eb013ac564db1f5bc538ed01747d5ad01b2cb4e",
+    "evidenceSha256": "3f6c904608e45e6057400d6451ee21bab47627c0f87dee029e35fcdf7fc5e99d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-commerce-bp1-pass.log",
+    "rawSha256": "05d135b7ac40cbe32bb099dd7d5d356320ad120d21c349dd250c7dc880618ecc",
+    "evidenceSha256": "88a39dec2a95e217a190566bdaf1cfcac2f4baaf38f3edafd70d7f8e7782716b"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-commerce-bp5-pass.log",
+    "rawSha256": "7a54f036545dc4c1a12791d4174a54820e932bb9e480fc4cef33000882429b21",
+    "evidenceSha256": "cd97ed4e8c308ca376ac3bf01fa0e6ebbfaed6a1d6b86869e0b0e91808e1ee6c"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-experience-bp1-pass.log",
+    "rawSha256": "376af696bc2ec2b875ecb3ccb81e008d6644c7da11f5e179931ee52f5b40ffbb",
+    "evidenceSha256": "486a4b4132d0db7fc0b54654b490c3156362906799446b99a0681f39e42b39ed"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-experience-bp5-pass.log",
+    "rawSha256": "1d39a22d00d4407627ecd741aec3783e3bfbf6016c5e4f175b2452b444d590df",
+    "evidenceSha256": "b78827ba3ffdd32deb8bfd5debf0c5687b4d1c14c94532f0dabf9b592a2f0aa0"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-integration-bp1-pass.log",
+    "rawSha256": "63c1a0e15bddc3a035e791d5d1a315f3d9f1adfd5295ec7e8b5d8484fa4da04b",
+    "evidenceSha256": "4f83365ec970c48b1ed110d957f65b3f8e329b6efe35674d64424269124b6eba"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-84e53a36f0-postgres-integration-bp5-pass.log",
+    "rawSha256": "69809aef3c4d2f01067f0953aea428f6b884cce28b1802cf187d931e7e17a9cd",
+    "evidenceSha256": "663ad4794ef76a733d0b982a0721e5fe6a353a79992f616365d9e9c8ce79c695"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-ai-bp5-pass.log",
+    "rawSha256": "7b91eaa250a91707d921476b78435a3a4b9168d0e81256e91f784cf179fa5860",
+    "evidenceSha256": "57306d3a434f03573a41b261fda574c4805ee4ed157dc5510c3f95e4a481cf0e"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-commerce-bp1-pass.log",
+    "rawSha256": "7c89ad7a14c556ffaa8fc04f8fffa2c72d9498a0a87cb3b12f47a963958577be",
+    "evidenceSha256": "8f9830322c1f757b5af43f98da8cbcdad845144211929edab96d82171817360d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-commerce-bp5-pass.log",
+    "rawSha256": "9a047d1cf2d4de2a53742ac4a7d3e478fc76969bd7b72564f7993d8e407e6e21",
+    "evidenceSha256": "af942dc127c46c2c18d0efec6a2bcefacd84627d328f4e40d5560550ead7ac69"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-experience-bp1-pass.log",
+    "rawSha256": "12ea2789a2fac02d2a0822329ea05130a853ae2ae16590d4b110ad650a8b70bf",
+    "evidenceSha256": "4e485dc051ee0b7b69375f947ffd72234a87553c4905bc41839cd06a113329a2"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-experience-bp5-pass.log",
+    "rawSha256": "c7feb7aea5ec4236220c7175a8965f4ac8cfdbba47b8b5b3152a397eae84f317",
+    "evidenceSha256": "107d463bda61170c13b483975827286ac0c22ce84d9a3cef7a787118d21c294b"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-integration-bp1-pass.log",
+    "rawSha256": "cced428bdddf5e3b2ed03b9d3750672b16f4807a556a1594e459fede2bd0f01d",
+    "evidenceSha256": "68ed53f8629adffcadd184704b88966d5430a0a5de7bfa714fb15dc96373479d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-b086c84a6a-postgres-integration-bp5-pass.log",
+    "rawSha256": "17e172b57047aca4b585f666e0f744e5b5c28920e3e8e8223cf53abc38558cab",
+    "evidenceSha256": "8a17d46f342ba55068f2c8159dbe052d6f89c06becc5278f2275dc845aa4420f"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-ai-bp5-pass.log",
+    "rawSha256": "cc0d9a95c655bee9957ed9835aa2f6fbc20016847420742d20a96d707f4159a1",
+    "evidenceSha256": "62d3515679e2582ac5f3210e87d7488736aa5fc69ac31c91555e8151f06bc730"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-commerce-bp1-pass.log",
+    "rawSha256": "f60eccf1eaeb81dc907c4dec0238c6dc9148a0de12bcc7ed7d4bac87c89abc90",
+    "evidenceSha256": "c9d72114d3dc96be135a780682a05b11f96785689795a78e868df83e5cb7884f"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-commerce-bp5-pass.log",
+    "rawSha256": "3a242af637b4447b6fc3e33094c4e8900a0058b00806c341e0a82a764d0803eb",
+    "evidenceSha256": "68081cec654cedcefa07f40e44b337a11b6ab452594dc9dfa3c871794c657751"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-experience-bp1-pass.log",
+    "rawSha256": "bf1864fa773259c5b777511b6270a8fc4892cc031180f43081aabf965c130adb",
+    "evidenceSha256": "ff3a19fc63c21dd598121b8401ef536a2887361542a60368bb9e6c0897cc32c1"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-experience-bp5-pass.log",
+    "rawSha256": "5e561ca957ca61f53370d6400cff8ec23ef1d9ad8ef2f3ec0a11f3fd86959e09",
+    "evidenceSha256": "761f837e961ed125e6d71cd00882dc7d3efbe953ba9e2499be01d784484b0054"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-integration-bp1-pass.log",
+    "rawSha256": "4ac8d3b741e9a00a13eddf43e4ef72ae818a235bc358477c1b25262b60d586fb",
+    "evidenceSha256": "d7400bca35c526e920c307d69b6bb6e4e26e21088b6cdd8f38c2426ec2a6cc3a"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-bf7a02e0c1-postgres-integration-bp5-pass.log",
+    "rawSha256": "97175a8b4f43c35af49732f3d5fca428f30339dfbc01f978282518ec7d0e79fa",
+    "evidenceSha256": "514d920a995af57a68d109d0f66d9fb1648275b137efd23d86c018bbd8849ea0"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-ai-bp5-pass.log",
+    "rawSha256": "b6ce3523bae605b286d83642abfb2eb3e77e298ddf2329542ce8d67b6883431f",
+    "evidenceSha256": "f8729905c29a625f3d29819bafaad44b1e438ac4fe2e69ebfb5ec59aef140aa3"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-commerce-bp1-pass.log",
+    "rawSha256": "929c1309f87de44fc31751cd820c305227394a80e66cbf0468d42421ca21866f",
+    "evidenceSha256": "a7f11dcb5cbb55fb96af9d0cf5d20cfc9ca24127993675a739e59fde468e4c92"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-commerce-bp5-pass.log",
+    "rawSha256": "c2e389225ac99671517730725d7e55113204e8e1d45ce94409980f702ff60904",
+    "evidenceSha256": "829f1da9917b2bc456cd9e37f90a08a99b2a943ee9b3106b2a3130c285435582"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-experience-bp1-pass.log",
+    "rawSha256": "57a692a64aa181e35cc549c51b836690eb11fd3550c6f24cb3a16700a28d8279",
+    "evidenceSha256": "780b7089da2ae53fea678d43eea97bd8d4e8888e0a9e780b53d4dab29a2fbfc7"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-experience-bp5-pass.log",
+    "rawSha256": "9e43746ff466931d8867fa173ee936ec1f517729daa46e9c2f639fb9dc639de4",
+    "evidenceSha256": "0d90d9efbbb2a92ebd5f1601ce7a7622c01e0ab7899fa835f6cccc8e4e5265df"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-integration-bp1-pass.log",
+    "rawSha256": "ff8c6c1f91e5463ee58f9a68acaf7214539a9d12d308b1848ececda63f92f9fa",
+    "evidenceSha256": "cd334ce0e8e695a3e6ccf62a9c5a2a5aa56c4dc7b9b97a79ce11cd0f4ff48259"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001/carrier001/database-evidence/nigson-test-plat-c1403cf9ae-postgres-integration-bp5-pass.log",
+    "rawSha256": "a9b404fad6055ec8424e8ff8b66e16fbe1e5dab482925d6bfdad26da49f84348",
+    "evidenceSha256": "e3c0773a277f8316d3254488cf3b6d2680fd6bb49b508afc68da66aa63644643"
+  }
+]

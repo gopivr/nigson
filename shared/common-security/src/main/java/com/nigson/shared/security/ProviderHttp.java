@@ -25,7 +25,7 @@ public final class ProviderHttp {
   if(mode==Mode.MOCK){if(!local||!base.getScheme().equals("http")||!(base.getHost().equals(mockHost)&&base.getPort()==8080||environment.equals("test")&&base.getHost().equals("127.0.0.1")&&base.getPort()>0))throw new IllegalArgumentException("MOCK_TARGET_INVALID");}
   else if(!base.getScheme().equals("https")||!officialHosts.contains(base.getHost())||base.getPort()!=-1)throw new IllegalArgumentException("PROVIDER_TARGET_INVALID");
   if(environment.equals("prod")&&mode!=Mode.LIVE)throw new IllegalArgumentException("PRODUCTION_MODE_INVALID");
-  if(!Set.of("local","test","dev","stage","prod").contains(environment))throw new IllegalArgumentException("ENVIRONMENT_INVALID");
+  if(!Set.of("local","test","dev","qa","stage","prod").contains(environment))throw new IllegalArgumentException("ENVIRONMENT_INVALID");
   for(String key:credentials){if(key==null||key.isBlank()||key.length()>2048)throw new IllegalArgumentException("PROVIDER_CREDENTIAL_MISSING");boolean dummy=key.toLowerCase(Locale.ROOT).matches(".*(mock|dummy|placeholder|example).*" )||key.matches("(?:AC|MG|HX)?0{8,}");if(mode==Mode.MOCK&&!dummy||mode!=Mode.MOCK&&dummy)throw new IllegalArgumentException("PROVIDER_CREDENTIAL_MODE_INVALID");}
   client=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER).build();
  }
@@ -35,16 +35,19 @@ public final class ProviderHttp {
   URI target=base.resolve(path);if(!Objects.equals(target.getAuthority(),base.getAuthority()))throw new IllegalArgumentException("PROVIDER_TARGET_INVALID");
   var wire=com.nigson.shared.observability.WireContext.current();
   var span=wire==null?io.opentelemetry.api.trace.Span.getInvalid():wire.tracer.spanBuilder("http.provider").setSpanKind(io.opentelemetry.api.trace.SpanKind.CLIENT).setAttribute("http.request.method",method).setAttribute("nigson.provider",provider).setAttribute("nigson.provider_mode",mode.name()).startSpan();
+  java.util.concurrent.CompletableFuture<HttpResponse<byte[]>> pending=null;
   try(var scope=span.makeCurrent()){
    var builder=HttpRequest.newBuilder(target).timeout(Duration.ofSeconds(8)).header("Content-Type",contentType);
    if(authorization!=null&&!authorization.isBlank())builder.header("Authorization",authorization);
    if(wire!=null){builder.header("X-Correlation-ID",wire.correlationId.toString());String trace=com.nigson.shared.observability.WireContext.traceparent();if(trace!=null)builder.header("traceparent",trace);}
    var request=builder.method(method,body.isEmpty()?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body)).build();
-   var response=client.send(request,info->new BoundedBody());
+   // A request timeout alone may end at response headers; include the entire bounded body.
+   pending=client.sendAsync(request,info->new BoundedBody());
+   var response=pending.get(9,java.util.concurrent.TimeUnit.SECONDS);
    span.setAttribute("http.response.status_code",response.statusCode());
    if(response.statusCode()<200||response.statusCode()>=300)throw new Failure("PROVIDER_HTTP_"+response.statusCode(),sideEffect&&(response.statusCode()>=500||response.statusCode()==408||response.statusCode()>=300&&response.statusCode()<400),response.statusCode());
    return new Result(response.statusCode(),new String(response.body(),StandardCharsets.UTF_8));
-  } catch(Failure classified){span.setStatus(io.opentelemetry.api.trace.StatusCode.ERROR);throw classified;}catch(InterruptedException interrupted){span.setStatus(io.opentelemetry.api.trace.StatusCode.ERROR);Thread.currentThread().interrupt();throw new Failure("PROVIDER_INTERRUPTED",sideEffect,0);}catch(Exception transport){span.setStatus(io.opentelemetry.api.trace.StatusCode.ERROR);throw new Failure("PROVIDER_TRANSPORT_UNCERTAIN",sideEffect,0);}finally{span.end();}
+  } catch(Failure classified){span.setStatus(io.opentelemetry.api.trace.StatusCode.ERROR);throw classified;}catch(InterruptedException interrupted){span.setStatus(io.opentelemetry.api.trace.StatusCode.ERROR);Thread.currentThread().interrupt();throw new Failure("PROVIDER_INTERRUPTED",sideEffect,0);}catch(Exception transport){span.setStatus(io.opentelemetry.api.trace.StatusCode.ERROR);throw new Failure("PROVIDER_TRANSPORT_UNCERTAIN",sideEffect,0);}finally{if(pending!=null&&!pending.isDone())pending.cancel(true);span.end();}
  }
  private static final class BoundedBody implements HttpResponse.BodySubscriber<byte[]> {
   private final HttpResponse.BodySubscriber<byte[]> delegate=HttpResponse.BodySubscribers.ofByteArray();

@@ -1,0 +1,16 @@
+{
+  "tests": 24,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "executed": 24,
+  "classes": [
+    "com.nigson.commerce.security.SecurityAssemblyTest",
+    "com.nigson.commerce.fulfillment.HttpCarrierRatesTest",
+    "com.nigson.acceptance.carrier.CarrierRateBindingTest",
+    "com.nigson.integration.providers.FedExAdapterTest",
+    "com.nigson.integration.carrier.CarrierValuesTest",
+    "com.nigson.acceptance.carrier.CarrierQuotePersistenceTest",
+    "com.nigson.acceptance.carrier.CarrierQuoteHttpTest"
+  ]
+}

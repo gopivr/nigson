@@ -1,0 +1,51 @@
+package com.nigson.integration.providers;
+
+import java.net.*;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import com.sun.net.httpserver.HttpServer;
+import com.nigson.shared.events.EventCodec;
+import com.nigson.shared.security.ProviderHttp;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import static org.assertj.core.api.Assertions.*;
+
+/** Actual loopback HTTP with token state; no genuine provider credentials or calls. */
+class FedExAdapterTest {
+ @Test void readRenewsOnceAndUsesConfiguredAccountAndReference()throws Exception{
+  var grants=new AtomicInteger();var reads=new AtomicInteger();var seen=new ArrayList<tools.jackson.databind.JsonNode>();
+  var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+  server.createContext("/",x->{String path=x.getRequestURI().getPath();String body=new String(x.getRequestBody().readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);int status=200;Object result;
+   if(path.equals("/oauth/token")){grants.incrementAndGet();result=Map.of("access_token","mock-access-"+grants.get(),"token_type","bearer","expires_in",3600);}
+   else{seen.add(EventCodec.JSON.readTree(body));reads.incrementAndGet();if(reads.get()==1){status=401;result=Map.of("errors",List.of(Map.of("code","EXPIRED")));}else{assertThat(x.getRequestHeaders().getFirst("Authorization")).isEqualTo("Bearer mock-access-2");result=Map.of("output",Map.of("completeTrackResults",List.of()));}}
+   byte[] bytes=EventCodec.JSON.writeValueAsBytes(result);x.getResponseHeaders().add("Content-Type","application/json");x.sendResponseHeaders(status,bytes.length);x.getResponseBody().write(bytes);x.close();
+  });server.start();
+  try{var adapter=adapter(server);var result=adapter.trackReference("booking-synthetic-1",LocalDate.of(2026,10,10),LocalDate.of(2026,10,12));assertThat(result.path("completeTrackResults").isEmpty()).isTrue();assertThat(grants.get()).isEqualTo(2);assertThat(reads.get()).isEqualTo(2);assertThat(seen.getFirst().path("referencesInformation").path("accountNumber").asString()).isEqualTo("mock-fedex-account");assertThat(seen.get(1)).isEqualTo(seen.getFirst());assertThat(seen.getFirst().path("referencesInformation").path("shipDateEnd").asString()).isEqualTo("2026-10-12");}
+  finally{server.stop(0);}
+ }
+ @Test void unauthorizedWriteIsNeverAutomaticallyRepeated()throws Exception{
+  var grants=new AtomicInteger();var writes=new AtomicInteger();var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+  server.createContext("/",x->{x.getRequestBody().readAllBytes();boolean token=x.getRequestURI().getPath().equals("/oauth/token");if(token)grants.incrementAndGet();else writes.incrementAndGet();byte[] b=EventCodec.JSON.writeValueAsBytes(token?Map.of("access_token","mock-access","token_type","bearer","expires_in",3600):Map.of("errors",List.of(Map.of("code","EXPIRED"))));x.sendResponseHeaders(token?200:401,b.length);x.getResponseBody().write(b);x.close();});server.start();
+  try{var adapter=adapter(server);assertThatThrownBy(()->adapter.book(EventCodec.JSON.valueToTree(Map.of("requestedShipment",Map.of())))).isInstanceOfSatisfying(ProviderHttp.Failure.class,f->{assertThat(f.status).isEqualTo(401);assertThat(f.uncertain).isFalse();});assertThat(grants.get()).isEqualTo(1);assertThat(writes.get()).isEqualTo(1);}
+  finally{server.stop(0);}
+ }
+ @Test void invalidTokenIsSafeAndDoesNotReachShipmentEndpoint()throws Exception{
+  var writes=new AtomicInteger();var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+  server.createContext("/",x->{x.getRequestBody().readAllBytes();if(!x.getRequestURI().getPath().equals("/oauth/token"))writes.incrementAndGet();byte[] b=EventCodec.JSON.writeValueAsBytes(Map.of("access_token","mock-private\r\nvalue","token_type","bearer","expires_in","3600"));x.sendResponseHeaders(200,b.length);x.getResponseBody().write(b);x.close();});server.start();
+  try{assertThatThrownBy(()->adapter(server).book(EventCodec.JSON.valueToTree(Map.of("requestedShipment",Map.of())))).isInstanceOf(ProviderHttp.Failure.class).hasMessage("FEDEX_TOKEN_INVALID");assertThat(writes.get()).isZero();}finally{server.stop(0);}
+ }
+ @Test void invalidModeReferenceOrTransactionCannotSendHttp(){
+  assertThatThrownBy(()->new FedExAdapter("prod",ProviderHttp.Mode.LIVE,"https://apis.fedex.com","synthetic-client","synthetic-secret","synthetic-account")).hasMessage("PROVIDER_CREDENTIAL_MODE_INVALID");
+  var adapter=new FedExAdapter("test",ProviderHttp.Mode.MOCK,"http://127.0.0.1:9","mock-client","mock-secret","mock-account");
+  assertThatThrownBy(()->adapter.trackReference("../private",LocalDate.now(),LocalDate.now())).hasMessage("FEDEX_REFERENCE_INVALID");
+  assertThatThrownBy(()->adapter.trackReference("booking",LocalDate.now(),LocalDate.now().plusDays(91))).hasMessage("FEDEX_REFERENCE_INVALID");
+  TransactionSynchronizationManager.setActualTransactionActive(true);try{assertThatThrownBy(()->adapter.rates(EventCodec.JSON.valueToTree(Map.of("requestedShipment",Map.of())))).hasMessage("PROVIDER_CALL_INSIDE_TRANSACTION");}finally{TransactionSynchronizationManager.setActualTransactionActive(false);}
+ }
+ private FedExAdapter adapter(HttpServer server){return new FedExAdapter("test",ProviderHttp.Mode.MOCK,"http://127.0.0.1:"+server.getAddress().getPort(),"mock-fedex-client","mock-fedex-secret","mock-fedex-account");}
+ @Test void acceptedWriteWithStalledResponseBodyIsBoundedAndUncertain()throws Exception{
+  var accepted=new AtomicInteger();var release=new java.util.concurrent.CountDownLatch(1);var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+  server.createContext("/",x->{x.getRequestBody().readAllBytes();if(x.getRequestURI().getPath().equals("/oauth/token")){byte[] b=EventCodec.JSON.writeValueAsBytes(Map.of("access_token","mock-token","token_type","bearer","expires_in",3600));x.sendResponseHeaders(200,b.length);x.getResponseBody().write(b);x.close();}else{accepted.incrementAndGet();x.sendResponseHeaders(200,0);x.getResponseBody().flush();try{release.await(20,java.util.concurrent.TimeUnit.SECONDS);}catch(InterruptedException interrupted){Thread.currentThread().interrupt();}finally{x.close();}}});server.start();
+  try{long start=System.nanoTime();assertThatThrownBy(()->adapter(server).book(EventCodec.JSON.valueToTree(Map.of("requestedShipment",Map.of())))).isInstanceOfSatisfying(ProviderHttp.Failure.class,f->assertThat(f.uncertain).isTrue());assertThat(Duration.ofNanos(System.nanoTime()-start)).isLessThan(Duration.ofSeconds(13));assertThat(accepted.get()).isEqualTo(1);}finally{release.countDown();server.stop(0);}
+ }
+}

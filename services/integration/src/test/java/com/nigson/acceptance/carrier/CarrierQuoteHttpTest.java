@@ -1,0 +1,44 @@
+package com.nigson.acceptance.carrier;
+
+import java.net.*;
+import java.net.http.*;
+import java.time.*;
+import java.util.*;
+import java.nio.charset.StandardCharsets;
+import com.sun.net.httpserver.HttpServer;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.ECDSASigner;
+import com.nimbusds.jose.jwk.*;
+import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
+import com.nimbusds.jwt.*;
+import org.junit.jupiter.api.*;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.server.context.WebServerApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import com.nigson.integration.IntegrationApplication;
+import com.nigson.integration.carrier.*;
+import com.nigson.shared.events.EventCodec;
+import com.nigson.shared.security.*;
+import static org.assertj.core.api.Assertions.*;
+
+class CarrierQuoteHttpTest {
+ private final HttpClient http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER).build();
+ private ECKey workload,actorKey;private String issuer,base;private final UUID party=UUID.randomUUID();
+ private String token(String client,String scope)throws Exception{Instant now=Instant.now();var jwt=new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.ES256).keyID(workload.getKeyID()).type(JOSEObjectType.JWT).build(),new JWTClaimsSet.Builder().issuer(issuer).subject("synthetic-carrier-workload").audience("nigson-integration").claim("azp",client).claim("client_id",client).claim("typ","Bearer").claim("scope",scope).issueTime(Date.from(now)).expirationTime(Date.from(now.plusSeconds(120))).build());jwt.sign(new ECDSASigner(workload));return jwt.serialize();}
+ private String actor(String body,UUID correlation)throws Exception{var actor=new ActorAssertion.Actor(party,issuer,"synthetic-customer",null,Set.of("CUSTOMER"),Set.of("carrier.quote_WITH_SIGNED_ACTOR"),null);var binding=new ActorAssertion.Binding("integration","carrier.quote_WITH_SIGNED_ACTOR","POST","/internal/v1/carrier/quotes",correlation,ActorAssertion.Binding.bodyHash(body.getBytes(StandardCharsets.UTF_8)));var jwt=new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.ES256).keyID(actorKey.getKeyID()).type(new JOSEObjectType("nigson-actor+jwt")).build(),ActorAssertion.claims(actor,binding,Instant.now()));jwt.sign(new ECDSASigner(actorKey));return jwt.serialize();}
+ private HttpResponse<String> post(String token,String actor,String body,UUID correlation,String query)throws Exception{var r=HttpRequest.newBuilder(URI.create(base+"/internal/v1/carrier/quotes"+query)).timeout(Duration.ofSeconds(6)).header("Authorization","Bearer "+token).header("Content-Type","application/json").header("X-Correlation-ID",correlation.toString());if(actor!=null)r.header("X-Nigson-Actor",actor);return http.send(r.POST(HttpRequest.BodyPublishers.ofString(body)).build(),HttpResponse.BodyHandlers.ofString());}
+ @Test void registeredCarrierQuoteUsesRealPrivateTrustAndConfiguredHttpAdapter()throws Exception{
+  String db=System.getenv("NIGSON_TEST_JDBC_URL");Assumptions.assumeTrue(db!=null,"native isolated integration qualification required");if(!db.matches("jdbc:postgresql://127.0.0.1:[0-9]+/nigson"))throw new IllegalArgumentException("LOCAL_INTEGRATION_DB_REQUIRED");
+  workload=new ECKeyGenerator(Curve.P_256).keyID("synthetic-carrier-workload").keyUse(KeyUse.SIGNATURE).algorithm(JWSAlgorithm.ES256).generate();actorKey=new ECKeyGenerator(Curve.P_256).keyID("synthetic-carrier-actor").generate();var provider=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);issuer="http://127.0.0.1:"+provider.getAddress().getPort()+"/realms/synthetic-carrier";var calls=new java.util.concurrent.atomic.AtomicInteger();
+  provider.createContext("/realms/synthetic-carrier/protocol/openid-connect/certs",x->{byte[] bytes=new JWKSet(workload.toPublicJWK()).toString().getBytes(StandardCharsets.UTF_8);x.getResponseHeaders().set("Content-Type","application/json");x.sendResponseHeaders(200,bytes.length);try(var out=x.getResponseBody()){out.write(bytes);}});
+  provider.createContext("/oauth/token",x->{x.getRequestBody().readAllBytes();byte[] bytes="{\"access_token\":\"mock-carrier-token\",\"token_type\":\"bearer\",\"expires_in\":3600}".getBytes(StandardCharsets.UTF_8);x.getResponseHeaders().set("Content-Type","application/json");x.sendResponseHeaders(200,bytes.length);try(var out=x.getResponseBody()){out.write(bytes);}});
+  provider.createContext("/rate/v1/rates/quotes",x->{x.getRequestBody().readAllBytes();calls.incrementAndGet();byte[] bytes="{\"output\":{\"rateReplyDetails\":[{\"serviceType\":\"SYNTHETIC_SERVICE\",\"ratedShipmentDetails\":[{\"rateType\":\"ACCOUNT\",\"totalNetCharge\":1234.56,\"shipmentRateDetail\":{\"currency\":\"NGN\"}}]}]}}".getBytes(StandardCharsets.UTF_8);x.getResponseHeaders().set("Content-Type","application/json");x.sendResponseHeaders(200,bytes.length);try(var out=x.getResponseBody()){out.write(bytes);}});provider.start();
+  try(var app=new SpringApplicationBuilder(IntegrationApplication.class).run("--server.port=0","--server.address=127.0.0.1","--APP_ENV=test","--NIGSON_SECURITY_ENABLED=true","--NIGSON_EVENTS_ENABLED=false","--NIGSON_CARRIER_ENABLED=true","--FEDEX_MODE=MOCK","--FEDEX_BASE_URL=http://127.0.0.1:"+provider.getAddress().getPort(),"--FEDEX_CLIENT_ID=mock-fedex-client","--FEDEX_CLIENT_SECRET=mock-fedex-secret","--FEDEX_ACCOUNT_NUMBER=mock-fedex-account","--NIGSON_CARRIER_SERVICES=SYNTHETIC_SERVICE","--NIGSON_CARRIER_DEFAULT_SERVICE=SYNTHETIC_SERVICE","--NIGSON_CARRIER_PICKUP_TYPE=DROPOFF_AT_FEDEX_LOCATION","--NIGSON_CARRIER_APPROVAL=synthetic-offline-approval","--NIGSON_CARRIER_APPROVAL_UNTIL="+Instant.now().plusSeconds(600),"--NIGSON_OIDC_ISSUER="+issuer,"--NIGSON_PRIVATE_PEER_CIDRS=127.0.0.1/32","--NIGSON_ACTOR_PUBLIC_KEYS="+EventCodec.JSON.writeValueAsString(Map.of(actorKey.getKeyID(),Base64.getEncoder().encodeToString(actorKey.toECPublicKey().getEncoded()))),"--spring.datasource.url="+db+"?currentSchema=integration","--spring.datasource.username=nigson_integration_app","--spring.datasource.password=mock-integration-runtime")){
+   base="http://127.0.0.1:"+((WebServerApplicationContext)app).getWebServer().getPort();var address=new CarrierValues.Address("Synthetic Recipient","+2348000000001","Synthetic street",null,"Lagos","LA",null,"NG");UUID cart=UUID.randomUUID();String body=EventCodec.JSON.writeValueAsString(new CarrierValues.QuoteInput(UUID.randomUUID(),cart,"NG","NGN",address,address,List.of(new CarrierValues.Parcel(UUID.randomUUID(),"1","1","10","10","10")),null));
+   // Optional fields are omitted on the wire; explicit null serviceCode is invalid.
+   var tree=(tools.jackson.databind.node.ObjectNode)EventCodec.JSON.readTree(body);tree.remove("serviceCode");body=EventCodec.JSON.writeValueAsString(tree);UUID correlation=UUID.randomUUID();String signed=actor(body,correlation),valid=token("nigson-commerce","carrier.quote_WITH_SIGNED_ACTOR");
+   assertThat(post(valid,null,body,correlation,"").statusCode()).isEqualTo(401);assertThat(post(token("nigson-experience","carrier.quote_WITH_SIGNED_ACTOR"),signed,body,correlation,"").statusCode()).isEqualTo(401);assertThat(post(token("nigson-commerce","jobs.read"),signed,body,correlation,"").statusCode()).isEqualTo(401);assertThat(post(valid,signed,body+" ",correlation,"").statusCode()).isEqualTo(401);assertThat(calls.get()).isZero();
+   assertThat(post(valid,signed,body,correlation,"?accountNumber=attacker").statusCode()).isEqualTo(400);var response=post(valid,signed,body,correlation,"");assertThat(response.statusCode()).isEqualTo(200);assertThat(response.headers().firstValue("X-Nigson-Carrier-Mode")).contains("MOCK");assertThat(response.headers().firstValue("Cache-Control")).contains("no-store");var value=EventCodec.JSON.readTree(response.body());assertThat(value.propertyNames()).containsExactlyInAnyOrder("provider","serviceCode","currency","amount","expiresAt","providerReference");assertThat(value.path("amount").asString()).isEqualTo("1234.56");assertThat(post(valid,signed,body,correlation,"").body()).isEqualTo(response.body());assertThat(app.getBean(JdbcTemplate.class).queryForObject("SELECT count(*) FROM integration.audit_record WHERE resource_id=?",Integer.class,cart)).isEqualTo(1);
+  }finally{provider.stop(0);}
+ }
+}

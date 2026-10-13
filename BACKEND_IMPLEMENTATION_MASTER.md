@@ -7196,6 +7196,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Query:** None; reject unknown parameters.
 - **Request:** `{commandId:UUID,cartId:UUID,market:NG,currency:NGN,shipper:CarrierAddress,destination:CarrierAddress,packages:[CarrierPackage],serviceCode?:string}`.
 - **Response:** `{provider:FEDEX,serviceCode:string,currency:NGN,amount:Money,expiresAt:Instant,providerReference:string|null}`.
+- **Response metadata:** `X-Nigson-Carrier-Mode: MOCK|SANDBOX|LIVE` from the actual adapter configuration; TEST transport maps to SANDBOX. Commerce must match its approved mode before binding the fee. The closed request/response body shapes are unchanged; caller input cannot select this metadata.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Allowlisted server packing/address only, bounded OAuth/rate request, no provider account or base URL from caller.
 - **Events:** None directly; owned audit/history where applicable.

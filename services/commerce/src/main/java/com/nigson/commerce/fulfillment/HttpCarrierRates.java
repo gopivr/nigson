@@ -1,0 +1,34 @@
+package com.nigson.commerce.fulfillment;
+
+import java.net.*;
+import java.net.http.*;
+import java.nio.ByteBuffer;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.Function;
+import com.nigson.shared.security.*;
+import com.nigson.shared.events.EventCodec;
+import com.nigson.shared.problem.*;
+
+/** Fixed signed rate command only; no redirect, retry or customer-selected transport target. */
+public final class HttpCarrierRates implements CarrierRates {
+ public static final PrivateWorkload.Route ROUTE=PrivateWorkload.ROUTES.stream().filter(r->r.api().equals("API-182")&&r.client().equals("nigson-commerce")&&r.owner().equals("integration")).findFirst().orElseThrow();
+ private final URI base;private final HttpClient http;private final Function<PrivateWorkload.Route,String> credentials;private final Clock clock;private final String mode;
+ public HttpCarrierRates(String env,String target,Function<PrivateWorkload.Route,String> credentials,Clock clock,String mode){base=com.nigson.commerce.security.IntegrationTarget.of(env,target);if(mode==null||!Set.of("MOCK","SANDBOX","LIVE").contains(mode)||env.equals("prod")&&!mode.equals("LIVE")||mode.equals("MOCK")&&!Set.of("local","test").contains(env))throw new IllegalArgumentException("CARRIER_RATE_MODE_REQUIRED");this.credentials=Objects.requireNonNull(credentials);this.clock=Objects.requireNonNull(clock);this.mode=mode;http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER).build();}
+ public static byte[] body(Request input){var node=(tools.jackson.databind.node.ObjectNode)EventCodec.JSON.valueToTree(input);if(input.serviceCode()==null)node.remove("serviceCode");byte[] bytes=EventCodec.JSON.writeValueAsBytes(node);if(bytes.length>65536)throw ApiValues.invalid();return bytes;}
+ public Rate quote(Request input,String assertion,UUID correlation){
+  com.nigson.commerce.security.IdentityKeys.outsideTransaction();if(input==null||assertion==null||assertion.isBlank()||assertion.length()>16384||correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();String token;try{token=credentials.apply(ROUTE);}catch(RuntimeException denied){throw unavailable();}if(token==null||token.isBlank()||token.length()>16384)throw unavailable();
+  var request=HttpRequest.newBuilder(base.resolve(ROUTE.path())).timeout(Duration.ofSeconds(10)).header("Authorization","Bearer "+token).header("X-Nigson-Actor",assertion).header("X-Correlation-ID",correlation.toString()).header("Content-Type","application/json").header("Accept","application/json").POST(HttpRequest.BodyPublishers.ofByteArray(body(input)));var trace=com.nigson.shared.observability.WireContext.traceparent();if(trace!=null)request.header("traceparent",trace);
+  CompletableFuture<HttpResponse<byte[]>> future=null;try{future=http.sendAsync(request.build(),info->new Limited());var response=future.get(11,TimeUnit.SECONDS);if(response.statusCode()!=200){if(Set.of(400,403,404,409,412,422).contains(response.statusCode())&&header(response,"Content-Type").split(";",2)[0].strip().equals("application/problem+json")){var json=EventCodec.JSON.readTree(response.body());for(var safe:List.of(ProblemCode.VALIDATION_ERROR,ProblemCode.ACCESS_DENIED,ProblemCode.NOT_FOUND,ProblemCode.VERSION_MISMATCH,ProblemCode.INVALID_TRANSITION,ProblemCode.IDEMPOTENCY_HASH_MISMATCH,ProblemCode.PROVIDER_RULE_VIOLATION,ProblemCode.PROVIDER_MODE_MISMATCH,ProblemCode.FEATURE_DISABLED))if(safe.name().equals(json.path("code").asString())&&safe.status==response.statusCode())throw new Problem.Failure(safe);}throw unavailable();}
+   if(!header(response,"Content-Type").split(";",2)[0].strip().equals("application/json"))throw unavailable();if(!mode.equals(header(response,"X-Nigson-Carrier-Mode")))throw new Problem.Failure(ProblemCode.PROVIDER_MODE_MISMATCH);var node=EventCodec.JSON.readTree(response.body());if(!node.isObject()||!node.propertyNames().equals(Set.of("provider","serviceCode","currency","amount","expiresAt","providerReference")))throw unavailable();for(String field:List.of("provider","serviceCode","currency","amount","expiresAt"))if(!node.path(field).isString())throw unavailable();var reference=node.get("providerReference");if(!reference.isNull()&&(!reference.isString()||reference.asString().isBlank()||reference.asString().length()>160||reference.asString().codePoints().anyMatch(Character::isISOControl)))throw unavailable();String service=node.path("serviceCode").asString(),amount=node.path("amount").asString();if(!"FEDEX".equals(node.path("provider").asString())||!"NGN".equals(node.path("currency").asString())||!service.matches("[A-Z][A-Z0-9_]{0,79}")||input.serviceCode()!=null&&!input.serviceCode().equals(service)||!amount.matches("[0-9]{1,15}\\.[0-9]{2}"))throw new Problem.Failure(ProblemCode.PROVIDER_RULE_VIOLATION);Instant expires=ApiValues.instant(node.path("expiresAt").asString());if(!expires.isAfter(clock.instant())||expires.isAfter(clock.instant().plusSeconds(300)))throw unavailable();return new Rate("FEDEX",service,"NGN",amount,expires,reference.isNull()?null:reference.asString());
+  }catch(Problem.Failure safe){throw safe;}catch(Exception failure){if(failure instanceof InterruptedException)Thread.currentThread().interrupt();throw unavailable();}finally{if(future!=null&&!future.isDone())future.cancel(true);}
+ }
+ private static Problem.Failure unavailable(){return new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);}
+ private static String header(HttpResponse<?> response,String name){var values=response.headers().allValues(name);if(values.size()!=1)throw unavailable();return values.getFirst();}
+ private static final class Limited implements HttpResponse.BodySubscriber<byte[]> {
+  private final HttpResponse.BodySubscriber<byte[]> delegate=HttpResponse.BodySubscribers.ofByteArray();private java.util.concurrent.Flow.Subscription subscription;private int size;private boolean failed;
+  public CompletionStage<byte[]> getBody(){return delegate.getBody();}public void onSubscribe(java.util.concurrent.Flow.Subscription value){subscription=value;delegate.onSubscribe(value);}
+  public void onNext(List<ByteBuffer> buffers){if(failed)return;for(var buffer:buffers){size+=buffer.remaining();if(size>65536){failed=true;subscription.cancel();delegate.onError(new IllegalStateException("CARRIER_RATE_RESPONSE_LIMIT"));return;}}delegate.onNext(buffers);}public void onError(Throwable failure){if(!failed)delegate.onError(failure);}public void onComplete(){if(!failed)delegate.onComplete();}
+ }
+}

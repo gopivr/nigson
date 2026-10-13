@@ -219,3 +219,9 @@ paystack-check:
 integration-provider-check:
 	python3 scripts/contracts/integration.py --check
 	ENV=test python3 scripts/integration-provider/verify.py
+
+.PHONY: carrier-check
+carrier-check:
+	python3 scripts/contracts/authorization.py --check
+	python3 scripts/contracts/integration.py --check
+	ENV=test python3 scripts/carrier/verify.py

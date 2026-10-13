@@ -32,8 +32,9 @@ public class PaymentConfiguration {
   @Bean PaymentExpiry paymentExpiry(JdbcTemplate jdbc,PlatformTransactionManager manager,OrderPolicy binding,PaymentPolicy policy,CheckoutPayments payments,OrderRepository orders,com.nigson.commerce.inventory.StockLedger stock,com.nigson.commerce.cart.CartCheckout carts,AuditWriter audit,io.micrometer.core.instrument.MeterRegistry metrics){return new PaymentExpiry(jdbc,manager,binding,policy,payments,orders,stock,carts,audit,Clock.systemUTC(),metrics);}
   @Configuration(proxyBeanMethods=false)
   @org.springframework.scheduling.annotation.EnableScheduling
-  @ConditionalOnProperty(name="NIGSON_PAYMENT_WORKER_ENABLED",havingValue="true",matchIfMissing=true)
+  @ConditionalOnProperty(name="NIGSON_PAYMENT_ENABLED",havingValue="true")
   static class Polling {
+   @ConditionalOnProperty(name="NIGSON_PAYMENT_WORKER_ENABLED",havingValue="true",matchIfMissing=true)
    @Bean PaymentWorker paymentWorker(JdbcTemplate jdbc,OrderPolicy binding,PaymentPolicy policy,CheckoutPayments payments,RefundOperations refunds,PaymentReceiptProcessor receipts,PaymentExpiry expiry,@Value("${NIGSON_PAYMENT_WORKER_BATCH:25}")int limit){return new PaymentWorker(jdbc,binding,policy,payments,refunds,receipts,expiry,Clock.systemUTC(),limit);}
   }
  }

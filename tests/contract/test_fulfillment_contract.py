@@ -17,3 +17,11 @@ class FulfillmentContracts(unittest.TestCase):
         self.assertEqual(s['DeliveryRuleInput']['properties']['countryCode'],{'const':'NG'})
         self.assertNotIn('labelAssetId',s['ShipmentDTO']['properties']);self.assertNotIn('packageSnapshot',s['ShipmentDTO']['properties']);self.assertNotIn('balanceId',s['ShipmentLineDTO']['properties'])
         self.assertEqual(set(s['StockReturnDTO']['properties']),{'returnId','orderId','lines'})
+
+    def test_customer_carrier_quote_uses_closed_input_and_versioned_csrf(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());op=spec['paths']['/api/v1/carts/{id}/delivery-quotes']['post'];schemas=spec['components']['schemas']
+        self.assertEqual(op['operationId'],'API-181');self.assertEqual(op['security'],[{'bffSession':[]}])
+        self.assertEqual({p['name'] for p in op['parameters'] if p.get('required')},{'id','Idempotency-Key','X-CSRF-TOKEN','If-Match'})
+        self.assertEqual(set(schemas['DeliveryQuoteInput']['properties']),{'addressId','serviceCode'});self.assertFalse(schemas['DeliveryQuoteInput']['additionalProperties'])
+        self.assertEqual(schemas['DeliveryQuoteInput']['required'],['addressId']);self.assertEqual(schemas['DeliveryQuoteDTO']['properties']['currency']['const'],'NGN');self.assertEqual(schemas['DeliveryQuoteDTO']['properties']['mode']['enum'],['MOCK','SANDBOX','LIVE'])
+        self.assertIn('201',op['responses']);self.assertIn('503',op['responses']);self.assertNotIn('ETag',op['responses']['201']['headers'])

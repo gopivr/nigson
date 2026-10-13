@@ -8491,6 +8491,187 @@
         }
       }
     },
+    "/api/v1/carts/{id}/delivery-quotes": {
+      "post": {
+        "operationId": "API-181",
+        "description": "Current CUSTOMER and owned cart/address/current organization. Capture approved server origin/packing and current cart version, then release local locks before private signed API-182 HTTP. Require exact NGN fee and trusted runtime mode metadata. Revalidate current cart/address/packing/market/approval before persisting a bound quote; expiry at most five minutes and no later than current provider approvals. Matching key replays the original acknowledgement without another HTTP/KMS call; current authority remains mandatory. No inferred route, exchange conversion, manual fallback, reservation or stock dispatch.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 43,
+              "maxLength": 43
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "FULFILLMENT_RULE_VIOLATION or missing approved quantity/coverage/booking proof",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryQuoteDTO"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Provider unavailable; no fabricated delivery fee",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryQuoteInput"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/staff/delivery-rules": {
       "post": {
         "operationId": "API-171",
@@ -15609,6 +15790,80 @@
             "items": {
               "$ref": "#/components/schemas/ShipmentLineDTO"
             }
+          }
+        }
+      },
+      "DeliveryQuoteInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "addressId"
+        ],
+        "properties": {
+          "addressId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "serviceCode": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
+            "maxLength": 80
+          }
+        }
+      },
+      "DeliveryQuoteDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "provider",
+          "serviceCode",
+          "currency",
+          "deliveryAmount",
+          "expiresAt",
+          "cartVersion",
+          "mode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "provider": {
+            "type": "string",
+            "const": "FEDEX"
+          },
+          "serviceCode": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
+            "maxLength": 80
+          },
+          "currency": {
+            "type": "string",
+            "const": "NGN"
+          },
+          "deliveryAmount": {
+            "type": "string",
+            "pattern": "^[0-9]{1,15}\\.[0-9]{2}$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cartVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "MOCK",
+              "SANDBOX",
+              "LIVE"
+            ]
           }
         }
       },

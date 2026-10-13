@@ -1,0 +1,22 @@
+{
+  "tests": 71,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "executed": 71,
+  "classes": [
+    "com.nigson.commerce.security.SecurityAssemblyTest",
+    "com.nigson.commerce.payment.PaystackModeTest",
+    "com.nigson.commerce.payment.PaymentWorkerActivationTest",
+    "com.nigson.commerce.BuildCompatibilityTest",
+    "com.nigson.acceptance.order.OrderPersistenceTest",
+    "com.nigson.acceptance.payment.PaymentReceiptKeysTest",
+    "com.nigson.acceptance.payment.PaymentPayloadCipherTest",
+    "com.nigson.acceptance.payment.PaymentValuesTest",
+    "com.nigson.acceptance.payment.PaymentPersistenceTest",
+    "com.nigson.acceptance.payment.PaymentActivationTest",
+    "com.nigson.acceptance.payment.PaystackWebhookProtocolTest",
+    "com.nigson.experience.BuildCompatibilityTest",
+    "com.nigson.integration.BuildCompatibilityTest"
+  ]
+}

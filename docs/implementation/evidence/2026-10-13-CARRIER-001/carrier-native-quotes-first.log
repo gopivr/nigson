@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/scripts/carrier/verify.py", line 8, in <module>
+    main(java_tests="FedExAdapterTest,CarrierValuesTest,CarrierQuotePersistenceTest",evidence=ROOT/".build/carrier001/database-evidence",run_python=False,completion="PASS: native private FedEx rate command, exact currency, audited durable acknowledgement; booking/tracking/public composition and genuine account/release qualification NOT_RUN")
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/platform/verify.py", line 29, in main
+    before=preserved();network='nigson-test-plat-'+uuid.uuid4().hex[:10];docker('network','create',network)
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 30, in preserved
+    ids = docker('ps', '-aq', '--filter', 'label=com.docker.compose.project=nigson-local')[0].split()
+          ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/database/verify.py", line 25, in docker
+    raise AssertionError('Docker check failed: ' + ' '.join(args[:5]) + '\n' + result.stdout + result.stderr)
+AssertionError: Docker check failed: ps -aq --filter label=com.docker.compose.project=nigson-local
+Cannot connect to the Docker daemon at unix:///Users/gopiravi/.docker/run/docker.sock. Is the docker daemon running?

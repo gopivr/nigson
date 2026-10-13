@@ -22,7 +22,7 @@ class ProviderContracts(unittest.TestCase):
 
     def test_private_integration_job_contract_preserves_safe_shapes_and_exact_scopes(self):
         spec=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
-        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry'})
+        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry','/internal/v1/carrier/quotes'})
         self.assertEqual(set(spec['components']['schemas']['JobDTO']['properties']),{'id','state','attemptCount','nextAttemptAt','lastErrorCode'})
         self.assertFalse(spec['components']['schemas']['JobDTO']['additionalProperties'])
         get=spec['paths']['/internal/v1/jobs']['get'];retry=spec['paths']['/internal/v1/jobs/{id}/retry']['post']
@@ -37,3 +37,19 @@ class ProviderContracts(unittest.TestCase):
         import subprocess
         result=subprocess.run(['python3',str(ROOT/'scripts/contracts/integration.py'),'--check'],cwd=ROOT,capture_output=True,text=True,check=True)
         self.assertIn('PASS:',result.stdout)
+
+    def test_private_carrier_quote_is_closed_signed_ngn_server_protocol(self):
+        spec=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
+        op=spec['paths']['/internal/v1/carrier/quotes']['post']
+        self.assertEqual(op['operationId'],'API-182')
+        self.assertEqual(op['security'],[{'workload':[],'signedActor':[]}])
+        self.assertEqual(op['responses']['200']['headers']['X-Nigson-Carrier-Mode']['schema']['enum'],['MOCK','SANDBOX','LIVE'])
+        schemas=spec['components']['schemas'];request=schemas['CarrierQuoteInput']
+        self.assertFalse(request['additionalProperties'])
+        self.assertEqual(set(request['properties']),{'commandId','cartId','market','currency','shipper','destination','packages','serviceCode'})
+        self.assertEqual(request['properties']['packages']['maxItems'],100)
+        self.assertNotIn('serviceCode',request['required'])
+        self.assertEqual(schemas['CarrierQuoteDTO']['properties']['currency']['const'],'NGN')
+        self.assertEqual(schemas['CarrierAddress']['properties']['countryCode']['const'],'NG')
+        registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
+        self.assertEqual(registry['API-182']['scope'],'carrier.quote_WITH_SIGNED_ACTOR')

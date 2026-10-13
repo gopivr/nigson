@@ -17,8 +17,9 @@ class SecurityAssemblyTest {
   com.nigson.acceptance.pricing.PricingHttpAcceptance.configure(properties);
   com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.configure(properties);
   if(workload!=null){properties.put("NIGSON_OIDC_ISSUER",workload.issuer);properties.put("NIGSON_OIDC_JWKS",workload.issuer+"/protocol/openid-connect/certs");}
-  var jobs=System.getenv("NIGSON_TEST_JOBS")==null?null:new com.nigson.acceptance.provider.JobHttpAcceptance.Fixture(keys);
+  var jobs=System.getenv("NIGSON_TEST_JOBS")==null&&System.getenv("NIGSON_TEST_CARRIER")==null?null:new com.nigson.acceptance.provider.JobHttpAcceptance.Fixture(keys);
   if(jobs!=null)jobs.configure(properties);
+  com.nigson.acceptance.carrier.CarrierDeliveryHttpAcceptance.configure(properties);
   var orders=System.getenv("NIGSON_TEST_PAYMENTS")!=null||System.getenv("NIGSON_TEST_ORDERS")==null?null:new com.nigson.acceptance.order.OrderHttpAcceptance.Fixture();
   if(orders!=null)orders.configure(properties);
   var payments=System.getenv("NIGSON_TEST_PAYMENTS")==null?null:new com.nigson.acceptance.payment.PaymentHttpAcceptance.Fixture();
@@ -36,6 +37,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.inventory.InventoryHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.market.MarketHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.pricing.PricingHttpAcceptance.run(app,http,base);
+   com.nigson.acceptance.carrier.CarrierDeliveryHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.cart.CartHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.order.OrderHttpAcceptance.run(app,http,base,orders);
