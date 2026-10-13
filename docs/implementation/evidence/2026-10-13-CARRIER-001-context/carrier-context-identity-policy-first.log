@@ -1,0 +1,15 @@
+test_audit_policy_is_explicit (test_identity_operations.IdentityOperationsTest.test_audit_policy_is_explicit) ... ok
+test_backup_authentication_revision_and_exclusive_target (test_identity_operations.IdentityOperationsTest.test_backup_authentication_revision_and_exclusive_target) ... ok
+test_exact_confidential_pkce_and_no_bp1_ai (test_identity_operations.IdentityOperationsTest.test_exact_confidential_pkce_and_no_bp1_ai) ... ok
+test_no_mock_production_configuration (test_identity_operations.IdentityOperationsTest.test_no_mock_production_configuration) ... ok
+test_optimized_wrapper_fails_closed_before_network (test_identity_operations.IdentityOperationsTest.test_optimized_wrapper_fails_closed_before_network) ... ok
+test_private_admin_target_has_no_redirect_or_userinfo (test_identity_operations.IdentityOperationsTest.test_private_admin_target_has_no_redirect_or_userinfo) ... ok
+test_private_file_permissions_required (test_identity_operations.IdentityOperationsTest.test_private_file_permissions_required) ... ok
+test_registry_matches_master_internal_contracts (test_identity_operations.IdentityOperationsTest.test_registry_matches_master_internal_contracts) ... ok
+test_scopes_are_authoritative_operation_grants (test_identity_operations.IdentityOperationsTest.test_scopes_are_authoritative_operation_grants) ... ok
+test_signed_profile_mappers_are_explicit_and_id_token_only (test_identity_operations.IdentityOperationsTest.test_signed_profile_mappers_are_explicit_and_id_token_only) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.061s
+
+OK

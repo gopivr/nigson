@@ -25,3 +25,13 @@ class FulfillmentContracts(unittest.TestCase):
         self.assertEqual(set(schemas['DeliveryQuoteInput']['properties']),{'addressId','serviceCode'});self.assertFalse(schemas['DeliveryQuoteInput']['additionalProperties'])
         self.assertEqual(schemas['DeliveryQuoteInput']['required'],['addressId']);self.assertEqual(schemas['DeliveryQuoteDTO']['properties']['currency']['const'],'NGN');self.assertEqual(schemas['DeliveryQuoteDTO']['properties']['mode']['enum'],['MOCK','SANDBOX','LIVE'])
         self.assertIn('201',op['responses']);self.assertIn('503',op['responses']);self.assertNotIn('ETag',op['responses']['201']['headers'])
+
+    def test_private_shipment_context_is_frozen_bounded_and_scoped_at_launch(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());op=spec['paths']['/internal/v1/shipments/{id}/provider-context']['get'];schemas=spec['components']['schemas']
+        self.assertEqual(op['operationId'],'API-119');self.assertEqual(op['security'],[{'carrierIntegrationWorkload':['logistics.read']}]);self.assertNotIn('requestBody',op)
+        self.assertEqual(op['responses']['200']['headers']['Cache-Control']['schema'],{'const':'no-store'})
+        context=schemas['ShipmentProviderContext'];self.assertFalse(context['additionalProperties']);self.assertEqual(context['properties']['packages']['maxItems'],100)
+        self.assertEqual(context['properties']['address'],{'$ref':'#/components/schemas/OrderAddressSnapshot'})
+        self.assertTrue({'id','version','organizationId'}.isdisjoint(schemas['OrderAddressSnapshot']['properties']))
+        route=next(r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text()) if r['api']=='API-119')
+        self.assertEqual((route['client'],route['scope'],route['phase']),('nigson-integration','logistics.read',1))

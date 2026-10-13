@@ -25,4 +25,13 @@ def extend(spec):
         op['responses']['422']['description']='FULFILLMENT_RULE_VIOLATION or missing approved quantity/coverage/booking proof'
         if api=='API-181':op['responses']['503']={'description':'Provider unavailable; no fabricated delivery fee','content':{'application/problem+json':{'schema':{'$ref':'../problem/problem.schema.json'}}}}
         spec['paths'][route]={method:op}
+    address={name:nullable(text(200)) if name in ('line2','postalCode') else text(200) for name in ('recipient','phone','line1','line2','city','region','postalCode','countryCode')}
+    address['countryCode']={'type':'string','const':'NG'};address['phone']={'type':'string','pattern':r'^\+[1-9][0-9]{7,14}$'}
+    s['ShipmentCarrierAddress']=object_schema(address)
+    s['ShipmentCarrierPackage']=object_schema({'skuId':UUID,'quantity':quantity,'weightKg':quantity,**{key:{'type':'string','pattern':r'^[0-9]{1,15}(\.[0-9]{1,2})?$'} for key in ('lengthCm','widthCm','heightCm')}})
+    s['ShipmentProviderContext']=object_schema({'shipmentId':UUID,'orderId':UUID,'address':REF('OrderAddressSnapshot'),'shipper':REF('ShipmentCarrierAddress'),'serviceCode':s['DeliveryQuoteInput']['properties']['serviceCode'],'packages':{'type':'array','minItems':1,'maxItems':100,'items':REF('ShipmentCarrierPackage')},'bookingReference':UUID,'mode':{'type':'string','enum':['MOCK','SANDBOX','LIVE']}})
+    context=operation('API-119','Private phase1 nigson-integration logistics.read; no actor/cookie/query/body. Bounded repeatable-read snapshot of verified paid unheld order and FEDEX shipment intent; current qualified mode. Frozen minimal order address (CF-ORDER-001), original shipper and hash-bound parcels/reference. Missing historical shipper fails closed; no current configuration fallback, stock/payment writes or provider HTTP.','ShipmentProviderContext',[path])
+    context['security']=[{'carrierIntegrationWorkload':['logistics.read']}];context['responses']['200']['headers']={'Cache-Control':{'schema':{'const':'no-store'}}};context['responses']['422']['description']='FULFILLMENT_RULE_VIOLATION or missing frozen packing/shipper/verified settlement'
+    spec['paths']['/internal/v1/shipments/{id}/provider-context']={'get':context}
+    spec['components']['securitySchemes']['carrierIntegrationWorkload']={'type':'oauth2','flows':{'clientCredentials':{'tokenUrl':'/realms/nigson/protocol/openid-connect/token','scopes':{'logistics.read':'Private immutable paid shipment context'}}},'description':'Exact nigson-integration Keycloak workload client/audience/scope and private ingress. No signed actor/browser cookie.'}
     return spec

@@ -38,6 +38,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.market.MarketHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.pricing.PricingHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.carrier.CarrierDeliveryHttpAcceptance.run(app,http,base,jobs);
+   com.nigson.acceptance.carrier.CarrierContextHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.cart.CartHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.order.OrderHttpAcceptance.run(app,http,base,orders);

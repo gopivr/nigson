@@ -1,0 +1,22 @@
+[
+  "BACKEND_IMPLEMENTATION_MASTER.md",
+  "contracts/openapi/commerce.yaml",
+  "contracts/security/workload-scopes.json",
+  "docs/API_CONTRACT.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-13-CARRIER-001.md",
+  "docs/runbooks/carrier-quotes.md",
+  "scripts/carrier/verify.py",
+  "scripts/contracts/fulfillment.py",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/CarrierContextController.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/CarrierContextService.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/CarrierShipmentContext.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/FulfillmentConfiguration.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/JdbcShipmentRepository.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/CarrierContextHttpAcceptance.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/CarrierContextPersistenceTest.java",
+  "services/commerce/src/test/java/com/nigson/commerce/security/SecurityAssemblyTest.java",
+  "tests/contract/test_authorization_contract.py",
+  "tests/contract/test_fulfillment_contract.py",
+  "tests/contract/test_party_contract.py"
+]

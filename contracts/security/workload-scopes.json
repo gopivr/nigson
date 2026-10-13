@@ -24,7 +24,7 @@
     "owner": "commerce",
     "client": "nigson-integration",
     "scope": "logistics.read",
-    "phase": 4
+    "phase": 1
   },
   {
     "api": "API-120",

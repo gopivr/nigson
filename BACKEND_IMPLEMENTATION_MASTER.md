@@ -6243,14 +6243,14 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 
 ### API-119 GET /internal/v1/shipments/{id}/provider-context
 
-- **Service / module / phase:** commerce / fulfillment / BP4.
+- **Service / module / phase:** commerce / fulfillment / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
 - **Authorization:** SERVICE_INTEGRATION:logistics.read; resource/organization/market checks required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `none`.
-- **Response:** `{shipmentId:UUID,orderId:UUID,address:AddressDTO,shipper:CarrierAddress,serviceCode:string,packages:[CarrierPackage],bookingReference:string,mode:MOCK|SANDBOX|LIVE}`.
+- **Response:** `{shipmentId:UUID,orderId:UUID,address:immutable order address snapshot (CF-ORDER-001),shipper:CarrierAddress,serviceCode:string,packages:[CarrierPackage],bookingReference:string,mode:MOCK|SANDBOX|LIVE}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Minimum logistics data only; immutable stable request reference.
 - **Events:** None directly; owned audit/history where applicable.
