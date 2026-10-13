@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 — IN_PROGRESS; carrier protocol native29/no skips, affected financial71/no skips, full116 Java/233 gated,66 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline; carrier protocol committed a3c8eb09b7d2a3cce8c10a461ea9ef6e664ec7cd. Durable booking/labels/cancellation/tracking and dependency-bound BP3 composition remain pending. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7. No critical approval blocks offline engineering.
+CARRIER-001 — IN_PROGRESS; carrier context native32/no skips, affected financial71/no skips, full116 Java/236 gated,67 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline; carrier context committed d7c37c1c2ac5bb19dcd6aee2e5f877adc7d9d1ee. Durable booking/labels/cancellation/tracking and dependency-bound BP3 composition remain pending. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7. No critical approval blocks offline engineering.
 
 ## Completed Tasks
 
@@ -113,15 +113,15 @@ CARRIER-001 — IN_PROGRESS; carrier protocol native29/no skips, affected financ
 
 ## Build Status
 
-PASS — CARRIER-001 quote correction full116 Java/233 gated,66 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Overall carrier task remains IN_PROGRESS.
+PASS — CARRIER-001 quote correction full116 Java/236 gated,67 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Overall carrier task remains IN_PROGRESS.
 
 ## Test Status
 
-PASS — CARRIER-001 carrier protocol native29/no skips and affected payment/order/activation71/no skips; actual BFF/private mode/KMS/workload/JWKS/owned binding/audit/HTTP race and all-owner migrations/original Docker preservation. Booking/labels/tracking and genuine provider/release qualification NOT_RUN.
+PASS — CARRIER-001 carrier context native32/no skips and affected payment/order/activation71/no skips; actual BFF/private mode/KMS/workload/JWKS/owned binding/audit/HTTP race and all-owner migrations/original Docker preservation. Booking/labels/tracking and genuine provider/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
-a3c8eb09b7d2a3cce8c10a461ea9ef6e664ec7cd — verified carrier asynchronous HTTP protocol; CARRIER-001 remains IN_PROGRESS. No remote deployment.
+d7c37c1c2ac5bb19dcd6aee2e5f877adc7d9d1ee — verified private immutable paid shipment context; CARRIER-001 remains IN_PROGRESS. No remote deployment.
 
 ## Confirmed Inputs
 
