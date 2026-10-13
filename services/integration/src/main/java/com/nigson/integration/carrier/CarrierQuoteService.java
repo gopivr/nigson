@@ -20,7 +20,7 @@ public final class CarrierQuoteService {
  private void proof(PrivateWorkload.Proof proof){var route=PrivateWorkload.ROUTES.stream().filter(r->r.api().equals("API-182")).findFirst().orElseThrow(ActorAssertion::denied);if(proof==null||!route.equals(proof.route())||!route.client().equals(proof.client())||proof.subject()==null||!proof.subject().matches("[\\x21-\\x7e]{1,100}")||proof.actor()==null||!proof.actor().scopes().contains(route.scope()))throw ActorAssertion.denied();}
  public CarrierValues.Quote quote(PrivateWorkload.Proof proof,CarrierValues.QuoteInput input,UUID correlation){
   proof(proof);Objects.requireNonNull(input);if(correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();if(!approvedUntil.isAfter(clock.instant()))throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);
-  String service=input.serviceCode()==null?defaultService:input.serviceCode();if(!services.contains(service))throw CarrierValues.rule();Instant expires=clock.instant().plusSeconds(300);
+  String service=input.serviceCode()==null?defaultService:input.serviceCode();if(!services.contains(service))throw CarrierValues.rule();Instant latest=clock.instant().plusSeconds(300);Instant expires=approvedUntil.isBefore(latest)?approvedUntil:latest;
   CarrierValues.Quote quote;try{quote=CarrierValues.rate(provider.rates(CarrierValues.rateRequest(input,service,pickup)),service,expires);}catch(ProviderHttp.Failure failure){throw new Problem.Failure(failure.status==400||failure.status==404?ProblemCode.PROVIDER_RULE_VIOLATION:ProblemCode.PROVIDER_UNAVAILABLE);}
   if(!expires.isAfter(clock.instant()))throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);
   String principal="nigson-commerce:carrier:"+proof.actor().party();

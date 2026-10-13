@@ -12,4 +12,5 @@ public final class PricingAuthority {
  public void stabilize(ActorAssertion.Actor actor,String role){jdbc.query("SELECT id FROM commerce.party WHERE id=? FOR SHARE",(r,n)->r.getObject(1,UUID.class),actor.party());require(actor,role);}
  public void organization(ActorAssertion.Actor actor,UUID organization,boolean lock){require(actor,"CUSTOMER");if(phase<3||entitlement.isEmpty())throw new Problem.Failure(ProblemCode.ACCESS_DENIED);var rows=jdbc.query("SELECT o.id FROM commerce.organization o JOIN commerce.organization_membership m ON m.organization_id=o.id JOIN commerce.account_entitlement e ON e.organization_id=o.id WHERE o.id=? AND o.status='ACTIVE' AND m.party_id=? AND m.status='ACTIVE' AND e.status='ACTIVE' AND e.entitlement=?"+(lock?" FOR SHARE OF o,m,e":""),(r,n)->r.getObject(1,UUID.class),organization,actor.party(),entitlement);if(rows.isEmpty())throw new Problem.Failure(ProblemCode.ACCESS_DENIED);}
  public int phase(){return phase;}
+ public String entitlement(){return entitlement;}
 }

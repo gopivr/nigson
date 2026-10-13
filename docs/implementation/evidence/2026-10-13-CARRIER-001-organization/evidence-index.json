@@ -1,0 +1,62 @@
+[
+  {
+    "source": ".build/carrier-native-organization-bff-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-native-organization-bff-first.log",
+    "rawSha256": "31e6414bf951aaf2cf84707db13f54d83a11b3f5cf04e2afad3c09befe0bc31f",
+    "evidenceSha256": "6288b82bbcd60bceea2ecd6860fbdca014f066adf71eaeecf884ce32a88f4373"
+  },
+  {
+    "source": ".build/carrier-native-organization-expiry-final-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-native-organization-expiry-final-counts.json",
+    "rawSha256": "5c752722361b1c39983aa293e3d6727d932d950a7c7782de716cd0734b6f61ec",
+    "evidenceSha256": "5c752722361b1c39983aa293e3d6727d932d950a7c7782de716cd0734b6f61ec"
+  },
+  {
+    "source": ".build/carrier-native-organization-expiry-final.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-native-organization-expiry-final.log",
+    "rawSha256": "939a1379f26d2d8f5b32cae365506663a4e5edab93d5de74d445178215e6ff36",
+    "evidenceSha256": "729532905000414b75f30212e1118095065c93898a9d1ef3678d8b72ef3bccfb"
+  },
+  {
+    "source": ".build/carrier-native-organization-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-native-organization-first.log",
+    "rawSha256": "ad6acbc18a79f03ea84be7c47d2af358f42e89b86d3b45429067eefc64491dfa",
+    "evidenceSha256": "ed849a7f72458ea5abf4cd2be5f85f69a564ef4025aced4ff31ed7af118b5e6a"
+  },
+  {
+    "source": ".build/carrier-organization-artifacts-first.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-organization-artifacts-first.json",
+    "rawSha256": "367bb509de99f2b2120f4bbe6ea5b86d2c0b07007ca99b962650c25f033db596",
+    "evidenceSha256": "367bb509de99f2b2120f4bbe6ea5b86d2c0b07007ca99b962650c25f033db596"
+  },
+  {
+    "source": ".build/carrier-organization-artifacts-second.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-organization-artifacts-second.json",
+    "rawSha256": "367bb509de99f2b2120f4bbe6ea5b86d2c0b07007ca99b962650c25f033db596",
+    "evidenceSha256": "367bb509de99f2b2120f4bbe6ea5b86d2c0b07007ca99b962650c25f033db596"
+  },
+  {
+    "source": ".build/carrier-organization-full-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-organization-full-first-counts.json",
+    "rawSha256": "c0e4a7fed89faf8a408ccf2e03908b63a19c18cc6a8c06e400d66c6c82dc01cb",
+    "evidenceSha256": "c0e4a7fed89faf8a408ccf2e03908b63a19c18cc6a8c06e400d66c6c82dc01cb"
+  },
+  {
+    "source": ".build/carrier-organization-full-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-organization-full-first.log",
+    "rawSha256": "e477fe710c47b3d2696676b2d860e1c31b56c8496be885983ade894d0a484406",
+    "evidenceSha256": "78961ddcc32373619c0e17846d75a9a0feb78b06c87e4f043245a48f9079bdda"
+  },
+  {
+    "source": ".build/carrier-organization-reproduce-ai.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-organization-reproduce-ai.log",
+    "rawSha256": "3df4cd9943cf96df95f589ea7cd47cbf2f0715b08aac06e180f046f419f0c525",
+    "evidenceSha256": "3df4cd9943cf96df95f589ea7cd47cbf2f0715b08aac06e180f046f419f0c525"
+  },
+  {
+    "source": ".build/carrier-organization-reproduce-java.log",
+    "evidence": "docs/implementation/evidence/2026-10-13-CARRIER-001-organization/carrier-organization-reproduce-java.log",
+    "rawSha256": "28cd63d8c84b92ca4dea05d37e429a0ed470612e29b9d578942ddba2cdf3d39c",
+    "evidenceSha256": "30afce5aa23df87e716d22393bbc7d3c95628735fd06ffb9652d41d733c47391"
+  }
+]

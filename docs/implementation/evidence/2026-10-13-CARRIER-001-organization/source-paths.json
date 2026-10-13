@@ -1,0 +1,11 @@
+[
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-13-CARRIER-001.md",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/DeliveryQuoteService.java",
+  "services/commerce/src/main/java/com/nigson/commerce/pricing/PricingAuthority.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/CarrierDeliveryHttpAcceptance.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/CarrierRateBindingTest.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/provider/JobHttpAcceptance.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierQuoteService.java",
+  "services/integration/src/test/java/com/nigson/acceptance/carrier/CarrierQuotePersistenceTest.java"
+]
