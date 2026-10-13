@@ -1,0 +1,12 @@
+[
+  "IMPLEMENTATION_STATUS.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-13-CARRIER-001.md",
+  "docs/runbooks/carrier-quotes.md",
+  "services/integration/src/main/java/com/nigson/integration/providers/CarrierProvider.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/FedExAdapter.java",
+  "services/integration/src/test/java/com/nigson/acceptance/carrier/CarrierQuotePersistenceTest.java",
+  "services/integration/src/test/java/com/nigson/integration/providers/FedExAdapterTest.java",
+  "tests/mocks/src/com/nigson/mocks/ProviderStateExtension.java",
+  "tests/providers/src/com/nigson/providers/ProviderQualification.java"
+]

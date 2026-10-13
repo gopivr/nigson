@@ -25,7 +25,7 @@ public final class FedExAdapter implements CarrierProvider {
  private synchronized void invalidate(String rejected){if(Objects.equals(token,rejected)){token=null;expires=Instant.EPOCH;}}
  private JsonNode call(String method,String path,JsonNode request) {
   if(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");
-  boolean effect=path.startsWith("/ship/");String bearer=token();ProviderHttp.Result response;
+  boolean effect=path.equals("/ship/v1/shipments")||path.equals("/ship/v1/shipments/cancel");String bearer=token();ProviderHttp.Result response;
   try{response=http.call(method,path,"application/json",EventCodec.JSON.writeValueAsString(request),"Bearer "+bearer,effect);}catch(ProviderHttp.Failure failure){
    if(failure.status!=401)throw failure;invalidate(bearer);
    // Only read operations may renew and repeat in this call; writes return to their durable owner.
@@ -39,7 +39,10 @@ public final class FedExAdapter implements CarrierProvider {
   var copy=((tools.jackson.databind.node.ObjectNode)request).deepCopy();copy.set("accountNumber",EventCodec.JSON.valueToTree(Map.of("value",account)));return copy;
  }
  public JsonNode rates(JsonNode shipment){var data=call("POST","/rate/v1/rates/quotes",withAccount(shipment));if(!data.path("rateReplyDetails").isArray())throw new IllegalArgumentException("FEDEX_RATES_INVALID");return data;}
- public JsonNode book(JsonNode shipment){var data=call("POST","/ship/v1/shipments",withAccount(shipment));if(!data.path("transactionShipments").isArray()||data.path("transactionShipments").isEmpty())throw new ProviderHttp.Failure("FEDEX_BOOKING_UNCERTAIN",true,200);return data;}
+ public JsonNode book(JsonNode shipment){var data=call("POST","/ship/v1/shipments",withAccount(shipment));if(!completed(data)&&!validJob(data.path("jobId")))throw new ProviderHttp.Failure("FEDEX_BOOKING_UNCERTAIN",true,200);return data;}
+ public JsonNode confirmed(String jobId){if(jobId==null||!jobId.matches("[A-Za-z0-9][A-Za-z0-9_-]{0,159}"))throw new IllegalArgumentException("FEDEX_JOB_INVALID");var data=call("POST","/ship/v1/shipments/results",EventCodec.JSON.valueToTree(Map.of("accountNumber",Map.of("value",account),"jobId",jobId)));if(!completed(data))throw new ProviderHttp.Failure("FEDEX_RESULTS_UNAVAILABLE",false,200);return data;}
+ private static boolean completed(JsonNode data){return data.path("transactionShipments").isArray()&&!data.path("transactionShipments").isEmpty();}
+ private static boolean validJob(JsonNode job){return job.isString()&&job.asString().matches("[A-Za-z0-9][A-Za-z0-9_-]{0,159}");}
  public JsonNode cancel(String tracking){checkTracking(tracking);return call("PUT","/ship/v1/shipments/cancel",EventCodec.JSON.valueToTree(Map.of("accountNumber",Map.of("value",account),"trackingNumber",tracking,"deletionControl","DELETE_ALL_PACKAGES")));}
  public JsonNode track(String tracking){checkTracking(tracking);return call("POST","/track/v1/trackingnumbers",EventCodec.JSON.valueToTree(Map.of("includeDetailedScans",true,"trackingInfo",List.of(Map.of("trackingNumberInfo",Map.of("trackingNumber",tracking))))));}
  public JsonNode trackReference(String reference,LocalDate begin,LocalDate end){

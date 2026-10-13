@@ -1,0 +1,45 @@
+No validation errors found.
+Database is up to date, no changesets to execute
+Database is up to date, no changesets to execute
+Owner migration verified: commerce; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 13, 2026 12:00:48 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 13, 2026 12:00:48 PM liquibase.command
+INFO: Command execution complete
+Oct 13, 2026 12:00:48 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 13, 2026 12:00:48 PM liquibase
+INFO: Parsed changelog file 'services/commerce/src/main/resources/db/changelog/master.yaml'
+Oct 13, 2026 12:00:48 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 13, 2026 12:00:48 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 13, 2026 12:00:48 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 13, 2026 12:00:48 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 13, 2026 12:00:48 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 13, 2026 12:00:48 PM liquibase.command
+INFO: Command execution complete
+Oct 13, 2026 12:00:48 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog
+Oct 13, 2026 12:00:48 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 13, 2026 12:00:48 PM liquibase.util
+INFO: Run:                          0
+Oct 13, 2026 12:00:48 PM liquibase.util
+INFO: Previously run:              20
+Oct 13, 2026 12:00:48 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 13, 2026 12:00:48 PM liquibase.util
+INFO: -------------------------------
+Oct 13, 2026 12:00:48 PM liquibase.util
+INFO: Total change sets:           20
+Oct 13, 2026 12:00:48 PM liquibase.util
+INFO: Update summary generated
+Oct 13, 2026 12:00:48 PM liquibase.command
+INFO: Command execution complete
+Oct 13, 2026 12:00:48 PM liquibase.changelog
+INFO: Reading from commerce.databasechangelog

@@ -42,6 +42,30 @@ class FedExAdapterTest {
   assertThatThrownBy(()->adapter.trackReference("booking",LocalDate.now(),LocalDate.now().plusDays(91))).hasMessage("FEDEX_REFERENCE_INVALID");
   TransactionSynchronizationManager.setActualTransactionActive(true);try{assertThatThrownBy(()->adapter.rates(EventCodec.JSON.valueToTree(Map.of("requestedShipment",Map.of())))).hasMessage("PROVIDER_CALL_INSIDE_TRANSACTION");}finally{TransactionSynchronizationManager.setActualTransactionActive(false);}
  }
+ @Test void asynchronousAcceptancePollsExistingJobWithReadOnlyTokenRenewal()throws Exception{
+  var grants=new AtomicInteger();var creates=new AtomicInteger();var polls=new AtomicInteger();var requests=new ArrayList<tools.jackson.databind.JsonNode>();
+  var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+  server.createContext("/",x->{String path=x.getRequestURI().getPath();byte[] input=x.getRequestBody().readAllBytes();int status=200;Object response;
+   if(path.equals("/oauth/token")){response=Map.of("access_token","mock-access-"+grants.incrementAndGet(),"token_type","bearer","expires_in",3600);}
+   else if(path.equals("/ship/v1/shipments")){creates.incrementAndGet();response=Map.of("output",Map.of("jobId","synthetic-job-1"));}
+   else if(path.equals("/ship/v1/shipments/results")){requests.add(EventCodec.JSON.readTree(input));if(polls.incrementAndGet()==1){status=401;response=Map.of("errors",List.of(Map.of("code","EXPIRED")));}else response=Map.of("output",Map.of("transactionShipments",List.of(Map.of("masterTrackingNumber","123456789012"))));}
+   else{status=404;response=Map.of("errors",List.of());}
+   byte[] bytes=EventCodec.JSON.writeValueAsBytes(response);x.sendResponseHeaders(status,bytes.length);x.getResponseBody().write(bytes);x.close();
+  });server.start();
+  try{var adapter=adapter(server);String job=adapter.book(EventCodec.JSON.valueToTree(Map.of("requestedShipment",Map.of()))).path("jobId").asString();assertThat(job).isEqualTo("synthetic-job-1");assertThat(adapter.confirmed(job).path("transactionShipments").path(0).path("masterTrackingNumber").asString()).isEqualTo("123456789012");assertThat(creates.get()).isEqualTo(1);assertThat(polls.get()).isEqualTo(2);assertThat(grants.get()).isEqualTo(2);assertThat(requests.getFirst()).isEqualTo(EventCodec.JSON.valueToTree(Map.of("accountNumber",Map.of("value","mock-fedex-account"),"jobId",job)));assertThat(requests.getLast()).isEqualTo(requests.getFirst());}finally{server.stop(0);}
+ }
+ @Test void invalidAsyncAcceptanceRemainsUncertainAndUnavailableResultsNeverCreate()throws Exception{
+  var creates=new AtomicInteger();var polls=new AtomicInteger();var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+  server.createContext("/",x->{x.getRequestBody().readAllBytes();String path=x.getRequestURI().getPath();Object response;
+   if(path.equals("/oauth/token"))response=Map.of("access_token","mock-token","token_type","bearer","expires_in",3600);
+   else if(path.equals("/ship/v1/shipments")){creates.incrementAndGet();response=Map.of("output",Map.of("jobId","../unsafe"));}
+   else{polls.incrementAndGet();response=Map.of("output",Map.of("transactionShipments",List.of()));}
+   byte[] bytes=EventCodec.JSON.writeValueAsBytes(response);x.sendResponseHeaders(200,bytes.length);x.getResponseBody().write(bytes);x.close();
+  });server.start();
+  try{var adapter=adapter(server);assertThatThrownBy(()->adapter.book(EventCodec.JSON.valueToTree(Map.of("requestedShipment",Map.of())))).isInstanceOfSatisfying(ProviderHttp.Failure.class,f->assertThat(f.uncertain).isTrue());assertThatThrownBy(()->adapter.confirmed("../unsafe")).hasMessage("FEDEX_JOB_INVALID");assertThat(polls.get()).isZero();assertThatThrownBy(()->adapter.confirmed("synthetic-job-1")).isInstanceOfSatisfying(ProviderHttp.Failure.class,f->{assertThat(f.uncertain).isFalse();assertThat(f).hasMessage("FEDEX_RESULTS_UNAVAILABLE");});assertThat(creates.get()).isEqualTo(1);assertThat(polls.get()).isEqualTo(1);
+   TransactionSynchronizationManager.setActualTransactionActive(true);try{assertThatThrownBy(()->adapter.confirmed("synthetic-job-1")).hasMessage("PROVIDER_CALL_INSIDE_TRANSACTION");}finally{TransactionSynchronizationManager.setActualTransactionActive(false);}assertThat(polls.get()).isEqualTo(1);
+  }finally{server.stop(0);}
+ }
  private FedExAdapter adapter(HttpServer server){return new FedExAdapter("test",ProviderHttp.Mode.MOCK,"http://127.0.0.1:"+server.getAddress().getPort(),"mock-fedex-client","mock-fedex-secret","mock-fedex-account");}
  @Test void acceptedWriteWithStalledResponseBodyIsBoundedAndUncertain()throws Exception{
   var accepted=new AtomicInteger();var release=new java.util.concurrent.CountDownLatch(1);var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);

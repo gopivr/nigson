@@ -40,7 +40,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
    if(path.equals("/__scenario/state")&&method.equals("GET"))return reply(200,state,0);
    if(path.equals("/__scenario/configure")&&method.equals("POST")){
     var input=JSON.readTree(request.getBodyAsString());String scenario=input.path("scenario").asText();
-    if(!Set.of("success","decline","rate-limit","unavailable","timeout-after-acceptance","booking-response-lost","duplicate-status","out-of-order-status","invalid-verification","invalid-refund-verification","wrong-currency").contains(scenario))return reply(400,Map.of("code","SCENARIO_INVALID"),0);
+    if(!Set.of("success","decline","rate-limit","unavailable","timeout-after-acceptance","booking-response-lost","duplicate-status","out-of-order-status","invalid-verification","invalid-refund-verification","wrong-currency","async-booking").contains(scenario))return reply(400,Map.of("code","SCENARIO_INVALID"),0);
     state.put("scenario",scenario);save();return reply(200,Map.of("scenario",scenario),0);
    }
    if(path.equals("/__scenario/progress")&&method.equals("POST")){
@@ -69,7 +69,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
   } catch(wiremock.com.fasterxml.jackson.core.JsonProcessingException|IllegalArgumentException invalid){return new ResponseDefinitionBuilder().withStatus(400).withHeader("Content-Type","application/json").withBody("{\"code\":\"MOCK_REQUEST_INVALID\"}").build();}
    catch(Exception unavailable){return new ResponseDefinitionBuilder().withStatus(503).withHeader("Content-Type","application/json").withBody("{\"code\":\"MOCK_STATE_OR_TRANSPORT_UNAVAILABLE\"}").build();}
  }
- private String route(String path){if(path.startsWith("/refund/"))return "/refund/{id}";if(path.startsWith("/transaction/verify/"))return "/transaction/verify/{reference}";if(path.matches("/2010-04-01/Accounts/[^/]+/Messages/[^/]+.json"))return "/2010-04-01/Accounts/{account}/Messages/{sid}.json";if(path.startsWith("/2010-04-01/Accounts/"))return "/2010-04-01/Accounts/{account}/Messages.json";return Set.of("/transaction/initialize","/refund","/oauth/token","/rate/v1/rates/quotes","/ship/v1/shipments","/ship/v1/shipments/cancel","/track/v1/trackingnumbers","/track/v1/referencenumbers").contains(path)?path:"UNKNOWN";}
+ private String route(String path){if(path.startsWith("/refund/"))return "/refund/{id}";if(path.startsWith("/transaction/verify/"))return "/transaction/verify/{reference}";if(path.matches("/2010-04-01/Accounts/[^/]+/Messages/[^/]+.json"))return "/2010-04-01/Accounts/{account}/Messages/{sid}.json";if(path.startsWith("/2010-04-01/Accounts/"))return "/2010-04-01/Accounts/{account}/Messages.json";return Set.of("/transaction/initialize","/refund","/oauth/token","/rate/v1/rates/quotes","/ship/v1/shipments","/ship/v1/shipments/cancel","/ship/v1/shipments/results","/track/v1/trackingnumbers","/track/v1/referencenumbers").contains(path)?path:"UNKNOWN";}
  private ResponseDefinition paystack(String method,String path,String url,String body,String scenario) throws Exception {
   if(method.equals("POST")&&path.equals("/transaction/initialize")){
    var input=JSON.readTree(body);String ref=input.path("reference").asText();long amount=input.path("amount").asLong();
@@ -97,7 +97,12 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
   if(method.equals("POST")&&path.equals("/rate/v1/rates/quotes"))return reply(200,Map.of("transactionId",next("RATE"),"output",Map.of("rateReplyDetails",List.of(Map.of("serviceType","FEDEX_INTERNATIONAL_PRIORITY","ratedShipmentDetails",List.of(Map.of("rateType","ACCOUNT","totalNetCharge",15000,"shipmentRateDetail",Map.of("currency",scenario.equals("wrong-currency")?"USD":"NGN"))))))),0);
   if(method.equals("POST")&&path.equals("/ship/v1/shipments")){
    if(!input.path("accountNumber").path("value").asText().equals("mock-fedex-account")||input.path("requestedShipment").isMissingNode())return reply(400,Map.of("errors",List.of(Map.of("code","INVALID_INPUT"))),0);
-   String id=next("TRACK");var op=JSON.createObjectNode().put("id",id).put("status","pending").put("reference",input.path("requestedShipment").path("requestedPackageLineItems").path(0).path("customerReferences").path(0).path("value").asText());operations().set(id,op);return reply(200,Map.of("transactionId",id,"output",Map.of("transactionShipments",List.of(Map.of("masterTrackingNumber",id,"serviceType","FEDEX_INTERNATIONAL_PRIORITY","pieceResponses",List.of(Map.of("trackingNumber",id,"packageDocuments",List.of(Map.of("contentType","LABEL","encodedLabel",Base64.getEncoder().encodeToString("synthetic-label".getBytes(StandardCharsets.UTF_8)))))))))),scenario.equals("timeout-after-acceptance")?12000:0);
+   String id=next("TRACK");var op=JSON.createObjectNode().put("id",id).put("status","pending").put("reference",input.path("requestedShipment").path("requestedPackageLineItems").path(0).path("customerReferences").path(0).path("value").asText());operations().set(id,op);if(scenario.equals("async-booking")){String job="JOB_"+id;op.put("jobId",job);return reply(200,Map.of("output",Map.of("jobId",job)),0);}return reply(200,Map.of("transactionId",id,"output",shipmentResult(id)),scenario.equals("timeout-after-acceptance")?12000:0);
+  }
+  if(method.equals("POST")&&path.equals("/ship/v1/shipments/results")){
+   if(!input.path("accountNumber").path("value").asText().equals("mock-fedex-account"))return reply(400,Map.of("errors",List.of(Map.of("code","INVALID_INPUT"))),0);
+   String job=input.path("jobId").asText();for(var op:operations())if(op.path("jobId").asText().equals(job)&&!job.isBlank())return reply(200,Map.of("output",op.path("status").asText().equals("pending")?Map.of("transactionShipments",List.of()):shipmentResult(op.path("id").asText())),0);
+   return reply(404,Map.of("errors",List.of(Map.of("code","JOB_NOT_FOUND"))),0);
   }
   if(method.equals("PUT")&&path.equals("/ship/v1/shipments/cancel")){var op=operations().get(input.path("trackingNumber").asText());if(op==null)return reply(404,Map.of("errors",List.of(Map.of("code","TRACKING_NUMBER_NOT_FOUND"))),0);((ObjectNode)op).put("status","cancelled");return reply(200,Map.of("output",Map.of("cancelledShipment",true)),0);}
   if(method.equals("POST")&&path.equals("/track/v1/trackingnumbers")){String id=input.path("trackingInfo").path(0).path("trackingNumberInfo").path("trackingNumber").asText();var op=operations().get(id);if(op==null)return reply(404,Map.of("errors",List.of(Map.of("code","NOT_FOUND"))),0);return reply(200,Map.of("output",Map.of("completeTrackResults",List.of(Map.of("trackingNumber",id,"trackResults",List.of(Map.of("trackingNumberInfo",Map.of("trackingNumber",id),"latestStatusDetail",Map.of("code",op.path("status").asText()))))))),0);}
@@ -108,6 +113,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
   }
   return reply(404,Map.of("code","NOT_FOUND"),0);
  }
+ private Map<String,Object> shipmentResult(String id){return Map.of("transactionShipments",List.of(Map.of("masterTrackingNumber",id,"serviceType","FEDEX_INTERNATIONAL_PRIORITY","pieceResponses",List.of(Map.of("trackingNumber",id,"packageDocuments",List.of(Map.of("contentType","LABEL","encodedLabel",Base64.getEncoder().encodeToString("synthetic-label".getBytes(StandardCharsets.UTF_8)))))))));}
  private ResponseDefinition twilio(String method,String path,String body,String scenario) throws Exception {
   String root="/2010-04-01/Accounts/AC"+"0".repeat(32)+"/Messages";
   if(method.equals("POST")&&path.equals(root+".json")){

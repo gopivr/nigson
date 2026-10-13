@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 — IN_PROGRESS; quote increment native24/no skips, affected financial71/no skips, full114 Java/230 gated,66 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline; quote increment committed 62cb5b6dd955814ff4afd6787002e8b6d83f02d1. Durable booking/labels/cancellation/tracking and dependency-bound BP3 composition remain pending. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7. No critical approval blocks offline engineering.
+CARRIER-001 — IN_PROGRESS; quote correction native27/no skips, affected financial71/no skips, full114 Java/233 gated,66 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline; quote correction committed 12b4bbd3d33cc85e18f88c8146a7f864a7f7e42b. Durable booking/labels/cancellation/tracking and dependency-bound BP3 composition remain pending. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7. No critical approval blocks offline engineering.
 
 ## Completed Tasks
 
@@ -113,15 +113,15 @@ CARRIER-001 — IN_PROGRESS; quote increment native24/no skips, affected financi
 
 ## Build Status
 
-PASS — CARRIER-001 quote increment full114 Java/230 gated,66 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Overall carrier task remains IN_PROGRESS.
+PASS — CARRIER-001 quote correction full114 Java/233 gated,66 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Overall carrier task remains IN_PROGRESS.
 
 ## Test Status
 
-PASS — CARRIER-001 quote increment native24/no skips and affected payment/order/activation71/no skips; actual BFF/private mode/KMS/workload/JWKS/owned binding/audit/HTTP race and all-owner migrations/original Docker preservation. Booking/labels/tracking and genuine provider/release qualification NOT_RUN.
+PASS — CARRIER-001 quote correction native27/no skips and affected payment/order/activation71/no skips; actual BFF/private mode/KMS/workload/JWKS/owned binding/audit/HTTP race and all-owner migrations/original Docker preservation. Booking/labels/tracking and genuine provider/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
-62cb5b6dd955814ff4afd6787002e8b6d83f02d1 — verified carrier quote increment; CARRIER-001 remains IN_PROGRESS. No remote deployment.
+12b4bbd3d33cc85e18f88c8146a7f864a7f7e42b — verified carrier quote organization/expiry correction; CARRIER-001 remains IN_PROGRESS. No remote deployment.
 
 ## Confirmed Inputs
 
