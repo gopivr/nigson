@@ -42,3 +42,10 @@ class FulfillmentContracts(unittest.TestCase):
         self.assertEqual(set(schema['required']),{'commandId','provider','reference','status','occurredAt','mode'});self.assertTrue({'fee','account','dispatchedAt'}.isdisjoint(schema['properties']))
         self.assertEqual(schema['properties']['bookingState']['enum'],['BOOKED','UNKNOWN','FAILED']);self.assertEqual(schema['properties']['labelChecksum']['pattern'],'^[a-f0-9]{64}$')
         route=next(r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text()) if r['api']=='API-120');self.assertEqual((route['client'],route['scope'],route['phase']),('nigson-integration','logistics.write',1))
+
+    def test_customer_tracking_is_owned_private_and_bounded(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());op=spec['paths']['/api/v1/orders/{id}/tracking']['get'];schema=spec['components']['schemas']['OrderTracking']
+        self.assertEqual(op['operationId'],'API-051');self.assertEqual(op['security'],[{'bffSession':[]}]);self.assertNotIn('requestBody',op);self.assertEqual(op['responses']['200']['headers']['Cache-Control']['schema'],{'const':'no-store'})
+        self.assertFalse(schema['additionalProperties']);self.assertEqual(set(schema['properties']),{'orderId','shipments','events'})
+        self.assertEqual(schema['properties']['shipments']['maxItems'],100);self.assertEqual(schema['properties']['events']['maxItems'],100)
+        self.assertIn('latest100',op['description']);self.assertIn('Raw provider/internal notes',op['description'])

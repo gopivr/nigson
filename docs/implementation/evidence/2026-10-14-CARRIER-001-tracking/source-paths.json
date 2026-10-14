@@ -1,0 +1,20 @@
+[
+  "BACKEND_IMPLEMENTATION_MASTER.md",
+  "contracts/openapi/commerce.yaml",
+  "docs/API_CONTRACT.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-14-CARRIER-001.md",
+  "docs/runbooks/carrier-quotes.md",
+  "scripts/carrier/verify.py",
+  "scripts/contracts/fulfillment.py",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/FulfillmentConfiguration.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/ShipmentTrackingController.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/ShipmentTrackingService.java",
+  "services/commerce/src/main/java/com/nigson/commerce/security/SecurityConfiguration.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/ShipmentTrackingHttpAcceptance.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/ShipmentTrackingPersistenceTest.java",
+  "services/commerce/src/test/java/com/nigson/commerce/security/SecurityAssemblyTest.java",
+  "tests/contract/test_authorization_contract.py",
+  "tests/contract/test_fulfillment_contract.py",
+  "tests/contract/test_party_contract.py"
+]

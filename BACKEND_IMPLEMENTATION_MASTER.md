@@ -5223,7 +5223,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 
 ### API-051 GET /api/v1/orders/{id}/tracking
 
-- **Service / module / phase:** commerce / fulfillment / BP4.
+- **Service / module / phase:** commerce / fulfillment / BP1.
 - **Authentication:** Verified session/bearer or explicitly described capability/OIDC flow.
 - **Authorization:** CUSTOMER; resource/organization/market checks required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
@@ -5232,7 +5232,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `none`.
 - **Response:** `{orderId:UUID,shipments:[ShipmentDTO],events:[{status:string,occurredAt:Instant,note:string|null}]}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Only own order; stale logistics updates never reverse status.
+- **Validation / business rules:** Only own order or current active organization membership under historical order authority; stale logistics updates never reverse status. Events are the latest100 with stable newest-first ordering (CF-CARRIER-003), with full durable history retained. Raw internal/provider notes remain private (response note null); private label keys are never returned. More than100 shipments fails explicitly rather than silently reporting incomplete shipment composition.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 

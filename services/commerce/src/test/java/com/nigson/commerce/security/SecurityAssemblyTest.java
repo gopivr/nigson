@@ -41,6 +41,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.carrier.CarrierDeliveryHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.carrier.CarrierContextHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.carrier.CarrierResultHttpAcceptance.run(app,http,base,jobs);
+   com.nigson.acceptance.carrier.ShipmentTrackingHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.cart.CartHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.order.OrderHttpAcceptance.run(app,http,base,orders);

@@ -1,0 +1,152 @@
+[
+  {
+    "source": ".build/carrier-tracking-artifacts-first.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-artifacts-first.json",
+    "rawSha256": "6054a713d2777a9613aa09e77cc82ccfc7e4a578373168f50a900a6f1488e79b",
+    "evidenceSha256": "6054a713d2777a9613aa09e77cc82ccfc7e4a578373168f50a900a6f1488e79b"
+  },
+  {
+    "source": ".build/carrier-tracking-artifacts-second.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-artifacts-second.json",
+    "rawSha256": "6054a713d2777a9613aa09e77cc82ccfc7e4a578373168f50a900a6f1488e79b",
+    "evidenceSha256": "6054a713d2777a9613aa09e77cc82ccfc7e4a578373168f50a900a6f1488e79b"
+  },
+  {
+    "source": ".build/carrier-tracking-contract-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-contract-first.log",
+    "rawSha256": "aa8a2ca68f9c15da9adf8922b1e5e088295371a9417c305bfdd2378808ef7b95",
+    "evidenceSha256": "aa8a2ca68f9c15da9adf8922b1e5e088295371a9417c305bfdd2378808ef7b95"
+  },
+  {
+    "source": ".build/carrier-tracking-full-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-full-first-counts.json",
+    "rawSha256": "d99109e377e65b9ff9ef544ea92f006094d22b1286ad69a7aad38dbc87b384f3",
+    "evidenceSha256": "d99109e377e65b9ff9ef544ea92f006094d22b1286ad69a7aad38dbc87b384f3"
+  },
+  {
+    "source": ".build/carrier-tracking-full-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-full-first.log",
+    "rawSha256": "92822ca73054b20ce7a4812f77c210fa209b9c22c0dfa7cadfbefc8559c17210",
+    "evidenceSha256": "a41707a75b427a421a424236e5d641d0f8e860b74a3d12250390fed402af6a47"
+  },
+  {
+    "source": ".build/carrier-tracking-native-bff-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-native-bff-first-counts.json",
+    "rawSha256": "35a45f22d389c6c202610d592695f47c8be04320de884bc9ec334fdf6a456921",
+    "evidenceSha256": "35a45f22d389c6c202610d592695f47c8be04320de884bc9ec334fdf6a456921"
+  },
+  {
+    "source": ".build/carrier-tracking-native-bff-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-native-bff-first.log",
+    "rawSha256": "4b2047e676d4577ac08a8f1a4d6e7d1a588ad1ec4f712529c293864a883cbeb0",
+    "evidenceSha256": "11b19175521f30f289036ece7cf71c43e72b6b9593327d634d3e6c5032703b95"
+  },
+  {
+    "source": ".build/carrier-tracking-native-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-native-first-counts.json",
+    "rawSha256": "404442fea58be60b2c1d1cad7f55fda4d7c556a6d6e31d81592a7d6b6b5e3a35",
+    "evidenceSha256": "404442fea58be60b2c1d1cad7f55fda4d7c556a6d6e31d81592a7d6b6b5e3a35"
+  },
+  {
+    "source": ".build/carrier-tracking-native-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-native-first.log",
+    "rawSha256": "1cbef248cfffef746dee2313f70b57edca8856b20d9e07457db3bcce7a1b89d5",
+    "evidenceSha256": "57b464fa212f034be81b4365782987384ad5d7ae0683fa404d63aded9c20f161"
+  },
+  {
+    "source": ".build/carrier-tracking-reproduce-ai.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-reproduce-ai.log",
+    "rawSha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce",
+    "evidenceSha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce"
+  },
+  {
+    "source": ".build/carrier-tracking-reproduce-java.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/carrier-tracking-reproduce-java.log",
+    "rawSha256": "bf3f45046a356f2e1ec2792187893572d8ea4340d2ffcef0855320883cb37449",
+    "evidenceSha256": "f3589968d2a091fd978278b30015fa72e5ea66e54ed9ec766a8b001f100768ff"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-24af29c029-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-24af29c029-postgres-ai-bp5-pass.log",
+    "rawSha256": "3b6b90d561ee8a4f59a7cf0a7cf527e63823f6c2e606f53697dde715ce3c8bbd",
+    "evidenceSha256": "0b28c41318f52d6a77e16574f7036184741b8549e346363b05cd31f359d301d8"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-24af29c029-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-24af29c029-postgres-commerce-bp1-pass.log",
+    "rawSha256": "c0086777732b07d5f2babaf47e8b7e41fe13873304c173013007445f8925e787",
+    "evidenceSha256": "be23f52826d62d718a635efb7100335045dbe770c5f5dbfc77f833d2d0951860"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-24af29c029-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-24af29c029-postgres-commerce-bp5-pass.log",
+    "rawSha256": "8ebb852e5415e0b87b55e58cf146819188ae21345f796836232bbc4f5726b5ef",
+    "evidenceSha256": "3f87197d51b8b57202ecfff23a995d45354859dbec241dae7d9b19fc3147244d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-24af29c029-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-24af29c029-postgres-experience-bp1-pass.log",
+    "rawSha256": "02a955c0245e9e182f61530f996842e7d2f51227c0d0d07a6c3565b83241fe8b",
+    "evidenceSha256": "9d85b1dc8e1919b7a749aedf165e9d3c195bb7e9fa5439d2f121a4178c2f90bd"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-24af29c029-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-24af29c029-postgres-experience-bp5-pass.log",
+    "rawSha256": "c444e0cdf826e3c5598390a4ff10fb6b61ba716fa39dfe62e9710544f6d466b9",
+    "evidenceSha256": "9132d6ad108011c4610213a622ca10ed74551a168d6c68ccdd3d45b7e490dfa7"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-24af29c029-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-24af29c029-postgres-integration-bp1-pass.log",
+    "rawSha256": "9d3f99035f909e4433874f2b7bcc330aceba0a879ed2cf3aebc09d573d58c379",
+    "evidenceSha256": "9a5ec67dbbfb79a4de52a3cdf98e3ad27f580a5df7a2e5cc33ce40f097cd437d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-24af29c029-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-24af29c029-postgres-integration-bp5-pass.log",
+    "rawSha256": "4b0274c0caf3d2de0f620a47e9c582104d351e30d6f41eac29d6f81ed70cf3a2",
+    "evidenceSha256": "5215a43ebd9e091c1a82a326bae94f2e564397f25b5d68a72d8d178e57508555"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-948c7eb407-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-948c7eb407-postgres-ai-bp5-pass.log",
+    "rawSha256": "dbc21d910c682d9a05a3ee242df1f46846f2f1e570eee034c20af32098e88912",
+    "evidenceSha256": "d932005ad523ae3fa9edb93ff8e97413b1e0db1ace74860960cfc17ca1205c21"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-948c7eb407-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-948c7eb407-postgres-commerce-bp1-pass.log",
+    "rawSha256": "07390c6e7c36c41f1b9b2d103cb897178b0f5d6b5b1f286359bafcfe32808e1a",
+    "evidenceSha256": "73d4a8606b8feb9daf502f84ca8b52117dd0b5b1cf75b5816a2e3e789ffcf192"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-948c7eb407-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-948c7eb407-postgres-commerce-bp5-pass.log",
+    "rawSha256": "d9e50b2d61660099bd3307bc93dc3ae8548184231145cc41e60cebf2fcfceb8f",
+    "evidenceSha256": "16470ead374e7832ffd0371bff2f71129e301a5a4e8e1f3af5c292eff4c2a65c"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-948c7eb407-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-948c7eb407-postgres-experience-bp1-pass.log",
+    "rawSha256": "87edd24bd310e5a6ffa1d642350c7137adf547f2389b2be194904642236b10a9",
+    "evidenceSha256": "39ecc0301944d19e5e3861bb117669f7969ca125d7ccb5d58a3f8230d210de7f"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-948c7eb407-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-948c7eb407-postgres-experience-bp5-pass.log",
+    "rawSha256": "b49687a452acb59ec4c03117207e6cb0de6afaaad92ec8193a4de15e6bf6998b",
+    "evidenceSha256": "84125d2e03a7d2f22e44fadef09bbffa4054464d1f7fb72705afb5ade6d05f33"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-948c7eb407-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-948c7eb407-postgres-integration-bp1-pass.log",
+    "rawSha256": "e313d34310239a6fc306fd127039de42ee92ec5c896b58fd642e401edb67b94f",
+    "evidenceSha256": "10dcf5128efa1569662e08a7d499eb395672fcf5a6f09d489837bc22ffed4306"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-948c7eb407-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-tracking/nigson-test-plat-948c7eb407-postgres-integration-bp5-pass.log",
+    "rawSha256": "cd8cec06a85c674206a9edff6b61697429d3b0568ec36a1e5d3ceaab611c411c",
+    "evidenceSha256": "5440543f4140bb0d79a880f17f4eca8f9d2937ce91daf66178678ad3e159923a"
+  }
+]
