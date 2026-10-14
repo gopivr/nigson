@@ -8,9 +8,9 @@ import java.util.concurrent.*;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /** Bounded private wire transport; callers supply and validate fixed targets and safe semantics. */
-final class PrivateHttp {
+public final class PrivateHttp {
  private PrivateHttp(){}
- static HttpResponse<byte[]> send(HttpClient client,HttpRequest request,int limit,Duration deadline){
+ public static HttpResponse<byte[]> send(HttpClient client,HttpRequest request,int limit,Duration deadline){
   if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");if(limit<1||limit>65536||deadline.toMillis()<1||deadline.toMillis()>10000)throw new IllegalArgumentException("HTTP_BOUND_INVALID");
   var future=client.sendAsync(request,info->new Body(limit));try{return future.get(deadline.toMillis(),TimeUnit.MILLISECONDS);}catch(Exception unavailable){if(unavailable instanceof InterruptedException)Thread.currentThread().interrupt();throw new IllegalStateException("PRIVATE_HTTP_UNAVAILABLE");}finally{if(!future.isDone())future.cancel(true);}
  }

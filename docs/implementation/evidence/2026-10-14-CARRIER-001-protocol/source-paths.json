@@ -1,0 +1,18 @@
+[
+  "IMPLEMENTATION_STATUS.md",
+  "contracts/providers/fedex/ship-profile-2026-10-14.json",
+  "contracts/providers/fedex/ship-request.json",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-14-CARRIER-001.md",
+  "docs/runbooks/carrier-quotes.md",
+  "scripts/carrier/verify.py",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierContextClient.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierCreationContext.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierShipmentRequest.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierValues.java",
+  "services/integration/src/main/java/com/nigson/integration/provider/PrivateHttp.java",
+  "services/integration/src/test/java/com/nigson/acceptance/carrier/CarrierQuotePersistenceTest.java",
+  "services/integration/src/test/java/com/nigson/integration/carrier/CarrierContextClientTest.java",
+  "services/integration/src/test/java/com/nigson/integration/carrier/CarrierShipmentRequestTest.java",
+  "tests/contract/test_carrier_ship_profile.py"
+]

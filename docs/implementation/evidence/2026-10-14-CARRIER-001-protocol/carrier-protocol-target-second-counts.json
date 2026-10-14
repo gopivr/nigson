@@ -1,0 +1,31 @@
+{
+  "total": 35,
+  "failures": 1,
+  "errors": 0,
+  "skipped": 0,
+  "passed": 34,
+  "reportedClasses": [
+    {
+      "name": "com.nigson.integration.carrier.CarrierShipmentRequestTest",
+      "total": 7,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.carrier.CarrierContextClientTest",
+      "total": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.carrier.CarrierValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "counting": "Sum reported class executions across Maven modules, excluding aggregate summary lines; compile failure executes no tests."
+}

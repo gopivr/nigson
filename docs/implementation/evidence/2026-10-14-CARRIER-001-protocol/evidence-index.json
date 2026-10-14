@@ -1,0 +1,140 @@
+[
+  {
+    "source": ".build/carrier-protocol-artifacts-first.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-artifacts-first.json",
+    "rawSha256": "69b0434ec5d3065c4b5477e248b055771a3194a08cf634b5e766b9af8d355fee",
+    "evidenceSha256": "69b0434ec5d3065c4b5477e248b055771a3194a08cf634b5e766b9af8d355fee"
+  },
+  {
+    "source": ".build/carrier-protocol-artifacts-second.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-artifacts-second.json",
+    "rawSha256": "69b0434ec5d3065c4b5477e248b055771a3194a08cf634b5e766b9af8d355fee",
+    "evidenceSha256": "69b0434ec5d3065c4b5477e248b055771a3194a08cf634b5e766b9af8d355fee"
+  },
+  {
+    "source": ".build/carrier-protocol-contract.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-contract.log",
+    "rawSha256": "a8094112c2cbab1c1437284903d2564115d3b142dcb41452b54a5d20f5b43d3c",
+    "evidenceSha256": "a8094112c2cbab1c1437284903d2564115d3b142dcb41452b54a5d20f5b43d3c"
+  },
+  {
+    "source": ".build/carrier-protocol-full-rest.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-full-rest.log",
+    "rawSha256": "ca71b803d6a3a04978160d17696bebbd12b27e67be3e8c3df549052b6f332129",
+    "evidenceSha256": "35c811cafef52a483b3321a3c671ea3eecf82f1fc0fd628ddeb3d69b35d4db75"
+  },
+  {
+    "source": ".build/carrier-protocol-native-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-native-counts.json",
+    "rawSha256": "f460bee33a1ffd2db02d1e4bed84e422edacc571e6b07d8e9f395ffe2fefd67b",
+    "evidenceSha256": "f460bee33a1ffd2db02d1e4bed84e422edacc571e6b07d8e9f395ffe2fefd67b"
+  },
+  {
+    "source": ".build/carrier-protocol-native.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-native.log",
+    "rawSha256": "0f9b2122680d5f5146e5d004ee99a8d6da82bbb6f2244899f61caf99a45878dc",
+    "evidenceSha256": "8431bf9e3894b27e5bbb54204c339dc38979f9391408cfba623e1fd64d6e9b5e"
+  },
+  {
+    "source": ".build/carrier-protocol-providers-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-providers-counts.json",
+    "rawSha256": "224a2e993be93145a4373e77e9a73c66e10521b423ff1d3bb688aeeaeeaa54d0",
+    "evidenceSha256": "224a2e993be93145a4373e77e9a73c66e10521b423ff1d3bb688aeeaeeaa54d0"
+  },
+  {
+    "source": ".build/carrier-protocol-providers.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-providers.log",
+    "rawSha256": "1ff3157e599b79a156ca1d7577a3b2e788d4c91fbaddc51ba93fda9030b745a1",
+    "evidenceSha256": "231f90f6a2b844369549c907b8e4d18cf64abd1c6fa928f991998facbb597f54"
+  },
+  {
+    "source": ".build/carrier-protocol-reproduce-ai.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-reproduce-ai.log",
+    "rawSha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce",
+    "evidenceSha256": "7360a175a350b056d63e85b6084f9be51a640b86cf22a6c9e32c70274ef9c1ce"
+  },
+  {
+    "source": ".build/carrier-protocol-reproduce-java.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-reproduce-java.log",
+    "rawSha256": "feadd23f468fed73b7fb5e8d688185e80e45da87c01856a0aa94b43a17650669",
+    "evidenceSha256": "b883d087e8a12c5391b36ed9e2d5c468adc88fe84947d535519a4cd2480cfe01"
+  },
+  {
+    "source": ".build/carrier-protocol-target-final-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-target-final-counts.json",
+    "rawSha256": "1110bb7734753e6880c991b60fbf515b4cc7519cee5fb935d4673c754e703bea",
+    "evidenceSha256": "1110bb7734753e6880c991b60fbf515b4cc7519cee5fb935d4673c754e703bea"
+  },
+  {
+    "source": ".build/carrier-protocol-target-final.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-target-final.log",
+    "rawSha256": "2361af246fbbbf08cfbe033d5ab6291672610caec17eb8fe044b6634ce3acef6",
+    "evidenceSha256": "2ab2e784c28a5f1ac260c910d1b79a2b93c403163b435a144a8f3b8213d50a3a"
+  },
+  {
+    "source": ".build/carrier-protocol-target-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-target-first-counts.json",
+    "rawSha256": "7311f202974376be426feba1343fe05d131856918a22c9188f28b1b4b92c3b2a",
+    "evidenceSha256": "7311f202974376be426feba1343fe05d131856918a22c9188f28b1b4b92c3b2a"
+  },
+  {
+    "source": ".build/carrier-protocol-target-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-target-first.log",
+    "rawSha256": "a771c4c7e2c090414fe107ebd549d7ef5d774a76a64bda503c9fdfe7808a3639",
+    "evidenceSha256": "b4e65bff5bb9c93e32c6c0efae96d89891ca8a6eee1c970bc5847ff20b8272f2"
+  },
+  {
+    "source": ".build/carrier-protocol-target-second-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-target-second-counts.json",
+    "rawSha256": "b087f44179d9b42bbfcd21a02da7094c9418409333f39c97e95e00a5a16b26a6",
+    "evidenceSha256": "b087f44179d9b42bbfcd21a02da7094c9418409333f39c97e95e00a5a16b26a6"
+  },
+  {
+    "source": ".build/carrier-protocol-target-second.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/carrier-protocol-target-second.log",
+    "rawSha256": "3f2cd265d2de717d17f16261661a5f8ea19ccffe977dbf23a48d9a70f563ff90",
+    "evidenceSha256": "446fcef21d762dcdb51c882bc535088fe3246205afe844cd6fb6ecf111bed025"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-fd36649aa6-postgres-ai-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/nigson-test-plat-fd36649aa6-postgres-ai-bp5-pass.log",
+    "rawSha256": "285983fed068b49f38b4b1cd21457e2528d391a7b12fd0c5ed242350e8853525",
+    "evidenceSha256": "5788df2ec0a5fddcd9041dce04f6cebf98f6782f5a25ad2e65282e452e8a6719"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-fd36649aa6-postgres-commerce-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/nigson-test-plat-fd36649aa6-postgres-commerce-bp1-pass.log",
+    "rawSha256": "71eb3c4336851161bb31c2e9f5e84fbfcf552faf78eea4673d5cafa4eec0806e",
+    "evidenceSha256": "25aee3e949d4ce27ced9f8227791961fccbd700385e596a839138b5a039d2501"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-fd36649aa6-postgres-commerce-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/nigson-test-plat-fd36649aa6-postgres-commerce-bp5-pass.log",
+    "rawSha256": "bd03633a8c4dce700ea6fd71097c4cfc07b7d11e278889c8da9bddb179bd2e03",
+    "evidenceSha256": "5a162eeed849e23a77fe99af6624c88f691109a2d5cff68342d94cf18f097f8d"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-fd36649aa6-postgres-experience-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/nigson-test-plat-fd36649aa6-postgres-experience-bp1-pass.log",
+    "rawSha256": "61414d03bbfd7f9903c5e53031aef787f377839d1c76865eb18e3fac892d3ef8",
+    "evidenceSha256": "12fe2af65eecacf98ff2d92dbdc0ba364c931f634e93ff22082c71fbab18a0b6"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-fd36649aa6-postgres-experience-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/nigson-test-plat-fd36649aa6-postgres-experience-bp5-pass.log",
+    "rawSha256": "485c0dbf287209bf02d16f08d35e5facd7fe07e506b392d40c095dd760c2319d",
+    "evidenceSha256": "01373136f7aa66ace883864e42c36f06e2628a9ab0d03cb6593472e043e6b68e"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-fd36649aa6-postgres-integration-bp1-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/nigson-test-plat-fd36649aa6-postgres-integration-bp1-pass.log",
+    "rawSha256": "47168dffdde470ef44bc835a6f73295acff24f53ef6cbfd9176095a162d4221e",
+    "evidenceSha256": "352aca29b4668324a615275409b7b1346e83f9c1d6e6e507aa58be831dc0d4d4"
+  },
+  {
+    "source": ".build/carrier001/database-evidence/nigson-test-plat-fd36649aa6-postgres-integration-bp5-pass.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-protocol/nigson-test-plat-fd36649aa6-postgres-integration-bp5-pass.log",
+    "rawSha256": "93e9556384cdf430787763a4ca9cc3dad75eb0ed19e3bf681de2862b3b4e6f0b",
+    "evidenceSha256": "ff95a5bd787d1656fc4c97048670c080f5222ff817383157cedb1b5a42c7ed08"
+  }
+]

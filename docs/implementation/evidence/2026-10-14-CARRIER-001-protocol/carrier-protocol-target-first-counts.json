@@ -1,0 +1,9 @@
+{
+  "total": 0,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": 0,
+  "reportedClasses": [],
+  "counting": "Sum reported class executions across Maven modules, excluding aggregate summary lines; compile failure executes no tests."
+}

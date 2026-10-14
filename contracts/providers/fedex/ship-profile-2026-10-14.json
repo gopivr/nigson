@@ -1,0 +1,66 @@
+{
+  "profileVersion": 1,
+  "reviewedOn": "2026-10-14",
+  "source": "https://developer.fedex.com/api/en-us/catalog/ship/v1/docs.html",
+  "upstream": {
+    "title": "Ship API",
+    "version": "1.0.0",
+    "openapi": "3.0.0",
+    "sha256": "ebc4248f99bd04cd5d7a815cb2b6c089ab72291afd6bf5980e329979102acc53"
+  },
+  "scope": "Reviewed NG domestic YOUR_PACKAGING/PDF request subset; not account, route, print or release qualification. Account is supplied by the configured adapter, never a caller.",
+  "requiredRoot": [
+    "accountNumber",
+    "labelResponseOptions",
+    "requestedShipment"
+  ],
+  "requiredShipment": [
+    "labelSpecification",
+    "packagingType",
+    "pickupType",
+    "recipients",
+    "requestedPackageLineItems",
+    "serviceType",
+    "shipper",
+    "shippingChargesPayment",
+    "totalWeight"
+  ],
+  "processingOptions": [
+    "SYNCHRONOUS_ONLY",
+    "ALLOW_ASYNCHRONOUS"
+  ],
+  "synchronousPackageLimit": 40,
+  "labelResponseOptions": "LABEL",
+  "labelImageType": "PDF",
+  "supportedPaperStocks": [
+    "PAPER_4X6",
+    "PAPER_4X675",
+    "PAPER_4X8",
+    "PAPER_4X9",
+    "PAPER_7X475",
+    "PAPER_85X11_BOTTOM_HALF_LABEL",
+    "PAPER_85X11_TOP_HALF_LABEL",
+    "PAPER_LETTER"
+  ],
+  "supportedBilling": [
+    "SENDER"
+  ],
+  "packing": {
+    "packageCountLimit": 100,
+    "units": "KG",
+    "dimensions": "CM",
+    "dimensionRounding": "CEILING",
+    "totalWeightScale": 1,
+    "totalWeightRounding": "CEILING",
+    "customerReferenceType": "CUSTOMER_REFERENCE",
+    "businessReference": "canonical booking UUID on every package"
+  },
+  "addressLimits": {
+    "ascii": true,
+    "personName": 70,
+    "streetLine": 35,
+    "city": 35,
+    "postalCode": 10,
+    "phone": "E164 validated internally; provider receives unchanged digits without the leading plus"
+  }
+}
