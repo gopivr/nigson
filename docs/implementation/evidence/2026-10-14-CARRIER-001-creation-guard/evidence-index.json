@@ -1,0 +1,80 @@
+[
+  {
+    "source": ".build/carrier-context-creation-guard-contract.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-context-creation-guard-contract.log",
+    "rawSha256": "686c5c19997491bda430404cb3090d2f307869471d1cb273df3b99b4f59ea6ad",
+    "evidenceSha256": "686c5c19997491bda430404cb3090d2f307869471d1cb273df3b99b4f59ea6ad"
+  },
+  {
+    "source": ".build/carrier-context-creation-guard-final-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-context-creation-guard-final-counts.json",
+    "rawSha256": "a56f48cc2825603544649d8103acce25cb0783b7e7b2184e89d4399cbc021c07",
+    "evidenceSha256": "a56f48cc2825603544649d8103acce25cb0783b7e7b2184e89d4399cbc021c07"
+  },
+  {
+    "source": ".build/carrier-context-creation-guard-final.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-context-creation-guard-final.log",
+    "rawSha256": "b14245ecaaf22d4c775bb33f537c083ac473def95139d3f65b3cb7339d3314c3",
+    "evidenceSha256": "6ea9065b6a4528dcf24782231866da7f4aba1741f2503fc0c5a04c17ba818cac"
+  },
+  {
+    "source": ".build/carrier-context-creation-guard-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-context-creation-guard-first-counts.json",
+    "rawSha256": "a56f48cc2825603544649d8103acce25cb0783b7e7b2184e89d4399cbc021c07",
+    "evidenceSha256": "a56f48cc2825603544649d8103acce25cb0783b7e7b2184e89d4399cbc021c07"
+  },
+  {
+    "source": ".build/carrier-context-creation-guard-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-context-creation-guard-first.log",
+    "rawSha256": "9c8f7391dc4f91ab23e20ab808c08490e8113c8be44709354d0794f20a0dc0dd",
+    "evidenceSha256": "affab37e66ed029fdbc369dba9959aa6a13a9e10eedf26181603dc89bf665acb"
+  },
+  {
+    "source": ".build/carrier-context-creation-guard-serial-final-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-context-creation-guard-serial-final-counts.json",
+    "rawSha256": "a56f48cc2825603544649d8103acce25cb0783b7e7b2184e89d4399cbc021c07",
+    "evidenceSha256": "a56f48cc2825603544649d8103acce25cb0783b7e7b2184e89d4399cbc021c07"
+  },
+  {
+    "source": ".build/carrier-context-creation-guard-serial-final.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-context-creation-guard-serial-final.log",
+    "rawSha256": "dc58747e3089285cf65d8b005f40388da5cb841f82434f77ce4eadc62ca431e7",
+    "evidenceSha256": "aee23fbeb76694d635520628462121ac35085426cd11d51f6abd6dcd8d6b8f5e"
+  },
+  {
+    "source": ".build/carrier-creation-guard-artifacts-first.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-creation-guard-artifacts-first.json",
+    "rawSha256": "5f9b295daceaccc2db91507a9a8896d241f847bfde7a092a88c8da9735533716",
+    "evidenceSha256": "5f9b295daceaccc2db91507a9a8896d241f847bfde7a092a88c8da9735533716"
+  },
+  {
+    "source": ".build/carrier-creation-guard-artifacts-second.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-creation-guard-artifacts-second.json",
+    "rawSha256": "5f9b295daceaccc2db91507a9a8896d241f847bfde7a092a88c8da9735533716",
+    "evidenceSha256": "5f9b295daceaccc2db91507a9a8896d241f847bfde7a092a88c8da9735533716"
+  },
+  {
+    "source": ".build/carrier-creation-guard-full-first-counts.json",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-creation-guard-full-first-counts.json",
+    "rawSha256": "23a1485e4cc599199e6da1f58bf4acb8af634ecaae37f88f9109c0e3b21d927f",
+    "evidenceSha256": "23a1485e4cc599199e6da1f58bf4acb8af634ecaae37f88f9109c0e3b21d927f"
+  },
+  {
+    "source": ".build/carrier-creation-guard-full-first.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-creation-guard-full-first.log",
+    "rawSha256": "9043695225f9cf3e261b9de341a03146d42d2ed6467a38fe922cef4c86ce1318",
+    "evidenceSha256": "816aa678cac2b92c5c20f4830dbf56ee939de59deed14001afbdc4e5564040da"
+  },
+  {
+    "source": ".build/carrier-creation-guard-reproduce-ai.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-creation-guard-reproduce-ai.log",
+    "rawSha256": "71feb04f401a2a7c0ae2e27d5825a7b09f781f8e03a863101276a155516e060f",
+    "evidenceSha256": "71feb04f401a2a7c0ae2e27d5825a7b09f781f8e03a863101276a155516e060f"
+  },
+  {
+    "source": ".build/carrier-creation-guard-reproduce-java.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-creation-guard/carrier-creation-guard-reproduce-java.log",
+    "rawSha256": "655d429ff28211b910b385e515e14f9c079a8a0cd2f1d1c96094baf04287a541",
+    "evidenceSha256": "f7a05ce29270e7d4d691e3da61500cf3f44af9faa292bcbb5bc5f9ccc9957762"
+  }
+]

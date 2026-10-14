@@ -1,0 +1,11 @@
+[
+  "BACKEND_IMPLEMENTATION_MASTER.md",
+  "contracts/openapi/commerce.yaml",
+  "docs/API_CONTRACT.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-14-CARRIER-001.md",
+  "scripts/contracts/fulfillment.py",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/JdbcShipmentRepository.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/CarrierContextHttpAcceptance.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/CarrierContextPersistenceTest.java"
+]

@@ -1816,7 +1816,7 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 - **Request:** `none`.
 - **Response:** `{shipmentId:UUID,orderId:UUID,address:immutable order address snapshot (CF-ORDER-001),shipper:CarrierAddress,serviceCode:string,packages:[CarrierPackage],bookingReference:string,mode:MOCK|SANDBOX|LIVE}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Minimum logistics data only; immutable stable request reference.
+- **Validation / business rules:** Minimum logistics data only; immutable stable request reference. Creation context is limited to outstanding CREATED/EXCEPTION intents; READY/SHIPPED/DELIVERED/CANCELLED reject INVALID_TRANSITION (CF-CARRIER-004). Tracking and ACK recovery use existing owned provider identifiers/stored ACKs, never another creation context.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
