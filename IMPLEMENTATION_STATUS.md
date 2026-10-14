@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 durable EVT-027 intake increment — IN_PROGRESS; native62/no skips, full120 Java/262 gated,69 contracts,15 AI/five gated,268 locked dependencies and nine reproduced artifacts PASS. Atomic owned intent/job/inbox/audit, twelve-way duplicate race, conflicting booking guards, partial-restore safeguards, actual application gating and SNS/SQS failure/redelivery qualified offline. Source commit pending. Booking execution/labels/cancellation/polling and the rest of the roadmap remain pending; no critical approval blocks offline engineering.
+CARRIER-001 durable EVT-027 intake increment — IN_PROGRESS; native62/no skips, full120 Java/262 gated,69 contracts,15 AI/five gated,268 locked dependencies and nine reproduced artifacts PASS. Atomic owned intent/job/inbox/audit, twelve-way duplicate race, conflicting booking guards, partial-restore safeguards, actual application gating and SNS/SQS failure/redelivery qualified offline. Accepted source 2c3ccd8b041ce01ad64e0839d4a75a488439c1d7. Booking execution/labels/cancellation/polling and the rest of the roadmap remain pending; no critical approval blocks offline engineering.
 
 CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected financial71/no skips, full120 Java/251 gated,69 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline; creation safeguard committed 828bb46eab3c05d3d4c70e74f6fa699dedcb77fd. Durable booking/labels/cancellation/tracking and dependency-bound BP3 composition remain pending. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7. No critical approval blocks offline engineering.
 
@@ -123,7 +123,7 @@ PASS — CARRIER-001 durable intake native62/no skips; actual PostgreSQL/SNS/SQS
 
 ## Last Successful Commit
 
-828bb46eab3c05d3d4c70e74f6fa699dedcb77fd — verified completed-shipment creation safeguard; CARRIER-001 remains IN_PROGRESS. No remote deployment.
+2c3ccd8b041ce01ad64e0839d4a75a488439c1d7 — verified atomic durable EVT-027 carrier intake; CARRIER-001 remains IN_PROGRESS. No remote deployment.
 
 ## Confirmed Inputs
 

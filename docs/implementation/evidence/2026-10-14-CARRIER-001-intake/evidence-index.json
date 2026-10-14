@@ -148,5 +148,17 @@
     "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-intake/nigson-test-plat-d096ea1d14-postgres-integration-bp5-pass.log",
     "rawSha256": "66096249903866235d4dedadb010bda69f8b2fb321371cda221cf24f10548ce7",
     "evidenceSha256": "49642b8ec452e3fcefda2fed281f8827a8e5f79736234b51f85f533739bd5777"
+  },
+  {
+    "source": ".build/carrier-intake-repository-before-stage.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-intake/carrier-intake-repository-before-stage.log",
+    "rawSha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8",
+    "evidenceSha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8"
+  },
+  {
+    "source": ".build/carrier-intake-repository-staged.log",
+    "evidence": "docs/implementation/evidence/2026-10-14-CARRIER-001-intake/carrier-intake-repository-staged.log",
+    "rawSha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8",
+    "evidenceSha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8"
   }
 ]
