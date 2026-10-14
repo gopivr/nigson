@@ -1,0 +1,584 @@
+{
+  "total": 382,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 262,
+  "passed": 120,
+  "reportedClasses": [
+    {
+      "name": "com.nigson.commerce.OtlpTransportTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.bootstrap.KeycloakTrustTest",
+      "total": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.commerce.security.HttpTrustBoundaryTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.commerce.security.KmsIdentityTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.security.SecurityProtocolTest",
+      "total": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.security.OidcSessionAcceptanceTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.commerce.security.JdbcSessionTrustTest",
+      "total": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 7
+    },
+    {
+      "name": "com.nigson.commerce.security.SecurityAssemblyTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.commerce.PlatformPersistenceTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "name": "com.nigson.commerce.payment.PaystackModeTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.payment.PaystackTransactionGuardTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.commerce.payment.PaymentWorkerActivationTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.EventTransportTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.commerce.BuildCompatibilityTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.fulfillment.HttpCarrierRatesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.SafeBoundaryTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.AuditPersistenceTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2
+    },
+    {
+      "name": "com.nigson.commerce.authorization.StaffValuesTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.authorization.StaffAuthorizationTest",
+      "total": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 7
+    },
+    {
+      "name": "com.nigson.acceptance.order.OrderValuesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.order.OrderPersistenceTest",
+      "total": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 17
+    },
+    {
+      "name": "com.nigson.acceptance.configuration.ConfigurationPersistenceTest",
+      "total": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    {
+      "name": "com.nigson.acceptance.party.PartyPersistenceTest",
+      "total": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    {
+      "name": "com.nigson.acceptance.party.PartyValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.notification.TemplatePersistenceTest",
+      "total": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    {
+      "name": "com.nigson.acceptance.notification.TemplateTransportTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.notification.NotificationPersistenceTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "name": "com.nigson.acceptance.notification.NotificationValuesTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.payment.PaymentReceiptKeysTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.payment.PaymentPayloadCipherTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.payment.PaymentValuesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.payment.PaymentPersistenceTest",
+      "total": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 30
+    },
+    {
+      "name": "com.nigson.acceptance.payment.PaymentActivationTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.payment.PaystackWebhookProtocolTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.nigeria.NigeriaKoboTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.nigeria.NigeriaBaselineTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.acceptance.provider.JobPersistenceTest",
+      "total": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    {
+      "name": "com.nigson.acceptance.provider.JobValuesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.provider.JobTransportTest",
+      "total": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.fulfillment.FulfillmentValuesTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.fulfillment.ShipmentPersistenceTest",
+      "total": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 11
+    },
+    {
+      "name": "com.nigson.acceptance.fulfillment.DeliveryRulePersistenceTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    {
+      "name": "com.nigson.acceptance.inventory.InventoryValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.inventory.InventoryPersistenceTest",
+      "total": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    },
+    {
+      "name": "com.nigson.acceptance.cart.CartPersistenceTest",
+      "total": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    },
+    {
+      "name": "com.nigson.acceptance.cart.CartValuesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.files.FileConfigurationTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.files.FilePersistenceTest",
+      "total": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 8
+    },
+    {
+      "name": "com.nigson.acceptance.files.FileValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.market.MarketPersistenceTest",
+      "total": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    },
+    {
+      "name": "com.nigson.acceptance.market.MarketValuesTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierRateBindingTest",
+      "total": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 8
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierContextPersistenceTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierResultValuesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierResultPersistenceTest",
+      "total": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 10
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierResultStatesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.ShipmentTrackingPersistenceTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "name": "com.nigson.acceptance.catalogue.CatalogueReadLoadTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.acceptance.catalogue.ProductPersistenceTest",
+      "total": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 7
+    },
+    {
+      "name": "com.nigson.acceptance.catalogue.CatalogueValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.catalogue.TaxonomyPersistenceTest",
+      "total": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5
+    },
+    {
+      "name": "com.nigson.acceptance.pricing.PricingPersistenceTest",
+      "total": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 13
+    },
+    {
+      "name": "com.nigson.acceptance.pricing.PricingValuesTest",
+      "total": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.session.SessionHttpTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.experience.PlatformPersistenceTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "name": "com.nigson.experience.BuildCompatibilityTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.experience.SafeBoundaryTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.experience.AuditPersistenceTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2
+    },
+    {
+      "name": "com.nigson.integration.PlatformPersistenceTest",
+      "total": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5
+    },
+    {
+      "name": "com.nigson.integration.providers.FedExAdapterTest",
+      "total": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.provider.PrivateHttpTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.BuildCompatibilityTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.SafeBoundaryTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.AuditPersistenceTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2
+    },
+    {
+      "name": "com.nigson.integration.carrier.CarrierValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.provider.IntegrationJobExecutionTest",
+      "total": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    {
+      "name": "com.nigson.acceptance.provider.IntegrationJobPersistenceTest",
+      "total": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 8
+    },
+    {
+      "name": "com.nigson.acceptance.provider.JobValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.provider.IntegrationJobHttpTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierQuotePersistenceTest",
+      "total": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierQuoteHttpTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 2
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierBookingIntakePersistenceTest",
+      "total": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 10
+    }
+  ],
+  "counting": "Sum reported class executions; identical class names in separate Maven modules are separate executions. Summary total lines excluded."
+}

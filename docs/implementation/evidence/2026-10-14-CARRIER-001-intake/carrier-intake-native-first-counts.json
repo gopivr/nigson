@@ -1,0 +1,101 @@
+{
+  "total": 61,
+  "failures": 0,
+  "errors": 9,
+  "skipped": 0,
+  "passed": 52,
+  "reportedClasses": [
+    {
+      "name": "com.nigson.commerce.security.SecurityAssemblyTest",
+      "total": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.commerce.fulfillment.HttpCarrierRatesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierRateBindingTest",
+      "total": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierContextPersistenceTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierResultValuesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierResultPersistenceTest",
+      "total": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierResultStatesTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.ShipmentTrackingPersistenceTest",
+      "total": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.providers.FedExAdapterTest",
+      "total": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.integration.carrier.CarrierValuesTest",
+      "total": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierQuotePersistenceTest",
+      "total": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierQuoteHttpTest",
+      "total": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.nigson.acceptance.carrier.CarrierBookingIntakePersistenceTest",
+      "total": 9,
+      "failures": 0,
+      "errors": 9,
+      "skipped": 0
+    }
+  ],
+  "counting": "Sum reported class executions; identical class names in separate Maven modules are separate executions. Summary total lines excluded."
+}

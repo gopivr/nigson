@@ -1,0 +1,12 @@
+[
+  "IMPLEMENTATION_STATUS.md",
+  "docs/EVENT_CATALOG.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-14-CARRIER-001.md",
+  "docs/runbooks/carrier-quotes.md",
+  "scripts/carrier/verify.py",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierBookingRequestedHandler.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierConfiguration.java",
+  "services/integration/src/test/java/com/nigson/acceptance/carrier/CarrierBookingIntakePersistenceTest.java",
+  "services/integration/src/test/java/com/nigson/acceptance/carrier/CarrierQuoteHttpTest.java"
+]

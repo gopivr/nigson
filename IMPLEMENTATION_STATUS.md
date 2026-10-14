@@ -8,6 +8,8 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
+CARRIER-001 durable EVT-027 intake increment — IN_PROGRESS; native62/no skips, full120 Java/262 gated,69 contracts,15 AI/five gated,268 locked dependencies and nine reproduced artifacts PASS. Atomic owned intent/job/inbox/audit, twelve-way duplicate race, conflicting booking guards, partial-restore safeguards, actual application gating and SNS/SQS failure/redelivery qualified offline. Source commit pending. Booking execution/labels/cancellation/polling and the rest of the roadmap remain pending; no critical approval blocks offline engineering.
+
 CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected financial71/no skips, full120 Java/251 gated,69 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline; creation safeguard committed 828bb46eab3c05d3d4c70e74f6fa699dedcb77fd. Durable booking/labels/cancellation/tracking and dependency-bound BP3 composition remain pending. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7. No critical approval blocks offline engineering.
 
 ## Completed Tasks
@@ -113,11 +115,11 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — CARRIER-001 quote correction full120 Java/251 gated,69 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Overall carrier task remains IN_PROGRESS.
+PASS — CARRIER-001 durable intake full120 Java/262 gated,69 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies and nine exactly reproduced artifacts. Overall carrier task remains IN_PROGRESS.
 
 ## Test Status
 
-PASS — CARRIER-001 creation safeguard native51/no skips and affected payment/order/activation71/no skips; actual BFF/private mode/KMS/workload/JWKS/owned binding/audit/HTTP race and all-owner migrations/original Docker preservation. Booking/labels/tracking and genuine provider/release qualification NOT_RUN.
+PASS — CARRIER-001 durable intake native62/no skips; actual PostgreSQL/SNS/SQS audit rollback/redelivery, twelve-way semantic duplicate race, partial-restore safeguards and enabled/disabled application wiring. All-owner migrations/original Docker preservation PASS. Prior affected payment/order/activation71 remains accepted unchanged. Booking execution/labels/cancellation/polling and genuine provider/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
