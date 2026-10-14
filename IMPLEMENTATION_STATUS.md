@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 booking protocol increment — IN_PROGRESS; targeted35/no skips, native95/no skips, full152 Java/263 gated,70 contracts,15 AI/five gated, stateful all-provider HTTP regression and nine reproduced artifacts PASS. Closed API-119 binding/bounded HTTP, frozen Ship request construction/async threshold and explicit provider address/configuration guards qualified offline. Source commit pending; durable execution/label production/cancellation/polling and other roadmap work remain pending. No critical approval blocks offline engineering.
+CARRIER-001 booking protocol increment — IN_PROGRESS; targeted35/no skips, native95/no skips, full152 Java/263 gated,70 contracts,15 AI/five gated, stateful all-provider HTTP regression and nine reproduced artifacts PASS. Closed API-119 binding/bounded HTTP, frozen Ship request construction/async threshold and explicit provider address/configuration guards qualified offline. Accepted source 53e2d1569345aef4f7887561c6ff9a9bb4c52303; durable execution/label production/cancellation/polling and other roadmap work remain pending. No critical approval blocks offline engineering.
 
 CARRIER-001 durable EVT-027 intake increment — IN_PROGRESS; native62/no skips, full120 Java/262 gated,69 contracts,15 AI/five gated,268 locked dependencies and nine reproduced artifacts PASS. Atomic owned intent/job/inbox/audit, twelve-way duplicate race, conflicting booking guards, partial-restore safeguards, actual application gating and SNS/SQS failure/redelivery qualified offline. Accepted source 2c3ccd8b041ce01ad64e0839d4a75a488439c1d7. Booking execution/labels/cancellation/polling and the rest of the roadmap remain pending; no critical approval blocks offline engineering.
 
@@ -125,7 +125,7 @@ PASS — CARRIER-001 booking protocol native95/no skips; private HTTP mode/refer
 
 ## Last Successful Commit
 
-2c3ccd8b041ce01ad64e0839d4a75a488439c1d7 — verified atomic durable EVT-027 carrier intake; CARRIER-001 remains IN_PROGRESS. No remote deployment.
+53e2d1569345aef4f7887561c6ff9a9bb4c52303 — verified private creation binding/Ship protocol and before-rate compatibility; CARRIER-001 remains IN_PROGRESS. No remote deployment.
 
 ## Confirmed Inputs
 
