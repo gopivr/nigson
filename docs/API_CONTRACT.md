@@ -1822,7 +1822,7 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 
 ### API-120 POST /internal/v1/shipments/{id}/provider-result
 
-- **Service / module / phase:** commerce / fulfillment / BP4.
+- **Service / module / phase:** commerce / fulfillment / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
 - **Authorization:** SERVICE_INTEGRATION:logistics.write; resource/organization/market checks required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.

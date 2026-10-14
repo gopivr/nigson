@@ -115,7 +115,7 @@ def fixture(environment):
                     with lock:
                         if self.command == 'POST':
                             control = json.loads(payload)
-                            if control.get('fault') not in ('BEFORE_ACCEPT', 'AFTER_ACCEPT', None):
+                            if control.get('fault') not in ('BEFORE_ACCEPT', 'AFTER_ACCEPT', 'INVALID_HEAD_CHECKSUM', None):
                                 raise ValueError('control')
                             state['fault'] = control.get('fault')
                         response = json.dumps({k: v for k, v in state.items() if k != 'objects'}).encode()
@@ -141,6 +141,9 @@ def fixture(environment):
                             return
                         obj = versions[-1]
                         headers = {'Content-Type': obj['mime'], 'Content-Length': str(len(obj['bytes'])), 'ETag': obj['etag'], 'x-amz-version-id': obj['version'], 'x-amz-checksum-sha256': obj['checksum'], 'x-amz-server-side-encryption': 'AES256', 'x-amz-meta-owner': obj['owner'], 'x-amz-meta-asset': obj['asset']}
+                        if self.command == 'HEAD' and state['fault'] == 'INVALID_HEAD_CHECKSUM':
+                            state['fault'] = None
+                            headers['x-amz-checksum-sha256'] = 'invalid-checksum'
                         self.reply(200, obj['bytes'], headers)
                         return
                     if self.command != 'PUT' or self.headers.get('If-None-Match') != '*':

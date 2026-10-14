@@ -35,3 +35,10 @@ class FulfillmentContracts(unittest.TestCase):
         self.assertTrue({'id','version','organizationId'}.isdisjoint(schemas['OrderAddressSnapshot']['properties']))
         route=next(r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text()) if r['api']=='API-119')
         self.assertEqual((route['client'],route['scope'],route['phase']),('nigson-integration','logistics.read',1))
+
+    def test_private_provider_result_requires_trusted_closed_source_command(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());op=spec['paths']['/internal/v1/shipments/{id}/provider-result']['post'];schema=spec['components']['schemas']['ShipmentProviderResult']
+        self.assertEqual(op['operationId'],'API-120');self.assertEqual(op['security'],[{'carrierIntegrationWorkload':['logistics.write']}]);self.assertFalse(schema['additionalProperties'])
+        self.assertEqual(set(schema['required']),{'commandId','provider','reference','status','occurredAt','mode'});self.assertTrue({'fee','account','dispatchedAt'}.isdisjoint(schema['properties']))
+        self.assertEqual(schema['properties']['bookingState']['enum'],['BOOKED','UNKNOWN','FAILED']);self.assertEqual(schema['properties']['labelChecksum']['pattern'],'^[a-f0-9]{64}$')
+        route=next(r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text()) if r['api']=='API-120');self.assertEqual((route['client'],route['scope'],route['phase']),('nigson-integration','logistics.write',1))

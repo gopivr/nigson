@@ -9820,6 +9820,150 @@
         }
       }
     },
+    "/internal/v1/shipments/{id}/provider-result": {
+      "post": {
+        "operationId": "API-120",
+        "description": "Private phase1 nigson-integration logistics.write; no actor/cookie/query. Default disabled until NIGSON_CARRIER_RESULTS_ENABLED plus configured private storage/security/fulfillment qualification. BOOKED requires READY and trusted private PDF label key/checksum; exact environment/shipment prefix, booking owner, actual size/mime/encryption/checksum HEAD outside SQL. Scoped commandId dedup/hash survives response loss and replays without another HEAD. Owned status/metadata/history/audit/outbox commit together. UNKNOWN cannot create ready proof; old events and transit cannot regress or manufacture physical stock dispatch. Delivery requires recorded handover; monetary state is untouched. Optional fields are omitted, not null.",
+        "security": [
+          {
+            "carrierIntegrationWorkload": [
+              "logistics.write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShipmentDTO"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "FULFILLMENT_RULE_VIOLATION or invalid trusted booking/label/state evidence",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShipmentProviderResult"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/checkout/attempts": {
       "post": {
         "operationId": "API-037",
@@ -12140,7 +12284,8 @@
           "clientCredentials": {
             "tokenUrl": "/realms/nigson/protocol/openid-connect/token",
             "scopes": {
-              "logistics.read": "Private immutable paid shipment context"
+              "logistics.read": "Private immutable paid shipment context",
+              "logistics.write": "Trusted owned shipment acknowledgement"
             }
           }
         },
@@ -16174,6 +16319,79 @@
               "MOCK",
               "SANDBOX",
               "LIVE"
+            ]
+          }
+        }
+      },
+      "ShipmentProviderResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "commandId",
+          "provider",
+          "reference",
+          "status",
+          "occurredAt",
+          "mode"
+        ],
+        "properties": {
+          "commandId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "provider": {
+            "type": "string",
+            "const": "FEDEX"
+          },
+          "reference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CREATED",
+              "READY",
+              "SHIPPED",
+              "DELIVERED",
+              "CANCELLED",
+              "EXCEPTION"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "MOCK",
+              "SANDBOX",
+              "LIVE"
+            ]
+          },
+          "trackingUrl": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://",
+            "maxLength": 1000
+          },
+          "labelObjectKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "labelChecksum": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "bookingState": {
+            "type": "string",
+            "enum": [
+              "BOOKED",
+              "UNKNOWN",
+              "FAILED"
             ]
           }
         }

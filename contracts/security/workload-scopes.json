@@ -33,7 +33,7 @@
     "owner": "commerce",
     "client": "nigson-integration",
     "scope": "logistics.write",
-    "phase": 4
+    "phase": 1
   },
   {
     "api": "API-121",
