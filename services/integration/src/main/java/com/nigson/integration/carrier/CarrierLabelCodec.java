@@ -1,0 +1,32 @@
+package com.nigson.integration.carrier;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.*;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.cos.*;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.pdfbox.pdmodel.*;
+import tools.jackson.databind.JsonNode;
+
+/** Trusted FedEx embedded PDF labels only. No URL fetch, rendering, script or general upload scanner. */
+public final class CarrierLabelCodec {
+ private static final int LIMIT=10*1024*1024;
+ private static final Set<String> FORBIDDEN=Set.of("OpenAction","AA","AcroForm","JS","JavaScript","EmbeddedFiles","EF","RichMedia","XFA","Collection");
+ private static final Set<String> ACTIONS=Set.of("JavaScript","Launch","URI","GoToR","GoToE","SubmitForm","ImportData","Rendition","Sound","Movie","Named","Hide","ResetForm","Thread");
+ public static final class Label {private final byte[] bytes;private final String checksum;private final int pages;private Label(byte[] bytes,String checksum,int pages){this.bytes=bytes.clone();this.checksum=checksum;this.pages=pages;}public byte[] bytes(){return bytes.clone();}public String checksum(){return checksum;}public int pages(){return pages;}@Override public String toString(){return "CarrierLabel[protected]";}}
+ private CarrierLabelCodec(){}
+ public static Label decode(JsonNode output,String master,int expectedPackages){
+  if(master==null||!master.matches("[A-Za-z0-9]{10,40}")||expectedPackages<1||expectedPackages>100)throw CarrierValues.rule();
+  try{var shipments=output==null?null:output.get("transactionShipments");if(shipments==null||!shipments.isArray()||shipments.size()!=1||!master.equals(shipments.path(0).path("masterTrackingNumber").asString()))throw CarrierValues.rule();var pieces=shipments.path(0).get("pieceResponses");if(pieces==null||!pieces.isArray()||pieces.size()!=expectedPackages)throw CarrierValues.rule();var labels=new TreeMap<String,byte[]>();int total=0;
+   for(var piece:pieces){String tracking=piece.path("trackingNumber").asString();if(!piece.path("trackingNumber").isString()||!tracking.matches("[A-Za-z0-9]{10,40}"))throw CarrierValues.rule();var documents=piece.get("packageDocuments");if(documents==null||!documents.isArray()||documents.isEmpty()||documents.size()>10)throw CarrierValues.rule();byte[] bytes=null;for(var document:documents){if(!"LABEL".equals(document.path("contentType").asString()))continue;if(bytes!=null||!"PDF".equals(document.path("docType").asString())||!document.path("encodedLabel").isString())throw CarrierValues.rule();String encoded=document.path("encodedLabel").asString();if(encoded.isEmpty()||encoded.length()>((LIMIT+2L)/3)*4)throw CarrierValues.rule();bytes=Base64.getDecoder().decode(encoded);if(bytes.length<8||bytes.length>LIMIT||!new String(bytes,0,5,StandardCharsets.US_ASCII).equals("%PDF-"))throw CarrierValues.rule();}if(bytes==null||labels.putIfAbsent(tracking,bytes)!=null)throw CarrierValues.rule();total=Math.addExact(total,bytes.length);if(total>LIMIT)throw CarrierValues.rule();}
+   if(!labels.containsKey(master))throw CarrierValues.rule();var digest=MessageDigest.getInstance("SHA-256");int pages=0;
+   try(var merged=new PDDocument()){var merger=new PDFMergerUtility();for(var entry:labels.entrySet()){byte[] bytes=entry.getValue();digest.update(entry.getKey().getBytes(StandardCharsets.US_ASCII));digest.update(java.nio.ByteBuffer.allocate(4).putInt(bytes.length).array());digest.update(bytes);try(var document=Loader.loadPDF(bytes)){if(document.isEncrypted()||document.getNumberOfPages()<1||document.getNumberOfPages()>4)throw CarrierValues.rule();int count=0;for(var page:document.getPages()){if(++count>4)throw CarrierValues.rule();var bounds=page.getMediaBox();if(!Float.isFinite(bounds.getWidth())||!Float.isFinite(bounds.getHeight())||bounds.getWidth()<=0||bounds.getHeight()<=0||bounds.getWidth()>2000||bounds.getHeight()>2000)throw CarrierValues.rule();}if(count!=document.getNumberOfPages())throw CarrierValues.rule();inspect(document.getDocument().getTrailer());merger.appendDocument(merged,document);pages+=count;}}
+    if(pages<expectedPackages||pages>expectedPackages*4||merged.getNumberOfPages()!=pages)throw CarrierValues.rule();var info=new PDDocumentInformation();info.setProducer("Nigson private carrier PDF");merged.setDocumentInformation(info);var identifiers=new COSArray();byte[] id=Arrays.copyOf(digest.digest(),16);identifiers.add(new COSString(id));identifiers.add(new COSString(id));merged.getDocument().getTrailer().setItem(COSName.ID,identifiers);var sink=new Bounded();merged.save(sink);byte[] bytes=sink.bytes();return new Label(bytes,HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)),pages);
+   }
+  }catch(com.nigson.shared.problem.Problem.Failure safe){throw safe;}catch(Exception invalid){throw CarrierValues.rule();}
+ }
+ private static void inspect(COSBase root){var pending=new ArrayDeque<COSBase>();var seen=Collections.newSetFromMap(new IdentityHashMap<COSBase,Boolean>());pending.add(root);while(!pending.isEmpty()){var value=pending.removeLast();if(!seen.add(value))continue;if(seen.size()>50000)throw CarrierValues.rule();if(value instanceof COSObject object){if(object.getObject()!=null)pending.add(object.getObject());}else if(value instanceof COSArray array){for(var child:array)if(child!=null)pending.add(child);}else if(value instanceof COSDictionary dictionary){if(dictionary.getNameAsString(COSName.S)!=null&&ACTIONS.contains(dictionary.getNameAsString(COSName.S)))throw CarrierValues.rule();if(dictionary instanceof COSStream&&dictionary.containsKey(COSName.F))throw CarrierValues.rule();for(var entry:dictionary.entrySet()){String key=entry.getKey().getName();if(FORBIDDEN.contains(key)||key.equals("Annots")&&entry.getValue() instanceof COSArray annotations&&annotations.size()!=0)throw CarrierValues.rule();if(entry.getValue()!=null)pending.add(entry.getValue());}}}}
+ private static final class Bounded extends OutputStream{private final ByteArrayOutputStream output=new ByteArrayOutputStream();public void write(int value)throws IOException{if(output.size()>=LIMIT)throw new IOException("LABEL_SIZE_INVALID");output.write(value);}public void write(byte[] values,int offset,int length)throws IOException{if((long)output.size()+length>LIMIT)throw new IOException("LABEL_SIZE_INVALID");output.write(values,offset,length);}byte[] bytes(){return output.toByteArray();}}
+}

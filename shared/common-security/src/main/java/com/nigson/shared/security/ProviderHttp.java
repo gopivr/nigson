@@ -31,6 +31,11 @@ public final class ProviderHttp {
  }
  public Result call(String method,String path,String contentType,String body,String authorization) {return call(method,path,contentType,body,authorization,!method.equals("GET"));}
  public Result call(String method,String path,String contentType,String body,String authorization,boolean sideEffect) {
+  return call(method,path,contentType,body,authorization,sideEffect,1048576);
+ }
+ /** Larger bounded documents are opt-in per operation; ordinary provider responses remain one MiB. */
+ public Result call(String method,String path,String contentType,String body,String authorization,boolean sideEffect,int responseLimit) {
+  if(responseLimit<1||responseLimit>16*1024*1024)throw new IllegalArgumentException("PROVIDER_RESPONSE_LIMIT_INVALID");
   if(!Set.of("GET","POST","PUT","DELETE").contains(method)||!path.startsWith("/")||path.startsWith("//")||path.contains("..")||body.getBytes(StandardCharsets.UTF_8).length>65536)throw new IllegalArgumentException("PROVIDER_REQUEST_INVALID");
   URI target=base.resolve(path);if(!Objects.equals(target.getAuthority(),base.getAuthority()))throw new IllegalArgumentException("PROVIDER_TARGET_INVALID");
   var wire=com.nigson.shared.observability.WireContext.current();
@@ -42,7 +47,7 @@ public final class ProviderHttp {
    if(wire!=null){builder.header("X-Correlation-ID",wire.correlationId.toString());String trace=com.nigson.shared.observability.WireContext.traceparent();if(trace!=null)builder.header("traceparent",trace);}
    var request=builder.method(method,body.isEmpty()?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body)).build();
    // A request timeout alone may end at response headers; include the entire bounded body.
-   pending=client.sendAsync(request,info->new BoundedBody());
+   pending=client.sendAsync(request,info->new BoundedBody(responseLimit));
    var response=pending.get(9,java.util.concurrent.TimeUnit.SECONDS);
    span.setAttribute("http.response.status_code",response.statusCode());
    if(response.statusCode()<200||response.statusCode()>=300)throw new Failure("PROVIDER_HTTP_"+response.statusCode(),sideEffect&&(response.statusCode()>=500||response.statusCode()==408||response.statusCode()>=300&&response.statusCode()<400),response.statusCode());
@@ -51,10 +56,11 @@ public final class ProviderHttp {
  }
  private static final class BoundedBody implements HttpResponse.BodySubscriber<byte[]> {
   private final HttpResponse.BodySubscriber<byte[]> delegate=HttpResponse.BodySubscribers.ofByteArray();
-  private java.util.concurrent.Flow.Subscription subscription;private int size;
+  private java.util.concurrent.Flow.Subscription subscription;private int size;private final int limit;
+  BoundedBody(int limit){this.limit=limit;}
   public java.util.concurrent.CompletionStage<byte[]> getBody(){return delegate.getBody();}
   public void onSubscribe(java.util.concurrent.Flow.Subscription s){subscription=s;delegate.onSubscribe(s);}
-  public void onNext(List<java.nio.ByteBuffer> buffers){for(var b:buffers){size+=b.remaining();if(size>1048576){subscription.cancel();delegate.onError(new java.io.IOException("RESPONSE_TOO_LARGE"));return;}}delegate.onNext(buffers);}
+  public void onNext(List<java.nio.ByteBuffer> buffers){for(var b:buffers){size+=b.remaining();if(size>limit){subscription.cancel();delegate.onError(new java.io.IOException("RESPONSE_TOO_LARGE"));return;}}delegate.onNext(buffers);}
   public void onError(Throwable t){delegate.onError(t);}public void onComplete(){delegate.onComplete();}
  }
  public static String form(Map<String,String> fields){return fields.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e->URLEncoder.encode(e.getKey(),StandardCharsets.UTF_8)+"="+URLEncoder.encode(e.getValue(),StandardCharsets.UTF_8)).collect(java.util.stream.Collectors.joining("&"));}

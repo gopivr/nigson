@@ -115,7 +115,7 @@ def fixture(environment):
                     with lock:
                         if self.command == 'POST':
                             control = json.loads(payload)
-                            if control.get('fault') not in ('BEFORE_ACCEPT', 'AFTER_ACCEPT', 'INVALID_HEAD_CHECKSUM', None):
+                            if control.get('fault') not in ('BEFORE_ACCEPT', 'AFTER_ACCEPT', 'INVALID_HEAD_CHECKSUM', 'PUT_BEFORE_ACCEPT', 'PUT_AFTER_ACCEPT', None):
                                 raise ValueError('control')
                             state['fault'] = control.get('fault')
                         response = json.dumps({k: v for k, v in state.items() if k != 'objects'}).encode()
@@ -180,8 +180,18 @@ def fixture(environment):
                         if self.headers.get('x-amz-checksum-sha256') != checksum or self.headers.get('x-amz-server-side-encryption') != 'AES256':
                             self.reply(400)
                             return
+                        state['puts'] = state.get('puts', 0) + 1
+                        fault = state['fault']
+                        if fault in ('PUT_BEFORE_ACCEPT', 'PUT_AFTER_ACCEPT'):
+                            state['fault'] = None
+                        if fault == 'PUT_BEFORE_ACCEPT':
+                            self.close_connection = True
+                            return
                         obj = {'bytes': payload, 'checksum': checksum, 'mime': self.headers.get('Content-Type'), 'owner': self.headers.get('x-amz-meta-owner'), 'asset': self.headers.get('x-amz-meta-asset'), 'etag': '"' + hashlib.md5(payload, usedforsecurity=False).hexdigest() + '"', 'version': str(uuid.uuid4())}
                         state['objects'][(bucket, object_key)] = [obj]
+                        if fault == 'PUT_AFTER_ACCEPT':
+                            self.close_connection = True
+                            return
                         self.reply(200, headers={'ETag': obj['etag'], 'x-amz-version-id': obj['version'], 'x-amz-checksum-sha256': checksum})
             except (ValueError, KeyError, OSError):
                 self.close_connection = True

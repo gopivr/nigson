@@ -5,6 +5,9 @@
   <parent><groupId>com.nigson</groupId><artifactId>nigson-backend</artifactId><version>0.1.0</version><relativePath>../../pom.xml</relativePath></parent>
   <artifactId>integration</artifactId>
   <dependencies>
+    <dependency><groupId>org.apache.pdfbox</groupId><artifactId>pdfbox</artifactId><version>3.0.8</version></dependency>
+    <dependency><groupId>software.amazon.awssdk</groupId><artifactId>s3</artifactId></dependency>
+    <dependency><groupId>software.amazon.awssdk</groupId><artifactId>apache-client</artifactId></dependency>
     <dependency><groupId>com.nigson</groupId><artifactId>common-problem</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.nigson</groupId><artifactId>common-observability</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>io.opentelemetry</groupId><artifactId>opentelemetry-sdk</artifactId></dependency>

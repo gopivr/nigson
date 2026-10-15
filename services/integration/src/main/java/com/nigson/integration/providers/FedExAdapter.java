@@ -8,7 +8,7 @@ import java.util.*;
 
 /** Private carrier HTTP boundary. Booking intent/reconciliation are integration-owned. */
 public final class FedExAdapter implements CarrierProvider {
- private static final tools.jackson.databind.json.JsonMapper JSON=tools.jackson.databind.json.JsonMapper.builder(tools.jackson.core.json.JsonFactory.builder().streamReadConstraints(tools.jackson.core.StreamReadConstraints.builder().maxNestingDepth(32).maxStringLength(1048576).maxNumberLength(40).build()).enable(tools.jackson.core.StreamReadFeature.STRICT_DUPLICATE_DETECTION).build()).enable(tools.jackson.databind.DeserializationFeature.FAIL_ON_TRAILING_TOKENS).enable(tools.jackson.databind.cfg.JsonNodeFeature.USE_BIG_DECIMAL_FOR_FLOATS).disable(tools.jackson.databind.cfg.JsonNodeFeature.STRIP_TRAILING_BIGDECIMAL_ZEROES).build();
+ private static final tools.jackson.databind.json.JsonMapper JSON=tools.jackson.databind.json.JsonMapper.builder(tools.jackson.core.json.JsonFactory.builder().streamReadConstraints(tools.jackson.core.StreamReadConstraints.builder().maxNestingDepth(32).maxStringLength(14*1024*1024).maxNumberLength(40).build()).enable(tools.jackson.core.StreamReadFeature.STRICT_DUPLICATE_DETECTION).build()).enable(tools.jackson.databind.DeserializationFeature.FAIL_ON_TRAILING_TOKENS).enable(tools.jackson.databind.cfg.JsonNodeFeature.USE_BIG_DECIMAL_FOR_FLOATS).disable(tools.jackson.databind.cfg.JsonNodeFeature.STRIP_TRAILING_BIGDECIMAL_ZEROES).build();
  private final ProviderHttp http;private final String clientId,secret,account;private final ProviderHttp.Mode mode;
  private String token;private Instant expires=Instant.EPOCH;
  public FedExAdapter(String environment,ProviderHttp.Mode mode,String endpoint,String clientId,String secret,String account) {
@@ -17,6 +17,7 @@ public final class FedExAdapter implements CarrierProvider {
   http=new ProviderHttp(environment,mode,endpoint,"fedex-mock",Set.of(host),clientId,secret,account);this.clientId=clientId;this.secret=secret;this.account=account;this.mode=mode;
  }
  public ProviderHttp.Mode mode(){return mode;}
+ public String accountFingerprint(){return EventCodec.hash(EventCodec.JSON.valueToTree(Map.of("provider","FEDEX","mode",mode.name(),"account",account)));}
  private synchronized String token() {
   if(token!=null&&expires.isAfter(Instant.now().plusSeconds(60)))return token;
   var response=http.call("POST","/oauth/token","application/x-www-form-urlencoded",ProviderHttp.form(Map.of("grant_type","client_credentials","client_id",clientId,"client_secret",secret)),null,false);
@@ -25,12 +26,12 @@ public final class FedExAdapter implements CarrierProvider {
  private synchronized void invalidate(String rejected){if(Objects.equals(token,rejected)){token=null;expires=Instant.EPOCH;}}
  private JsonNode call(String method,String path,JsonNode request) {
   if(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");
-  boolean effect=path.equals("/ship/v1/shipments")||path.equals("/ship/v1/shipments/cancel");String bearer=token();ProviderHttp.Result response;
-  try{response=http.call(method,path,"application/json",EventCodec.JSON.writeValueAsString(request),"Bearer "+bearer,effect);}catch(ProviderHttp.Failure failure){
+  boolean effect=path.equals("/ship/v1/shipments")||path.equals("/ship/v1/shipments/cancel");String bearer=token();int limit=path.equals("/ship/v1/shipments")||path.equals("/ship/v1/shipments/results")?16*1024*1024:1048576;ProviderHttp.Result response;
+  try{response=http.call(method,path,"application/json",EventCodec.JSON.writeValueAsString(request),"Bearer "+bearer,effect,limit);}catch(ProviderHttp.Failure failure){
    if(failure.status!=401)throw failure;invalidate(bearer);
    // Only read operations may renew and repeat in this call; writes return to their durable owner.
    if(effect)throw failure;
-   response=http.call(method,path,"application/json",EventCodec.JSON.writeValueAsString(request),"Bearer "+token(),false);
+   response=http.call(method,path,"application/json",EventCodec.JSON.writeValueAsString(request),"Bearer "+token(),false,limit);
   }
   try{var data=JSON.readTree(response.body());if(!data.path("output").isObject()||data.has("errors"))throw new IllegalArgumentException();return data.get("output");}catch(RuntimeException e){throw new ProviderHttp.Failure("FEDEX_RESPONSE_INVALID",effect,response.status());}
  }
