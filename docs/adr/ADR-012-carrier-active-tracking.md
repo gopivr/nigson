@@ -1,6 +1,6 @@
 # ADR-012: Active carrier tracking and durable scan acknowledgement
 
-Status: Accepted technical implementation; native132/no skips PASS. Full163 Java/289 gated,70 contracts,15 AI/five gated, stateful provider checks and nine reproduced artifacts PASS; source acceptance commit pending.
+Status: Accepted technical implementation; native132/no skips PASS. Full163 Java/289 gated,70 contracts,15 AI/five gated, stateful provider checks and nine reproduced artifacts PASS; accepted source 998893156dc4364edafc52dff96410345c7c391b.
 
 The completed integration LOGISTICS_CREATE cursor additionally retains sorted unique physical-piece tracking identifiers. Existing completed jobs remain SUCCEEDED; active tracking leases the booking and fences both versions without resetting creation permission or its original acknowledgement. A small optional tracking checkpoint in the same owner-local opaque cursor persists the original source command before HTTP. No schema, owner boundary, public DTO or event changes.
 

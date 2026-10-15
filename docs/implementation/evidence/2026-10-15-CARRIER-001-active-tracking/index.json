@@ -130,6 +130,12 @@
       "source": ".build/carrier001/database-evidence/nigson-test-plat-5653129cd8-postgres-integration-bp5-pass.log",
       "original_sha256": "d54f8ccee908133f218e069df036b33dbcff1dc8f8abcdab0b3799b8d0e9750b",
       "sha256": "7146c5f07cf1c8a53ad38badafe65c31efa395e1ef7a6f2cdc3c6a85a1f06e3f"
+    },
+    "carrier-active-tracking-repository-final.log": {
+      "source": ".build/carrier-active-tracking-repository-final.log",
+      "original_sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8",
+      "sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8"
     }
-  }
+  },
+  "accepted_source_commit": "998893156dc4364edafc52dff96410345c7c391b"
 }
