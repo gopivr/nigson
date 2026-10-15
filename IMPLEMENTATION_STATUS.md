@@ -125,7 +125,7 @@ PASS — CARRIER-001 active tracking full163 Java/289 gated,70 contracts,15 AI/f
 
 ## Test Status
 
-PASS — CARRIER-001 booking protocol native95/no skips; private HTTP mode/reference/closed/deadline guards, frozen package protocol, before-rate address rejection with no HTTP/audited fee, prior source/intake/race/label/stock safeguards. All-owner migrations/original Docker preservation PASS. Prior affected payment/order/activation71 remains accepted unchanged. Booking execution/labels/cancellation/polling and genuine provider/release qualification NOT_RUN.
+PASS — CARRIER-001 active tracking native132/no skips: durable booking/private PDF/S3/upload-intent/source ACK recovery, original-event restore cutoff, exact all-piece tracking batches, duplicate/older scans, leases/races/audit rollback and terminal polling qualified offline. Existing actual source/intake/label/stock guards and all-owner migrations/original Docker preservation PASS. Cancellation initiation/API-191 and combined real-source/worker end-to-end remain pending; genuine account/route/print/cloud/restore/release qualification NOT_RUN. Prior affected financial71 acceptance remains unchanged.
 
 ## Last Successful Commit
 
