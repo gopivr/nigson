@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 durable execution/private label increment — IN_PROGRESS. Native119/no skips, full157 Java/282 gated,70 contracts,15 AI/five gated,271 locked dependencies/zero OSV findings and nine reproduced artifacts PASS. Paired leases, request/account fencing, external generation/source-event cutoff, async recovery, real PDF/S3 immutable upload intent and byte-identical source ACK recovery qualified offline. Active tracking/cancellation/staff reconciliation remain pending. Current source acceptance commit pending; no critical approval blocks offline engineering.
+CARRIER-001 durable execution/private label increment — IN_PROGRESS. Native119/no skips, full157 Java/282 gated,70 contracts,15 AI/five gated,271 locked dependencies/zero OSV findings and nine reproduced artifacts PASS. Paired leases, request/account fencing, external generation/source-event cutoff, async recovery, real PDF/S3 immutable upload intent and byte-identical source ACK recovery qualified offline. Active tracking/cancellation/staff reconciliation remain pending. Accepted source 455294bb132f5a51d09c475cabc124aef6c813e1; no critical approval blocks offline engineering.
 
 CARRIER-001 booking protocol increment — IN_PROGRESS; targeted35/no skips, native95/no skips, full152 Java/263 gated,70 contracts,15 AI/five gated, stateful all-provider HTTP regression and nine reproduced artifacts PASS. Closed API-119 binding/bounded HTTP, frozen Ship request construction/async threshold and explicit provider address/configuration guards qualified offline. Accepted source 53e2d1569345aef4f7887561c6ff9a9bb4c52303; durable execution/label production/cancellation/polling and other roadmap work remain pending. No critical approval blocks offline engineering.
 
@@ -119,7 +119,7 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — CARRIER-001 booking protocol full152 Java/263 gated,70 contracts,15 AI/five gated,Ruff/mypy13,268 unchanged locked dependencies, all-provider stateful regression and nine reproduced artifacts. Overall carrier task remains IN_PROGRESS.
+PASS — CARRIER-001 durable execution/private label full157 Java/282 gated,70 contracts,15 AI/five gated,Ruff/mypy13,271 locked dependencies/zero OSV findings, all-provider stateful regression and nine reproduced artifacts. Overall carrier task remains IN_PROGRESS.
 
 ## Test Status
 
@@ -127,7 +127,7 @@ PASS — CARRIER-001 booking protocol native95/no skips; private HTTP mode/refer
 
 ## Last Successful Commit
 
-53e2d1569345aef4f7887561c6ff9a9bb4c52303 — verified private creation binding/Ship protocol and before-rate compatibility; CARRIER-001 remains IN_PROGRESS. No remote deployment.
+455294bb132f5a51d09c475cabc124aef6c813e1 — verified fenced execution/private label/upload-intent/source ACK recovery and restore cutoff; CARRIER-001 remains IN_PROGRESS. No remote deployment.
 
 ## Confirmed Inputs
 
