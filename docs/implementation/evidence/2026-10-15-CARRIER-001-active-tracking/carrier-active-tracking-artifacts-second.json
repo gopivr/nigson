@@ -1,0 +1,15 @@
+{
+  "java": {
+    "shared/common-problem/target/common-problem-0.1.0.jar": "1f61e33f1d2e702aee13380718c55dfd8d161861531fe7d8079a40ed27024864",
+    "shared/common-observability/target/common-observability-0.1.0.jar": "1d6d9117a8a3144463b54c1e9a90884e2480d51bb2529ac8550152ad28e6508f",
+    "shared/common-events/target/common-events-0.1.0.jar": "bf861be18432e0de0534f43d2b51d91cf4acd25472bd8aa6b6550c983f6a3796",
+    "shared/common-security/target/common-security-0.1.0.jar": "93354f83e370209eec56d705424a12451f0e79b810008eda2552166a986e0875",
+    "services/experience/target/experience-0.1.0.jar": "f1d619a65d7a100cd71555dec8644051852d0e6b38ad54e29e1147ec6162b7fa",
+    "services/commerce/target/commerce-0.1.0.jar": "3604a073e9ed8032662715a0ff6e87a8cebfa055c350ea7c0d0f4969feb9d364",
+    "services/integration/target/integration-0.1.0.jar": "a5bd0910d0d17e078c77138a9dfe0d7b1c923feb069d4d134b06cc4d771e4ae6"
+  },
+  "python": {
+    "nigson_ai-0.1.0-py3-none-any.whl": "872107186ee338a653879eb13bfb7c5c3e7945345f51f9d5196044a38a0ec3e3",
+    "nigson_ai-0.1.0.tar.gz": "e74337485a3266f1bf33fc4e94a23e379fbe750b3738a697b5839d0ecc80201c"
+  }
+}

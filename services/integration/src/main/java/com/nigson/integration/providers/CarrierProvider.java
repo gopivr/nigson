@@ -14,5 +14,7 @@ public interface CarrierProvider {
  JsonNode confirmed(String jobId);
  JsonNode cancel(String tracking);
  JsonNode track(String tracking);
+ /** Read-only request with at most thirty distinct physical tracking numbers. */
+ JsonNode track(java.util.List<String> tracking);
  JsonNode trackReference(String reference,LocalDate begin,LocalDate end);
 }

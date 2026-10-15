@@ -1,0 +1,23 @@
+[
+  "IMPLEMENTATION_STATUS.md",
+  "contracts/providers/fedex/track-profile-2026-10-15.json",
+  "docs/adr/ADR-012-carrier-active-tracking.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-15-CARRIER-001.md",
+  "docs/runbooks/carrier-quotes.md",
+  "scripts/carrier/verify.py",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierBookingExecution.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierContextClient.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierTrackingExecution.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierTrackingValues.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierTrackingWorker.java",
+  "services/integration/src/main/java/com/nigson/integration/carrier/CarrierWorkerConfiguration.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/CarrierProvider.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/FedExAdapter.java",
+  "services/integration/src/test/java/com/nigson/acceptance/carrier/CarrierBookingExecutionPersistenceTest.java",
+  "services/integration/src/test/java/com/nigson/acceptance/carrier/CarrierQuotePersistenceTest.java",
+  "services/integration/src/test/java/com/nigson/integration/carrier/CarrierTrackingValuesTest.java",
+  "services/integration/src/test/java/com/nigson/integration/providers/FedExAdapterTest.java",
+  "tests/mocks/src/com/nigson/mocks/ProviderStateExtension.java",
+  "tests/providers/src/com/nigson/providers/ProviderQualification.java"
+]

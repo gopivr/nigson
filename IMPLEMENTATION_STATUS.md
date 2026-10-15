@@ -8,6 +8,8 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
+CARRIER-001 active polling increment — IN_PROGRESS. Native132/no skips, full163 Java/289 gated,70 contracts,15 AI/five gated,271 unchanged locked dependencies and nine reproduced artifacts PASS. Complete physical-piece identities, batches<=30, original scan timestamps, durable byte-identical ACK replay and source handover/terminal guards qualified offline. Source commit pending. Cancellation initiation/API-191 staff reconciliation remain next; no critical approval blocks offline engineering.
+
 CARRIER-001 durable execution/private label increment — IN_PROGRESS. Native119/no skips, full157 Java/282 gated,70 contracts,15 AI/five gated,271 locked dependencies/zero OSV findings and nine reproduced artifacts PASS. Paired leases, request/account fencing, external generation/source-event cutoff, async recovery, real PDF/S3 immutable upload intent and byte-identical source ACK recovery qualified offline. Active tracking/cancellation/staff reconciliation remain pending. Accepted source 455294bb132f5a51d09c475cabc124aef6c813e1; no critical approval blocks offline engineering.
 
 CARRIER-001 booking protocol increment — IN_PROGRESS; targeted35/no skips, native95/no skips, full152 Java/263 gated,70 contracts,15 AI/five gated, stateful all-provider HTTP regression and nine reproduced artifacts PASS. Closed API-119 binding/bounded HTTP, frozen Ship request construction/async threshold and explicit provider address/configuration guards qualified offline. Accepted source 53e2d1569345aef4f7887561c6ff9a9bb4c52303; durable execution/label production/cancellation/polling and other roadmap work remain pending. No critical approval blocks offline engineering.

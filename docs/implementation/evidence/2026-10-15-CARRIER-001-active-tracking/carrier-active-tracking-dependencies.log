@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/scripts/java_dependency_lock.py", line 59, in <module>
+    main()
+    ~~~~^^
+  File "/Users/gopiravi/workspace/nigson/scripts/java_dependency_lock.py", line 47, in main
+    result = snapshot(args.repository)
+  File "/Users/gopiravi/workspace/nigson/scripts/java_dependency_lock.py", line 35, in snapshot
+    graph = json.loads((ROOT / module / "target/dependencies.json").read_text())
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/gopiravi/workspace/nigson/target/dependencies.json'
