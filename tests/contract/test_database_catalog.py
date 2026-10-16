@@ -16,7 +16,7 @@ class DatabaseCatalogTest(unittest.TestCase):
         for path, content in generate().items():
             self.assertEqual((ROOT / path).read_text(), content, str(path))
         manifest = json.loads((ROOT / 'database/schema-manifest.json').read_text())
-        self.assertEqual(len(manifest['tables']), 123)
+        self.assertEqual(len(manifest['tables']), 125)
         for name, table in manifest['tables'].items():
             self.assertTrue(table['creation_changeset'].startswith(table['owner'] + '-'))
             self.assertIn('CREATE TABLE ' + name + ' ', (ROOT / table['creation_file']).read_text())

@@ -3673,6 +3673,218 @@
       "owner": "commerce",
       "phase": 1
     },
+    "commerce.carrier_cancellation": {
+      "checks": "state IN (REQUESTED,QUEUED,UNKNOWN,CANCELLED,REJECTED); mode IN (MOCK,SANDBOX,LIVE); attempt_count>=0",
+      "creation_changeset": "commerce-20261016-carrier-001",
+      "creation_file": "services/commerce/src/main/resources/db/changelog/025-bp1-carrier-cancellation.sql",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "shipment",
+          "name": "shipment_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "booking_request_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "reference",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(40)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "mode",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(10)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "reason",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(500)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "request_hash",
+          "nullable": false,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "requested_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": "REQUESTED",
+          "external": null,
+          "foreign": null,
+          "name": "state",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "accepted_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "next_attempt_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "lease_until",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "attempt_count",
+          "nullable": false,
+          "primary": false,
+          "type": "integer"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "last_result_command_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "error_code",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(60)"
+        }
+      ],
+      "keys": "UQ(shipment_id) WHERE state IN (REQUESTED,QUEUED,UNKNOWN); IX(state,next_attempt_at); IX(shipment_id,created_at)",
+      "module": "fulfillment",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 1
+    },
     "commerce.carrier_quote": {
       "checks": "provider=FEDEX; mode IN (MOCK,SANDBOX,LIVE); status IN (QUOTED,EXPIRED,CONSUMED); delivery_amount>=0",
       "creation_changeset": "commerce-20261006-012",
@@ -15810,6 +16022,288 @@
         }
       ],
       "keys": "UQ(shipment_id,provider); UQ(business_key); IX(state,next_poll_at)",
+      "module": "provider",
+      "mutation": "versioned",
+      "owner": "integration",
+      "phase": 1
+    },
+    "integration.carrier_cancellation": {
+      "checks": "state IN (QUEUED,SUBMITTING,UNKNOWN,ACK_PENDING,CANCELLED,REJECTED); outcome_state IN (UNKNOWN,CANCELLED,REJECTED); notified_state IN (UNKNOWN,CANCELLED,REJECTED); mode IN (MOCK,SANDBOX,LIVE); attempt_count>=0; jsonb_typeof(piece_numbers)=array",
+      "creation_changeset": "integration-20261016-carrier-001",
+      "creation_file": "services/integration/src/main/resources/db/changelog/023-bp1-carrier-cancellation.sql",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": "commerce.carrier_cancellation",
+          "foreign": null,
+          "name": "source_request_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "carrier_booking",
+          "name": "booking_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": "commerce.shipment",
+          "foreign": null,
+          "name": "shipment_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "reference",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(40)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "mode",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(10)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "account_hash",
+          "nullable": false,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "request_hash",
+          "nullable": false,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "generation",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "requested_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "piece_numbers",
+          "nullable": false,
+          "primary": false,
+          "type": "jsonb"
+        },
+        {
+          "cascade": false,
+          "default": "QUEUED",
+          "external": null,
+          "foreign": null,
+          "name": "state",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "attempt_count",
+          "nullable": false,
+          "primary": false,
+          "type": "integer"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "next_attempt_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "lease_until",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "submitted_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "outcome_state",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "occurred_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "callback_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "callback_body",
+          "nullable": true,
+          "primary": false,
+          "type": "jsonb"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "notified_state",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "error_code",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(60)"
+        }
+      ],
+      "keys": "UQ(source_request_id); UQ(booking_id) WHERE state IN (QUEUED,SUBMITTING,UNKNOWN,ACK_PENDING); IX(state,next_attempt_at); IX(booking_id)",
       "module": "provider",
       "mutation": "versioned",
       "owner": "integration",

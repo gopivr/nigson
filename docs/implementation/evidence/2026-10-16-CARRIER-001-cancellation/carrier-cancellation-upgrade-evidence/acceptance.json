@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "owners": [
+    "commerce",
+    "integration"
+  ],
+  "checks": [
+    "Previous accepted BP1 without cancellation applied",
+    "Prior changeset checksums and representative product/booked carrier evidence preserved",
+    "Repeated additive upgrade unchanged",
+    "Actual Liquibase empty cancellation rollback/reapply preserves prior data"
+  ],
+  "local_state_preserved": true
+}

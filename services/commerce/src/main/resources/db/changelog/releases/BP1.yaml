@@ -35,6 +35,12 @@
         "file": "../024-bp1-nigeria-metadata.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../025-bp1-carrier-cancellation.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

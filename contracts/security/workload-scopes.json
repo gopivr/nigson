@@ -295,5 +295,23 @@
     "client": "nigson-commerce",
     "scope": "carrier.reconcile_WITH_SIGNED_STAFF",
     "phase": 1
+  },
+  {
+    "api": "API-198",
+    "method": "POST",
+    "path": "/internal/v1/carrier/cancellations",
+    "owner": "integration",
+    "client": "nigson-commerce",
+    "scope": "carrier.cancel",
+    "phase": 1
+  },
+  {
+    "api": "API-199",
+    "method": "POST",
+    "path": "/internal/v1/carrier/cancellation-results",
+    "owner": "commerce",
+    "client": "nigson-integration",
+    "scope": "logistics.write",
+    "phase": 1
   }
 ]

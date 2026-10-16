@@ -1,0 +1,19 @@
+package com.nigson.integration.carrier;
+import java.net.*;
+import java.time.*;
+import java.util.*;
+import com.sun.net.httpserver.HttpServer;
+import org.junit.jupiter.api.*;
+import com.nigson.shared.events.EventCodec;
+import static org.assertj.core.api.Assertions.*;
+class CarrierCancellationResultClientTest {
+ HttpServer server;String base,response,original;Throwable violation;int calls;CarrierCancellationValues.Receipt receipt;
+ @BeforeEach void setup()throws Exception{receipt=new CarrierCancellationValues.Receipt(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),"123456789012","MOCK","UNKNOWN",Instant.now(),"PROVIDER_OUTCOME_UNKNOWN");response=view("UNKNOWN");server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);base="http://127.0.0.1:"+server.getAddress().getPort();server.createContext("/",x->{try{calls++;assertThat(x.getRequestURI().getPath()).isEqualTo("/internal/v1/carrier/cancellation-results");assertThat(x.getRequestHeaders().getFirst("Authorization")).isEqualTo("Bearer synthetic-workload");assertThat(x.getRequestHeaders().getFirst("Idempotency-Key")).isEqualTo(receipt.commandId().toString());assertThat(x.getRequestHeaders().getFirst("Cookie")).isNull();assertThat(x.getRequestHeaders().getFirst("X-Nigson-Actor")).isNull();String wire=new String(x.getRequestBody().readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);if(original==null)original=wire;else assertThat(wire).isEqualTo(original);assertThat(EventCodec.JSON.readTree(wire)).isEqualTo(EventCodec.JSON.valueToTree(receipt));byte[] bytes=response.getBytes(java.nio.charset.StandardCharsets.UTF_8);x.getResponseHeaders().set("Content-Type","application/json");x.sendResponseHeaders(200,bytes.length);x.getResponseBody().write(bytes);}catch(Throwable failure){violation=failure;}finally{x.close();}});server.start();}
+ String view(String state){var values=new LinkedHashMap<String,Object>();values.put("id",receipt.cancellationId());values.put("shipmentId",receipt.shipmentId());values.put("state",state);values.put("version",2);values.put("shipmentVersion",2);values.put("errorCode",null);return EventCodec.JSON.writeValueAsString(values);}
+ @AfterEach void cleanup(){server.stop(0);assertThat(violation).isNull();}
+ void acknowledge(){new CarrierCancellationResultClient("test",base,route->{assertThat(route.scope()).isEqualTo("logistics.write");assertThat(route.client()).isEqualTo("nigson-integration");return "synthetic-workload";}).acknowledge(receipt);}
+ @Test void repeatedReceiptsAreByteIdenticalAndUnknownCanAcknowledgeLaterSourceTruth(){acknowledge();response=view("CANCELLED");acknowledge();response=view("REJECTED");acknowledge();assertThat(calls).isEqualTo(3);}
+ @Test void wrongIdentityAndMalformedClosedRepliesStayUnknown(){String valid=response;for(String malformed:List.of(valid.replace(receipt.cancellationId().toString(),UUID.randomUUID().toString()),valid+" {}",valid.substring(0,valid.length()-1)+",\"account\":\"protected\"}",valid.replace("\"version\":2","\"version\":-1"),valid.replace("\"state\":\"UNKNOWN\"","\"state\":\"UNKNOWN\",\"state\":\"CANCELLED\""))){response=malformed;assertThatThrownBy(this::acknowledge).hasMessage("PROVIDER_OUTCOME_UNKNOWN");}}
+ @Test void terminalReceiptRequiresMatchingSourceTerminalState(){receipt=new CarrierCancellationValues.Receipt(receipt.commandId(),receipt.cancellationId(),receipt.shipmentId(),receipt.bookingRequestId(),receipt.reference(),receipt.mode(),"CANCELLED",receipt.occurredAt(),"NONE");assertThatThrownBy(this::acknowledge).hasMessage("PROVIDER_OUTCOME_UNKNOWN");response=view("CANCELLED");acknowledge();}
+ @Test void productionPrivateDestinationFailsClosed(){assertThatThrownBy(()->new CarrierCancellationResultClient("prod",base,r->"synthetic")).isInstanceOf(IllegalArgumentException.class);assertThatThrownBy(()->new CarrierCancellationResultClient("test","http://example.invalid",r->"synthetic")).isInstanceOf(IllegalArgumentException.class);}
+}

@@ -22,6 +22,7 @@ class SecurityAssemblyTest {
   com.nigson.acceptance.carrier.CarrierDeliveryHttpAcceptance.configure(properties);
   com.nigson.acceptance.carrier.CarrierResultHttpAcceptance.configure(properties);
   com.nigson.acceptance.carrier.CarrierReconciliationHttpAcceptance.configure(properties);
+  com.nigson.acceptance.carrier.CarrierCancellationHttpAcceptance.configure(properties);
   var orders=System.getenv("NIGSON_TEST_PAYMENTS")!=null||System.getenv("NIGSON_TEST_ORDERS")==null?null:new com.nigson.acceptance.order.OrderHttpAcceptance.Fixture();
   if(orders!=null)orders.configure(properties);
   var payments=System.getenv("NIGSON_TEST_PAYMENTS")==null?null:new com.nigson.acceptance.payment.PaymentHttpAcceptance.Fixture();
@@ -44,6 +45,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.carrier.CarrierResultHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.carrier.ShipmentTrackingHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.carrier.CarrierReconciliationHttpAcceptance.run(app,http,base,jobs);
+   com.nigson.acceptance.carrier.CarrierCancellationHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.cart.CartHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.order.OrderHttpAcceptance.run(app,http,base,orders);

@@ -5,6 +5,159 @@
     "version": "1.1.0"
   },
   "paths": {
+    "/internal/v1/carrier/cancellations": {
+      "post": {
+        "operationId": "API-198",
+        "security": [
+          {
+            "workload": []
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierCancellationAcknowledgement"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Provider rule violation",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Provider unavailable or outcome unknown",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "description": "Exact nigson-commerce carrier.cancel workload, no actor/cookie. Persist original source intent and existing booking/account/pieces. One fenced cancel write; submitted/restored/unknown intents reconcile by read-only physical tracking. Replay returns current durable state and original saved receipt.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CarrierCancellationCommand"
+              }
+            }
+          }
+        }
+      }
+    },
     "/internal/v1/jobs": {
       "get": {
         "operationId": "API-140",
@@ -1054,6 +1207,216 @@
           "jobId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "CarrierCancellationCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cancellationId",
+          "shipmentId",
+          "bookingRequestId",
+          "reference",
+          "mode",
+          "requestedAt"
+        ],
+        "properties": {
+          "cancellationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shipmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bookingRequestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{10,40}$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "MOCK",
+              "SANDBOX",
+              "LIVE"
+            ]
+          },
+          "requestedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CarrierCancellationReceipt": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "commandId",
+          "cancellationId",
+          "shipmentId",
+          "bookingRequestId",
+          "reference",
+          "mode",
+          "state",
+          "occurredAt",
+          "reasonCode"
+        ],
+        "properties": {
+          "commandId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cancellationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shipmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bookingRequestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reference": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{10,40}$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "MOCK",
+              "SANDBOX",
+              "LIVE"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "CANCELLED",
+              "REJECTED"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reasonCode": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "PROVIDER_OUTCOME_UNKNOWN",
+              "PROVIDER_UNAVAILABLE",
+              "PROVIDER_MODE_MISMATCH",
+              "CARRIER_CANCEL_REJECTED",
+              "CARRIER_ALREADY_DELIVERED",
+              "CARRIER_APPROVAL_REQUIRED"
+            ]
+          }
+        }
+      },
+      "CarrierCancellationAcknowledgement": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cancellationId",
+          "shipmentId",
+          "state"
+        ],
+        "properties": {
+          "cancellationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shipmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "QUEUED",
+              "UNKNOWN",
+              "CANCELLED",
+              "REJECTED"
+            ]
+          },
+          "receipt": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CarrierCancellationReceipt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "CarrierCancellationDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "shipmentId",
+          "state",
+          "version",
+          "shipmentVersion",
+          "errorCode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shipmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "REQUESTED",
+              "QUEUED",
+              "UNKNOWN",
+              "CANCELLED",
+              "REJECTED"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "shipmentVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "NONE",
+                  "PROVIDER_OUTCOME_UNKNOWN",
+                  "PROVIDER_UNAVAILABLE",
+                  "PROVIDER_MODE_MISMATCH",
+                  "CARRIER_CANCEL_REJECTED",
+                  "CARRIER_ALREADY_DELIVERED",
+                  "CARRIER_APPROVAL_REQUIRED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       }

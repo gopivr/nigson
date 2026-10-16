@@ -13,7 +13,11 @@ import re
 from catalog import ROOT, catalog
 
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
-ADDITIVE_TABLES = {'commerce.file_transfer'}
+ADDITIVE_TABLES = {
+    'commerce.file_transfer': ('023-bp1-file-transfer', 'commerce-20261010-files-001', 'nigson-files', 'ADR-009: additive owned file transfer intent; existing migrations preserved.'),
+    'commerce.carrier_cancellation': ('025-bp1-carrier-cancellation', 'commerce-20261016-carrier-001', 'nigson-carrier', 'ADR-014: additive owned cancellation/dispatch exclusion; prior migrations preserved.'),
+    'integration.carrier_cancellation': ('023-bp1-carrier-cancellation', 'integration-20261016-carrier-001', 'nigson-carrier', 'ADR-014: additive owned cancellation checkpoint; prior migrations preserved.'),
+}
 SESSION_TABLES = {'commerce.spring_session', 'commerce.spring_session_attributes'}
 
 
@@ -178,6 +182,7 @@ def generate():
             chain = [] if phase==1 else [{'include':{'file':f'BP{phase-1}.yaml','relativeToChangelogFile':True}}]
             files[base/'releases'/f'BP{phase}.yaml'] = json.dumps({'databaseChangeLog':chain+includes},indent=2)+'\n'
     # New owned durability tables are separate increments; never rewrite applied DATA-001 DDL.
+    deferred_includes = []
     for fullname in ADDITIVE_TABLES:
         table = tables[fullname]
         owner, name = fullname.split('.')
@@ -192,23 +197,30 @@ def generate():
             fields.append(f'CONSTRAINT {name}_rule_{i}_ck CHECK ({predicate(check.strip())})')
         statements = [f'CREATE TABLE {fullname} (\n    ' + ',\n    '.join(fields) + '\n);']
         statements.append(f'GRANT SELECT, INSERT, UPDATE, DELETE ON {fullname} TO nigson_{owner}_app;')
-        for kind, columns in re.findall(r'(UQ|IX)\(([^)]+)\)', table['keys']):
-            suffix = '_'.join(columns.split(',')) + ('_uq' if kind == 'UQ' else '_ix')
-            statements.append(f"CREATE {'UNIQUE ' if kind == 'UQ' else ''}INDEX {name}_{suffix} ON {fullname} ({columns});")
+        for key in table['keys'].split(';'):
+            match = re.fullmatch(r'(UQ|IX)\((.*?)\)(?: WHERE (.*))?', key.strip())
+            if not match:
+                raise ValueError('Unrecognized additive key: '+fullname+': '+key)
+            kind, columns, where = match.groups()
+            suffix = re.sub(r'[^a-z0-9]+', '_', columns.lower()).strip('_') + ('_uq' if kind == 'UQ' else '_ix')
+            statements.append(f"CREATE {'UNIQUE ' if kind == 'UQ' else ''}INDEX {identifier(name+'_'+suffix)} ON {fullname} ({columns})" + (' WHERE '+predicate(where) if where else '') + ';')
         for field in table['fields']:
             if field['foreign']:
                 target = field['foreign'].split('.')[0]
                 statements.append(f"ALTER TABLE {fullname} ADD CONSTRAINT {name}_{field['name']}_fk FOREIGN KEY ({field['name']}) REFERENCES {owner}.{target} (id) ON DELETE RESTRICT;")
-        stem = '023-bp1-file-transfer'
-        change = 'commerce-20261010-files-001'
-        files[base/(stem+'.sql')] = '-- ADR-009: additive owned file transfer intent; existing migrations preserved.\n' + '\n\n'.join(statements)+'\n'
+        stem, change, author, header = ADDITIVE_TABLES[fullname]
+        files[base/(stem+'.sql')] = '-- '+header+'\n' + '\n\n'.join(statements)+'\n'
         files[base/(stem+'-rollback.sql')] = rollback_sql(owner, statements)
-        guard = "SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
-        payload = {'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-files','logicalFilePath':owner+'/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+        guard = f"SELECT CASE WHEN current_user='nigson_{owner}_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+        payload = {'databaseChangeLog':[{'changeSet':{'id':change,'author':author,'logicalFilePath':owner+'/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
         files[base/(stem+'.yaml')] = json.dumps(payload,indent=2)+'\n'
         wrapper = base/'releases'/'BP1.yaml'
-        payload = json.loads(files[wrapper]); payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}})
-        files[wrapper] = json.dumps(payload,indent=2)+'\n'
+        include = {'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}}
+        if fullname == 'commerce.file_transfer':
+            payload = json.loads(files[wrapper]); payload['databaseChangeLog'].append(include)
+            files[wrapper] = json.dumps(payload,indent=2)+'\n'
+        else:
+            deferred_includes.append((wrapper, include))
         table['creation_changeset']=change
         table['creation_file']=str(base/(stem+'.sql'))
     # Explicitly approved country/currency metadata is an additive data changeset, not domain DDL.
@@ -217,6 +229,9 @@ def generate():
     wrapper=nigeria_base/'releases'/'BP1.yaml'
     payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+nigeria_stem+'.yaml','relativeToChangelogFile':True}})
     files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    for wrapper, include in deferred_includes:
+        payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append(include)
+        files[wrapper]=json.dumps(payload,indent=2)+'\n'
     for name in SESSION_TABLES:
         tables[name]['creation_changeset'] = 'commerce-20261005-002'
         tables[name]['creation_file'] = 'services/commerce/src/main/resources/db/changelog/001-framework-sessions.sql'

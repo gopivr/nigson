@@ -8,6 +8,8 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
+CARRIER-001 cancellation increment — IN_PROGRESS pending source commit. Native178/no skips, full176 Java/322 gated,72 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. Durable API-197/200 source dispatch exclusion, pure API-198/199 relay/receipt protocol, single fenced cancellation and read-only UNKNOWN recovery qualified offline. Both additive owner migrations retain previous checksums/data and pass empty rollback/reapply plus populated rollback refusal. No stock or payment reversal. Remaining account/late-handover conflicts and genuine release gates keep whole CARRIER-001 IN_PROGRESS.
+
 CARRIER-001 staff reconciliation increment — IN_PROGRESS. Native150/no skips, full167 Java/303 gated,71 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. API-191/scoped private196, current OPERATIONS/recent MFA, durable original ACK recovery and actual job identity qualified offline. Active leases/request evidence remain intact and reconciliation cannot grant fresh create permission. Accepted source d82734d5ab1728cab93feb1143359d73c5f38bc6; cancellation initiation remains next.
 
 CARRIER-001 active polling increment — IN_PROGRESS. Native132/no skips, full163 Java/289 gated,70 contracts,15 AI/five gated,271 unchanged locked dependencies and nine reproduced artifacts PASS. Complete physical-piece identities, batches<=30, original scan timestamps, durable byte-identical ACK replay and source handover/terminal guards qualified offline. Accepted source 998893156dc4364edafc52dff96410345c7c391b. Cancellation initiation/API-191 staff reconciliation remain next; no critical approval blocks offline engineering.
@@ -123,11 +125,11 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — CARRIER-001 staff reconciliation full167 Java/303 gated,71 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged dependencies/zero OSV findings, stateful all-provider regression and nine reproduced artifacts. Whole CARRIER-001 remains IN_PROGRESS.
+PASS — CARRIER-001 cancellation full176 Java/322 gated,72 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged dependencies/zero OSV findings, stateful all-provider regression and nine reproduced artifacts. Whole CARRIER-001 remains IN_PROGRESS. Initial sandbox uv system-configuration panic retained; rerun with normal local system access passed.
 
 ## Test Status
 
-PASS — Native150/no skips: current BFF/KMS/private JWT reconciliation, original source-command ACK recovery, live leases, immutable account/request evidence, twelve-way races, audit rollback and no fresh create permission; prior booking/private labels/all-piece tracking/source stock guards retained. All-owner fresh/repeat migrations and original Docker preservation PASS. Cancellation initiation and combined two-real-service staging qualification remain pending; genuine provider/route/print/cloud/private-scope deployment/restore/release qualification NOT_RUN.
+PASS — Native178/no skips: durable Source dispatch exclusion/race, current BFF/CSRF/MFA/private JWT, single committed cancel write, accepted response loss and31-piece read-only recovery, byte-identical receipt replay, twelve-way claims, expired submission/generation/source-cutoff/approval guards and audit rollback. All-owner fresh/repeat migrations, both-owner previous-BP1 upgrade/checksum/data/empty rollback/reapply and populated rollback refusal PASS; original Docker state preserved. Combined two-real-service staging, genuine provider/route/print/cloud/private-scope deployment/restore/release qualification NOT_RUN.
 
 ## Last Successful Commit
 

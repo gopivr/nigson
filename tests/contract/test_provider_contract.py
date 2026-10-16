@@ -22,7 +22,7 @@ class ProviderContracts(unittest.TestCase):
 
     def test_private_integration_job_contract_preserves_safe_shapes_and_exact_scopes(self):
         spec=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
-        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry','/internal/v1/carrier/quotes','/internal/v1/carrier/shipments/{id}/reconciliation'})
+        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry','/internal/v1/carrier/quotes','/internal/v1/carrier/shipments/{id}/reconciliation','/internal/v1/carrier/cancellations'})
         self.assertEqual(set(spec['components']['schemas']['JobDTO']['properties']),{'id','state','attemptCount','nextAttemptAt','lastErrorCode'})
         self.assertFalse(spec['components']['schemas']['JobDTO']['additionalProperties'])
         get=spec['paths']['/internal/v1/jobs']['get'];retry=spec['paths']['/internal/v1/jobs/{id}/retry']['post']
@@ -71,3 +71,21 @@ class ProviderContracts(unittest.TestCase):
         self.assertEqual(registry['API-196']['scope'],'carrier.reconcile_WITH_SIGNED_STAFF')
         self.assertEqual(registry['API-196']['client'],'nigson-commerce')
         self.assertEqual(registry['API-196']['phase'],1)
+    def test_cancellation_is_closed_and_uses_pure_owner_workloads(self):
+        public=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
+        private=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
+        path=public['paths']['/api/v1/staff/shipments/{id}/carrier-cancellation']
+        self.assertEqual(path['post']['operationId'],'API-197')
+        self.assertEqual(path['get']['operationId'],'API-200')
+        self.assertEqual(public['paths']['/internal/v1/carrier/cancellation-results']['post']['operationId'],'API-199')
+        self.assertEqual(private['paths']['/internal/v1/carrier/cancellations']['post']['operationId'],'API-198')
+        for spec in (public,private):
+            for name,fields in [('CarrierCancellationCommand',{'cancellationId','shipmentId','bookingRequestId','reference','mode','requestedAt'}),('CarrierCancellationReceipt',{'commandId','cancellationId','shipmentId','bookingRequestId','reference','mode','state','occurredAt','reasonCode'}),('CarrierCancellationDTO',{'id','shipmentId','state','version','shipmentVersion','errorCode'})]:
+                schema=spec['components']['schemas'][name]
+                self.assertFalse(schema['additionalProperties'])
+                self.assertEqual(set(schema['properties']),fields)
+                self.assertEqual(set(schema['required']),fields)
+        registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
+        self.assertEqual((registry['API-198']['scope'],registry['API-198']['client'],registry['API-198']['phase']),('carrier.cancel','nigson-commerce',1))
+        self.assertEqual((registry['API-199']['scope'],registry['API-199']['client'],registry['API-199']['phase']),('logistics.write','nigson-integration',1))
+        self.assertEqual(private['paths']['/internal/v1/carrier/cancellations']['post']['security'],[{'workload':[]}])

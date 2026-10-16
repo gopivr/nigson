@@ -3729,6 +3729,37 @@ source_quote_revision_id uuid NULL FK quote_revision
 - **Checks:** provider=FEDEX; mode IN (MOCK,SANDBOX,LIVE); status IN (QUOTED,EXPIRED,CONSUMED); delivery_amount>=0.
 - **Business invariant:** Server-computed NGN fee with bound address/package/cart revision; valid5m. No mock quote can be used in live checkout. Carrier can return another rate currency: reject unless a separate approved FX policy exists, never treat it as NGN.
 
+### commerce.carrier_cancellation
+
+Owner: `commerce`; module: `fulfillment`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+shipment_id uuid NN FK shipment
+booking_request_id uuid NN
+reference varchar(40) NN
+mode varchar(10) NN
+reason varchar(500) NN
+request_hash char(64) NN
+requested_at timestamptz NN
+state varchar(20) NN DEFAULT REQUESTED
+accepted_at timestamptz NULL
+next_attempt_at timestamptz NN DEFAULT now()
+lease_until timestamptz NULL
+attempt_count integer NN DEFAULT 0
+last_result_command_id uuid NULL
+error_code varchar(60) NULL
+```
+
+- **Keys and indexes:** UQ(shipment_id) WHERE state IN (REQUESTED,QUEUED,UNKNOWN); IX(state,next_attempt_at); IX(shipment_id,created_at).
+- **Checks:** state IN (REQUESTED,QUEUED,UNKNOWN,CANCELLED,REJECTED); mode IN (MOCK,SANDBOX,LIVE); attempt_count>=0.
+- **Business invariant:** ADR-014. Active cancellation is a durable dispatch exclusion serialized under order/shipment locks. Original request UUID/reference/mode/time survives relay uncertainty; current staff authorization precedes intent. Provider cancellation never refunds money or returns stock. Source callbacks bind the original approved intent and cannot cancel an already physically shipped/delivered shipment.
+
 ### integration.carrier_booking
 
 Owner: `integration`; module: `provider`; introduced: BP1; mutation: versioned.
@@ -3758,6 +3789,44 @@ error_code varchar(80) NULL
 - **Keys and indexes:** UQ(shipment_id,provider); UQ(business_key); IX(state,next_poll_at).
 - **Checks:** state IN (PENDING,CLAIMED,BOOKED,UNKNOWN,FAILED,CANCELLED); mode IN (MOCK,SANDBOX,LIVE).
 - **Business invariant:** Stable shipment business reference; UNKNOWN creates are reconciled by reference or operator before retry. Booking/label creation does not dispatch or debit stock.
+
+### integration.carrier_cancellation
+
+Owner: `integration`; module: `provider`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+source_request_id uuid NN EXTERNAL commerce.carrier_cancellation
+booking_id uuid NN FK carrier_booking
+shipment_id uuid NN EXTERNAL commerce.shipment
+reference varchar(40) NN
+mode varchar(10) NN
+account_hash char(64) NN
+request_hash char(64) NN
+generation uuid NN
+requested_at timestamptz NN
+piece_numbers jsonb NN
+state varchar(20) NN DEFAULT QUEUED
+attempt_count integer NN DEFAULT 0
+next_attempt_at timestamptz NN DEFAULT now()
+lease_until timestamptz NULL
+submitted_at timestamptz NULL
+outcome_state varchar(20) NULL
+occurred_at timestamptz NULL
+callback_id uuid NULL
+callback_body jsonb NULL
+notified_state varchar(20) NULL
+error_code varchar(60) NULL
+```
+
+- **Keys and indexes:** UQ(source_request_id); UQ(booking_id) WHERE state IN (QUEUED,SUBMITTING,UNKNOWN,ACK_PENDING); IX(state,next_attempt_at); IX(booking_id).
+- **Checks:** state IN (QUEUED,SUBMITTING,UNKNOWN,ACK_PENDING,CANCELLED,REJECTED); outcome_state IN (UNKNOWN,CANCELLED,REJECTED); notified_state IN (UNKNOWN,CANCELLED,REJECTED); mode IN (MOCK,SANDBOX,LIVE); attempt_count>=0; jsonb_typeof(piece_numbers)=array.
+- **Business invariant:** ADR-014. Source request dedup and fenced SUBMITTING intent precede a single provider cancellation. Submitted/expired/restored/uncertain records reconcile by saved physical-piece tracking; no blind repeat or new shipment. Account/mode/generation/source-time guards fail closed. Callback body/UUID persists before source HTTP and UNKNOWN remains durable until authoritative evidence.
 
 ### experience.communication_destination
 

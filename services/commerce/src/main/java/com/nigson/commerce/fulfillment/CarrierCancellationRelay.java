@@ -1,0 +1,23 @@
+package com.nigson.commerce.fulfillment;
+import java.time.*;
+import java.util.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.*;
+import org.springframework.scheduling.annotation.Scheduled;
+import com.nigson.commerce.platform.AuditWriter;
+import com.nigson.shared.problem.*;
+/** Acknowledged source saga; original business request is durable before any token/private HTTP. */
+public final class CarrierCancellationRelay {
+ public record Claim(UUID id,long version,CarrierCancellationValues.Command command){@Override public String toString(){return "CarrierCancellationRelayClaim[protected]";}}
+ private final JdbcTemplate jdbc;private final TransactionTemplate tx;private final CarrierCancellationPort remote;private final CarrierCancellationService source;private final AuditWriter audit;private final Clock clock;
+ public CarrierCancellationRelay(JdbcTemplate jdbc,PlatformTransactionManager manager,CarrierCancellationPort remote,CarrierCancellationService source,AuditWriter audit,Clock clock){this.jdbc=jdbc;this.remote=remote;this.source=source;this.audit=audit;this.clock=clock;tx=new TransactionTemplate(manager);tx.setTimeout(3);}
+ private java.sql.Timestamp stamp(Instant at){return java.sql.Timestamp.from(at);}
+ private void limits(){jdbc.execute("SET LOCAL lock_timeout='500ms'");jdbc.execute("SET LOCAL statement_timeout='2s'");}
+ private void evidence(Claim c,String state){audit.append("commerce-cancellation-relay",AuditValues.ActorKind.SYSTEM,AuditValues.Action.QUEUE_REPLAY,AuditValues.Resource.SHIPMENT,c.command().shipmentId(),c.id(),AuditValues.Reason.RECONCILIATION,null,Map.of("version",c.version()+(state.equals("CLAIMED")?0:1)),null);}
+ public Optional<Claim> claim(){return tx.execute(status->{limits();var rows=jdbc.queryForList("SELECT * FROM commerce.carrier_cancellation WHERE state IN ('REQUESTED','QUEUED','UNKNOWN') AND next_attempt_at<=? AND (lease_until IS NULL OR lease_until<=?) ORDER BY next_attempt_at,id FOR UPDATE SKIP LOCKED LIMIT 1",stamp(clock.instant()),stamp(clock.instant()));if(rows.isEmpty())return Optional.empty();var row=rows.getFirst();var command=new CarrierCancellationValues.Command((UUID)row.get("id"),(UUID)row.get("shipment_id"),(UUID)row.get("booking_request_id"),row.get("reference").toString(),row.get("mode").toString(),((java.sql.Timestamp)row.get("requested_at")).toInstant());if(!CarrierCancellationValues.hash(command).equals(row.get("request_hash")))throw FulfillmentValues.rule();jdbc.update("UPDATE commerce.carrier_cancellation SET lease_until=?,attempt_count=attempt_count+1,version=version+1,updated_at=?,updated_by='commerce-cancellation-relay' WHERE id=?",stamp(clock.instant().plusSeconds(120)),stamp(clock.instant()),command.cancellationId());var c=new Claim(command.cancellationId(),((Number)row.get("version")).longValue()+1,command);evidence(c,"CLAIMED");return Optional.of(c);});}
+ private void finish(Claim c,CarrierCancellationValues.Acknowledgement ack){tx.executeWithoutResult(status->{limits();String state=ack==null?"UNKNOWN":ack.state().equals("UNKNOWN")?"UNKNOWN":"QUEUED";int changed=jdbc.update("UPDATE commerce.carrier_cancellation SET state=?,accepted_at=CASE WHEN ? THEN COALESCE(accepted_at,?) ELSE accepted_at END,lease_until=NULL,error_code=?,next_attempt_at=?,version=version+1,updated_at=?,updated_by='commerce-cancellation-relay' WHERE id=? AND version=? AND lease_until>? AND state IN ('REQUESTED','QUEUED','UNKNOWN')",state,ack!=null,stamp(clock.instant()),ack==null?"PROVIDER_OUTCOME_UNKNOWN":null,stamp(clock.instant().plusSeconds(ack==null?30:900)),stamp(clock.instant()),c.id(),c.version(),stamp(clock.instant()));if(changed==1)evidence(c,state);});}
+ @Scheduled(fixedDelayString="${NIGSON_CARRIER_CANCELLATION_DELAY_MS:30000}",initialDelayString="${NIGSON_CARRIER_CANCELLATION_DELAY_MS:30000}")public void scheduled(){try{poll();}catch(RuntimeException unavailable){org.slf4j.LoggerFactory.getLogger(getClass()).warn("CARRIER_CANCELLATION_RELAY_RECOVERY_REQUIRED");}}
+ public int poll(){if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");var next=claim();if(next.isEmpty())return 0;return process(next.get());}
+ public int process(Claim c){if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");try{var result=remote.exchange(c.command(),c.id());if(result.receipt()!=null)source.acceptRelay(result.receipt(),c.id());finish(c,result);}catch(RuntimeException unavailable){finish(c,null);}return 1;}
+}

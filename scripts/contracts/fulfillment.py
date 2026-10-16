@@ -28,6 +28,14 @@ def extend(spec):
     s['CarrierReconciliationDTO']=object_schema({'shipmentId':UUID,'state':{'type':'string','enum':['BOOKED','UNKNOWN','FAILED']},'jobId':UUID})
     reconcile=operation('API-191','Current OPERATIONS/recent-MFA BFF session, CSRF/If-Match/key; validate owned NGN shipment and original booking identity. Persist source private request/command before unlocked signed API-196 HTTP. Return the actual integration job identifier. Preserve active leases, UNKNOWN and original provider evidence; no fresh creation, stock or financial mutation. Stable private UUID/body survives a lost ACK; replay still checks current authority.','CarrierReconciliationDTO',[path,key,csrf,match]);reconcile['requestBody']={'required':True,'content':{'application/json':{'schema':REF('ShipmentReason')}}};reconcile['responses']['202']=reconcile['responses'].pop('200');reconcile['responses']['202']['headers']={'Cache-Control':{'schema':{'const':'no-store'}}}
     spec['paths']['/api/v1/staff/shipments/{id}/booking-reconciliation']={'post':reconcile}
+    from cancellation import schemas as cancellation_schemas
+    s.update(cancellation_schemas())
+    cancel=operation('API-197','Current OPERATIONS and recent MFA; CSRF/key/If-Match. Commit original cancellation intent under order/shipment lock and exclude dispatch before private asynchronous relay. UNKNOWN holds dispatch; no refund or stock mutation.','CarrierCancellationDTO',[path,key,csrf,match]);cancel['requestBody']={'required':True,'content':{'application/json':{'schema':REF('ShipmentReason')}}};cancel['responses']['202']=cancel['responses'].pop('200')
+    read_cancel=operation('API-200','Current OPERATIONS; latest source-owned cancellation status.','CarrierCancellationDTO',[path])
+    spec['paths']['/api/v1/staff/shipments/{id}/carrier-cancellation']={'post':cancel,'get':read_cancel}
+    receipt=operation('API-199','Exact nigson-integration logistics.write, no actor or cookie. Persist immutable receipt under source locks. UNKNOWN retains dispatch hold; cancellation never changes money or stock.','CarrierCancellationDTO',[parameter('Idempotency-Key','header',UUID,True)])
+    receipt['security']=[{'carrierIntegrationWorkload':['logistics.write']}];receipt['requestBody']={'required':True,'content':{'application/json':{'schema':REF('CarrierCancellationReceipt')}}}
+    spec['paths']['/internal/v1/carrier/cancellation-results']={'post':receipt}
     address={name:nullable(text(200)) if name in ('line2','postalCode') else text(200) for name in ('recipient','phone','line1','line2','city','region','postalCode','countryCode')}
     address['countryCode']={'type':'string','const':'NG'};address['phone']={'type':'string','pattern':r'^\+[1-9][0-9]{7,14}$'}
     s['ShipmentCarrierAddress']=object_schema(address)

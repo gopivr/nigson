@@ -1,0 +1,21 @@
+{
+  "profile": "Nigson conservative FedEx cancellation interpretation",
+  "upstream_url": "https://developer.fedex.com/wirc/json/api_groups/Ship/Shipment-Resource.json",
+  "upstream_api_version": "1.0.0",
+  "upstream_sha256": "ebc4248f99bd04cd5d7a815cb2b6c089ab72291afd6bf5980e329979102acc53",
+  "method": "PUT",
+  "path": "/ship/v1/shipments/cancel",
+  "request_fields": [
+    "accountNumber.value",
+    "trackingNumber",
+    "deletionControl"
+  ],
+  "deletionControl": "DELETE_ALL_PACKAGES",
+  "success_field": "output.cancelledShipment",
+  "interpretation": {
+    "true": "CANCELLED",
+    "false": "REJECTED",
+    "missing_or_malformed_or_uncertain": "UNKNOWN; read-only saved-piece reconciliation"
+  },
+  "live_account_route_qualification": "NOT_RUN"
+}

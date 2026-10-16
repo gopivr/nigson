@@ -2975,6 +2975,64 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 - **Events:** None directly; durable scoped acknowledgement and audit.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, PROVIDER_MODE_MISMATCH, PROVIDER_OUTCOME_UNKNOWN, FEATURE_DISABLED.
 
+### API-197 POST /api/v1/staff/shipments/{id}/carrier-cancellation
+
+- **Service / module / phase:** commerce / fulfillment / BP1.
+- **Authentication / authorization:** Current OPERATIONS and recent MFA; CSRF on cookies, If-Match source shipment version and Idempotency-Key.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{reason:string}`.
+- **Response:** `CarrierCancellationDTO`.
+- **Statuses:** 202; standard safe errors.
+- **Validation / business rules:** ADR-014. Persist/audit approved unshipped FEDEX/BOOKED cancellation under order/shipment locks; active intent excludes dispatch. Durable relay, no provider HTTP in this command; no automatic refund/stock return.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+### API-198 POST /internal/v1/carrier/cancellations
+
+- **Service / module / phase:** integration / provider / BP1.
+- **Authentication / authorization:** SERVICE_COMMERCE:carrier.cancel; exact private workload, no browser or actor token.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** None.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{cancellationId:UUID,shipmentId:UUID,bookingRequestId:UUID,reference:string,mode:MOCK|SANDBOX|LIVE,requestedAt:Instant}`.
+- **Response:** `{cancellationId:UUID,shipmentId:UUID,state:QUEUED|UNKNOWN|CANCELLED|REJECTED,receipt?:CarrierCancellationReceipt}`.
+- **Statuses:** 202; standard safe errors.
+- **Validation / business rules:** ADR-014. Original source UUID/header key and exact request bind existing account/mode/booking/piece evidence. Persist once, return current state/original receipt on replay; never resend an uncertain cancel or create a shipment.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+### API-199 POST /internal/v1/carrier/cancellation-results
+
+- **Service / module / phase:** commerce / fulfillment / BP1.
+- **Authentication / authorization:** SERVICE_INTEGRATION:logistics.write; exact private workload, no actor/cookie.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** None.
+- **Query:** None; reject unknown parameters.
+- **Request:** `CarrierCancellationReceipt`.
+- **Response:** `CarrierCancellationDTO`.
+- **Statuses:** 200; standard safe errors.
+- **Validation / business rules:** ADR-014. Idempotent original callback UUID/body; match approved source intent, identity/mode/reference. UNKNOWN retains dispatch exclusion; rejection releases it; confirmed cancellation only for an unshipped matching shipment. Atomic audit/history/outbox; no money/stock reversal.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+### API-200 GET /api/v1/staff/shipments/{id}/carrier-cancellation
+
+- **Service / module / phase:** commerce / fulfillment / BP1.
+- **Authentication / authorization:** Current OPERATIONS; no query/body.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `none`.
+- **Response:** `CarrierCancellationDTO`.
+- **Statuses:** 200; standard safe errors.
+- **Validation / business rules:** ADR-014. Latest owned cancellation status with current source shipment version; no provider HTTP or protected operator/provider messages.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+CarrierCancellationDTO is closed `{id:UUID,shipmentId:UUID,state:REQUESTED|QUEUED|UNKNOWN|CANCELLED|REJECTED,version:int64,shipmentVersion:int64,errorCode:string|null}`. CarrierCancellationReceipt is closed `{commandId:UUID,cancellationId:UUID,shipmentId:UUID,bookingRequestId:UUID,reference:string,mode:MOCK|SANDBOX|LIVE,state:UNKNOWN|CANCELLED|REJECTED,occurredAt:Instant,reasonCode:string}`. Reason codes are the reviewed nonpersonal NONE/PROVIDER_OUTCOME_UNKNOWN/PROVIDER_UNAVAILABLE/PROVIDER_MODE_MISMATCH/CARRIER_CANCEL_REJECTED/CARRIER_ALREADY_DELIVERED/CARRIER_APPROVAL_REQUIRED vocabulary. The relay may consume the exact persisted receipt from the authenticated API-198 reply; it uses the same source receipt dedup namespace as API-199, without fabricating a workload proof. This read-back recovers a source restore/lost callback without a second provider cancel.
+
 ## Normative reusable DTO registry
 
 Closed fields below take precedence over shorthand ...request/plus/as API notation. API-072 uses API-037. Staff product APIs add status/version; request lengths inherit matching section10 columns. E164 is a normalized +country-number string<=16. Unknown fields rejected.

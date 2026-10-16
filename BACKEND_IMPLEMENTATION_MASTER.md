@@ -4256,6 +4256,37 @@ source_quote_revision_id uuid NULL FK quote_revision
 - **Checks:** provider=FEDEX; mode IN (MOCK,SANDBOX,LIVE); status IN (QUOTED,EXPIRED,CONSUMED); delivery_amount>=0.
 - **Business invariant:** Server-computed NGN fee with bound address/package/cart revision; valid5m. No mock quote can be used in live checkout. Carrier can return another rate currency: reject unless a separate approved FX policy exists, never treat it as NGN.
 
+### commerce.carrier_cancellation
+
+Owner: `commerce`; module: `fulfillment`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+shipment_id uuid NN FK shipment
+booking_request_id uuid NN
+reference varchar(40) NN
+mode varchar(10) NN
+reason varchar(500) NN
+request_hash char(64) NN
+requested_at timestamptz NN
+state varchar(20) NN DEFAULT REQUESTED
+accepted_at timestamptz NULL
+next_attempt_at timestamptz NN DEFAULT now()
+lease_until timestamptz NULL
+attempt_count integer NN DEFAULT 0
+last_result_command_id uuid NULL
+error_code varchar(60) NULL
+```
+
+- **Keys and indexes:** UQ(shipment_id) WHERE state IN (REQUESTED,QUEUED,UNKNOWN); IX(state,next_attempt_at); IX(shipment_id,created_at).
+- **Checks:** state IN (REQUESTED,QUEUED,UNKNOWN,CANCELLED,REJECTED); mode IN (MOCK,SANDBOX,LIVE); attempt_count>=0.
+- **Business invariant:** ADR-014. Active cancellation is a durable dispatch exclusion serialized under order/shipment locks. Original request UUID/reference/mode/time survives relay uncertainty; current staff authorization precedes intent. Provider cancellation never refunds money or returns stock. Source callbacks bind the original approved intent and cannot cancel an already physically shipped/delivered shipment.
+
 ### integration.carrier_booking
 
 Owner: `integration`; module: `provider`; introduced: BP1; mutation: versioned.
@@ -4285,6 +4316,44 @@ error_code varchar(80) NULL
 - **Keys and indexes:** UQ(shipment_id,provider); UQ(business_key); IX(state,next_poll_at).
 - **Checks:** state IN (PENDING,CLAIMED,BOOKED,UNKNOWN,FAILED,CANCELLED); mode IN (MOCK,SANDBOX,LIVE).
 - **Business invariant:** Stable shipment business reference; UNKNOWN creates are reconciled by reference or operator before retry. Booking/label creation does not dispatch or debit stock.
+
+### integration.carrier_cancellation
+
+Owner: `integration`; module: `provider`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+source_request_id uuid NN EXTERNAL commerce.carrier_cancellation
+booking_id uuid NN FK carrier_booking
+shipment_id uuid NN EXTERNAL commerce.shipment
+reference varchar(40) NN
+mode varchar(10) NN
+account_hash char(64) NN
+request_hash char(64) NN
+generation uuid NN
+requested_at timestamptz NN
+piece_numbers jsonb NN
+state varchar(20) NN DEFAULT QUEUED
+attempt_count integer NN DEFAULT 0
+next_attempt_at timestamptz NN DEFAULT now()
+lease_until timestamptz NULL
+submitted_at timestamptz NULL
+outcome_state varchar(20) NULL
+occurred_at timestamptz NULL
+callback_id uuid NULL
+callback_body jsonb NULL
+notified_state varchar(20) NULL
+error_code varchar(60) NULL
+```
+
+- **Keys and indexes:** UQ(source_request_id); UQ(booking_id) WHERE state IN (QUEUED,SUBMITTING,UNKNOWN,ACK_PENDING); IX(state,next_attempt_at); IX(booking_id).
+- **Checks:** state IN (QUEUED,SUBMITTING,UNKNOWN,ACK_PENDING,CANCELLED,REJECTED); outcome_state IN (UNKNOWN,CANCELLED,REJECTED); notified_state IN (UNKNOWN,CANCELLED,REJECTED); mode IN (MOCK,SANDBOX,LIVE); attempt_count>=0; jsonb_typeof(piece_numbers)=array.
+- **Business invariant:** ADR-014. Source request dedup and fenced SUBMITTING intent precede a single provider cancellation. Submitted/expired/restored/uncertain records reconcile by saved physical-piece tracking; no blind repeat or new shipment. Account/mode/generation/source-time guards fail closed. Callback body/UUID persists before source HTTP and UNKNOWN remains durable until authoritative evidence.
 
 ### experience.communication_destination
 
@@ -7412,6 +7481,64 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Events:** None directly; durable scoped acknowledgement and audit.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, PROVIDER_MODE_MISMATCH, PROVIDER_OUTCOME_UNKNOWN, FEATURE_DISABLED.
 
+### API-197 POST /api/v1/staff/shipments/{id}/carrier-cancellation
+
+- **Service / module / phase:** commerce / fulfillment / BP1.
+- **Authentication / authorization:** Current OPERATIONS and recent MFA; CSRF on cookies, If-Match source shipment version and Idempotency-Key.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{reason:string}`.
+- **Response:** `CarrierCancellationDTO`.
+- **Statuses:** 202; standard safe errors.
+- **Validation / business rules:** ADR-014. Persist/audit approved unshipped FEDEX/BOOKED cancellation under order/shipment locks; active intent excludes dispatch. Durable relay, no provider HTTP in this command; no automatic refund/stock return.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+### API-198 POST /internal/v1/carrier/cancellations
+
+- **Service / module / phase:** integration / provider / BP1.
+- **Authentication / authorization:** SERVICE_COMMERCE:carrier.cancel; exact private workload, no browser or actor token.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** None.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{cancellationId:UUID,shipmentId:UUID,bookingRequestId:UUID,reference:string,mode:MOCK|SANDBOX|LIVE,requestedAt:Instant}`.
+- **Response:** `{cancellationId:UUID,shipmentId:UUID,state:QUEUED|UNKNOWN|CANCELLED|REJECTED,receipt?:CarrierCancellationReceipt}`.
+- **Statuses:** 202; standard safe errors.
+- **Validation / business rules:** ADR-014. Original source UUID/header key and exact request bind existing account/mode/booking/piece evidence. Persist once, return current state/original receipt on replay; never resend an uncertain cancel or create a shipment.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+### API-199 POST /internal/v1/carrier/cancellation-results
+
+- **Service / module / phase:** commerce / fulfillment / BP1.
+- **Authentication / authorization:** SERVICE_INTEGRATION:logistics.write; exact private workload, no actor/cookie.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** None.
+- **Query:** None; reject unknown parameters.
+- **Request:** `CarrierCancellationReceipt`.
+- **Response:** `CarrierCancellationDTO`.
+- **Statuses:** 200; standard safe errors.
+- **Validation / business rules:** ADR-014. Idempotent original callback UUID/body; match approved source intent, identity/mode/reference. UNKNOWN retains dispatch exclusion; rejection releases it; confirmed cancellation only for an unshipped matching shipment. Atomic audit/history/outbox; no money/stock reversal.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+### API-200 GET /api/v1/staff/shipments/{id}/carrier-cancellation
+
+- **Service / module / phase:** commerce / fulfillment / BP1.
+- **Authentication / authorization:** Current OPERATIONS; no query/body.
+- **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `none`.
+- **Response:** `CarrierCancellationDTO`.
+- **Statuses:** 200; standard safe errors.
+- **Validation / business rules:** ADR-014. Latest owned cancellation status with current source shipment version; no provider HTTP or protected operator/provider messages.
+- **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
+
+CarrierCancellationDTO is closed `{id:UUID,shipmentId:UUID,state:REQUESTED|QUEUED|UNKNOWN|CANCELLED|REJECTED,version:int64,shipmentVersion:int64,errorCode:string|null}`. CarrierCancellationReceipt is closed `{commandId:UUID,cancellationId:UUID,shipmentId:UUID,bookingRequestId:UUID,reference:string,mode:MOCK|SANDBOX|LIVE,state:UNKNOWN|CANCELLED|REJECTED,occurredAt:Instant,reasonCode:string}`. Reason codes are the reviewed nonpersonal NONE/PROVIDER_OUTCOME_UNKNOWN/PROVIDER_UNAVAILABLE/PROVIDER_MODE_MISMATCH/CARRIER_CANCEL_REJECTED/CARRIER_ALREADY_DELIVERED/CARRIER_APPROVAL_REQUIRED vocabulary. The relay may consume the exact persisted receipt from the authenticated API-198 reply; it uses the same source receipt dedup namespace as API-199, without fabricating a workload proof. This read-back recovers a source restore/lost callback without a second provider cancel.
+
 ## Normative reusable DTO registry
 
 Closed fields below take precedence over shorthand ...request/plus/as API notation. API-072 uses API-037. Staff product APIs add status/version; request lengths inherit matching section10 columns. E164 is a normalized +country-number string<=16. Unknown fields rejected.
@@ -9105,7 +9232,7 @@ Permanent task IDs; existing IDs retained. Specification1.1.0 adds six explicit 
 - **Dependencies:** MOCK-001, NGN-001, PLAT-001, SEC-001
 - **Files/packages:** `services/integration/provider/internal/infrastructure/external/fedex/`, `services/commerce/fulfillment/`, `contracts/providers/fedex/`, `tests/providers/fedex/`
 - **Implementation:** Implement CarrierProvider HTTP adapters, commerce bound rate quotes and private integration booking/polling jobs; server packing, exact currencies, private labels, OAuth renewal, provider reference reconciliation and cancellation. Process paid-order booking asynchronously and acknowledge commerce status via scoped API. FedEx label creation is not dispatch. Unsupported Nigerian routes fail explicitly; no automatic manual fallback that conceals unbooked orders.
-- **Contracts:** APIs API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195; tables commerce.carrier_quote, integration.carrier_booking; events EVT-027
+- **Contracts:** APIs API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195, API-196, API-197, API-198, API-199, API-200; tables commerce.carrier_quote, integration.carrier_booking, commerce.carrier_cancellation, integration.carrier_cancellation; events EVT-027 and owned EVT-009 results
 - **Tests:** TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION.
 - **Acceptance AC-CARRIER-001:** Given NGN cart/address/packages and FedEx mock, when quote->paid order->booking->tracking repeats or times out, then one stable booking remains, mock/live mismatch rejected, stock dispatch occurs once on explicit physical handover and delivery cannot regress.
 
@@ -9613,6 +9740,12 @@ ARCH rows preserve every source heading; BP rows preserve functional features; t
 | REQ-API-194 | experience | API-194 GET /internal/v1/leads/{id}/messaging-context | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-195 | commerce | API-195 POST /api/v1/quotes/{id}/delivery-quotes | commerce.carrier_quote, integration.carrier_booking | None directly | CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |
 | REQ-API-196 | integration | API-196 POST /internal/v1/carrier/shipments/{id}/reconciliation | integration.carrier_booking, integration.integration_job | None directly | CARRIER-001; TEST-CARRIER-UNKNOWN; TEST-CARRIER-CONTRACT; TEST-QUEUE-REPLAY; ADR-013. | AC-CARRIER-001 |
+| REQ-API-197 | commerce | API-197 POST /api/v1/staff/shipments/{id}/carrier-cancellation | commerce.carrier_cancellation | EVT-009 on confirmed source state change | CARRIER-001; TEST-CARRIER-CANCELLATION; TEST-FULFILLMENT-CONSERVATION; ADR-014. | AC-CARRIER-001 |
+| REQ-API-198 | integration | API-198 POST /internal/v1/carrier/cancellations | integration.carrier_cancellation | EVT-009 on confirmed source state change | CARRIER-001; TEST-CARRIER-CANCELLATION; TEST-FULFILLMENT-CONSERVATION; ADR-014. | AC-CARRIER-001 |
+| REQ-API-199 | commerce | API-199 POST /internal/v1/carrier/cancellation-results | commerce.carrier_cancellation | EVT-009 on confirmed source state change | CARRIER-001; TEST-CARRIER-CANCELLATION; TEST-FULFILLMENT-CONSERVATION; ADR-014. | AC-CARRIER-001 |
+| REQ-API-200 | commerce | API-200 GET /api/v1/staff/shipments/{id}/carrier-cancellation | commerce.carrier_cancellation | EVT-009 on confirmed source state change | CARRIER-001; TEST-CARRIER-CANCELLATION; TEST-FULFILLMENT-CONSERVATION; ADR-014. | AC-CARRIER-001 |
+| REQ-DB-commerce.carrier_cancellation | commerce | API-197, API-198, API-199, API-200 | commerce.carrier_cancellation | None directly | DATA-001; CARRIER-001; TEST-CARRIER-CANCELLATION; ADR-014. | AC-CARRIER-001 |
+| REQ-DB-integration.carrier_cancellation | integration | API-197, API-198, API-199, API-200 | integration.carrier_cancellation | None directly | DATA-001; CARRIER-001; TEST-CARRIER-CANCELLATION; ADR-014. | AC-CARRIER-001 |
 | REQ-DB-commerce.carrier_quote | commerce | API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195 | commerce.carrier_quote | EVT-027 | DATA-001; CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |
 | REQ-DB-integration.carrier_booking | integration | API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195 | integration.carrier_booking | EVT-027 | DATA-001; CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |
 | REQ-DB-experience.communication_destination | experience | API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-102, API-127, API-142, API-165, API-175 | experience.communication_destination | EVT-028 | DATA-001; MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
