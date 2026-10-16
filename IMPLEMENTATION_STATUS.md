@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 staff reconciliation increment — IN_PROGRESS. Native150/no skips, full167 Java/303 gated,71 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. API-191/scoped private196, current OPERATIONS/recent MFA, durable original ACK recovery and actual job identity qualified offline. Active leases/request evidence remain intact and reconciliation cannot grant fresh create permission. Source commit pending; cancellation initiation remains next.
+CARRIER-001 staff reconciliation increment — IN_PROGRESS. Native150/no skips, full167 Java/303 gated,71 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. API-191/scoped private196, current OPERATIONS/recent MFA, durable original ACK recovery and actual job identity qualified offline. Active leases/request evidence remain intact and reconciliation cannot grant fresh create permission. Accepted source d82734d5ab1728cab93feb1143359d73c5f38bc6; cancellation initiation remains next.
 
 CARRIER-001 active polling increment — IN_PROGRESS. Native132/no skips, full163 Java/289 gated,70 contracts,15 AI/five gated,271 unchanged locked dependencies and nine reproduced artifacts PASS. Complete physical-piece identities, batches<=30, original scan timestamps, durable byte-identical ACK replay and source handover/terminal guards qualified offline. Accepted source 998893156dc4364edafc52dff96410345c7c391b. Cancellation initiation/API-191 staff reconciliation remain next; no critical approval blocks offline engineering.
 
@@ -123,15 +123,15 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — CARRIER-001 active tracking full163 Java/289 gated,70 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged locked dependencies, all-provider stateful regression and nine reproduced artifacts. Same-day unchanged graph OSV zero findings retained. Overall carrier task remains IN_PROGRESS.
+PASS — CARRIER-001 staff reconciliation full167 Java/303 gated,71 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged dependencies/zero OSV findings, stateful all-provider regression and nine reproduced artifacts. Whole CARRIER-001 remains IN_PROGRESS.
 
 ## Test Status
 
-PASS — CARRIER-001 active tracking native132/no skips: durable booking/private PDF/S3/upload-intent/source ACK recovery, original-event restore cutoff, exact all-piece tracking batches, duplicate/older scans, leases/races/audit rollback and terminal polling qualified offline. Existing actual source/intake/label/stock guards and all-owner migrations/original Docker preservation PASS. Cancellation initiation/API-191 and combined real-source/worker end-to-end remain pending; genuine account/route/print/cloud/restore/release qualification NOT_RUN. Prior affected financial71 acceptance remains unchanged.
+PASS — Native150/no skips: current BFF/KMS/private JWT reconciliation, original source-command ACK recovery, live leases, immutable account/request evidence, twelve-way races, audit rollback and no fresh create permission; prior booking/private labels/all-piece tracking/source stock guards retained. All-owner fresh/repeat migrations and original Docker preservation PASS. Cancellation initiation and combined two-real-service staging qualification remain pending; genuine provider/route/print/cloud/private-scope deployment/restore/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
-998893156dc4364edafc52dff96410345c7c391b — verified active all-piece tracking/durable scan ACK/terminal polling, following execution/private label source455294bb132f5a51d09c475cabc124aef6c813e1. CARRIER-001 remains IN_PROGRESS. No remote deployment.
+d82734d5ab1728cab93feb1143359d73c5f38bc6 — verified API-191/scoped private196 staff reconciliation; prior active tracking998893156dc4364edafc52dff96410345c7c391b and execution455294bb132f5a51d09c475cabc124aef6c813e1 remain accepted. CARRIER-001 remains IN_PROGRESS. No deployment.
 
 ## Confirmed Inputs
 

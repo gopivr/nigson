@@ -1,6 +1,6 @@
 # ADR-013: Scoped staff carrier reconciliation
 
-Status: Accepted technical contract refinement; native150/no skips, full167 Java/303 gated,71 contracts and nine reproduced artifacts PASS; source acceptance commit pending.
+Status: Accepted technical contract refinement; native150/no skips, full167 Java/303 gated,71 contracts and nine reproduced artifacts PASS; accepted source d82734d5ab1728cab93feb1143359d73c5f38bc6.
 
 API-191 already requires commerce to request integration-owned reconciliation and return its real job identifier. API-140 lacks a shipment lookup; API-141 permits only retrying FAILED jobs and must not reset an UNKNOWN carrier side effect. Add private API-196 POST /internal/v1/carrier/shipments/{id}/reconciliation with exact nigson-commerce `carrier.reconcile_WITH_SIGNED_STAFF` workload scope, current originating OPERATIONS and recent MFA assertion bound to the method/path/body/correlation. Body is closed `{bookingRequestId,mode,reason}`; Idempotency-Key is the persisted source command UUID. Response matches API-191's closed `{shipmentId,state:BOOKED|UNKNOWN|FAILED,jobId}`. No owner-boundary or schema change.
 
