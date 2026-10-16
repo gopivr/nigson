@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 account binding increment (CF-CARRIER-007 / ADR-016) — qualified offline; source acceptance commit pending below. Native282/no skips, independent financial66/no skips, full179 Java/334 gated,74 contracts,271 unchanged dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Trusted private account identity is immutable through rate/checkout/order/shipment/API-119; missing identity or rotation rejects before new checkout/create. Public DTOs unchanged; no DDL/owner changes. Historical/UNKNOWN evidence remains reconcilable. Whole CARRIER-001 IN_PROGRESS; BP3 API-195 and genuine provider/release qualification remain pending. No critical approval blocks offline engineering.
+CARRIER-001 account binding increment (CF-CARRIER-007 / ADR-016) — accepted offline at 2cb1643de0a01f5f935f5a24e929b1073f5c22bf. Native282/no skips, independent financial66/no skips, full179 Java/334 gated,74 contracts,271 unchanged dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Trusted private account identity is immutable through rate/checkout/order/shipment/API-119; missing identity or rotation rejects before new checkout/create. Public DTOs unchanged; no DDL/owner changes. Historical/UNKNOWN evidence remains reconcilable. Whole CARRIER-001 IN_PROGRESS; BP3 API-195 and genuine provider/release qualification remain pending. No critical approval blocks offline engineering.
 
 CARRIER-001 late handover increment (CF-CARRIER-008) — accepted offline at c1eb1cde54b397abff38194dc4138b7856a16b6c; whole CARRIER-001 IN_PROGRESS. Optional validated actual dispatchedAt in API-049 preserves reason-only commands and original delivery scans. Native47/no skips, full177 Java/324 gated,73 contracts,271 unchanged locked dependencies and nine reproduced artifacts PASS. Current authorization, paid/booking/label/cancellation guards, source locks and one-time stock movement retained. No DDL/owner/event schema change; historical incorrect handover rows are not silently rewritten.
 
@@ -137,7 +137,7 @@ PASS — Native282/no skips plus independent financial66/no skips: actual HTTP f
 
 ## Last Successful Commit
 
-c1eb1cde54b397abff38194dc4138b7856a16b6c — verified compatible actual handover timestamps; cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4 and staff reconciliation d82734d5ab1728cab93feb1143359d73c5f38bc6 remain accepted. Whole CARRIER-001 remains IN_PROGRESS. No deployment.
+2cb1643de0a01f5f935f5a24e929b1073f5c22bf — verified CF-CARRIER-007 immutable carrier account binding; native282/financial66 no skips, full179 Java/334 gated,74 contracts,271 dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Earlier handover c1eb1cde54b397abff38194dc4138b7856a16b6c and cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4 remain accepted. Whole CARRIER-001 IN_PROGRESS. No deployment.
 
 ## Confirmed Inputs
 

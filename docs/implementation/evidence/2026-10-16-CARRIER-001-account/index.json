@@ -250,5 +250,7 @@
   "post_stage_checks": {
     "repository": "PASS/exit0",
     "git_diff_cached_check": "PASS/exit0"
-  }
+  },
+  "accepted_source_commit": "2cb1643de0a01f5f935f5a24e929b1073f5c22bf",
+  "acceptance_scope": "CF-CARRIER-007 offline account binding; whole CARRIER-001 IN_PROGRESS; API-195 and genuine qualification pending"
 }

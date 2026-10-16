@@ -1,6 +1,6 @@
 # ADR-016: Immutable trusted carrier account binding
 
-Status: Accepted technical design; CF-CARRIER-007 implementation qualified offline (native282, independent financial66, full179 Java/334 gated,74 contracts). Source acceptance commit pending. Whole CARRIER-001 remains IN_PROGRESS.
+Status: Accepted technical design; CF-CARRIER-007 implementation qualified offline (native282, independent financial66, full179 Java/334 gated,74 contracts). Accepted source 2cb1643de0a01f5f935f5a24e929b1073f5c22bf. Whole CARRIER-001 remains IN_PROGRESS.
 
 CF-CARRIER-007: intake/execution bind the configured FedEx account, but earlier rate/order snapshots did not. A fee obtained using account A must not authorize checkout or a shipment using account B.
 
