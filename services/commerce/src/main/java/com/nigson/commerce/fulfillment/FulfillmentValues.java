@@ -18,6 +18,7 @@ public final class FulfillmentValues {
  public record ReturnInput(List<LineInput> lines,StockLedger.ReturnKind kind,String receiptReference,String reason){}
  public record Return(UUID returnId,UUID orderId,List<ShipmentLine> lines){}
  public record Delivery(Instant deliveredAt,String reason){}
+ public record Dispatch(Instant dispatchedAt,String reason){}
  public static Problem.Failure rule(){return new Problem.Failure(ProblemCode.FULFILLMENT_RULE_VIOLATION);}
  private static void closed(JsonNode input,Set<String> required,Set<String> allowed){if(input==null||!input.isObject()||!allowed.containsAll(input.propertyNames())||!input.propertyNames().containsAll(required))throw ApiValues.invalid();}
  private static String text(JsonNode input,String key,int max,boolean required){var value=input.get(key);if(value==null){if(required)throw ApiValues.invalid();return null;}if(!value.isString())throw ApiValues.invalid();String raw=value.asString();if(raw.isEmpty()||raw.length()>max||!raw.equals(raw.strip())||raw.codePoints().anyMatch(c->Character.isISOControl(c)||Character.getType(c)==Character.FORMAT))throw ApiValues.invalid();return raw;}
@@ -28,6 +29,7 @@ public final class FulfillmentValues {
  public static void https(String value){try{var uri=java.net.URI.create(value);if(!"https".equals(uri.getScheme())||uri.getHost()==null||uri.getRawUserInfo()!=null||uri.getPort()!=-1&&uri.getPort()!=443||uri.getRawFragment()!=null)throw ApiValues.invalid();}catch(IllegalArgumentException invalid){throw ApiValues.invalid();}}
  public static String reason(JsonNode input){closed(input,Set.of("reason"),Set.of("reason"));return reasonValue(input);}
  private static String reasonValue(JsonNode input){String reason=text(input,"reason",500,true);if(reason.length()<10)throw ApiValues.invalid();return reason;}
+ public static Dispatch dispatch(JsonNode input){closed(input,Set.of("reason"),Set.of("reason","dispatchedAt"));String at=text(input,"dispatchedAt",40,false);try{return new Dispatch(at==null?null:Instant.parse(at),reasonValue(input));}catch(java.time.format.DateTimeParseException invalid){throw ApiValues.invalid();}}
  public static Delivery delivered(JsonNode input){closed(input,Set.of("deliveredAt","reason"),Set.of("deliveredAt","reason"));try{return new Delivery(Instant.parse(text(input,"deliveredAt",40,true)),reasonValue(input));}catch(java.time.format.DateTimeParseException invalid){throw ApiValues.invalid();}}
  public static ReturnInput returned(JsonNode input){closed(input,Set.of("lines","kind","reason"),Set.of("lines","kind","receiptReference","reason"));StockLedger.ReturnKind kind;try{kind=StockLedger.ReturnKind.valueOf(text(input,"kind",30,true));}catch(IllegalArgumentException invalid){throw ApiValues.invalid();}String receipt=text(input,"receiptReference",120,kind==StockLedger.ReturnKind.PHYSICAL_RETURN);if(receipt!=null&&!receipt.matches("[A-Za-z0-9][A-Za-z0-9:_-]{0,119}"))throw ApiValues.invalid();var rows=lines(input);if(rows.stream().map(LineInput::orderLineId).distinct().count()!=rows.size())throw ApiValues.invalid();return new ReturnInput(rows,kind,receipt,reasonValue(input));}
 }

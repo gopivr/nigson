@@ -5,7 +5,7 @@
     "shared/common-events/target/common-events-0.1.0.jar": "bf861be18432e0de0534f43d2b51d91cf4acd25472bd8aa6b6550c983f6a3796",
     "shared/common-security/target/common-security-0.1.0.jar": "c067efa156cbc48a50eb1ff01ec0c361e331029f27570c76139548af9ed17520",
     "services/experience/target/experience-0.1.0.jar": "0995f5981935ed090c5554e2e827d448cf21780a84842dab6caff1aa8595d084",
-    "services/commerce/target/commerce-0.1.0.jar": "3e1c4d0dfd00969ce4b924b79bc4f2650b5b053552ac45adb24161a76414c76c",
+    "services/commerce/target/commerce-0.1.0.jar": "4d8f1808b810959864d07da63cba3178dedc2377a7bf513322fc061a818d3256",
     "services/integration/target/integration-0.1.0.jar": "160be442aecc301e1e25ea09eed5d57bd84483dd8c2c6e053e651d6f4edd6b56"
   },
   "python": {

@@ -10,5 +10,6 @@ public interface ShipmentRepository {
  FulfillmentValues.Shipment find(UUID shipment,boolean lock);
  FulfillmentValues.Shipment create(UUID order,FulfillmentValues.ShipmentInput input,String actor);
  FulfillmentValues.Shipment dispatch(UUID shipment,long expected,String actor);
+ FulfillmentValues.Shipment dispatch(UUID shipment,long expected,String actor,java.time.Instant dispatchedAt);
  FulfillmentValues.Shipment delivered(UUID shipment,long expected,FulfillmentValues.Delivery input,String actor);
 }

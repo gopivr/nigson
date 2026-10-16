@@ -49,3 +49,14 @@ class FulfillmentContracts(unittest.TestCase):
         self.assertFalse(schema['additionalProperties']);self.assertEqual(set(schema['properties']),{'orderId','shipments','events'})
         self.assertEqual(schema['properties']['shipments']['maxItems'],100);self.assertEqual(schema['properties']['events']['maxItems'],100)
         self.assertIn('latest100',op['description']);self.assertIn('Raw provider/internal notes',op['description'])
+
+    def test_dispatch_time_is_optional_closed_and_never_provider_supplied(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
+        schema=spec['components']['schemas']['ShipmentDispatch']
+        self.assertFalse(schema['additionalProperties'])
+        self.assertEqual(schema['required'],['reason'])
+        self.assertEqual(set(schema['properties']),{'reason','dispatchedAt'})
+        self.assertEqual(schema['properties']['dispatchedAt'],{'type':'string','format':'date-time'})
+        op=spec['paths']['/api/v1/staff/shipments/{id}/dispatch']['post']
+        self.assertEqual(op['requestBody']['content']['application/json']['schema'],{'$ref':'#/components/schemas/ShipmentDispatch'})
+        self.assertNotIn('dispatchedAt',spec['components']['schemas']['ShipmentProviderResult']['properties'])

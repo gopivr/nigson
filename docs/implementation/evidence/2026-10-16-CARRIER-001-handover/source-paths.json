@@ -1,0 +1,21 @@
+[
+  "BACKEND_IMPLEMENTATION_MASTER.md",
+  "IMPLEMENTATION_STATUS.md",
+  "contracts/openapi/commerce.yaml",
+  "docs/API_CONTRACT.md",
+  "docs/adr/ADR-015-recorded-physical-handover-time.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/implementation/2026-10-16-CARRIER-001.md",
+  "docs/runbooks/carrier-quotes.md",
+  "scripts/carrier/handover_verify.py",
+  "scripts/contracts/fulfillment.py",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/FulfillmentController.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/FulfillmentValues.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/JdbcShipmentRepository.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/ShipmentRepository.java",
+  "services/commerce/src/main/java/com/nigson/commerce/fulfillment/ShipmentService.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/carrier/CarrierResultPersistenceTest.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/fulfillment/FulfillmentHttpAcceptance.java",
+  "services/commerce/src/test/java/com/nigson/acceptance/fulfillment/FulfillmentValuesTest.java",
+  "tests/contract/test_fulfillment_contract.py"
+]

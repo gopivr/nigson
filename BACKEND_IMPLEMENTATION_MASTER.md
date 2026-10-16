@@ -5268,10 +5268,10 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
-- **Request:** `{reason:string}; If-Match`.
+- **Request:** `{reason:string, dispatchedAt?:Instant}; If-Match`.
 - **Response:** `ShipmentDTO`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Under order lock, decrease on_hand and allocated together exactly once; record movement.
+- **Validation / business rules:** Under order/shipment locks, require current OPERATIONS, version, paid/unheld state, qualified booking/private label and no active carrier cancellation. Decrease on_hand and allocated together exactly once; record movement. Optional actual dispatchedAt must be nonfuture and at or after shipment creation; omission retains processing time and original reason-only command hashes. Explicit null/malformed/unknown fields reject. Persist actual handover at PostgreSQL microsecond precision in shipment/history/EVT-009 payload; audit/ledger/event envelope retain processing time. Provider scans keep their original timestamps. ADR-015 resolves CF-CARRIER-008 without schema/owner/event changes.
 - **Events:** shipment.changed.v1, inventory.availability.changed.v1
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -9233,7 +9233,7 @@ Permanent task IDs; existing IDs retained. Specification1.1.0 adds six explicit 
 - **Files/packages:** `services/integration/provider/internal/infrastructure/external/fedex/`, `services/commerce/fulfillment/`, `contracts/providers/fedex/`, `tests/providers/fedex/`
 - **Implementation:** Implement CarrierProvider HTTP adapters, commerce bound rate quotes and private integration booking/polling jobs; server packing, exact currencies, private labels, OAuth renewal, provider reference reconciliation and cancellation. Process paid-order booking asynchronously and acknowledge commerce status via scoped API. FedEx label creation is not dispatch. Unsupported Nigerian routes fail explicitly; no automatic manual fallback that conceals unbooked orders.
 - **Contracts:** APIs API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195, API-196, API-197, API-198, API-199, API-200; tables commerce.carrier_quote, integration.carrier_booking, commerce.carrier_cancellation, integration.carrier_cancellation; events EVT-027 and owned EVT-009 results
-- **Tests:** TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION.
+- **Tests:** TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-CARRIER-HANDOVER; TEST-FULFILLMENT-CONSERVATION.
 - **Acceptance AC-CARRIER-001:** Given NGN cart/address/packages and FedEx mock, when quote->paid order->booking->tracking repeats or times out, then one stable booking remains, mock/live mismatch rejected, stock dispatch occurs once on explicit physical handover and delivery cannot regress.
 
 ### MSG-001 — Implement SMS WhatsApp consent proof callbacks and mock qualification

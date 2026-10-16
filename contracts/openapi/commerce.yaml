@@ -9175,7 +9175,7 @@
     "/api/v1/staff/shipments/{id}/dispatch": {
       "post": {
         "operationId": "API-049",
-        "description": "Current OPERATIONS/If-Match; order first, paid/unheld READY plus BOOKED/reference and shipment-bound CLEAN private label for FEDEX. StockLedger debits allocated/on_hand once atomically with shipment/order progress, audit/history/EVT-005/009; no provider HTTP.",
+        "description": "Current OPERATIONS/If-Match; order first, paid/unheld READY plus BOOKED/reference and shipment-bound CLEAN private label for FEDEX. StockLedger debits allocated/on_hand once atomically with shipment/order progress, audit/history/EVT-005/009; Optional explicit dispatchedAt must be at or after shipment creation and not in the future; omission preserves processing time and original command hashes. History/payload retain actual handover; ledger/audit/envelope record processing time. Active cancellation still excludes dispatch; no provider HTTP.",
         "security": [
           {
             "bffSession": []
@@ -9341,7 +9341,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ShipmentReason"
+                "$ref": "#/components/schemas/ShipmentDispatch"
               }
             }
           }
@@ -16725,6 +16725,24 @@
             "type": "string",
             "minLength": 10,
             "maxLength": 500
+          }
+        }
+      },
+      "ShipmentDispatch": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reason"
+        ],
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500
+          },
+          "dispatchedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

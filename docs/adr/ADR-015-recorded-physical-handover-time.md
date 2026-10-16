@@ -1,0 +1,11 @@
+# ADR-015: Record actual physical handover time
+
+Status: Accepted technical design; implementation/acceptance IN_PROGRESS.
+
+CF-CARRIER-008: API-049 previously always stored processing time as dispatched_at. When a genuine handover is recorded late, an original delivery scan between handover and recording incorrectly fails the existing delivered_at >= dispatched_at guard. Do not rewrite the provider scan or invent an earlier handover.
+
+Extend the closed API-049 request compatibly with optional dispatchedAt (RFC3339). A current OPERATIONS actor explicitly supplies the actual physical handover time and reason. Omission retains server processing time and the exact existing idempotency request hash shape. Explicit null, malformed/unknown fields, future instants and instants before shipment creation are rejected. Validate under the existing order/shipment locks; persist at PostgreSQL microsecond precision. A changed explicit time conflicts under the same command key. Once dispatched, neither this command nor a provider callback can rewrite handover evidence.
+
+Existing paid/unheld state, version, qualified booking/private label, active cancellation exclusion, cumulative quantities and stock-ledger conservation remain mandatory. Record stock/audit mutation at processing time, physical shipment history and shipment.changed payload at the stored actual handover time, and event-envelope occurrence at processing time. Trusted carrier delivery retains its original scan time and must still follow this explicit physical handover. No provider event dispatches stock automatically.
+
+Compatibility/migration: use the existing commerce.shipment.dispatched_at column and unchanged event schema; no DDL, cross-owner SQL, new scope or service. Existing reason-only clients, command acknowledgements and historical rows continue unchanged. Roll out servers before clients send the optional field; older servers reject unknown fields rather than guessing. Current callback UNKNOWN/physical/terminal guards and cancellation rollout rules remain applicable. Actual production deployment/operational qualification remains NOT_RUN.

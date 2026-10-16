@@ -8,6 +8,8 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
+CARRIER-001 late handover increment (CF-CARRIER-008) — IN_PROGRESS pending source commit. Optional validated actual dispatchedAt in API-049 preserves reason-only commands and original delivery scans. Native47/no skips, full177 Java/324 gated,73 contracts,271 unchanged locked dependencies and nine reproduced artifacts PASS. Current authorization, paid/booking/label/cancellation guards, source locks and one-time stock movement retained. No DDL/owner/event schema change; historical incorrect handover rows are not silently rewritten.
+
 CARRIER-001 cancellation increment — accepted offline at ffca2bd2394d04a4f4a4df759da681bd91f607e4; whole CARRIER-001 IN_PROGRESS. Native178/no skips, full176 Java/322 gated,72 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. Durable API-197/200 source dispatch exclusion, pure API-198/199 relay/receipt protocol, single fenced cancellation and read-only UNKNOWN recovery qualified offline. Both additive owner migrations retain previous checksums/data and pass empty rollback/reapply plus populated rollback refusal. No stock or payment reversal. Remaining account/late-handover conflicts and genuine release gates keep whole CARRIER-001 IN_PROGRESS.
 
 CARRIER-001 staff reconciliation increment — IN_PROGRESS. Native150/no skips, full167 Java/303 gated,71 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. API-191/scoped private196, current OPERATIONS/recent MFA, durable original ACK recovery and actual job identity qualified offline. Active leases/request evidence remain intact and reconciliation cannot grant fresh create permission. Accepted source d82734d5ab1728cab93feb1143359d73c5f38bc6; cancellation initiation remains next.
@@ -125,11 +127,11 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — CARRIER-001 cancellation full176 Java/322 gated,72 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged dependencies/zero OSV findings, stateful all-provider regression and nine reproduced artifacts. Whole CARRIER-001 remains IN_PROGRESS. Initial sandbox uv system-configuration panic retained; rerun with normal local system access passed.
+PASS — CARRIER-001 late handover full177 Java/324 gated,73 contracts,271 unchanged locked dependencies and nine reproduced artifacts. Unchanged AI15/five gated,Ruff/mypy13 and271-coordinate OSV/zero findings retained from accepted cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4; no new AI test execution claimed. Whole CARRIER-001 remains IN_PROGRESS.
 
 ## Test Status
 
-PASS — Native178/no skips: durable Source dispatch exclusion/race, current BFF/CSRF/MFA/private JWT, single committed cancel write, accepted response loss and31-piece read-only recovery, byte-identical receipt replay, twelve-way claims, expired submission/generation/source-cutoff/approval guards and audit rollback. All-owner fresh/repeat migrations, both-owner previous-BP1 upgrade/checksum/data/empty rollback/reapply and populated rollback refusal PASS; original Docker state preserved. Combined two-real-service staging, genuine provider/route/print/cloud/private-scope deployment/restore/release qualification NOT_RUN.
+PASS — Native47/no skips: actual late handover plus original unchanged delivery scan, future/precreation/null rejection, BFF/CSRF/current role, reason-only compatibility/idempotency/changed-time conflict, paid/booking/private-label/cancellation exclusion and one-time stock conservation. All-owner fresh/repeat migrations and original Docker preservation PASS; no DDL change. Prior cancellation178/no skips and both-owner additive upgrade/rollback remain accepted at ffca2bd2394d04a4f4a4df759da681bd91f607e4. Genuine provider/deployment/staging/restore/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
