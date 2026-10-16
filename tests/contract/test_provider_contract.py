@@ -22,7 +22,7 @@ class ProviderContracts(unittest.TestCase):
 
     def test_private_integration_job_contract_preserves_safe_shapes_and_exact_scopes(self):
         spec=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
-        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry','/internal/v1/carrier/quotes'})
+        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry','/internal/v1/carrier/quotes','/internal/v1/carrier/shipments/{id}/reconciliation'})
         self.assertEqual(set(spec['components']['schemas']['JobDTO']['properties']),{'id','state','attemptCount','nextAttemptAt','lastErrorCode'})
         self.assertFalse(spec['components']['schemas']['JobDTO']['additionalProperties'])
         get=spec['paths']['/internal/v1/jobs']['get'];retry=spec['paths']['/internal/v1/jobs/{id}/retry']['post']
@@ -53,3 +53,21 @@ class ProviderContracts(unittest.TestCase):
         self.assertEqual(schemas['CarrierAddress']['properties']['countryCode']['const'],'NG')
         registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
         self.assertEqual(registry['API-182']['scope'],'carrier.quote_WITH_SIGNED_ACTOR')
+
+    def test_carrier_reconciliation_keeps_exact_scoped_closed_owner_contract(self):
+        public=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
+        private=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
+        operation=public['paths']['/api/v1/staff/shipments/{id}/booking-reconciliation']['post']
+        self.assertEqual(operation['operationId'],'API-191')
+        self.assertEqual({p['name'] for p in operation['parameters'] if p['required']},{'id','If-Match','Idempotency-Key','X-CSRF-TOKEN'})
+        self.assertIn('202',operation['responses'])
+        self.assertEqual(set(public['components']['schemas']['CarrierReconciliationDTO']['properties']),{'shipmentId','state','jobId'})
+        op=private['paths']['/internal/v1/carrier/shipments/{id}/reconciliation']['post']
+        self.assertEqual(op['operationId'],'API-196')
+        self.assertEqual(op['security'],[{'workload':[],'signedActor':[]}])
+        self.assertFalse(private['components']['schemas']['CarrierReconciliationInput']['additionalProperties'])
+        self.assertEqual(set(private['components']['schemas']['CarrierReconciliationInput']['properties']),{'bookingRequestId','mode','reason'})
+        registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
+        self.assertEqual(registry['API-196']['scope'],'carrier.reconcile_WITH_SIGNED_STAFF')
+        self.assertEqual(registry['API-196']['client'],'nigson-commerce')
+        self.assertEqual(registry['API-196']['phase'],1)

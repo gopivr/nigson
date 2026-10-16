@@ -286,5 +286,14 @@
     "client": "nigson-integration",
     "scope": "notification.read_WITH_SIGNED_ACTOR",
     "phase": 1
+  },
+  {
+    "api": "API-196",
+    "method": "POST",
+    "path": "/internal/v1/carrier/shipments/{id}/reconciliation",
+    "owner": "integration",
+    "client": "nigson-commerce",
+    "scope": "carrier.reconcile_WITH_SIGNED_STAFF",
+    "phase": 1
   }
 ]

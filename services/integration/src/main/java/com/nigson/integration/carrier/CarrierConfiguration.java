@@ -17,4 +17,6 @@ public class CarrierConfiguration {
  @Bean
  @ConditionalOnProperty(name="NIGSON_CARRIER_BOOKING_INTAKE_ENABLED",havingValue="true")
  CarrierBookingRequestedHandler carrierBookingRequestedHandler(CarrierProvider provider,com.nigson.integration.provider.JobRepository jobs,AuditWriter audit,Environment env){return new CarrierBookingRequestedHandler(jobs,audit,Clock.systemUTC(),provider.mode(),com.nigson.shared.problem.ApiValues.uuid(env.getRequiredProperty("NIGSON_CARRIER_CREATION_GENERATION")),provider.accountFingerprint());}
+ @Bean @ConditionalOnProperty(name="NIGSON_CARRIER_RECONCILIATION_ENABLED",havingValue="true")
+ CarrierReconciliationService carrierReconciliationService(org.springframework.jdbc.core.JdbcTemplate jdbc,PlatformStore commands,AuditWriter audit,CarrierProvider provider){return new CarrierReconciliationService(jdbc,commands,audit,provider,Clock.systemUTC());}
 }

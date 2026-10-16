@@ -155,6 +155,7 @@
   "/internal/v1/ai/order-status",
   "/internal/v1/career-applications/{id}/sheet-context",
   "/internal/v1/carrier/quotes",
+  "/internal/v1/carrier/shipments/{id}/reconciliation",
   "/internal/v1/cart-recovery/{id}/eligibility",
   "/internal/v1/catalogue/knowledge/{id}",
   "/internal/v1/communication-eligibility",

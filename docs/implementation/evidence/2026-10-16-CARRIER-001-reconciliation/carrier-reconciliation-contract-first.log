@@ -1,0 +1,108 @@
+python3 -m unittest discover -s tests/contract -v
+test_reviewed_generation_and_exact_implemented_routes (test_authorization_contract.AuthorizationContracts.test_reviewed_generation_and_exact_implemented_routes) ... PASS: reviewed implemented commerce OpenAPI matches generator
+FAIL
+test_synthetic_request_covers_reviewed_provider_required_fields (test_carrier_ship_profile.CarrierShipProfile.test_synthetic_request_covers_reviewed_provider_required_fields) ... ok
+test_closed_inputs_and_bounded_aggregate (test_cart_contract.CartContracts.test_closed_inputs_and_bounded_aggregate) ... ok
+test_exact_private_cart_routes (test_cart_contract.CartContracts.test_exact_private_cart_routes) ... ok
+test_closed_public_shapes_and_private_assets (test_catalogue_contract.CatalogueContracts.test_closed_public_shapes_and_private_assets) ... ok
+test_exact_public_security_and_versioned_commands (test_catalogue_contract.CatalogueContracts.test_exact_public_security_and_versioned_commands) ... ok
+test_exact_closed_configuration_contract (test_configuration_contract.ConfigurationContract.test_exact_closed_configuration_contract) ... ok
+test_partial_state_index_literals (test_database_catalog.DatabaseCatalogTest.test_partial_state_index_literals) ... ok
+test_phase_wrappers_are_cumulative_without_contexts (test_database_catalog.DatabaseCatalogTest.test_phase_wrappers_are_cumulative_without_contexts) ... ok
+test_reviewed_artifacts_match_normative_catalog (test_database_catalog.DatabaseCatalogTest.test_reviewed_artifacts_match_normative_catalog) ... ok
+test_all_phases_match_terraform_and_closed_registry (test_event_topology.EventTopologyTests.test_all_phases_match_terraform_and_closed_registry) ... ok
+test_local_provider_mocks_have_no_published_ports (test_event_topology.EventTopologyTests.test_local_provider_mocks_have_no_published_ports) ... ok
+test_closed_purpose_bound_wire_shapes_and_private_callback (test_files_contract.FileContracts.test_closed_purpose_bound_wire_shapes_and_private_callback) ... ok
+test_transfer_is_separate_additive_owned_increment (test_files_contract.FileContracts.test_transfer_is_separate_additive_owned_increment) ... ok
+test_closed_bounded_commands_and_minimal_shipping_responses (test_fulfillment_contract.FulfillmentContracts.test_closed_bounded_commands_and_minimal_shipping_responses) ... ok
+test_customer_carrier_quote_uses_closed_input_and_versioned_csrf (test_fulfillment_contract.FulfillmentContracts.test_customer_carrier_quote_uses_closed_input_and_versioned_csrf) ... ok
+test_customer_tracking_is_owned_private_and_bounded (test_fulfillment_contract.FulfillmentContracts.test_customer_tracking_is_owned_private_and_bounded) ... ok
+test_exact_six_owned_mutations (test_fulfillment_contract.FulfillmentContracts.test_exact_six_owned_mutations) ... ok
+test_private_provider_result_requires_trusted_closed_source_command (test_fulfillment_contract.FulfillmentContracts.test_private_provider_result_requires_trusted_closed_source_command) ... ok
+test_private_shipment_context_is_frozen_bounded_and_scoped_at_launch (test_fulfillment_contract.FulfillmentContracts.test_private_shipment_context_is_frozen_bounded_and_scoped_at_launch) ... ok
+test_locations_do_not_accept_initial_stock_or_client_authority (test_inventory_contract.InventoryContracts.test_locations_do_not_accept_initial_stock_or_client_authority) ... ok
+test_stock_is_closed_scaled_strings_with_explicit_versioned_adjustment (test_inventory_contract.InventoryContracts.test_stock_is_closed_scaled_strings_with_explicit_versioned_adjustment) ... ok
+test_down_includes_every_profile_and_retains_volumes (test_local_configuration.LocalIsolationTests.test_down_includes_every_profile_and_retains_volumes) ... ok
+test_explicit_schema_gate_is_validated (test_local_configuration.LocalIsolationTests.test_explicit_schema_gate_is_validated) ... ok
+test_externally_published_port_rejected (test_local_configuration.LocalIsolationTests.test_externally_published_port_rejected) ... ok
+test_fixture_manifest_matches_real_identity_import (test_local_configuration.LocalIsolationTests.test_fixture_manifest_matches_real_identity_import) ... ok
+test_floating_image_rejected (test_local_configuration.LocalIsolationTests.test_floating_image_rejected) ... ok
+test_foundation_make_targets_have_real_entrypoints (test_local_configuration.LocalIsolationTests.test_foundation_make_targets_have_real_entrypoints) ... ok
+test_implicit_provider_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_implicit_provider_profile_rejected_before_docker) ... ok
+test_missing_fixture_password_refused_before_identity (test_local_configuration.LocalIsolationTests.test_missing_fixture_password_refused_before_identity) ... ok
+test_missing_migration_credentials_explained_before_docker (test_local_configuration.LocalIsolationTests.test_missing_migration_credentials_explained_before_docker) ... ok
+test_nonlocal_project_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_nonlocal_project_rejected_before_docker) ... ok
+test_prod_configuration_rejected (test_local_configuration.LocalIsolationTests.test_prod_configuration_rejected) ... ok
+test_prod_environment_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_prod_environment_rejected_before_docker) ... ok
+test_remote_docker_host_refused_before_docker (test_local_configuration.LocalIsolationTests.test_remote_docker_host_refused_before_docker) ... ok
+test_remote_migration_target_rejected (test_local_configuration.LocalIsolationTests.test_remote_migration_target_rejected) ... ok
+test_unapproved_fixture_profile_refused_before_identity (test_local_configuration.LocalIsolationTests.test_unapproved_fixture_profile_refused_before_identity) ... ok
+test_unknown_profile_rejected_before_docker (test_local_configuration.LocalIsolationTests.test_unknown_profile_rejected_before_docker) ... ok
+test_wrong_owner_role_rejected (test_local_configuration.LocalIsolationTests.test_wrong_owner_role_rejected) ... ok
+test_both_updates_require_version_and_public_list_has_no_staff_fields (test_market_contract.MarketContracts.test_both_updates_require_version_and_public_list_has_no_staff_fields) ... ok
+test_draft_creation_cannot_receive_business_approvals (test_market_contract.MarketContracts.test_draft_creation_cannot_receive_business_approvals) ... ok
+test_minimum_context_closed_receipt_and_private_scopes (test_notification_contract.NotificationContracts.test_minimum_context_closed_receipt_and_private_scopes) ... ok
+test_signed_admin_proxy_has_closed_schema_and_optional_create_version (test_notification_contract.NotificationContracts.test_signed_admin_proxy_has_closed_schema_and_optional_create_version) ... ok
+test_audit_states_remain_closed_and_match_runtime_owners (test_observability_contract.ObservabilityContracts.test_audit_states_remain_closed_and_match_runtime_owners) ... ok
+test_closed_problem_schema_and_java_vocabulary (test_observability_contract.ObservabilityContracts.test_closed_problem_schema_and_java_vocabulary) ... ok
+test_route_catalog_includes_all_declared_apis_and_is_identical (test_observability_contract.ObservabilityContracts.test_route_catalog_includes_all_declared_apis_and_is_identical) ... FAIL
+test_exact_seven_operations_and_security_headers (test_order_contract.OrderContracts.test_exact_seven_operations_and_security_headers) ... ok
+test_frozen_values_are_closed_and_private_proof_is_boolean_only (test_order_contract.OrderContracts.test_frozen_values_are_closed_and_private_proof_is_boolean_only) ... ok
+test_closed_address_policy_schema (test_party_contract.PartyContracts.test_closed_address_policy_schema) ... ok
+test_exact_owned_contracts (test_party_contract.PartyContracts.test_exact_owned_contracts) ... FAIL
+test_callback_private_and_finance_contracts_have_distinct_trust (test_payment_contract.PaymentContracts.test_callback_private_and_finance_contracts_have_distinct_trust) ... ok
+test_refund_detail_and_immutable_inputs_are_closed_and_bounded (test_payment_contract.PaymentContracts.test_refund_detail_and_immutable_inputs_are_closed_and_bounded) ... ok
+test_closed_commercial_quote_cannot_accept_browser_amounts_or_provider_mode (test_pricing_contract.PricingContracts.test_closed_commercial_quote_cannot_accept_browser_amounts_or_provider_mode) ... ok
+test_copy_on_write_and_activation_use_parent_version_but_creates_do_not (test_pricing_contract.PricingContracts.test_copy_on_write_and_activation_use_parent_version_but_creates_do_not) ... ok
+test_only_retail_reads_are_public_and_every_price_response_is_noncacheable (test_pricing_contract.PricingContracts.test_only_retail_reads_are_public_and_every_price_response_is_noncacheable) ... ok
+test_carrier_reconciliation_keeps_exact_scoped_closed_owner_contract (test_provider_contract.ProviderContracts.test_carrier_reconciliation_keeps_exact_scoped_closed_owner_contract) ... ok
+test_closed_job_shapes_and_versioned_signed_retry (test_provider_contract.ProviderContracts.test_closed_job_shapes_and_versioned_signed_retry) ... ok
+test_private_carrier_quote_is_closed_signed_ngn_server_protocol (test_provider_contract.ProviderContracts.test_private_carrier_quote_is_closed_signed_ngn_server_protocol) ... ok
+test_private_integration_generator_emits_only_reviewed_implemented_routes (test_provider_contract.ProviderContracts.test_private_integration_generator_emits_only_reviewed_implemented_routes) ... ok
+test_private_integration_job_contract_preserves_safe_shapes_and_exact_scopes (test_provider_contract.ProviderContracts.test_private_integration_job_contract_preserves_safe_shapes_and_exact_scopes) ... ok
+test_read_and_retry_follow_specific_compiled_scopes (test_provider_contract.ProviderContracts.test_read_and_retry_follow_specific_compiled_scopes) ... ok
+test_complete_tracked_tree (test_repository.RepositoryChecks.test_complete_tracked_tree) ... ok
+test_disallowed_deployment_tree_rejected (test_repository.RepositoryChecks.test_disallowed_deployment_tree_rejected) ... ok
+test_duplicate_status_task (test_repository.RepositoryChecks.test_duplicate_status_task) ... ok
+test_manifest_path_escape_rejected (test_repository.RepositoryChecks.test_manifest_path_escape_rejected) ... ok
+test_missing_required_directory (test_repository.RepositoryChecks.test_missing_required_directory) ... ok
+test_missing_status_task (test_repository.RepositoryChecks.test_missing_status_task) ... ok
+test_real_provider_key_pattern_rejected (test_repository.RepositoryChecks.test_real_provider_key_pattern_rejected) ... ok
+test_tracked_runtime_secret_file_rejected (test_repository.RepositoryChecks.test_tracked_runtime_secret_file_rejected) ... ok
+test_untracked_onboarding_file_rejected (test_repository.RepositoryChecks.test_untracked_onboarding_file_rejected) ... ok
+test_exact_public_session_contracts (test_session_contract.SessionContracts.test_exact_public_session_contracts) ... ok
+
+======================================================================
+FAIL: test_reviewed_generation_and_exact_implemented_routes (test_authorization_contract.AuthorizationContracts.test_reviewed_generation_and_exact_implemented_routes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_authorization_contract.py", line 12, in test_reviewed_generation_and_exact_implemented_routes
+    self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()}, {f'API-{n:03}' for n in range(1,26)} | {'API-111', 'API-112', 'API-113', 'API-132', 'API-135', 'API-149', 'API-163', 'API-164', 'API-122', 'API-133', 'API-165', 'API-045', 'API-046', 'API-170', 'API-029', 'API-031', 'API-162', 'API-169', 'API-026', 'API-027', 'API-028', 'API-036', 'API-150', 'API-151', 'API-032', 'API-033', 'API-034', 'API-035', 'API-047', 'API-048', 'API-049', 'API-050', 'API-171', 'API-174', 'API-037', 'API-038', 'API-039', 'API-040', 'API-043', 'API-044', 'API-121', 'API-041', 'API-042', 'API-052', 'API-053', 'API-054', 'API-118', 'API-181', 'API-119', 'API-120', 'API-051'})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Items in the first set but not the second:
+'API-191'
+
+======================================================================
+FAIL: test_route_catalog_includes_all_declared_apis_and_is_identical (test_observability_contract.ObservabilityContracts.test_route_catalog_includes_all_declared_apis_and_is_identical)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_observability_contract.py", line 21, in test_route_catalog_includes_all_declared_apis_and_is_identical
+    self.assertTrue(declared<=set(routes))
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_exact_owned_contracts (test_party_contract.PartyContracts.test_exact_owned_contracts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/tests/contract/test_party_contract.py", line 9, in test_exact_owned_contracts
+    self.assertEqual({op['operationId'] for op in operations},{f'API-{n:03}' for n in range(1,26)} | {'API-111', 'API-112', 'API-113', 'API-132', 'API-135', 'API-149', 'API-163', 'API-164', 'API-122', 'API-133', 'API-165', 'API-045', 'API-046', 'API-170', 'API-029', 'API-031', 'API-162', 'API-169', 'API-026', 'API-027', 'API-028', 'API-036', 'API-150', 'API-151', 'API-032', 'API-033', 'API-034', 'API-035', 'API-047', 'API-048', 'API-049', 'API-050', 'API-171', 'API-174', 'API-037', 'API-038', 'API-039', 'API-040', 'API-043', 'API-044', 'API-121', 'API-041', 'API-042', 'API-052', 'API-053', 'API-054', 'API-118', 'API-181', 'API-119', 'API-120', 'API-051'})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Items in the first set but not the second:
+'API-191'
+
+----------------------------------------------------------------------
+Ran 71 tests in 2.156s
+
+FAILED (failures=3)
+make: *** [command-surface-check] Error 1

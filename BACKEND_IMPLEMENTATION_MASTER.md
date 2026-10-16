@@ -7333,7 +7333,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Request:** `{reason:string}`.
 - **Response:** `{shipmentId:UUID,state:BOOKED|UNKNOWN|FAILED,jobId:UUID}`.
 - **Statuses:** 202 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Idempotent scoped worker reconciliation by shipment reference; may return202. Never blindly create second FedEx label after timeout.
+- **Validation / business rules:** ADR-013: current OPERATIONS/recent-MFA BFF session, CSRF/If-Match/idempotency; persist original private command before signed API-196 HTTP. Return real owned job identity; preserve UNKNOWN and live leases. Never blindly create a second FedEx label.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -7396,6 +7396,21 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Validation / business rules:** Owned approved nonexpired offered revision; create/reuse owned temporary cart from frozen quantities for carrier packing; store source_quote_revision_id, calculate rate outside transaction and bind revision/address/package/mode. No negotiated price mutation.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+
+### API-196 POST /internal/v1/carrier/shipments/{id}/reconciliation
+
+- **Service / module / phase:** integration / provider / BP1.
+- **Authentication:** Private Keycloak workload JWT and signed staff actor.
+- **Authorization:** SERVICE_COMMERCE:carrier.reconcile_WITH_SIGNED_STAFF; originating OPERATIONS, recent MFA and no selected organization.
+- **Headers:** Idempotency-Key (source command UUID), X-Correlation-ID and X-Nigson-Actor bound to exact method/path/body; no cookie or query.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{bookingRequestId:UUID,mode:MOCK|SANDBOX|LIVE,reason:string}`.
+- **Response:** `{shipmentId:UUID,state:BOOKED|UNKNOWN|FAILED,jobId:UUID}`.
+- **Statuses:** 202 accepted; standard safe errors.
+- **Validation / business rules:** ADR-013. Match original shipment/business reference/account/mode and existing owned LOGISTICS_CREATE job. Preserve active leases and original request/provider/checkpoint/attempt evidence; schedule only reconciliation, never fresh shipment creation. No provider HTTP or cross-owner SQL. Missing records fail explicitly without fabricated job IDs.
+- **Events:** None directly; durable scoped acknowledgement and audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, PROVIDER_MODE_MISMATCH, PROVIDER_OUTCOME_UNKNOWN, FEATURE_DISABLED.
 
 ## Normative reusable DTO registry
 
@@ -9597,6 +9612,7 @@ ARCH rows preserve every source heading; BP rows preserve functional features; t
 | REQ-API-193 | integration | API-193 POST /internal/v1/notification-commands | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-194 | experience | API-194 GET /internal/v1/leads/{id}/messaging-context | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-195 | commerce | API-195 POST /api/v1/quotes/{id}/delivery-quotes | commerce.carrier_quote, integration.carrier_booking | None directly | CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |
+| REQ-API-196 | integration | API-196 POST /internal/v1/carrier/shipments/{id}/reconciliation | integration.carrier_booking, integration.integration_job | None directly | CARRIER-001; TEST-CARRIER-UNKNOWN; TEST-CARRIER-CONTRACT; TEST-QUEUE-REPLAY; ADR-013. | AC-CARRIER-001 |
 | REQ-DB-commerce.carrier_quote | commerce | API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195 | commerce.carrier_quote | EVT-027 | DATA-001; CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |
 | REQ-DB-integration.carrier_booking | integration | API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195 | integration.carrier_booking | EVT-027 | DATA-001; CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |
 | REQ-DB-experience.communication_destination | experience | API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-102, API-127, API-142, API-165, API-175 | experience.communication_destination | EVT-028 | DATA-001; MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |

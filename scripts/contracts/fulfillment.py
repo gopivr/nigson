@@ -25,6 +25,9 @@ def extend(spec):
         op['responses']['422']['description']='FULFILLMENT_RULE_VIOLATION or missing approved quantity/coverage/booking proof'
         if api=='API-181':op['responses']['503']={'description':'Provider unavailable; no fabricated delivery fee','content':{'application/problem+json':{'schema':{'$ref':'../problem/problem.schema.json'}}}}
         spec['paths'][route]={method:op}
+    s['CarrierReconciliationDTO']=object_schema({'shipmentId':UUID,'state':{'type':'string','enum':['BOOKED','UNKNOWN','FAILED']},'jobId':UUID})
+    reconcile=operation('API-191','Current OPERATIONS/recent-MFA BFF session, CSRF/If-Match/key; validate owned NGN shipment and original booking identity. Persist source private request/command before unlocked signed API-196 HTTP. Return the actual integration job identifier. Preserve active leases, UNKNOWN and original provider evidence; no fresh creation, stock or financial mutation. Stable private UUID/body survives a lost ACK; replay still checks current authority.','CarrierReconciliationDTO',[path,key,csrf,match]);reconcile['requestBody']={'required':True,'content':{'application/json':{'schema':REF('ShipmentReason')}}};reconcile['responses']['202']=reconcile['responses'].pop('200');reconcile['responses']['202']['headers']={'Cache-Control':{'schema':{'const':'no-store'}}}
+    spec['paths']['/api/v1/staff/shipments/{id}/booking-reconciliation']={'post':reconcile}
     address={name:nullable(text(200)) if name in ('line2','postalCode') else text(200) for name in ('recipient','phone','line1','line2','city','region','postalCode','countryCode')}
     address['countryCode']={'type':'string','const':'NG'};address['phone']={'type':'string','pattern':r'^\+[1-9][0-9]{7,14}$'}
     s['ShipmentCarrierAddress']=object_schema(address)

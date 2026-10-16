@@ -1,12 +1,14 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:14 October2026 UTC
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:16 October2026 UTC
 
 ## Current Phase
 
 EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/market/inventory accepted, BP1 launch composition remains section46.
 
 ## Current Task
+
+CARRIER-001 staff reconciliation increment — IN_PROGRESS. Native150/no skips, full167 Java/303 gated,71 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. API-191/scoped private196, current OPERATIONS/recent MFA, durable original ACK recovery and actual job identity qualified offline. Active leases/request evidence remain intact and reconciliation cannot grant fresh create permission. Source commit pending; cancellation initiation remains next.
 
 CARRIER-001 active polling increment — IN_PROGRESS. Native132/no skips, full163 Java/289 gated,70 contracts,15 AI/five gated,271 unchanged locked dependencies and nine reproduced artifacts PASS. Complete physical-piece identities, batches<=30, original scan timestamps, durable byte-identical ACK replay and source handover/terminal guards qualified offline. Accepted source 998893156dc4364edafc52dff96410345c7c391b. Cancellation initiation/API-191 staff reconciliation remain next; no critical approval blocks offline engineering.
 

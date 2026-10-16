@@ -2896,7 +2896,7 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 - **Request:** `{reason:string}`.
 - **Response:** `{shipmentId:UUID,state:BOOKED|UNKNOWN|FAILED,jobId:UUID}`.
 - **Statuses:** 202 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Idempotent scoped worker reconciliation by shipment reference; may return202. Never blindly create second FedEx label after timeout.
+- **Validation / business rules:** ADR-013: current OPERATIONS/recent-MFA BFF session, CSRF/If-Match/idempotency; persist original private command before signed API-196 HTTP. Return real owned job identity; preserve UNKNOWN and live leases. Never blindly create a second FedEx label.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -2959,6 +2959,21 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 - **Validation / business rules:** Owned approved nonexpired offered revision; create/reuse owned temporary cart from frozen quantities for carrier packing; store source_quote_revision_id, calculate rate outside transaction and bind revision/address/package/mode. No negotiated price mutation.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+
+### API-196 POST /internal/v1/carrier/shipments/{id}/reconciliation
+
+- **Service / module / phase:** integration / provider / BP1.
+- **Authentication:** Private Keycloak workload JWT and signed staff actor.
+- **Authorization:** SERVICE_COMMERCE:carrier.reconcile_WITH_SIGNED_STAFF; originating OPERATIONS, recent MFA and no selected organization.
+- **Headers:** Idempotency-Key (source command UUID), X-Correlation-ID and X-Nigson-Actor bound to exact method/path/body; no cookie or query.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{bookingRequestId:UUID,mode:MOCK|SANDBOX|LIVE,reason:string}`.
+- **Response:** `{shipmentId:UUID,state:BOOKED|UNKNOWN|FAILED,jobId:UUID}`.
+- **Statuses:** 202 accepted; standard safe errors.
+- **Validation / business rules:** ADR-013. Match original shipment/business reference/account/mode and existing owned LOGISTICS_CREATE job. Preserve active leases and original request/provider/checkpoint/attempt evidence; schedule only reconciliation, never fresh shipment creation. No provider HTTP or cross-owner SQL. Missing records fail explicitly without fabricated job IDs.
+- **Events:** None directly; durable scoped acknowledgement and audit.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, PROVIDER_MODE_MISMATCH, PROVIDER_OUTCOME_UNKNOWN, FEATURE_DISABLED.
 
 ## Normative reusable DTO registry
 
