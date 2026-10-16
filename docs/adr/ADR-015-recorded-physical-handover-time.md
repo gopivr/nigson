@@ -1,6 +1,6 @@
 # ADR-015: Record actual physical handover time
 
-Status: Accepted technical design; implementation/acceptance IN_PROGRESS.
+Status: Accepted; offline implementation/acceptance source c1eb1cde54b397abff38194dc4138b7856a16b6c. Production operational qualification remains NOT_RUN.
 
 CF-CARRIER-008: API-049 previously always stored processing time as dispatched_at. When a genuine handover is recorded late, an original delivery scan between handover and recording incorrectly fails the existing delivered_at >= dispatched_at guard. Do not rewrite the provider scan or invent an earlier handover.
 

@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 late handover increment (CF-CARRIER-008) — IN_PROGRESS pending source commit. Optional validated actual dispatchedAt in API-049 preserves reason-only commands and original delivery scans. Native47/no skips, full177 Java/324 gated,73 contracts,271 unchanged locked dependencies and nine reproduced artifacts PASS. Current authorization, paid/booking/label/cancellation guards, source locks and one-time stock movement retained. No DDL/owner/event schema change; historical incorrect handover rows are not silently rewritten.
+CARRIER-001 late handover increment (CF-CARRIER-008) — accepted offline at c1eb1cde54b397abff38194dc4138b7856a16b6c; whole CARRIER-001 IN_PROGRESS. Optional validated actual dispatchedAt in API-049 preserves reason-only commands and original delivery scans. Native47/no skips, full177 Java/324 gated,73 contracts,271 unchanged locked dependencies and nine reproduced artifacts PASS. Current authorization, paid/booking/label/cancellation guards, source locks and one-time stock movement retained. No DDL/owner/event schema change; historical incorrect handover rows are not silently rewritten.
 
 CARRIER-001 cancellation increment — accepted offline at ffca2bd2394d04a4f4a4df759da681bd91f607e4; whole CARRIER-001 IN_PROGRESS. Native178/no skips, full176 Java/322 gated,72 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. Durable API-197/200 source dispatch exclusion, pure API-198/199 relay/receipt protocol, single fenced cancellation and read-only UNKNOWN recovery qualified offline. Both additive owner migrations retain previous checksums/data and pass empty rollback/reapply plus populated rollback refusal. No stock or payment reversal. Remaining account/late-handover conflicts and genuine release gates keep whole CARRIER-001 IN_PROGRESS.
 
@@ -135,7 +135,7 @@ PASS — Native47/no skips: actual late handover plus original unchanged deliver
 
 ## Last Successful Commit
 
-ffca2bd2394d04a4f4a4df759da681bd91f607e4 — verified durable cancellation/dispatch exclusion and private API-197/198/199/200; prior staff reconciliation d82734d5ab1728cab93feb1143359d73c5f38bc6 remains accepted. Whole CARRIER-001 remains IN_PROGRESS. No deployment.
+c1eb1cde54b397abff38194dc4138b7856a16b6c — verified compatible actual handover timestamps; cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4 and staff reconciliation d82734d5ab1728cab93feb1143359d73c5f38bc6 remain accepted. Whole CARRIER-001 remains IN_PROGRESS. No deployment.
 
 ## Confirmed Inputs
 
@@ -151,7 +151,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-CARRIER-001 — dependency-ready required launch FedEx work. Messaging/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
+CARRIER-001 — CF-CARRIER-007 immutable trusted account fingerprint binding across quote/order/context, preserving public DTOs and rejecting account rotation. BP3 quote/API-195 remains dependency-bound. Messaging/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
 
 ## Session Evidence / Protocol
 

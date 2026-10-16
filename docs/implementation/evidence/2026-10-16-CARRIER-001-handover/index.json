@@ -86,5 +86,15 @@
       "original_sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8",
       "sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8"
     }
+  },
+  "accepted_source_commit": "c1eb1cde54b397abff38194dc4138b7856a16b6c",
+  "acceptance": "Offline handover increment; whole CARRIER-001 remains IN_PROGRESS; genuine qualification NOT_RUN",
+  "retained_unchanged_checks": {
+    "source_commit": "ffca2bd2394d04a4f4a4df759da681bd91f607e4",
+    "checks": [
+      "AI15 passed/five gated; Ruff/mypy13",
+      "OSV271 public Maven coordinates/zero findings",
+      "Both-owner additive cancellation upgrade/rollback acceptance"
+    ]
   }
 }
