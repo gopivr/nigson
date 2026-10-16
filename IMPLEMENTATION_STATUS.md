@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-CARRIER-001 cancellation increment — IN_PROGRESS pending source commit. Native178/no skips, full176 Java/322 gated,72 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. Durable API-197/200 source dispatch exclusion, pure API-198/199 relay/receipt protocol, single fenced cancellation and read-only UNKNOWN recovery qualified offline. Both additive owner migrations retain previous checksums/data and pass empty rollback/reapply plus populated rollback refusal. No stock or payment reversal. Remaining account/late-handover conflicts and genuine release gates keep whole CARRIER-001 IN_PROGRESS.
+CARRIER-001 cancellation increment — accepted offline at ffca2bd2394d04a4f4a4df759da681bd91f607e4; whole CARRIER-001 IN_PROGRESS. Native178/no skips, full176 Java/322 gated,72 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. Durable API-197/200 source dispatch exclusion, pure API-198/199 relay/receipt protocol, single fenced cancellation and read-only UNKNOWN recovery qualified offline. Both additive owner migrations retain previous checksums/data and pass empty rollback/reapply plus populated rollback refusal. No stock or payment reversal. Remaining account/late-handover conflicts and genuine release gates keep whole CARRIER-001 IN_PROGRESS.
 
 CARRIER-001 staff reconciliation increment — IN_PROGRESS. Native150/no skips, full167 Java/303 gated,71 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. API-191/scoped private196, current OPERATIONS/recent MFA, durable original ACK recovery and actual job identity qualified offline. Active leases/request evidence remain intact and reconciliation cannot grant fresh create permission. Accepted source d82734d5ab1728cab93feb1143359d73c5f38bc6; cancellation initiation remains next.
 
@@ -133,7 +133,7 @@ PASS — Native178/no skips: durable Source dispatch exclusion/race, current BFF
 
 ## Last Successful Commit
 
-d82734d5ab1728cab93feb1143359d73c5f38bc6 — verified API-191/scoped private196 staff reconciliation; prior active tracking998893156dc4364edafc52dff96410345c7c391b and execution455294bb132f5a51d09c475cabc124aef6c813e1 remain accepted. CARRIER-001 remains IN_PROGRESS. No deployment.
+ffca2bd2394d04a4f4a4df759da681bd91f607e4 — verified durable cancellation/dispatch exclusion and private API-197/198/199/200; prior staff reconciliation d82734d5ab1728cab93feb1143359d73c5f38bc6 remains accepted. Whole CARRIER-001 remains IN_PROGRESS. No deployment.
 
 ## Confirmed Inputs
 

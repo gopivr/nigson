@@ -1,6 +1,6 @@
 # ADR-014: Durable carrier cancellation and dispatch exclusion
 
-Status: Accepted technical design; implementation/acceptance IN_PROGRESS.
+Status: Accepted; offline cancellation implementation/acceptance source ffca2bd2394d04a4f4a4df759da681bd91f607e4. Genuine provider/deployment/restore qualification remains NOT_RUN.
 
 Required launch cancellation needs an application command and a durable source dispatch exclusion; the existing HTTP adapter alone is insufficient. Add commerce.carrier_cancellation and integration.carrier_cancellation as owner-local additive BP1 tables, with separate application/migration roles and no cross-owner SQL/FK/shared entities. Existing applied DDL/checksums remain untouched. Commerce locks order then shipment before accepting an unshipped FEDEX/BOOKED cancellation intent. Its active-request partial unique index and the dispatch guard serialize cancellation against physical handover. Cancellation never refunds money or returns stock automatically.
 

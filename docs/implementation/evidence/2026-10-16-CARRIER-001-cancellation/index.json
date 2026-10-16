@@ -271,5 +271,7 @@
       "original_sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8",
       "sha256": "838f5000960fdcd1e25dc54ddce906331d50c30beb0fd5d054ee6d1a38deacb8"
     }
-  }
+  },
+  "accepted_source_commit": "ffca2bd2394d04a4f4a4df759da681bd91f607e4",
+  "acceptance": "Offline cancellation increment only; whole CARRIER-001 IN_PROGRESS; genuine provider/release gates NOT_RUN"
 }
