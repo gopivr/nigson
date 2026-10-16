@@ -18,6 +18,6 @@ public final class CarrierQuoteController {
  public ResponseEntity<CarrierValues.Quote> quote(HttpServletRequest request,@RequestBody JsonNode input){
   if(!request.getParameterMap().isEmpty())throw ApiValues.invalid();var auth=SecurityContextHolder.getContext().getAuthentication();if(auth==null||!auth.isAuthenticated())throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);if(!(auth.getPrincipal() instanceof PrivateWorkload.Proof proof))throw new Problem.Failure(ProblemCode.ACCESS_DENIED);
   var correlation=WireContext.current()==null?WireContext.correlation(null):WireContext.current().correlationId;
-  return ResponseEntity.ok().header("Cache-Control","no-store").header("X-Nigson-Carrier-Mode",service.mode()).body(service.quote(proof,CarrierValues.quoteInput(input),correlation));
+  return ResponseEntity.ok().header("Cache-Control","no-store").header("X-Nigson-Carrier-Mode",service.mode()).header("X-Nigson-Carrier-Account-SHA256",service.accountHash()).body(service.quote(proof,CarrierValues.quoteInput(input),correlation));
  }
 }

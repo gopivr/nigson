@@ -17260,7 +17260,8 @@
           "serviceCode",
           "packages",
           "bookingReference",
-          "mode"
+          "mode",
+          "accountHash"
         ],
         "properties": {
           "shipmentId": {
@@ -17304,6 +17305,10 @@
               "SANDBOX",
               "LIVE"
             ]
+          },
+          "accountHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
           }
         }
       },

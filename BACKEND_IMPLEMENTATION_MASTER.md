@@ -6319,11 +6319,13 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `none`.
-- **Response:** `{shipmentId:UUID,orderId:UUID,address:immutable order address snapshot (CF-ORDER-001),shipper:CarrierAddress,serviceCode:string,packages:[CarrierPackage],bookingReference:string,mode:MOCK|SANDBOX|LIVE}`.
+- **Response:** `{shipmentId:UUID,orderId:UUID,address:immutable order address snapshot (CF-ORDER-001),shipper:CarrierAddress,serviceCode:string,packages:[CarrierPackage],bookingReference:string,mode:MOCK|SANDBOX|LIVE,accountHash:lowercase SHA256}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Minimum logistics data only; immutable stable request reference. Creation context is limited to outstanding CREATED/EXCEPTION intents; READY/SHIPPED/DELIVERED/CANCELLED reject INVALID_TRANSITION (CF-CARRIER-004). Tracking and ACK recovery use existing owned provider identifiers/stored ACKs, never another creation context.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+
+ADR-016: private response includes required accountHash (lowercase SHA256) frozen from the trusted rate through checkout/order/shipment. Missing identity or mismatch with qualified commerce configuration rejects before a creation context is returned. Public DTOs are unchanged.
 
 ### API-120 POST /internal/v1/shipments/{id}/provider-result
 
@@ -7270,6 +7272,8 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Validation / business rules:** Allowlisted server packing/address only, bounded OAuth/rate request, no provider account or base URL from caller.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, PROVIDER_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+
+ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identity, bound to the durable quote command hash. Commerce requires one valid header matching explicit server configuration and freezes it in owned snapshots. Account rotation cannot replay an old fee or overwrite a quote account. Credentials, account numbers and browser account selections are not part of this protocol.
 
 ### API-183 POST /api/v1/me/communication-destinations
 

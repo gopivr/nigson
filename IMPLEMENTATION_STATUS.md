@@ -8,6 +8,8 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
+CARRIER-001 account binding increment (CF-CARRIER-007 / ADR-016) — qualified offline; source acceptance commit pending below. Native282/no skips, independent financial66/no skips, full179 Java/334 gated,74 contracts,271 unchanged dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Trusted private account identity is immutable through rate/checkout/order/shipment/API-119; missing identity or rotation rejects before new checkout/create. Public DTOs unchanged; no DDL/owner changes. Historical/UNKNOWN evidence remains reconcilable. Whole CARRIER-001 IN_PROGRESS; BP3 API-195 and genuine provider/release qualification remain pending. No critical approval blocks offline engineering.
+
 CARRIER-001 late handover increment (CF-CARRIER-008) — accepted offline at c1eb1cde54b397abff38194dc4138b7856a16b6c; whole CARRIER-001 IN_PROGRESS. Optional validated actual dispatchedAt in API-049 preserves reason-only commands and original delivery scans. Native47/no skips, full177 Java/324 gated,73 contracts,271 unchanged locked dependencies and nine reproduced artifacts PASS. Current authorization, paid/booking/label/cancellation guards, source locks and one-time stock movement retained. No DDL/owner/event schema change; historical incorrect handover rows are not silently rewritten.
 
 CARRIER-001 cancellation increment — accepted offline at ffca2bd2394d04a4f4a4df759da681bd91f607e4; whole CARRIER-001 IN_PROGRESS. Native178/no skips, full176 Java/322 gated,72 contracts,15 AI/five gated,271 unchanged dependencies/zero OSV findings and nine reproduced artifacts PASS. Durable API-197/200 source dispatch exclusion, pure API-198/199 relay/receipt protocol, single fenced cancellation and read-only UNKNOWN recovery qualified offline. Both additive owner migrations retain previous checksums/data and pass empty rollback/reapply plus populated rollback refusal. No stock or payment reversal. Remaining account/late-handover conflicts and genuine release gates keep whole CARRIER-001 IN_PROGRESS.
@@ -127,11 +129,11 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — CARRIER-001 late handover full177 Java/324 gated,73 contracts,271 unchanged locked dependencies and nine reproduced artifacts. Unchanged AI15/five gated,Ruff/mypy13 and271-coordinate OSV/zero findings retained from accepted cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4; no new AI test execution claimed. Whole CARRIER-001 remains IN_PROGRESS.
+PASS — CF-CARRIER-007: full179 Java/334 environment-gated,74 contracts,271 unchanged locked dependencies/zero fresh OSV findings and nine reproduced artifacts. Unchanged AI15/five gated,Ruff/mypy13 retained from accepted cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4; no new AI test execution claimed. Whole CARRIER-001 remains IN_PROGRESS.
 
 ## Test Status
 
-PASS — Native47/no skips: actual late handover plus original unchanged delivery scan, future/precreation/null rejection, BFF/CSRF/current role, reason-only compatibility/idempotency/changed-time conflict, paid/booking/private-label/cancellation exclusion and one-time stock conservation. All-owner fresh/repeat migrations and original Docker preservation PASS; no DDL change. Prior cancellation178/no skips and both-owner additive upgrade/rollback remain accepted at ffca2bd2394d04a4f4a4df759da681bd91f607e4. Genuine provider/deployment/staging/restore/release qualification NOT_RUN.
+PASS — Native282/no skips plus independent financial66/no skips: actual HTTP fingerprint binding; account rotation/legacy replay/context/checkout/create rejection; immutable commercial/order snapshots and no new payment HTTP on rejection; credential renewal retains identity; historical provider results remain recordable. All-owner fresh/repeat migrations and original Docker preservation PASS; no DDL change. Full stateful provider HTTP/SMTP regression PASS. Earlier cancellation upgrade/rollback and handover evidence remain accepted. Genuine account/route/print/deployment/staging/restore/release qualification NOT_RUN.
 
 ## Last Successful Commit
 
@@ -151,7 +153,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-CARRIER-001 — CF-CARRIER-007 immutable trusted account fingerprint binding across quote/order/context, preserving public DTOs and rejecting account rotation. BP3 quote/API-195 remains dependency-bound. Messaging/experience/infrastructure work continues independently; no critical approval blocks offline engineering.
+MSG-001 — dependency-ready required launch SMS/WhatsApp verification, channel-purpose consent, private commands, signed callbacks and suppression with stateful local mocks. MOCK-001/SEC-001/PLAT-001 dependencies are accepted; real sender/template/account inputs block live activation only. CARRIER-001 BP3 quote/API-195 remains dependency-bound; experience/infrastructure work continues independently. No critical approval blocks offline engineering.
 
 ## Session Evidence / Protocol
 

@@ -565,6 +565,13 @@
                     "LIVE"
                   ]
                 }
+              },
+              "X-Nigson-Carrier-Account-SHA256": {
+                "description": "Actual immutable configured account identity, included in durable command hash; never a browser-selected account. ADR-016.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
               }
             }
           },

@@ -10,6 +10,6 @@ public interface CarrierRates {
   public Request{packages=List.copyOf(packages);}
   @Override public String toString(){return "CarrierRateRequest[protected]";}
  }
- record Rate(String provider,String serviceCode,String currency,String amount,Instant expiresAt,String providerReference){}
+ record Rate(String provider,String serviceCode,String currency,String amount,Instant expiresAt,String providerReference,@com.fasterxml.jackson.annotation.JsonIgnore String accountHash){@Override public String toString(){return "CarrierRate[protected]";}}
  Rate quote(Request request,String actorAssertion,UUID correlation);
 }

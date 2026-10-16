@@ -89,3 +89,16 @@ class ProviderContracts(unittest.TestCase):
         self.assertEqual((registry['API-198']['scope'],registry['API-198']['client'],registry['API-198']['phase']),('carrier.cancel','nigson-commerce',1))
         self.assertEqual((registry['API-199']['scope'],registry['API-199']['client'],registry['API-199']['phase']),('logistics.write','nigson-integration',1))
         self.assertEqual(private['paths']['/internal/v1/carrier/cancellations']['post']['security'],[{'workload':[]}])
+
+    def test_account_identity_is_private_metadata_and_required_creation_context(self):
+        private=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
+        public=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
+        header=private['paths']['/internal/v1/carrier/quotes']['post']['responses']['200']['headers']['X-Nigson-Carrier-Account-SHA256']
+        self.assertEqual(header['schema'],{'type':'string','pattern':'^[a-f0-9]{64}$'})
+        context=public['components']['schemas']['ShipmentProviderContext']
+        self.assertIn('accountHash',context['required'])
+        self.assertEqual(context['properties']['accountHash'],{'type':'string','pattern':'^[a-f0-9]{64}$'})
+        for name in ('DeliveryQuoteDTO','ShipmentDTO','DeliveryQuoteInput','ShipmentInput'):
+            self.assertNotIn('accountHash',public['components']['schemas'][name]['properties'])
+        self.assertNotIn('accountHash',private['components']['schemas']['CarrierQuoteInput']['properties'])
+        self.assertNotIn('accountHash',private['components']['schemas']['CarrierQuoteDTO']['properties'])
