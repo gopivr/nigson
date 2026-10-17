@@ -105,6 +105,8 @@ jobs:
         run: bash scripts/infra/tests/deploy-stage-test.sh
       - name: Test stage private and public smoke probes
         run: bash scripts/infra/tests/smoke-stage-test.sh
+      - name: Test isolated RDS restore verifier
+        run: bash scripts/infra/tests/verify-rds-restore-test.sh
 
   remote-plan:
     if: github.event_name == 'workflow_dispatch'

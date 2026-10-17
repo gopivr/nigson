@@ -146,3 +146,41 @@ offline module work. They require a provisioned account, approved network and
 retention policy, TLS certificates, deployment role, operator alert destination
 and a reviewed release plan. A successful image scan or local Terraform test is
 not deployment, migration, restore, or endpoint acceptance.
+
+## Stage RDS restore qualification
+
+Perform restore qualification only against a separate stage restore instance;
+never point the verifier at `nigson-stage-commerce` or production. Select and
+record an approved point-in-time before restore. Use the stage subnet group and
+KMS key, `PubliclyAccessible=false`, and a dedicated restore database security
+group that admits only the one-time restore auditor security group on TCP 5432.
+The auditor group must have no ingress. Keep the restored endpoint isolated from
+application and migration task security groups. Do not delete the source or
+restored instance as part of verification.
+
+Provision a read-only `RESTORE_AUDIT_DB_USER` outside Terraform, its password in
+a `PGPASSFILE` with mode 0600, and the approved RDS CA file as `PGSSLROOTCERT`.
+Run from the dedicated auditor network vantage with the expected account, region,
+KMS key ARN, isolated database/auditor security group IDs, stage database subnet
+group, and declared product phase set explicitly:
+
+```sh
+AWS_REGION=<stage-region> AWS_EXPECTED_ACCOUNT_ID=<12-digit-stage-account> \
+AWS_EXPECTED_KMS_KEY_ARN=<stage-kms-key-arn> \
+AWS_EXPECTED_RESTORE_SECURITY_GROUP_ID=<isolated-restore-db-sg> \
+AWS_EXPECTED_RESTORE_AUDITOR_SECURITY_GROUP_ID=<restore-auditor-sg> \
+AWS_EXPECTED_DATABASE_SUBNET_GROUP=nigson-stage-commerce \
+RESTORE_AUDIT_DB_USER=<read-only-auditor-role> RESTORE_PRODUCT_PHASE=<1-5> \
+PGPASSFILE=<protected-passfile> PGSSLROOTCERT=<approved-rds-ca.pem> \
+scripts/infra/verify-rds-restore.sh nigson-stage-restore-<approved-id>
+```
+
+The verifier is read-only. It confirms the target is available, private,
+encrypted with the expected KMS key, in the expected stage subnet group, and
+uses the dedicated security groups. It then connects with `verify-full` TLS and
+checks expected owner schema ownership and Liquibase history, including AI at
+BP5. Record the selected restore time, source snapshot/instance reference,
+restored identifier, verifier output, application/API recovery evidence and
+rollback decision in the release record. This verifier alone does not prove
+application recovery or restore-point completeness; retain the restored target
+until those checks pass and remove it only through the approved cleanup change.
