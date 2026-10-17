@@ -77,7 +77,72 @@ ECR lifecycle expiry is intentionally not configured until an approved image
 and attestation retention period exists. Do not manually delete image tags or
 untagged attestation manifests as part of routine cleanup.
 
-Image publication does not deploy or run migrations. The production migration
-launcher, per-owner credential provisioning and migration-aware ECS sequencing
-remain required before a stage rollout can meet AC-INFRA-001. Do not treat a
-successful image scan as a deployment or migration acceptance.
+Image publication does not deploy or run migrations. Provision each owner's
+`migration_password` secret out of band with the matching database role, and
+bootstrap those roles using the reviewed database-owner procedure before
+running application migrations. The migration task can read only its owner's
+secret. It runs the commerce image at the reviewed immutable digest, connects
+to the private commerce RDS hostname with `sslmode=verify-full`, and is launched
+inside the VPC without a public IP. The production target guard rejects local,
+non-RDS, mismatched-host, and non-TLS endpoints. AI migrations exist only at BP5.
+
+After reviewing and applying the environment's Terraform plan, launch one owner
+at a time from the repository root with credentials for that environment:
+
+```sh
+AWS_REGION=<environment-region> AWS_EXPECTED_ACCOUNT_ID=<12-digit-account> \
+  scripts/infra/run-owner-migration.sh stage commerce
+```
+
+Use `stage` or `prod` and one of `commerce`, `experience`, or `integration`;
+include `ai` only at BP5. The launcher checks the account and environment,
+submits exactly one ECS task, disables public IP assignment, and waits for the
+container exit. A timeout, ECS launch failure, or missing/nonzero exit is an
+ambiguous result: inspect the task and CloudWatch logs plus the owner's
+`databasechangelog` before deciding whether another run is safe. The launcher
+never retries automatically. The operator's ECS launch role must be limited to
+these exact task definitions and `iam:PassRole` for the migration task and
+execution roles; the task role has no application permissions.
+
+Only after every required owner migration has a confirmed exit code of zero
+should the separately reviewed application deployment proceed. Use the manual
+`deploy reviewed stage release` workflow, whose `stage` GitHub environment must
+have required reviewers and branch restrictions configured. Commit both
+reviewed JSON manifests beneath `docs/releases/stage/`; enter their
+repository-relative paths at dispatch. The workflow accepts only those paths,
+uses short-lived OIDC credentials, and checks the resolved AWS account. Its
+`AWS_DEPLOY_ROLE_ARN` must be limited to the stage cluster/services, named task
+definitions and required `iam:PassRole` ARNs. It must not have Terraform,
+Secrets Manager, IAM administration, or production access. For local operator
+execution, use `scripts/infra/deploy-stage.sh <release.json> <rollback.json>`
+with stage-scoped credentials, `AWS_REGION`, and `AWS_EXPECTED_ACCOUNT_ID`.
+The release manifest
+must name the stage cluster, product phase, exact required owner list, each
+successful migration task ARN and zero exit code, immutable service task
+definition ARNs and matching ECR image digests, plus HTTPS health URLs. The
+rollback manifest must contain the previously reviewed task definition for
+each service. The script checks the AWS account and actual stopped migration
+tasks, verifies task definition image digests, rolls services, waits for ECS
+stability, checks HTTPS health, and submits the reviewed prior task definitions
+if rollout or health fails. Rollback is refused unless it covers the same exact
+service set. The ECS deployment role should be restricted to these stage
+services and task definitions. It should not have Terraform, Secrets Manager,
+IAM administration, or production permissions.
+
+Run `scripts/infra/smoke-stage.sh <approved-smoke.json>` from the required
+network vantages. Its JSON lists private service readiness URLs that must return
+HTTP 200 and public `/internal` URLs that must return HTTP 404. Run private
+probes inside the VPC and public-denial probes outside it; a failed connection
+is never treated as a successful denial. Record both vantage locations and
+results before accepting stage. The smoke runner validates targets but cannot
+create or prove the network vantage itself. For rollback, restore the previous
+task-definition image digest only when schema changes remain backward
+compatible; repair forward when data has crossed an incompatible boundary.
+Record plan and image digests, migration IDs, smoke results and recovery action
+without credentials or customer data.
+
+No cloud staging smoke, rollback or production deployment is claimed by the
+offline module work. They require a provisioned account, approved network and
+retention policy, TLS certificates, deployment role, operator alert destination
+and a reviewed release plan. A successful image scan or local Terraform test is
+not deployment, migration, restore, or endpoint acceptance.

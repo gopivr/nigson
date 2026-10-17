@@ -54,19 +54,14 @@ module "secrets" {
 }
 
 module "identity" {
-  source              = "../../modules/identity"
-  environment         = "prod"
-  vpc_id              = module.network.vpc_id
-  vpc_cidr            = var.vpc_cidr
-  ecs_cluster_arn     = module.compute.cluster_arn
-  public_subnet_ids   = module.network.edge_subnet_ids
-  private_subnet_ids  = module.network.application_subnet_ids
-  database_subnet_ids = module.network.data_subnet_ids
-  product_phase       = var.product_phase
-  owner_task_security_groups = merge(
-    { for name in ["commerce", "experience", "integration"] : name => module.compute.service_security_group_ids[name] },
-    contains(keys(var.services), "ai") ? { ai = module.compute.service_security_group_ids["ai"] } : {}
-  )
+  source                         = "../../modules/identity"
+  environment                    = "prod"
+  vpc_id                         = module.network.vpc_id
+  vpc_cidr                       = var.vpc_cidr
+  ecs_cluster_arn                = module.compute.cluster_arn
+  public_subnet_ids              = module.network.edge_subnet_ids
+  private_subnet_ids             = module.network.application_subnet_ids
+  database_subnet_ids            = module.network.data_subnet_ids
   admin_cidrs                    = var.identity_admin_cidrs
   trusted_proxy_cidrs            = concat([for cidrs in values(var.subnet_cidrs) : cidrs.edge], [for cidrs in values(var.subnet_cidrs) : cidrs.application])
   aws_endpoint_security_group_id = module.network.endpoint_security_group_id
@@ -121,12 +116,13 @@ module "compute" {
 }
 
 module "database" {
-  source          = "../../modules/database"
-  environment     = "prod"
-  policy_revision = var.policy_revision
-  product_phase   = var.product_phase
-  vpc_id          = module.network.vpc_id
-  data_subnet_ids = module.network.data_subnet_ids
+  source                     = "../../modules/database"
+  environment                = "prod"
+  policy_revision            = var.policy_revision
+  product_phase              = var.product_phase
+  vpc_id                     = module.network.vpc_id
+  endpoint_security_group_id = module.network.endpoint_security_group_id
+  data_subnet_ids            = module.network.data_subnet_ids
   owner_task_security_groups = merge(
     { for name in ["commerce", "experience", "integration"] : name => module.compute.service_security_group_ids[name] },
     contains(keys(var.services), "ai") ? { ai = module.compute.service_security_group_ids["ai"] } : {}
@@ -140,6 +136,26 @@ module "database" {
   log_retention_days        = var.log_retention_days
   multi_az                  = var.database_multi_az
   deletion_protection       = var.database_deletion_protection
+}
+
+module "migrations" {
+  source                      = "../../modules/migrations"
+  environment                 = "prod"
+  region                      = var.region
+  product_phase               = var.product_phase
+  migration_release           = var.migration_release
+  image_digest                = var.migration_image_digest
+  architecture                = var.migration_architecture
+  database_address            = module.database.database_address
+  migration_security_group_id = module.database.migration_task_security_group_id
+  kms_key_arn                 = module.secrets.kms_key_arn
+  log_retention_days          = var.log_retention_days
+  commerce_repository_arn     = module.compute.repository_arns.commerce
+  commerce_repository_url     = module.compute.repository_urls.commerce
+  migration_password_secret_arns = merge(
+    { for name in ["commerce", "experience", "integration"] : name => module.secrets.secret_arns[name]["migration_password"] },
+    var.product_phase == 5 ? { ai = module.secrets.secret_arns.ai["migration_password"] } : {}
+  )
 }
 
 module "storage" {
@@ -205,10 +221,24 @@ output "compute" {
 
 output "database" {
   value = {
-    address           = module.database.database_address
-    port              = module.database.database_port
-    security_group_id = module.database.database_security_group_id
-    master_secret_arn = module.database.master_secret_arn
+    address                     = module.database.database_address
+    port                        = module.database.database_port
+    security_group_id           = module.database.database_security_group_id
+    master_secret_arn           = module.database.master_secret_arn
+    migration_security_group_id = module.database.migration_task_security_group_id
+  }
+}
+
+output "migrations" {
+  value = {
+    environment          = "prod"
+    region               = var.region
+    task_definition_arns = module.migrations.task_definition_arns
+    execution_role_arns  = module.migrations.execution_role_arns
+    task_role_arns       = module.migrations.task_role_arns
+    cluster_arn          = module.compute.cluster_arn
+    private_subnet_ids   = module.network.application_subnet_ids
+    security_group_id    = module.database.migration_task_security_group_id
   }
 }
 

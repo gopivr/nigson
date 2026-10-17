@@ -71,7 +71,7 @@
               <rules>
                 <requireJavaVersion><version>[25.0.2,25.0.3)</version></requireJavaVersion>
                 <requireJavaVendor><includes><include>Oracle Corporation</include></includes></requireJavaVendor>
-                <requireMavenVersion><version>[3.9.11,3.9.12)</version></requireMavenVersion>
+                <requireMavenVersion><version>3.10.0</version></requireMavenVersion>
                 <requireReleaseDeps><onlyWhenRelease>false</onlyWhenRelease><failWhenParentIsSnapshot>false</failWhenParentIsSnapshot></requireReleaseDeps>
                 <dependencyConvergence/>
               </rules>

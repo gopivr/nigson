@@ -1,11 +1,18 @@
-mock_provider "aws" {}
+mock_provider "aws" {
+  mock_resource "aws_db_instance" {
+    defaults = {
+      master_user_secret = [{ secret_arn = "arn:aws:secretsmanager:eu-west-1:123456789012:secret:mock-rds-master" }]
+    }
+  }
+}
 
 variables {
-  environment     = "prod"
-  policy_revision = "db-v1"
-  product_phase   = 1
-  vpc_id          = "vpc-0123456789abcdef0"
-  data_subnet_ids = ["subnet-data-a", "subnet-data-b"]
+  environment                = "prod"
+  policy_revision            = "db-v1"
+  product_phase              = 1
+  vpc_id                     = "vpc-0123456789abcdef0"
+  endpoint_security_group_id = "sg-endpoints"
+  data_subnet_ids            = ["subnet-data-a", "subnet-data-b"]
   owner_task_security_groups = {
     commerce    = "sg-0123456789abcdef0"
     experience  = "sg-1123456789abcdef0"
@@ -23,7 +30,7 @@ variables {
 }
 
 run "production_database_is_private_and_protected" {
-  command = plan
+  command = apply
 
   assert {
     condition     = aws_db_instance.database.publicly_accessible == false
@@ -36,6 +43,10 @@ run "production_database_is_private_and_protected" {
   assert {
     condition     = length(aws_vpc_security_group_ingress_rule.owner_tasks) == 3
     error_message = "Only explicitly named owner task groups may be admitted to PostgreSQL."
+  }
+  assert {
+    condition     = aws_vpc_security_group_ingress_rule.migration_tasks.referenced_security_group_id == aws_security_group.migration_tasks.id && aws_vpc_security_group_egress_rule.migration_database.referenced_security_group_id == aws_security_group.database.id && length(aws_security_group.migration_tasks.ingress) == 0
+    error_message = "One-shot migration tasks need private endpoint/database access and no inbound connectivity."
   }
 }
 

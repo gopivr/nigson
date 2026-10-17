@@ -108,3 +108,18 @@ variable "identity_cpu_architecture" {
 }
 variable "identity_database_instance_class" { type = string }
 variable "identity_service_enabled" { type = bool }
+variable "migration_image_digest" {
+  type = string
+  validation {
+    condition     = can(regex("^sha256:[a-f0-9]{64}$", var.migration_image_digest))
+    error_message = "Published immutable owner migration image digest required."
+  }
+}
+variable "migration_architecture" {
+  type = string
+  validation {
+    condition     = contains(["ARM64", "X86_64"], var.migration_architecture)
+    error_message = "Explicit migration task CPU architecture required."
+  }
+}
+variable "migration_release" { type = string }

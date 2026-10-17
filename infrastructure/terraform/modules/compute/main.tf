@@ -373,4 +373,5 @@ output "load_balancer_dns_name" { value = aws_lb.public.dns_name }
 output "service_security_group_ids" { value = { for name, group in aws_security_group.service : name => group.id } }
 output "task_role_arns" { value = { for name, role in aws_iam_role.task : name => role.arn } }
 output "repository_urls" { value = { for name, repository in aws_ecr_repository.service : name => repository.repository_url } }
+output "repository_arns" { value = { for name, repository in aws_ecr_repository.service : name => repository.arn } }
 output "private_service_names" { value = { for name, service in aws_service_discovery_service.service : name => "${name}.${var.private_namespace}" } }

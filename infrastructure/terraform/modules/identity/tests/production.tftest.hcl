@@ -17,8 +17,6 @@ variables {
   public_subnet_ids              = ["subnet-test-public-a", "subnet-test-public-b"]
   private_subnet_ids             = ["subnet-test-private-a", "subnet-test-private-b"]
   database_subnet_ids            = ["subnet-test-data-a", "subnet-test-data-b"]
-  product_phase                  = 1
-  owner_task_security_groups     = { commerce = "sg-test-commerce", experience = "sg-test-experience", integration = "sg-test-integration" }
   admin_cidrs                    = ["10.94.0.0/24"]
   trusted_proxy_cidrs            = ["10.93.1.0/24", "10.93.2.0/24"]
   aws_endpoint_security_group_id = "sg-test-endpoints"
@@ -76,8 +74,8 @@ run "bootstrap_closed" {
     error_message = "Cluster and external connections must be private and explicitly scoped."
   }
   assert {
-    condition     = length(aws_vpc_security_group_ingress_rule.database) == 4 && aws_vpc_security_group_ingress_rule.database["commerce"].referenced_security_group_id == "sg-test-commerce"
-    error_message = "Dedicated identity PostgreSQL must allow Keycloak and each explicitly named business owner."
+    condition     = aws_vpc_security_group_ingress_rule.database.referenced_security_group_id == aws_security_group.server.id
+    error_message = "Dedicated Keycloak PostgreSQL must accept ingress only from the identity task group."
   }
   assert {
     condition     = aws_ecs_task_definition.identity.runtime_platform[0].cpu_architecture == "ARM64" && aws_ecs_task_definition.bootstrap.runtime_platform[0].cpu_architecture == "ARM64"

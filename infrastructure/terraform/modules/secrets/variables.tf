@@ -29,7 +29,7 @@ variable "secret_recovery_window_days" {
 variable "secret_names" {
   type = map(map(string))
   validation {
-    condition = contains(keys(var.secret_names), "identity") && toset(["database_password", "tls_certificate", "tls_key", "database_ca", "bootstrap_username", "bootstrap_password"]) == toset(keys(var.secret_names.identity)) && alltrue([for service, secrets in var.secret_names : contains(["commerce", "experience", "integration", "identity", "ai"], service) && (service != "ai" || var.product_phase == 5) && alltrue([
+    condition = contains(keys(var.secret_names), "identity") && toset(["database_password", "tls_certificate", "tls_key", "database_ca", "bootstrap_username", "bootstrap_password"]) == toset(keys(var.secret_names.identity)) && alltrue([for service in ["commerce", "experience", "integration"] : contains(keys(var.secret_names), service) && contains(keys(var.secret_names[service]), "migration_password")]) && (var.product_phase == 5 ? contains(keys(var.secret_names), "ai") && contains(keys(var.secret_names.ai), "migration_password") : !contains(keys(var.secret_names), "ai")) && alltrue([for service, secrets in var.secret_names : contains(["commerce", "experience", "integration", "identity", "ai"], service) && (service != "ai" || var.product_phase == 5) && alltrue([
       for alias, name in secrets : can(regex("^[A-Za-z0-9/_+=.@-]{1,512}$", alias)) && startswith(name, "nigson/${var.environment}/${service}/") && !strcontains(name, "..")
     ])])
     error_message = "Secret metadata must use exact approved service paths; AI entries are BP5-only. Secret values are never Terraform inputs."

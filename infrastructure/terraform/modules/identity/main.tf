@@ -76,9 +76,8 @@ resource "aws_vpc_security_group_ingress_rule" "cluster" {
   to_port                      = tonumber(each.value)
 }
 resource "aws_vpc_security_group_ingress_rule" "database" {
-  for_each                     = merge({ identity = aws_security_group.server.id }, var.owner_task_security_groups)
   security_group_id            = aws_security_group.database.id
-  referenced_security_group_id = each.value
+  referenced_security_group_id = aws_security_group.server.id
   ip_protocol                  = "tcp"
   from_port                    = 5432
   to_port                      = 5432
@@ -357,7 +356,6 @@ output "dedicated_database_address" { value = aws_db_instance.identity.address }
 output "database_admin_secret_arn" { value = aws_db_instance.identity.master_user_secret[0].secret_arn }
 output "identity_service_name" { value = aws_ecs_service.identity.name }
 output "identity_security_group_id" { value = aws_security_group.server.id }
-output "identity_database_security_group_id" { value = aws_security_group.database.id }
 output "keycloak_task_definition_arn" { value = aws_ecs_task_definition.identity.arn }
 output "public_alb_dns_name" { value = aws_lb.public.dns_name }
 output "private_admin_alb_dns_name" { value = aws_lb.admin.dns_name }

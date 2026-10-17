@@ -7,9 +7,15 @@ variables {
   secret_recovery_window_days = 14
   product_phase               = 1
   secret_names = {
-    commerce    = { paystack_test = "nigson/stage/commerce/paystack-test" }
-    experience  = {}
-    integration = { twilio_auth = "nigson/stage/integration/twilio-auth" }
+    commerce = {
+      paystack_test      = "nigson/stage/commerce/paystack-test"
+      migration_password = "nigson/stage/commerce/migration-password"
+    }
+    experience = { migration_password = "nigson/stage/experience/migration-password" }
+    integration = {
+      twilio_auth        = "nigson/stage/integration/twilio-auth"
+      migration_password = "nigson/stage/integration/migration-password"
+    }
     identity = {
       database_password  = "nigson/stage/identity/database-password"
       tls_certificate    = "nigson/stage/identity/tls-certificate"
@@ -25,7 +31,7 @@ run "create_secret_metadata_without_values" {
   command = plan
 
   assert {
-    condition     = length(aws_secretsmanager_secret.owned) == 8
+    condition     = length(aws_secretsmanager_secret.owned) == 11
     error_message = "Only named secret metadata should be provisioned."
   }
   assert {
@@ -38,9 +44,9 @@ run "reject_ai_secrets_before_bp5" {
   command = plan
   variables {
     secret_names = {
-      commerce    = {}
-      experience  = {}
-      integration = {}
+      commerce    = { migration_password = "nigson/stage/commerce/migration-password" }
+      experience  = { migration_password = "nigson/stage/experience/migration-password" }
+      integration = { migration_password = "nigson/stage/integration/migration-password" }
       identity = {
         database_password  = "nigson/stage/identity/database-password"
         tls_certificate    = "nigson/stage/identity/tls-certificate"
@@ -49,7 +55,10 @@ run "reject_ai_secrets_before_bp5" {
         bootstrap_username = "nigson/stage/identity/bootstrap-username"
         bootstrap_password = "nigson/stage/identity/bootstrap-password"
       }
-      ai = { provider = "nigson/stage/ai/provider" }
+      ai = {
+        provider           = "nigson/stage/ai/provider"
+        migration_password = "nigson/stage/ai/migration-password"
+      }
     }
   }
   expect_failures = [var.secret_names]

@@ -1,0 +1,64 @@
+name: deploy reviewed stage release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_manifest:
+        description: Committed, reviewed release receipt and immutable task definitions under docs/releases/stage/
+        required: true
+        type: string
+      rollback_manifest:
+        description: Committed, reviewed prior task definitions under docs/releases/stage/
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nigson-stage-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    environment: stage
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_EXPECTED_ACCOUNT_ID: ${{ vars.AWS_EXPECTED_ACCOUNT_ID }}
+      AWS_DEPLOY_ROLE_ARN: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Validate protected stage target and reviewed manifests
+        shell: bash
+        env:
+          RELEASE_MANIFEST: ${{ inputs.release_manifest }}
+          ROLLBACK_MANIFEST: ${{ inputs.rollback_manifest }}
+        run: |
+          set -euo pipefail
+          [[ "$AWS_REGION" =~ ^[a-z]{2}(-gov)?-[a-z]+-[0-9]+$ ]]
+          [[ "$AWS_EXPECTED_ACCOUNT_ID" =~ ^[0-9]{12}$ ]]
+          [[ "$AWS_DEPLOY_ROLE_ARN" =~ ^arn:aws[a-z-]*:iam::${AWS_EXPECTED_ACCOUNT_ID}:role/[A-Za-z0-9+=,.@_/-]+$ ]]
+          [[ "$RELEASE_MANIFEST" =~ ^docs/releases/stage/[A-Za-z0-9._-]+\.json$ ]]
+          [[ "$ROLLBACK_MANIFEST" =~ ^docs/releases/stage/[A-Za-z0-9._-]+\.json$ ]]
+          [[ -f "$RELEASE_MANIFEST" && -f "$ROLLBACK_MANIFEST" ]]
+      - name: Obtain short-lived stage deployment credentials through OIDC
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOY_ROLE_ARN }}
+          role-session-name: nigson-stage-deploy-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Verify scoped AWS account
+        run: |
+          set -euo pipefail
+          actual_account="$(aws sts get-caller-identity --query Account --output text --no-cli-pager)"
+          [[ "$actual_account" == "$AWS_EXPECTED_ACCOUNT_ID" ]]
+      - name: Deploy after migration receipts, verify health and roll back on failure
+        env:
+          RELEASE_MANIFEST: ${{ inputs.release_manifest }}
+          ROLLBACK_MANIFEST: ${{ inputs.rollback_manifest }}
+        run: scripts/infra/deploy-stage.sh "$RELEASE_MANIFEST" "$ROLLBACK_MANIFEST"

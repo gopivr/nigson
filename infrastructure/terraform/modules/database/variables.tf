@@ -20,6 +20,13 @@ variable "product_phase" {
   }
 }
 variable "vpc_id" { type = string }
+variable "endpoint_security_group_id" {
+  type = string
+  validation {
+    condition     = can(regex("^sg-[A-Za-z0-9-]+$", var.endpoint_security_group_id))
+    error_message = "Private AWS endpoint security group required for migrations."
+  }
+}
 variable "data_subnet_ids" {
   type = list(string)
   validation {

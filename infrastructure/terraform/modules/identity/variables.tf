@@ -33,20 +33,6 @@ variable "database_subnet_ids" {
     error_message = "Dedicated identity database requires isolated data subnets in at least two AZs."
   }
 }
-variable "owner_task_security_groups" {
-  type = map(string)
-  validation {
-    condition     = length(var.owner_task_security_groups) >= 3 && alltrue([for name, id in var.owner_task_security_groups : (contains(["commerce", "experience", "integration"], name) || (name == "ai" && var.product_phase == 5)) && can(regex("^sg-[A-Za-z0-9-]+$", id))])
-    error_message = "Identity DB ingress requires each named commerce owner and BP5-only AI task group."
-  }
-}
-variable "product_phase" {
-  type = number
-  validation {
-    condition     = contains([1, 2, 3, 4, 5], var.product_phase)
-    error_message = "Explicit product phase required."
-  }
-}
 variable "admin_cidrs" {
   type = list(string)
   validation {

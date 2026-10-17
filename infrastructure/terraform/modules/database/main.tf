@@ -22,6 +22,14 @@ resource "aws_security_group" "database" {
   tags        = local.tags
 }
 
+resource "aws_security_group" "migration_tasks" {
+  name        = "nigson-${var.environment}-owner-migrations"
+  description = "One-shot owner migration tasks; no ingress and only database/AWS endpoint egress"
+  vpc_id      = var.vpc_id
+  egress      = []
+  tags        = merge(local.tags, { Service = "owner-migrations" })
+}
+
 resource "aws_vpc_security_group_ingress_rule" "owner_tasks" {
   for_each                     = var.owner_task_security_groups
   security_group_id            = aws_security_group.database.id
@@ -30,6 +38,33 @@ resource "aws_vpc_security_group_ingress_rule" "owner_tasks" {
   from_port                    = 5432
   to_port                      = 5432
   description                  = "PostgreSQL from owner task ${each.key}"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "migration_tasks" {
+  security_group_id            = aws_security_group.database.id
+  referenced_security_group_id = aws_security_group.migration_tasks.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+  description                  = "One-shot Liquibase migration tasks"
+}
+
+resource "aws_vpc_security_group_egress_rule" "migration_database" {
+  security_group_id            = aws_security_group.migration_tasks.id
+  referenced_security_group_id = aws_security_group.database.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+  description                  = "Reach only the private commerce PostgreSQL instance"
+}
+
+resource "aws_vpc_security_group_egress_rule" "migration_endpoints" {
+  security_group_id            = aws_security_group.migration_tasks.id
+  referenced_security_group_id = var.endpoint_security_group_id
+  ip_protocol                  = "tcp"
+  from_port                    = 443
+  to_port                      = 443
+  description                  = "Fetch named secret, image and log services through VPC endpoints"
 }
 
 resource "aws_db_subnet_group" "database" {
@@ -97,4 +132,5 @@ resource "aws_db_instance" "database" {
 output "database_address" { value = aws_db_instance.database.address }
 output "database_port" { value = aws_db_instance.database.port }
 output "database_security_group_id" { value = aws_security_group.database.id }
+output "migration_task_security_group_id" { value = aws_security_group.migration_tasks.id }
 output "master_secret_arn" { value = aws_db_instance.database.master_user_secret[0].secret_arn }

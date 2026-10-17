@@ -28,7 +28,7 @@ RUN --mount=type=cache,id=nigson-maven-repository-${TARGETARCH},target=/workspac
     --mount=type=cache,id=nigson-maven-wrapper-${TARGETARCH},target=/workspace/.build/maven,sharing=locked \
     ./mvnw -B install && \
     ./mvnw -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
-RUN javac -cp '/migration-lib/*' -d /tools scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
+RUN javac -cp '/migration-lib/*' -d /tools scripts/java/MigrationTargetPolicy.java scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
 RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
 
 FROM oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c AS runtime-base

@@ -11,27 +11,13 @@ import liquibase.resource.DirectoryResourceAccessor;
 /** One-shot owner migration tool; never used by an application runtime identity. */
 public class OwnerMigration {
     public static void main(String[] args) throws Exception {
-        if (!java.util.Set.of("local", "test").contains(required("APP_ENV"))) {
-            throw new IllegalArgumentException("Foundation migration requires APP_ENV=local|test");
-        }
+        String environment = required("APP_ENV");
         String release = required("MIGRATION_RELEASE");
-        if (!release.matches("BP[1-5]")) {
-            throw new IllegalArgumentException("Migration release must be BP1..BP5");
-        }
         String owner = required("MIGRATION_OWNER");
-        if (!java.util.Set.of("commerce", "experience", "integration", "ai").contains(owner)) {
-            throw new IllegalArgumentException("Unsupported migration owner");
-        }
         String url = required("MIGRATION_JDBC_URL");
-        String expectedUrl = owner.equals("ai") ? "jdbc:postgresql://vector-db:5432/nigson_vector_test"
-                : "jdbc:postgresql://postgres:5432/nigson";
-        // The isolated catalog qualification uses the production topology: all
-        // four schemas in one pgvector-enabled PostgreSQL database.
-        boolean sharedAiTest = owner.equals("ai") && required("APP_ENV").equals("test")
-                && url.equals("jdbc:postgresql://postgres:5432/nigson");
-        if (!url.equals(expectedUrl) && !sharedAiTest) {
-            throw new IllegalArgumentException("Refusing nonlocal migration target");
-        }
+        String expectedHost = environment.equals("stage") || environment.equals("prod")
+                ? required("MIGRATION_EXPECTED_HOST") : null;
+        MigrationTargetPolicy.validate(environment, owner, release, url, expectedHost);
         String username = "nigson_" + owner + "_migrator";
         String password = required("MIGRATION_PASSWORD");
         String root = required("MIGRATION_ROOT");
