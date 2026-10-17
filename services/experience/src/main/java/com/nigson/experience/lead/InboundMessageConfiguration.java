@@ -34,6 +34,8 @@ public class InboundMessageConfiguration {
             e.getRequiredProperty("NIGSON_INBOUND_RETENTION_DAYS",Integer.class));
     }
     @Bean InboundMessageController inboundMessageController(InboundMessageProcessor processor) { return new InboundMessageController(processor); }
+    @Bean LeadMessagingContext leadMessagingContext(JdbcTemplate jdbc,com.nigson.experience.consent.PhoneSecrets phones,InboundMessageSecrets content,AuditWriter audit,MeterRegistry metrics,PlatformTransactionManager manager,Environment e){String raw=e.getProperty("NIGSON_MESSAGING_STAFF_REPLY_TEMPLATES","");var templates=raw.isBlank()?java.util.List.<String>of():java.util.List.of(raw.split(",",-1));return new LeadMessagingContext(jdbc,phones,content,audit,metrics,Clock.systemUTC(),manager,templates);}
+    @Bean LeadMessagingContextController leadMessagingContextController(LeadMessagingContext service){return new LeadMessagingContextController(service);}
     @Bean InboundMessageRetention inboundMessageRetention(InboundMessageProcessor processor){return new InboundMessageRetention(processor);}
     public static final class InboundMessageRetention {private final InboundMessageProcessor processor;InboundMessageRetention(InboundMessageProcessor processor){this.processor=processor;}@org.springframework.scheduling.annotation.Scheduled(fixedDelayString="${NIGSON_INBOUND_RETENTION_INTERVAL_MS:60000}") public void run(){processor.eraseExpired(100);}}
 }

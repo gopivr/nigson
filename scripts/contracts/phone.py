@@ -40,6 +40,9 @@ def extend_commerce(spec):
 def experience_contract():
     from authorization import operation, parameter, UUID, REF
     paths=operations(True)
+    context194=operation('API-194','Exact Integration workload plus a fresh signed SALES actor. Return only a verified inbound or active, purpose-granted and currently unsuppressed WhatsApp destination for this CONTACT lead; context is limited to an approved transactional reply. No order lookup, marketing authority or caller-supplied destination.','LeadMessagingContext',[parameter('id','path',UUID,True)])
+    context194['security']=[{'workload':['notification.read_WITH_SIGNED_ACTOR'],'signedActor':[]}]
+    paths['/internal/v1/leads/{id}/messaging-context']={'get':context194}
     paths['/api/v1/webhooks/notifications/twilio/whatsapp']={'post':{
         'operationId':'API-190','summary':'Verified Twilio WhatsApp inbound','description':'Validate the complete signed form against the configured public URL; deduplicate MessageSid and atomically apply STOP/UNSUBSCRIBE suppression, fixed HELP TwiML, or a private CONTACT lead. No browser authentication or CSRF; no order lookup, login, marketing grant, or financial mutation.',
         'security':[],'parameters':[parameter('X-Twilio-Signature','header',{'type':'string','minLength':1,'maxLength':256},True)],
@@ -49,6 +52,7 @@ def experience_contract():
     context['security']=[{'workload':['notification.read']}];context['requestBody']={'required':True,'content':{'application/json':{'schema':REF('PhoneVerificationJob')}}};paths['/internal/v1/communication-verifications/{id}/notification-context']={'post':context}
     from authorization import object_schema
     model=schemas()
+    model['LeadMessagingContext']=object_schema({'phone':{'type':'string','pattern':r'^\+234[1-9][0-9]{9}$'},'channel':{'const':'WHATSAPP'},'destinationHash':{'type':'string','pattern':'^[a-f0-9]{64}$'},'eligible':{'const':True},'basis':{'enum':['SIGNED_INBOUND_REQUEST','VERIFIED_DESTINATION']},'approvedTemplateCodes':{'type':'array','maxItems':10,'uniqueItems':True,'items':{'enum':['STAFF_LEAD_REPLY']}}})
     model['PhoneEligibilityInput']=object_schema({'partyId':UUID,'destinationId':UUID,'channel':{'enum':['SMS','WHATSAPP']},'purpose':{'enum':['ORDER_UPDATES','MARKETING','CART_RECOVERY']}})
     model['PhoneEligibilityInput']['required']=['channel','purpose'];model['PhoneEligibilityInput']['anyOf']=[{'required':['partyId']},{'required':['destinationId']}]
     model['PhoneEligibility']=object_schema({'eligible':{'type':'boolean'},'reasonCode':{'enum':['GRANTED','SUPPRESSED','CONSENT_NOT_GRANTED']},'email':{'type':'null'},'phone':{'type':['string','null']},'destinationHash':{'type':'string','pattern':'^[a-f0-9]{64}$'},'policyRevision':{'type':'string'}})
@@ -57,7 +61,7 @@ def experience_contract():
     for api,path,body,response,scope in [('API-127','/internal/v1/communication-eligibility','PhoneEligibilityInput','PhoneEligibility','consent.read'),('API-175','/internal/v1/communication-suppressions','PhoneSuppression','PhoneAcknowledged','consent.write')]:
         op=operation(api,'Exact nigson-integration, no user actor. Phone-channel implementation only; no email/newsletter activation. Authoritative current grants and global suppression; missing destination denies. No provider HTTP. Suppression command UUID is immutable/idempotent and cannot grant consent.',response,[])
         op['security']=[{'workload':[scope]}];op['requestBody']={'required':True,'content':{'application/json':{'schema':REF(body)}}};paths[path]={'post':op}
-    return {'openapi':'3.1.0','info':{'title':'Nigson experience implemented phone consent and inbound messaging','version':'1.1.0'},'paths':paths,'components':{'schemas':model,'securitySchemes':{'workload':{'type':'oauth2','flows':{'clientCredentials':{'tokenUrl':'https://configured-keycloak.invalid/protocol/openid-connect/token','scopes':{**{f'communication.{scope}_WITH_SIGNED_CUSTOMER':'Exact commerce private phone operation' for scope in ['create','verify','read','withdraw']},'notification.read':'Original private verification context','consent.read':'Current phone eligibility','consent.write':'Verified provider phone suppression'}}}},'signedActor':{'type':'apiKey','in':'header','name':'X-Nigson-Actor'}}}}
+    return {'openapi':'3.1.0','info':{'title':'Nigson experience implemented phone consent and messaging','version':'1.1.0'},'paths':paths,'components':{'schemas':model,'securitySchemes':{'workload':{'type':'oauth2','flows':{'clientCredentials':{'tokenUrl':'https://configured-keycloak.invalid/protocol/openid-connect/token','scopes':{**{f'communication.{scope}_WITH_SIGNED_CUSTOMER':'Exact commerce private phone operation' for scope in ['create','verify','read','withdraw']},'notification.read':'Original private verification context','notification.read_WITH_SIGNED_ACTOR':'Lead reply context for a signed SALES actor','consent.read':'Current phone eligibility','consent.write':'Verified provider phone suppression'}}}},'signedActor':{'type':'apiKey','in':'header','name':'X-Nigson-Actor'}}}}
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');args=parser.parse_args();path=ROOT/'contracts/openapi/experience.yaml';expected=json.dumps(experience_contract(),indent=2)+'\n'
     if args.check:

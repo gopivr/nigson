@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Nigson experience implemented phone consent and inbound messaging",
+    "title": "Nigson experience implemented phone consent and messaging",
     "version": "1.1.0"
   },
   "paths": {
@@ -597,6 +597,134 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/PhoneWithdrawal"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/leads/{id}/messaging-context": {
+      "get": {
+        "operationId": "API-194",
+        "description": "Exact Integration workload plus a fresh signed SALES actor. Return only a verified inbound or active, purpose-granted and currently unsuppressed WhatsApp destination for this CONTACT lead; context is limited to an approved transactional reply. No order lookup, marketing authority or caller-supplied destination.",
+        "security": [
+          {
+            "workload": [
+              "notification.read_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadMessagingContext"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
               }
             }
           }
@@ -1259,6 +1387,50 @@
           }
         }
       },
+      "LeadMessagingContext": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "phone",
+          "channel",
+          "destinationHash",
+          "eligible",
+          "basis",
+          "approvedTemplateCodes"
+        ],
+        "properties": {
+          "phone": {
+            "type": "string",
+            "pattern": "^\\+234[1-9][0-9]{9}$"
+          },
+          "channel": {
+            "const": "WHATSAPP"
+          },
+          "destinationHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "eligible": {
+            "const": true
+          },
+          "basis": {
+            "enum": [
+              "SIGNED_INBOUND_REQUEST",
+              "VERIFIED_DESTINATION"
+            ]
+          },
+          "approvedTemplateCodes": {
+            "type": "array",
+            "maxItems": 10,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "STAFF_LEAD_REPLY"
+              ]
+            }
+          }
+        }
+      },
       "PhoneEligibilityInput": {
         "type": "object",
         "additionalProperties": false,
@@ -1403,6 +1575,7 @@
               "communication.read_WITH_SIGNED_CUSTOMER": "Exact commerce private phone operation",
               "communication.withdraw_WITH_SIGNED_CUSTOMER": "Exact commerce private phone operation",
               "notification.read": "Original private verification context",
+              "notification.read_WITH_SIGNED_ACTOR": "Lead reply context for a signed SALES actor",
               "consent.read": "Current phone eligibility",
               "consent.write": "Verified provider phone suppression"
             }
