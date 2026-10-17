@@ -35,6 +35,12 @@
         "file": "../023-bp1-carrier-cancellation.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../025-msg-001-staff-reply-envelope.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

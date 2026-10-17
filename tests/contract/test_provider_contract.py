@@ -22,7 +22,11 @@ class ProviderContracts(unittest.TestCase):
 
     def test_private_integration_job_contract_preserves_safe_shapes_and_exact_scopes(self):
         spec=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
-        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry','/internal/v1/carrier/quotes','/internal/v1/carrier/shipments/{id}/reconciliation','/internal/v1/carrier/cancellations','/internal/v1/notification-provider-receipts'})
+        self.assertEqual(set(spec['paths']),{'/internal/v1/jobs','/internal/v1/jobs/{id}/retry','/internal/v1/carrier/quotes','/internal/v1/carrier/shipments/{id}/reconciliation','/internal/v1/carrier/cancellations','/internal/v1/notification-provider-receipts','/internal/v1/notification-commands'})
+        staff=spec['paths']['/internal/v1/notification-commands']['post']
+        self.assertEqual(staff['operationId'],'API-193')
+        self.assertEqual(staff['security'],[{'workload':['notification.send_WITH_SIGNED_ACTOR'],'signedActor':[]}])
+        self.assertIn('API-194',staff['description']);self.assertIn('API-205',staff['description'])
         self.assertEqual(set(spec['components']['schemas']['JobDTO']['properties']),{'id','state','attemptCount','nextAttemptAt','lastErrorCode'})
         self.assertFalse(spec['components']['schemas']['JobDTO']['additionalProperties'])
         get=spec['paths']['/internal/v1/jobs']['get'];retry=spec['paths']['/internal/v1/jobs/{id}/retry']['post']

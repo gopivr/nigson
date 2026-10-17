@@ -3252,12 +3252,17 @@ lease_until timestamptz NULL
 submitted_at timestamptz NULL
 provider_message_id varchar(160) NULL
 request_hash char(64) NULL
+command_hash char(64) NULL
+recipient_ciphertext bytea NULL
+variables_ciphertext bytea NULL
+context_key_revision varchar(40) NULL
+context_basis varchar(40) NULL
 error_code varchar(60) NULL
 ```
 
 - **Keys and indexes:** UQ(account_sid,provider_message_id); IX(stage,next_attempt_at).
-- **Checks:** stage IN (INTENT,SUBMITTING,ACCEPTED,UNKNOWN,SUPPRESSED,FAILED); attempt_count>=0; jsonb_typeof(template_snapshot)='object'; account_sid ~ '^AC[a-fA-F0-9]{32}$'; messaging_service_sid ~ '^MG[a-fA-F0-9]{32}$'; account_hash ~ '^[a-f0-9]{64}$'; template_hash ~ '^[a-f0-9]{64}$'.
-- **Business invariant:** ADR-018. Paired job/template/account/generation identity is immutable; static template only, never rendered phone/code. Missing paired record rejects replay. SUBMITTING/UNKNOWN cannot grant fresh send; account/restore/source guards apply before unlocked provider HTTP. Populated rollback refuses; no automatic legacy backfill.
+- **Checks:** stage IN (INTENT,SUBMITTING,ACCEPTED,UNKNOWN,SUPPRESSED,FAILED); attempt_count>=0; jsonb_typeof(template_snapshot)='object'; account_sid ~ '^AC[a-fA-F0-9]{32}$'; messaging_service_sid ~ '^MG[a-fA-F0-9]{32}$'; account_hash ~ '^[a-f0-9]{64}$'; template_hash ~ '^[a-f0-9]{64}$'; staff context is all NULL or all present with command_hash ~ '^[a-f0-9]{64}$', recipient_ciphertext 29..512 bytes, variables_ciphertext 29..8192 bytes, context_key_revision ~ '^[A-Za-z0-9_-]{1,40}$', and context_basis IN (SIGNED_INBOUND_REQUEST,VERIFIED_DESTINATION).
+- **Business invariant:** ADR-018 and ADR-020. Paired job/template/account/generation identity is immutable; static template only, never rendered phone/code. Staff command variables and recipient are encrypted with purpose-separated Integration-owned key material; command hash is keyed and only used for stable idempotency. Missing paired record rejects replay. SUBMITTING/UNKNOWN cannot grant fresh send; account/restore/source guards apply before unlocked provider HTTP. Populated rollback refuses; no automatic legacy backfill.
 
 ### integration.notification_attempt
 
@@ -7447,16 +7452,16 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 ### API-192 POST /api/v1/staff/leads/{id}/messages
 
-- **Service / module / phase:** experience / lead / BP1.
-- **Authentication:** Verified session/bearer or explicitly described capability/OIDC flow.
-- **Authorization:** SALES; resource/organization/market checks required.
+- **Service / module / phase:** commerce BFF / notification relay / BP1 (Experience owns lead/context data; see ADR-021).
+- **Authentication:** Current server-side Commerce BFF session; no browser bearer token.
+- **Authorization:** Current Commerce SALES role, no selected organization; Experience validates eligible CONTACT context through API-194.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `{channel:WHATSAPP,templateCode:string,variables:object}`.
 - **Response:** `{jobId:UUID,state:PENDING}`.
 - **Statuses:** 202 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Lead from verified inbound or verified opt-in destination, own role, closed allowlisted templates and fresh suppression; private relay creates unique worker job, no send inside DB transaction.
+- **Validation / business rules:** Closed allowlisted template and variables only. Commerce signs API-194 GET and API-193 POST assertions for the same current session identity and makes a fixed private relay. Integration validates both assertions, fetches the eligible context, resolves the explicitly configured active template revision/content SID, applies stable command deduplication and commits a durable intent. Sender rechecks fresh suppression through API-205 immediately before provider HTTP. No send inside a request/database transaction.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, LEAD_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -7464,14 +7469,14 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 - **Service / module / phase:** integration / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_EXPERIENCE:notification.send_WITH_SIGNED_ACTOR; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:notification.send_WITH_SIGNED_ACTOR; resource/organization/market checks required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `{commandId:UUID,leadId:UUID,templateCode:string,channel:WHATSAPP,variables:object}`.
 - **Response:** `{jobId:UUID,state:PENDING}`.
 - **Statuses:** 202 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Allowlisted sender/template/context and trusted SALES actor. Require a second Commerce-signed actor assertion bound to the exact API-194 context GET; both assertions must resolve to the same current SALES actor. Fetch authoritative destination/context, never arbitrary phone/provider URL; audited stable command dedup. Encrypt recipient/context in Integration-owned dispatch intent, then recheck API-205 suppression immediately before provider HTTP.
+- **Validation / business rules:** Allowlisted configured WhatsApp template/context and trusted SALES actor. Require a second Commerce-signed actor assertion bound to the exact API-194 context GET; both assertions must resolve to the same current SALES actor. Fetch authoritative destination/context, never arbitrary phone/provider URL; audited stable command dedup. Bind each accepted template to an explicitly configured active revision and provider content SID. Encrypt recipient/variables in Integration-owned dispatch intent, then recheck API-205 suppression immediately before provider HTTP. Persist a single-write fence before HTTP; uncertain create remains UNKNOWN and only reads provider status when a SID is known.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, NOTIFICATION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -9843,7 +9848,7 @@ ARCH rows preserve every source heading; BP rows preserve functional features; t
 | REQ-API-189 | integration | API-189 POST /internal/v1/notification-provider-receipts | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-190 | experience | API-190 POST /api/v1/webhooks/notifications/twilio/whatsapp | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | lead.created.v1, consent.changed.v1 | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-191 | commerce | API-191 POST /api/v1/staff/shipments/{id}/booking-reconciliation | commerce.carrier_quote, integration.carrier_booking | None directly | CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |
-| REQ-API-192 | experience | API-192 POST /api/v1/staff/leads/{id}/messages | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
+| REQ-API-192 | commerce BFF | API-192 POST /api/v1/staff/leads/{id}/messages | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-193 | integration | API-193 POST /internal/v1/notification-commands | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-194 | experience | API-194 GET /internal/v1/leads/{id}/messaging-context | experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression | None directly | MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-API-195 | commerce | API-195 POST /api/v1/quotes/{id}/delivery-quotes | commerce.carrier_quote, integration.carrier_booking | None directly | CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |

@@ -34,6 +34,7 @@ class PhoneContracts(unittest.TestCase):
         self.assertEqual(scopes['API-205']['owner'],'experience')
         self.assertEqual(scopes['API-205']['client'],'nigson-integration')
         self.assertEqual(scopes['API-205']['scope'],'notification.read')
+        self.assertEqual(scopes['API-193']['client'],'nigson-commerce')
     def test_public_masked_dto_and_explicit_channel_purpose(self):
         spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());schemas=spec['components']['schemas']
         self.assertEqual(set(schemas['PhoneDestination']['properties']),{'id','channel','maskedAddress','status','version'})
@@ -48,6 +49,7 @@ class PhoneContracts(unittest.TestCase):
         table=model['tables']['integration.notification_dispatch']
         fields={field['name'] for field in table['fields']}
         self.assertTrue({'template_snapshot','template_hash','account_hash','generation','source_occurred_at','stage','submitted_at','provider_message_id'}<=fields)
+        self.assertTrue({'command_hash','recipient_ciphertext','variables_ciphertext','context_key_revision','context_basis'}<=fields)
         self.assertFalse({'phone','rendered_code','rendered_body','destination_ciphertext'}&fields)
         self.assertEqual(table['owner'],'integration')
         self.assertEqual(table['phase'],1)
@@ -57,3 +59,7 @@ class PhoneContracts(unittest.TestCase):
         rollback=(ROOT/'services/integration/src/main/resources/db/changelog/024-bp1-notification-dispatch-rollback.sql').read_text()
         self.assertIn('Populated table integration.notification_dispatch',rollback)
         self.assertIn('RAISE EXCEPTION',rollback)
+        envelope=json.loads((ROOT/'services/integration/src/main/resources/db/changelog/025-msg-001-staff-reply-envelope.yaml').read_text())['databaseChangeLog'][0]['changeSet']
+        self.assertEqual(envelope['id'],'integration-20261017-msg-001-envelope')
+        rollback=(ROOT/'services/integration/src/main/resources/db/changelog/025-msg-001-staff-reply-envelope-rollback.sql').read_text()
+        self.assertIn('staff-reply context',rollback);self.assertIn('RAISE EXCEPTION',rollback)

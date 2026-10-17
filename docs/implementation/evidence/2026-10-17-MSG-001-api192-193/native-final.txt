@@ -1,0 +1,13 @@
+Command:
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home/bin:$PATH ENV=test python3 scripts/messaging/inbound_verify.py
+
+Result: PASS (exit 0), 2026-10-17 14:29 UTC. The repository harness used fresh owner PostgreSQL databases and a stateful local Twilio WireMock extension.
+
+Selected Commerce tests: 4 passed, 0 failed/errors/skipped.
+Selected Experience tests: 27 passed, 0 failed/errors/skipped. PhoneHttpTest exercised signed private context/suppression HTTP behavior.
+Selected Integration tests: 11 passed, 0 failed/errors/skipped, including seven StaffReplyPersistenceTest scenarios.
+Reactor build: BUILD SUCCESS.
+
+The seven staff-reply scenarios cover encrypted recipient/variables decryption and storage, stable same-command replay and conflict, concurrent conflicting command deduplication, current suppression and suppression outage, uncertain provider acceptance without a second create, invalid actor/template rejection, and provider receipt projection to DELIVERED without regression.
+
+This verifies offline mock behavior. It does not qualify genuine Twilio credentials, sender, approved template/account metadata, or live delivery.

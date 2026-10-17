@@ -17020,7 +17020,7 @@
       "phase": 1
     },
     "integration.notification_dispatch": {
-      "checks": "stage IN (INTENT,SUBMITTING,ACCEPTED,UNKNOWN,SUPPRESSED,FAILED); attempt_count>=0; jsonb_typeof(template_snapshot)='object'; account_sid ~ '^AC[a-fA-F0-9]{32}$'; messaging_service_sid ~ '^MG[a-fA-F0-9]{32}$'; account_hash ~ '^[a-f0-9]{64}$'; template_hash ~ '^[a-f0-9]{64}$'",
+      "checks": "stage IN (INTENT,SUBMITTING,ACCEPTED,UNKNOWN,SUPPRESSED,FAILED); attempt_count>=0; jsonb_typeof(template_snapshot)='object'; account_sid ~ '^AC[a-fA-F0-9]{32}$'; messaging_service_sid ~ '^MG[a-fA-F0-9]{32}$'; account_hash ~ '^[a-f0-9]{64}$'; template_hash ~ '^[a-f0-9]{64}$'; staff context is all NULL or all present with command_hash ~ '^[a-f0-9]{64}$', recipient_ciphertext 29..512 bytes, variables_ciphertext 29..8192 bytes, context_key_revision ~ '^[A-Za-z0-9_-]{1,40}$', and context_basis IN (SIGNED_INBOUND_REQUEST,VERIFIED_DESTINATION)",
       "creation_changeset": "integration-20261017-msg-001",
       "creation_file": "services/integration/src/main/resources/db/changelog/024-bp1-notification-dispatch.sql",
       "fields": [
@@ -17253,6 +17253,56 @@
           "nullable": true,
           "primary": false,
           "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "command_hash",
+          "nullable": true,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "recipient_ciphertext",
+          "nullable": true,
+          "primary": false,
+          "type": "bytea"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "variables_ciphertext",
+          "nullable": true,
+          "primary": false,
+          "type": "bytea"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "context_key_revision",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(40)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "context_basis",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(40)"
         },
         {
           "cascade": false,

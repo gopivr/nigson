@@ -1029,6 +1029,169 @@
           }
         }
       }
+    },
+    "/internal/v1/notification-commands": {
+      "post": {
+        "operationId": "API-193",
+        "security": [
+          {
+            "workload": [
+              "notification.send_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffReplyAcknowledgement"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Provider rule violation",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Provider unavailable or outcome unknown",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "description": "ADR-020/021: exact nigson-commerce SERVICE_COMMERCE notification.send_WITH_SIGNED_ACTOR, current SALES only, no selected organization. A second Commerce-signed assertion must bind the exact API-194 context GET and match this command actor identity. Integration fetches the authoritative destination, requires a configured active WhatsApp transactional template, commits an encrypted durable Integration-owned intent and keyed stable command hash; no provider HTTP in the command transaction. The fenced sender rechecks API-205 suppression immediately before the single unlocked Twilio write. UNKNOWN never retries a create.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffReplyCommand"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1655,6 +1818,65 @@
           "acknowledged": {
             "type": "boolean",
             "const": true
+          }
+        }
+      },
+      "StaffReplyCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "commandId",
+          "leadId",
+          "templateCode",
+          "channel",
+          "variables"
+        ],
+        "properties": {
+          "commandId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "leadId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "templateCode": {
+            "type": "string",
+            "const": "STAFF_LEAD_REPLY"
+          },
+          "channel": {
+            "type": "string",
+            "const": "WHATSAPP"
+          },
+          "variables": {
+            "type": "object",
+            "maxProperties": 20,
+            "propertyNames": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_]{1,40}$"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 1000
+            }
+          }
+        }
+      },
+      "StaffReplyAcknowledgement": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "jobId",
+          "state"
+        ],
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "type": "string",
+            "const": "PENDING"
           }
         }
       }

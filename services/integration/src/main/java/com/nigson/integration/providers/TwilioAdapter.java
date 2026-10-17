@@ -17,6 +17,8 @@ public final class TwilioAdapter implements SmsProvider,WhatsAppProvider {
  }
  public ProviderHttp.Mode mode(){return mode;}
  public String accountFingerprint(){return TwilioAccount.fingerprint(mode,account,service);}
+ public String accountSid(){return account;}
+ public String messagingServiceSid(){return service;}
  private JsonNode call(String method,String path,Map<String,String> fields){
   if(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");
   var response=http.call(method,path,"application/x-www-form-urlencoded",fields==null?"":ProviderHttp.form(fields),auth);

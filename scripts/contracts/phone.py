@@ -39,6 +39,14 @@ def operations(private=False):
     return result
 def extend_commerce(spec):
     spec['components']['schemas'].update(schemas());spec['paths'].update(operations());return spec
+def staff_reply_extend_commerce(spec):
+    from authorization import object_schema, operation, parameter, UUID, REF
+    model=spec['components']['schemas']
+    model['StaffLeadReply']=object_schema({'templateCode':{'type':'string','const':'STAFF_LEAD_REPLY'},'channel':{'type':'string','const':'WHATSAPP'},'variables':{'type':'object','maxProperties':20,'propertyNames':{'type':'string','pattern':'^[A-Za-z0-9_]{1,40}$'},'additionalProperties':{'type':'string','maxLength':1000}}})
+    model['StaffLeadReplyAcknowledgement']=object_schema({'jobId':UUID,'state':{'type':'string','const':'PENDING'}})
+    op=operation('API-192','ADR-020/021: current Commerce BFF SALES role and session-bound API-194/API-193 actor assertions. CSRF and Idempotency-Key required; fixed Integration relay only, no phone or provider input. Returns durable pending job after Integration commits encrypted recipient/context and command identity.','StaffLeadReplyAcknowledgement',[parameter('id','path',UUID,True),parameter('Idempotency-Key','header',UUID,True),parameter('X-CSRF-TOKEN','header',{'type':'string','minLength':43,'maxLength':43},True)])
+    op['requestBody']={'required':True,'content':{'application/json':{'schema':REF('StaffLeadReply')}}};op['responses']['202']=op['responses'].pop('200');op['responses']['202']['headers']={'Cache-Control':{'schema':{'const':'no-store'}}}
+    spec['paths']['/api/v1/staff/leads/{id}/messages']={'post':op};return spec
 def experience_contract():
     from authorization import operation, parameter, UUID, REF
     paths=operations(True)

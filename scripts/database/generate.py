@@ -190,13 +190,15 @@ def generate():
         table = tables[fullname]
         owner, name = fullname.split('.')
         base = Path(f'services/{owner}/src/main/resources/db/changelog')
-        fields = [column(field) for field in table['fields']]
+        additive_columns = {'integration.notification_dispatch': {'command_hash','recipient_ciphertext','variables_ciphertext','context_key_revision','context_basis'}}
+        fields = [column(field) for field in table['fields'] if field['name'] not in additive_columns.get(fullname,set())]
         fields.append(f'CONSTRAINT {name}_id_pk PRIMARY KEY (id)')
         fields.append(f'CONSTRAINT {name}_version_ck CHECK (version >= 0)')
         for field in table['fields']:
             if field['type'] == 'uuid':
                 fields.append(f"CONSTRAINT {name}_{field['name']}_nonnil_ck CHECK ({field['name']} <> '00000000-0000-0000-0000-000000000000'::uuid)")
-        for i, check in enumerate(table['checks'].split(';'), 1):
+        checks = [check for check in table['checks'].split(';') if not (fullname == 'integration.notification_dispatch' and check.strip().startswith('staff context is all NULL'))]
+        for i, check in enumerate(checks, 1):
             fields.append(f'CONSTRAINT {name}_rule_{i}_ck CHECK ({predicate(check.strip())})')
         statements = [f'CREATE TABLE {fullname} (\n    ' + ',\n    '.join(fields) + '\n);']
         statements.append(f'GRANT SELECT, INSERT, UPDATE, DELETE ON {fullname} TO nigson_{owner}_app;')
@@ -250,6 +252,22 @@ def generate():
     files[base/(stem+'-rollback.sql')]=("DO $$ BEGIN IF EXISTS (SELECT 1 FROM experience.inbound_message WHERE sender_ciphertext IS NULL) THEN RAISE EXCEPTION 'Cannot restore inbound sender ciphertext NOT NULL while retention-erased records exist'; END IF; END $$;\nALTER TABLE experience.inbound_message ALTER COLUMN sender_ciphertext SET NOT NULL;\n")
     payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-platform','logicalFilePath':'experience/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
     files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    # API-193 staff replies need a private durable recipient and variables
+    # envelope. Keep already-applied 024 DDL immutable and refuse populated rollback.
+    owner='integration';base=Path('services/integration/src/main/resources/db/changelog');stem='025-msg-001-staff-reply-envelope';change='integration-20261017-msg-001-envelope'
+    statements=[
+        'ALTER TABLE integration.notification_dispatch ADD COLUMN command_hash char(64);',
+        'ALTER TABLE integration.notification_dispatch ADD COLUMN recipient_ciphertext bytea;',
+        'ALTER TABLE integration.notification_dispatch ADD COLUMN variables_ciphertext bytea;',
+        'ALTER TABLE integration.notification_dispatch ADD COLUMN context_key_revision varchar(40);',
+        'ALTER TABLE integration.notification_dispatch ADD COLUMN context_basis varchar(40);',
+        "ALTER TABLE integration.notification_dispatch ADD CONSTRAINT notification_dispatch_staff_context_ck CHECK ((command_hash IS NULL AND recipient_ciphertext IS NULL AND variables_ciphertext IS NULL AND context_key_revision IS NULL AND context_basis IS NULL) OR (command_hash IS NOT NULL AND command_hash ~ '^[a-f0-9]{64}$' AND recipient_ciphertext IS NOT NULL AND octet_length(recipient_ciphertext) BETWEEN 29 AND 512 AND variables_ciphertext IS NOT NULL AND octet_length(variables_ciphertext) BETWEEN 29 AND 8192 AND context_key_revision IS NOT NULL AND context_key_revision ~ '^[A-Za-z0-9_-]{1,40}$' AND context_basis IS NOT NULL AND context_basis IN ('SIGNED_INBOUND_REQUEST','VERIFIED_DESTINATION')));"
+    ]
+    files[base/(stem+'.sql')]='-- ADR-020: encrypted staff-reply destination and variables stay Integration-owned.\n'+'\n'.join(statements)+'\n'
+    files[base/(stem+'-rollback.sql')]=( "DO $$ BEGIN IF EXISTS (SELECT 1 FROM integration.notification_dispatch WHERE command_hash IS NOT NULL OR recipient_ciphertext IS NOT NULL OR variables_ciphertext IS NOT NULL OR context_key_revision IS NOT NULL OR context_basis IS NOT NULL) THEN RAISE EXCEPTION 'Populated staff-reply context: use expand/contract migration'; END IF; END $$;\n" + '\n'.join([f'ALTER TABLE integration.notification_dispatch DROP CONSTRAINT notification_dispatch_staff_context_ck;'] + [f'ALTER TABLE integration.notification_dispatch DROP COLUMN {column};' for column in ['context_basis','context_key_revision','variables_ciphertext','recipient_ciphertext','command_hash']])+'\n')
+    guard="SELECT CASE WHEN current_user='nigson_integration_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+    payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-messaging','logicalFilePath':'integration/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+    files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';wrapper=base/'releases'/'BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
     for name in SESSION_TABLES:
         tables[name]['creation_changeset'] = 'commerce-20261005-002'
         tables[name]['creation_file'] = 'services/commerce/src/main/resources/db/changelog/001-framework-sessions.sql'

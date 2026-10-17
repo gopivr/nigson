@@ -1,0 +1,13 @@
+{
+  "result": "PASS",
+  "owner": "integration",
+  "command": "JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home/bin:$PATH ENV=test python3 scripts/messaging/schema_upgrade.py",
+  "checks": [
+    "Previous accepted BP1 applied without dispatch table",
+    "Existing checksums and legacy UNKNOWN notification retained",
+    "Repeated upgrade unchanged",
+    "Actual empty staff-reply envelope rollback/reapply",
+    "Actual populated staff-reply context rollback refusal preserves encrypted intent and changelog"
+  ],
+  "local_state_preserved": true
+}

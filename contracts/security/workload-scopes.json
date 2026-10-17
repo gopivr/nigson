@@ -274,7 +274,7 @@
     "method": "POST",
     "path": "/internal/v1/notification-commands",
     "owner": "integration",
-    "client": "nigson-experience",
+    "client": "nigson-commerce",
     "scope": "notification.send_WITH_SIGNED_ACTOR",
     "phase": 1
   },

@@ -1,0 +1,5 @@
+Command: ENV=test make status-check schema-check command-surface-check
+
+Result: PASS (exit 0), 2026-10-17. TEST-FOUND-TREE, generated database catalog check, OpenAPI generation comparison, repository/schema/command-surface checks, and contract suite all passed. Contract suite: 80 tests, zero failures/errors/skips.
+
+Additional direct checks: git diff --check; python3 scripts/contracts/authorization.py; python3 scripts/contracts/integration.py; python3 scripts/contracts/phone.py; python3 scripts/database/generate.py --check. All passed.

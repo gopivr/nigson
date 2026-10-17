@@ -16,4 +16,4 @@ def java25(env):
     return set_java()
 
 if __name__=='__main__':
-    module.main(java_tests='InboundMessageSecretsTest,InboundMessagePersistenceTest,PhoneSecretsTest,PhoneConsentPersistenceTest,PhoneHttpTest,AuditPersistenceTest,BuildCompatibilityTest',evidence=ROOT/'.build/messaging-inbound/database-evidence',run_python=False,java_environment=java25,completion='PASS: API-190 signed Twilio HTTP ingress, STOP/HELP/private lead, encrypted record, SID dedup and owner commit checks; live sender/account qualification not implied')
+    module.main(java_tests='InboundMessageSecretsTest,InboundMessagePersistenceTest,PhoneSecretsTest,PhoneConsentPersistenceTest,PhoneHttpTest,StaffReplyPersistenceTest,AuditPersistenceTest,BuildCompatibilityTest',evidence=ROOT/'.build/messaging-inbound/database-evidence',run_python=False,java_environment=java25,completion='PASS: API-190 signed Twilio ingress, API-192/193 actor-bound durable WhatsApp reply, API-205 fresh suppression fence, encrypted context, stable dedup, UNKNOWN after uncertain provider acceptance, and owner commit checks; live sender/account qualification not implied')
