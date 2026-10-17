@@ -23,6 +23,16 @@ resource "aws_security_group" "database" {
   vpc_id = var.vpc_id
   tags   = local.tags
 }
+resource "aws_ecr_repository" "identity" {
+  name                 = "nigson/${var.environment}/identity"
+  image_tag_mutability = "IMMUTABLE"
+  image_scanning_configuration { scan_on_push = true }
+  encryption_configuration {
+    encryption_type = "KMS"
+    kms_key         = var.kms_key_arn
+  }
+  tags = local.tags
+}
 resource "aws_vpc_security_group_ingress_rule" "public_tls" {
   security_group_id = aws_security_group.public.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -47,7 +57,10 @@ resource "aws_vpc_security_group_ingress_rule" "from_load_balancer" {
   to_port                      = 8443
 }
 resource "aws_vpc_security_group_ingress_rule" "management" {
-  for_each                     = { public = aws_security_group.public.id, admin = aws_security_group.admin.id, metrics = var.metrics_security_group_id }
+  for_each = merge(
+    { public = aws_security_group.public.id, admin = aws_security_group.admin.id },
+    { for id in var.metrics_security_group_ids : "metrics-${id}" => id }
+  )
   security_group_id            = aws_security_group.server.id
   referenced_security_group_id = each.value
   ip_protocol                  = "tcp"
@@ -63,8 +76,9 @@ resource "aws_vpc_security_group_ingress_rule" "cluster" {
   to_port                      = tonumber(each.value)
 }
 resource "aws_vpc_security_group_ingress_rule" "database" {
+  for_each                     = merge({ identity = aws_security_group.server.id }, var.owner_task_security_groups)
   security_group_id            = aws_security_group.database.id
-  referenced_security_group_id = aws_security_group.server.id
+  referenced_security_group_id = each.value
   ip_protocol                  = "tcp"
   from_port                    = 5432
   to_port                      = 5432
@@ -101,7 +115,7 @@ resource "aws_vpc_security_group_egress_rule" "dns" {
 }
 resource "aws_db_subnet_group" "identity" {
   name       = local.name
-  subnet_ids = var.private_subnet_ids
+  subnet_ids = var.database_subnet_ids
   tags       = local.tags
 }
 resource "aws_db_parameter_group" "identity" {
@@ -143,7 +157,7 @@ resource "aws_db_instance" "identity" {
   copy_tags_to_snapshot           = true
   deletion_protection             = true
   skip_final_snapshot             = false
-  final_snapshot_identifier       = "${local.name}-operator-final"
+  final_snapshot_identifier       = "${local.name}-operator-final-${substr(sha256(var.policy_revision), 0, 8)}"
   auto_minor_version_upgrade      = false
   allow_major_version_upgrade     = false
   enabled_cloudwatch_logs_exports = ["postgresql"]
@@ -250,10 +264,10 @@ resource "aws_iam_role_policy" "execution" {
   role = aws_iam_role.execution.id
   policy = jsonencode({ Version = "2012-10-17", Statement = [
     { Effect = "Allow", Action = ["ecr:GetAuthorizationToken"], Resource = "*" },
-    { Effect = "Allow", Action = ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"], Resource = "arn:aws:ecr:${data.aws_region.current.region}:${split(".", var.identity_image)[0]}:repository/${split("@", split("amazonaws.com/", var.identity_image)[1])[0]}" },
+    { Effect = "Allow", Action = ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"], Resource = aws_ecr_repository.identity.arn },
     { Effect = "Allow", Action = ["logs:CreateLogStream", "logs:PutLogEvents"], Resource = "${aws_cloudwatch_log_group.identity.arn}:*" },
     { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = values(var.secret_refs) },
-    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn }
+    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn, Condition = { StringEquals = { "kms:ViaService" = "secretsmanager.${data.aws_region.current.region}.amazonaws.com" }, "ForAnyValue:StringEquals" = { "kms:EncryptionContext:SecretARN" = values(var.secret_refs) } } }
   ] })
 }
 resource "aws_iam_role" "task" {
@@ -343,6 +357,7 @@ output "dedicated_database_address" { value = aws_db_instance.identity.address }
 output "database_admin_secret_arn" { value = aws_db_instance.identity.master_user_secret[0].secret_arn }
 output "identity_service_name" { value = aws_ecs_service.identity.name }
 output "identity_security_group_id" { value = aws_security_group.server.id }
+output "identity_database_security_group_id" { value = aws_security_group.database.id }
 output "keycloak_task_definition_arn" { value = aws_ecs_task_definition.identity.arn }
 output "public_alb_dns_name" { value = aws_lb.public.dns_name }
 output "private_admin_alb_dns_name" { value = aws_lb.admin.dns_name }
@@ -443,8 +458,11 @@ resource "aws_iam_role" "bootstrap_execution" {
   tags               = local.tags
 }
 resource "aws_iam_role_policy" "bootstrap_execution" {
-  role   = aws_iam_role.bootstrap_execution.id
-  policy = jsonencode({ Version = "2012-10-17", Statement = concat(jsondecode(aws_iam_role_policy.execution.policy).Statement, [{ Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = values(var.bootstrap_secret_refs) }]) })
+  role = aws_iam_role.bootstrap_execution.id
+  policy = jsonencode({ Version = "2012-10-17", Statement = concat(jsondecode(aws_iam_role_policy.execution.policy).Statement, [
+    { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = values(var.bootstrap_secret_refs) },
+    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn, Condition = { StringEquals = { "kms:ViaService" = "secretsmanager.${data.aws_region.current.region}.amazonaws.com" }, "ForAnyValue:StringEquals" = { "kms:EncryptionContext:SecretARN" = values(var.bootstrap_secret_refs) } } }
+  ]) })
 }
 resource "aws_ecs_task_definition" "bootstrap" {
   family                   = "${local.name}-bootstrap"
@@ -468,3 +486,4 @@ resource "aws_ecs_task_definition" "bootstrap" {
 }
 output "bootstrap_task_definition_arn" { value = aws_ecs_task_definition.bootstrap.arn }
 output "public_identity_web_acl_arn" { value = aws_wafv2_web_acl.identity.arn }
+output "identity_repository_url" { value = aws_ecr_repository.identity.repository_url }

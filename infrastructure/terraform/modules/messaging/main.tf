@@ -63,3 +63,6 @@ resource "aws_iam_role_policy" "consumer" {
 }
 output "topic_arn" { value = aws_sns_topic.domain.arn }
 output "queues" { value = { for name, q in aws_sqs_queue.consumer : name => q.url } }
+output "queue_names" {
+  value = { for name, queue in aws_sqs_queue.consumer : name => { work = queue.name, dead = aws_sqs_queue.dead[name].name } }
+}

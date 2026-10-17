@@ -8,6 +8,8 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
+INFRA-001 — IN_PROGRESS (partial offline increment). Added multi-AZ private networking, ECS Fargate/ECR/ALB, PostgreSQL 18 commerce DB, versioned private/public S3 buckets, KMS and secret metadata, SNS/SQS/CloudWatch composition, dedicated Keycloak service/database, stage/prod account-fenced roots and protected OIDC read-only plan workflow. Module formatting/validation PASS; 29 mocked Terraform runs PASS across 8 tested modules (messaging has no module tests); both roots init with backend disabled and validate. CI YAML parse and git diff whitespace checks PASS. The identity database accepts only explicit owner task groups (commerce/experience/integration, plus AI at BP5). This does not meet AC-INFRA-001: immutable artifact build/publish, SBOM and vulnerability/signature gates, migration/deploy sequencing, verified reachability, stage health/API smoke and rollback evidence remain unimplemented/unqualified. Cloud plan/apply, restore and endpoint smoke NOT_RUN; account, region, CIDRs, backend, certificates, approved retention, named operator and real deployment inputs are absent.
+
 MSG-001 — DONE (offline engineering) at `95573e203fc59ca7edf171eed5bc25b1389e75fd`. API-192 Commerce session/CSRF relay, API-193 durable encrypted Integration command/worker, API-194 signed eligible context, API-205 fresh suppression, and API-189 staff receipt projection are implemented. Native tests: Commerce4, Experience27, Integration11, zero skips; repository/contracts/schema80 PASS; previous-schema migration, repeat, empty rollback/reapply and populated rollback refusal PASS. Evidence/report: `docs/implementation/2026-10-17-MSG-001.md` and `docs/implementation/evidence/2026-10-17-MSG-001-api192-193/`. Live Twilio qualification is NOT_RUN pending genuine sender/account/template inputs; flags remain off. No critical approval blocks offline engineering.
 
 Next dependency-ready work: INFRA-001 predecessors FOUND-002, PLAT-002 and SEC-001 are accepted and infrastructure work can proceed independently. CARRIER-001 BP3 quote/API-195 remains dependency-bound.
@@ -169,7 +171,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-MSG-001 API-190 — signed inbound WhatsApp STOP/HELP/private lead, followed by API-192–194 private SALES reply/context. Durable intake accepted at 99e3c13137bbcb66238106ca079067e2; fenced sender at 0309b480b40b7b02fe848784ec7548e8c6c2acdc; signed API-188/189 receipt handler at 7580c1b5040f751ceb9a4eda823939375b621d27. Phone proof/BFF/private eligibility/suppression is qualified offline. Existing MOCK-001/SEC-001/PLAT-001 dependencies are accepted; no critical approval blocks engineering. CARRIER-001 BP3 API-195 remains dependency-bound; experience/infrastructure proceed independently.
+INFRA-001 — Continue immutable artifact build/publish with SBOM, vulnerability/signature checks, safe migrations and protected stage deploy/smoke/rollback workflow. Offline infra roots/modules are present; required staging acceptance is still open. FOUND-002, PLAT-002 and SEC-001 are accepted; CARRIER-001 BP3 quote/API-195 remains dependency-bound and unrelated engineering proceeds independently.
 
 ## Session Evidence / Protocol
 

@@ -1,0 +1,208 @@
+name: infrastructure plan
+
+on:
+  pull_request:
+    paths:
+      - "infrastructure/terraform/**"
+      - ".github/workflows/infra-plan.yml"
+      - "docs/runbooks/deploy.md"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment for a read-only plan
+        required: true
+        type: choice
+        options: [stage, prod]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nigson-infrastructure-${{ inputs.environment || 'validation' }}
+  cancel-in-progress: false
+
+jobs:
+  offline-validation:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+        with:
+          terraform_version: 1.12.2
+          terraform_wrapper: false
+      - name: Check formatting
+        run: |
+          terraform -chdir=infrastructure/terraform/modules/network fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/compute fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/database fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/storage fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/secrets fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/messaging fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/observability fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/identity fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/modules/private-trust fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/environments/stage fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/environments/prod fmt -check -recursive
+      - name: Initialize without a backend
+        run: |
+          terraform -chdir=infrastructure/terraform/modules/network init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/compute init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/database init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/storage init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/secrets init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/messaging init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/observability init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/identity init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/modules/private-trust init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/environments/stage init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/environments/prod init -backend=false -input=false
+      - name: Validate configuration
+        run: |
+          terraform -chdir=infrastructure/terraform/modules/network validate
+          terraform -chdir=infrastructure/terraform/modules/compute validate
+          terraform -chdir=infrastructure/terraform/modules/database validate
+          terraform -chdir=infrastructure/terraform/modules/storage validate
+          terraform -chdir=infrastructure/terraform/modules/secrets validate
+          terraform -chdir=infrastructure/terraform/modules/messaging validate
+          terraform -chdir=infrastructure/terraform/modules/observability validate
+          terraform -chdir=infrastructure/terraform/modules/identity validate
+          terraform -chdir=infrastructure/terraform/modules/private-trust validate
+          terraform -chdir=infrastructure/terraform/environments/stage validate
+          terraform -chdir=infrastructure/terraform/environments/prod validate
+      - name: Test private network topology
+        run: terraform -chdir=infrastructure/terraform/modules/network test
+      - name: Test private ECS and ALB boundaries
+        run: terraform -chdir=infrastructure/terraform/modules/compute test
+      - name: Test private database boundaries
+        run: terraform -chdir=infrastructure/terraform/modules/database test
+      - name: Test S3 storage and access controls
+        run: terraform -chdir=infrastructure/terraform/modules/storage test
+      - name: Test KMS and secret phase gates
+        run: terraform -chdir=infrastructure/terraform/modules/secrets test
+      - name: Test identity network boundaries
+        run: terraform -chdir=infrastructure/terraform/modules/identity test
+      - name: Test observability phase gates
+        run: terraform -chdir=infrastructure/terraform/modules/observability test
+      - name: Test private service trust
+        run: terraform -chdir=infrastructure/terraform/modules/private-trust test
+
+  remote-plan:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      TF_IN_AUTOMATION: "true"
+      TF_INPUT: "false"
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_EXPECTED_ACCOUNT_ID: ${{ vars.AWS_EXPECTED_ACCOUNT_ID }}
+      AWS_PLAN_ROLE_ARN: ${{ vars.AWS_PLAN_ROLE_ARN }}
+      TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
+      TF_VAR_region: ${{ vars.AWS_REGION }}
+      TF_VAR_expected_account_id: ${{ vars.AWS_EXPECTED_ACCOUNT_ID }}
+      TF_VAR_policy_revision: ${{ vars.NETWORK_POLICY_REVISION }}
+      TF_VAR_vpc_cidr: ${{ vars.VPC_CIDR }}
+      TF_VAR_availability_zones: ${{ vars.AVAILABILITY_ZONES_JSON }}
+      TF_VAR_subnet_cidrs: ${{ vars.SUBNET_CIDRS_JSON }}
+      TF_VAR_product_phase: ${{ vars.PRODUCT_PHASE }}
+      TF_VAR_private_namespace: ${{ vars.PRIVATE_NAMESPACE }}
+      TF_VAR_key_administrator_role_arns: ${{ vars.KMS_ADMIN_ROLE_ARNS_JSON }}
+      TF_VAR_secret_recovery_window_days: ${{ vars.SECRET_RECOVERY_WINDOW_DAYS }}
+      TF_VAR_secret_names: ${{ vars.SECRET_NAMES_JSON }}
+      TF_VAR_waf_web_acl_arn: ${{ vars.WAF_WEB_ACL_ARN }}
+      TF_VAR_public_certificate_arn: ${{ vars.PUBLIC_CERTIFICATE_ARN }}
+      TF_VAR_alb_deletion_protection: ${{ vars.ALB_DELETION_PROTECTION }}
+      TF_VAR_log_retention_days: ${{ vars.LOG_RETENTION_DAYS }}
+      TF_VAR_database_connection_budget: ${{ vars.DATABASE_CONNECTION_BUDGET }}
+      TF_VAR_cpu_target_percent: ${{ vars.CPU_TARGET_PERCENT }}
+      TF_VAR_services: ${{ vars.SERVICES_JSON }}
+      TF_VAR_public_routes: ${{ vars.PUBLIC_ROUTES_JSON }}
+      TF_VAR_database_engine_version: ${{ vars.DATABASE_ENGINE_VERSION }}
+      TF_VAR_database_instance_class: ${{ vars.DATABASE_INSTANCE_CLASS }}
+      TF_VAR_database_allocated_storage_gib: ${{ vars.DATABASE_ALLOCATED_STORAGE_GIB }}
+      TF_VAR_database_max_allocated_storage_gib: ${{ vars.DATABASE_MAX_ALLOCATED_STORAGE_GIB }}
+      TF_VAR_database_backup_retention_days: ${{ vars.DATABASE_BACKUP_RETENTION_DAYS }}
+      TF_VAR_database_multi_az: ${{ vars.DATABASE_MULTI_AZ }}
+      TF_VAR_database_deletion_protection: ${{ vars.DATABASE_DELETION_PROTECTION }}
+      TF_VAR_cloudfront_distribution_arn: ${{ vars.CLOUDFRONT_DISTRIBUTION_ARN }}
+      TF_VAR_bucket_names: ${{ vars.BUCKET_NAMES_JSON }}
+      TF_VAR_bucket_lifecycle_days: ${{ vars.BUCKET_LIFECYCLE_DAYS_JSON }}
+      TF_VAR_bucket_access: ${{ vars.BUCKET_ACCESS_JSON }}
+      TF_VAR_named_operator: ${{ vars.NAMED_OPERATOR }}
+      TF_VAR_alert_destination_arns: ${{ vars.ALERT_DESTINATION_ARNS_JSON }}
+      TF_VAR_identity_admin_cidrs: ${{ vars.IDENTITY_ADMIN_CIDRS_JSON }}
+      TF_VAR_identity_public_hostname: ${{ vars.IDENTITY_PUBLIC_HOSTNAME }}
+      TF_VAR_identity_admin_hostname: ${{ vars.IDENTITY_ADMIN_HOSTNAME }}
+      TF_VAR_identity_realm: ${{ vars.IDENTITY_REALM }}
+      TF_VAR_identity_public_certificate_arn: ${{ vars.IDENTITY_PUBLIC_CERTIFICATE_ARN }}
+      TF_VAR_identity_admin_certificate_arn: ${{ vars.IDENTITY_ADMIN_CERTIFICATE_ARN }}
+      TF_VAR_identity_image: ${{ vars.IDENTITY_IMAGE_DIGEST }}
+      TF_VAR_identity_database_instance_class: ${{ vars.IDENTITY_DATABASE_INSTANCE_CLASS }}
+      TF_VAR_identity_service_enabled: ${{ vars.IDENTITY_SERVICE_ENABLED }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+        with:
+          terraform_version: 1.12.2
+          terraform_wrapper: false
+      - name: Validate required environment configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$AWS_REGION" =~ ^[a-z]{2}(-gov)?-[a-z]+-[0-9]+$ ]]
+          [[ "$AWS_EXPECTED_ACCOUNT_ID" =~ ^[0-9]{12}$ ]]
+          [[ "$AWS_PLAN_ROLE_ARN" =~ ^arn:aws[a-z-]*:iam::${AWS_EXPECTED_ACCOUNT_ID}:role/[A-Za-z0-9+=,.@_/-]+$ ]]
+          [[ "$TF_STATE_BUCKET" =~ ^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$ ]]
+          [[ -n "$TF_VAR_policy_revision" && -n "$TF_VAR_vpc_cidr" && -n "$TF_VAR_availability_zones" && -n "$TF_VAR_subnet_cidrs" ]]
+          [[ -n "$TF_VAR_product_phase" && -n "$TF_VAR_private_namespace" && -n "$TF_VAR_key_administrator_role_arns" && -n "$TF_VAR_secret_names" ]]
+          [[ -n "$TF_VAR_secret_recovery_window_days" && -n "$TF_VAR_waf_web_acl_arn" ]]
+          [[ -n "$TF_VAR_public_certificate_arn" && -n "$TF_VAR_log_retention_days" && -n "$TF_VAR_database_connection_budget" ]]
+          [[ -n "$TF_VAR_cpu_target_percent" && -n "$TF_VAR_services" && -n "$TF_VAR_public_routes" ]]
+          [[ -n "$TF_VAR_database_engine_version" && -n "$TF_VAR_database_instance_class" ]]
+          [[ -n "$TF_VAR_database_allocated_storage_gib" && -n "$TF_VAR_database_max_allocated_storage_gib" ]]
+          [[ -n "$TF_VAR_database_backup_retention_days" && -n "$TF_VAR_database_multi_az" && -n "$TF_VAR_database_deletion_protection" ]]
+          [[ -n "$TF_VAR_cloudfront_distribution_arn" && -n "$TF_VAR_bucket_names" && -n "$TF_VAR_bucket_lifecycle_days" && -n "$TF_VAR_bucket_access" ]]
+          [[ -n "$TF_VAR_named_operator" && -n "$TF_VAR_alert_destination_arns" ]]
+          [[ -n "$TF_VAR_identity_admin_cidrs" && -n "$TF_VAR_identity_public_hostname" && -n "$TF_VAR_identity_admin_hostname" ]]
+          [[ -n "$TF_VAR_identity_realm" && -n "$TF_VAR_identity_public_certificate_arn" && -n "$TF_VAR_identity_admin_certificate_arn" ]]
+          [[ -n "$TF_VAR_identity_image" && -n "$TF_VAR_identity_database_instance_class" && -n "$TF_VAR_identity_service_enabled" ]]
+      - name: Obtain short-lived environment credentials through OIDC
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
+        with:
+          role-to-assume: ${{ env.AWS_PLAN_ROLE_ARN }}
+          role-session-name: nigson-infra-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Initialize environment state
+        shell: bash
+        env:
+          TARGET_ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          set -euo pipefail
+          terraform -chdir="infrastructure/terraform/environments/${TARGET_ENVIRONMENT}" init -input=false \
+            -backend-config="bucket=${TF_STATE_BUCKET}" \
+            -backend-config="key=nigson/${TARGET_ENVIRONMENT}/terraform.tfstate" \
+            -backend-config="region=${AWS_REGION}" \
+            -backend-config="encrypt=true" \
+            -backend-config="use_lockfile=true"
+      - name: Generate read-only reviewed plan
+        shell: bash
+        env:
+          TARGET_ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          set -euo pipefail
+          root="infrastructure/terraform/environments/${TARGET_ENVIRONMENT}"
+          terraform -chdir="$root" plan -input=false -lock-timeout=5m -out="$RUNNER_TEMP/nigson.tfplan"
+          terraform -chdir="$root" show -json "$RUNNER_TEMP/nigson.tfplan" | python3 -c '
+          import json, sys
+          plan = json.load(sys.stdin)
+          counts = plan.get("resource_changes", [])
+          adds = sum(change["change"]["actions"] == ["create"] for change in counts)
+          changes = sum(change["change"]["actions"] == ["update"] for change in counts)
+          destroys = sum("delete" in change["change"]["actions"] for change in counts)
+          print(f"Reviewed plan summary: create={adds} update={changes} delete_or_replace={destroys}")
+          '

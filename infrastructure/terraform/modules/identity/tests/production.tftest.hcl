@@ -16,17 +16,20 @@ variables {
   ecs_cluster_arn                = "arn:aws:ecs:us-east-1:000000000000:cluster/test"
   public_subnet_ids              = ["subnet-test-public-a", "subnet-test-public-b"]
   private_subnet_ids             = ["subnet-test-private-a", "subnet-test-private-b"]
+  database_subnet_ids            = ["subnet-test-data-a", "subnet-test-data-b"]
+  product_phase                  = 1
+  owner_task_security_groups     = { commerce = "sg-test-commerce", experience = "sg-test-experience", integration = "sg-test-integration" }
   admin_cidrs                    = ["10.94.0.0/24"]
   trusted_proxy_cidrs            = ["10.93.1.0/24", "10.93.2.0/24"]
   aws_endpoint_security_group_id = "sg-test-endpoints"
-  metrics_security_group_id      = "sg-test-metrics"
+  metrics_security_group_ids     = []
   public_hostname                = "identity.synthetic.test"
   admin_hostname                 = "identity-admin.synthetic.test"
   realm                          = "synthetic-test"
   public_certificate_arn         = "arn:aws:acm:us-east-1:000000000000:certificate/test-public"
   admin_certificate_arn          = "arn:aws:acm:us-east-1:000000000000:certificate/test-private"
   kms_key_arn                    = "arn:aws:kms:us-east-1:000000000000:key/synthetic-test"
-  identity_image                 = "000000000000.dkr.ecr.us-east-1.amazonaws.com/test-keycloak@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  identity_image                 = "000000000000.dkr.ecr.us-east-1.amazonaws.com/nigson/stage/identity@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   secret_refs = {
     database_password = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-db"
     tls_certificate   = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-cert"
@@ -70,6 +73,10 @@ run "bootstrap_closed" {
   assert {
     condition     = alltrue([for rule in aws_vpc_security_group_egress_rule.server : rule.referenced_security_group_id != null]) && aws_vpc_security_group_ingress_rule.cluster["7800"].from_port == 7800 && aws_vpc_security_group_ingress_rule.cluster["57800"].from_port == 57800
     error_message = "Cluster and external connections must be private and explicitly scoped."
+  }
+  assert {
+    condition     = length(aws_vpc_security_group_ingress_rule.database) == 4 && aws_vpc_security_group_ingress_rule.database["commerce"].referenced_security_group_id == "sg-test-commerce"
+    error_message = "Dedicated identity PostgreSQL must allow Keycloak and each explicitly named business owner."
   }
 }
 run "two_replicas" {

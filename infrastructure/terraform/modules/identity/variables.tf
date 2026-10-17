@@ -26,6 +26,27 @@ variable "private_subnet_ids" {
     error_message = "At least two private availability-zone subnets required."
   }
 }
+variable "database_subnet_ids" {
+  type = list(string)
+  validation {
+    condition     = length(var.database_subnet_ids) >= 2
+    error_message = "Dedicated identity database requires isolated data subnets in at least two AZs."
+  }
+}
+variable "owner_task_security_groups" {
+  type = map(string)
+  validation {
+    condition     = length(var.owner_task_security_groups) >= 3 && alltrue([for name, id in var.owner_task_security_groups : (contains(["commerce", "experience", "integration"], name) || (name == "ai" && var.product_phase == 5)) && can(regex("^sg-[A-Za-z0-9-]+$", id))])
+    error_message = "Identity DB ingress requires each named commerce owner and BP5-only AI task group."
+  }
+}
+variable "product_phase" {
+  type = number
+  validation {
+    condition     = contains([1, 2, 3, 4, 5], var.product_phase)
+    error_message = "Explicit product phase required."
+  }
+}
 variable "admin_cidrs" {
   type = list(string)
   validation {
@@ -41,7 +62,14 @@ variable "trusted_proxy_cidrs" {
   }
 }
 variable "aws_endpoint_security_group_id" { type = string }
-variable "metrics_security_group_id" { type = string }
+variable "metrics_security_group_ids" {
+  type    = set(string)
+  default = []
+  validation {
+    condition     = alltrue([for id in var.metrics_security_group_ids : can(regex("^sg-[A-Za-z0-9-]+$", id))])
+    error_message = "Only explicit private telemetry security groups may access the identity management port."
+  }
+}
 variable "public_hostname" {
   type = string
   validation {
@@ -75,8 +103,8 @@ variable "kms_key_arn" {
 variable "identity_image" {
   type = string
   validation {
-    condition     = can(regex("^[0-9]{12}\\.dkr\\.ecr\\.[a-z0-9-]+\\.amazonaws\\.com/[a-zA-Z0-9/_-]+@sha256:[a-f0-9]{64}$", var.identity_image))
-    error_message = "Immutable optimized Keycloak ECR artifact digest required."
+    condition     = can(regex("^[0-9]{12}\\.dkr\\.ecr\\.[a-z0-9-]+\\.amazonaws\\.com/nigson/${var.environment}/identity@sha256:[a-f0-9]{64}$", var.identity_image))
+    error_message = "Immutable optimized Keycloak ECR artifact digest from this environment's identity repository required."
   }
 }
 variable "secret_refs" {
