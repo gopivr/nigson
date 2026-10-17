@@ -731,6 +731,132 @@
         }
       }
     },
+    "/internal/v1/notification-suppression-checks": {
+      "post": {
+        "operationId": "API-205",
+        "description": "Exact Integration workload. Return only current WhatsApp suppression for a keyed destination hash, serializing with STOP; no destination or lead details. The worker must call outside its database transaction immediately before a send and fail closed on unavailable response.",
+        "security": [
+          {
+            "workload": [
+              "notification.read"
+            ]
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneSuppressionResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneSuppressionCheck"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/webhooks/notifications/twilio/whatsapp": {
       "post": {
         "operationId": "API-190",
@@ -1350,6 +1476,35 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          }
+        }
+      },
+      "PhoneSuppressionCheck": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "destinationHash",
+          "channel"
+        ],
+        "properties": {
+          "destinationHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "channel": {
+            "const": "WHATSAPP"
+          }
+        }
+      },
+      "PhoneSuppressionResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "suppressed"
+        ],
+        "properties": {
+          "suppressed": {
+            "type": "boolean"
           }
         }
       },

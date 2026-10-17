@@ -9,7 +9,7 @@ class PhoneContracts(unittest.TestCase):
     def test_generated_experience_routes_and_exact_scopes(self):
         subprocess.run([sys.executable,'scripts/contracts/phone.py','--check'],cwd=ROOT,check=True)
         spec=json.loads((ROOT/'contracts/openapi/experience.yaml').read_text())
-        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-127','API-175','API-187','API-190','API-194','API-201','API-202','API-203','API-204'})
+        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-127','API-175','API-187','API-190','API-194','API-201','API-202','API-203','API-204','API-205'})
         inbound=spec['paths']['/api/v1/webhooks/notifications/twilio/whatsapp']['post']
         self.assertEqual(inbound['security'],[])
         self.assertIn('X-Twilio-Signature',{p['name'] for p in inbound['parameters']})
@@ -17,6 +17,9 @@ class PhoneContracts(unittest.TestCase):
         context=spec['paths']['/internal/v1/leads/{id}/messaging-context']['get']
         self.assertEqual(context['security'],[{'workload':['notification.read_WITH_SIGNED_ACTOR'],'signedActor':[]}])
         self.assertEqual(set(spec['components']['schemas']['LeadMessagingContext']['properties']),{'phone','channel','destinationHash','eligible','basis','approvedTemplateCodes'})
+        suppression=spec['paths']['/internal/v1/notification-suppression-checks']['post']
+        self.assertEqual(suppression['security'],[{'workload':['notification.read']}])
+        self.assertEqual(set(spec['components']['schemas']['PhoneSuppressionCheck']['properties']),{'destinationHash','channel'})
     def test_inbound_retention_and_phone_only_migrations_are_additive_and_guarded(self):
         release=json.loads((ROOT/'services/experience/src/main/resources/db/changelog/releases/BP1.yaml').read_text())['databaseChangeLog']
         self.assertTrue(any(row['include']['file']=='../023-msg-001-lead-email-nullable.yaml' for row in release))
@@ -28,6 +31,9 @@ class PhoneContracts(unittest.TestCase):
             self.assertEqual(scopes[f'API-{number}']['owner'],'experience')
             self.assertEqual(scopes[f'API-{number}']['client'],'nigson-commerce')
             self.assertTrue(scopes[f'API-{number}']['scope'].endswith('_WITH_SIGNED_CUSTOMER'))
+        self.assertEqual(scopes['API-205']['owner'],'experience')
+        self.assertEqual(scopes['API-205']['client'],'nigson-integration')
+        self.assertEqual(scopes['API-205']['scope'],'notification.read')
     def test_public_masked_dto_and_explicit_channel_purpose(self):
         spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());schemas=spec['components']['schemas']
         self.assertEqual(set(schemas['PhoneDestination']['properties']),{'id','channel','maskedAddress','status','version'})

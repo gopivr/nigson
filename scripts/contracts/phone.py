@@ -12,6 +12,8 @@ def schemas():
             'PhoneProofPrivate':object_schema({'code':{'type':'string','pattern':'^[0-9]{6}$'},'version':VERSION}),
             'PhoneWithdrawal':object_schema({'version':VERSION}),
             'PhoneVerificationJob':object_schema({'jobId':UUID}),
+            'PhoneSuppressionCheck':object_schema({'destinationHash':{'type':'string','pattern':'^[a-f0-9]{64}$'},'channel':{'const':'WHATSAPP'}}),
+            'PhoneSuppressionResult':object_schema({'suppressed':{'type':'boolean'}}),
             'PhoneVerificationContext':object_schema({'phone':{'type':'string','pattern':r'^\+234[1-9][0-9]{9}$'},'channel':channel,'code':{'type':'string','pattern':'^[0-9]{6}$'},'expiresAt':{'type':'string','format':'date-time'},'templateCode':{'const':'CONTACT_VERIFICATION'}})}
 def operations(private=False):
     from authorization import operation, parameter, UUID, REF
@@ -43,6 +45,10 @@ def experience_contract():
     context194=operation('API-194','Exact Integration workload plus a fresh signed SALES actor. Return only a verified inbound or active, purpose-granted and currently unsuppressed WhatsApp destination for this CONTACT lead; context is limited to an approved transactional reply. No order lookup, marketing authority or caller-supplied destination.','LeadMessagingContext',[parameter('id','path',UUID,True)])
     context194['security']=[{'workload':['notification.read_WITH_SIGNED_ACTOR'],'signedActor':[]}]
     paths['/internal/v1/leads/{id}/messaging-context']={'get':context194}
+    suppression205=operation('API-205','Exact Integration workload. Return only current WhatsApp suppression for a keyed destination hash, serializing with STOP; no destination or lead details. The worker must call outside its database transaction immediately before a send and fail closed on unavailable response.','PhoneSuppressionResult',[])
+    suppression205['security']=[{'workload':['notification.read']}]
+    suppression205['requestBody']={'required':True,'content':{'application/json':{'schema':REF('PhoneSuppressionCheck')}}}
+    paths['/internal/v1/notification-suppression-checks']={'post':suppression205}
     paths['/api/v1/webhooks/notifications/twilio/whatsapp']={'post':{
         'operationId':'API-190','summary':'Verified Twilio WhatsApp inbound','description':'Validate the complete signed form against the configured public URL; deduplicate MessageSid and atomically apply STOP/UNSUBSCRIBE suppression, fixed HELP TwiML, or a private CONTACT lead. No browser authentication or CSRF; no order lookup, login, marketing grant, or financial mutation.',
         'security':[],'parameters':[parameter('X-Twilio-Signature','header',{'type':'string','minLength':1,'maxLength':256},True)],

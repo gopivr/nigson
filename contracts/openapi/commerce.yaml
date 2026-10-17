@@ -19139,6 +19139,35 @@
           }
         }
       },
+      "PhoneSuppressionCheck": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "destinationHash",
+          "channel"
+        ],
+        "properties": {
+          "destinationHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "channel": {
+            "const": "WHATSAPP"
+          }
+        }
+      },
+      "PhoneSuppressionResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "suppressed"
+        ],
+        "properties": {
+          "suppressed": {
+            "type": "boolean"
+          }
+        }
+      },
       "PhoneVerificationContext": {
         "type": "object",
         "additionalProperties": false,

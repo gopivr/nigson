@@ -288,6 +288,15 @@
     "phase": 1
   },
   {
+    "api": "API-205",
+    "method": "POST",
+    "path": "/internal/v1/notification-suppression-checks",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "notification.read",
+    "phase": 1
+  },
+  {
     "api": "API-196",
     "method": "POST",
     "path": "/internal/v1/carrier/shipments/{id}/reconciliation",

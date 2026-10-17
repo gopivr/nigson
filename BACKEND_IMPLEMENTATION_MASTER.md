@@ -459,7 +459,7 @@ Apply section 44 budgets. Commit primary data and outbox locally, surface a corr
 | Owner | New tables / responsibilities | New APIs |
 |---|---|---|
 | commerce | carrier_quote | API-181, API-188, API-191, API-195 |
-| experience | communication_destination, destination_verification, inbound_message | API-183, API-184, API-185, API-186, API-187, API-190, API-192, API-194 |
+| experience | communication_destination, destination_verification, inbound_message, communication_suppression | API-183, API-184, API-185, API-186, API-187, API-190, API-192, API-194, API-205 |
 | integration | carrier_booking, message_receipt | API-182, API-189, API-193 |
 
 
@@ -7471,7 +7471,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 - **Request:** `{commandId:UUID,leadId:UUID,templateCode:string,channel:WHATSAPP,variables:object}`.
 - **Response:** `{jobId:UUID,state:PENDING}`.
 - **Statuses:** 202 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Allowlisted sender/template/context and trusted SALES actor; fetch authoritative destination/context, never arbitrary phone/provider URL; audited stable command dedup.
+- **Validation / business rules:** Allowlisted sender/template/context and trusted SALES actor. Require a second Commerce-signed actor assertion bound to the exact API-194 context GET; both assertions must resolve to the same current SALES actor. Fetch authoritative destination/context, never arbitrary phone/provider URL; audited stable command dedup. Encrypt recipient/context in Integration-owned dispatch intent, then recheck API-205 suppression immediately before provider HTTP.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, NOTIFICATION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -7489,6 +7489,19 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 - **Validation / business rules:** Trusted originating SALES actor and exact lead scope required; phone from verified signed inbound or owned active destination, latest suppression enforced. Signed inbound supports requested utility reply only, never marketing consent or authenticated order access.
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, NOTIFICATION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+
+### API-205 POST /internal/v1/notification-suppression-checks
+
+- **Service / module / phase:** experience / notification / BP1.
+- **Authentication:** Exact Integration workload JWT; no user actor.
+- **Authorization:** SERVICE_INTEGRATION:notification.read.
+- **Headers:** X-Correlation-ID; JSON only; no query parameters.
+- **Request:** `{destinationHash:string,channel:WHATSAPP}`.
+- **Response:** `{suppressed:boolean}`.
+- **Statuses:** 200 success; common section13 errors.
+- **Validation / business rules:** Hash must be 64 lowercase hex characters. Acquire the same destination advisory lock as STOP and API-194; return current channel suppression only. Do not disclose phone, lead or consent data. Audit the bounded decision. Integration dispatch workers call outside their transaction immediately before send and fail closed on unavailable response.
+- **Events:** None.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, PROVIDER_UNAVAILABLE.
 
 ### API-195 POST /api/v1/quotes/{id}/delivery-quotes
 
@@ -9337,7 +9350,7 @@ Permanent task IDs; existing IDs retained. Specification1.1.0 adds six explicit 
 - **Dependencies:** MOCK-001, SEC-001, PLAT-001
 - **Files/packages:** `services/integration/notification/`, `services/experience/consent/`, `services/experience/lead/`, `services/commerce/notification/`, `contracts/providers/twilio/`, `tests/providers/twilio/`
 - **Implementation:** Implement Twilio SMS and WhatsApp through separate SmsProvider/WhatsAppProvider ports, same HTTP adapter mode-config, channel-aware templates/jobs/dedup. Phone proof and explicit channel-purpose grants, exact callback signature/publicURL verification, DLR mapping, inbound WhatsApp STOP/help/contact lead, staff template reply. Keep worker private; callbacks facade persists owner records through scoped APIs. No auth/MFA SMS change or autonomous WhatsApp AI implied.
-- **Contracts:** APIs API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-102, API-127, API-142, API-165, API-175; tables experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression; events EVT-028
+- **Contracts:** APIs API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-205, API-102, API-127, API-142, API-165, API-175; tables experience.communication_destination, experience.destination_verification, experience.inbound_message, integration.message_receipt, integration.notification_template, integration.notification_job, experience.consent_event, experience.communication_suppression; events EVT-028
 - **Tests:** TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION.
 - **Acceptance AC-MSG-001:** Given verified phone purpose grants and dummy mock credentials, when SMS/WhatsApp sends/statuses/inbound/withdrawal replay, then one authorized channel job exists, unconsented phone is denied, forged callback fails, and queued/sent never masquerades as delivered; real credential/sender/template configuration needs no code rewrite.
 

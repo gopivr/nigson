@@ -176,6 +176,7 @@
   "/internal/v1/jobs/{id}/retry",
   "/internal/v1/knowledge/reindex",
   "/internal/v1/leads/{id}/messaging-context",
+  "/internal/v1/notification-suppression-checks",
   "/internal/v1/leads/{id}/notification-context",
   "/internal/v1/leads/{id}/quote-association",
   "/internal/v1/leads/{id}/quote-context",
