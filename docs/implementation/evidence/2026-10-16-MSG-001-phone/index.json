@@ -305,5 +305,7 @@
   "post_stage_checks": {
     "repository": "PASS/exit0",
     "git_diff_cached_check": "PASS/exit0"
-  }
+  },
+  "accepted_source_commit": "cda3bacca12c6a53a552415f337b130a50b33cb8",
+  "acceptance_scope": "Phone proof/BFF/private consent eligibility and suppression only; whole MSG-001 IN_PROGRESS"
 }

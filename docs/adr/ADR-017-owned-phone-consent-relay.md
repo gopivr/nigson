@@ -1,6 +1,6 @@
 # ADR-017: Owned phone consent and fixed BFF relay
 
-Status: Accepted technical design; MSG-001 implementation IN_PROGRESS.
+Status: Accepted technical design; phone-consent increment accepted offline at cda3bacca12c6a53a552415f337b130a50b33cb8. Whole MSG-001 remains IN_PROGRESS.
 
 Commerce retains browser session/CSRF/current party authority. Experience owns encrypted communication destinations, proof attempts, explicit channel-purpose grants and suppression. Existing public APIs183–186 stay unchanged. Add fixed private companions201–204 so commerce can delegate a fresh current CUSTOMER actor bound to exact method/path/body/correlation; no browser-selected route, phone recipient lookup or cross-owner SQL. Verify/withdraw versions are inside the signed private body. Private ingress/JWT/client/audience/operation/actor guards remain mandatory. Source rechecks current session/party before returning a relay result. No bearer token or cookie is forwarded to experience.
 

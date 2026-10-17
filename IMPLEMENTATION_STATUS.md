@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-MSG-001 — IN_PROGRESS. Phone-consent increment qualified offline; actual acceptance source commit pending. Native33/no skips, full185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes/zero fresh OSV findings and nine reproduced artifacts PASS. Current BFF/CSRF/fixed private201–204, owned encrypted proof/context, explicit channel-purpose policy grants, authoritative127/175 suppression and audit/races qualified. Sender/UNKNOWN/status/inbound WhatsApp/SALES reply remain pending. Real sender/template/account/policy/retention inputs block live activation only; no critical approval blocks offline work.
+MSG-001 — IN_PROGRESS. Phone-consent increment accepted offline at cda3bacca12c6a53a552415f337b130a50b33cb8. Native33/no skips, full185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes/zero fresh OSV findings and nine reproduced artifacts PASS. Current BFF/CSRF/fixed private201–204, owned encrypted proof/context, explicit channel-purpose policy grants, authoritative127/175 suppression and audit/races qualified. Sender/UNKNOWN/status/inbound WhatsApp/SALES reply remain pending. Real sender/template/account/policy/retention inputs block live activation only; no critical approval blocks offline work.
 
 CARRIER-001 account binding increment (CF-CARRIER-007 / ADR-016) — accepted offline at 2cb1643de0a01f5f935f5a24e929b1073f5c22bf. Native282/no skips, independent financial66/no skips, full179 Java/334 gated,74 contracts,271 unchanged dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Trusted private account identity is immutable through rate/checkout/order/shipment/API-119; missing identity or rotation rejects before new checkout/create. Public DTOs unchanged; no DDL/owner changes. Historical/UNKNOWN evidence remains reconcilable. Whole CARRIER-001 IN_PROGRESS; BP3 API-195 and genuine provider/release qualification remain pending. No critical approval blocks offline engineering.
 
@@ -139,7 +139,7 @@ PASS — Native33/no skips: real PostgreSQL plus actual BFF/private HTTP/JWT/KMS
 
 ## Last Successful Commit
 
-2cb1643de0a01f5f935f5a24e929b1073f5c22bf — verified CF-CARRIER-007 immutable carrier account binding; native282/financial66 no skips, full179 Java/334 gated,74 contracts,271 dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Earlier handover c1eb1cde54b397abff38194dc4138b7856a16b6c and cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4 remain accepted. Whole CARRIER-001 IN_PROGRESS. No deployment.
+cda3bacca12c6a53a552415f337b130a50b33cb8 — MSG-001 phone-consent increment accepted offline:33 native/no skips,185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 dependency artifacts/zero fresh OSV findings and nine reproduced artifacts. Whole MSG-001 IN_PROGRESS. Carrier account binding 2cb1643de0a01f5f935f5a24e929b1073f5c22bf remains accepted; no deployment.
 
 ## Confirmed Inputs
 
