@@ -98,6 +98,10 @@ run "keep_worker_private_and_deny_internal_paths" {
     condition     = jsondecode(aws_ecs_task_definition.service["commerce"].container_definitions)[0].readonlyRootFilesystem == true
     error_message = "Application containers must run with a read-only root filesystem."
   }
+  assert {
+    condition     = aws_ecr_repository.service["commerce"].image_tag_mutability == "IMMUTABLE" && aws_ecr_repository.service["commerce"].image_scanning_configuration[0].scan_on_push
+    error_message = "Published service images must retain immutable tags and scan on push."
+  }
 }
 
 run "reject_public_worker_route" {

@@ -57,12 +57,6 @@ resource "aws_ecr_repository" "service" {
   tags = merge(local.tags, { Service = each.key })
 }
 
-resource "aws_ecr_lifecycle_policy" "service" {
-  for_each   = var.services
-  repository = aws_ecr_repository.service[each.key].name
-  policy     = jsonencode({ rules = [{ rulePriority = 1, description = "Expire untagged layers after seven days", selection = { tagStatus = "untagged", countType = "sinceImagePushed", countUnit = "days", countNumber = 7 }, action = { type = "expire" } }] })
-}
-
 resource "aws_cloudwatch_log_group" "service" {
   for_each          = var.services
   name              = "/nigson/${var.environment}/${each.key}"

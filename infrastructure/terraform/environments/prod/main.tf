@@ -78,6 +78,7 @@ module "identity" {
   admin_certificate_arn          = var.identity_admin_certificate_arn
   kms_key_arn                    = module.secrets.kms_key_arn
   identity_image                 = var.identity_image
+  cpu_architecture               = var.identity_cpu_architecture
   secret_refs = {
     database_password = module.secrets.secret_arns.identity["database_password"]
     tls_certificate   = module.secrets.secret_arns.identity["tls_certificate"]

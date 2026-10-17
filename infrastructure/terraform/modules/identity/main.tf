@@ -285,7 +285,7 @@ resource "aws_ecs_task_definition" "identity" {
   task_role_arn            = aws_iam_role.task.arn
   runtime_platform {
     operating_system_family = "LINUX"
-    cpu_architecture        = "ARM64"
+    cpu_architecture        = var.cpu_architecture
   }
   volume { name = "identity-data" }
   volume { name = "identity-tmp" }
@@ -474,7 +474,7 @@ resource "aws_ecs_task_definition" "bootstrap" {
   task_role_arn            = aws_iam_role.task.arn
   runtime_platform {
     operating_system_family = "LINUX"
-    cpu_architecture        = "ARM64"
+    cpu_architecture        = var.cpu_architecture
   }
   volume { name = "identity-data" }
   volume { name = "identity-tmp" }

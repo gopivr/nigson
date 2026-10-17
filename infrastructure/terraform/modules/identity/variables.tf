@@ -107,6 +107,13 @@ variable "identity_image" {
     error_message = "Immutable optimized Keycloak ECR artifact digest from this environment's identity repository required."
   }
 }
+variable "cpu_architecture" {
+  type = string
+  validation {
+    condition     = contains(["ARM64", "X86_64"], var.cpu_architecture)
+    error_message = "Explicit supported ECS identity task architecture required."
+  }
+}
 variable "secret_refs" {
   type = object({ database_password = string, tls_certificate = string, tls_key = string, database_ca = string })
   validation {

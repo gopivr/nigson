@@ -5,7 +5,9 @@ on:
     paths:
       - "infrastructure/terraform/**"
       - ".github/workflows/infra-plan.yml"
+      - ".github/workflows/infra-artifacts.yml"
       - "docs/runbooks/deploy.md"
+      - "scripts/infra/**"
   workflow_dispatch:
     inputs:
       environment:
@@ -88,6 +90,8 @@ jobs:
         run: terraform -chdir=infrastructure/terraform/modules/observability test
       - name: Test private service trust
         run: terraform -chdir=infrastructure/terraform/modules/private-trust test
+      - name: Test immutable artifact publication gates
+        run: bash scripts/infra/tests/publish-images-test.sh
 
   remote-plan:
     if: github.event_name == 'workflow_dispatch'
@@ -142,6 +146,7 @@ jobs:
       TF_VAR_identity_public_certificate_arn: ${{ vars.IDENTITY_PUBLIC_CERTIFICATE_ARN }}
       TF_VAR_identity_admin_certificate_arn: ${{ vars.IDENTITY_ADMIN_CERTIFICATE_ARN }}
       TF_VAR_identity_image: ${{ vars.IDENTITY_IMAGE_DIGEST }}
+      TF_VAR_identity_cpu_architecture: ${{ vars.IDENTITY_CPU_ARCHITECTURE }}
       TF_VAR_identity_database_instance_class: ${{ vars.IDENTITY_DATABASE_INSTANCE_CLASS }}
       TF_VAR_identity_service_enabled: ${{ vars.IDENTITY_SERVICE_ENABLED }}
     steps:
@@ -171,6 +176,7 @@ jobs:
           [[ -n "$TF_VAR_identity_admin_cidrs" && -n "$TF_VAR_identity_public_hostname" && -n "$TF_VAR_identity_admin_hostname" ]]
           [[ -n "$TF_VAR_identity_realm" && -n "$TF_VAR_identity_public_certificate_arn" && -n "$TF_VAR_identity_admin_certificate_arn" ]]
           [[ -n "$TF_VAR_identity_image" && -n "$TF_VAR_identity_database_instance_class" && -n "$TF_VAR_identity_service_enabled" ]]
+          [[ "$TF_VAR_identity_cpu_architecture" == "ARM64" || "$TF_VAR_identity_cpu_architecture" == "X86_64" ]]
       - name: Obtain short-lived environment credentials through OIDC
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
         with:

@@ -30,6 +30,7 @@ variables {
   admin_certificate_arn          = "arn:aws:acm:us-east-1:000000000000:certificate/test-private"
   kms_key_arn                    = "arn:aws:kms:us-east-1:000000000000:key/synthetic-test"
   identity_image                 = "000000000000.dkr.ecr.us-east-1.amazonaws.com/nigson/stage/identity@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  cpu_architecture               = "ARM64"
   secret_refs = {
     database_password = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-db"
     tls_certificate   = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-cert"
@@ -78,6 +79,10 @@ run "bootstrap_closed" {
     condition     = length(aws_vpc_security_group_ingress_rule.database) == 4 && aws_vpc_security_group_ingress_rule.database["commerce"].referenced_security_group_id == "sg-test-commerce"
     error_message = "Dedicated identity PostgreSQL must allow Keycloak and each explicitly named business owner."
   }
+  assert {
+    condition     = aws_ecs_task_definition.identity.runtime_platform[0].cpu_architecture == "ARM64" && aws_ecs_task_definition.bootstrap.runtime_platform[0].cpu_architecture == "ARM64"
+    error_message = "Identity and bootstrap task architectures must match the explicitly selected artifact platform."
+  }
 }
 run "two_replicas" {
   command = plan
@@ -85,6 +90,14 @@ run "two_replicas" {
   assert {
     condition     = aws_ecs_service.identity.desired_count == 2 && aws_ecs_service.identity.deployment_minimum_healthy_percent == 100 && aws_ecs_service.identity.deployment_circuit_breaker[0].rollback
     error_message = "Enabled identity requires two replicas and safe replacement."
+  }
+}
+run "select_x86_artifact_platform" {
+  command = plan
+  variables { cpu_architecture = "X86_64" }
+  assert {
+    condition     = aws_ecs_task_definition.identity.runtime_platform[0].cpu_architecture == "X86_64" && aws_ecs_task_definition.bootstrap.runtime_platform[0].cpu_architecture == "X86_64"
+    error_message = "The selected artifact architecture must be used consistently by identity and bootstrap tasks."
   }
 }
 run "deny_public_admin_cidr" {

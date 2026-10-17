@@ -51,3 +51,33 @@ No cloud staging smoke, rollback or production deployment is claimed by the
 offline module work. They require a provisioned account, approved network and
 retention policy, TLS certificates, deployment role, operator alert destination
 and a reviewed release plan.
+
+## Immutable image publication
+
+After Terraform has created the environment's immutable ECR repositories, run
+the manual `publish infrastructure images` workflow in that environment. It
+uses only a short-lived GitHub OIDC role (`AWS_PUBLISH_ROLE_ARN`) and verifies
+the returned AWS account against `AWS_EXPECTED_ACCOUNT_ID`. Scope the role to
+ECR upload and scan-read actions for that environment's commerce, experience,
+integration, identity, and BP5-only AI repositories. Do not grant ECR delete,
+Terraform, ECS deployment, IAM, or secret-read permissions.
+
+Choose the ECS architecture explicitly. The workflow builds the app,
+commerce migration, and Keycloak images for that architecture, tags them with
+the source commit and architecture, and uses BuildKit to attach SBOM and
+provenance attestations. ECR scan-on-push results must reach COMPLETE with no
+HIGH or CRITICAL findings or the run fails. Existing immutable tags are reused
+and rechecked rather than overwritten. The workflow run summary records each
+repository, tag, content digest, and scan counts; use those digests in a
+separately reviewed Terraform plan. Keep every task definition's CPU
+architecture aligned with its image set. AI is built only when product phase 5
+is explicitly selected and its ECR repository exists.
+
+ECR lifecycle expiry is intentionally not configured until an approved image
+and attestation retention period exists. Do not manually delete image tags or
+untagged attestation manifests as part of routine cleanup.
+
+Image publication does not deploy or run migrations. The production migration
+launcher, per-owner credential provisioning and migration-aware ECS sequencing
+remain required before a stage rollout can meet AC-INFRA-001. Do not treat a
+successful image scan as a deployment or migration acceptance.

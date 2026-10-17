@@ -1,0 +1,70 @@
+name: publish infrastructure images
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment's pre-created immutable ECR repositories
+        required: true
+        type: choice
+        options: [stage, prod]
+      architecture:
+        description: ECS architecture for this immutable image set
+        required: true
+        type: choice
+        options: [arm64, amd64]
+      product_phase:
+        description: Approved product phase (AI is built only for BP5)
+        required: true
+        type: choice
+        options: ['1', '2', '3', '4', '5']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nigson-image-publish-${{ inputs.environment }}-${{ inputs.architecture }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ${{ inputs.architecture == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+    timeout-minutes: 90
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_EXPECTED_ACCOUNT_ID: ${{ vars.AWS_EXPECTED_ACCOUNT_ID }}
+      AWS_PUBLISH_ROLE_ARN: ${{ vars.AWS_PUBLISH_ROLE_ARN }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Validate target and short-lived role configuration
+        shell: bash
+        env:
+          TARGET_ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          set -euo pipefail
+          [[ "$AWS_REGION" =~ ^[a-z]{2}(-gov)?-[a-z]+-[0-9]+$ ]]
+          [[ "$AWS_EXPECTED_ACCOUNT_ID" =~ ^[0-9]{12}$ ]]
+          [[ "$AWS_PUBLISH_ROLE_ARN" =~ ^arn:aws[a-z-]*:iam::${AWS_EXPECTED_ACCOUNT_ID}:role/[A-Za-z0-9+=,.@_/-]+$ ]]
+          [[ "$TARGET_ENVIRONMENT" == "stage" || "$TARGET_ENVIRONMENT" == "prod" ]]
+          [[ "$GITHUB_SHA" =~ ^[a-f0-9]{40}$ ]]
+      - name: Obtain short-lived credentials through OIDC
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
+        with:
+          role-to-assume: ${{ env.AWS_PUBLISH_ROLE_ARN }}
+          role-session-name: nigson-publish-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Verify scoped account identity
+        run: |
+          set -euo pipefail
+          actual_account="$(aws sts get-caller-identity --query Account --output text)"
+          [[ "$actual_account" == "$AWS_EXPECTED_ACCOUNT_ID" ]]
+      - name: Build immutable artifacts, attest SBOM/provenance and enforce ECR scan gate
+        env:
+          TARGET_ENVIRONMENT: ${{ inputs.environment }}
+          TARGET_ARCHITECTURE: ${{ inputs.architecture }}
+          PRODUCT_PHASE: ${{ inputs.product_phase }}
+        run: scripts/infra/publish-images.sh "$TARGET_ENVIRONMENT" "$TARGET_ARCHITECTURE" "$PRODUCT_PHASE" "$AWS_EXPECTED_ACCOUNT_ID" "$AWS_REGION"

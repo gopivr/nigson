@@ -99,5 +99,12 @@ variable "identity_realm" { type = string }
 variable "identity_public_certificate_arn" { type = string }
 variable "identity_admin_certificate_arn" { type = string }
 variable "identity_image" { type = string }
+variable "identity_cpu_architecture" {
+  type = string
+  validation {
+    condition     = contains(["ARM64", "X86_64"], var.identity_cpu_architecture)
+    error_message = "Explicit supported identity ECS CPU architecture required."
+  }
+}
 variable "identity_database_instance_class" { type = string }
 variable "identity_service_enabled" { type = bool }
