@@ -8,7 +8,9 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-MSG-001 API-192–194 private SALES reply/context — IN_PROGRESS. API-194 context lookup partial accepted offline at source commit d5ef5d36e0e7af6e0802c16ec0274a31b65517b7: only a signed SALES assertion can disclose verified inbound/active opt-in WhatsApp context, and STOP suppression is re-read. API-192 session/CSRF SALES relay and API-193 durable deduplicated Integration enqueue/dispatch remain pending. No sender HTTP occurs in an owner transaction.
+MSG-001 — DONE (offline engineering) at `95573e203fc59ca7edf171eed5bc25b1389e75fd`. API-192 Commerce session/CSRF relay, API-193 durable encrypted Integration command/worker, API-194 signed eligible context, API-205 fresh suppression, and API-189 staff receipt projection are implemented. Native tests: Commerce4, Experience27, Integration11, zero skips; repository/contracts/schema80 PASS; previous-schema migration, repeat, empty rollback/reapply and populated rollback refusal PASS. Evidence/report: `docs/implementation/2026-10-17-MSG-001.md` and `docs/implementation/evidence/2026-10-17-MSG-001-api192-193/`. Live Twilio qualification is NOT_RUN pending genuine sender/account/template inputs; flags remain off. No critical approval blocks offline engineering.
+
+Next dependency-ready work: INFRA-001 predecessors FOUND-002, PLAT-002 and SEC-001 are accepted and infrastructure work can proceed independently. CARRIER-001 BP3 quote/API-195 remains dependency-bound.
 
 MSG-001 API-190 signed inbound WhatsApp — accepted offline at source commit cf7144d0699af1aeb51c66f849c9f70107a6d18c: native HTTP/PostgreSQL tests5/no skips for signed callback, invalid signature, browser-origin rejection, HELP, STOP suppression, SID replay/mismatch, private lead, outbox/audit, and retention erasure. Repository/contracts/schema80 PASS; dependency graph271 unchanged. Live Twilio account/sender/key/retention approval and provider qualification remain NOT_RUN.
 
@@ -137,7 +139,7 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 - [ ] INFRA-001 — Implement ECS reference infrastructure and immutable delivery pipeline (EP10)
 - [ ] OPS-002 — Verify resilience, restore and measured capacity (EP10)
 - [ ] REL-001 — Qualify each product phase and hand over documented release (EP13)
-- [ ] MSG-001 — Implement SMS WhatsApp consent proof callbacks and mock qualification (EP05)
+- [x] MSG-001 — DONE offline engineering at `95573e203fc59ca7edf171eed5bc25b1389e75fd`; genuine Twilio qualification/live activation NOT_RUN (EP05)
 
 ## Build Status
 

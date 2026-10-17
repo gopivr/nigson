@@ -9963,7 +9963,7 @@ Build/test PASS is command-scoped and timestamped; it does not imply every test 
 - [ ] INT-PROVI-001 Implement integration provider increment — AC-INT-PROVI-001
 - [ ] PAYSTACK-001 Complete exclusive Paystack launch adapter and mock qualification — AC-PAYSTACK-001
 - [ ] CARRIER-001 Implement required FedEx rate booking cancellation and tracking — AC-CARRIER-001
-- [ ] MSG-001 Implement SMS WhatsApp consent proof callbacks and mock qualification — AC-MSG-001
+- [x] MSG-001 — Offline engineering complete at `95573e203fc59ca7edf171eed5bc25b1389e75fd` — AC-MSG-001; genuine Twilio provider/live activation remains NOT_RUN pending approved sender/account/template inputs
 
 
 ## EP06 — Promotions, loyalty, referrals and wheel

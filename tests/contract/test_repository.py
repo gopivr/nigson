@@ -38,7 +38,7 @@ class RepositoryChecks(unittest.TestCase):
 
     def test_missing_status_task(self):
         file = self.root / "IMPLEMENTATION_STATUS.md"
-        file.write_text(file.read_text().replace("- [ ] MSG-001 —", "- MSG-001 —"))
+        file.write_text(file.read_text().replace("- [x] MSG-001 —", "- MSG-001 —"))
         self.assertTrue(any("Task registry mismatch" in error for error in checker.check(self.root)))
 
     def test_duplicate_status_task(self):
