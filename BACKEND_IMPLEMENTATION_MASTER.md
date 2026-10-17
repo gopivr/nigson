@@ -3224,6 +3224,41 @@ provider_mode varchar(10) NN DEFAULT MOCK
 - **Checks:** state IN (PENDING,CLAIMED,SENT,DELIVERED,SUPPRESSED,FAILED,UNKNOWN); attempt_count>=0; channel IN (EMAIL,SMS,WHATSAPP); provider_mode IN (MOCK,SANDBOX,LIVE).
 - **Business invariant:** Fetch minimum authorized delivery context just before send; fail closed if consent cannot be checked. Unique business_key includes channel and destination. Never fallback between channels without fresh consent and explicitly configured routing.
 
+### integration.notification_dispatch
+
+Owner: `integration`; module: `notification`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK FK notification_job
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+template_id uuid NN FK notification_template
+locale varchar(16) NN
+template_snapshot jsonb NN
+template_hash char(64) NN
+account_sid varchar(34) NN
+messaging_service_sid varchar(34) NN
+account_hash char(64) NN
+generation uuid NN
+source_occurred_at timestamptz NN
+correlation_id uuid NN
+stage varchar(20) NN DEFAULT INTENT
+attempt_count integer NN DEFAULT 0
+next_attempt_at timestamptz NN DEFAULT now()
+lease_until timestamptz NULL
+submitted_at timestamptz NULL
+provider_message_id varchar(160) NULL
+request_hash char(64) NULL
+error_code varchar(60) NULL
+```
+
+- **Keys and indexes:** UQ(account_sid,provider_message_id); IX(stage,next_attempt_at).
+- **Checks:** stage IN (INTENT,SUBMITTING,ACCEPTED,UNKNOWN,SUPPRESSED,FAILED); attempt_count>=0; jsonb_typeof(template_snapshot)='object'; account_sid ~ '^AC[a-fA-F0-9]{32}$'; messaging_service_sid ~ '^MG[a-fA-F0-9]{32}$'; account_hash ~ '^[a-f0-9]{64}$'; template_hash ~ '^[a-f0-9]{64}$'.
+- **Business invariant:** ADR-018. Paired job/template/account/generation identity is immutable; static template only, never rendered phone/code. Missing paired record rejects replay. SUBMITTING/UNKNOWN cannot grant fresh send; account/restore/source guards apply before unlocked provider HTTP. Populated rollback refuses; no automatic legacy backfill.
+
 ### integration.notification_attempt
 
 Owner: `integration`; module: `notification`; introduced: BP1; mutation: append-only.
@@ -9816,6 +9851,7 @@ ARCH rows preserve every source heading; BP rows preserve functional features; t
 | REQ-DB-experience.destination_verification | experience | API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-102, API-127, API-142, API-165, API-175 | experience.destination_verification | EVT-028 | DATA-001; MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-DB-experience.inbound_message | experience | API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-102, API-127, API-142, API-165, API-175 | experience.inbound_message | EVT-028 | DATA-001; MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
 | REQ-DB-integration.message_receipt | integration | API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-102, API-127, API-142, API-165, API-175 | integration.message_receipt | EVT-028 | DATA-001; MSG-001; TEST-SMS-MOCK; TEST-WHATSAPP-MOCK; TEST-TWILIO-SIGNATURE; TEST-PHONE-CONSENT; TEST-MESSAGE-UNKNOWN; TEST-UNSUBSCRIBE-SUPPRESSION. | AC-MSG-001 |
+| REQ-DB-integration.notification_dispatch | integration | EVT-028 intake and MSG-001 dispatch | integration.notification_dispatch, integration.notification_job, integration.notification_template | EVT-028 | MSG-001; ADR-018; TEST-MESSAGE-UNKNOWN; TEST-QUEUE-REPLAY | AC-MSG-001 |
 | REQ-EVT-027 | commerce -> integration | API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195 | producer.outbox_event; consumer.processed_event | shipment.booking.requested.v1 | CARRIER-001; TEST-QUEUE-REPLAY | AC-CARRIER-001 |
 | REQ-EVT-028 | experience -> integration | API-183, API-184, API-185, API-186, API-187, API-188, API-189, API-190, API-192, API-193, API-194, API-102, API-127, API-142, API-165, API-175 | producer.outbox_event; consumer.processed_event | communication.verification.requested.v1 | MSG-001; TEST-QUEUE-REPLAY | AC-MSG-001 |
 

@@ -26,6 +26,12 @@
     },
     {
       "include": {
+        "file": "../024-bp1-notification-dispatch.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
         "file": "../023-bp1-carrier-cancellation.yaml",
         "relativeToChangelogFile": true
       }

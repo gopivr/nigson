@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "owner": "integration",
+  "checks": [
+    "Previous accepted BP1 applied without dispatch table",
+    "Existing checksums and legacy UNKNOWN notification retained",
+    "Repeated upgrade unchanged",
+    "Actual empty Liquibase rollback/reapply",
+    "Actual populated rollback refusal preserves intent and changelog"
+  ],
+  "local_state_preserved": true
+}

@@ -17019,6 +17019,258 @@
       "owner": "integration",
       "phase": 1
     },
+    "integration.notification_dispatch": {
+      "checks": "stage IN (INTENT,SUBMITTING,ACCEPTED,UNKNOWN,SUPPRESSED,FAILED); attempt_count>=0; jsonb_typeof(template_snapshot)='object'; account_sid ~ '^AC[a-fA-F0-9]{32}$'; messaging_service_sid ~ '^MG[a-fA-F0-9]{32}$'; account_hash ~ '^[a-f0-9]{64}$'; template_hash ~ '^[a-f0-9]{64}$'",
+      "creation_changeset": "integration-20261017-msg-001",
+      "creation_file": "services/integration/src/main/resources/db/changelog/024-bp1-notification-dispatch.sql",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "notification_job",
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "notification_template",
+          "name": "template_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "locale",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(16)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "template_snapshot",
+          "nullable": false,
+          "primary": false,
+          "type": "jsonb"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "template_hash",
+          "nullable": false,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "account_sid",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(34)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "messaging_service_sid",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(34)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "account_hash",
+          "nullable": false,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "generation",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "source_occurred_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "correlation_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "INTENT",
+          "external": null,
+          "foreign": null,
+          "name": "stage",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "attempt_count",
+          "nullable": false,
+          "primary": false,
+          "type": "integer"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "next_attempt_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "lease_until",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "submitted_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "provider_message_id",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(160)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "request_hash",
+          "nullable": true,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "error_code",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(60)"
+        }
+      ],
+      "keys": "UQ(account_sid,provider_message_id); IX(stage,next_attempt_at)",
+      "module": "notification",
+      "mutation": "versioned",
+      "owner": "integration",
+      "phase": 1
+    },
     "integration.notification_job": {
       "checks": "state IN (PENDING,CLAIMED,SENT,DELIVERED,SUPPRESSED,FAILED,UNKNOWN); attempt_count>=0; channel IN (EMAIL,SMS,WHATSAPP); provider_mode IN (MOCK,SANDBOX,LIVE)",
       "creation_changeset": "integration-20261006-012",

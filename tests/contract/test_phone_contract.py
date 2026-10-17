@@ -23,3 +23,18 @@ class PhoneContracts(unittest.TestCase):
         verify=spec['paths']['/api/v1/me/communication-destinations/{id}/verification']['post']
         self.assertEqual({p['name'] for p in verify['parameters'] if p['required']},{'id','Idempotency-Key','X-CSRF-TOKEN','If-Match'})
         self.assertEqual(set(schemas['PhoneProofPrivate']['properties']),{'code','version'})
+
+    def test_paired_dispatch_catalog_is_owned_and_contains_no_rendered_recipient(self):
+        model=json.loads((ROOT/'database/schema-manifest.json').read_text())
+        table=model['tables']['integration.notification_dispatch']
+        fields={field['name'] for field in table['fields']}
+        self.assertTrue({'template_snapshot','template_hash','account_hash','generation','source_occurred_at','stage','submitted_at','provider_message_id'}<=fields)
+        self.assertFalse({'phone','rendered_code','rendered_body','destination_ciphertext'}&fields)
+        self.assertEqual(table['owner'],'integration')
+        self.assertEqual(table['phase'],1)
+    def test_new_dispatch_migration_preserves_applied_history_and_blocks_populated_rollback(self):
+        change=json.loads((ROOT/'services/integration/src/main/resources/db/changelog/024-bp1-notification-dispatch.yaml').read_text())['databaseChangeLog'][0]['changeSet']
+        self.assertEqual(change['id'],'integration-20261017-msg-001')
+        rollback=(ROOT/'services/integration/src/main/resources/db/changelog/024-bp1-notification-dispatch-rollback.sql').read_text()
+        self.assertIn('Populated table integration.notification_dispatch',rollback)
+        self.assertIn('RAISE EXCEPTION',rollback)

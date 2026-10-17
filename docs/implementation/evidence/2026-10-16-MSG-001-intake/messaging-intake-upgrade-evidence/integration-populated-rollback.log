@@ -1,0 +1,22 @@
+Rolling Back Changeset: integration/024-bp1-notification-dispatch.yaml::integration-20261017-msg-001::nigson-messaging
+ERROR: Exception Details
+ERROR: Exception Primary Class:  PSQLException
+ERROR: Exception Primary Reason:  ERROR: Populated table integration.notification_dispatch: use expand/contract migration
+  Where: PL/pgSQL function inline_code_block line 1 at RAISE
+ERROR: Exception Primary Source:  PostgreSQL 18.4 (Debian 18.4-1.pgdg12+1)
+PASS: populated notification dispatch rollback refused and preserved evidence
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 17, 2026 12:37:01 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 17, 2026 12:37:01 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 17, 2026 12:37:01 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 17, 2026 12:37:01 AM liquibase.command
+INFO: rollbackCount command encountered an exception.
+Oct 17, 2026 12:37:01 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 17, 2026 12:37:01 AM liquibase.command
+INFO: Logging exception.
+Oct 17, 2026 12:37:01 AM liquibase.command
+INFO: Command execution complete
