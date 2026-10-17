@@ -8,11 +8,11 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-MSG-001 fenced verification sender — IN_PROGRESS. Implement channel-specific ports, fresh scoped API187 context, explicit WhatsApp variable bindings, immutable account/generation/source cutoff and durable SUBMITTING before unlocked provider HTTP. Qualify one-write races, stale leases, UNKNOWN/no resend, read-only SID recovery, safe audit/metrics and actual stateful mocks.
+MSG-001 API-190 signed inbound WhatsApp — IN_PROGRESS. Validate the complete Twilio form signature against the exact configured URL, durably deduplicate by MessageSid, immediately apply STOP/UNSUBSCRIBE suppression in the Experience owner, return the fixed HELP response, and create only a private bounded CONTACT lead for other messages.
 
-MSG-001 durable intake accepted at 99e3c13137bbcb66238106ca0790670bb16e68e2; fenced sender increment accepted after this session. Native54/no skips,78 contracts, full185 Java/359 gated provider regression,271 locked artifacts and nine reproducible artifact hashes PASS. Paired immutable intent, SNS/SQS redelivery, single-write concurrency, SUBMITTING fence, keyed request identity, UNKNOWN/no resend and SID status recovery are qualified offline. Whole MSG-001 IN_PROGRESS: API-188/189 callbacks and API-190/192–194 inbound/SALES remain pending. No genuine provider activation is claimed.
+MSG-001 durable intake accepted at 99e3c13137bbcb66238106ca0790670bb16e68e2; fenced sender source 0309b480b40b7b02fe848784ec7548e8c6c2acdc; API-188/189 status receipt source accepted at 7580c1b5040f751ceb9a4eda823939375b621d27. Callback tests4/no skips,contracts79,271 unchanged dependencies and nine reproducible build artifacts PASS. Complete signature verification, minimized scoped relay, immutable account/job/SID binding, event-hash deduplication, audit and monotonic state projection are qualified offline. API-190 is now IN_PROGRESS; private SALES APIs192–194 remain pending. Whole MSG-001 remains IN_PROGRESS and no genuine provider activation is claimed.
 
-MSG-001 — IN_PROGRESS. Phone-consent increment accepted offline at cda3bacca12c6a53a552415f337b130a50b33cb8. Native33/no skips, full185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes/zero fresh OSV findings and nine reproduced artifacts PASS. Current BFF/CSRF/fixed private201–204, owned encrypted proof/context, explicit channel-purpose policy grants, authoritative127/175 suppression and audit/races qualified. Sender/UNKNOWN/status/inbound WhatsApp/SALES reply remain pending. Real sender/template/account/policy/retention inputs block live activation only; no critical approval blocks offline work.
+MSG-001 — IN_PROGRESS. Phone-consent increment accepted offline at cda3bacca12c6a53a552415f337b130a50b33cb8. Native33/no skips,full185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes/zero fresh OSV findings and nine reproduced artifacts PASS. Current BFF/CSRF/fixed private201–204, owned encrypted proof/context, explicit channel-purpose policy grants, authoritative127/175 suppression and audit/races qualified. Fenced sender accepted offline at 0309b480b40b7b02fe848784ec7548e8c6c2acdc; API-188/189 accepted offline at 7580c1b5040f751ceb9a4eda823939375b621d27. API-190 inbound WhatsApp and private SALES reply remain engineering work. Real sender/template/account/policy/retention inputs block live activation only; no critical approval blocks offline work.
 
 CARRIER-001 account binding increment (CF-CARRIER-007 / ADR-016) — accepted offline at 2cb1643de0a01f5f935f5a24e929b1073f5c22bf. Native282/no skips, independent financial66/no skips, full179 Java/334 gated,74 contracts,271 unchanged dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Trusted private account identity is immutable through rate/checkout/order/shipment/API-119; missing identity or rotation rejects before new checkout/create. Public DTOs unchanged; no DDL/owner changes. Historical/UNKNOWN evidence remains reconcilable. Whole CARRIER-001 IN_PROGRESS; BP3 API-195 and genuine provider/release qualification remain pending. No critical approval blocks offline engineering.
 
@@ -135,15 +135,17 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — MSG-001 phone increment: full185 Java/348 environment-gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes with explicit experience KMS graph edge/zero fresh OSV findings and nine reproduced artifacts. Whole MSG-001 IN_PROGRESS; no sender/callback/live completion claim.
+PASS — MSG-001 phone increment: full185 Java/348 environment-gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes with explicit experience KMS graph edge/zero fresh OSV findings and nine reproduced artifacts. This evidence is scoped to that increment.
+PASS — MSG-001 API-188/189 signed status receipt increment: native4/no skips,79 repo/contract/schema checks,271 unchanged locked artifacts and nine actual Java/Python artifact hashes reproduced in two clean builds. Source 7580c1b5040f751ceb9a4eda823939375b621d27; no live Twilio reachability/qualification claimed.
 
 ## Test Status
 
-PASS — Native33/no skips: real PostgreSQL plus actual BFF/private HTTP/JWT/KMS; CSRF/current authority/body binding, approved policy, keyed hashes/AES-GCM, five committed failed attempts, expiry/rate bound, stable proof/job replay, one-time channel-purpose grants/one active destination, fresh private eligibility/global suppression, audit rollback/races. All-owner fresh/repeat migrations and original Docker state preserved; no DDL change. All-provider HTTP/SMTP regression PASS. Genuine activation/staging/restore NOT_RUN.
+PASS — Phone foundation native33/no skips: real PostgreSQL plus actual BFF/private HTTP/JWT/KMS; CSRF/current authority/body binding, approved policy, keyed hashes/AES-GCM, five committed failed attempts, expiry/rate bound, stable proof/job replay, one-time channel-purpose grants/one active destination, fresh private eligibility/global suppression, audit rollback/races. All-owner fresh/repeat migrations and original Docker state preserved; no DDL change. All-provider HTTP/SMTP regression PASS. Genuine activation/staging/restore NOT_RUN.
+PASS — API-188/189 final native callback suite:4 Java tests/no skips with local PostgreSQL/HTTP mock; Commerce verifies signed full-form ingress/minimization/correlation/malformed forms and Integration verifies unique SID ownership, account/checkpoint rejection, deduplication, audit and terminal monotonicity. Contracts/repository/schema79 PASS; dependency lock271 unchanged; repeated seven JAR/two Python hashes match.
 
 ## Last Successful Commit
 
-cda3bacca12c6a53a552415f337b130a50b33cb8 — MSG-001 phone-consent increment accepted offline:33 native/no skips,185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 dependency artifacts/zero fresh OSV findings and nine reproduced artifacts. Whole MSG-001 IN_PROGRESS. Carrier account binding 2cb1643de0a01f5f935f5a24e929b1073f5c22bf remains accepted; no deployment.
+7580c1b5040f751ceb9a4eda823939375b621d27 — MSG-001 API-188/189 signed status receipt increment accepted offline: native4/no skips,79 repo/contract/schema checks,271 unchanged dependency artifacts and nine reproducible build hashes. Whole MSG-001 IN_PROGRESS; API-190 is next. Earlier phone foundation cda3bacca12c6a53a552415f337b130a50b33cb8 and sender 0309b480b40b7b02fe848784ec7548e8c6c2acdc remain accepted. No deployment/live qualification.
 
 ## Confirmed Inputs
 
@@ -159,7 +161,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-MSG-001 — signed API-188/189 status receipts, then inbound WhatsApp STOP/HELP/private lead and API-192–194 SALES reply/context. Durable intake accepted at 99e3c13137bbcb66238106ca079067e2; fenced SMS/WhatsApp sender accepted after current evidence commit. Phone proof/BFF/private eligibility/suppression is qualified offline. Existing MOCK-001/SEC-001/PLAT-001 dependencies are accepted; no critical approval blocks engineering. CARRIER-001 BP3 API-195 remains dependency-bound; experience/infrastructure proceed independently.
+MSG-001 API-190 — signed inbound WhatsApp STOP/HELP/private lead, followed by API-192–194 private SALES reply/context. Durable intake accepted at 99e3c13137bbcb66238106ca079067e2; fenced sender at 0309b480b40b7b02fe848784ec7548e8c6c2acdc; signed API-188/189 receipt handler at 7580c1b5040f751ceb9a4eda823939375b621d27. Phone proof/BFF/private eligibility/suppression is qualified offline. Existing MOCK-001/SEC-001/PLAT-001 dependencies are accepted; no critical approval blocks engineering. CARRIER-001 BP3 API-195 remains dependency-bound; experience/infrastructure proceed independently.
 
 ## Session Evidence / Protocol
 
