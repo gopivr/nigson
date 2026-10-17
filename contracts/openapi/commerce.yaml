@@ -5698,6 +5698,177 @@
         }
       }
     },
+    "/api/v1/webhooks/notifications/twilio/status": {
+      "post": {
+        "operationId": "API-188",
+        "description": "Provider callback only. No browser credentials or Origin. Validate the complete bounded application/x-www-form-urlencoded parameter set using the official Twilio SDK and the fixed configured public URL plus canonical jobId; relay a minimized, scoped API-189 receipt and acknowledge only after Integration commits it. Duplicate and out-of-order statuses are durable and monotonic.",
+        "security": [
+          {
+            "twilioSignature": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "X-Twilio-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "AccountSid",
+                  "MessageSid",
+                  "MessageStatus"
+                ],
+                "properties": {
+                  "AccountSid": {
+                    "type": "string",
+                    "pattern": "^AC[a-fA-F0-9]{32}$"
+                  },
+                  "MessageSid": {
+                    "type": "string",
+                    "pattern": "^SM[a-fA-F0-9]{32}$"
+                  },
+                  "MessageStatus": {
+                    "type": "string",
+                    "enum": [
+                      "accepted",
+                      "scheduled",
+                      "queued",
+                      "sending",
+                      "sent",
+                      "delivered",
+                      "read",
+                      "failed",
+                      "undelivered",
+                      "canceled"
+                    ]
+                  },
+                  "ErrorCode": {
+                    "type": "string",
+                    "pattern": "^[0-9]{3,6}$"
+                  }
+                },
+                "additionalProperties": {
+                  "type": "string",
+                  "maxLength": 4096
+                },
+                "maxProperties": 100
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Durable receipt acknowledged",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TwilioStatusAcknowledged"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid callback",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid signature or account",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown notification job",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Notification rule violation",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Receipt outcome unavailable or unknown",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/staff/inventory": {
       "get": {
         "operationId": "API-045",
@@ -13629,6 +13800,12 @@
         },
         "description": "Private ingress, exact Keycloak issuer/audience/client/scope. No browser cookies or signed user actor."
       },
+      "twilioSignature": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Twilio-Signature",
+        "description": "Official Twilio signature over the complete form and the configured exact public URL plus jobId."
+      },
       "carrierIntegrationWorkload": {
         "type": "oauth2",
         "flows": {
@@ -15995,6 +16172,18 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          }
+        }
+      },
+      "TwilioStatusAcknowledged": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "received"
+        ],
+        "properties": {
+          "received": {
+            "type": "boolean"
           }
         }
       },

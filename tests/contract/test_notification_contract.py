@@ -16,3 +16,16 @@ class NotificationContracts(unittest.TestCase):
         registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
         self.assertEqual(registry['API-142']['scope'],'templates.write_WITH_SIGNED_ADMIN')
         self.assertEqual(registry['API-122']['scope'],'notification.read')
+    def test_twilio_status_callback_has_fixed_signature_and_private_receipt_contract(self):
+        commerce=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());callback=commerce['paths']['/api/v1/webhooks/notifications/twilio/status']['post']
+        self.assertEqual(callback['operationId'],'API-188');self.assertEqual(callback['security'],[{'twilioSignature':[]}])
+        self.assertEqual({p['name'] for p in callback['parameters']},{'jobId','X-Twilio-Signature'})
+        self.assertIn('application/x-www-form-urlencoded',callback['requestBody']['content'])
+        self.assertEqual(commerce['components']['schemas']['TwilioStatusAcknowledged']['properties'],{'received':{'type':'boolean'}})
+        integration=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text());receipt=integration['paths']['/internal/v1/notification-provider-receipts']['post']
+        self.assertEqual(receipt['operationId'],'API-189');self.assertEqual(receipt['security'],[{'workload':[]}])
+        self.assertIn('notification.feedback.write',receipt['description'])
+        self.assertFalse(integration['components']['schemas']['NotificationReceiptInput']['additionalProperties'])
+        self.assertEqual(integration['components']['schemas']['NotificationReceiptAcknowledged']['properties']['acknowledged']['const'],True)
+        registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
+        self.assertEqual((registry['API-189']['owner'],registry['API-189']['client'],registry['API-189']['scope']),('integration','nigson-commerce','notification.feedback.write'))

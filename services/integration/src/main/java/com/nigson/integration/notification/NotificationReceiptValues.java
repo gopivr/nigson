@@ -1,0 +1,9 @@
+package com.nigson.integration.notification;
+import java.time.Instant;
+import java.util.*;
+import tools.jackson.databind.JsonNode;
+import com.nigson.shared.problem.ApiValues;
+public record NotificationReceiptValues(UUID jobId,String provider,String accountSid,String messageSid,String status,String eventHash,String errorCode,Instant receivedAt){
+ public static NotificationReceiptValues parse(JsonNode n){Set<String> required=Set.of("jobId","provider","accountSid","messageSid","status","eventHash","receivedAt");if(n==null||!n.isObject()||!n.propertyNames().containsAll(required)||!Set.of(required,union(required,"errorCode")).contains(n.propertyNames())||!n.path("jobId").isString()||!n.path("provider").isString()||!n.path("accountSid").isString()||!n.path("messageSid").isString()||!n.path("status").isString()||!n.path("eventHash").isString()||!n.path("receivedAt").isString()||n.has("errorCode")&&!n.path("errorCode").isString())throw ApiValues.invalid();String status=n.path("status").asString(),error=n.has("errorCode")?n.path("errorCode").asString():null;if(!"TWILIO".equals(n.path("provider").asString())||!n.path("accountSid").asString().matches("AC[a-fA-F0-9]{32}")||!n.path("messageSid").asString().matches("SM[a-fA-F0-9]{32}")||!Set.of("accepted","scheduled","queued","sending","sent","delivered","read","failed","undelivered","canceled").contains(status)||!n.path("eventHash").asString().matches("[a-f0-9]{64}")||error!=null&&!error.matches("[0-9]{3,6}"))throw ApiValues.invalid();Instant at;try{at=Instant.parse(n.path("receivedAt").asString());}catch(RuntimeException bad){throw ApiValues.invalid();}return new NotificationReceiptValues(ApiValues.uuid(n.path("jobId").asString()),"TWILIO",n.path("accountSid").asString(),n.path("messageSid").asString(),status,n.path("eventHash").asString(),error,at);}
+ private static Set<String> union(Set<String> values,String extra){var copy=new HashSet<>(values);copy.add(extra);return Set.copyOf(copy);}
+}

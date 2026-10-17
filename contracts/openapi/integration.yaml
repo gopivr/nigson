@@ -869,6 +869,166 @@
           }
         }
       }
+    },
+    "/internal/v1/notification-provider-receipts": {
+      "post": {
+        "operationId": "API-189",
+        "security": [
+          {
+            "workload": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationReceiptAcknowledged"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JSON, idempotency key, or callback receipt shape",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied to workload or mismatched account/SID binding",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown notification job",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency key, event hash or SID binding conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Notification rule violation or uncheckpointed/mismatched provider receipt",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Durable receipt outcome unavailable; caller may retry the same event hash",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "description": "Private exact nigson-commerce SERVICE_COMMERCE notification.feedback.write, no actor assertion, browser credentials or origin. Accept only the trusted commerce callback facade. Bind the signed provider/SID to the frozen account and a job already fenced before its provider write; commit minimized durable deduplication, monotonic state projection and audit atomically. Idempotency-Key equals eventHash. No raw form, recipient or message content is accepted.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationReceiptInput"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1426,6 +1586,77 @@
             ]
           }
         }
+      },
+      "NotificationReceiptInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "jobId",
+          "provider",
+          "accountSid",
+          "messageSid",
+          "status",
+          "eventHash",
+          "receivedAt"
+        ],
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "provider": {
+            "type": "string",
+            "const": "TWILIO"
+          },
+          "accountSid": {
+            "type": "string",
+            "pattern": "^AC[a-fA-F0-9]{32}$"
+          },
+          "messageSid": {
+            "type": "string",
+            "pattern": "^SM[a-fA-F0-9]{32}$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "scheduled",
+              "queued",
+              "sending",
+              "sent",
+              "delivered",
+              "read",
+              "failed",
+              "undelivered",
+              "canceled"
+            ]
+          },
+          "eventHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "errorCode": {
+            "type": "string",
+            "pattern": "^[0-9]{3,6}$"
+          },
+          "receivedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NotificationReceiptAcknowledged": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "acknowledged"
+        ],
+        "properties": {
+          "acknowledged": {
+            "type": "boolean",
+            "const": true
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -1433,7 +1664,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "Exact registered Keycloak client/audience/scope; private ingress only"
+        "description": "Exact registered Keycloak client/audience/scope; private ingress only; API-189 requires notification.feedback.write"
       },
       "signedActor": {
         "type": "apiKey",

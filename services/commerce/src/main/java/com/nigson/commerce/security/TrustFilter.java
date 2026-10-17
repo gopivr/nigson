@@ -28,7 +28,8 @@ public final class TrustFilter extends OncePerRequestFilter {
             } else {
                 if(single(req,"X-Nigson-Actor")!=null||single(req,"Authorization")!=null)throw ActorAssertion.denied();
                 boolean publicCatalogue=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}"));
-                boolean providerCallback=req.getMethod().equals("POST")&&req.getRequestURI().equals("/api/v1/webhooks/payments/paystack");
+                boolean providerCallback=req.getMethod().equals("POST")&&Set.of("/api/v1/webhooks/payments/paystack","/api/v1/webhooks/notifications/twilio/status").contains(req.getRequestURI());
+                if(req.getRequestURI().equals("/api/v1/webhooks/notifications/twilio/status")&&(req.getHeader("Origin")!=null||req.getCookies()!=null))throw ActorAssertion.denied();
                 String id=publicCatalogue||providerCallback?null:cookies.read(req);
                 // Login/callback/session public controllers (next task) explicitly invoke their own typed flow.
                 if(id!=null&&!publicCatalogue&&!Set.of("/bff/login","/bff/callback","/bff/session").contains(req.getRequestURI())){
