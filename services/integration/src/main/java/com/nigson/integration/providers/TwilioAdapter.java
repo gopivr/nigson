@@ -8,13 +8,15 @@ import java.nio.charset.StandardCharsets;
 import java.net.URI;
 
 /** SMS/WhatsApp use one actual Messages HTTP API. Approved sender/template IDs are configuration. */
-public final class TwilioAdapter {
- private final ProviderHttp http;private final String auth,account,service;
+public final class TwilioAdapter implements SmsProvider,WhatsAppProvider {
+ private final ProviderHttp.Mode mode;private final ProviderHttp http;private final String auth,account,service;
  public TwilioAdapter(String environment,ProviderHttp.Mode mode,String endpoint,String account,String token,String service) {
   if(account==null||!account.matches("AC[a-fA-F0-9]{32}")||service==null||!service.matches("MG[a-fA-F0-9]{32}"))throw new IllegalArgumentException("TWILIO_CONFIGURATION_INVALID");
   http=new ProviderHttp(environment,mode,endpoint,"twilio-mock",Set.of("api.twilio.com"),account,token,service);
-  this.account=account;this.service=service;auth="Basic "+Base64.getEncoder().encodeToString((account+":"+token).getBytes(StandardCharsets.UTF_8));
+  this.mode=mode;this.account=account;this.service=service;auth="Basic "+Base64.getEncoder().encodeToString((account+":"+token).getBytes(StandardCharsets.UTF_8));
  }
+ public ProviderHttp.Mode mode(){return mode;}
+ public String accountFingerprint(){return TwilioAccount.fingerprint(mode,account,service);}
  private JsonNode call(String method,String path,Map<String,String> fields){
   if(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("PROVIDER_CALL_INSIDE_TRANSACTION");
   var response=http.call(method,path,"application/x-www-form-urlencoded",fields==null?"":ProviderHttp.form(fields),auth);

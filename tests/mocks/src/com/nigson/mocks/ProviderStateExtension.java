@@ -36,7 +36,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
   var request=served.getRequest();String path=URI.create(request.getUrl()).getPath();String method=request.getMethod().getName();
   try {
    if(request.getBody().length>65536)return reply(413,Map.of("code","BODY_TOO_LARGE"),0);
-   if(path.equals("/__scenario/reset")&&method.equals("POST")){state=fresh();save();return reply(200,Map.of("reset",true),0);}
+   if(path.equals("/__scenario/reset")&&method.equals("POST")){int sequence=state.path("sequence").asInt();state=fresh();state.put("sequence",sequence);save();return reply(200,Map.of("reset",true),0);}
    if(path.equals("/__scenario/state")&&method.equals("GET"))return reply(200,state,0);
    if(path.equals("/__scenario/configure")&&method.equals("POST")){
     var input=JSON.readTree(request.getBodyAsString());String scenario=input.path("scenario").asText();

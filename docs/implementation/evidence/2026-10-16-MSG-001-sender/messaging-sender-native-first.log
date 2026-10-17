@@ -1,0 +1,14 @@
+PASS: pinned immutable local mock extension
+The JAVA_HOME environment variable is not defined correctly,
+this environment variable is needed to run this program.
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/scripts/messaging/sender_verify.py", line 10, in <module>
+    module.main(java_tests='VerificationSenderPersistenceTest,VerificationIntakePersistenceTest,PhoneSecretsTest,PhoneConsentPersistenceTest,PhoneHttpTest,PhoneKeysTest,AuditPersistenceTest,SecurityAssemblyTest,BuildCompatibilityTest',evidence=ROOT/'.build/messaging-sender/database-evidence',run_python=False,completion='PASS: fenced verification sender/intake and phone/BFF regression; signed callbacks/inbound/live qualification not implied')
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/platform/verify.py", line 50, in main
+    subprocess.run(['./mvnw','-B','-pl','services/commerce,services/experience,services/integration','-am','-Dtest='+java_tests,'-Dsurefire.failIfNoSpecifiedTests=false','test'],cwd=ROOT,env=env,check=True,timeout=300)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['./mvnw', '-B', '-pl', 'services/commerce,services/experience,services/integration', '-am', '-Dtest=VerificationSenderPersistenceTest,VerificationIntakePersistenceTest,PhoneSecretsTest,PhoneConsentPersistenceTest,PhoneHttpTest,PhoneKeysTest,AuditPersistenceTest,SecurityAssemblyTest,BuildCompatibilityTest', '-Dsurefire.failIfNoSpecifiedTests=false', 'test']' returned non-zero exit status 1.

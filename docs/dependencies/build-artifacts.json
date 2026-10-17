@@ -6,7 +6,7 @@
     "shared/common-security/target/common-security-0.1.0.jar": "fedd7bd6687274243878c66ab20b429ed67a0dce36765e2fd859af547f11a2b1",
     "services/experience/target/experience-0.1.0.jar": "b2b6e233ff837f8ff3d5ebddeec33dd115e1511d3f6a238892d0e88dc422abde",
     "services/commerce/target/commerce-0.1.0.jar": "6ddc7a913f5102c053ab741fa5e511bb14fa1d079e763637f3780af217c9ca6d",
-    "services/integration/target/integration-0.1.0.jar": "a747a40e70dc1df591dadd457a833cfc9b8c2f247de7caf415da8fe9eb724b52"
+    "services/integration/target/integration-0.1.0.jar": "08acf40f9f4497e39aba4267715d50702d019c6432d339263965594462bbe92e"
   },
   "python": {
     "nigson_ai-0.1.0-py3-none-any.whl": "5be692a410ec56ba835afe7d3c053d53d20ec42244c94eef50604d56d09d6f6d",

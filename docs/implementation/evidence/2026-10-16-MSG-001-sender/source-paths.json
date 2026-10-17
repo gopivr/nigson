@@ -1,0 +1,23 @@
+[
+  "IMPLEMENTATION_STATUS.md",
+  "docs/RELEASE_CONFIGURATION.md",
+  "docs/dependencies/build-artifacts.json",
+  "docs/dependencies/java-lock.json",
+  "docs/implementation/2026-10-16-MSG-001.md",
+  "docs/runbooks/notifications.md",
+  "scripts/messaging/sender_verify.py",
+  "services/integration/pom.xml",
+  "services/integration/src/main/java/com/nigson/integration/notification/MessageKey.java",
+  "services/integration/src/main/java/com/nigson/integration/notification/VerificationContextClient.java",
+  "services/integration/src/main/java/com/nigson/integration/notification/VerificationExecution.java",
+  "services/integration/src/main/java/com/nigson/integration/notification/VerificationMessage.java",
+  "services/integration/src/main/java/com/nigson/integration/notification/VerificationWorker.java",
+  "services/integration/src/main/java/com/nigson/integration/notification/VerificationWorkerConfiguration.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/ProviderConfiguration.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/SmsProvider.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/TwilioAdapter.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/TwilioConfiguration.java",
+  "services/integration/src/main/java/com/nigson/integration/providers/WhatsAppProvider.java",
+  "services/integration/src/test/java/com/nigson/integration/notification/VerificationSenderPersistenceTest.java",
+  "tests/mocks/src/com/nigson/mocks/ProviderStateExtension.java"
+]
