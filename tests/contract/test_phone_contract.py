@@ -9,7 +9,17 @@ class PhoneContracts(unittest.TestCase):
     def test_generated_experience_routes_and_exact_scopes(self):
         subprocess.run([sys.executable,'scripts/contracts/phone.py','--check'],cwd=ROOT,check=True)
         spec=json.loads((ROOT/'contracts/openapi/experience.yaml').read_text())
-        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-127','API-175','API-187','API-201','API-202','API-203','API-204'})
+        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-127','API-175','API-187','API-190','API-201','API-202','API-203','API-204'})
+        inbound=spec['paths']['/api/v1/webhooks/notifications/twilio/whatsapp']['post']
+        self.assertEqual(inbound['security'],[])
+        self.assertIn('X-Twilio-Signature',{p['name'] for p in inbound['parameters']})
+        self.assertEqual(inbound['requestBody']['content']['application/x-www-form-urlencoded']['schema']['required'],['AccountSid','MessageSid','From','To','Body'])
+    def test_inbound_retention_and_phone_only_migrations_are_additive_and_guarded(self):
+        release=json.loads((ROOT/'services/experience/src/main/resources/db/changelog/releases/BP1.yaml').read_text())['databaseChangeLog']
+        self.assertTrue(any(row['include']['file']=='../023-msg-001-lead-email-nullable.yaml' for row in release))
+        self.assertTrue(any(row['include']['file']=='../024-msg-001-inbound-retention.yaml' for row in release))
+        rollback=(ROOT/'services/experience/src/main/resources/db/changelog/024-msg-001-inbound-retention-rollback.sql').read_text()
+        self.assertIn('sender_ciphertext IS NULL',rollback);self.assertIn('RAISE EXCEPTION',rollback)
         scopes={row['api']:row for row in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
         for number in range(201,205):
             self.assertEqual(scopes[f'API-{number}']['owner'],'experience')

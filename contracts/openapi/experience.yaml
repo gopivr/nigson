@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Nigson experience implemented phone consent",
+    "title": "Nigson experience implemented phone consent and inbound messaging",
     "version": "1.1.0"
   },
   "paths": {
@@ -599,6 +599,96 @@
                 "$ref": "#/components/schemas/PhoneWithdrawal"
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/webhooks/notifications/twilio/whatsapp": {
+      "post": {
+        "operationId": "API-190",
+        "summary": "Verified Twilio WhatsApp inbound",
+        "description": "Validate the complete signed form against the configured public URL; deduplicate MessageSid and atomically apply STOP/UNSUBSCRIBE suppression, fixed HELP TwiML, or a private CONTACT lead. No browser authentication or CSRF; no order lookup, login, marketing grant, or financial mutation.",
+        "security": [],
+        "parameters": [
+          {
+            "name": "X-Twilio-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "AccountSid": {
+                    "type": "string",
+                    "pattern": "^AC[0-9a-fA-F]{32}$"
+                  },
+                  "MessageSid": {
+                    "type": "string",
+                    "pattern": "^SM[0-9a-fA-F]{32}$"
+                  },
+                  "From": {
+                    "type": "string",
+                    "pattern": "^whatsapp:\\+234[1-9][0-9]{9}$"
+                  },
+                  "To": {
+                    "type": "string",
+                    "pattern": "^whatsapp:\\+234[1-9][0-9]{9}$"
+                  },
+                  "Body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4096
+                  }
+                },
+                "required": [
+                  "AccountSid",
+                  "MessageSid",
+                  "From",
+                  "To",
+                  "Body"
+                ],
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Owner commit acknowledged; HELP returns fixed safe TwiML and other dispositions an empty Response.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string",
+                  "maxLength": 512
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed bounded callback form"
+          },
+          "403": {
+            "description": "Provider signature or configured account mismatch"
+          },
+          "503": {
+            "description": "Owner transaction unavailable; provider may retry"
           }
         }
       }

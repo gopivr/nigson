@@ -1,0 +1,44 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "experience-20261016-024",
+        "author": "nigson-platform",
+        "logicalFilePath": "experience/024-msg-001-inbound-retention.yaml",
+        "preConditions": [
+          {
+            "onFail": "HALT"
+          },
+          {
+            "dbms": {
+              "type": "postgresql"
+            }
+          },
+          {
+            "sqlCheck": {
+              "expectedResult": "1",
+              "sql": "SELECT CASE WHEN current_user='nigson_experience_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+            }
+          }
+        ],
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "024-msg-001-inbound-retention.sql",
+              "relativeToChangelogFile": true
+            }
+          }
+        ],
+        "rollback": [
+          {
+            "sqlFile": {
+              "path": "024-msg-001-inbound-retention-rollback.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

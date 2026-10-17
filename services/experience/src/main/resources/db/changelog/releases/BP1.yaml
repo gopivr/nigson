@@ -23,6 +23,18 @@
         "file": "../022-bp1-constraints.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../023-msg-001-lead-email-nullable.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../024-msg-001-inbound-retention.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

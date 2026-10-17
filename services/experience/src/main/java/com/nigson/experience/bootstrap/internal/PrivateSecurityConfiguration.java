@@ -15,7 +15,13 @@ public class PrivateSecurityConfiguration {
  @Bean SecurityFilterChain privateSecurity(HttpSecurity http,PrivateWorkload trust,com.nigson.experience.platform.ProblemWriter problems)throws Exception {
   return http.securityContext(c->c.securityContextRepository(new org.springframework.security.web.context.NullSecurityContextRepository())).sessionManagement(s->s.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS)).csrf(c->c.disable())
    .addFilterAfter(new PrivateProofFilter(trust,(r,s)->problems.write(r,s,com.nigson.shared.problem.ProblemCode.AUTH_REQUIRED,List.of())),SecurityContextHolderFilter.class)
-   .authorizeHttpRequests(a->a.requestMatchers("/actuator/health/liveness","/actuator/health/readiness").permitAll().requestMatchers("/internal/**").authenticated().anyRequest().denyAll())
+   .addFilterAfter(new InboundBrowserHeaderFilter(),PrivateProofFilter.class)
+   .authorizeHttpRequests(a->a.requestMatchers("/actuator/health/liveness","/actuator/health/readiness").permitAll().requestMatchers("/api/v1/webhooks/notifications/twilio/whatsapp").permitAll().requestMatchers("/internal/**").authenticated().anyRequest().denyAll())
    .exceptionHandling(e->e.authenticationEntryPoint((r,s,f)->problems.write(r,s,com.nigson.shared.problem.ProblemCode.AUTH_REQUIRED,List.of())).accessDeniedHandler((r,s,f)->problems.write(r,s,com.nigson.shared.problem.ProblemCode.ACCESS_DENIED,List.of()))).build();
+ }
+ private static final class InboundBrowserHeaderFilter extends org.springframework.web.filter.OncePerRequestFilter {
+  @Override protected void doFilterInternal(jakarta.servlet.http.HttpServletRequest request,jakarta.servlet.http.HttpServletResponse response,jakarta.servlet.FilterChain chain)throws java.io.IOException,jakarta.servlet.ServletException {
+   if("/api/v1/webhooks/notifications/twilio/whatsapp".equals(request.getRequestURI())&&(request.getHeader("Origin")!=null||request.getHeader("Cookie")!=null)){response.setStatus(400);response.setHeader("Cache-Control","no-store");return;}chain.doFilter(request,response);
+  }
  }
 }

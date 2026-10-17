@@ -35,9 +35,9 @@ def predicate(value):
     return re.sub(r'=\s*(ACTIVE|PENDING|FEDEX|WHATSAPP|object|array)\b', r"='\1'", value)
 
 
-def column(field):
+def column(field, force_not_null=False):
     datatype = 'ai.' + field['type'] if field['type'].startswith('vector(') else field['type']
-    result = f"{field['name']} {datatype}" + (' NOT NULL' if not field['nullable'] else '')
+    result = f"{field['name']} {datatype}" + (' NOT NULL' if (force_not_null or not field['nullable']) else '')
     default = field['default']
     if default is not None:
         if default in ('{}', '[]'):
@@ -82,7 +82,9 @@ def generate():
                 statements = []
                 for fullname, table in subset.items():
                     name = fullname.split('.')[1]
-                    fields = [column(field) for field in table['fields']]
+                    # Preserve the originally released BP1 table DDL. A later
+                    # additive migration relaxes this one field for API-190.
+                    fields = [column(field, (fullname == 'experience.lead' and field['name'] == 'email') or (fullname == 'experience.inbound_message' and field['name'] == 'sender_ciphertext')) for field in table['fields']]
                     primary = [field['name'] for field in table['fields'] if field['primary']]
                     fields.append(f"CONSTRAINT {identifier(name+'_id_pk')} PRIMARY KEY ({','.join(primary)})")
                     for field in table['fields']:
@@ -233,6 +235,21 @@ def generate():
     for wrapper, include in deferred_includes:
         payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append(include)
         files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    # API-190 admits phone-only inbound leads without synthesizing email data.
+    # The historical BP1 CREATE TABLE stays immutable; this is an additive change.
+    stem='023-msg-001-lead-email-nullable';change='experience-20261016-023';owner='experience';base=Path('services/experience/src/main/resources/db/changelog')
+    statements=['ALTER TABLE experience.lead ALTER COLUMN email DROP NOT NULL;']
+    files[base/(stem+'.sql')]='-- ADR-019: Experience-owned phone-only verified inbound leads.\n'+'\n'.join(statements)+'\n'
+    files[base/(stem+'-rollback.sql')]=("DO $$ BEGIN IF EXISTS (SELECT 1 FROM experience.lead WHERE email IS NULL) THEN RAISE EXCEPTION 'Cannot restore lead.email NOT NULL while phone-only inbound leads exist'; END IF; END $$;\nALTER TABLE experience.lead ALTER COLUMN email SET NOT NULL;\n")
+    guard="SELECT CASE WHEN current_user='nigson_experience_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+    payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-platform','logicalFilePath':owner+'/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+    files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n'
+    wrapper=base/'releases'/'BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    stem='024-msg-001-inbound-retention';change='experience-20261016-024';statements=['ALTER TABLE experience.inbound_message ALTER COLUMN sender_ciphertext DROP NOT NULL;']
+    files[base/(stem+'.sql')]='-- ADR-019: erase sender ciphertext at the explicit inbound retention boundary.\n'+'\n'.join(statements)+'\n'
+    files[base/(stem+'-rollback.sql')]=("DO $$ BEGIN IF EXISTS (SELECT 1 FROM experience.inbound_message WHERE sender_ciphertext IS NULL) THEN RAISE EXCEPTION 'Cannot restore inbound sender ciphertext NOT NULL while retention-erased records exist'; END IF; END $$;\nALTER TABLE experience.inbound_message ALTER COLUMN sender_ciphertext SET NOT NULL;\n")
+    payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-platform','logicalFilePath':'experience/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+    files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
     for name in SESSION_TABLES:
         tables[name]['creation_changeset'] = 'commerce-20261005-002'
         tables[name]['creation_file'] = 'services/commerce/src/main/resources/db/changelog/001-framework-sessions.sql'

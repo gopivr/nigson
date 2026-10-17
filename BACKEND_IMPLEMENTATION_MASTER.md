@@ -2875,7 +2875,7 @@ type varchar(20) NN
 party_id uuid NULL EXTERNAL commerce.party
 organization_id uuid NULL EXTERNAL commerce.organization
 name varchar(160) NN
-email varchar(254) NN
+email varchar(254) NULL
 phone varchar(32) NULL
 subject varchar(200) NN
 message text NN
@@ -4455,7 +4455,7 @@ provider varchar(30) NN
 provider_message_id varchar(160) NN
 channel varchar(20) NN
 sender_hash char(64) NN
-sender_ciphertext bytea NN
+sender_ciphertext bytea NULL
 body_ciphertext bytea NULL
 lead_id uuid NULL FK lead
 received_at timestamptz NN
@@ -4465,7 +4465,7 @@ disposition varchar(20) NN
 
 - **Keys and indexes:** UQ(provider,provider_message_id); IX(retention_until).
 - **Checks:** channel=WHATSAPP; disposition IN (RECEIVED,LEAD_CREATED,OPT_OUT,HELP,IGNORED).
-- **Business invariant:** Signed WhatsApp inbound is a contact/lead, never authentication or authority to inspect orders; STOP suppresses matching phone/channel immediately. No autonomous financial/AI commands.
+- **Business invariant:** Signed WhatsApp inbound is a contact/lead, never authentication or authority to inspect orders; STOP suppresses matching phone/channel immediately. Erase sender/body ciphertext at `retention_until` while retaining keyed sender hash and SID for deduplication. No autonomous financial/AI commands.
 
 ### integration.message_receipt
 
@@ -7424,7 +7424,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `Twilio signed form fields: AccountSid,MessageSid,From,To,Body plus all signature parameters`.
-- **Response:** `TwiML empty Response XML`.
+- **Response:** `TwiML XML`; HELP receives the fixed safe response “For assistance, contact Nigson support through official channels.” Other dispositions receive an empty `Response` element. This resolves the earlier empty-only wording against the requirement for a safe HELP response without sending a second provider message.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Validate account/registered sender/publicURL/signature using SDK; dedupMessageSid; STOP/UNSUBSCRIBE opt-out immediately, HELP safe static response, other bounded messages create private CONTACT lead. No order lookup/login/financial mutation. Acknowledge only after owner commit.
 - **Events:** lead.created.v1, consent.changed.v1

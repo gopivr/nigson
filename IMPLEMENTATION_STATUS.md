@@ -8,7 +8,9 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-MSG-001 API-190 signed inbound WhatsApp — IN_PROGRESS. Validate the complete Twilio form signature against the exact configured URL, durably deduplicate by MessageSid, immediately apply STOP/UNSUBSCRIBE suppression in the Experience owner, return the fixed HELP response, and create only a private bounded CONTACT lead for other messages.
+MSG-001 API-192–194 private SALES reply/context — IN_PROGRESS. Preserve verified-session SALES authority at API-192, bind a signed SALES assertion to the exact Experience lead and private API-193 notification command, and let API-194 disclose only verified inbound or currently active unsuppressed WhatsApp context. No sender HTTP occurs in the owner transaction.
+
+MSG-001 API-190 signed inbound WhatsApp — accepted offline: native HTTP/PostgreSQL tests5/no skips for signed callback, invalid signature, browser-origin rejection, HELP, STOP suppression, SID replay/mismatch, private lead, outbox/audit, and retention erasure. Repository/contracts/schema80 PASS; dependency graph271 unchanged. Live Twilio account/sender/key/retention approval and provider qualification remain NOT_RUN.
 
 MSG-001 durable intake accepted at 99e3c13137bbcb66238106ca0790670bb16e68e2; fenced sender source 0309b480b40b7b02fe848784ec7548e8c6c2acdc; API-188/189 status receipt source accepted at 7580c1b5040f751ceb9a4eda823939375b621d27. Callback tests4/no skips,contracts79,271 unchanged dependencies and nine reproducible build artifacts PASS. Complete signature verification, minimized scoped relay, immutable account/job/SID binding, event-hash deduplication, audit and monotonic state projection are qualified offline. API-190 is now IN_PROGRESS; private SALES APIs192–194 remain pending. Whole MSG-001 remains IN_PROGRESS and no genuine provider activation is claimed.
 
@@ -164,6 +166,8 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 MSG-001 API-190 — signed inbound WhatsApp STOP/HELP/private lead, followed by API-192–194 private SALES reply/context. Durable intake accepted at 99e3c13137bbcb66238106ca079067e2; fenced sender at 0309b480b40b7b02fe848784ec7548e8c6c2acdc; signed API-188/189 receipt handler at 7580c1b5040f751ceb9a4eda823939375b621d27. Phone proof/BFF/private eligibility/suppression is qualified offline. Existing MOCK-001/SEC-001/PLAT-001 dependencies are accepted; no critical approval blocks engineering. CARRIER-001 BP3 API-195 remains dependency-bound; experience/infrastructure proceed independently.
 
 ## Session Evidence / Protocol
+
+PASS — MSG-001 API-190 signed inbound WhatsApp offline increment: native Experience HTTP/PostgreSQL tests27/no skips, including five API-190 persistence cases; fresh Liquibase migration 023/024 pass. Repository/contracts/schema80 PASS; dependency lock271 unchanged. Twilio real account/sender/retention approval and live provider qualification remain NOT_RUN. API-192–194 is now IN_PROGRESS; whole MSG-001 remains IN_PROGRESS.
 
 FOUND-001/002 evidence: docs/implementation/2026-10-05-FOUND-001.md and docs/implementation/2026-10-05-FOUND-002.md. FOUND-002 retains initial convergence/security/sandbox failures and successful remedies. Original blueprint remains unchanged. Initial normal-sandbox git init and Maven Central DNS failed; authorized escalated operations succeeded. Copied specification has original EOF blank lines; diff whitespace validation uses core.whitespace=-blank-at-eof to preserve source bytes.
 

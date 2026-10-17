@@ -14436,7 +14436,7 @@
           "external": null,
           "foreign": null,
           "name": "sender_ciphertext",
-          "nullable": false,
+          "nullable": true,
           "primary": false,
           "type": "bytea"
         },
@@ -14608,7 +14608,7 @@
           "external": null,
           "foreign": null,
           "name": "email",
-          "nullable": false,
+          "nullable": true,
           "primary": false,
           "type": "varchar(254)"
         },
