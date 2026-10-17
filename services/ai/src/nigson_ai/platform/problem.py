@@ -69,6 +69,11 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Inventory rule violation",
         "The stock operation does not meet current inventory rules.",
     ),
+    "CONSENT_RULE_VIOLATION": (
+        422,
+        "Consent rule violation",
+        "The operation does not meet current communication consent rules.",
+    ),
     "NOTIFICATION_RULE_VIOLATION": (
         422,
         "Notification rule violation",

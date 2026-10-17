@@ -7543,6 +7543,62 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 CarrierCancellationDTO is closed `{id:UUID,shipmentId:UUID,state:REQUESTED|QUEUED|UNKNOWN|CANCELLED|REJECTED,version:int64,shipmentVersion:int64,errorCode:string|null}`. CarrierCancellationReceipt is closed `{commandId:UUID,cancellationId:UUID,shipmentId:UUID,bookingRequestId:UUID,reference:string,mode:MOCK|SANDBOX|LIVE,state:UNKNOWN|CANCELLED|REJECTED,occurredAt:Instant,reasonCode:string}`. Reason codes are the reviewed nonpersonal NONE/PROVIDER_OUTCOME_UNKNOWN/PROVIDER_UNAVAILABLE/PROVIDER_MODE_MISMATCH/CARRIER_CANCEL_REJECTED/CARRIER_ALREADY_DELIVERED/CARRIER_APPROVAL_REQUIRED vocabulary. The relay may consume the exact persisted receipt from the authenticated API-198 reply; it uses the same source receipt dedup namespace as API-199, without fabricating a workload proof. This read-back recovers a source restore/lost callback without a second provider cancel.
 
+### API-201 POST /internal/v1/communication-destinations
+
+- **Service / module / phase:** experience / consent / BP1.
+- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
+- **Path parameters:** None.
+- **Query:** None; reject unknown parameters.
+- **Request:** `As API-183`.
+- **Response:** `DestinationDTO`.
+- **Statuses:** 201; standard safe errors.
+- **Validation / business rules:** Fixed companion for API-183; owned phone proof/consent/suppression only. No provider HTTP. Recheck owner/role/version; idempotent failures commit proof attempt count. Cached replies never restore withdrawn consent. Source validates current session/party before returning.
+- **Events:** Existing EVT-028/EVT-023 and atomic owned audit as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, CONSENT_RULE_VIOLATION, PROVIDER_UNAVAILABLE, FEATURE_DISABLED.
+
+### API-202 POST /internal/v1/communication-destinations/{id}/verification
+
+- **Service / module / phase:** experience / consent / BP1.
+- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{code:string[6 digits],version:int64}`.
+- **Response:** `DestinationDTO`.
+- **Statuses:** 200; standard safe errors.
+- **Validation / business rules:** Fixed companion for API-184; owned phone proof/consent/suppression only. No provider HTTP. Recheck owner/role/version; idempotent failures commit proof attempt count. Cached replies never restore withdrawn consent. Source validates current session/party before returning.
+- **Events:** Existing EVT-028/EVT-023 and atomic owned audit as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, CONSENT_RULE_VIOLATION, PROVIDER_UNAVAILABLE, FEATURE_DISABLED.
+
+### API-203 GET /internal/v1/communication-destinations
+
+- **Service / module / phase:** experience / consent / BP1.
+- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
+- **Path parameters:** None.
+- **Query:** None; reject unknown parameters.
+- **Request:** `none`.
+- **Response:** `[DestinationDTO]`.
+- **Statuses:** 200; standard safe errors.
+- **Validation / business rules:** Fixed companion for API-185; owned phone proof/consent/suppression only. No provider HTTP. Recheck owner/role/version; idempotent failures commit proof attempt count. Cached replies never restore withdrawn consent. Source validates current session/party before returning.
+- **Events:** Existing EVT-028/EVT-023 and atomic owned audit as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, CONSENT_RULE_VIOLATION, PROVIDER_UNAVAILABLE, FEATURE_DISABLED.
+
+### API-204 POST /internal/v1/communication-destinations/{id}/withdrawal
+
+- **Service / module / phase:** experience / consent / BP1.
+- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
+- **Path parameters:** id:UUID.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{version:int64}`.
+- **Response:** `none`.
+- **Statuses:** 204; standard safe errors.
+- **Validation / business rules:** Fixed companion for API-186; owned phone proof/consent/suppression only. No provider HTTP. Recheck owner/role/version; idempotent failures commit proof attempt count. Cached replies never restore withdrawn consent. Source validates current session/party before returning.
+- **Events:** Existing EVT-028/EVT-023 and atomic owned audit as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, CONSENT_RULE_VIOLATION, PROVIDER_UNAVAILABLE, FEATURE_DISABLED.
+
 ## Normative reusable DTO registry
 
 Closed fields below take precedence over shorthand ...request/plus/as API notation. API-072 uses API-037. Staff product APIs add status/version; request lengths inherit matching section10 columns. E164 is a normalized +country-number string<=16. Unknown fields rejected.
@@ -9748,6 +9804,10 @@ ARCH rows preserve every source heading; BP rows preserve functional features; t
 | REQ-API-198 | integration | API-198 POST /internal/v1/carrier/cancellations | integration.carrier_cancellation | EVT-009 on confirmed source state change | CARRIER-001; TEST-CARRIER-CANCELLATION; TEST-FULFILLMENT-CONSERVATION; ADR-014. | AC-CARRIER-001 |
 | REQ-API-199 | commerce | API-199 POST /internal/v1/carrier/cancellation-results | commerce.carrier_cancellation | EVT-009 on confirmed source state change | CARRIER-001; TEST-CARRIER-CANCELLATION; TEST-FULFILLMENT-CONSERVATION; ADR-014. | AC-CARRIER-001 |
 | REQ-API-200 | commerce | API-200 GET /api/v1/staff/shipments/{id}/carrier-cancellation | commerce.carrier_cancellation | EVT-009 on confirmed source state change | CARRIER-001; TEST-CARRIER-CANCELLATION; TEST-FULFILLMENT-CONSERVATION; ADR-014. | AC-CARRIER-001 |
+| REQ-API-201 | experience | API-201 fixed private phone consent companion | experience.communication_destination, experience.destination_verification, experience.consent_event, experience.communication_suppression | EVT-028/EVT-023 | MSG-001; ADR-017; TEST-PHONE-CONSENT | AC-MSG-001 |
+| REQ-API-202 | experience | API-202 fixed private phone consent companion | experience.communication_destination, experience.destination_verification, experience.consent_event, experience.communication_suppression | EVT-028/EVT-023 | MSG-001; ADR-017; TEST-PHONE-CONSENT | AC-MSG-001 |
+| REQ-API-203 | experience | API-203 fixed private phone consent companion | experience.communication_destination, experience.destination_verification, experience.consent_event, experience.communication_suppression | EVT-028/EVT-023 | MSG-001; ADR-017; TEST-PHONE-CONSENT | AC-MSG-001 |
+| REQ-API-204 | experience | API-204 fixed private phone consent companion | experience.communication_destination, experience.destination_verification, experience.consent_event, experience.communication_suppression | EVT-028/EVT-023 | MSG-001; ADR-017; TEST-PHONE-CONSENT | AC-MSG-001 |
 | REQ-DB-commerce.carrier_cancellation | commerce | API-197, API-198, API-199, API-200 | commerce.carrier_cancellation | None directly | DATA-001; CARRIER-001; TEST-CARRIER-CANCELLATION; ADR-014. | AC-CARRIER-001 |
 | REQ-DB-integration.carrier_cancellation | integration | API-197, API-198, API-199, API-200 | integration.carrier_cancellation | None directly | DATA-001; CARRIER-001; TEST-CARRIER-CANCELLATION; ADR-014. | AC-CARRIER-001 |
 | REQ-DB-commerce.carrier_quote | commerce | API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195 | commerce.carrier_quote | EVT-027 | DATA-001; CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |

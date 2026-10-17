@@ -17,6 +17,8 @@ class SecurityAssemblyTest {
   com.nigson.acceptance.pricing.PricingHttpAcceptance.configure(properties);
   com.nigson.acceptance.fulfillment.FulfillmentHttpAcceptance.configure(properties);
   if(workload!=null){properties.put("NIGSON_OIDC_ISSUER",workload.issuer);properties.put("NIGSON_OIDC_JWKS",workload.issuer+"/protocol/openid-connect/certs");}
+  var phone=System.getenv("NIGSON_TEST_PHONE")==null?null:new com.nigson.acceptance.messaging.PhoneHttpAcceptance.Fixture(keys);
+  if(phone!=null)phone.configure(properties);
   var jobs=System.getenv("NIGSON_TEST_JOBS")==null&&System.getenv("NIGSON_TEST_CARRIER")==null?null:new com.nigson.acceptance.provider.JobHttpAcceptance.Fixture(keys);
   if(jobs!=null)jobs.configure(properties);
   com.nigson.acceptance.carrier.CarrierDeliveryHttpAcceptance.configure(properties);
@@ -28,7 +30,7 @@ class SecurityAssemblyTest {
   var payments=System.getenv("NIGSON_TEST_PAYMENTS")==null?null:new com.nigson.acceptance.payment.PaymentHttpAcceptance.Fixture();
   if(payments!=null)payments.configure(properties);
   if(System.getenv("NIGSON_TEST_NOTIFICATION")!=null)properties.put("NIGSON_NOTIFICATION_TEMPLATES_ENABLED","true");
-  try(workload;jobs;orders;payments;var app=new SpringApplicationBuilder(CommerceApplication.class).properties(properties).run();var http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build()) {
+  try(workload;phone;jobs;orders;payments;var app=new SpringApplicationBuilder(CommerceApplication.class).properties(properties).run();var http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build()) {
    assertThat(app.getBeansOfType(org.springframework.security.web.SecurityFilterChain.class)).containsOnlyKeys("trustedSecurity");assertThat(app.getBean("springSessionConversionService",org.springframework.core.convert.ConversionService.class)).isNotNull();assertThat(app.getBean(SessionCookies.class)).isNotNull();String base="http://127.0.0.1:"+((WebServerApplicationContext)app).getWebServer().getPort();
    com.nigson.acceptance.AuthorizationHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.party.PartyHttpAcceptance.run(app,http,base);
@@ -37,6 +39,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.files.FileHttpAcceptance.run(app,http,base,workload);
    com.nigson.acceptance.provider.JobHttpAcceptance.run(app,http,base,jobs);
    com.nigson.acceptance.notification.NotificationHttpAcceptance.run(app,http,base,jobs);
+   com.nigson.acceptance.messaging.PhoneHttpAcceptance.run(app,http,base,phone);
    com.nigson.acceptance.inventory.InventoryHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.market.MarketHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.pricing.PricingHttpAcceptance.run(app,http,base);

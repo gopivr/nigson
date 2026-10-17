@@ -168,5 +168,10 @@
     "status": 422,
     "title": "Payment rule violation",
     "detail": "The payment or refund operation does not meet verified financial rules."
+  },
+  "CONSENT_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Consent rule violation",
+    "detail": "The operation does not meet current communication consent rules."
   }
 }

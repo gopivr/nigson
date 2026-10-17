@@ -313,5 +313,41 @@
     "client": "nigson-integration",
     "scope": "logistics.write",
     "phase": 1
+  },
+  {
+    "api": "API-201",
+    "method": "POST",
+    "path": "/internal/v1/communication-destinations",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "communication.create_WITH_SIGNED_CUSTOMER",
+    "phase": 1
+  },
+  {
+    "api": "API-202",
+    "method": "POST",
+    "path": "/internal/v1/communication-destinations/{id}/verification",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "communication.verify_WITH_SIGNED_CUSTOMER",
+    "phase": 1
+  },
+  {
+    "api": "API-203",
+    "method": "GET",
+    "path": "/internal/v1/communication-destinations",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "communication.read_WITH_SIGNED_CUSTOMER",
+    "phase": 1
+  },
+  {
+    "api": "API-204",
+    "method": "POST",
+    "path": "/internal/v1/communication-destinations/{id}/withdrawal",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "communication.withdraw_WITH_SIGNED_CUSTOMER",
+    "phase": 1
   }
 ]

@@ -225,3 +225,9 @@ carrier-check:
 	python3 scripts/contracts/authorization.py --check
 	python3 scripts/contracts/integration.py --check
 	ENV=test python3 scripts/carrier/verify.py
+
+.PHONY: messaging-check
+messaging-check:
+	python3 scripts/contracts/authorization.py --check
+	python3 scripts/contracts/phone.py --check
+	NIGSON_TEST_PHONE=true python3 scripts/messaging/verify.py

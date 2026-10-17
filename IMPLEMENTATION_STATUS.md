@@ -1,12 +1,14 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:16 October2026 UTC
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:17 October2026 UTC
 
 ## Current Phase
 
 EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/market/inventory accepted, BP1 launch composition remains section46.
 
 ## Current Task
+
+MSG-001 — IN_PROGRESS. Phone-consent increment qualified offline; actual acceptance source commit pending. Native33/no skips, full185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes/zero fresh OSV findings and nine reproduced artifacts PASS. Current BFF/CSRF/fixed private201–204, owned encrypted proof/context, explicit channel-purpose policy grants, authoritative127/175 suppression and audit/races qualified. Sender/UNKNOWN/status/inbound WhatsApp/SALES reply remain pending. Real sender/template/account/policy/retention inputs block live activation only; no critical approval blocks offline work.
 
 CARRIER-001 account binding increment (CF-CARRIER-007 / ADR-016) — accepted offline at 2cb1643de0a01f5f935f5a24e929b1073f5c22bf. Native282/no skips, independent financial66/no skips, full179 Java/334 gated,74 contracts,271 unchanged dependencies/zero fresh OSV findings and nine reproduced artifacts PASS. Trusted private account identity is immutable through rate/checkout/order/shipment/API-119; missing identity or rotation rejects before new checkout/create. Public DTOs unchanged; no DDL/owner changes. Historical/UNKNOWN evidence remains reconcilable. Whole CARRIER-001 IN_PROGRESS; BP3 API-195 and genuine provider/release qualification remain pending. No critical approval blocks offline engineering.
 
@@ -129,11 +131,11 @@ CARRIER-001 — IN_PROGRESS; creation safeguard native51/no skips, affected fina
 
 ## Build Status
 
-PASS — CF-CARRIER-007: full179 Java/334 environment-gated,74 contracts,271 unchanged locked dependencies/zero fresh OSV findings and nine reproduced artifacts. Unchanged AI15/five gated,Ruff/mypy13 retained from accepted cancellation ffca2bd2394d04a4f4a4df759da681bd91f607e4; no new AI test execution claimed. Whole CARRIER-001 remains IN_PROGRESS.
+PASS — MSG-001 phone increment: full185 Java/348 environment-gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes with explicit experience KMS graph edge/zero fresh OSV findings and nine reproduced artifacts. Whole MSG-001 IN_PROGRESS; no sender/callback/live completion claim.
 
 ## Test Status
 
-PASS — Native282/no skips plus independent financial66/no skips: actual HTTP fingerprint binding; account rotation/legacy replay/context/checkout/create rejection; immutable commercial/order snapshots and no new payment HTTP on rejection; credential renewal retains identity; historical provider results remain recordable. All-owner fresh/repeat migrations and original Docker preservation PASS; no DDL change. Full stateful provider HTTP/SMTP regression PASS. Earlier cancellation upgrade/rollback and handover evidence remain accepted. Genuine account/route/print/deployment/staging/restore/release qualification NOT_RUN.
+PASS — Native33/no skips: real PostgreSQL plus actual BFF/private HTTP/JWT/KMS; CSRF/current authority/body binding, approved policy, keyed hashes/AES-GCM, five committed failed attempts, expiry/rate bound, stable proof/job replay, one-time channel-purpose grants/one active destination, fresh private eligibility/global suppression, audit rollback/races. All-owner fresh/repeat migrations and original Docker state preserved; no DDL change. All-provider HTTP/SMTP regression PASS. Genuine activation/staging/restore NOT_RUN.
 
 ## Last Successful Commit
 
@@ -153,7 +155,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-MSG-001 — dependency-ready required launch SMS/WhatsApp verification, channel-purpose consent, private commands, signed callbacks and suppression with stateful local mocks. MOCK-001/SEC-001/PLAT-001 dependencies are accepted; real sender/template/account inputs block live activation only. CARRIER-001 BP3 quote/API-195 remains dependency-bound; experience/infrastructure work continues independently. No critical approval blocks offline engineering.
+MSG-001 — durable EVT-028 notification intake and channel-specific fenced SMS/WhatsApp execution, then signed status receipts/inbound STOP/help/private lead/SALES reply. Phone proof/BFF/private eligibility/suppression is qualified offline. Existing MOCK-001/SEC-001/PLAT-001 dependencies are accepted; no critical approval blocks engineering. CARRIER-001 BP3 API-195 remains dependency-bound; experience/infrastructure proceed independently.
 
 ## Session Evidence / Protocol
 

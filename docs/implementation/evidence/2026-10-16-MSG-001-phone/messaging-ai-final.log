@@ -1,0 +1,47 @@
+.build/uv-package/bin/uv --directory services/ai sync --locked --python 3.12.12
+Resolved 91 packages in 12ms
+Audited 88 packages in 16ms
+.build/uv-package/bin/uv --directory services/ai build --no-build-isolation --python /Users/gopiravi/workspace/nigson/.build/ai-env/bin/python --out-dir /Users/gopiravi/workspace/nigson/.build/ai-dist
+Building source distribution...
+Building wheel from source distribution...
+Successfully built /Users/gopiravi/workspace/nigson/.build/ai-dist/nigson_ai-0.1.0.tar.gz
+Successfully built /Users/gopiravi/workspace/nigson/.build/ai-dist/nigson_ai-0.1.0-py3-none-any.whl
+/Users/gopiravi/workspace/nigson/.build/ai-env/bin/python -m pytest services/ai/tests -q
+s........s....F..sss                                                     [100%]
+=================================== FAILURES ===================================
+____________ test_wire_vocabulary_and_structural_validation_parity _____________
+
+    def test_wire_vocabulary_and_structural_validation_parity():
+        from pathlib import Path
+
+        from nigson_ai.platform.problem import CODES
+        from nigson_ai.platform.values import (
+            idempotency_key,
+            json_shape,
+            money,
+            page,
+            quantity,
+            version,
+        )
+
+        root = Path(__file__).resolve().parents[3]
+        contract = json.loads((root / "contracts/problem/codes.json").read_text())
+>       assert contract == {
+            code: {"status": status, "title": title, "detail": detail}
+            for code, (status, title, detail) in CODES.items()
+        }
+E       AssertionError: assert {'VALIDATION_...lable.'}, ...} == {'VALIDATION_...lable.'}, ...}
+E
+E         Omitting 34 identical items, use -vv to show
+E         Left contains 1 more item:
+E         {'CONSENT_RULE_VIOLATION': {'detail': 'The operation does not meet current '
+E                                               'communication consent rules.',
+E                                     'status': 422,
+E                                     'title': 'Consent rule violation'}}
+E         Use -v to get more diff
+
+services/ai/tests/test_observability.py:261: AssertionError
+=========================== short test summary info ============================
+FAILED services/ai/tests/test_observability.py::test_wire_vocabulary_and_structural_validation_parity
+1 failed, 14 passed, 5 skipped in 3.96s
+make: *** [ai-test] Error 1

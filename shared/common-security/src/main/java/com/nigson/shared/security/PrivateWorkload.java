@@ -41,6 +41,7 @@ public final class PrivateWorkload {
         if(route.scope().contains("_WITH_SIGNED_")) {
             actor=ActorAssertion.verify(actorToken,new ActorAssertion.Binding(owner,route.scope(),method,path,correlation,bodyHash),actorKeys,identityIssuers,clock);
             if(!actor.scopes().contains(route.scope()))throw ActorAssertion.denied();
+            if(route.scope().endsWith("_WITH_SIGNED_CUSTOMER")&&(!actor.roles().contains("CUSTOMER")||actor.organization()!=null))throw ActorAssertion.denied();
             if(route.scope().endsWith("_WITH_SIGNED_ADMIN")){if(!actor.roles().contains("ADMIN"))throw ActorAssertion.denied();ActorAssertion.recentMfa(actor,clock);}
             if(route.scope().endsWith("_WITH_SIGNED_STAFF")){if(!actor.roles().contains("OPERATIONS"))throw ActorAssertion.denied();ActorAssertion.recentMfa(actor,clock);}
         } else if(actorToken!=null)throw ActorAssertion.denied();
