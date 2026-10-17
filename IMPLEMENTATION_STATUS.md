@@ -8,7 +8,7 @@ EP05 — Atomic checkout and owned order history; fulfillment/cart/pricing/marke
 
 ## Current Task
 
-MSG-001 durable verification intake increment — qualified offline, acceptance commit pending. Native44/no skips,78 contracts, actual old BP1 upgrade/rollback and full185 Java/359 gated provider regression PASS. Stable paired intent freezes original template/channel/account/transport/generation; SNS/SQS replay/races and partial-restore conflicts qualified. Whole MSG-001 IN_PROGRESS: sender/UNKNOWN/status/inbound/SALES remain pending. No provider acknowledgement is manufactured by intake.
+MSG-001 durable verification intake increment — accepted offline at 99e3c13137bbcb66238106ca0790670bb16e68e2. Native44/no skips,78 contracts, actual old BP1 upgrade/rollback and full185 Java/359 gated provider regression PASS. Stable paired intent freezes original template/channel/account/transport/generation; SNS/SQS replay/races and partial-restore conflicts qualified. Whole MSG-001 IN_PROGRESS: sender/UNKNOWN/status/inbound/SALES remain pending. No provider acknowledgement is manufactured by intake.
 
 MSG-001 — IN_PROGRESS. Phone-consent increment accepted offline at cda3bacca12c6a53a552415f337b130a50b33cb8. Native33/no skips, full185 Java/348 gated,76 contracts,15 AI/five gated,Ruff/mypy13,271 unchanged artifact bytes/zero fresh OSV findings and nine reproduced artifacts PASS. Current BFF/CSRF/fixed private201–204, owned encrypted proof/context, explicit channel-purpose policy grants, authoritative127/175 suppression and audit/races qualified. Sender/UNKNOWN/status/inbound WhatsApp/SALES reply remain pending. Real sender/template/account/policy/retention inputs block live activation only; no critical approval blocks offline work.
 
@@ -157,7 +157,7 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-MSG-001 — durable EVT-028 notification intake and channel-specific fenced SMS/WhatsApp execution, then signed status receipts/inbound STOP/help/private lead/SALES reply. Phone proof/BFF/private eligibility/suppression is qualified offline. Existing MOCK-001/SEC-001/PLAT-001 dependencies are accepted; no critical approval blocks engineering. CARRIER-001 BP3 API-195 remains dependency-bound; experience/infrastructure proceed independently.
+MSG-001 — channel-specific fenced SMS/WhatsApp execution, then signed status receipts/inbound STOP/help/private lead/SALES reply. Durable EVT-028 intake accepted at 99e3c13137bbcb66238106ca0790670bb16e68e2. Phone proof/BFF/private eligibility/suppression is qualified offline. Existing MOCK-001/SEC-001/PLAT-001 dependencies are accepted; no critical approval blocks engineering. CARRIER-001 BP3 API-195 remains dependency-bound; experience/infrastructure proceed independently.
 
 ## Session Evidence / Protocol
 
