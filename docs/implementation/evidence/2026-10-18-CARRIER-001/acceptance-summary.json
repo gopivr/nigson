@@ -1,0 +1,33 @@
+{
+  "task": "CARRIER-001",
+  "date_utc": "2026-10-18",
+  "status": "IN_PROGRESS",
+  "offline_bp1_engineering": "ACCEPTED",
+  "native_carrier_suite": {
+    "status": "PASS",
+    "tests": 122,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "harness": "scripts/carrier/verify.py",
+    "maven": "3.10.0 installed binary, required because checked-in wrapper selects 3.9.11"
+  },
+  "repository_contract_suite": {
+    "status": "PASS",
+    "tests": 80,
+    "command": "ENV=test JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home make status-check command-surface-check"
+  },
+  "provider_http_regression": {
+    "status": "PASS",
+    "maven_reported_tests": 1108,
+    "failures": 0,
+    "errors": 0,
+    "environment_gated_skips": 734,
+    "mock_http_scenarios": "PASS",
+    "safe_log": ".build/carrier-provider-regression-final.log"
+  },
+  "live_fedex_qualification": "NOT_RUN",
+  "live_release_qualification": "NOT_RUN",
+  "api_195": "DEPENDENCY_BOUND_ON_COM-QUOTE-001",
+  "last_accepted_carrier_source_commit": "2cb1643de0a01f5f935f5a24e929b1073f5c22bf"
+}
