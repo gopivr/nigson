@@ -26,6 +26,12 @@
     },
     {
       "include": {
+        "file": "../025-bp1-file-transfer.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
         "file": "../023-msg-001-lead-email-nullable.yaml",
         "relativeToChangelogFile": true
       }

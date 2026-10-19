@@ -279,6 +279,33 @@
     "phase": 1
   },
   {
+    "api": "API-114",
+    "method": "POST",
+    "path": "/api/v1/experience/files/uploads",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "files.upload_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-115",
+    "method": "POST",
+    "path": "/api/v1/experience/files/{id}/completion",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "files.complete_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-116",
+    "method": "GET",
+    "path": "/api/v1/experience/files/{id}/download",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "files.download_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
     "api": "API-137",
     "method": "POST",
     "path": "/internal/v1/notification-deliveries",
@@ -529,5 +556,68 @@
     "client": "nigson-commerce",
     "scope": "report.read_WITH_SIGNED_ANALYST",
     "phase": 4
+  },
+  {
+    "api": "API-078",
+    "method": "POST",
+    "path": "/api/v1/staff/content",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "content.write_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-079",
+    "method": "POST",
+    "path": "/api/v1/staff/content/{id}/revisions",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "content.write_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-080",
+    "method": "POST",
+    "path": "/api/v1/staff/content-revisions/{id}/review",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "content.review_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-081",
+    "method": "POST",
+    "path": "/api/v1/staff/content-revisions/{id}/approval",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "content.approve_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-082",
+    "method": "POST",
+    "path": "/api/v1/staff/content-revisions/{id}/publication",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "content.publish_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-083",
+    "method": "GET",
+    "path": "/api/v1/staff/content-revisions/{id}/preview",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "content.read_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-086",
+    "method": "PUT",
+    "path": "/api/v1/staff/channel-configurations/{id}",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "channels.write_WITH_SIGNED_ADMIN",
+    "phase": 1
   }
 ]

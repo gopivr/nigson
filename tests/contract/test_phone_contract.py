@@ -9,7 +9,7 @@ class PhoneContracts(unittest.TestCase):
     def test_generated_experience_routes_and_exact_scopes(self):
         subprocess.run([sys.executable,'scripts/contracts/phone.py','--check'],cwd=ROOT,check=True)
         spec=json.loads((ROOT/'contracts/openapi/experience.yaml').read_text())
-        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-088','API-092','API-093','API-094','API-095','API-097','API-098','API-099','API-100','API-101','API-102','API-103','API-104','API-105','API-106','API-107','API-108','API-109','API-110','API-127','API-128','API-138','API-156','API-157','API-158','API-172','API-175','API-176','API-177','API-187','API-190','API-194','API-201','API-202','API-203','API-204','API-205','API-130','API-131'})
+        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-076','API-077','API-078','API-079','API-080','API-081','API-082','API-083','API-084','API-085','API-086','API-088','API-092','API-093','API-094','API-095','API-097','API-098','API-099','API-100','API-101','API-102','API-103','API-104','API-105','API-106','API-107','API-108','API-109','API-110','API-127','API-128','API-138','API-156','API-157','API-158','API-172','API-175','API-176','API-177','API-187','API-190','API-194','API-201','API-202','API-203','API-204','API-205','API-130','API-131','API-125','API-126'})
         inbound=spec['paths']['/api/v1/webhooks/notifications/twilio/whatsapp']['post']
         self.assertEqual(inbound['security'],[])
         self.assertIn('X-Twilio-Signature',{p['name'] for p in inbound['parameters']})

@@ -2861,6 +2861,36 @@ upload_session_id uuid NULL FK upload_session
 - **Checks:** byte_size>0; classification IN (PUBLIC,PRIVATE); scan_status IN (UPLOADING,QUARANTINED,CLEAN,REJECTED); owner_party_id IS NOT NULL OR upload_session_id IS NOT NULL.
 - **Business invariant:** Linked owner and purpose determine download access; no public URI for applications or business proofs.
 
+### experience.file_transfer
+
+Owner: `experience`; module: `files`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK FK file_asset
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+owner_party_id uuid NN EXTERNAL commerce.party
+source_key varchar(500) NN
+final_key varchar(500) NN
+upload_expires_at timestamptz NN
+scan_command_id uuid NULL
+source_version varchar(200) NULL
+source_etag varchar(200) NULL
+state varchar(20) NN DEFAULT UPLOADING
+copy_lease_until timestamptz NULL
+scan_request_hash char(64) NULL
+scan_result varchar(8) NULL
+scanner_version varchar(100) NULL
+```
+
+- **Keys and indexes:** UQ(scan_command_id); IX(owner_party_id); IX(state,updated_at).
+- **Checks:** state IN (UPLOADING,QUARANTINED,COPYING,UNKNOWN,CLEAN,REJECTED); scan_result IN (CLEAN,REJECTED).
+- **Business invariant:** Experience-owned pinned scan intent. Completion stores the verified source version/ETag and EVT-025 event ID. Promotion HTTP occurs outside transactions; uncertainty stays UNKNOWN and reconciles by HEAD of the deterministic final object before any retry. Terminal outcomes cannot be reversed by duplicate or out-of-order callbacks.
+- **Audit:** Versioned actor-attributed changes.
+
 ### experience.lead
 
 Owner: `experience`; module: `lead`; introduced: BP1; mutation: versioned.
@@ -9954,7 +9984,7 @@ Build/test PASS is command-scoped and timestamped; it does not imply every test 
 - [ ] COM-NOTIF-001 Implement commerce notification increment — AC-COM-NOTIF-001
 - [ ] COM-PLATF-001 Implement commerce platform increment — AC-COM-PLATF-001
 - [ ] COM-PROVI-001 Implement commerce provider increment — AC-COM-PROVI-001
-- [ ] EXP-CONTE-001 Implement experience content increment — AC-EXP-CONTE-001
+- [x] EXP-CONTE-001 Implement experience content increment — AC-EXP-CONTE-001
 - [ ] EXP-FILES-001 Implement experience files increment — AC-EXP-FILES-001
 - [ ] EXP-LEAD-001 Implement experience lead increment — AC-EXP-LEAD-001
 - [ ] EXP-NOTIF-001 Implement experience notification increment — AC-EXP-NOTIF-001
@@ -10039,7 +10069,7 @@ Build/test PASS is command-scoped and timestamped; it does not imply every test 
 - [x] COM-CATAL-002 Implement commerce catalogue increment — AC-COM-CATAL-002
 - [x] COM-MARKE-002 Implement commerce market increment — AC-COM-MARKE-002
 - [x] COM-ORDER-002 Implement commerce order increment — AC-COM-ORDER-002
-- [ ] EXP-CONTE-002 Implement experience content increment — AC-EXP-CONTE-002
+- [x] EXP-CONTE-002 Implement experience content increment — AC-EXP-CONTE-002
 
 
 ## EP13 — End-to-end qualification and release handover

@@ -3,6 +3,7 @@ package com.nigson.experience.content;
 import java.util.UUID;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import com.nigson.experience.platform.AuditWriter;
@@ -22,7 +23,7 @@ public final class ContentKnowledgeService {
     public ContentKnowledgeService(JdbcTemplate jdbc, ContentKnowledgeRepository repository, AuditWriter audit,
                                    PlatformTransactionManager manager, MeterRegistry metrics) {
         this.jdbc=jdbc; this.repository=repository; this.audit=audit; this.metrics=metrics;
-        tx=new TransactionTemplate(manager); tx.setTimeout(3);
+        tx=new TransactionTemplate(manager); tx.setTimeout(3); tx.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
     }
 
     public ContentKnowledgeValues.ValidationResult validate(PrivateWorkload.Proof proof,

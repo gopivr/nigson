@@ -42,7 +42,7 @@ class ContentKnowledgePersistenceTest {
                 new ContentKnowledgeValues.RequestedRevision(item,1),new ContentKnowledgeValues.RequestedRevision(item,2),
                 new ContentKnowledgeValues.RequestedRevision(draft,1),new ContentKnowledgeValues.RequestedRevision(archived,1),
                 new ContentKnowledgeValues.RequestedRevision(future,1),new ContentKnowledgeValues.RequestedRevision(UUID.randomUUID(),1))),UUID.randomUUID()).items();
-        assertThat(statuses).extracting(ContentKnowledgeValues.ValidatedRevision::approved).containsExactly(true,true,false,false,false,false);
+        assertThat(statuses).extracting(ContentKnowledgeValues.ValidatedRevision::approved).containsExactly(true,true,false,false,true,false);
         assertThat(statuses).extracting(ContentKnowledgeValues.ValidatedRevision::current).containsExactly(false,true,false,false,false,false);
         var content=service.read(read,item,UUID.randomUUID());assertThat(content.revision()).isEqualTo(2);assertThat(content.visibility()).isEqualTo("PUBLIC");assertThat(content.approved()).isTrue();assertThat(content.body().toString()).contains("Published");
         assertThatThrownBy(()->service.read(denied,item,UUID.randomUUID())).isInstanceOf(Problem.Failure.class).extracting(e->((Problem.Failure)e).code).isEqualTo(ProblemCode.ACCESS_DENIED);
@@ -56,7 +56,8 @@ class ContentKnowledgePersistenceTest {
 
     private PrivateWorkload.Proof proof(String api,String scope) {
         var route=PrivateWorkload.ROUTES.stream().filter(value->value.api().equals(api)).findFirst().orElseThrow();
-        return new PrivateWorkload.Proof("nigson-ai","synthetic-ai-workload",route,null);
+        var supplied=new PrivateWorkload.Route(route.api(),route.method(),route.path(),route.owner(),route.client(),scope,route.phase());
+        return new PrivateWorkload.Proof("nigson-ai","synthetic-ai-workload",supplied,null);
     }
     private void seedItem(UUID id,String slug,String state) {
         jdbc.update("INSERT INTO experience.content_item(id,created_by,updated_by,content_type,slug,locale,status) VALUES (?,'content-test','content-test','BLOG',?,'en-NG',?)",id,slug+"-"+id.toString().substring(0,8),state);

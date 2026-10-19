@@ -2565,6 +2565,637 @@
         }
       }
     },
+    "/api/v1/experience/files/uploads": {
+      "post": {
+        "operationId": "API-114",
+        "description": "Experience owner. Signed current actor; CONTENT_EDITOR may upload IMAGE/BROCHURE and the matching CUSTOMER may upload PRIVATE DISTRIBUTOR_PROOF. Original filename is display-only; UUID owner/resource/purpose and checksum bind the quarantine object. Idempotent create returns a five-minute constrained HTTPS upload capability; no final URI is exposed.",
+        "security": [
+          {
+            "workload": [
+              "files.upload_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperienceFileUploadResult"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "const": "\"0\""
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperienceFileUploadInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experience/files/{id}/completion": {
+      "post": {
+        "operationId": "API-115",
+        "description": "Experience owner. Exact signed actor scope, creator/resource/purpose authorization and If-Match. Verify quarantine HEAD outside the transaction (owner, size, MIME, encryption, SHA-256, immutable version/ETag); atomically persist QUARANTINED, audit and EVT-025 file.scan.requested.v1 in the Experience outbox. Idempotent replay returns the original response.",
+        "security": [
+          {
+            "workload": [
+              "files.complete_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperienceFileAsset"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "checksumSha256"
+                ],
+                "properties": {
+                  "checksumSha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experience/files/{id}/download": {
+      "get": {
+        "operationId": "API-116",
+        "description": "Experience owner. Authenticated, purpose- and owner/resource-authorized clean asset only. CUSTOMER reads only their PRIVATE business proof; CONTENT_EDITOR reads only Experience media permitted by current owner policy. Reject quarantined/rejected assets. Return a private, short-lived HTTPS capability with no-store.",
+        "security": [
+          {
+            "workload": [
+              "files.download_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperienceFileDownload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/files/{id}/scan-result": {
+      "post": {
+        "operationId": "API-136",
+        "description": "Exact nigson-integration files.scan.write workload only; no browser/caller actor. commandId and checksum must match this Experience asset\u2019s EVT-025 request. CLEAN promotion is pinned to the verified quarantine object version and occurs outside transactions. Timeout remains UNKNOWN and is reconciled by final-object HEAD; no blind retry or terminal reversal.",
+        "security": [
+          {
+            "workload": [
+              "files.scan.write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperienceFileAsset"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Provider unavailable or uncertain; keep UNKNOWN and reconcile without blind promotion retry"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperienceFileScanResult"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/newsletter-subscriptions": {
       "post": {
         "operationId": "API-099",
@@ -5904,6 +6535,910 @@
           }
         }
       }
+    },
+    "/api/v1/content/{type}/{slug}": {
+      "get": {
+        "operationId": "API-076",
+        "description": "Public current approved published revision only. Optional market fails closed when no owner-local eligibility is configured. Never serves preview/draft.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 220
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 16,
+              "default": "en"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 8
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/content": {
+      "get": {
+        "operationId": "API-077",
+        "description": "Bounded stable page of current approved published content only. Reject unknown/repeated query parameters.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "publishedAt,asc",
+                "publishedAt,desc"
+              ],
+              "default": "publishedAt,desc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/staff/content": {
+      "post": {
+        "operationId": "API-078",
+        "description": "CONTENT_EDITOR; create content item and immutable draft revision in one owner-local transaction; idempotent replay.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentRevisionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": [
+          {
+            "workload": [
+              "content.write_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentRevisionInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/content/{id}/revisions": {
+      "post": {
+        "operationId": "API-079",
+        "description": "CONTENT_EDITOR; create a new draft revision, never overwrite published text. If-Match is the content item version.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentRevisionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": [
+          {
+            "workload": [
+              "content.write_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentRevisionEdit"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/content-revisions/{id}/review": {
+      "post": {
+        "operationId": "API-080",
+        "description": "CONTENT_EDITOR; DRAFT to REVIEW only; actor/reason audited.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentRevisionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": [
+          {
+            "workload": [
+              "content.review_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentReview"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/content-revisions/{id}/approval": {
+      "post": {
+        "operationId": "API-081",
+        "description": "CONTENT_PUBLISHER; REVIEW to APPROVED or back to DRAFT; public visibility requires a separate publication command.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentRevisionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": [
+          {
+            "workload": [
+              "content.approve_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentApproval"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/content-revisions/{id}/publication": {
+      "post": {
+        "operationId": "API-082",
+        "description": "CONTENT_PUBLISHER; publish an approved immutable revision or withdraw it immediately. State, pointer, audit, idempotency and EVT-017/018 outbox commit atomically. Future schedules publish from the owner scheduler.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentRevisionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": [
+          {
+            "workload": [
+              "content.publish_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentPublication"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/content-revisions/{id}/preview": {
+      "get": {
+        "operationId": "API-083",
+        "description": "CONTENT_EDITOR only; private no-store draft/revision preview.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentRevisionDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": [
+          {
+            "workload": [
+              "content.read_WITH_SIGNED_ACTOR"
+            ],
+            "signedActor": []
+          }
+        ]
+      }
+    },
+    "/api/v1/seo/sitemap": {
+      "get": {
+        "operationId": "API-084",
+        "description": "Public sitemap contains only configured canonical HTTPS URLs for current approved public Experience content; empty until approved SEO origin configuration exists.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentSitemap"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/channels": {
+      "get": {
+        "operationId": "API-085",
+        "description": "Public active channel projection; never returns lead recipient groups or provider secrets.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicChannels"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/staff/channel-configurations/{id}": {
+      "put": {
+        "operationId": "API-086",
+        "description": "ADMIN with current signed assertion and recent MFA; versioned typed channel configuration update. No channel values are preconfigured.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success; no-store for private responses",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelConfigurationDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict or invalid transition"
+          },
+          "412": {
+            "description": "Stale version"
+          },
+          "500": {
+            "description": "Safe internal error"
+          }
+        },
+        "security": [
+          {
+            "workload": [
+              "channels.write_WITH_SIGNED_ADMIN"
+            ],
+            "signedActor": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChannelConfigurationInput"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6984,6 +8519,208 @@
           "total": {
             "type": "integer",
             "minimum": 0
+          }
+        }
+      },
+      "ExperienceFileUploadInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "purpose",
+          "filename",
+          "mimeType",
+          "size",
+          "checksumSha256"
+        ],
+        "properties": {
+          "purpose": {
+            "enum": [
+              "IMAGE",
+              "BROCHURE",
+              "DISTRIBUTOR_PROOF"
+            ]
+          },
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "mimeType": {
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "application/pdf"
+            ]
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 10485760
+          },
+          "checksumSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "linkedResourceId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          }
+        }
+      },
+      "ExperienceFileUploadResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assetId",
+          "uploadUrl",
+          "requiredHeaders",
+          "expiresAt"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "uploadUrl": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https:"
+          },
+          "requiredHeaders": {
+            "type": "object",
+            "maxProperties": 20,
+            "propertyNames": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 2048
+            }
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ExperienceFileAsset": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "state",
+          "purpose",
+          "mimeType",
+          "size",
+          "checksum",
+          "url",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "state": {
+            "enum": [
+              "UPLOADING",
+              "QUARANTINED",
+              "CLEAN",
+              "REJECTED"
+            ]
+          },
+          "purpose": {
+            "enum": [
+              "IMAGE",
+              "BROCHURE",
+              "DISTRIBUTOR_PROOF"
+            ]
+          },
+          "mimeType": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "checksum": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      },
+      "ExperienceFileDownload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "expiresAt"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https:"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ExperienceFileScanResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "commandId",
+          "checksumSha256",
+          "result",
+          "scannerVersion"
+        ],
+        "properties": {
+          "commandId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "checksumSha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "result": {
+            "enum": [
+              "CLEAN",
+              "REJECTED"
+            ]
+          },
+          "scannerVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "reasonCode": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{0,99}$"
           }
         }
       },
@@ -8543,7 +10280,7 @@
                     "url": {
                       "type": "string",
                       "format": "uri",
-                      "pattern": "^https://"
+                      "pattern": "^https:"
                     }
                   }
                 },
@@ -8638,7 +10375,7 @@
               {
                 "type": "string",
                 "format": "uri",
-                "pattern": "^https://"
+                "pattern": "^https:"
               },
               {
                 "type": "null"
@@ -8669,15 +10406,14 @@
                 "url": {
                   "type": "string",
                   "format": "uri",
-                  "pattern": "^https://"
+                  "pattern": "^https:"
                 }
               }
             }
           },
           "structuredData": {
             "type": "object",
-            "maxProperties": 50,
-            "additionalProperties": true
+            "maxProperties": 50
           }
         }
       },
@@ -8755,6 +10491,481 @@
             "const": "PUBLIC"
           }
         }
+      },
+      "ContentDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "slug",
+          "locale",
+          "revision",
+          "title",
+          "body",
+          "metadata",
+          "publishedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "type": {
+            "enum": [
+              "HOME",
+              "ABOUT",
+              "LEADERSHIP",
+              "DIVISION",
+              "BLOG",
+              "VIDEO",
+              "FAQ",
+              "CAREERS",
+              "CONTACT"
+            ]
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 220
+          },
+          "locale": {
+            "type": "string",
+            "maxLength": 16
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 220
+          },
+          "body": {
+            "$ref": "#/components/schemas/ContentBody"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/SeoDTO"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ContentRevisionInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "slug",
+          "locale",
+          "title",
+          "body",
+          "metadata"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "HOME",
+              "ABOUT",
+              "LEADERSHIP",
+              "DIVISION",
+              "BLOG",
+              "VIDEO",
+              "FAQ",
+              "CAREERS",
+              "CONTACT"
+            ]
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 220
+          },
+          "locale": {
+            "type": "string",
+            "maxLength": 16
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 220
+          },
+          "body": {
+            "$ref": "#/components/schemas/ContentBody"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/SeoDTO"
+          }
+        }
+      },
+      "ContentRevisionEdit": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "body",
+          "metadata"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 220
+          },
+          "body": {
+            "$ref": "#/components/schemas/ContentBody"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/SeoDTO"
+          }
+        }
+      },
+      "ContentRevisionDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "contentItemId",
+          "revision",
+          "state",
+          "type",
+          "slug",
+          "locale",
+          "title",
+          "body",
+          "metadata",
+          "version",
+          "scheduledAt",
+          "publishedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "contentItemId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "enum": [
+              "DRAFT",
+              "REVIEW",
+              "APPROVED",
+              "PUBLISHED",
+              "WITHDRAWN",
+              "ARCHIVED"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "$ref": "#/components/schemas/ContentBody"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/SeoDTO"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "scheduledAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "publishedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "ContentReview": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reason"
+        ],
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "ContentApproval": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "approve",
+          "reason"
+        ],
+        "properties": {
+          "approve": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "ContentPublication": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "reason"
+        ],
+        "properties": {
+          "action": {
+            "enum": [
+              "PUBLISH",
+              "WITHDRAW"
+            ]
+          },
+          "scheduleAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "ChannelConfigurationInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "key",
+          "publicValue",
+          "active"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "WHATSAPP",
+              "SOCIAL",
+              "MAP",
+              "LEAD_RECIPIENT_GROUP",
+              "SEO"
+            ]
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "publicValue": {
+            "type": "object"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ChannelConfigurationDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "key",
+          "publicValue",
+          "active",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "publicValue": {
+            "type": "object"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      },
+      "ContentPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content",
+          "page",
+          "size",
+          "totalElements",
+          "totalPages",
+          "sort"
+        ],
+        "properties": {
+          "content": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/ContentDTO"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "sort": {
+            "type": "string"
+          }
+        }
+      },
+      "SitemapEntry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "lastModified",
+          "locale",
+          "alternateUrls"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https:"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "locale": {
+            "type": "string",
+            "maxLength": 16
+          },
+          "alternateUrls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "locale",
+                "url"
+              ],
+              "properties": {
+                "locale": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "pattern": "^https:"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ContentSitemap": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entries"
+        ],
+        "properties": {
+          "entries": {
+            "type": "array",
+            "maxItems": 10000,
+            "items": {
+              "$ref": "#/components/schemas/SitemapEntry"
+            }
+          }
+        }
+      },
+      "PublicChannels": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "whatsapp",
+          "social",
+          "maps"
+        ],
+        "properties": {
+          "whatsapp": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "social": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "maps": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -8779,6 +10990,9 @@
               "careers.write_WITH_SIGNED_ACTOR": "Exact signed Commerce BFF staff career permission",
               "careers.read_WITH_SIGNED_ACTOR": "Exact signed Commerce BFF staff career permission",
               "careers.manage_WITH_SIGNED_ACTOR": "Exact signed Commerce BFF staff career permission",
+              "files.upload_WITH_SIGNED_ACTOR": "Create an Experience-owned purpose-authorized upload",
+              "files.complete_WITH_SIGNED_ACTOR": "Complete and quarantine an Experience-owned upload",
+              "files.download_WITH_SIGNED_ACTOR": "Download an authorized clean Experience file",
               "reviews.create_WITH_SIGNED_CUSTOMER": "Create a customer review",
               "reviews.moderate_WITH_SIGNED_ACTOR": "Moderate reviews",
               "reviews.read_WITH_SIGNED_ACTOR": "Read private review queue",
@@ -8792,7 +11006,13 @@
               "audit.read_WITH_SIGNED_ADMIN": "Read Experience-owned audit history with a signed current ADMIN actor",
               "report.read_WITH_SIGNED_ANALYST": "Read sanitized Experience engagement aggregates with a signed current ANALYST actor",
               "knowledge.validate": "Validate approval and current publication state for up to 20 Experience content revisions",
-              "knowledge.read": "Read the current approved PUBLIC Experience content revision"
+              "knowledge.read": "Read the current approved PUBLIC Experience content revision",
+              "content.write_WITH_SIGNED_ACTOR": "Exact current signed CONTENT_EDITOR actor delegated by Commerce BFF",
+              "content.review_WITH_SIGNED_ACTOR": "Exact current signed CONTENT_EDITOR actor delegated by Commerce BFF",
+              "content.approve_WITH_SIGNED_ACTOR": "Exact current signed CONTENT_PUBLISHER actor delegated by Commerce BFF",
+              "content.publish_WITH_SIGNED_ACTOR": "Exact current signed CONTENT_PUBLISHER actor delegated by Commerce BFF",
+              "content.read_WITH_SIGNED_ACTOR": "Exact current signed CONTENT_EDITOR actor delegated by Commerce BFF",
+              "channels.write_WITH_SIGNED_ADMIN": "Exact current signed ADMIN actor delegated by Commerce BFF"
             }
           }
         },

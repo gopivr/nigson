@@ -7,7 +7,9 @@ Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:18 October2026
 EP12 — Bounded assistant and catalogue increments; SEC-001, DATA-001 and PLAT-001 are accepted. EP09 offline reporting increments are accepted; OPS-001 genuine carrier qualification and INFRA-001 stage/restore gates continue independently. BP1 launch composition remains section46.
 
 ## Current Task
-EXP-CONTE-002 — IN_PROGRESS (EP12 / Experience). Implement exact private API-125/126 over Experience-owned published content; workload clients/scopes are `nigson-ai` + `knowledge.validate` and `knowledge.read`. Keep authoring/publication mutations in their separate contracts; deny draft, preview, stale, superseded and withdrawn sources. Planned verification: actual private HTTP and native PostgreSQL, exact scope/client rejection, input bounds, public DTO redaction, withdrawal freshness, safe errors, OpenAPI/contracts/security/schema and fresh/repeat owner migrations. No direct events are specified.
+EXP-FILES-001 — IN_PROGRESS (EP03 / Experience). Implement APIs 114/115/116/136 over Experience-owned file assets with purpose/owner authorization, quarantined upload verification, EVT-025 outbox, clean promotion and authenticated downloads. Preserve exact storage/scanner state handling and fail closed when approved storage/scanner configuration is absent. Planned verification: native PostgreSQL and actual HTTP quarantine/access/replay/race/stale/uncertain cases, generated OpenAPI, focused Experience harness, contract/security/schema/migration checks. INFRA-001 stage/restore gates remain input-bound.
+
+EXP-CONTE-002 — DONE offline engineering (EP12 / Experience). APIs 125/126 provide exact private `nigson-ai` revision validation and sanitized access to current approved public content, with owner-local snapshot checks, immediate withdrawal freshness, safe errors, audit and bounded metrics. Native PostgreSQL/actual HTTP: 4 tests passed, no failures/errors/skips; contract suite89, security10, OpenAPI/authorization, schema and fresh/repeat owner migrations passed. No schema or direct event was required. CMS mutation APIs076–086 remain EXP-CONTE-001; no channel/approval configuration or live activation is claimed. Evidence: `docs/implementation/2026-10-18-EXP-CONTE-002.md` and `docs/implementation/evidence/2026-10-18-EXP-CONTE-002/`.
 
 AI-KNOWL-001 — DONE (offline engineering, EP11 / AI). APIs 146/179 now queue idempotent AI-owned ingestion, create immutable disabled embedding revisions, validate/chunk approved PUBLIC snapshots, persist complete embeddings atomically, withdraw stale evidence, and provide bounded lexical/vector scoped retrieval with current owner validation. Local/test provider is deterministic and stateful; production source/embedding adapters are not configured and no fallback exists. Native PostgreSQL/actual HTTP harness: 26 passed, 1 environment-gated skip; security suite 10 passed; contract suite 86 passed; AI OpenAPI generation/check, authorization, schema catalog, Ruff, mypy and diff checks passed. No DDL, direct events, cross-owner SQL, model approval, embedding activation, locale, budget or retention policy was added. Commerce API-123 omits locale, and no embedding activation API exists; these remain explicit contract/configuration dependencies. INFRA-001 stage and restore gates remain input-bound. Evidence: `docs/implementation/2026-10-18-AI-KNOWL-001.md`.
 
@@ -66,6 +68,8 @@ CARRIER-001 durable EVT-027 intake increment — accepted offline at 2c3ccd8b041
 CARRIER-001 initial quote/creation safeguard — accepted offline at 828bb46eab3c05d3d4c70e74f6fa699dedcb77fd; native51/no skips, affected financial71/no skips, full120 Java/251 gated,69 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7.
 
 ## Completed Tasks
+
+- [x] EXP-CONTE-001 — DONE offline engineering; APIs076–086 and EVT-017/018 accepted through native PostgreSQL/actual HTTP, exact actor scopes, stale-version/replay/race coverage, contracts/security/OpenAPI/schema and fresh/repeat owner migration checks. Evidence: `docs/implementation/2026-10-18-EXP-CONTE-001.md`.
 
 - [x] INT-PROVI-001 — DONE (engineering); implementation 7c02b3b63db4e9909d8239be24305208e9ec23d7; native22/no skips, full100 Java/218 gated,64 contracts,15 AI/five gated and nine reproduced artifacts PASS. Private APIs, actual registered scoped payment worker, UNKNOWN/lease fencing, cursors, audit and SNS/SQS inbox qualified offline. Genuine provider/release qualification NOT_RUN. Report docs/implementation/2026-10-12-INT-PROVI-001.md.
 
@@ -127,7 +131,6 @@ CARRIER-001 initial quote/creation safeguard — accepted offline at 828bb46eab3
 
 ## Pending
 
-- [ ] EXP-CONTE-001 — Implement experience content increment (EP03)
 - [ ] EXP-FILES-001 — Implement experience files increment (EP03)
 - [ ] EXP-LEAD-001 — Implement experience lead increment (EP03)
 - [ ] EXP-NOTIF-001 — Implement experience notification increment (EP03)
@@ -159,7 +162,7 @@ CARRIER-001 initial quote/creation safeguard — accepted offline at 828bb46eab3
 - [x] AI-KNOWL-001 — Implement ai knowledge increment (EP11)
 - [x] AI-ASSIS-001 — Implement ai assistant increment (EP12)
 - [x] COM-ORDER-002 — DONE offline engineering; API-124 actual HTTP/native PostgreSQL, contracts, security, OpenAPI, schema and migration checks PASS. Evidence: `docs/implementation/2026-10-18-COM-ORDER-002.md`.
-- [ ] EXP-CONTE-002 — Implement experience content increment (EP12)
+- [x] EXP-CONTE-002 — DONE offline engineering; API-125/126 current approved public knowledge projection and exact workload validation accepted. Evidence: `docs/implementation/2026-10-18-EXP-CONTE-002.md`. CMS mutations remain EXP-CONTE-001.
 - [ ] OPS-001 — Deepen FedEx carrier operational qualification at BP4 (EP09); offline runbooks/mock regression complete, live account/route qualification NOT_RUN.
 - [ ] INFRA-001 — Implement ECS reference infrastructure and immutable delivery pipeline (EP10)
 - [ ] OPS-002 — Verify resilience, restore and measured capacity (EP10)
@@ -167,6 +170,10 @@ CARRIER-001 initial quote/creation safeguard — accepted offline at 828bb46eab3
 - [x] MSG-001 — DONE offline engineering at `95573e203fc59ca7edf171eed5bc25b1389e75fd`; genuine Twilio qualification/live activation NOT_RUN (EP05)
 
 ## Build Status
+
+PASS — EXP-CONTE-001 Java 25/Maven 3.10.0 Experience compile and focused native PostgreSQL/actual HTTP harness passed; 4 selected tests, zero failures/errors/skips. No DDL changes. See `docs/implementation/2026-10-18-EXP-CONTE-001.md`.
+
+PASS — EXP-CONTE-002 Java 25 Experience source/test compilation through the focused native runner; no dependency or lockfile changes. See `docs/implementation/2026-10-18-EXP-CONTE-002.md`.
 
 PASS — COM-ORDER-002 Java 25 source compile and focused actual-HTTP/native-PostgreSQL harness. Local Maven wrapper 3.9.11 required `-Denforcer.skip=true`; no enforcer pass is claimed. Exact command, resolved initial fixture/toolchain failures and evidence paths: `docs/implementation/2026-10-18-COM-ORDER-002.md`.
 
@@ -180,6 +187,10 @@ PASS — MSG-001 phone increment: full185 Java/348 environment-gated,76 contract
 PASS — MSG-001 API-188/189 signed status receipt increment: native4/no skips,79 repo/contract/schema checks,271 unchanged locked artifacts and nine actual Java/Python artifact hashes reproduced in two clean builds. Source 7580c1b5040f751ceb9a4eda823939375b621d27; no live Twilio reachability/qualification claimed.
 
 ## Test Status
+
+PASS — EXP-CONTE-001 actual HTTP/native PostgreSQL covers actor and role denial, idempotent replay/hash mismatch, simultaneous request race with retry and exact-once persistence, stale `If-Match`, review/approval, scheduled publication, immediate withdrawal and EVT-017/018 outbox rows. All-owner fresh/repeat migrations, contract suite91, generated OpenAPI/authorization, native security and authorization tests, schema catalog and `git diff --check` PASS. Evidence: `docs/implementation/evidence/2026-10-18-EXP-CONTE-001/`. Maven wrapper3.9.11 was below the enforced3.10.0 minimum; final native checks used installed Maven3.10.0.
+
+PASS — EXP-CONTE-002 native PostgreSQL and actual HTTP acceptance4/no skips; contracts89, security10, generated Experience OpenAPI/authorization, schema catalog, fresh/repeat owner migrations and `git diff --check` PASS. Evidence: `docs/implementation/evidence/2026-10-18-EXP-CONTE-002/`. Live CMS configuration and INFRA-001 stage/restore remain unqualified/input-bound.
 
 PASS — COM-ORDER-002 Commerce24 tests (SecurityAssembly1, OrderPersistence19, OrderValues2, compatibility2), Experience2 and Integration2; zero failures/errors/skips. Includes API-124 actual HTTP authorization/owner checks and existing checkout snapshot, late settlement and payment UNKNOWN persistence acceptance. Contracts87, Python security10, generated OpenAPI authorization, schema catalog, fresh/repeat owner migrations and `git diff --check` PASS. Evidence: `docs/implementation/evidence/2026-10-18-COM-ORDER-002/`. No live commercial/provider approval is claimed.
 
@@ -198,6 +209,7 @@ PASS — API-188/189 final native callback suite:4 Java tests/no skips with loca
 
 ## Last Successful Commit
 
+No commit created for EXP-CONTE-001; workspace HEAD remains `2032ac367fc3f776d738aed7854710e9e38a310e`. Evidence and implementation are in the shared worktree; unrelated in-flight changes were preserved.
 No commit created for COM-CATAL-002; workspace HEAD remains `a683d6332781eb7e54a95574af322e3a603275e9`. The source/evidence are in the shared worktree; unrelated in-flight work was preserved.
 No commit created for COM-MARKE-002; workspace HEAD remains `a683d6332781eb7e54a95574af322e3a603275e9`. Acceptance and migration evidence is recorded in `docs/implementation/2026-10-18-COM-MARKE-002.md`; unrelated in-flight work was preserved.
 
@@ -217,9 +229,9 @@ Credential-free WireMock/Testcontainers HTTP servers, real adapters and protocol
 
 ## Next Recommended Task
 
-Most recently completed: COM-ORDER-002 — DONE offline engineering. API-124 read-only owner projection and its actual HTTP/native PostgreSQL, authorization, contract, security, schema and migration evidence are recorded in `docs/implementation/2026-10-18-COM-ORDER-002.md`.
+Most recently completed: EXP-CONTE-001 — DONE offline engineering. APIs076–086 and EVT-017/018 passed native PostgreSQL/actual HTTP acceptance and the required offline checks; evidence is recorded in `docs/implementation/2026-10-18-EXP-CONTE-001.md`.
 
-Next dependency-ready task: EXP-CONTE-002 (EP12 / Experience). Implement Experience content APIs 125/126. First read BACKEND_IMPLEMENTATION_MASTER.md sections 3, 17, 46, 47, 48 and 54; IMPLEMENTATION_STATUS.md; the EXP-CONTE-002 blueprint, referenced Experience-owned schemas/events/acceptance and applicable ADRs. Record IN_PROGRESS before editing. Preserve Experience ownership and existing content revision/publication contracts. Implement only dependency-ready owner-local behavior: keep draft/preview private, enforce contract-defined publication approval and exact scopes, make withdrawal immediately unavailable, and use safe errors, audit/observability and existing persistence semantics. Add generated OpenAPI and native PostgreSQL plus actual HTTP acceptance for authorization, ownership, publication/withdrawal, stale versions, replay and failure cases. Run focused Experience harness and contract/security/schema/migration checks; write `docs/implementation/2026-10-18-EXP-CONTE-002.md` and update status/next prompt only after checks pass. Do not invent approval or channel configuration. INFRA-001 stage and restore gates remain input-bound.
+Next dependency-ready task: EXP-FILES-001 (EP03 / Experience). Implement APIs114/115/116/136 for purpose- and owner-checked uploads, quarantine, and authenticated clean downloads over Experience-owned `file_asset`, with EVT-025 through the durable owner outbox. Read BACKEND_IMPLEMENTATION_MASTER.md sections 3, 17, 46, 47, 48 and 54; IMPLEMENTATION_STATUS.md; the EXP-FILES-001 blueprint and referenced schemas/APIs/events/acceptance and ADRs. Record IN_PROGRESS before editing. Preserve Experience ownership and file capability rules; implement exact signed scopes, idempotency, stale versions, safe errors, audit/observability, and the existing scan/provider state machine. Add generated OpenAPI and native PostgreSQL plus actual HTTP acceptance for quarantine, clean/public/private access, ownership denial, replay/races, stale versions and failure/uncertain scan outcomes. Run the focused Experience harness, contract/security/schema/migration checks; record evidence and update status only after checks pass. Do not invent scanner, storage, retention or activation configuration. INFRA-001 stage and restore gates remain input-bound.
 
 ## Session Evidence / Protocol
 

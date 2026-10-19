@@ -96,12 +96,14 @@ def experience_contract():
         op=operation(api,'Exact nigson-integration, no user actor. Resolve the requested email, SMS or WhatsApp destination against current purpose grants and authoritative channel suppression; missing destination denies. No provider HTTP.',response,[])
         op['security']=[{'workload':[scope]}];op['requestBody']={'required':True,'content':{'application/json':{'schema':REF(body)}}};paths[path]={'post':op}
     contract={'openapi':'3.1.0','info':{'title':'Nigson Experience APIs','version':'1.1.0'},'paths':paths,'components':{'schemas':model,'securitySchemes':{'workload':{'type':'oauth2','flows':{'clientCredentials':{'tokenUrl':'https://configured-keycloak.invalid/protocol/openid-connect/token','scopes':{**{f'communication.{scope}_WITH_SIGNED_CUSTOMER':'Exact commerce private phone operation' for scope in ['create','verify','read','withdraw']},'consent.write_WITH_SIGNED_CUSTOMER':'Current customer email or verified phone consent change','notification.read':'Original private verification context','notification.read_WITH_SIGNED_ACTOR':'Lead reply context for a signed SALES actor','consent.read':'Current consent eligibility','consent.write':'Verified provider suppression','quote.read':'Read Experience-owned quote lead context','quote.write':'Bind Experience-owned quote lead to Commerce quote','lead.quote.create_WITH_SIGNED_CUSTOMER':'Create a quote lead as the signed current CUSTOMER'}}}},'signedActor':{'type':'apiKey','in':'header','name':'X-Nigson-Actor'}}}}
+    from experience_files import extend_experience as experience_files_extend
     from career import extend_experience
     from consent import extend_experience as consent_extend
     from engagement import extend_experience as engagement_extend
     from distributor import extend_experience as distributor_extend
     from content_knowledge import extend as content_knowledge_extend
-    return content_knowledge_extend(report_extend_experience(audit_extend_experience(lead_extend_experience(distributor_extend(engagement_extend(consent_extend(extend_experience(contract))))) )))
+    from cms_content import extend as cms_content_extend
+    return cms_content_extend(content_knowledge_extend(report_extend_experience(audit_extend_experience(lead_extend_experience(distributor_extend(engagement_extend(consent_extend(experience_files_extend(extend_experience(contract))))))) )))
 
 def audit_extend_experience(spec):
     """API-138 Experience-owned read-only audit page; preserves the shared AuditDTO."""

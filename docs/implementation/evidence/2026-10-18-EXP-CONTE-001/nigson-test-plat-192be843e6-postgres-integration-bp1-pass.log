@@ -1,0 +1,134 @@
+No validation errors found.
+Running Changeset: integration/000-schema-and-roles.yaml::integration-20261005-001::nigson-platform
+Running Changeset: integration/010-bp1-platform-tables.yaml::integration-20261006-011::nigson-platform
+Running Changeset: integration/020-bp1-domain-tables.yaml::integration-20261006-012::nigson-platform
+Running Changeset: integration/021-bp1-indexes.yaml::integration-20261006-013::nigson-platform
+Running Changeset: integration/022-bp1-constraints.yaml::integration-20261006-014::nigson-platform
+Running Changeset: integration/024-bp1-notification-dispatch.yaml::integration-20261017-msg-001::nigson-messaging
+Running Changeset: integration/023-bp1-carrier-cancellation.yaml::integration-20261016-carrier-001::nigson-carrier
+Running Changeset: integration/025-msg-001-staff-reply-envelope.yaml::integration-20261017-msg-001-envelope::nigson-messaging
+Liquibase: Update has been successful. Rows affected: 0
+Owner migration verified: integration; applied=8
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Creating database changelog table with name: integration.databasechangelog
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 19, 2026 3:01:37 AM liquibase.snapshot
+INFO: Creating snapshot
+Oct 19, 2026 3:01:37 AM liquibase.command
+INFO: Command execution complete
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 19, 2026 3:01:37 AM liquibase
+INFO: Parsed changelog file 'services/integration/src/main/resources/db/changelog/master.yaml'
+Oct 19, 2026 3:01:37 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 19, 2026 3:01:37 AM liquibase.command
+INFO: Using deploymentId: 2378896603
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/000-schema-and-roles.yaml::integration-20261005-001::nigson-platform ran successfully in 5ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/010-bp1-platform-tables.yaml::integration-20261006-011::nigson-platform ran successfully in 17ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/020-bp1-domain-tables.yaml::integration-20261006-012::nigson-platform ran successfully in 13ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/021-bp1-indexes.yaml::integration-20261006-013::nigson-platform ran successfully in 8ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/022-bp1-constraints.yaml::integration-20261006-014::nigson-platform ran successfully in 4ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 024-bp1-notification-dispatch.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/024-bp1-notification-dispatch.yaml::integration-20261017-msg-001::nigson-messaging ran successfully in 4ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 023-bp1-carrier-cancellation.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/023-bp1-carrier-cancellation.yaml::integration-20261016-carrier-001::nigson-carrier ran successfully in 4ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 025-msg-001-staff-reply-envelope.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/025-msg-001-staff-reply-envelope.yaml::integration-20261017-msg-001-envelope::nigson-messaging ran successfully in 2ms
+Oct 19, 2026 3:01:37 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 19, 2026 3:01:37 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 19, 2026 3:01:37 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 19, 2026 3:01:37 AM liquibase.command
+INFO: Command execution complete
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 19, 2026 3:01:37 AM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 19, 2026 3:01:37 AM liquibase.command
+INFO: Using deploymentId: 2378896603
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Custom SQL executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/000-schema-and-roles.yaml::integration-20261005-001::nigson-platform ran successfully in 2ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 010-bp1-platform-tables.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/010-bp1-platform-tables.yaml::integration-20261006-011::nigson-platform ran successfully in 20ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 020-bp1-domain-tables.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/020-bp1-domain-tables.yaml::integration-20261006-012::nigson-platform ran successfully in 18ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 021-bp1-indexes.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/021-bp1-indexes.yaml::integration-20261006-013::nigson-platform ran successfully in 15ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 022-bp1-constraints.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/022-bp1-constraints.yaml::integration-20261006-014::nigson-platform ran successfully in 4ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 024-bp1-notification-dispatch.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/024-bp1-notification-dispatch.yaml::integration-20261017-msg-001::nigson-messaging ran successfully in 11ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 023-bp1-carrier-cancellation.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/023-bp1-carrier-cancellation.yaml::integration-20261016-carrier-001::nigson-carrier ran successfully in 10ms
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: SQL in file 025-msg-001-staff-reply-envelope.sql executed
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: ChangeSet integration/025-msg-001-staff-reply-envelope.yaml::integration-20261017-msg-001-envelope::nigson-messaging ran successfully in 5ms
+Oct 19, 2026 3:01:37 AM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 19, 2026 3:01:37 AM liquibase.util
+INFO: Run:                          8
+Oct 19, 2026 3:01:37 AM liquibase.util
+INFO: Previously run:               0
+Oct 19, 2026 3:01:37 AM liquibase.util
+INFO: Filtered out:                 0
+Oct 19, 2026 3:01:37 AM liquibase.util
+INFO: -------------------------------
+Oct 19, 2026 3:01:37 AM liquibase.util
+INFO: Total change sets:            8
+Oct 19, 2026 3:01:37 AM liquibase.util
+INFO: Update summary generated
+Oct 19, 2026 3:01:37 AM liquibase.command
+INFO: Update command completed successfully.
+Oct 19, 2026 3:01:37 AM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 19, 2026 3:01:37 AM liquibase.command
+INFO: Command execution complete
+Oct 19, 2026 3:01:37 AM liquibase.changelog
+INFO: Reading from integration.databasechangelog

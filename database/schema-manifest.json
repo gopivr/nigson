@@ -14159,6 +14159,196 @@
       "owner": "experience",
       "phase": 1
     },
+    "experience.file_transfer": {
+      "checks": "state IN (UPLOADING,QUARANTINED,COPYING,UNKNOWN,CLEAN,REJECTED); scan_result IN (CLEAN,REJECTED)",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "file_asset",
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": "commerce.party",
+          "foreign": null,
+          "name": "owner_party_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "source_key",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(500)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "final_key",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(500)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "upload_expires_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "scan_command_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "source_version",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "source_etag",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "UPLOADING",
+          "external": null,
+          "foreign": null,
+          "name": "state",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "copy_lease_until",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "scan_request_hash",
+          "nullable": true,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "scan_result",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(8)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "scanner_version",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(100)"
+        }
+      ],
+      "keys": "UQ(scan_command_id); IX(owner_party_id); IX(state,updated_at)",
+      "module": "files",
+      "mutation": "versioned",
+      "owner": "experience",
+      "phase": 1
+    },
     "experience.idempotency_record": {
       "checks": "state IN (RUNNING,SUCCEEDED,FAILED_RETRYABLE); response_status IS NULL OR response_status BETWEEN 100 AND 599",
       "creation_changeset": "experience-20261006-011",

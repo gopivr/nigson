@@ -14,6 +14,7 @@ from catalog import ROOT, catalog
 
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
 ADDITIVE_TABLES = {
+    'experience.file_transfer': ('025-bp1-file-transfer', 'experience-20261019-files-001', 'nigson-files', 'EXP-FILES-001: Experience-owned pinned file scan/promotion intent; existing migrations preserved.'),
     'integration.notification_dispatch': ('024-bp1-notification-dispatch', 'integration-20261017-msg-001', 'nigson-messaging', 'ADR-018: additive owned immutable notification dispatch identity; prior migrations preserved.'),
     'commerce.file_transfer': ('023-bp1-file-transfer', 'commerce-20261010-files-001', 'nigson-files', 'ADR-009: additive owned file transfer intent; existing migrations preserved.'),
     'commerce.carrier_cancellation': ('025-bp1-carrier-cancellation', 'commerce-20261016-carrier-001', 'nigson-carrier', 'ADR-014: additive owned cancellation/dispatch exclusion; prior migrations preserved.'),

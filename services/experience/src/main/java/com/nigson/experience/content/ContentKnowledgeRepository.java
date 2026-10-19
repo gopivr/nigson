@@ -18,6 +18,8 @@ public final class ContentKnowledgeRepository {
 
     public ContentKnowledgeRepository(JdbcTemplate jdbc) { this.jdbc = jdbc; }
 
+    public JdbcTemplate jdbc() { return jdbc; }
+
     public ContentKnowledgeValues.ValidatedRevision validate(UUID itemId, int revision) {
         var rows = jdbc.query("""
                 SELECT r.state, r.approved_by,
