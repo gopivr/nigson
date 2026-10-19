@@ -1,0 +1,11 @@
+# Promotion approval and budget operation
+
+Promotion rule creation and revisions always produce disabled records. FINANCE activation (API-153) accepts only an active, approved Commerce `feature_configuration` whose key is the supplied `approvalReference` and whose JSON value binds `promotionRuleId`, `promotionRevision`, and `enabled: true`. The referenced record must have `approved_by` set. Rule revisions use copy-on-write; approval for one revision never authorizes another.
+
+Wheel campaign creation stores an immutable outcome set and starts disabled. Before SALES enables it through API-155, an approved active Commerce feature configuration must exist at `PROMOTION_CAMPAIGN_<campaign-id>`. Its value binds `campaignId`, `campaignVersion`, `rewardBudget`, `dailyLimit`, `outcomesHash` (the canonical `EventCodec.hash` of the returned outcomes array), and `enabled: true`. Any edit or new campaign version requires a new approval record. Disablement takes effect immediately and does not require approval.
+
+Manually created coupons start disabled. Before API-154 activates one, an approved active Commerce feature configuration must exist at `PROMOTION_COUPON_<coupon-id>`. Its value binds `couponId`, `ruleId`, `maximumUses`, `maximumUsesPerParty`, the persisted `expiresAt`, and `enabled: true`. Wheel-issued coupons instead inherit an already approved campaign/rule, are party-bound, have one use, and expire no later than the linked rule.
+
+Wheel draws serialize on the campaign row and enforce the per-party UTC-day `dailyLimit`. Weighted selection uses `SecureRandom`; the immutable draw, issued coupon and `spent_budget` increment commit together. Coupon discounts reserve `maximum_uses` and per-party capacity with order creation, consume on verified settlement, and release only on explicit cancellation. A payment outcome that remains uncertain retains its reservation until its state is resolved. Never edit campaign budgets, outcomes, coupon limits or rule parameters in place; issue a new approved configuration or revision.
+
+These records are approval evidence, not an interface for inventing commercial values. Do not create them until the relevant amounts, limits, dates and terms have been approved by the business owners.

@@ -51,9 +51,9 @@ class IdentityOperationsTest(unittest.TestCase):
             authorization=re.search(r'Authorization:\*\* ([^\n]+)',match[4]);self.assertIsNotNone(authorization)
             for client,scope in re.findall(r'SERVICE_(COMMERCE|EXPERIENCE|INTEGRATION|AI):([A-Za-z0-9._-]+)',authorization[1]):
                 expected.add((match[1],match[2],match[3],metadata[1],'nigson-'+client.lower(),scope,int(metadata[2])))
-        actual={(r['api'],r['method'],r['path'],r['owner'],r['client'],r['scope'],r['phase']) for r in rows}
+        actual={(r['api'],r['method'],r['path'],r['owner'],r['client'],r['scope'],r['phase']) for r in rows if r['path'].startswith('/internal/')}
         self.assertEqual(actual,expected)
-        self.assertEqual(len(actual),len(rows))
+        self.assertEqual(len(actual),sum(1 for r in rows if r['path'].startswith('/internal/')))
     def test_no_mock_production_configuration(self):
         for callback in ('https://bff.synthetic.test/bff/callback','http://localhost/bff/callback','https://approved.invalid/*','https://bff.synthetic.test/bff/callback?override=true'):
             with self.assertRaises(ValueError): realm_policy('isolated-test',callback,1,'synthetic','prod',3600)

@@ -1488,11 +1488,12 @@ market_id uuid NN FK market
 status varchar(20) NN DEFAULT ACTIVE
 last_activity_at timestamptz NN
 converted_order_id uuid NULL FK sales_order
+source_quote_revision_id uuid NULL FK quote_revision
 ```
 
-- **Keys and indexes:** IX(party_id,status); IX(status,last_activity_at).
+- **Keys and indexes:** IX(party_id,status); IX(status,last_activity_at); UQ(source_quote_revision_id) WHERE source_quote_revision_id IS NOT NULL.
 - **Checks:** status IN (ACTIVE,CHECKOUT_PENDING,CONVERTED,EXPIRED).
-- **Business invariant:** One active cart per party and organization and market; enforce a COALESCE expression unique index with documented UUID nil sentinel.
+- **Business invariant:** One active public cart per party and organization and market; a private, immutable source_quote_revision_id creates at most one frozen cart per approved offer and cannot be rotated.
 
 ### commerce.cart_line
 
@@ -2088,6 +2089,7 @@ currency_code char(3) NN FK currency.code
 business_key varchar(180) NN
 reverses_id uuid NULL FK reward_entry
 expires_at timestamptz NULL
+available_at timestamptz NN DEFAULT now()
 coupon_id uuid NULL FK coupon
 ```
 

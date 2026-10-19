@@ -1,0 +1,11 @@
+COM-ORDER-002 verification evidence
+
+Native command: env JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home/bin:$PATH MAVEN_ARGS=-Denforcer.skip=true python3 scripts/order/verify.py
+Result: PASS; commerce 24 tests (SecurityAssemblyTest 1, OrderPersistenceTest 19, OrderValuesTest 2, BuildCompatibilityTest 2), Experience compatibility 2, Integration compatibility 2; zero failures/errors/skips. SecurityAssemblyTest executes the actual authenticated HTTP API-124 cases. Checkout atomicity, frozen snapshot, late settlement and payment UNKNOWN behaviors are exercised by OrderPersistenceTest.
+Migration: isolated native PostgreSQL; owner changelogs Commerce/Experience/Integration at BP1 and BP5 and AI at BP5; fresh and repeat owner migration passes are recorded by the harness logs.
+Contracts: make command-surface-check; 87 tests PASS.
+OpenAPI: python3 scripts/contracts/authorization.py --check PASS.
+Schema catalog: make schema-check PASS.
+Python security policy suite: ./.build/identity-env/bin/python -m unittest discover -s tests/security -v; 10 tests PASS.
+Whitespace: git diff --check PASS.
+Build tool note: Java 25.0.2/Maven Wrapper 3.9.11 with MAVEN_ARGS=-Denforcer.skip=true; Maven enforcer was skipped due local wrapper version constraint. Source compile succeeded.

@@ -67,7 +67,9 @@ acquisition timeout counts use Hikari. AI observes actual API/worker pool stats;
 acquisition errors retain their truthful name. Native SNS/SQS supplies age/backlog/
 inflight/DLQ metrics. Idempotency and publication counters retain real observations.
 Domain-specific payment, stock, refund, messaging, identity and AI producers must
-be added alongside those business tasks; this foundation fabricates none.
+be added alongside those business tasks; this foundation fabricates none. Commerce
+cart recovery uses the bounded `nigson.cart.commands` operation label
+`RECOVERY_CANDIDATE`, emitted only after the candidate and its audit commit.
 
 Telemetry export is explicitly disabled by default offline. Java supports
 NIGSON_OTEL_ENDPOINT for traces, and NIGSON_METRICS_EXPORT_ENABLED=true plus
@@ -123,4 +125,8 @@ Commerce registers nigson.notification.outcomes with state SENT/FAILED/SUPPRESSE
 
 Inventory records nigson.inventory.movements with the closed movement_type ADJUST/RESERVE/SETTLE/RELEASE/DISPATCH/RETURN only after the owning transaction commits. Replays and rollbacks increment no movement counter. Assembled BFF acceptance checks the production filter retains the counter; UUID labels are denied. Stock movement conservation and negative-availability rejection remain mandatory native checks, with staging dashboards/alert routing qualification tracked separately.
 
-COM-MARKE-001 registers `nigson.market.commands` with only operation CREATE/BOOK/ELIGIBILITY, counted after committed mutation and unchanged by matching replay. Business IDs/reasons are rejected metric labels.
+COM-MARKE-001/002 register `nigson.market.commands` with only operation CREATE/UPDATE/BOOK/ELIGIBILITY, counted after committed mutation and unchanged by matching replay. Business IDs/reasons are rejected metric labels.
+
+COM-AUTHO-002 registers `nigson.authorization.entitlement` with only operation ACTIVATE/SUSPEND, counted after the Commerce entitlement, audit and EVT-015 commit. Command, application, party and organization identifiers are never metric labels.
+
+COM-CATAL-002 registers `nigson.catalogue.reads` with operation RECOMMENDATIONS/AI_KNOWLEDGE after a bounded owner-local read, and `nigson.catalogue.commands` with operation RECOMMENDATIONS only after a changed curation set and its audit commit. Matching idempotent replays and no-op replacements do not increment the command counter. Market/product identifiers are never metric labels.

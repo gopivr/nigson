@@ -1,0 +1,11 @@
+package com.nigson.experience.careers;
+import java.nio.charset.StandardCharsets;import java.security.*;import java.util.*;import java.util.concurrent.ConcurrentHashMap;import javax.crypto.Mac;import javax.crypto.spec.SecretKeySpec;
+/** Local/test-only deterministic anti-spam verifier. Tokens bind to an idempotency key and replay safely. */
+public final class LocalCareerAntiSpamMock implements CareerService.AntiSpamVerifier {
+ private final byte[] key;private final ConcurrentHashMap<String,String> accepted=new ConcurrentHashMap<>();
+ public LocalCareerAntiSpamMock(String base64){try{key=Base64.getDecoder().decode(base64);if(key.length<32)throw new IllegalArgumentException();}catch(Exception e){throw new IllegalArgumentException("CAREER_MOCK_ANTISPAM_KEY_REQUIRED");}}
+ public String sign(String nonce,String idempotencyKey){if(nonce==null||!nonce.matches("[A-Za-z0-9_-]{16,100}")||idempotencyKey==null||idempotencyKey.isBlank()||idempotencyKey.length()>100)throw new IllegalArgumentException("CAREER_MOCK_ANTISPAM_INPUT_INVALID");return nonce+"."+Base64.getUrlEncoder().withoutPadding().encodeToString(mac(nonce+":"+idempotencyKey));}
+ @Override public boolean verify(String token,String idempotencyKey){try{if(token==null||token.length()>512||idempotencyKey==null||idempotencyKey.length()>100||accepted.size()>10000)return false;String[] p=token.split("\\.",-1);if(p.length!=2||!p[0].matches("[A-Za-z0-9_-]{16,100}"))return false;byte[] supplied=Base64.getUrlDecoder().decode(p[1]);if(!MessageDigest.isEqual(supplied,mac(p[0]+":"+idempotencyKey)))return false;String tokenHash=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(token.getBytes(StandardCharsets.US_ASCII)));String existing=accepted.putIfAbsent(tokenHash,idempotencyKey);return existing==null||existing.equals(idempotencyKey);}catch(Exception invalid){return false;}}
+ private byte[] mac(String value){try{Mac m=Mac.getInstance("HmacSHA256");m.init(new SecretKeySpec(key,"HmacSHA256"));return m.doFinal(("nigson-career-antispam:v1:"+value).getBytes(StandardCharsets.US_ASCII));}catch(Exception e){throw new IllegalStateException("CAREER_MOCK_ANTISPAM_UNAVAILABLE");}}
+ @Override public String toString(){return "LocalCareerAntiSpamMock[protected]";}
+}

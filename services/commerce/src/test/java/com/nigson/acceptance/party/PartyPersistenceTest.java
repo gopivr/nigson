@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 class PartyPersistenceTest {
     static final String ISSUER="https://identity.example.invalid/realms/test";
     static final String RULES="{\"schemaVersion\":1,\"requiredFields\":[],\"postalPattern\":null,\"regionCodes\":[]}";
-    JdbcTemplate jdbc;TransactionTemplate tx;PartyService service;UUID party,other,market;String subject;List<UUID> parties=new ArrayList<>();
+    JdbcTemplate jdbc;TransactionTemplate tx;PartyService service;UUID party,other,market;String subject;List<UUID> parties=new ArrayList<>(),organizations=new ArrayList<>();
     Clock clock=Clock.fixed(Instant.parse("2026-10-04T00:00:00Z"),ZoneOffset.UTC);
     @BeforeEach void setup(){
         String url=System.getenv("NIGSON_TEST_JDBC_URL");Assumptions.assumeTrue(url!=null,"make party-check supplies isolated owner PostgreSQL");if(!url.matches("jdbc:postgresql://127.0.0.1:[0-9]+/nigson"))throw new IllegalArgumentException("LOCAL_TEST_DB_REQUIRED");
@@ -29,7 +29,7 @@ class PartyPersistenceTest {
         jdbc.update("INSERT INTO commerce.market_destination(id,created_by,updated_by,market_id,country_code,address_rules) VALUES (?,'test','test',?,'NG',?::jsonb)",UUID.randomUUID(),market,RULES);
     }
     UUID provision(String s){UUID id=service.provision(new PartyValues.VerifiedIdentity(ISSUER,s,s+"@example.invalid",true,"Synthetic party"));parties.add(id);return id;}
-    @AfterEach void clean(){if(jdbc==null)return;for(UUID id:new HashSet<>(parties)){jdbc.update("DELETE FROM commerce.address WHERE party_id=?",id);jdbc.update("DELETE FROM commerce.customer_profile WHERE party_id=?",id);jdbc.update("DELETE FROM commerce.organization_membership WHERE party_id=?",id);jdbc.update("DELETE FROM commerce.party WHERE id=?",id);}if(market!=null){jdbc.update("DELETE FROM commerce.market_destination WHERE market_id=?",market);jdbc.update("DELETE FROM commerce.market WHERE id=?",market);}}
+    @AfterEach void clean(){if(jdbc==null)return;for(UUID id:new HashSet<>(parties)){jdbc.update("DELETE FROM commerce.address WHERE party_id=?",id);jdbc.update("DELETE FROM commerce.customer_profile WHERE party_id=?",id);jdbc.update("DELETE FROM commerce.organization_membership WHERE party_id=?",id);}for(UUID id:organizations){jdbc.update("DELETE FROM commerce.account_entitlement WHERE organization_id=?",id);jdbc.update("DELETE FROM commerce.organization_membership WHERE organization_id=?",id);jdbc.update("DELETE FROM commerce.organization WHERE id=?",id);}for(UUID id:new HashSet<>(parties))jdbc.update("DELETE FROM commerce.party WHERE id=?",id);if(market!=null){jdbc.update("DELETE FROM commerce.market_destination WHERE market_id=?",market);jdbc.update("DELETE FROM commerce.market WHERE id=?",market);}}
     ActorAssertion.Actor actor(UUID id){String s=jdbc.queryForObject("SELECT identity_subject FROM commerce.party WHERE id=?",String.class,id);return new ActorAssertion.Actor(id,ISSUER,s,null,Set.of("CUSTOMER"),Set.of(),null);}
     JsonNode json(String s){return EventCodec.JSON.readTree(s);}
     JsonNode address(boolean defaultAddress){return json("{\"recipient\":\"Synthetic recipient\",\"phone\":\"+2348000000000\",\"line1\":\"Synthetic road\",\"city\":\"Synthetic city\",\"countryCode\":\"NG\",\"isDefault\":"+defaultAddress+"}");}
@@ -82,4 +82,15 @@ class PartyPersistenceTest {
             jdbc.update("UPDATE commerce.organization_membership SET status='SUSPENDED' WHERE organization_id=? AND party_id=?",org,party);assertThat(service.addresses(actor(party))).isEmpty();assertThatThrownBy(()->service.deleteAddress(actor(party),owned.id(),0,"suspended",UUID.randomUUID())).hasMessage("NOT_FOUND");
         }finally{jdbc.update("DELETE FROM commerce.address WHERE organization_id=?",org);jdbc.update("DELETE FROM commerce.organization_membership WHERE organization_id=?",org);jdbc.update("DELETE FROM commerce.organization WHERE id=?",org);}
     }
+    @Test void organizationsListsOnlyCurrentActorMembershipAndOwnedEntitlementState(){
+        var configured=new PartyService(new JdbcPartyRepository(jdbc,clock,3,new AuditWriter(jdbc,clock,new SimpleMeterRegistry()),"SYNTHETIC_DISTRIBUTOR_BUY"),new PlatformStore(jdbc,new DataSourceTransactionManager(jdbc.getDataSource()),clock,new SimpleMeterRegistry()),tx,new AuditWriter(jdbc,clock,new SimpleMeterRegistry()),clock);
+        UUID active=organization("Active synthetic organization"),suspended=organization("Suspended synthetic organization"),pending=organization("Pending synthetic organization"),foreign=organization("Foreign synthetic organization"),inactiveMember=organization("Inactive synthetic organization");
+        membership(active,party,"OWNER","ACTIVE");membership(suspended,party,"BUYER","ACTIVE");membership(pending,party,"OWNER","ACTIVE");membership(foreign,other,"OWNER","ACTIVE");membership(inactiveMember,party,"BUYER","SUSPENDED");
+        entitlement(active,"ACTIVE");entitlement(suspended,"SUSPENDED");entitlement(foreign,"ACTIVE");entitlement(inactiveMember,"ACTIVE");
+        var result=configured.organizations(actor(party));assertThat(result).extracting(PartyValues.Organization::name).containsExactly("Active synthetic organization","Pending synthetic organization","Suspended synthetic organization");assertThat(result).extracting(PartyValues.Organization::membershipRole).containsExactly("OWNER","OWNER","BUYER");assertThat(result).extracting(PartyValues.Organization::entitlementState).containsExactly("ACTIVE","PENDING","SUSPENDED");assertThat(configured.organizations(actor(other))).extracting(PartyValues.Organization::id).containsExactly(foreign);
+        var staff=new ActorAssertion.Actor(party,ISSUER,subject,null,Set.of("SALES"),Set.of(),null);assertThatThrownBy(()->configured.organizations(staff)).hasMessage("ACCESS_DENIED");
+    }
+    private UUID organization(String name){UUID id=UUID.randomUUID();organizations.add(id);jdbc.update("INSERT INTO commerce.organization(id,created_by,updated_by,name,country_code,status) VALUES (?,'test','test',?,'NG','ACTIVE')",id,name);return id;}
+    private void membership(UUID organization,UUID member,String role,String status){jdbc.update("INSERT INTO commerce.organization_membership(id,created_by,updated_by,organization_id,party_id,role,status) VALUES (?,'test','test',?,?,?,?)",UUID.randomUUID(),organization,member,role,status);}
+    private void entitlement(UUID organization,String status){jdbc.update("INSERT INTO commerce.account_entitlement(id,created_by,updated_by,organization_id,entitlement,status,source_application_id,approval_command_id) VALUES (?,'test','test',?,'SYNTHETIC_DISTRIBUTOR_BUY',?,?,?)",UUID.randomUUID(),organization,status,UUID.randomUUID(),UUID.randomUUID());}
 }

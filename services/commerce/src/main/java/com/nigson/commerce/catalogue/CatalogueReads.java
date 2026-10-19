@@ -24,5 +24,6 @@ public final class CatalogueReads {
     public CatalogueValues.Product product(UUID id,String market){admit();market(market);return query(()->repository.product(id,market));}
     public List<CatalogueValues.PublicCategory> categories(String market){admit();market(market);return query(()->repository.categories(market));}
     public List<CatalogueValues.PublicBrand> brands(){admit();return query(repository::brands);}
+    public <T>T boundedQuery(java.util.function.Supplier<T> operation){admit();return query(operation);}
     public CatalogueValues.Page<CatalogueValues.ProductAdmin> staff(ActorAssertion.Actor actor,String q,String status,int page,int size,String sort){authority.require(actor,"CONTENT_EDITOR");String text=q(q);ApiValues.page(page,size);if(status!=null&&!Set.of("DRAFT","ACTIVE","ARCHIVED").contains(status))throw ApiValues.invalid();return query(()->{authority.require(actor,"CONTENT_EDITOR");return repository.staff(text,status,page,size,sort);});}
 }

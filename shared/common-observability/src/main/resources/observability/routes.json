@@ -176,7 +176,6 @@
   "/internal/v1/jobs/{id}/retry",
   "/internal/v1/knowledge/reindex",
   "/internal/v1/leads/{id}/messaging-context",
-  "/internal/v1/notification-suppression-checks",
   "/internal/v1/leads/{id}/notification-context",
   "/internal/v1/leads/{id}/quote-association",
   "/internal/v1/leads/{id}/quote-context",
@@ -185,8 +184,10 @@
   "/internal/v1/notification-context/{orderId}",
   "/internal/v1/notification-deliveries",
   "/internal/v1/notification-provider-receipts",
+  "/internal/v1/notification-suppression-checks",
   "/internal/v1/payments/reconciliation",
   "/internal/v1/purchase-proofs",
+  "/internal/v1/quote-sku-eligibility",
   "/internal/v1/shipments/{id}/provider-context",
   "/internal/v1/shipments/{id}/provider-result",
   "/internal/v1/templates"

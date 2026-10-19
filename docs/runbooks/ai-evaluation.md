@@ -1,0 +1,9 @@
+# AI evaluation operations
+
+API-180 stores immutable, versioned synthetic/sanitized suites in the AI schema. API-147 requires the exact Commerce workload scope plus a signed ADMIN actor, the suite owner's identity and an `If-Match` revision. Evaluation currently runs only through the deterministic local evaluator, bounded to the API's 500-case maximum; it makes no Bedrock/model network request. API-148 reads sanitized, UTC-bounded aggregates from AI-owned run records.
+
+The local result is evidence for offline engineering only. Its `activationEligible` value is always false and no API in this task activates a model policy. A failed policy match, prompt linkage or grounding/scoring gate remains visible in the result's sanitized `insightDraft.failedGates`. Provider/model activation, spend budgets, retention and policy approvals remain separate owned inputs; do not add them to local configuration to make a test pass.
+
+For local verification, run `python3 scripts/contracts/ai.py --check` and `ENV=test python3 scripts/platform/verify.py` in the approved Python 3.12 and Java 25/Maven toolchain. The AI-only native database harness may call `verify.main(run_java=False, python_tests=["services/ai/tests"])` when unrelated Java checks are unavailable; record that limitation explicitly. The runner creates isolated PostgreSQL/LocalStack resources, verifies the existing Docker baseline and removes only its own containers/network.
+
+API-148's source schema currently has no persisted intent or empty-search dimensions. It therefore returns empty/zero values for those dimensions rather than deriving labels from prompt text or private tool output. Add owner-approved, bounded measurement fields in the assistant implementation before treating those dimensions as production analytics. Never include prompts, case inputs, raw tool output, model tokens or personal data in reports, logs or metric labels.

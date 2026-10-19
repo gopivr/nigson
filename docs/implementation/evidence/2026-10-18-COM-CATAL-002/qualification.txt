@@ -1,0 +1,39 @@
+COM-CATAL-002 focused qualification evidence
+Date: 2026-10-18
+
+Focused owner command:
+ENV=test JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home/bin:$PATH MAVEN_ARGS=-Denforcer.skip=true python3 scripts/catalogue/verify.py
+
+Final run: PASS. Commerce ProductPersistenceTest 9, CatalogueValuesTest 3,
+TaxonomyPersistenceTest 5, CatalogueReadLoadTest 1, SecurityAssemblyTest 1 and
+BuildCompatibilityTest 2; zero failures/errors/skips. Experience and Integration
+BuildCompatibilityTest 2 each; zero failures/errors/skips. Actual BFF HTTP verified
+API-073 anonymous access and market filtering, API-074 exact SALES/current role,
+stale If-Match and idempotent replay, and API-123 signed nigson-ai knowledge.read
+JWT/JWKS access. Native Commerce tests cover self/inactive target denial,
+organization denial, atomic audit rollback, concurrent same-key replay, unpublished
+and ineligible filtering, and unchanged direct outbox count. The isolated database
+runner verified fresh/repeat owner migrations and preserved existing Docker state.
+Commerce migration log: commerce-bp5-migration.log.
+
+Contract/schema/security:
+- .build/ai-env/bin/python -m unittest discover -s tests/contract -v — 87 passed.
+- python3 scripts/contracts/authorization.py --check — PASS.
+- python3 scripts/database/generate.py --check — PASS; no migration required.
+- ENV=test NIGSON_TEST_CATALOGUE=1 JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home PATH=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home/bin:$PATH MAVEN_ARGS=-Denforcer.skip=true python3 scripts/security/verify.py — PASS; 18 native security tests, zero failures/errors/skips, including API-123 actual HTTP.
+
+Toolchain limitation and failure history:
+- Default ./mvnw was rejected before compilation because the shell selected Java
+  17.0.14/Maven 3.9.11 while the repository pins Java 25.0.2/Maven 3.10.0+.
+- Final native harness used installed Java 25.0.2 and the checked-in Maven wrapper's
+  3.9.11 with only its enforcer skipped (MAVEN_ARGS=-Denforcer.skip=true). Do not
+  interpret this as an enforcer-passing build.
+- An early native run caught a malformed SQL EXISTS parenthesis and an assertion
+  using the old product version after curation. Both were corrected. A subsequent
+  test run exposed a missing concurrency-test latch release; that run was
+  interrupted, its isolated containers were confirmed removed, and the fixture was
+  corrected. The final native run above passed.
+
+No production credentials, provider endpoints, customer data, staging, or live
+activation were used. The existing product_recommendation table from DATA-001 was
+reused without DDL.

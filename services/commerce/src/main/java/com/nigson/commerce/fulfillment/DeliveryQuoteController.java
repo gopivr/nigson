@@ -22,4 +22,9 @@ public final class DeliveryQuoteController {
   if(!request.getParameterMap().isEmpty())throw ApiValues.invalid();var auth=SecurityContextHolder.getContext().getAuthentication();if(auth==null||!auth.isAuthenticated())throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);if(!(auth.getPrincipal() instanceof ActorAssertion.Actor actor))throw new Problem.Failure(ProblemCode.ACCESS_DENIED);var correlation=WireContext.current()==null?WireContext.correlation(null):WireContext.current().correlationId;
   return ResponseEntity.status(201).header("Cache-Control","no-store").body(service.create(actor,cookies.read(request),ApiValues.uuid(id),ApiValues.version(header(request,"If-Match")),DeliveryQuoteValues.input(input),header(request,"Idempotency-Key"),correlation));
  }
+ @PostMapping(value="/api/v1/quotes/{id}/delivery-quotes",consumes="application/json",produces="application/json")
+ public ResponseEntity<DeliveryQuoteValues.Quote> quote(HttpServletRequest request,@PathVariable String id,@RequestBody JsonNode input){
+  if(!request.getParameterMap().isEmpty())throw ApiValues.invalid();var auth=SecurityContextHolder.getContext().getAuthentication();if(auth==null||!auth.isAuthenticated())throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);if(!(auth.getPrincipal() instanceof ActorAssertion.Actor actor))throw new Problem.Failure(ProblemCode.ACCESS_DENIED);var correlation=WireContext.current()==null?WireContext.correlation(null):WireContext.current().correlationId;
+  return ResponseEntity.status(201).header("Cache-Control","no-store").body(service.createForQuote(actor,cookies.read(request),ApiValues.uuid(id),ApiValues.version(header(request,"If-Match")),DeliveryQuoteValues.quoteInput(input),header(request,"Idempotency-Key"),correlation));
+ }
 }

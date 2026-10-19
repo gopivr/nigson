@@ -16,6 +16,10 @@ def extend(spec):
     s['PriceBooksPage']=object_schema({'items':{'type':'array','maxItems':100,'items':REF('PriceBookDTO')},'page':{'type':'integer','minimum':0},'size':{'type':'integer','minimum':1,'maximum':100},'totalElements':VERSION,'totalPages':VERSION})
     s['PriceDTO']=object_schema({'skuId':UUID,'unitAmount':money,'currency':currency,'minimumQuantity':quantity,'packMultiple':quantity,'priceBookRevision':{'type':'integer','minimum':1,'format':'int64'},'validUntil':instant})
     s['PriceActivation']=object_schema({'reason':{'type':'string','minLength':10,'maxLength':300}})
+    s['WholesaleMinimumRule']=object_schema({'skuId':UUID,'minimumQuantity':quantity,'packMultiple':quantity,'minimumOrderAmount':money})
+    s['WholesaleMinimumRule']['required']=[]
+    s['PriceAssignment']=object_schema({'marketId':UUID,'priceBookId':UUID,'minimumRules':{'type':'array','maxItems':100,'items':REF('WholesaleMinimumRule')}})
+    s['PriceAssignmentDTO']=object_schema({'organizationId':UUID,'priceBookId':UUID,'revision':{'type':'integer','minimum':1,'format':'int64'}})
     quote=object_schema({'cartId':UUID,'addressId':UUID,'carrierQuoteId':UUID,'couponCode':{'type':'string','pattern':'^[A-Za-z0-9_-]{1,80}$'}});quote['required'].remove('couponCode');s['NewCheckoutQuote']=quote
     s['CheckoutQuoteLine']=object_schema({'skuId':UUID,'quantity':quantity,'unitAmount':money,'lineTotal':money})
     s['CheckoutQuoteTotals']=object_schema({key:money for key in ('subtotal','discount','tax','delivery','grandTotal')})
@@ -30,7 +34,8 @@ def extend(spec):
     create=operation('API-027','Current SALES/CSRF/key. Explicit nonempty draft revision1; active approved currency, SKU scale and exact minor units. Numeric duplicate thresholds rejected; family advisory lock plus durable idempotency and atomic audit. No prices or market activation invented.','PriceBookDTO',headers)
     activate=operation('API-028','Current FINANCE/recent MFA15m/CSRF/key/If-Match. Effective nonexpired valid draft and nonoverlapping active family interval. Immutable published entries; atomically activate/version/audit/EVT-007/ack. Does not choose a default market book; API-162 remains explicit.','PriceBookDTO',[path,*headers,match])
     revise=operation('API-151','Current SALES/CSRF/key/If-Match of parent. Serialize family, require latest revision and next effective interval, same currency/segment. Copy-on-write new draft/revision; published prices never changed. An open-ended active parent cannot be silently shortened.','PriceBookDTO',[path,*headers,match])
-    checkout=operation('API-036','Current CUSTOMER/CSRF/key with owned cart/address. No reservation/provider HTTP. Lock current cart, product/SKU, owned policies and carrier binding; require unexpired QUOTED current cart/version/address/package/service/currency/mode and reviewed provider configuration. Canonical immutable snapshot/hash freezes all sources, fee and expiry up to5m. Approved offer takes precedence; current membership/eligibility and quantity still checked. BP1 coupon or a higher-phase enabled campaign fails closed until promotion port is implemented. Same-key replay returns the original snapshot and expiry.','CheckoutQuote',headers)
+    assign=operation('API-067','Current SALES/CSRF/key/If-Match. Lock organization, market and active DISTRIBUTOR price book; validate NGN minor units and SKU quantity scales. Atomically replace this organization/market minimum-rule set, version assignment, audit and append EVT-007. Does not alter organization or entitlement state; it cannot activate a suspended distributor.','PriceAssignmentDTO',[path,*headers,match])
+    checkout=operation('API-036','Current CUSTOMER/CSRF/key with owned cart/address. No reservation/provider HTTP. Lock current cart, product/SKU, owned policies and carrier binding; require unexpired QUOTED current cart/version/address/package/service/currency/mode and reviewed provider configuration. Canonical immutable snapshot/hash freezes all sources, fee and expiry up to5m. Approved offer takes precedence; current membership/eligibility and quantity still checked. BP1 coupons fail closed; BP2 explicit coupon rules require an approved immutable promotion revision and finite usage budget, revalidated on quote and reserved atomically with order. Automatic campaign discounts remain disabled unless separately approved and implemented. Same-key replay returns the original snapshot and expiry.','CheckoutQuote',headers)
     for op,request in ((create,'NewPriceBook'),(activate,'PriceActivation'),(revise,'PriceRevision'),(checkout,'NewCheckoutQuote')):
         op['requestBody']={'required':True,'content':{'application/json':{'schema':REF(request)}}}
         op['responses']['201']=op['responses'].pop('200')
@@ -39,9 +44,13 @@ def extend(spec):
         op['responses'][success]['headers']={'Cache-Control':{'schema':{'const':'no-store'}}}
         if op in (create,activate,revise):op['responses'][success]['headers']['ETag']={'schema':{'type':'string'}}
         op['responses']['422']['description']='Pricing rule violation, missing approval or disabled phase feature'
+    assign['requestBody']={'required':True,'content':{'application/json':{'schema':REF('PriceAssignment')}}}
+    assign['responses']['200']['headers']={'Cache-Control':{'schema':{'const':'no-store'}},'ETag':{'schema':{'type':'string'}}}
+    assign['responses']['422']['description']='Pricing rule violation or unsupported market/book'
     spec['paths']['/api/v1/catalogue/skus/{id}/price']={'get':read}
     spec['paths']['/api/v1/staff/price-books']={'get':listing,'post':create}
     spec['paths']['/api/v1/staff/price-books/{id}/activation']={'post':activate}
     spec['paths']['/api/v1/staff/price-books/{id}/revisions']={'post':revise}
+    spec['paths']['/api/v1/staff/organizations/{id}/price-assignment']={'put':assign}
     spec['paths']['/api/v1/checkout/quotes']={'post':checkout}
     return spec

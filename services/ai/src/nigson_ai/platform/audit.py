@@ -25,12 +25,30 @@ CURRENCIES = frozenset(
 )
 KINDS = {"USER", "SERVICE", "SYSTEM"}
 ACTIONS = {
-    "ORDER_CHECKOUT", "ORDER_PROCESSING", "ORDER_CANCELLATION", "ORDER_SETTLEMENT",
-    "PAYMENT_RECEIPT", "PAYMENT_INITIATION", "PAYMENT_VERIFICATION", "REFUND_SUBMISSION",
-    "NOTIFICATION_DELIVERY", "NOTIFICATION_TEMPLATE",
-    "FILE_UPLOAD", "FILE_COMPLETION", "FILE_SCAN_RESULT", "FILE_PROMOTION_REQUEST", "FILE_TRANSFER_UNKNOWN",
-    "PRODUCT_CREATE", "PRODUCT_UPDATE", "SKU_CREATE", "SKU_UPDATE", "TAXONOMY_CREATE", "TAXONOMY_UPDATE",
-    "SESSION_LOGIN", "SESSION_LOGOUT", "PROFILE_UPDATE",
+    "ORDER_CHECKOUT",
+    "ORDER_PROCESSING",
+    "ORDER_CANCELLATION",
+    "ORDER_SETTLEMENT",
+    "PAYMENT_RECEIPT",
+    "PAYMENT_INITIATION",
+    "PAYMENT_VERIFICATION",
+    "REFUND_SUBMISSION",
+    "NOTIFICATION_DELIVERY",
+    "NOTIFICATION_TEMPLATE",
+    "FILE_UPLOAD",
+    "FILE_COMPLETION",
+    "FILE_SCAN_RESULT",
+    "FILE_PROMOTION_REQUEST",
+    "FILE_TRANSFER_UNKNOWN",
+    "PRODUCT_CREATE",
+    "PRODUCT_UPDATE",
+    "SKU_CREATE",
+    "SKU_UPDATE",
+    "TAXONOMY_CREATE",
+    "TAXONOMY_UPDATE",
+    "SESSION_LOGIN",
+    "SESSION_LOGOUT",
+    "PROFILE_UPDATE",
     "ADDRESS_CREATE",
     "ADDRESS_UPDATE",
     "ADDRESS_DELETE",
@@ -51,12 +69,14 @@ ACTIONS = {
     "CART_TRANSITION",
     "PRICE_CREATE",
     "PRICE_REVISION",
+    "PRICE_ASSIGNMENT",
     "CHECKOUT_QUOTE",
     "PRICE_ACTIVATION",
     "PROMOTION_ACTIVATION",
     "STOCK_LOCATION_CREATE",
     "STOCK_TRANSITION",
     "MARKET_CREATE",
+    "MARKET_UPDATE",
     "MARKET_BOOK",
     "MARKET_ELIGIBILITY",
     "STOCK_ADJUSTMENT",
@@ -71,13 +91,29 @@ ACTIONS = {
     "APPLICANT_EXPORT",
     "FEATURE_ACTIVATION",
     "QUEUE_REPLAY",
+    "AI_POLICY_CREATE",
     "AI_POLICY_ACTIVATION",
+    "AI_PROMPT_REVISION_CREATE",
+    "AI_MODEL_RATE_CREATE",
+    "AI_EVALUATION_SUITE_CREATE",
+    "AI_EVALUATION_RUN",
+    "AI_EMBEDDING_REVISION_CREATE",
+    "AI_KNOWLEDGE_REINDEX",
+    "AI_CONVERSATION_CREATE",
+    "AI_RUN_START",
+    "AI_RUN_COMPLETE",
+    "AI_RUN_ESCALATE",
+    "AI_FEEDBACK_CREATE",
 }
 RESOURCES = {
     "PAYMENT_RECEIPT",
     "NOTIFICATION",
-    "PRODUCT", "SKU", "BRAND", "CATEGORY",
-    "SESSION", "PARTY",
+    "PRODUCT",
+    "SKU",
+    "BRAND",
+    "CATEGORY",
+    "SESSION",
+    "PARTY",
     "PROFILE",
     "ADDRESS",
     "STAFF_ROLE",
@@ -99,6 +135,14 @@ RESOURCES = {
     "FEATURE",
     "QUEUE",
     "AI_POLICY",
+    "AI_PROMPT",
+    "AI_MODEL_RATE",
+    "AI_EVALUATION",
+    "AI_EMBEDDING_REVISION",
+    "AI_INGESTION_JOB",
+    "AI_CONVERSATION",
+    "AI_RUN",
+    "AI_FEEDBACK",
 }
 REASONS = {
     "OPERATOR_REQUEST",
@@ -136,6 +180,10 @@ def redact(values: dict[str, Any] | None) -> dict[str, Any] | None:
     for key, value in values.items():
         if key in {"version", "revision"}:
             valid = type(value) is int and 0 <= value <= 9223372036854775807
+        elif key == "checksum":
+            valid = isinstance(value, str) and bool(
+                re.fullmatch(r"[0-9a-f]{64}", value)
+            )
         elif key == "enabled":
             valid = type(value) is bool
         elif key in {"amount", "quantity", "currency"}:

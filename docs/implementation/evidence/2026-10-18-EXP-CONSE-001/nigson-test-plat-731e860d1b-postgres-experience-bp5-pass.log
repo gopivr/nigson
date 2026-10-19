@@ -1,0 +1,45 @@
+No validation errors found.
+Database is up to date, no changesets to execute
+Database is up to date, no changesets to execute
+Owner migration verified: experience; applied=0
+Picked up JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp
+Oct 18, 2026 6:52:55 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 18, 2026 6:52:55 PM liquibase.command
+INFO: Command execution complete
+Oct 18, 2026 6:52:55 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 18, 2026 6:52:55 PM liquibase
+INFO: Parsed changelog file 'services/experience/src/main/resources/db/changelog/master.yaml'
+Oct 18, 2026 6:52:55 PM liquibase.lockservice
+INFO: Successfully acquired change log lock
+Oct 18, 2026 6:52:55 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 18, 2026 6:52:55 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 18, 2026 6:52:55 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 18, 2026 6:52:55 PM liquibase.lockservice
+INFO: Successfully released change log lock
+Oct 18, 2026 6:52:55 PM liquibase.command
+INFO: Command execution complete
+Oct 18, 2026 6:52:55 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog
+Oct 18, 2026 6:52:55 PM liquibase.util
+INFO: UPDATE SUMMARY
+Oct 18, 2026 6:52:55 PM liquibase.util
+INFO: Run:                          0
+Oct 18, 2026 6:52:55 PM liquibase.util
+INFO: Previously run:              13
+Oct 18, 2026 6:52:55 PM liquibase.util
+INFO: Filtered out:                 0
+Oct 18, 2026 6:52:55 PM liquibase.util
+INFO: -------------------------------
+Oct 18, 2026 6:52:55 PM liquibase.util
+INFO: Total change sets:           13
+Oct 18, 2026 6:52:55 PM liquibase.util
+INFO: Update summary generated
+Oct 18, 2026 6:52:55 PM liquibase.command
+INFO: Command execution complete
+Oct 18, 2026 6:52:55 PM liquibase.changelog
+INFO: Reading from experience.databasechangelog

@@ -27,7 +27,7 @@ public final class TrustFilter extends OncePerRequestFilter {
                 var body=new PrivateBody(req);forwarded=body;proof=privateTrust.verify(req.getRemoteAddr(),req.getMethod(),req.getRequestURI(),authorization,actor,correlation,body.hash());
             } else {
                 if(single(req,"X-Nigson-Actor")!=null||single(req,"Authorization")!=null)throw ActorAssertion.denied();
-                boolean publicCatalogue=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}"));
+                boolean publicCatalogue=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}(?:/recommendations)?"));
                 boolean providerCallback=req.getMethod().equals("POST")&&Set.of("/api/v1/webhooks/payments/paystack","/api/v1/webhooks/notifications/twilio/status").contains(req.getRequestURI());
                 if(req.getRequestURI().equals("/api/v1/webhooks/notifications/twilio/status")&&(req.getHeader("Origin")!=null||req.getCookies()!=null))throw ActorAssertion.denied();
                 String id=publicCatalogue||providerCallback?null:cookies.read(req);

@@ -14,6 +14,7 @@ public final class PartyService {
     private void evidence(ActorAssertion.Actor actor,AuditValues.Action action,AuditValues.Resource resource,UUID id,UUID correlation,long previous,long updated){audit.append(actor.party().toString(),AuditValues.ActorKind.USER,action,resource,id,correlation,AuditValues.Reason.OPERATOR_REQUEST,Map.of("version",previous),Map.of("version",updated),null);}
     public PartyValues.Profile profile(ActorAssertion.Actor actor){actor(actor);return transactions.execute(s->{repository.requireCurrent(actor,false);return repository.profile(actor.party());});}
     public List<PartyValues.Address> addresses(ActorAssertion.Actor actor){actor(actor);return transactions.execute(s->{repository.requireCurrent(actor,false);return repository.addresses(actor.party());});}
+    public List<PartyValues.Organization> organizations(ActorAssertion.Actor actor){actor(actor);return transactions.execute(s->{repository.requireCurrent(actor,false);return repository.organizations(actor.party());});}
     public PartyValues.Profile patchProfile(ActorAssertion.Actor actor,long version,JsonNode input,String key,UUID correlation){
         actor(actor);var patch=PartyValues.profilePatch(input);ApiValues.idempotencyKey(key);if(version<0)throw ApiValues.invalid();
         var request=EventCodec.JSON.valueToTree(Map.of("version",version,"patch",patch));

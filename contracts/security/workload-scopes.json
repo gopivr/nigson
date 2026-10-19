@@ -1,5 +1,122 @@
 [
   {
+    "api": "API-088",
+    "method": "POST",
+    "path": "/api/v1/quote-requests",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "lead.quote.create_WITH_SIGNED_CUSTOMER",
+    "phase": 3
+  },
+  {
+    "api": "API-206",
+    "method": "POST",
+    "path": "/internal/v1/quote-sku-eligibility",
+    "owner": "commerce",
+    "client": "nigson-experience",
+    "scope": "catalogue.quote-eligibility.read",
+    "phase": 3
+  },
+  {
+    "api": "API-092",
+    "method": "POST",
+    "path": "/api/v1/distributor-applications",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "distributor.create_WITH_SIGNED_CUSTOMER",
+    "phase": 3
+  },
+  {
+    "api": "API-093",
+    "method": "GET",
+    "path": "/api/v1/me/distributor-applications",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "distributor.read_WITH_SIGNED_CUSTOMER",
+    "phase": 3
+  },
+  {
+    "api": "API-094",
+    "method": "GET",
+    "path": "/api/v1/staff/distributor-applications",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "distributor.queue_WITH_SIGNED_ACTOR",
+    "phase": 3
+  },
+  {
+    "api": "API-095",
+    "method": "POST",
+    "path": "/api/v1/staff/distributor-applications/{id}/decision",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "distributor.decision_WITH_SIGNED_ACTOR",
+    "phase": 3
+  },
+  {
+    "api": "API-096",
+    "method": "POST",
+    "path": "/api/v1/reviews",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "reviews.create_WITH_SIGNED_CUSTOMER",
+    "phase": 2
+  },
+  {
+    "api": "API-098",
+    "method": "POST",
+    "path": "/api/v1/staff/reviews/{id}/moderation",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "reviews.moderate_WITH_SIGNED_ACTOR",
+    "phase": 2
+  },
+  {
+    "api": "API-102",
+    "method": "PUT",
+    "path": "/api/v1/me/consents",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "consent.write_WITH_SIGNED_CUSTOMER",
+    "phase": 1
+  },
+  {
+    "api": "API-104",
+    "method": "POST",
+    "path": "/api/v1/staff/career-opportunities",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "careers.write_WITH_SIGNED_ACTOR",
+    "phase": 2
+  },
+  {
+    "api": "API-106",
+    "method": "GET",
+    "path": "/api/v1/staff/career-applications",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "careers.read_WITH_SIGNED_ACTOR",
+    "phase": 2
+  },
+  {
+    "api": "API-107",
+    "method": "PATCH",
+    "path": "/api/v1/staff/career-applications/{id}",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "careers.manage_WITH_SIGNED_ACTOR",
+    "phase": 2
+  },
+  {
+    "api": "API-108",
+    "method": "POST",
+    "path": "/api/v1/staff/campaigns",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "campaigns.write_WITH_SIGNED_ACTOR",
+    "phase": 2
+  },
+  {
     "api": "API-117",
     "method": "POST",
     "path": "/internal/v1/distributor-entitlements",
@@ -216,6 +333,15 @@
     "phase": 5
   },
   {
+    "api": "API-156",
+    "method": "GET",
+    "path": "/api/v1/staff/career-applications/{id}",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "careers.read_WITH_SIGNED_ACTOR",
+    "phase": 2
+  },
+  {
     "api": "API-158",
     "method": "POST",
     "path": "/internal/v1/newsletter-subscriptions/{id}/notification-context",
@@ -234,6 +360,15 @@
     "phase": 4
   },
   {
+    "api": "API-172",
+    "method": "POST",
+    "path": "/api/v1/staff/distributor-applications/{id}/review",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "distributor.review_WITH_SIGNED_ACTOR",
+    "phase": 3
+  },
+  {
     "api": "API-175",
     "method": "POST",
     "path": "/internal/v1/communication-suppressions",
@@ -241,6 +376,24 @@
     "client": "nigson-integration",
     "scope": "consent.write",
     "phase": 1
+  },
+  {
+    "api": "API-176",
+    "method": "GET",
+    "path": "/api/v1/staff/reviews",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "reviews.read_WITH_SIGNED_ACTOR",
+    "phase": 2
+  },
+  {
+    "api": "API-177",
+    "method": "GET",
+    "path": "/api/v1/staff/distributor-applications/{id}",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "distributor.detail_WITH_SIGNED_ACTOR",
+    "phase": 3
   },
   {
     "api": "API-182",
@@ -285,15 +438,6 @@
     "owner": "experience",
     "client": "nigson-integration",
     "scope": "notification.read_WITH_SIGNED_ACTOR",
-    "phase": 1
-  },
-  {
-    "api": "API-205",
-    "method": "POST",
-    "path": "/internal/v1/notification-suppression-checks",
-    "owner": "experience",
-    "client": "nigson-integration",
-    "scope": "notification.read",
     "phase": 1
   },
   {
@@ -358,5 +502,32 @@
     "client": "nigson-commerce",
     "scope": "communication.withdraw_WITH_SIGNED_CUSTOMER",
     "phase": 1
+  },
+  {
+    "api": "API-205",
+    "method": "POST",
+    "path": "/internal/v1/notification-suppression-checks",
+    "owner": "experience",
+    "client": "nigson-integration",
+    "scope": "notification.read",
+    "phase": 1
+  },
+  {
+    "api": "API-138",
+    "method": "GET",
+    "path": "/api/v1/experience/staff/audit-records",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "audit.read_WITH_SIGNED_ADMIN",
+    "phase": 4
+  },
+  {
+    "api": "API-110",
+    "method": "GET",
+    "path": "/api/v1/staff/reports/engagement",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "report.read_WITH_SIGNED_ANALYST",
+    "phase": 4
   }
 ]

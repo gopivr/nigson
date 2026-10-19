@@ -1,0 +1,176 @@
+# Release Configuration
+
+Specification1.1.0; master authoritative.
+
+### ASSUMPTION-001
+
+- **Description:** Account-only checkout at launch
+- **Reason:** Source leaves guest checkout undecided.
+- **Implementation impact:** All carts/orders require mapped party; guest checkout is deferred, not silently implemented.
+
+### ASSUMPTION-002
+
+- **Status:** Confirmed by user; replaces specification1.0.0.
+- **Description:** Nigeria and Nigerian Naira approved for launch
+- **Reason:** User clarification, 4 October2026.
+- **Implementation impact:** Seed market code NG, destination country NG, currency NGN with minor_unit2. The country/currency approval is complete. Tax, returns, retail prices and actual serviceable delivery areas remain separate configuration inputs; never substitute a guessed tax rate.
+
+### ASSUMPTION-003
+
+- **Status:** Confirmed by user; replaces specification1.0.0.
+- **Description:** Paystack is the only launch payment gateway
+- **Reason:** User explicitly selected Paystack and requested a mock server before adding demo/live credentials.
+- **Implementation impact:** Implement real initialize/verify/refund adapters and signed webhook verification through PaymentProvider. Implement a local stateful HTTP mock with dummy keys; PAYSTACK_MODE=mock|test|live selects configuration, not different domain logic. Real test/live keys are added on release; no other payment gateway in launch code.
+
+### ASSUMPTION-004
+
+- **Status:** Confirmed by user; replaces specification1.0.0.
+- **Description:** Carrier API logistics required at launch; FedEx selected as initial adapter
+- **Reason:** User authorized FedEx or another prominent Nigeria carrier and mock-first implementation.
+- **Implementation impact:** Implement FedEx OAuth, rate requests, shipment creation/labels, cancellation and tracking polling through CarrierProvider, plus local stateful mocks. Carrier work is BP1 required, not deferred to BP4. Real service/account/route availability is checked with release credentials; no claim that every domestic Nigerian route supports a FedEx service. Manual exception handling is a contingency only.
+
+### ASSUMPTION-005
+
+- **Description:** Java BFF shares the commerce process
+- **Reason:** Source specifies BFF in commerce.
+- **Implementation impact:** Use Spring Session JDBC in commerce; default idle TTL 30m, absolute 12h, staff recent MFA <=15m; encrypted refresh tokens.
+
+### ASSUMPTION-006
+
+- **Description:** One location, extensible stock ledger
+- **Reason:** Source launch inventory is platform-managed.
+- **Implementation impact:** Location allocation order is configured; launch permits one location per line. Additional locations do not change SKU units.
+
+### ASSUMPTION-007
+
+- **Description:** Reservation TTL 15m and priced quote TTL 5m
+- **Reason:** Exact timing not specified.
+- **Implementation impact:** Configuration validates TTL bounds; late settlement follows explicit hold/re-reservation rules; never assume expired equals unpaid.
+
+### ASSUMPTION-008
+
+- **Description:** Paystack full capture, no partial order payments
+- **Reason:** Source does not request installments or split payment.
+- **Implementation impact:** One accepted settlement per order; partial refunds supported; decline partial settlement as mismatch for resolution.
+
+### ASSUMPTION-009
+
+- **Description:** Single company with organizations, not SaaS tenancy
+- **Reason:** Source is Nigson platform with distributors.
+- **Implementation impact:** Do not generate tenant onboarding or one-database-per-customer infrastructure; party may belong to several organizations.
+
+### ASSUMPTION-010
+
+- **Description:** Currency minor-unit rounding HALF_UP
+- **Reason:** No rounding/tax policy specified.
+- **Implementation impact:** Use BigDecimal; round each line net/tax under configured policy and derive totals from rounded lines. Tax rules and rates need explicit activation.
+
+### ASSUMPTION-011
+
+- **Description:** Commercial features disabled until rules approved
+- **Reason:** Amounts and thresholds are missing.
+- **Implementation impact:** Implement versioned rule engines and staff configuration; no production free rewards or blanket discounts seeded.
+
+### ASSUMPTION-012
+
+- **Status:** Confirmed by user; replaces specification1.0.0.
+- **Description:** Email, SMS and WhatsApp integrations required
+- **Reason:** User expanded automated communications beyond entry links.
+- **Implementation impact:** Keep email and newsletter double opt-in; add Twilio SMS and Twilio WhatsApp Business adapters, signed status/inbound callbacks, verified destinations, purpose/channel consent and templates. Mock-first implementation uses dummy credentials and synthetic recipients. Credentials, sender identities and approved WhatsApp templates are supplied for provider testing/release.
+
+### ASSUMPTION-013
+
+- **Status:** Confirmed by user; replaces specification1.0.0.
+- **Description:** Keycloak is the identity provider in every environment, including production
+- **Reason:** User explicitly replaced the Cognito production recommendation.
+- **Implementation impact:** Deploy and configure Keycloak with supported PostgreSQL identity database, OIDC/PKCE, confidential BFF/workload clients, staff MFA, TLS/proxy settings, private admin access, HA/backup/upgrade runbooks. Spring Session JDBC BFF sessions remain in commerce; business schemas never own password hashes.
+
+### ASSUMPTION-014
+
+- **Description:** Bedrock reference model/embedding provider
+- **Reason:** AWS reference hosting and approved AI service in architecture.
+- **Implementation impact:** Use boto3 Converse/ConverseStream for compatible selected chat model, InvokeModel Titan v2 for normalized 1024 embeddings; chat model ID is required activation config, not fabricated default.
+
+### ASSUMPTION-015
+
+- **Description:** No raw transcripts retained by default
+- **Reason:** Privacy and AI retention undecided.
+- **Implementation impact:** Encrypt bounded checkpoints <=24h; redact run logs. Optional approved transcript retention requires explicit policy.
+
+### ASSUMPTION-016
+
+- **Description:** SQS standard queues, SNS routing
+- **Reason:** Architecture explicitly picks SNS/SQS.
+- **Implementation impact:** At-least-once, no global ordering, consumer-local dedup. Use aggregate versions and authoritative reads; no exactly-once transport claim.
+
+### ASSUMPTION-017
+
+- **Description:** Terraform selected from IaC options
+- **Reason:** Architecture allows Terraform or OpenTofu.
+- **Implementation impact:** Use Terraform pinned stable 1.x in EP00; no Helm/EKS manifests unless separate approved architecture change.
+
+### ASSUMPTION-018
+
+- **Description:** Recovery profile and load fixture are engineering targets
+- **Reason:** Production demand/budget unspecified.
+- **Implementation impact:** Initial test workload: 100 concurrent sessions, 20 catalogue RPS plus 2 checkout RPS, 30m; 10k products/20k SKUs synthetic. Verify real sizing before commitment.
+
+### ASSUMPTION-019
+
+- **Description:** Retention defaults are provisional
+- **Reason:** Operating jurisdiction unspecified.
+- **Implementation impact:** Configurable defaults: outbox 30d after publish, dedup 90d, notification context 30d, careers 180d, audit/financial 7y, AI checkpoints 24h; approval required before production retention activation.
+
+### ASSUMPTION-020
+
+- **Description:** Two-person sensitive finance/entitlement approval supported
+- **Reason:** Source expects governance but not exact thresholds.
+- **Implementation impact:** Finance refund policy and sales discount thresholds are config. Default require second actor on refund approval and distributor approval for production; business may approve adjusted controls.
+
+### ASSUMPTION-021
+
+- **Description:** CMS structured JSON, sanitized rich text
+- **Reason:** No CMS product named.
+- **Implementation impact:** Implement content schemas and revision workflows in experience, not a new service or external CMS dependency.
+
+### ASSUMPTION-022
+
+- **Description:** Signed actor delegation for private BFF/tool hops
+- **Reason:** Independent APIs need trusted context without trusting model/body IDs.
+- **Implementation impact:** Workload OAuth token plus short-lived signed actor assertion; audience-bound, operation-scoped, validated at target; detailed security contract in section 15.
+
+Missing real credentials/account configuration, catalogue, tax/returns and service-area policy are production activation blockers only. Continue independent local/sandbox implementation and record their status. Never mark their production tests as passed without evidence.
+
+
+Remaining activation inputs are credentials/accounts/senders/templates, Nigeria tax/returns/prices/service areas, hosting/data location and unchanged campaign/AI policies. Nigeria/NGN, Paystack selection, automated messaging and production Keycloak are no longer unresolved provider/market decisions. Dummy values are local/test-only and cannot authenticate to real providers.
+
+Profiles local, dev, test, qa, stage, prod; qa may reuse staging infrastructure shape with its own state/secrets. Use typed @ConfigurationProperties/Pydantic Settings with startup validation. Local/test may supply deterministic adapters; stage/prod reject fake payment/model adapters, permissive CORS, HTTP issuer and embedded credentials.
+
+Required groups: service identity/public/internal base URLs; JDBC owner URL/user/secret ref; OIDC issuer/client/resource scopes; BFF allowed return origins and signing KMS ref; SNS/SQS ARNs/URLs; S3 bucket/purpose policies; payment provider/secret/merchant/approved currencies; email provider/sender/recipient groups; Sheet ID/credential ref/field allowlist; required FedEx carrier; feature flags; market/tax/reward/retention policies; AI region/model/prompt/rate/budget revisions; observability exporters and sampling. No environment-specific URL in Java/Python source. `.env.example` contains examples/empty secret references only, no production endpoint assumption.
+
+Runtime flags default false for rewards/wheel/international/AI/carrier/MCP. Activation validates complete policy plus approval evidence and writes audit. A feature disabled still rejects unauthorized access and reports FEATURE_DISABLED consistently; flags cannot bypass role checks. Missing enabled-provider config causes startup/activation failure, not silent fallback to a mock. Session/financial deadlines must be within documented limits. Use Secrets Manager runtime references and ECS task IAM; no secrets in Terraform state values, image args, Git history, completion reports or .env.example.
+
+
+## Launch provider configuration and credential replacement
+
+| Group | Required settings |
+|---|---|
+| Market | LAUNCH_MARKET=NG, LAUNCH_COUNTRY=NG, LAUNCH_CURRENCY=NGN, minor_unit2; tax/returns/book/origin/service-area policies separately versioned |
+| Paystack | PAYMENT_PROVIDER=paystack only; PAYSTACK_MODE=mock\|test\|live, PAYSTACK_BASE_URL, PAYSTACK_SECRET_KEY_REF, merchant/account reference, public callback/webhook URLs |
+| FedEx | CARRIER_PROVIDER=fedex; FEDEX_MODE=mock\|sandbox\|live, FEDEX_BASE_URL, CLIENT_ID/SECRET refs, account number ref, shipper origin, enabled service/package policies, poll interval and label bucket |
+| Twilio | SMS_PROVIDER=twilio, WHATSAPP_PROVIDER=twilio; independent channel enabled flags; TWILIO_MODE=mock\|sandbox\|live, BASE_URL, ACCOUNT_SID/AUTH_TOKEN refs, SMS sender/MessagingServiceSid, WhatsApp sender/ContentSid map, exact status/inbound public URLs |
+| Keycloak | KEYCLOAK_IMAGE_DIGEST, dedicated DB/secret refs, realm issuer, public hostname/private admin hostname, trusted proxy settings, BFF/workload client secret refs, MFA/realm/client/audience policy |
+
+Local/test defaults point to private Compose mock hostnames and visibly synthetic credentials such as mock-paystack-secret, mock-fedex-client and mock-twilio-token. .env.example may include these non-secret mock values and empty real secret references. No fake key is sent to a genuine provider endpoint. Mode selects target/auth/config, never skips business invariants or callback signature verification. Mock callback secrets/signatures are real algorithms over dummy secrets.
+
+Production profile rejects mock/sandbox targets or dummy credentials for enabled financial/carrier/messaging features; real test/trial credentials run against provider staging or explicitly non-production release verification. Missing enabled-provider config fails validation rather than silently falling back. Staging can run mock or genuine sandbox with recipient allowlist and separate data. A live environment with features disabled may start for infrastructure checks but cannot claim completed live checkout/fulfillment/messages. Keycloak production configuration is required for production identity regardless of provider test mode.
+
+## Ordered provider/identity launch qualification
+
+1. Complete offline mocks/adapters/contracts and all mandatory financial/security tests.
+2. Provision hardened Keycloak/DB/client/MFA/domain and verify replica/restore/private-admin controls.
+3. Configure Nigeria tax/returns/book/origin/service areas; metadata NG/NGN already approved.
+4. Add genuine Paystack test key, FedEx sandbox/account and Twilio trial/sandbox senders/approved templates in Secrets Manager; apply provider target allowlist and test recipient restrictions.
+5. Record actual provider checkout/refund/rate/book/cancel/track/SMS/WhatsApp/callback evidence. Verify FedEx services cover approved routes/currency; keys alone cannot establish service availability. Fix account/config gaps without pretending mocks prove live support.
+6. Switch configuration to live secrets/endpoints/senders/templates; no adapter/domain source rewrite. Production validation refuses dummy/mock targets. Run approved bounded live smoke and record commit/config revisions, mode/account and receipts without raw credentials.
+7. Verify alerts/reconciliation/backup/rollback and update IMPLEMENTATION_STATUS.md with actual results. Existing project deployment authority governs release, no new permission workflow introduced here.

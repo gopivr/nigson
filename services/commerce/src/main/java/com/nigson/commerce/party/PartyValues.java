@@ -10,6 +10,7 @@ public final class PartyValues {
     private PartyValues() {}
     public record Profile(UUID id,String displayName,String email,boolean emailVerified,String phone,String locale,long version) {}
     public record Address(UUID id,String label,String recipient,String phone,String line1,String line2,String city,String region,String postalCode,String countryCode,UUID organizationId,boolean isDefault,long version) {}
+    public record Organization(UUID id,String name,String membershipRole,String entitlementState) {}
     public record VerifiedIdentity(String issuer,String subject,String email,boolean emailVerified,String displayName) {
         public VerifiedIdentity {
             text(issuer,500,false); text(subject,200,false); text(email,254,false); text(displayName,160,false);

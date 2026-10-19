@@ -1,0 +1,19 @@
+package com.nigson.integration.provider;
+
+import java.time.*;import java.util.*;
+import org.springframework.jdbc.core.JdbcTemplate;import org.springframework.transaction.PlatformTransactionManager;import org.springframework.transaction.support.*;
+import com.nigson.shared.events.EventCodec;import com.nigson.shared.problem.*;
+
+/** Integration-owned versioned row intent and outcome; provider calls stay outside its transactions. */
+public final class SheetSyncRepository {
+ public record Record(UUID id,UUID applicationId,String spreadsheetKey,String rowKey,String contentHash,String state,long version){@Override public String toString(){return "SheetSyncRecord[protected]";}}
+ private final JdbcTemplate jdbc;private final TransactionTemplate tx;private final Clock clock;
+ public SheetSyncRepository(JdbcTemplate jdbc,PlatformTransactionManager manager,Clock clock){this.jdbc=jdbc;this.clock=clock;tx=new TransactionTemplate(manager);tx.setTimeout(5);}
+ private static java.sql.Timestamp stamp(Instant value){return java.sql.Timestamp.from(value);}
+ private Record find(UUID app,String sheet,boolean lock){var rows=jdbc.query("SELECT id,application_id,spreadsheet_key,row_key,rtrim(content_hash) AS content_hash,state,version FROM integration.sheet_sync_record WHERE application_id=? AND spreadsheet_key=?"+(lock?" FOR UPDATE":""),(r,n)->new Record(r.getObject("id",UUID.class),r.getObject("application_id",UUID.class),r.getString("spreadsheet_key"),r.getString("row_key"),r.getString("content_hash"),r.getString("state"),r.getLong("version")),app,sheet);if(rows.isEmpty())return null;if(rows.size()!=1)throw new Problem.Failure(ProblemCode.PROVIDER_RULE_VIOLATION);return rows.getFirst();}
+ public Record prepare(UUID app,String sheet,String hash){validate(app,sheet,hash);return tx.execute(s->{var current=find(app,sheet,true);if(current==null){UUID id=EventCodec.uuid7(clock.instant());String row=app.toString();jdbc.update("INSERT INTO integration.sheet_sync_record(id,created_by,updated_by,application_id,spreadsheet_key,row_key,content_hash,state) VALUES (?,'career-sheet-worker','career-sheet-worker',?,?,?,?, 'PENDING')",id,app,sheet,row,hash);return find(app,sheet,false);}if(!current.rowKey().equals(app.toString()))throw new Problem.Failure(ProblemCode.PROVIDER_RULE_VIOLATION);if(!current.contentHash().equals(hash)||!Set.of("PENDING","SYNCED").contains(current.state())){int changed=jdbc.update("UPDATE integration.sheet_sync_record SET content_hash=?,state='PENDING',version=version+1,updated_at=?,updated_by='career-sheet-worker' WHERE id=? AND version=?",hash,stamp(clock.instant()),current.id(),current.version());if(changed!=1)throw new Problem.Failure(ProblemCode.VERSION_MISMATCH);return find(app,sheet,false);}return current;});}
+ public Record synced(Record expected){return state(expected,"SYNCED");}
+ public Record failed(Record expected){return state(expected,"FAILED");}
+ private Record state(Record expected,String target){if(expected==null||!Set.of("SYNCED","FAILED").contains(target))throw ApiValues.invalid();return tx.execute(s->{var current=find(expected.applicationId(),expected.spreadsheetKey(),true);if(current==null)throw new Problem.Failure(ProblemCode.NOT_FOUND);if(current.version()!=expected.version())throw new Problem.Failure(ProblemCode.VERSION_MISMATCH);int changed=jdbc.update("UPDATE integration.sheet_sync_record SET state=?,version=version+1,updated_at=?,updated_by='career-sheet-worker' WHERE id=? AND version=?",target,stamp(clock.instant()),current.id(),current.version());if(changed!=1)throw new Problem.Failure(ProblemCode.VERSION_MISMATCH);return find(current.applicationId(),current.spreadsheetKey(),false);});}
+ private static void validate(UUID app,String sheet,String hash){if(app==null||app.equals(new UUID(0,0))||sheet==null||!sheet.matches("[A-Za-z0-9_-]{1,120}")||hash==null||!hash.matches("[a-f0-9]{64}"))throw ApiValues.invalid();}
+}

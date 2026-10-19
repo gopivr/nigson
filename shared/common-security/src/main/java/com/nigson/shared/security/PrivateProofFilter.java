@@ -17,7 +17,9 @@ public final class PrivateProofFilter extends OncePerRequestFilter {
         HttpServletRequest forwarded=r;
         try {
             if(r.getParameterMap().containsKey("access_token")||r.getParameterMap().containsKey("id_token")||r.getParameterMap().containsKey("refresh_token"))throw ActorAssertion.denied();
-            if(r.getRequestURI().startsWith("/internal/")){
+            boolean signedStaffFacade=false;
+            if(!r.getRequestURI().startsWith("/internal/"))try{var route=trust.match(r.getMethod(),r.getRequestURI());signedStaffFacade=route.scope().contains("_WITH_SIGNED_");}catch(RuntimeException ignored){}
+            if(r.getRequestURI().startsWith("/internal/")||signedStaffFacade){
                 if(r.getHeader("Origin")!=null||r.getHeader("Cookie")!=null)throw ActorAssertion.denied();
                 var context=com.nigson.shared.observability.WireContext.current();UUID correlation=context==null?com.nigson.shared.observability.WireContext.correlation(r.getHeader("X-Correlation-ID")):context.correlationId;
                 var body=new PrivateBody(r);forwarded=body;var proof=trust.verify(r.getRemoteAddr(),r.getMethod(),r.getRequestURI(),single(r,"Authorization"),single(r,"X-Nigson-Actor"),correlation,body.hash());

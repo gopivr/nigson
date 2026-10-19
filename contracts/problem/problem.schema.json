@@ -48,6 +48,27 @@
         "IDEMPOTENCY_HASH_MISMATCH",
         "IDEMPOTENCY_IN_PROGRESS",
         "VERSION_MISMATCH",
+        "CHECKOUT_REPRICE_REQUIRED",
+        "PAYMENT_RULE_VIOLATION",
+        "ORDER_RULE_VIOLATION",
+        "FULFILLMENT_RULE_VIOLATION",
+        "CART_RULE_VIOLATION",
+        "PRICING_RULE_VIOLATION",
+        "QUOTE_RULE_VIOLATION",
+        "MARKET_RULE_VIOLATION",
+        "INVENTORY_RULE_VIOLATION",
+        "CONSENT_RULE_VIOLATION",
+        "NOTIFICATION_RULE_VIOLATION",
+        "PROVIDER_RULE_VIOLATION",
+        "PROVIDER_MODE_MISMATCH",
+        "FILES_RULE_VIOLATION",
+        "CATALOGUE_RULE_VIOLATION",
+        "PLATFORM_RULE_VIOLATION",
+        "PARTY_RULE_VIOLATION",
+        "REWARD_RULE_VIOLATION",
+        "PROMOTION_RULE_VIOLATION",
+        "CAREERS_RULE_VIOLATION",
+        "AUTHORIZATION_RULE_VIOLATION",
         "BUSINESS_RULE_VIOLATION",
         "INVALID_TRANSITION",
         "FEATURE_DISABLED",
@@ -58,23 +79,11 @@
         "BODY_TOO_LARGE",
         "UNSUPPORTED_MEDIA_TYPE",
         "METHOD_NOT_ALLOWED",
-        "AUTHORIZATION_RULE_VIOLATION",
-        "PARTY_RULE_VIOLATION",
-        "PLATFORM_RULE_VIOLATION",
-        "CATALOGUE_RULE_VIOLATION",
-        "FILES_RULE_VIOLATION",
-        "PROVIDER_MODE_MISMATCH",
-        "PROVIDER_RULE_VIOLATION",
-        "NOTIFICATION_RULE_VIOLATION",
-        "INVENTORY_RULE_VIOLATION",
-        "MARKET_RULE_VIOLATION",
-        "PRICING_RULE_VIOLATION",
-        "CART_RULE_VIOLATION",
-        "CHECKOUT_REPRICE_REQUIRED",
-        "FULFILLMENT_RULE_VIOLATION",
-        "ORDER_RULE_VIOLATION",
-        "PAYMENT_RULE_VIOLATION",
-        "CONSENT_RULE_VIOLATION"
+        "ENGAGEMENT_RULE_VIOLATION",
+        "REPORTING_RULE_VIOLATION",
+        "GATEWAY_RULE_VIOLATION",
+        "KNOWLEDGE_RULE_VIOLATION",
+        "ASSISTANT_RULE_VIOLATION"
       ]
     },
     "timestamp": {
@@ -512,6 +521,28 @@
           },
           "detail": {
             "const": "Use a supported request method."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "REPORTING_RULE_VIOLATION"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": 422
+          },
+          "title": {
+            "const": "Reporting rule violation"
+          },
+          "detail": {
+            "const": "The requested report cannot be produced within current reporting limits."
           }
         }
       }

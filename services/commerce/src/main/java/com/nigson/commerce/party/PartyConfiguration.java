@@ -10,6 +10,6 @@ import com.nigson.commerce.platform.*;
 @Configuration(proxyBeanMethods=false)
 @ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED",havingValue="true")
 public class PartyConfiguration {
-    @Bean PartyRepository partyRepository(JdbcTemplate jdbc,AuditWriter audit,@Value("${NIGSON_PRODUCT_PHASE:1}")int phase){return new JdbcPartyRepository(jdbc,Clock.systemUTC(),phase,audit);}
+    @Bean PartyRepository partyRepository(JdbcTemplate jdbc,AuditWriter audit,@Value("${NIGSON_PRODUCT_PHASE:1}")int phase,@Value("${NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT:}")String entitlement){return new JdbcPartyRepository(jdbc,Clock.systemUTC(),phase,audit,entitlement);}
     @Bean PartyService partyService(PartyRepository repository,PlatformStore commands,PlatformTransactionManager manager,AuditWriter audit){var tx=new TransactionTemplate(manager);tx.setTimeout(2);return new PartyService(repository,commands,tx,audit,Clock.systemUTC());}
 }

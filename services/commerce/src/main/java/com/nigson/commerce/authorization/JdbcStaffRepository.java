@@ -8,7 +8,7 @@ import com.nigson.shared.problem.*;
 import com.nigson.shared.security.ActorAssertion;
 
 /** Reuses the Party aggregate revision and existing partial active-role uniqueness. */
-public final class JdbcStaffRepository implements StaffRepository {
+public final class JdbcStaffRepository implements StaffRepository, com.nigson.commerce.platform.AuditAuthority {
     private final JdbcTemplate jdbc;
     private final AuditWriter audit;
     private final Clock clock;
@@ -35,6 +35,7 @@ public final class JdbcStaffRepository implements StaffRepository {
                 actor.party(), actor.identityIssuer(), actor.identitySubject());
         if (!Boolean.TRUE.equals(allowed)) throw new Problem.Failure(ProblemCode.ACCESS_DENIED);
     }
+    @Override public void requireCurrentAdministrator(ActorAssertion.Actor actor) { requireAdministrator(actor); }
     private List<Staff.Role> roles(UUID id) {
         return jdbc.query("SELECT role FROM commerce.staff_role_assignment WHERE party_id=? AND revoked_at IS NULL ORDER BY role",
                 (r, n) -> Staff.Role.valueOf(r.getString(1)), id);

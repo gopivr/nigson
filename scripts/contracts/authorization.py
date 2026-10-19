@@ -47,18 +47,46 @@ def contract():
     from inventory import extend as inventory_extend
     from market import extend as market_extend
     from pricing import extend as pricing_extend
+    from quote import extend as quote_extend
     from cart import extend as cart_extend
     from fulfillment import extend as fulfillment_extend
     from order import extend as order_extend
     from payment import extend as payment_extend
     from phone import extend_commerce as phone_extend
     from phone import staff_reply_extend_commerce
+    from phone import quote_lead_extend_commerce
+    from reward import extend as reward_extend
+    from promotion import extend as promotion_extend
+    from audit import extend as audit_extend
+    from cart_recovery import extend as cart_recovery_extend
+    from reporting import extend as reporting_extend
     result = extend(result)
     for extension in (session_extend, configuration_extend, catalogue_extend, files_extend, provider_extend,
-                      notification_extend, inventory_extend, market_extend, pricing_extend, cart_extend,
-                      fulfillment_extend, order_extend, payment_extend, phone_extend, staff_reply_extend_commerce):
+                      notification_extend, inventory_extend, market_extend, pricing_extend, quote_extend, cart_extend,
+                      fulfillment_extend, order_extend, payment_extend, phone_extend, staff_reply_extend_commerce, quote_lead_extend_commerce):
         result = extension(result)
+    result = reward_extend(result)
+    result = promotion_extend(result)
+    result = audit_extend(result)
+    result = cart_recovery_extend(result)
+    result = reporting_extend(result)
+    result = extend_distributor_entitlements(result)
     return result
+
+def extend_distributor_entitlements(spec):
+    schemas=spec['components']['schemas']
+    decision={'type':'string','enum':['ACTIVATE','SUSPEND']}
+    schemas['DistributorEntitlementCommand']=object_schema({'commandId':UUID,'applicationId':UUID,'partyId':UUID,'organizationName':{'type':'string','minLength':1,'maxLength':200},'countryCode':{'type':'string','pattern':'^[A-Z]{2}$'},'businessReference':{'type':'string','minLength':1,'maxLength':100},'decision':decision,'marketId':UUID,'priceBookId':UUID})
+    schemas['DistributorEntitlementCommand']['required']=[k for k in schemas['DistributorEntitlementCommand']['required'] if k not in ('businessReference','priceBookId')]
+    schemas['DistributorEntitlementAcknowledgement']=object_schema({'commandId':UUID,'organizationId':UUID,'state':{'type':'string','enum':['PENDING','ACTIVE','SUSPENDED','REVOKED']},'revision':VERSION})
+    op={'operationId':'API-117','description':'Private exact nigson-experience entitlement.write workload. Commerce exclusively owns organization, membership and entitlement state. ACTIVATION validates current NG/NGN2 market and optional active distributor book, then commits organization access, entitlement, redacted audit and EVT-015 before acknowledging. SUSPEND commits current entitlement suspension and EVT-015 before acknowledging; market disablement cannot block a suspension. Command UUID is the durable idempotency identity; identical retries return the stored acknowledgment and conflicting input returns 409. No experience schema access or staff-role mutation.','security':[{'commerceEntitlementWorkload':['entitlement.write']}],
+        'parameters':[parameter('If-Match','header',{'type':'string','pattern':'^"(0|[1-9][0-9]{0,18})"$'},True),parameter('Idempotency-Key','header',{'type':'string','minLength':1,'maxLength':100,'pattern':r'^[ -~]+$'},True)],
+        'requestBody':{'required':True,'content':{'application/json':{'schema':REF('DistributorEntitlementCommand')}}},
+        'responses':{'200':{'description':'Commerce state committed and acknowledged','content':{'application/json':{'schema':REF('DistributorEntitlementAcknowledgement')}},'headers':{'Cache-Control':{'schema':{'const':'no-store'}},'ETag':{'schema':{'type':'string'},'description':'Current entitlement revision'}}},**{str(code):{'description':meaning,'content':{'application/problem+json':{'schema':{'$ref':'../problem/problem.schema.json'}}}} for code,meaning in [(400,'Invalid input'),(401,'Authentication required'),(403,'Workload or resource denied'),(404,'Application, party or organization not found'),(409,'Conflicting command or invalid transition'),(412,'Version mismatch'),(415,'Unsupported media type'),(422,'Authorization or market rule violation'),(500,'Safe internal error'),(503,'Acknowledgment unavailable; retry identical command') ]}}
+    }
+    spec['components']['securitySchemes']['commerceEntitlementWorkload']={'type':'oauth2','flows':{'clientCredentials':{'tokenUrl':'/realms/nigson/protocol/openid-connect/token','scopes':{'entitlement.write':'Create or suspend a reviewed distributor entitlement'}}},'description':'Exact nigson-experience workload client, commerce audience, entitlement.write scope and private ingress; no browser session.'}
+    spec['paths']['/internal/v1/distributor-entitlements']={'post':op}
+    return spec
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
     target = ROOT / 'contracts/openapi/commerce.yaml'; expected = json.dumps(contract(), indent=2) + '\n'

@@ -1,0 +1,1495 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Nigson AI assistant, knowledge, evaluation and gateway API",
+    "version": "1.1.0"
+  },
+  "paths": {
+    "/api/v1/ai/conversations": {
+      "post": {
+        "operationId": "createAiConversation",
+        "security": [
+          {},
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateConversation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Conversation created with server-verified owner and configured expiry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationCreated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/conversations/{id}/messages": {
+      "post": {
+        "operationId": "sendAiConversationMessage",
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "conversationToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\\"[0-9]{1,19}\\\"$"
+            }
+          },
+          {
+            "name": "X-Conversation-Token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 512
+            },
+            "description": "Signed expiring anonymous ownership capability; never an owner or party identifier."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Server-validated bounded SSE answer",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Provider outcome is uncertain; no blind retry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/runs/{id}/feedback": {
+      "post": {
+        "operationId": "submitAiRunFeedback",
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "conversationToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\\"[0-9]{1,19}\\\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "X-Conversation-Token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 512
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitFeedback"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Owner feedback recorded once with redacted comment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackReceived"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/knowledge/reindex": {
+      "post": {
+        "operationId": "reindexPublicKnowledge",
+        "security": [
+          {
+            "workload": [
+              "ai.manage_WITH_SIGNED_ADMIN"
+            ],
+            "signedActor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReindexKnowledge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "AI-owned ingestion job queued after exact workload and signed actor authorization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReindexQueued"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/ai/embedding-revisions": {
+      "post": {
+        "operationId": "createAiEmbeddingRevision",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmbeddingRevision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Immutable 1024-dimensional embedding revision created disabled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbeddingRevisionCreated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/ai/model-policies": {
+      "post": {
+        "operationId": "createAiModelPolicy",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateModelPolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Immutable disabled policy revision created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyCreated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/ai/model-policies/{id}/activation": {
+      "post": {
+        "operationId": "activateAiModelPolicy",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\\"[0-9]{1,19}\\\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivateModelPolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Policy activated only after passing evaluation, budget and configured provider gates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelPolicyActivated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/ai/prompt-revisions": {
+      "post": {
+        "operationId": "createAiPromptRevision",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePromptRevision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Immutable sanitized prompt revision created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromptRevisionCreated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/ai/model-rates": {
+      "post": {
+        "operationId": "createAiModelRate",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateModelRate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Immutable approved rate revision created; approval reference is stored only as an audit hash",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelRateCreated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/ai/evaluation-suites": {
+      "post": {
+        "operationId": "createEvaluationSuite",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSuite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Immutable suite revision created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuiteCreated"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/evaluations": {
+      "post": {
+        "operationId": "runEvaluation",
+        "security": [
+          {
+            "workload": [
+              "ai.manage_WITH_SIGNED_ADMIN"
+            ],
+            "signedActor": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\\"[1-9][0-9]{0,8}\\\"$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunEvaluation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Evaluation accepted; failed gates never activate a policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvaluationQueued"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/reports/ai": {
+      "get": {
+        "operationId": "readAiReport",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sanitized aggregate report; no prompts or private tool output",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiReport"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Case": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "input",
+          "market",
+          "locale",
+          "expectedIntent",
+          "requiredSourceIds",
+          "mustEscalate",
+          "forbiddenActions"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "input": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "market": {
+            "type": "string",
+            "maxLength": 32
+          },
+          "locale": {
+            "type": "string",
+            "maxLength": 35,
+            "pattern": "^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$"
+          },
+          "expectedIntent": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "requiredSourceIds": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "mustEscalate": {
+            "type": "boolean"
+          },
+          "forbiddenActions": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "string",
+              "maxLength": 80
+            }
+          }
+        }
+      },
+      "Thresholds": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "groundednessMinimum",
+          "scopeLeaksMaximum",
+          "injectionMutationMaximum",
+          "latencyP95MaximumMs"
+        ],
+        "properties": {
+          "groundednessMinimum": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "scopeLeaksMaximum": {
+            "type": "integer",
+            "const": 0
+          },
+          "injectionMutationMaximum": {
+            "type": "integer",
+            "const": 0
+          },
+          "latencyP95MaximumMs": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20000
+          }
+        }
+      },
+      "CreateSuite": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "cases",
+          "thresholds"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "cases": {
+            "type": "array",
+            "minItems": 200,
+            "maxItems": 500,
+            "items": {
+              "$ref": "#/components/schemas/Case"
+            }
+          },
+          "thresholds": {
+            "$ref": "#/components/schemas/Thresholds"
+          }
+        }
+      },
+      "SuiteCreated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "revision"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "RunEvaluation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "suiteId",
+          "modelPolicyRevision",
+          "promptRevision",
+          "retrievalRevision"
+        ],
+        "properties": {
+          "suiteId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "modelPolicyRevision": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "promptRevision": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "retrievalRevision": {
+            "type": "string",
+            "maxLength": 40
+          }
+        }
+      },
+      "EvaluationQueued": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evaluationId",
+          "state"
+        ],
+        "properties": {
+          "evaluationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "const": "QUEUED"
+          }
+        }
+      },
+      "ModelParameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schemaVersion",
+          "temperature",
+          "maxOutputTokens",
+          "requestDeadlineSeconds",
+          "maximumSteps",
+          "maximumTools",
+          "maximumInputTokens",
+          "concurrency",
+          "dailyBudget",
+          "rateRevision"
+        ],
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "maxOutputTokens": {
+            "type": "integer",
+            "minimum": 128,
+            "maximum": 2000
+          },
+          "requestDeadlineSeconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "maximumSteps": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8
+          },
+          "maximumTools": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          },
+          "maximumInputTokens": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12000
+          },
+          "concurrency": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "dailyBudget": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^[0-9]+(\\.[0-9]+)?$"
+          },
+          "rateRevision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "CreateModelPolicy": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "provider",
+          "chatModelId",
+          "parameters",
+          "promptRevisionId"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "provider": {
+            "const": "BEDROCK"
+          },
+          "chatModelId": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "fallbackModelId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 200
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/ModelParameters"
+          },
+          "promptRevisionId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "PolicyCreated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "revision",
+          "approved",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "approved": {
+            "const": false
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "CreatePromptRevision": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "template",
+          "toolSchemaRevision",
+          "reason"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "template": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "toolSchemaRevision": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      },
+      "PromptRevisionCreated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "code",
+          "revision",
+          "checksum"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "checksum": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "CreateModelRate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "provider",
+          "modelId",
+          "inputPerMillion",
+          "outputPerMillion",
+          "currency",
+          "effectiveFrom",
+          "approvalReference"
+        ],
+        "properties": {
+          "provider": {
+            "const": "BEDROCK"
+          },
+          "modelId": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "inputPerMillion": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,12})(\\.[0-9]{1,6})?$"
+          },
+          "outputPerMillion": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,12})(\\.[0-9]{1,6})?$"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "approvalReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      },
+      "ModelRateCreated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "revision"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "CreateEmbeddingRevision": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "provider",
+          "modelId",
+          "dimensions",
+          "chunkingRevision",
+          "approvalReference"
+        ],
+        "properties": {
+          "provider": {
+            "const": "BEDROCK"
+          },
+          "modelId": {
+            "const": "amazon.titan-embed-text-v2:0"
+          },
+          "dimensions": {
+            "const": 1024
+          },
+          "chunkingRevision": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "approvalReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      },
+      "EmbeddingRevisionCreated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "enabled"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "enabled": {
+            "const": false
+          }
+        }
+      },
+      "ReindexKnowledge": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceService",
+          "embeddingRevisionId"
+        ],
+        "properties": {
+          "sourceService": {
+            "enum": [
+              "COMMERCE",
+              "EXPERIENCE"
+            ]
+          },
+          "resourceId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "embeddingRevisionId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "ReindexQueued": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "jobId",
+          "state"
+        ],
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "const": "QUEUED"
+          }
+        }
+      },
+      "ActivateModelPolicy": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evaluationResultId",
+          "reason"
+        ],
+        "properties": {
+          "evaluationResultId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "ModelPolicyActivated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "revision",
+          "approved"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "approved": {
+            "const": true
+          }
+        }
+      },
+      "AiReport": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requests",
+          "escalations",
+          "topIntents",
+          "emptySearches",
+          "tokenUsage",
+          "costEstimate",
+          "latencyMs"
+        ],
+        "properties": {
+          "requests": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "escalations": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "topIntents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "intent",
+                "count"
+              ],
+              "properties": {
+                "intent": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "emptySearches": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "tokenUsage": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "costEstimate": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$"
+          },
+          "latencyMs": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "p50",
+              "p95"
+            ],
+            "properties": {
+              "p50": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "p95": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      },
+      "CreateConversation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "market"
+        ],
+        "properties": {
+          "market": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^[A-Z0-9_-]{1,32}$"
+          },
+          "locale": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 16,
+            "pattern": "^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8}){0,4}$"
+          }
+        }
+      },
+      "ConversationCreated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "expiresAt",
+          "anonymousToken"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "anonymousToken": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          }
+        }
+      },
+      "SendMessage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "message",
+          "clientRequestId"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "clientRequestId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "SourceDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "url",
+          "title",
+          "revision"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "AnswerDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "answer",
+          "sources",
+          "products",
+          "handoffUrl",
+          "runId"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "ANSWERED",
+              "CLARIFY",
+              "ESCALATED"
+            ]
+          },
+          "answer": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceDTO"
+            }
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "reason"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "handoffUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "runId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "SubmitFeedback": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rating"
+        ],
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "enum": [
+              -1,
+              1
+            ]
+          },
+          "category": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 30,
+            "pattern": "^[A-Za-z0-9_-]{1,30}$"
+          },
+          "comment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1000
+          }
+        }
+      },
+      "FeedbackReceived": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "received"
+        ],
+        "properties": {
+          "received": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "workload": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://configured-keycloak.invalid/protocol/openid-connect/token",
+            "scopes": {
+              "ai.manage_WITH_SIGNED_ADMIN": "API-146/147: nigson-commerce workload and signed ADMIN actor"
+            }
+          }
+        }
+      },
+      "signedActor": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Nigson-Actor",
+        "description": "ES256 nigson-actor+jwt assertion bound to exact method, path, raw body and correlation; ADMIN and recent MFA are required."
+      },
+      "conversationToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Conversation-Token",
+        "description": "Short-lived signed anonymous ownership capability tied to one conversation."
+      }
+    }
+  }
+}

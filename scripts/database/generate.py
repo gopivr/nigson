@@ -20,6 +20,9 @@ ADDITIVE_TABLES = {
     'integration.carrier_cancellation': ('023-bp1-carrier-cancellation', 'integration-20261016-carrier-001', 'nigson-carrier', 'ADR-014: additive owned cancellation checkpoint; prior migrations preserved.'),
 }
 SESSION_TABLES = {'commerce.spring_session', 'commerce.spring_session_attributes'}
+ADDITIVE_CHANGES = {
+    'commerce': ('043-bp3-quote-cart.yaml', '043-bp3-quote-cart.sql', '043-bp3-quote-cart-rollback.sql', 'commerce-20261018-001', 'nigson-platform', 'SELECT CASE WHEN current_user=\'nigson_commerce_migrator\' AND current_setting(\'server_version_num\')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END', 'BP3: bind Commerce carts immutably to quote revisions; preserve previous migrations.'),
+}
 
 
 def identifier(name):
@@ -84,7 +87,7 @@ def generate():
                     name = fullname.split('.')[1]
                     # Preserve the originally released BP1 table DDL. A later
                     # additive migration relaxes this one field for API-190.
-                    fields = [column(field, (fullname == 'experience.lead' and field['name'] == 'email') or (fullname == 'experience.inbound_message' and field['name'] == 'sender_ciphertext')) for field in table['fields']]
+                    fields = [column(field, (fullname == 'experience.lead' and field['name'] == 'email') or (fullname == 'experience.inbound_message' and field['name'] == 'sender_ciphertext')) for field in table['fields'] if not (fullname == 'commerce.reward_entry' and field['name'] == 'available_at')]
                     primary = [field['name'] for field in table['fields'] if field['primary']]
                     fields.append(f"CONSTRAINT {identifier(name+'_id_pk')} PRIMARY KEY ({','.join(primary)})")
                     for field in table['fields']:
@@ -226,8 +229,23 @@ def generate():
             files[wrapper] = json.dumps(payload,indent=2)+'\n'
         else:
             deferred_includes.append((wrapper, include))
-        table['creation_changeset']=change
-        table['creation_file']=str(base/(stem+'.sql'))
+    for owner, (yaml_name, sql_name, rollback_name, change_id, author, guard, header) in ADDITIVE_CHANGES.items():
+        base = Path(f'services/{owner}/src/main/resources/db/changelog')
+        migration = json.loads((base/yaml_name).read_text())
+        migration['databaseChangeLog'][0]['changeSet'].update({'id':change_id,'author':author,'logicalFilePath':f'{owner}/{yaml_name}'})
+        migration['databaseChangeLog'][0]['changeSet']['preConditions'][-1]['sqlCheck']['sql'] = guard
+        migration['databaseChangeLog'][0]['changeSet']['changes'][0]['sqlFile'] = {'path':sql_name,'relativeToChangelogFile':True,'splitStatements':False}
+        migration['databaseChangeLog'][0]['changeSet']['rollback'][0]['sqlFile'] = {'path':rollback_name,'relativeToChangelogFile':True,'splitStatements':False}
+        files[base/yaml_name] = json.dumps(migration,indent=2)+'\n'
+        release = base/'releases/BP3.yaml'
+        wrapper = json.loads((release).read_text())
+        if not any(item.get('include',{}).get('file') == '../'+yaml_name for item in wrapper['databaseChangeLog']):
+            wrapper['databaseChangeLog'].append({'include':{'file':'../'+yaml_name,'relativeToChangelogFile':True}})
+        files[release] = json.dumps(wrapper,indent=2)+'\n'
+        files[base/sql_name] = (base/sql_name).read_text()
+        files[base/rollback_name] = (base/rollback_name).read_text()
+    tables['commerce.cart']['creation_changeset']='commerce-20261018-001'
+    tables['commerce.cart']['creation_file']='services/commerce/src/main/resources/db/changelog/043-bp3-quote-cart.sql'
     # Explicitly approved country/currency metadata is an additive data changeset, not domain DDL.
     from nigeria import files as nigeria_files, BASE as nigeria_base, STEM as nigeria_stem
     files.update(nigeria_files())
@@ -237,6 +255,16 @@ def generate():
     for wrapper, include in deferred_includes:
         payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append(include)
         files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    # API-195 requires an immutable BP3 source revision on private quote carts.
+    base=Path('services/commerce/src/main/resources/db/changelog');stem='043-bp3-quote-cart';change='commerce-20261018-001';owner='commerce'
+    files[base/(stem+'.sql')] = (base/(stem+'.sql')).read_text()
+    files[base/(stem+'-rollback.sql')] = (base/(stem+'-rollback.sql')).read_text()
+    guard="SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+    payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-platform','logicalFilePath':owner+'/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True,'splitStatements':False}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+    files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n'
+    wrapper=base/'releases/BP3.yaml';payload=json.loads(files[wrapper]);include={'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}}
+    if include not in payload['databaseChangeLog']:payload['databaseChangeLog'].append(include)
+    files[wrapper]=json.dumps(payload,indent=2)+'\n'
     # API-190 admits phone-only inbound leads without synthesizing email data.
     # The historical BP1 CREATE TABLE stays immutable; this is an additive change.
     stem='023-msg-001-lead-email-nullable';change='experience-20261016-023';owner='experience';base=Path('services/experience/src/main/resources/db/changelog')
@@ -268,6 +296,13 @@ def generate():
     guard="SELECT CASE WHEN current_user='nigson_integration_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
     payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-messaging','logicalFilePath':'integration/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
     files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';wrapper=base/'releases'/'BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    # Release reward availability as an additive BP2 column; preserve DATA-001 DDL.
+    base=Path('services/commerce/src/main/resources/db/changelog');stem='033-bp2-reward-availability';change='commerce-20261018-reward-001'
+    files[base/(stem+'.sql')]='-- COM-REWAR-001: keep held earnings unavailable until the configured eligibility time.\nALTER TABLE commerce.reward_entry ADD COLUMN available_at timestamptz NOT NULL DEFAULT now();\nCREATE INDEX reward_entry_available_ix ON commerce.reward_entry (party_id,currency_code,available_at);\n'
+    files[base/(stem+'-rollback.sql')]=("DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.reward_entry WHERE available_at>now()) THEN RAISE EXCEPTION 'Pending held reward entries: retain availability metadata'; END IF; END $$;\nDROP INDEX commerce.reward_entry_available_ix;\nALTER TABLE commerce.reward_entry DROP COLUMN available_at;\n")
+    guard="SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+    payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-commerce','logicalFilePath':'commerce/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True,'splitStatements':False}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+    files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';wrapper=base/'releases/BP2.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
     for name in SESSION_TABLES:
         tables[name]['creation_changeset'] = 'commerce-20261005-002'
         tables[name]['creation_file'] = 'services/commerce/src/main/resources/db/changelog/001-framework-sessions.sql'

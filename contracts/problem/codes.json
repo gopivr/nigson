@@ -39,6 +39,111 @@
     "title": "Version mismatch",
     "detail": "Refresh the resource before retrying."
   },
+  "CHECKOUT_REPRICE_REQUIRED": {
+    "status": 409,
+    "title": "Checkout quote changed",
+    "detail": "Refresh the checkout quote before continuing."
+  },
+  "PAYMENT_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Payment rule violation",
+    "detail": "The payment or refund operation does not meet verified financial rules."
+  },
+  "ORDER_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Order rule violation",
+    "detail": "The order operation does not meet current purchase rules."
+  },
+  "FULFILLMENT_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Fulfillment rule violation",
+    "detail": "The delivery or shipment operation does not meet current rules."
+  },
+  "CART_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Cart rule violation",
+    "detail": "The cart operation does not meet current shopping rules."
+  },
+  "PRICING_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Pricing rule violation",
+    "detail": "The pricing operation does not meet current commercial rules."
+  },
+  "QUOTE_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Quote rule violation",
+    "detail": "The quote does not meet current commercial rules."
+  },
+  "MARKET_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Market rule violation",
+    "detail": "The market operation does not meet approved selling rules."
+  },
+  "INVENTORY_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Inventory rule violation",
+    "detail": "The stock operation does not meet current inventory rules."
+  },
+  "CONSENT_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Consent rule violation",
+    "detail": "The operation does not meet current communication consent rules."
+  },
+  "NOTIFICATION_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Notification rule violation",
+    "detail": "The notification operation does not meet current rules."
+  },
+  "PROVIDER_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Provider rule violation",
+    "detail": "The provider operation does not meet current rules."
+  },
+  "PROVIDER_MODE_MISMATCH": {
+    "status": 422,
+    "title": "Provider mode mismatch",
+    "detail": "The configured provider target does not match this environment."
+  },
+  "FILES_RULE_VIOLATION": {
+    "status": 422,
+    "title": "File rule violation",
+    "detail": "The file does not meet its purpose and safety requirements."
+  },
+  "CATALOGUE_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Catalogue rule violation",
+    "detail": "The catalogue change does not meet current rules."
+  },
+  "PLATFORM_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Configuration rule violation",
+    "detail": "The configuration does not meet registered owner rules."
+  },
+  "PARTY_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Party rule violation",
+    "detail": "The profile or address does not meet current rules."
+  },
+  "REWARD_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Reward rule violation",
+    "detail": "The reward or referral operation does not meet current eligibility rules."
+  },
+  "PROMOTION_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Promotion rule violation",
+    "detail": "The promotion operation does not meet current commercial rules."
+  },
+  "CAREERS_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Careers rule violation",
+    "detail": "The career opportunity or application does not meet current policy."
+  },
+  "AUTHORIZATION_RULE_VIOLATION": {
+    "status": 422,
+    "title": "Authorization rule violation",
+    "detail": "Retain an active administrator before removing this role."
+  },
   "BUSINESS_RULE_VIOLATION": {
     "status": 422,
     "title": "Ineligible operation",
@@ -89,89 +194,29 @@
     "title": "Method not allowed",
     "detail": "Use a supported request method."
   },
-  "AUTHORIZATION_RULE_VIOLATION": {
+  "ENGAGEMENT_RULE_VIOLATION": {
     "status": 422,
-    "title": "Authorization rule violation",
-    "detail": "Retain an active administrator before removing this role."
+    "title": "Engagement rule violation",
+    "detail": "The review or campaign does not meet current engagement rules."
   },
-  "PARTY_RULE_VIOLATION": {
+  "REPORTING_RULE_VIOLATION": {
     "status": 422,
-    "title": "Party rule violation",
-    "detail": "The profile or address does not meet current rules."
+    "title": "Reporting rule violation",
+    "detail": "The requested report cannot be produced within current reporting limits."
   },
-  "PLATFORM_RULE_VIOLATION": {
+  "GATEWAY_RULE_VIOLATION": {
     "status": 422,
-    "title": "Configuration rule violation",
-    "detail": "The configuration does not meet registered owner rules."
+    "title": "AI gateway rule violation",
+    "detail": "The configured model, prompt, provider or budget does not meet current gateway rules."
   },
-  "CATALOGUE_RULE_VIOLATION": {
+  "KNOWLEDGE_RULE_VIOLATION": {
     "status": 422,
-    "title": "Catalogue rule violation",
-    "detail": "The catalogue change does not meet current rules."
+    "title": "Knowledge rule violation",
+    "detail": "The source or embedding does not meet current public knowledge requirements."
   },
-  "FILES_RULE_VIOLATION": {
+  "ASSISTANT_RULE_VIOLATION": {
     "status": 422,
-    "title": "File rule violation",
-    "detail": "The file does not meet its purpose and safety requirements."
-  },
-  "PROVIDER_MODE_MISMATCH": {
-    "status": 422,
-    "title": "Provider mode mismatch",
-    "detail": "The configured provider target does not match this environment."
-  },
-  "PROVIDER_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Provider rule violation",
-    "detail": "The provider operation does not meet current rules."
-  },
-  "NOTIFICATION_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Notification rule violation",
-    "detail": "The notification operation does not meet current rules."
-  },
-  "INVENTORY_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Inventory rule violation",
-    "detail": "The stock operation does not meet current inventory rules."
-  },
-  "MARKET_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Market rule violation",
-    "detail": "The market operation does not meet approved selling rules."
-  },
-  "PRICING_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Pricing rule violation",
-    "detail": "The pricing operation does not meet current commercial rules."
-  },
-  "CART_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Cart rule violation",
-    "detail": "The cart operation does not meet current shopping rules."
-  },
-  "CHECKOUT_REPRICE_REQUIRED": {
-    "status": 409,
-    "title": "Checkout quote changed",
-    "detail": "Refresh the checkout quote before continuing."
-  },
-  "FULFILLMENT_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Fulfillment rule violation",
-    "detail": "The delivery or shipment operation does not meet current rules."
-  },
-  "ORDER_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Order rule violation",
-    "detail": "The order operation does not meet current purchase rules."
-  },
-  "PAYMENT_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Payment rule violation",
-    "detail": "The payment or refund operation does not meet verified financial rules."
-  },
-  "CONSENT_RULE_VIOLATION": {
-    "status": 422,
-    "title": "Consent rule violation",
-    "detail": "The operation does not meet current communication consent rules."
+    "title": "Assistant rule violation",
+    "detail": "The assistant request does not meet current safety or evidence requirements."
   }
 }

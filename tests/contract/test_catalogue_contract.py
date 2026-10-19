@@ -29,3 +29,22 @@ class CatalogueContracts(unittest.TestCase):
             self.assertIn('If-Match',{p['name'] for p in op['parameters']})
             self.assertIn('412',op['responses'])
             self.assertNotIn('202',op['responses'])
+    def test_catalogue_recommendation_and_ai_knowledge_contracts_are_exact(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
+        public=spec['paths']['/api/v1/catalogue/products/{id}/recommendations']['get']
+        self.assertEqual(public['operationId'],'API-073')
+        self.assertEqual(public['security'],[])
+        self.assertEqual({p['name']:p['required'] for p in public['parameters']},{'id':True,'market':True,'limit':False})
+        self.assertEqual(public['parameters'][-1]['schema']['default'],6)
+        self.assertIn('POPULAR',spec['components']['schemas']['PublicRecommendationDTO']['properties']['reason']['enum'])
+        self.assertNotIn('304',public['responses'])
+        update=spec['paths']['/api/v1/staff/products/{id}/recommendations']['put']
+        self.assertEqual(update['operationId'],'API-074')
+        self.assertIn('If-Match',{p['name'] for p in update['parameters']})
+        self.assertIn('Idempotency-Key',{p['name'] for p in update['parameters']})
+        self.assertIn('412',update['responses'])
+        self.assertEqual(set(spec['components']['schemas']['RecommendationDTO']['required']),{'relatedProductId','kind','priority'})
+        knowledge=spec['paths']['/internal/v1/catalogue/knowledge/{id}']['get']
+        self.assertEqual(knowledge['operationId'],'API-123')
+        self.assertEqual(knowledge['security'],[{'commerceAIKnowledgeWorkload':['knowledge.read']}])
+        self.assertNotIn('wholesalePrice',spec['components']['schemas']['CatalogueKnowledgeDTO']['properties'])

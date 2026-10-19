@@ -266,6 +266,11 @@ class Telemetry:
             "nigson.http.server.requests", unit="s"
         )
         self.query_timer = self.meter.create_histogram("nigson.db.query", unit="s")
+        self.ai_gateway_operations = self.meter.create_counter("nigson.ai.gateway.commands")
+        self.ai_budget_reservations = self.meter.create_counter("nigson.ai.budget.reservations")
+        self.ai_provider_outcomes = self.meter.create_counter("nigson.ai.provider.outcomes")
+        self.ai_knowledge_operations = self.meter.create_counter("nigson.ai.knowledge.operations")
+        self.ai_assistant_operations = self.meter.create_counter("nigson.ai.assistant.operations")
         self.provider = TracerProvider(
             sampler=ALWAYS_ON,
             resource=Resource(

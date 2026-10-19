@@ -8,6 +8,7 @@ import com.nigson.commerce.platform.*;
 @Configuration(proxyBeanMethods=false)
 public class CatalogueConfiguration {
     @Bean CatalogueAuthority catalogueAuthority(JdbcTemplate jdbc){return new CatalogueAuthority(jdbc);}
+    @Bean RecommendationService recommendationService(JdbcTemplate jdbc,CatalogueAssets assets,CatalogueAuthority authority,PlatformStore commands,AuditWriter audit,io.micrometer.core.instrument.MeterRegistry metrics){var clock=Clock.systemUTC();return new RecommendationService(jdbc,new JdbcProductRepository(jdbc,clock,assets),assets,authority,commands,audit,clock,metrics);}
     @Bean TaxonomyService taxonomyService(JdbcTemplate jdbc,CatalogueAuthority authority,PlatformStore commands,AuditWriter audit){var clock=Clock.systemUTC();return new TaxonomyService(new JdbcTaxonomyRepository(jdbc,clock),authority,commands,audit,clock);}
     @Bean ProductService productService(JdbcTemplate jdbc,CatalogueAssets assets,CatalogueAuthority authority,PlatformStore commands,AuditWriter audit){var clock=Clock.systemUTC();return new ProductService(new JdbcProductRepository(jdbc,clock,assets),new JdbcTaxonomyRepository(jdbc,clock),authority,commands,audit,clock);}
     @Bean public CatalogueMarketChanges catalogueMarketChanges(JdbcTemplate jdbc,CatalogueAssets assets,ProductService events){var clock=Clock.systemUTC();var repository=new JdbcProductRepository(jdbc,clock,assets);return new CatalogueMarketChanges(){

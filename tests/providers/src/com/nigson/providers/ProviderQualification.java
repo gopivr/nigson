@@ -13,6 +13,7 @@ import java.net.http.*;
 import java.nio.file.*;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.*;
 
 /** Offline system harness. Containers are private to this run; published test ports bind loopback. */
 public final class ProviderQualification {
@@ -75,7 +76,15 @@ public final class ProviderQualification {
    check(admin(p,"state",null).path("operations").size()==3,"Uncertain operation was blindly repeated");
    var carrier=new FedExAdapter("test",ProviderHttp.Mode.MOCK,f,"mock-fedex-client","mock-fedex-secret","mock-fedex-account");
    var shipment=EventCodec.JSON.readTree(Files.readString(Path.of("contracts/providers/fedex/ship-request.json")));
-   check(carrier.rates(shipment).path("rateReplyDetails").isArray(),"Carrier rates");var booking=carrier.book(shipment);String tracking=booking.path("transactionShipments").path(0).path("masterTrackingNumber").asString();check(com.nigson.integration.carrier.CarrierLabelCodec.decode(booking,tracking,1).pages()==1,"Carrier mock PDF label profile");check(com.nigson.integration.carrier.CarrierTrackingValues.parse(carrier.track(List.of(tracking)),List.of(tracking),java.time.Instant.now()).getFirst().code().equals("OC"),"Carrier tracking scan profile");carrier.cancel(tracking);check(admin(f,"state",null).path("operations").path(tracking).path("status").asString().equals("cancelled"),"Carrier cancellation");check(com.nigson.integration.carrier.CarrierTrackingValues.parse(carrier.track(tracking),List.of(tracking),java.time.Instant.now()).getFirst().code().equals("CA"),"Carrier cancelled scan profile");
+   check(carrier.rates(shipment).path("rateReplyDetails").isArray(),"Carrier rates");
+   // Bounded concurrent mock burst checks adapter and stateful HTTP behavior without inventing a live SLO.
+   int sequenceBefore=admin(f,"state",null).path("sequence").asInt();var pool=Executors.newFixedThreadPool(6);var burst=new ArrayList<Future<?>>();var latency=new long[24];long burstStarted=System.nanoTime();
+   for(int n=0;n<latency.length;n++){final int index=n;burst.add(pool.submit(()->{long started=System.nanoTime();try{check(carrier.rates(shipment).path("rateReplyDetails").isArray(),"Concurrent carrier rate failed");}catch(Exception failure){throw new CompletionException(failure);}finally{latency[index]=TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started);}}));}
+   try{for(var result:burst)result.get(20,TimeUnit.SECONDS);}finally{pool.shutdownNow();}long burstMillis=TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-burstStarted);
+   int sequenceAfter=admin(f,"state",null).path("sequence").asInt();check(sequenceAfter-sequenceBefore==24,"Concurrent rate mock lost or duplicated a request");
+   var sortedLatency=Arrays.stream(latency).sorted().toArray();long p95=sortedLatency[(int)Math.ceil(sortedLatency.length*.95)-1];
+   System.out.printf(Locale.ROOT,"CARRIER_MOCK_RATE_BURST requests=%d concurrency=%d elapsed_ms=%d throughput_rps=%.2f p50_ms=%d p95_ms=%d max_ms=%d%n",latency.length,6,burstMillis,latency.length*1000.0/Math.max(1,burstMillis),sortedLatency[sortedLatency.length/2],p95,sortedLatency[sortedLatency.length-1]);
+   var booking=carrier.book(shipment);String tracking=booking.path("transactionShipments").path(0).path("masterTrackingNumber").asString();check(com.nigson.integration.carrier.CarrierLabelCodec.decode(booking,tracking,1).pages()==1,"Carrier mock PDF label profile");check(com.nigson.integration.carrier.CarrierTrackingValues.parse(carrier.track(List.of(tracking)),List.of(tracking),java.time.Instant.now()).getFirst().code().equals("OC"),"Carrier tracking scan profile");carrier.cancel(tracking);check(admin(f,"state",null).path("operations").path(tracking).path("status").asString().equals("cancelled"),"Carrier cancellation");check(com.nigson.integration.carrier.CarrierTrackingValues.parse(carrier.track(tracking),List.of(tracking),java.time.Instant.now()).getFirst().code().equals("CA"),"Carrier cancelled scan profile");
    var uncertainShipment=shipment.deepCopy();((tools.jackson.databind.node.ObjectNode)uncertainShipment.path("requestedShipment").path("requestedPackageLineItems").path(0).path("customerReferences").path(0)).put("value","synthetic-booking-lost");
    admin(f,"configure",Map.of("scenario","timeout-after-acceptance"));failure(()->carrier.book(uncertainShipment),true);check(admin(f,"state",null).path("operations").size()==2,"Carrier uncertain booking repeated");
    admin(f,"configure",Map.of("scenario","success"));var recovered=carrier.trackReference("synthetic-booking-lost",java.time.LocalDate.now().minusDays(1),java.time.LocalDate.now());check(recovered.path("completeTrackResults").size()==1,"Reference reconciliation did not locate accepted booking");check(admin(f,"state",null).path("operations").size()==2,"Reference lookup created another booking");

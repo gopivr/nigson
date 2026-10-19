@@ -12,7 +12,7 @@ import com.nigson.commerce.security.JdbcSessionTrust;
 @Configuration(proxyBeanMethods=false)
 @ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED", havingValue="true")
 public class AuthorizationConfiguration {
-    @Bean StaffRepository staffRepository(JdbcTemplate jdbc, AuditWriter audit) {
+    @Bean JdbcStaffRepository staffRepository(JdbcTemplate jdbc, AuditWriter audit) {
         return new JdbcStaffRepository(jdbc, audit, Clock.systemUTC());
     }
     @Bean StaffService staffService(StaffRepository repository, PlatformStore commands, JdbcSessionTrust sessions, PlatformTransactionManager manager) {

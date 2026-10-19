@@ -24,3 +24,14 @@ class PricingContracts(unittest.TestCase):
         self.assertEqual(read['responses']['200']['headers']['Cache-Control']['schema']['const'],'no-store')
         for path in ('/api/v1/staff/price-books','/api/v1/staff/price-books/{id}/activation','/api/v1/staff/price-books/{id}/revisions','/api/v1/checkout/quotes'):
             for op in spec['paths'][path].values():self.assertEqual(op['security'],[{'bffSession':[]}])
+    def test_distributor_price_assignment_is_versioned_and_closed(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
+        op=spec['paths']['/api/v1/staff/organizations/{id}/price-assignment']['put']
+        self.assertEqual(op['operationId'],'API-067')
+        self.assertTrue({'If-Match','Idempotency-Key','X-CSRF-TOKEN'}<={p['name'] for p in op['parameters'] if p['required']})
+        self.assertEqual(op['responses']['200']['headers']['Cache-Control']['schema']['const'],'no-store')
+        schemas=spec['components']['schemas']
+        self.assertFalse(schemas['PriceAssignment']['additionalProperties'])
+        self.assertEqual(schemas['PriceAssignment']['required'],['marketId','priceBookId','minimumRules'])
+        self.assertFalse(schemas['WholesaleMinimumRule']['additionalProperties'])
+        self.assertEqual(schemas['WholesaleMinimumRule']['required'],[])

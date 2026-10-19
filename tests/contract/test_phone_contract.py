@@ -9,7 +9,7 @@ class PhoneContracts(unittest.TestCase):
     def test_generated_experience_routes_and_exact_scopes(self):
         subprocess.run([sys.executable,'scripts/contracts/phone.py','--check'],cwd=ROOT,check=True)
         spec=json.loads((ROOT/'contracts/openapi/experience.yaml').read_text())
-        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-127','API-175','API-187','API-190','API-194','API-201','API-202','API-203','API-204','API-205'})
+        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()},{'API-088','API-092','API-093','API-094','API-095','API-097','API-098','API-099','API-100','API-101','API-102','API-103','API-104','API-105','API-106','API-107','API-108','API-109','API-110','API-127','API-128','API-138','API-156','API-157','API-158','API-172','API-175','API-176','API-177','API-187','API-190','API-194','API-201','API-202','API-203','API-204','API-205','API-130','API-131'})
         inbound=spec['paths']['/api/v1/webhooks/notifications/twilio/whatsapp']['post']
         self.assertEqual(inbound['security'],[])
         self.assertIn('X-Twilio-Signature',{p['name'] for p in inbound['parameters']})
@@ -20,6 +20,22 @@ class PhoneContracts(unittest.TestCase):
         suppression=spec['paths']['/internal/v1/notification-suppression-checks']['post']
         self.assertEqual(suppression['security'],[{'workload':['notification.read']}])
         self.assertEqual(set(spec['components']['schemas']['PhoneSuppressionCheck']['properties']),{'destinationHash','channel'})
+        report=spec['paths']['/api/v1/staff/reports/engagement']['get']
+        self.assertEqual(report['operationId'],'API-110')
+        self.assertEqual(report['security'],[{'workload':['report.read_WITH_SIGNED_ANALYST'],'signedActor':[]}])
+        self.assertEqual({p['name'] for p in report['parameters'] if p['required']},{'from','to'})
+        report_scope={row['api']:row for row in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}['API-110']
+        self.assertEqual((report_scope['method'],report_scope['owner'],report_scope['client'],report_scope['scope']),('GET','experience','nigson-commerce','report.read_WITH_SIGNED_ANALYST'))
+        distributor_scopes={row['api']:row['scope'] for row in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text()) if row['api'] in {'API-092','API-093','API-094','API-095','API-172','API-177'}}
+        self.assertEqual(set(distributor_scopes),{'API-092','API-093','API-094','API-095','API-172','API-177'})
+        self.assertTrue(distributor_scopes['API-092'].endswith('_WITH_SIGNED_CUSTOMER'))
+        self.assertTrue(all(distributor_scopes[k].endswith('_WITH_SIGNED_ACTOR') for k in {'API-094','API-095','API-172','API-177'}))
+        self.assertIn('/api/v1/distributor-applications',spec['paths'])
+        lead_create=spec['paths']['/api/v1/quote-requests']['post']
+        self.assertEqual(lead_create['operationId'],'API-088')
+        self.assertEqual(lead_create['security'],[{'workload':['lead.quote.create_WITH_SIGNED_CUSTOMER'],'signedActor':[]}])
+        self.assertEqual(spec['paths']['/internal/v1/leads/{id}/quote-context']['get']['security'],[{'workload':['quote.read']}])
+        self.assertEqual(spec['paths']['/internal/v1/leads/{id}/quote-association']['post']['security'],[{'workload':['quote.write']}])
     def test_inbound_retention_and_phone_only_migrations_are_additive_and_guarded(self):
         release=json.loads((ROOT/'services/experience/src/main/resources/db/changelog/releases/BP1.yaml').read_text())['databaseChangeLog']
         self.assertTrue(any(row['include']['file']=='../023-msg-001-lead-email-nullable.yaml' for row in release))

@@ -1,0 +1,10 @@
+Security acceptance summary extracted from `.build/market002-security-final.log`.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.947 s -- in com.nigson.commerce.security.HttpTrustBoundaryTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.774 s -- in com.nigson.commerce.security.KmsIdentityTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.057 s -- in com.nigson.commerce.security.SecurityProtocolTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.898 s -- in com.nigson.commerce.security.JdbcSessionTrustTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.299 s -- in com.nigson.commerce.security.SecurityAssemblyTest
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+[INFO] Total time:  9.105 s
+PASS: SEC-001 native JDBC one-use state/race, rotation, idle/absolute TTL, encrypted Spring Session compatibility, current commerce policy/audit/revocation and KMS/protocol checks

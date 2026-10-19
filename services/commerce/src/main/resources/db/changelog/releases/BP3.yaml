@@ -23,6 +23,12 @@
         "file": "../042-bp3-constraints.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../043-bp3-quote-cart.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

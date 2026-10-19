@@ -1,0 +1,2 @@
+python3 scripts/database/generate.py --check
+PASS: generated catalog matches reviewed migration artifacts

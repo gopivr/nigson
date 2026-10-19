@@ -50,6 +50,13 @@ class FulfillmentContracts(unittest.TestCase):
         self.assertEqual(schema['properties']['shipments']['maxItems'],100);self.assertEqual(schema['properties']['events']['maxItems'],100)
         self.assertIn('latest100',op['description']);self.assertIn('Raw provider/internal notes',op['description'])
 
+    def test_logistics_webhook_is_reserved_and_disabled_without_signature_contract(self):
+        spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());op=spec['paths']['/api/v1/webhooks/logistics/{provider}']['post']
+        self.assertEqual(op['operationId'],'API-160');self.assertEqual(op['security'],[])
+        self.assertIn('no provider webhook signature contract is approved',op['description'])
+        self.assertEqual(set(op['responses']),{'400','422'})
+        self.assertIn('FEATURE_DISABLED',op['responses']['422']['description'])
+
     def test_dispatch_time_is_optional_closed_and_never_provider_supplied(self):
         spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())
         schema=spec['components']['schemas']['ShipmentDispatch']

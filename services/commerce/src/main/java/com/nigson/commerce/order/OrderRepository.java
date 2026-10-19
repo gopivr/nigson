@@ -12,5 +12,6 @@ public interface OrderRepository {
  OrderValues.Order processing(UUID id,long version,String actor,String reason);
  OrderValues.Order cancelled(UUID id,long version,String actor,String reason,UUID correlation);
  OrderValues.Proof proof(OrderValues.ProofInput input);
+ OrderValues.AiStatus aiStatus(UUID order);
  UUID organization(UUID order);
 }

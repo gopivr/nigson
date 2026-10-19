@@ -26,7 +26,8 @@ public final class ActorAssertion {
         public Binding(String audience,String operation,String method,String resource,UUID correlation){this(audience,operation,method,resource,correlation,bodyHash(new byte[0]));}
         public static String bodyHash(byte[] body){try{return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(body));}catch(Exception e){throw denied();}}
         public Binding {
-            if(!Set.of("commerce","experience","integration","ai").contains(audience)||operation==null||!operation.matches("[A-Za-z0-9:._-]{1,100}")||!Set.of("GET","POST","PUT","PATCH","DELETE").contains(method)||resource==null||resource.length()>512||!resource.startsWith("/internal/v1/")||resource.contains("%")||resource.contains("\\")||resource.contains(";")||resource.contains("?")||resource.contains("#")||resource.contains("//")||resource.contains(".."))throw denied();
+            boolean facade=resource!=null&&(resource.startsWith("/api/v1/staff/")||resource.startsWith("/api/v1/experience/staff/")||resource.startsWith("/api/v1/me/")||resource.equals("/api/v1/distributor-applications")||resource.equals("/api/v1/quote-requests"));
+            if(!Set.of("commerce","experience","integration","ai").contains(audience)||operation==null||!operation.matches("[A-Za-z0-9:._-]{1,100}")||!Set.of("GET","POST","PUT","PATCH","DELETE").contains(method)||resource==null||resource.length()>512||(!resource.startsWith("/internal/v1/")&&!facade)||resource.contains("%")||resource.contains("\\")||resource.contains(";")||resource.contains("?")||resource.contains("#")||resource.contains("//")||resource.contains(".."))throw denied();
             nonnil(correlation);if(bodyHash==null||!bodyHash.matches("[a-f0-9]{64}"))throw denied();
         }
     }

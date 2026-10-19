@@ -1,0 +1,27 @@
+package com.nigson.commerce.quote;
+
+import java.net.*;
+import java.net.http.*;
+import java.nio.ByteBuffer;
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.Flow;
+import java.util.function.Function;
+import com.nigson.shared.events.EventCodec;
+import com.nigson.shared.problem.*;
+import com.nigson.shared.security.ActorAssertion;
+import com.nigson.shared.security.PrivateWorkload;
+
+/** Fixed Commerce-to-Experience quote lead protocol; network calls happen outside DB transactions. */
+public final class HttpQuoteLeadPort implements QuoteLeadPort {
+ private static final PrivateWorkload.Route READ=route("API-130"),WRITE=route("API-131");
+ private final URI base;private final HttpClient http;private final Function<PrivateWorkload.Route,String> credentials;
+ public HttpQuoteLeadPort(String env,String endpoint,Function<PrivateWorkload.Route,String> credentials){base=com.nigson.commerce.security.IntegrationTarget.of(env,endpoint);this.credentials=Objects.requireNonNull(credentials);http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER).build();}
+ private static PrivateWorkload.Route route(String api){return PrivateWorkload.ROUTES.stream().filter(r->r.api().equals(api)&&r.owner().equals("experience")&&r.client().equals("nigson-commerce")).findFirst().orElseThrow(ActorAssertion::denied);}
+ @Override public QuoteValues.LeadContext context(UUID lead,UUID correlation){var response=send(READ,"/internal/v1/leads/"+lead+"/quote-context",null,null,correlation);try{var n=EventCodec.JSON.readTree(response.body());if(!n.propertyNames().equals(Set.of("id","partyId","organizationId","state")))throw new IllegalArgumentException();return new QuoteValues.LeadContext(uuid(n.path("id").asString()),uuid(n.path("partyId").isNull()?null:n.path("partyId").asString()),uuidOrNull(n.path("organizationId")),n.path("state").asString());}catch(RuntimeException malformed){throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);}}
+ @Override public boolean associate(UUID lead,UUID commandId,UUID quoteId,String state,UUID correlation){var body=EventCodec.JSON.writeValueAsBytes(Map.of("commandId",commandId,"quoteId",quoteId,"quoteState",state));var response=send(WRITE,"/internal/v1/leads/"+lead+"/quote-association",body,commandId.toString(),correlation);try{var n=EventCodec.JSON.readTree(response.body());if(!n.propertyNames().equals(Set.of("acknowledged"))||!n.path("acknowledged").isBoolean())throw new IllegalArgumentException();return n.path("acknowledged").asBoolean();}catch(RuntimeException malformed){throw new Problem.Failure(ProblemCode.PROVIDER_OUTCOME_UNKNOWN);}}
+ private HttpResponse<byte[]> send(PrivateWorkload.Route route,String path,byte[] body,String key,UUID correlation){com.nigson.commerce.security.IdentityKeys.outsideTransaction();if(correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();String token;try{token=credentials.apply(route);}catch(RuntimeException failed){throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);}if(token==null||token.isBlank()||token.length()>16384)throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);var request=HttpRequest.newBuilder(base.resolve(path)).timeout(Duration.ofSeconds(5)).header("Authorization","Bearer "+token).header("Accept","application/json").header("X-Correlation-ID",correlation.toString());String trace=com.nigson.shared.observability.WireContext.traceparent();if(trace!=null)request.header("traceparent",trace);if(body==null)request.GET();else request.header("Content-Type","application/json").header("Idempotency-Key",key).POST(HttpRequest.BodyPublishers.ofByteArray(body));CompletableFuture<HttpResponse<byte[]>> future=null;try{future=http.sendAsync(request.build(),r->new LimitedBody());var response=future.get(6,TimeUnit.SECONDS);int expected=body==null?200:200;if(response.statusCode()!=expected||!single(response,"Content-Type").split(";",2)[0].strip().equals("application/json"))throw new IllegalStateException();return response;}catch(Exception failure){if(failure instanceof InterruptedException)Thread.currentThread().interrupt();throw new Problem.Failure(body==null?ProblemCode.PROVIDER_UNAVAILABLE:ProblemCode.PROVIDER_OUTCOME_UNKNOWN);}finally{if(future!=null&&!future.isDone())future.cancel(true);}}
+ private static UUID uuid(String s){if(s==null)throw new IllegalArgumentException();return UUID.fromString(s);}private static UUID uuidOrNull(tools.jackson.databind.JsonNode n){return n==null||n.isNull()?null:uuid(n.asString());}private static String single(HttpResponse<?> r,String name){var values=r.headers().allValues(name);if(values.size()!=1)throw new IllegalStateException();return values.getFirst();}
+ private static final class LimitedBody implements HttpResponse.BodySubscriber<byte[]>{private final HttpResponse.BodySubscriber<byte[]> delegate=HttpResponse.BodySubscribers.ofByteArray();private Flow.Subscription subscription;private int bytes;private boolean failed;public CompletionStage<byte[]> getBody(){return delegate.getBody();}public void onSubscribe(Flow.Subscription s){subscription=s;delegate.onSubscribe(s);}public void onNext(List<ByteBuffer> items){if(failed)return;for(var item:items){bytes+=item.remaining();if(bytes>16384){failed=true;subscription.cancel();delegate.onError(new IllegalStateException());return;}}delegate.onNext(items);}public void onError(Throwable t){if(!failed)delegate.onError(t);}public void onComplete(){if(!failed)delegate.onComplete();}}
+}

@@ -1,0 +1,16 @@
+DO $$ BEGIN IF EXISTS (SELECT 1 FROM commerce.cart WHERE source_quote_revision_id IS NOT NULL) THEN RAISE EXCEPTION 'Populated quote-specific commerce.cart rows: use expand/contract migration'; END IF; END $$;
+DROP TRIGGER quote_guard ON commerce.quote;
+DROP FUNCTION commerce.guard_quote();
+DROP TRIGGER quote_line_guard ON commerce.quote_line;
+DROP FUNCTION commerce.guard_quote_line();
+DROP TRIGGER quote_revision_guard ON commerce.quote_revision;
+DROP FUNCTION commerce.guard_quote_revision();
+DROP INDEX commerce.cart_source_quote_revision_id_fk_ix;
+DROP INDEX commerce.cart_quote_revision_uq;
+DROP INDEX commerce.cart_active_context_uq;
+CREATE UNIQUE INDEX cart_active_context_uq ON commerce.cart (party_id,coalesce(organization_id,'00000000-0000-0000-0000-000000000000'::uuid),market_id) WHERE status='ACTIVE';
+ALTER TABLE commerce.cart DROP CONSTRAINT cart_source_quote_revision_id_fk;
+ALTER TABLE commerce.cart DROP CONSTRAINT cart_source_quote_revision_id_nonnil_ck;
+ALTER TABLE commerce.cart DROP COLUMN source_quote_revision_id;
+DROP TRIGGER cart_quote_revision_guard ON commerce.cart;
+DROP FUNCTION commerce.guard_quote_cart_revision();

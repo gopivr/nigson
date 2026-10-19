@@ -7,6 +7,7 @@ public interface PartyRepository {
     PartyValues.Profile profile(UUID party);
     void patchProfile(UUID party,long version,JsonNode patch);
     List<PartyValues.Address> addresses(UUID party);
+    List<PartyValues.Organization> organizations(UUID party);
     PartyValues.Address address(UUID party,UUID id);
     void requireOrganization(UUID party,UUID organization,boolean lock);
     void validateCountry(PartyValues.Address address);

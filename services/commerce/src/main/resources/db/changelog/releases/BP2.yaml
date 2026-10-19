@@ -23,6 +23,12 @@
         "file": "../032-bp2-constraints.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../033-bp2-reward-availability.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

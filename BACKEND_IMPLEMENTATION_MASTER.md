@@ -312,7 +312,7 @@ Mocks replace only Paystack/FedEx/Twilio target configuration in local/test. Key
 
 | Service | Responsibility | Schema | APIs | Produced events | Consumed events |
 |---|---|---|---|---|---|
-| commerce | Commerce core and Java BFF | commerce | API-001, API-002, API-003, API-004, API-005, API-006, API-007, API-008, API-009, API-010, API-011, API-012, API-013, API-014, API-015, API-016, API-017, API-018, API-019, API-020, API-021, API-022, API-023, API-024, API-025, API-026, API-027, API-028, API-029, API-030, API-031, API-032, API-033, API-034, API-035, API-036, API-037, API-038, API-039, API-040, API-041, API-042, API-043, API-044, API-045, API-046, API-047, API-048, API-049, API-050, API-051, API-052, API-053, API-054, API-055, API-056, API-057, API-058, API-059, API-060, API-061, API-062, API-063, API-064, API-065, API-066, API-067, API-068, API-069, API-070, API-071, API-072, API-073, API-074, API-075, API-111, API-112, API-113, API-117, API-118, API-119, API-120, API-121, API-122, API-123, API-124, API-132, API-133, API-134, API-135, API-149, API-150, API-151, API-152, API-153, API-154, API-155, API-159, API-160, API-161, API-162, API-163, API-164, API-165, API-169, API-170, API-171, API-173, API-174 | EVT-001, EVT-002, EVT-003, EVT-004, EVT-005, EVT-006, EVT-007, EVT-008, EVT-009, EVT-010, EVT-011, EVT-012, EVT-013, EVT-014, EVT-015, EVT-025, EVT-026 | EVT-002, EVT-004, EVT-011, EVT-012 |
+| commerce | Commerce core and Java BFF | commerce | API-001, API-002, API-003, API-004, API-005, API-006, API-007, API-008, API-009, API-010, API-011, API-012, API-013, API-014, API-015, API-016, API-017, API-018, API-019, API-020, API-021, API-022, API-023, API-024, API-025, API-026, API-027, API-028, API-029, API-030, API-031, API-032, API-033, API-034, API-035, API-036, API-037, API-038, API-039, API-040, API-041, API-042, API-043, API-044, API-045, API-046, API-047, API-048, API-049, API-050, API-051, API-052, API-053, API-054, API-055, API-056, API-057, API-058, API-059, API-060, API-061, API-062, API-063, API-064, API-065, API-066, API-067, API-068, API-069, API-070, API-071, API-072, API-073, API-074, API-075, API-111, API-112, API-113, API-117, API-118, API-119, API-120, API-121, API-122, API-123, API-124, API-132, API-133, API-134, API-135, API-149, API-150, API-151, API-152, API-153, API-154, API-155, API-159, API-160, API-161, API-162, API-163, API-164, API-165, API-169, API-170, API-171, API-173, API-174, API-206 | EVT-001, EVT-002, EVT-003, EVT-004, EVT-005, EVT-006, EVT-007, EVT-008, EVT-009, EVT-010, EVT-011, EVT-012, EVT-013, EVT-014, EVT-015, EVT-025, EVT-026 | EVT-002, EVT-004, EVT-011, EVT-012 |
 | experience | CMS engagement and business intake | experience | API-076, API-077, API-078, API-079, API-080, API-081, API-082, API-083, API-084, API-085, API-086, API-087, API-088, API-089, API-090, API-091, API-092, API-093, API-094, API-095, API-096, API-097, API-098, API-099, API-100, API-101, API-102, API-103, API-104, API-105, API-106, API-107, API-108, API-109, API-110, API-114, API-115, API-116, API-125, API-126, API-127, API-128, API-129, API-130, API-131, API-136, API-137, API-138, API-139, API-156, API-157, API-158, API-172, API-175, API-176, API-177 | EVT-016, EVT-017, EVT-018, EVT-019, EVT-020, EVT-021, EVT-022, EVT-023, EVT-024, EVT-025 | EVT-013, EVT-014, EVT-015, EVT-020 |
 | integration | Private adapters notifications and scheduled work | integration | API-140, API-141, API-142 |  | EVT-001, EVT-002, EVT-003, EVT-004, EVT-005, EVT-006, EVT-007, EVT-008, EVT-009, EVT-010, EVT-011, EVT-012, EVT-013, EVT-014, EVT-015, EVT-016, EVT-017, EVT-018, EVT-019, EVT-021, EVT-022, EVT-023, EVT-024, EVT-025, EVT-026 |
 | ai | Bounded customer assistant knowledge and provider gateway | ai | API-143, API-144, API-145, API-146, API-147, API-148, API-166, API-167, API-168, API-178, API-179, API-180 |  | EVT-006, EVT-008, EVT-017, EVT-018 |
@@ -2615,6 +2615,7 @@ currency_code char(3) NN FK currency.code
 business_key varchar(180) NN
 reverses_id uuid NULL FK reward_entry
 expires_at timestamptz NULL
+available_at timestamptz NN DEFAULT now()
 coupon_id uuid NULL FK coupon
 ```
 
@@ -6324,7 +6325,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 
 - **Service / module / phase:** commerce / authorization / BP3.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_EXPERIENCE:entitlement.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_EXPERIENCE:entitlement.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6339,7 +6340,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 
 - **Service / module / phase:** commerce / payment / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:payment.reconcile; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:payment.reconcile
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6354,7 +6355,7 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 
 - **Service / module / phase:** commerce / fulfillment / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:logistics.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:logistics.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6371,7 +6372,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / fulfillment / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:logistics.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:logistics.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6386,7 +6387,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / order / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_EXPERIENCE:purchase-proof.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_EXPERIENCE:purchase-proof.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6401,7 +6402,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:notification.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:notification.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** orderId; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6416,7 +6417,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / catalogue / BP5.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_AI:knowledge.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_AI:knowledge.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6431,7 +6432,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / order / BP5.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_AI:order-status.read_WITH_SIGNED_ACTOR; resource/organization/market checks required.
+- **Authorization:** SERVICE_AI:order-status.read_WITH_SIGNED_ACTOR
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6446,7 +6447,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / content / BP5.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_AI:knowledge.validate; resource/organization/market checks required.
+- **Authorization:** SERVICE_AI:knowledge.validate
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6461,7 +6462,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / content / BP5.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_AI:knowledge.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_AI:knowledge.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6476,7 +6477,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / consent / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:consent.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:consent.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6491,7 +6492,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / careers / BP2.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:sheets.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:sheets.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6506,7 +6507,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / lead / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:notification.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:notification.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6521,7 +6522,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / lead / BP3.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:quote.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:quote.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6536,7 +6537,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / lead / BP3.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:quote.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:quote.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6547,11 +6548,26 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, LEAD_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
+### API-206 POST /internal/v1/quote-sku-eligibility
+
+- **Service / module / phase:** commerce / catalogue and pricing authorization / BP3.
+- **Authentication:** Exact `nigson-experience` workload JWT with Commerce audience and `catalogue.quote-eligibility.read`; private ingress only; no signed user actor.
+- **Authorization:** SERVICE_EXPERIENCE:catalogue.quote-eligibility.read
+- **Headers:** JSON content type; no idempotency key because the operation is a bounded read.
+- **Path parameters:** None.
+- **Query:** None; reject unknown query parameters and body fields.
+- **Request:** `{partyId:UUID,marketId:UUID,organizationId:UUID|null,items:[{skuId:UUID,quantity:Quantity}]}`; 1..50 unique SKU IDs.
+- **Response:** `{items:[{skuId:UUID,quantityScale:0..3}]}` in request order; returns only validated requested identifiers and quantity scale.
+- **Statuses:** 200 success; common errors; 422 when market or any requested SKU is not eligible.
+- **Validation / business rules:** Read Commerce-owned catalogue, market, party, membership and entitlement only. Never return prices, stock quantities, private organization data or another SKU. Do not hold a transaction across Experience work.
+- **Events:** None.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, QUOTE_RULE_VIOLATION, PROVIDER_UNAVAILABLE.
+
 ### API-132 POST /internal/v1/files/{id}/scan-result
 
 - **Service / module / phase:** commerce / files / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:files.scan.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:files.scan.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6566,7 +6582,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:notification.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:notification.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6611,7 +6627,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / files / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:files.scan.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:files.scan.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6626,7 +6642,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:notification.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:notification.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6671,7 +6687,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** integration / provider / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:jobs.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:jobs.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** kind,state:enum optional; page,size,sort
@@ -6686,7 +6702,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** integration / provider / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:jobs.retry_WITH_SIGNED_STAFF; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:jobs.retry_WITH_SIGNED_STAFF
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6701,7 +6717,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** integration / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:templates.write_WITH_SIGNED_ADMIN; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:templates.write_WITH_SIGNED_ADMIN
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6761,7 +6777,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** ai / knowledge / BP5.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:ai.manage_WITH_SIGNED_ADMIN; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:ai.manage_WITH_SIGNED_ADMIN
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6776,7 +6792,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** ai / evaluation / BP5.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:ai.manage_WITH_SIGNED_ADMIN; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:ai.manage_WITH_SIGNED_ADMIN
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6941,7 +6957,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / notification / BP2.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:notification.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:notification.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -6956,7 +6972,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / cart / BP4.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:recovery.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:recovery.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -7196,7 +7212,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** experience / consent / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:consent.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:consent.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -7301,7 +7317,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** integration / provider / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:carrier.quote_WITH_SIGNED_ACTOR; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:carrier.quote_WITH_SIGNED_ACTOR
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -7379,7 +7395,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 - **Service / module / phase:** experience / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:notification.read; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:notification.read
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -7409,7 +7425,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 - **Service / module / phase:** integration / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:notification.feedback.write; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:notification.feedback.write
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -7469,7 +7485,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 - **Service / module / phase:** integration / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_COMMERCE:notification.send_WITH_SIGNED_ACTOR; resource/organization/market checks required.
+- **Authorization:** SERVICE_COMMERCE:notification.send_WITH_SIGNED_ACTOR
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -7484,7 +7500,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 - **Service / module / phase:** experience / notification / BP1.
 - **Authentication:** Workload JWT with exact client scope and signed actor where specified.
-- **Authorization:** SERVICE_INTEGRATION:notification.read_WITH_SIGNED_ACTOR; resource/organization/market checks required.
+- **Authorization:** SERVICE_INTEGRATION:notification.read_WITH_SIGNED_ACTOR
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -7499,7 +7515,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 - **Service / module / phase:** experience / notification / BP1.
 - **Authentication:** Exact Integration workload JWT; no user actor.
-- **Authorization:** SERVICE_INTEGRATION:notification.read.
+- **Authorization:** SERVICE_INTEGRATION:notification.read
 - **Headers:** X-Correlation-ID; JSON only; no query parameters.
 - **Request:** `{destinationHash:string,channel:WHATSAPP}`.
 - **Response:** `{suppressed:boolean}`.
@@ -7527,7 +7543,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 
 - **Service / module / phase:** integration / provider / BP1.
 - **Authentication:** Private Keycloak workload JWT and signed staff actor.
-- **Authorization:** SERVICE_COMMERCE:carrier.reconcile_WITH_SIGNED_STAFF; originating OPERATIONS, recent MFA and no selected organization.
+- **Authorization:** SERVICE_COMMERCE:carrier.reconcile_WITH_SIGNED_STAFF
 - **Headers:** Idempotency-Key (source command UUID), X-Correlation-ID and X-Nigson-Actor bound to exact method/path/body; no cookie or query.
 - **Path parameters:** id:UUID.
 - **Query:** None; reject unknown parameters.
@@ -7555,7 +7571,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 ### API-198 POST /internal/v1/carrier/cancellations
 
 - **Service / module / phase:** integration / provider / BP1.
-- **Authentication / authorization:** SERVICE_COMMERCE:carrier.cancel; exact private workload, no browser or actor token.
+- **Authorization:** SERVICE_COMMERCE:carrier.cancel
 - **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
 - **Path parameters:** None.
 - **Query:** None; reject unknown parameters.
@@ -7569,7 +7585,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 ### API-199 POST /internal/v1/carrier/cancellation-results
 
 - **Service / module / phase:** commerce / fulfillment / BP1.
-- **Authentication / authorization:** SERVICE_INTEGRATION:logistics.write; exact private workload, no actor/cookie.
+- **Authorization:** SERVICE_INTEGRATION:logistics.write
 - **Headers:** section12; private POST Idempotency-Key is the original cancellation/receipt UUID and X-Correlation-ID is required.
 - **Path parameters:** None.
 - **Query:** None; reject unknown parameters.
@@ -7599,7 +7615,7 @@ CarrierCancellationDTO is closed `{id:UUID,shipmentId:UUID,state:REQUESTED|QUEUE
 ### API-201 POST /internal/v1/communication-destinations
 
 - **Service / module / phase:** experience / consent / BP1.
-- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Authorization:** SERVICE_COMMERCE:communication.create_WITH_SIGNED_CUSTOMER
 - **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
 - **Path parameters:** None.
 - **Query:** None; reject unknown parameters.
@@ -7613,7 +7629,7 @@ CarrierCancellationDTO is closed `{id:UUID,shipmentId:UUID,state:REQUESTED|QUEUE
 ### API-202 POST /internal/v1/communication-destinations/{id}/verification
 
 - **Service / module / phase:** experience / consent / BP1.
-- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Authorization:** SERVICE_COMMERCE:communication.verify_WITH_SIGNED_CUSTOMER
 - **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
 - **Path parameters:** id:UUID.
 - **Query:** None; reject unknown parameters.
@@ -7627,7 +7643,7 @@ CarrierCancellationDTO is closed `{id:UUID,shipmentId:UUID,state:REQUESTED|QUEUE
 ### API-203 GET /internal/v1/communication-destinations
 
 - **Service / module / phase:** experience / consent / BP1.
-- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Authorization:** SERVICE_COMMERCE:communication.read_WITH_SIGNED_CUSTOMER
 - **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
 - **Path parameters:** None.
 - **Query:** None; reject unknown parameters.
@@ -7641,7 +7657,7 @@ CarrierCancellationDTO is closed `{id:UUID,shipmentId:UUID,state:REQUESTED|QUEUE
 ### API-204 POST /internal/v1/communication-destinations/{id}/withdrawal
 
 - **Service / module / phase:** experience / consent / BP1.
-- **Authentication / authorization:** Exact nigson-commerce workload and dedicated communication scope WITH_SIGNED_CUSTOMER; originating current CUSTOMER, no organization. ADR-017.
+- **Authorization:** SERVICE_COMMERCE:communication.withdraw_WITH_SIGNED_CUSTOMER
 - **Headers:** X-Nigson-Actor bound to exact body/method/path/correlation; Idempotency-Key on mutations; no browser cookies or Origin.
 - **Path parameters:** id:UUID.
 - **Query:** None; reject unknown parameters.
@@ -9114,7 +9130,7 @@ Permanent task IDs; existing IDs retained. Specification1.1.0 adds six explicit 
 - **Phase / service:** EP08 / experience.
 - **Dependencies:** SEC-001, DATA-001, PLAT-001, COM-PARTY-001, COM-PRICI-001
 - **Files/packages:** `services/experience/src/main/java/com/nigson/experience/lead/`, `services/experience/src/test/lead/`, `contracts/openapi/experience.yaml`, `services/experience/db/changelog/lead/`
-- **Implementation:** Implement enquiry/complaint/quote intake and staff assignment/history without losing notification failures. Create domain value objects/aggregate commands, repository ports and owned persistence adapters for experience.lead_requested_item. Implement exactly API-088, API-130, API-131 including their input/output types, status/auth/version/idempotency rules and outbox effects. Apply every listed table invariant and the section17 state machine; no cross-service repository calls. Register typed configs and observability; regenerate reviewed OpenAPI.
+- **Implementation:** Implement enquiry/complaint/quote intake and staff assignment/history without losing notification failures. Create domain value objects/aggregate commands, repository ports and owned persistence adapters for experience.lead_requested_item. Implement exactly API-088, API-130, API-131 including their input/output types, status/auth/version/idempotency rules and outbox effects. Use the separately registered Commerce-owned API-206 read for bounded SKU/market/organization eligibility; Experience must not query Commerce tables. Apply every listed table invariant and the section17 state machine; no cross-service repository calls. Register typed configs and observability; regenerate reviewed OpenAPI.
 - **Contracts:** APIs API-088, API-130, API-131; tables experience.lead_requested_item; events EVT-016
 - **Tests:** TEST-LEAD-DURABILITY: simulated mail failure preserves intake and activity history; endpoint input/response contract, owner denial, stale version, replay and migration tests.
 - **Acceptance AC-EXP-LEAD-002:** Given the section36 fixture and valid scoped actor, when the registered command/query contracts for experience.lead execute, then their declared state/value responses and table invariants hold; forbidden actor/resource requests are denied before writes, stale versions return412, and repeated side-effect keys cannot duplicate effects. The task-specific test scenarios below must pass.
@@ -10019,10 +10035,10 @@ Build/test PASS is command-scoped and timestamped; it does not imply every test 
 
 ## EP12 — Bounded assistant, trusted tools and international activation
 
-- [ ] AI-ASSIS-001 Implement ai assistant increment — AC-AI-ASSIS-001
-- [ ] COM-CATAL-002 Implement commerce catalogue increment — AC-COM-CATAL-002
-- [ ] COM-MARKE-002 Implement commerce market increment — AC-COM-MARKE-002
-- [ ] COM-ORDER-002 Implement commerce order increment — AC-COM-ORDER-002
+- [x] AI-ASSIS-001 Implement ai assistant increment — AC-AI-ASSIS-001
+- [x] COM-CATAL-002 Implement commerce catalogue increment — AC-COM-CATAL-002
+- [x] COM-MARKE-002 Implement commerce market increment — AC-COM-MARKE-002
+- [x] COM-ORDER-002 Implement commerce order increment — AC-COM-ORDER-002
 - [ ] EXP-CONTE-002 Implement experience content increment — AC-EXP-CONTE-002
 
 

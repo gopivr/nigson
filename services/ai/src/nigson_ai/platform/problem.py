@@ -41,9 +41,21 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Version mismatch",
         "Refresh the resource before retrying.",
     ),
-    "CHECKOUT_REPRICE_REQUIRED": (409, "Checkout quote changed", "Refresh the checkout quote before continuing."),
-    "PAYMENT_RULE_VIOLATION": (422, "Payment rule violation", "The payment or refund operation does not meet verified financial rules."),
-    "ORDER_RULE_VIOLATION": (422, "Order rule violation", "The order operation does not meet current purchase rules."),
+    "CHECKOUT_REPRICE_REQUIRED": (
+        409,
+        "Checkout quote changed",
+        "Refresh the checkout quote before continuing.",
+    ),
+    "PAYMENT_RULE_VIOLATION": (
+        422,
+        "Payment rule violation",
+        "The payment or refund operation does not meet verified financial rules.",
+    ),
+    "ORDER_RULE_VIOLATION": (
+        422,
+        "Order rule violation",
+        "The order operation does not meet current purchase rules.",
+    ),
     "FULFILLMENT_RULE_VIOLATION": (
         422,
         "Fulfillment rule violation",
@@ -99,6 +111,36 @@ CODES: dict[str, tuple[int, str, str]] = {
         "Catalogue rule violation",
         "The catalogue change does not meet current rules.",
     ),
+    "PROMOTION_RULE_VIOLATION": (
+        422,
+        "Promotion rule violation",
+        "The promotion operation does not meet current commercial rules.",
+    ),
+    "QUOTE_RULE_VIOLATION": (
+        422,
+        "Quote rule violation",
+        "The quote does not meet current commercial rules.",
+    ),
+    "CAREERS_RULE_VIOLATION": (
+        422,
+        "Careers rule violation",
+        "The career opportunity or application does not meet current policy.",
+    ),
+    "ENGAGEMENT_RULE_VIOLATION": (
+        422,
+        "Engagement rule violation",
+        "The review or campaign does not meet current engagement rules.",
+    ),
+    "REPORTING_RULE_VIOLATION": (
+        422,
+        "Reporting rule violation",
+        "The requested report cannot be produced within current reporting limits.",
+    ),
+    "REWARD_RULE_VIOLATION": (
+        422,
+        "Reward rule violation",
+        "The reward or referral operation does not meet current eligibility rules.",
+    ),
     "PLATFORM_RULE_VIOLATION": (
         422,
         "Configuration rule violation",
@@ -113,6 +155,21 @@ CODES: dict[str, tuple[int, str, str]] = {
         422,
         "Authorization rule violation",
         "Retain an active administrator before removing this role.",
+    ),
+    "GATEWAY_RULE_VIOLATION": (
+        422,
+        "AI gateway rule violation",
+        "The configured model, prompt, provider or budget does not meet current gateway rules.",
+    ),
+    "KNOWLEDGE_RULE_VIOLATION": (
+        422,
+        "Knowledge rule violation",
+        "The source or embedding does not meet current public knowledge requirements.",
+    ),
+    "ASSISTANT_RULE_VIOLATION": (
+        422,
+        "Assistant rule violation",
+        "The assistant request does not meet current safety or evidence requirements.",
     ),
     "BUSINESS_RULE_VIOLATION": (
         422,

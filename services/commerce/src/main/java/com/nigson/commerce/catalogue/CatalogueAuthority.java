@@ -11,7 +11,7 @@ public final class CatalogueAuthority {
     public CatalogueAuthority(JdbcTemplate jdbc){this.jdbc=jdbc;}
     public void require(ActorAssertion.Actor actor,String role){
         if(actor==null)throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);
-        if(!Set.of("CONTENT_EDITOR","CONTENT_PUBLISHER").contains(role)||actor.organization()!=null||!actor.roles().contains(role)||!Boolean.TRUE.equals(jdbc.queryForObject(
+        if(!Set.of("CONTENT_EDITOR","CONTENT_PUBLISHER","SALES").contains(role)||actor.organization()!=null||!actor.roles().contains(role)||!Boolean.TRUE.equals(jdbc.queryForObject(
             "SELECT EXISTS(SELECT 1 FROM commerce.party p JOIN commerce.staff_role_assignment r ON r.party_id=p.id WHERE p.id=? AND p.identity_issuer=? AND p.identity_subject=? AND p.status='ACTIVE' AND r.role=? AND r.revoked_at IS NULL)",Boolean.class,actor.party(),actor.identityIssuer(),actor.identitySubject(),role)))throw new Problem.Failure(ProblemCode.ACCESS_DENIED);
     }
     public void stabilize(ActorAssertion.Actor actor,String role){

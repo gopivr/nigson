@@ -1,0 +1,13 @@
+Native focused market harness output extracted from `.build/market002-native-final.log`.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.579 s -- in com.nigson.commerce.security.SecurityAssemblyTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.800 s -- in com.nigson.commerce.BuildCompatibilityTest
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.620 s -- in com.nigson.acceptance.market.MarketPersistenceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.nigson.acceptance.market.MarketValuesTest
+[INFO] Tests run: 25, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.488 s -- in com.nigson.experience.BuildCompatibilityTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.394 s -- in com.nigson.integration.BuildCompatibilityTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+[INFO] Total time:  24.156 s
+PASS: owned market native persistence/policy/rollback/races and BFF assembly; genuine market activation not implied

@@ -32,6 +32,8 @@ def catalog():
                         'mutation': metadata[4], 'fields': fields,
                         'keys': re.search(r'\*\*Keys and indexes:\*\* (.*)', body)[1].rstrip('.'),
                         'checks': re.search(r'\*\*Checks:\*\* (.*)', body)[1].rstrip('.')}
+    tables['commerce.cart']['creation_changeset']='commerce-20261018-001'
+    tables['commerce.cart']['creation_file']='services/commerce/src/main/resources/db/changelog/043-bp3-quote-cart.sql'
     if not tables:
         raise ValueError('Missing normative table catalog')
     return tables

@@ -138,6 +138,12 @@ authorization-check:
 	python3 scripts/contracts/authorization.py --check
 	ENV=test python3 scripts/authorization/verify.py
 
+.PHONY: audit-check
+audit-check:
+	python3 scripts/contracts/authorization.py --check
+	./.build/ai-env/bin/python -m pytest tests/contract/test_authorization_contract.py tests/contract/test_party_contract.py -q
+	ENV=test python3 scripts/audit/verify.py
+
 .PHONY: party-check
 party-check:
 	ENV=test python3 scripts/party/verify.py

@@ -1,0 +1,317 @@
+[INFO] Scanning for projects...
+[INFO] Loaded 24127 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Nigson backend                                                     [pom]
+[INFO] common-observability                                               [jar]
+[INFO] common-security                                                    [jar]
+[INFO] common-events                                                      [jar]
+[INFO] common-problem                                                     [jar]
+[INFO] commerce                                                           [jar]
+[INFO] experience                                                         [jar]
+[INFO] integration                                                        [jar]
+[INFO] 
+[INFO] ---------------------< com.nigson:nigson-backend >----------------------
+[INFO] Building Nigson backend 0.1.0                                      [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ nigson-backend ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.RequireJavaVendor passed
+[INFO] Rule 2: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO] 
+[INFO] ------------------< com.nigson:common-observability >-------------------
+[INFO] Building common-observability 0.1.0                                [2/8]
+[INFO]   from shared/common-observability/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-observability ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-observability ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-observability/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-observability ---
+[INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-observability ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-observability/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-observability ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ common-observability ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ---------------------< com.nigson:common-security >---------------------
+[INFO] Building common-security 0.1.0                                     [3/8]
+[INFO]   from shared/common-security/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-security ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-security ---
+[INFO] Copying 3 resources from ../../contracts/security to ../../.build/java/common-security/classes/security
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-security ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-security ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-security/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-security ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ common-security ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ----------------------< com.nigson:common-events >----------------------
+[INFO] Building common-events 0.1.0                                       [4/8]
+[INFO]   from shared/common-events/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-events ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-events ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-events/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-events ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-events ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-events/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-events ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ common-events ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ---------------------< com.nigson:common-problem >----------------------
+[INFO] Building common-problem 0.1.0                                      [5/8]
+[INFO]   from shared/common-problem/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ common-problem ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ common-problem ---
+[INFO] Copying 0 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/common-problem/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ common-problem ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ common-problem ---
+[INFO] skip non existing resourceDirectory /Users/gopiravi/workspace/nigson/shared/common-problem/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ common-problem ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ common-problem ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ------------------------< com.nigson:commerce >-------------------------
+[INFO] Building commerce 0.1.0                                            [6/8]
+[INFO]   from services/commerce/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] Loaded 7 auto-discovered prefixes for remote repository shibboleth-repo (prefixes-shibboleth-repo.txt)
+[INFO] Loaded 24127 auto-discovered prefixes for remote repository maven_central (prefixes-maven_central.txt)
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ commerce ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ commerce ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/commerce/classes
+[INFO] Copying 74 resources from src/main/resources to ../../.build/java/commerce/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ commerce ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/commerce/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ commerce ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ commerce ---
+[INFO] 
+[INFO] -----------------------< com.nigson:experience >------------------------
+[INFO] Building experience 0.1.0                                          [7/8]
+[INFO]   from services/experience/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (reproducible-toolchain) @ experience ---
+[INFO] Rule 3: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO] Rule 4: org.apache.maven.enforcer.rules.dependency.DependencyConvergence passed
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ experience ---
+[INFO] Copying 1 resource from src/main/resources to ../../.build/java/experience/classes
+[INFO] Copying 45 resources from src/main/resources to ../../.build/java/experience/classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ experience ---
+[INFO] Copying 1 resource from src/test/resources to ../../.build/java/experience/test-classes
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ experience ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ experience ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.nigson.experience.careers.CareerActorBoundaryTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.054 s -- in com.nigson.experience.careers.CareerActorBoundaryTest
+[INFO] Running com.nigson.experience.careers.CareerPersistenceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.878 s -- in com.nigson.experience.careers.CareerPersistenceTest
+[INFO] Running com.nigson.experience.careers.CareerValuesTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in com.nigson.experience.careers.CareerValuesTest
+[INFO] Running com.nigson.experience.careers.CareerUploadHttpTest
+{"timestamp":"2026-10-18T19:55:20.714Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:20.743Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:20.818Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:20.861Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:20.869Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:20.988Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.048Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.049Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.049Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.049Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.167Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.423Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.423Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.423Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.434Z","severity":"INFO","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.466Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.466Z","severity":"INFO","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.529Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.530Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.543Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.544Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.544Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.544Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:21.544Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.227Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.227Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.227Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.227Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.227Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.227Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.228Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.228Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.228Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.229Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.229Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.237Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.237Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.237Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.238Z","severity":"WARN","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.252Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.260Z","severity":"DEBUG","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+{"timestamp":"2026-10-18T19:55:22.260Z","severity":"ERROR","service":"nigson-experience","environment":"test","version":"0.1.0","trace_id":null,"span_id":null,"correlation_id":null,"error_code":null,"message":"OPERATOR_EVENT"}
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.989 s <<< FAILURE! -- in com.nigson.experience.careers.CareerUploadHttpTest
+[ERROR] com.nigson.experience.careers.CareerUploadHttpTest.publicUploadSessionUsesAntiAbuseIdempotencyAndPersistsOnlyHash -- Time elapsed: 1.988 s <<< ERROR!
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'inboundMessageController' defined in file [/Users/gopiravi/workspace/nigson/.build/java/experience/classes/com/nigson/experience/lead/InboundMessageController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.nigson.experience.lead.InboundMessageProcessor' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1380)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1219)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1225)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1191)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1121)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:994)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:621)
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:154)
+	at com.nigson.experience.careers.CareerUploadHttpTest.publicUploadSessionUsesAntiAbuseIdempotencyAndPersistsOnlyHash(CareerUploadHttpTest.java:41)
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.nigson.experience.lead.InboundMessageProcessor' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoMatchingBeanFound(DefaultListableBeanFactory.java:2304)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1732)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1658)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	... 20 more
+
+[INFO] Running com.nigson.experience.careers.CareerSecretsTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in com.nigson.experience.careers.CareerSecretsTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   CareerUploadHttpTest.publicUploadSessionUsesAntiAbuseIdempotencyAndPersistsOnlyHash:41 » UnsatisfiedDependency Error creating bean with name 'inboundMessageController' defined in file [/Users/gopiravi/workspace/nigson/.build/java/experience/classes/com/nigson/experience/lead/InboundMessageController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.nigson.experience.lead.InboundMessageProcessor' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+[INFO] 
+[ERROR] Tests run: 13, Failures: 0, Errors: 1, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Nigson backend 0.1.0:
+[INFO] 
+[INFO] integration ........................................ SKIPPED
+[INFO] Nigson backend ..................................... SUCCESS [  0.126 s]
+[INFO] common-observability ............................... SUCCESS [  0.859 s]
+[INFO] common-security .................................... SUCCESS [  0.329 s]
+[INFO] common-events ...................................... SUCCESS [  0.016 s]
+[INFO] common-problem ..................................... SUCCESS [  0.016 s]
+[INFO] commerce ........................................... SUCCESS [  0.472 s]
+[ERROR] experience ......................................... FAILURE [  3.520 s]
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.565 s
+[INFO] Finished at: 2026-10-18T15:55:22-04:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.5.6:test (default-test) on project experience: 
+[ERROR] 
+[ERROR] See /Users/gopiravi/workspace/nigson/services/experience/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :experience
+Traceback (most recent call last):
+  File "/Users/gopiravi/workspace/nigson/scripts/career_upload/verify.py", line 25, in <module>
+    platform.main(java_tests='Career*Test',run_python=False,evidence=evidence,
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                  completion='PASS: API-157 public anti-abuse checked CAREER_CV upload sessions, purpose/size/expiry bounds, encrypted idempotent capability replay, owner-local audit and actual anonymous HTTP route; no binary transfer or live object-store activation implied')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/platform/verify.py", line 50, in main
+    subprocess.run(['./mvnw','-B','-pl','services/commerce,services/experience,services/integration','-am','-Dtest='+java_tests,'-Dsurefire.failIfNoSpecifiedTests=false','test'],cwd=ROOT,env=env,check=True,timeout=300)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gopiravi/workspace/nigson/scripts/career_upload/verify.py", line 20, in run_with_pinned_maven
+    return real_run(args,*a,**kw)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/opt/homebrew/Cellar/maven/3.10.0/libexec/bin/mvn', '-B', '-pl', 'services/commerce,services/experience,services/integration', '-am', '-Dtest=Career*Test', '-Dsurefire.failIfNoSpecifiedTests=false', 'test']' returned non-zero exit status 1.

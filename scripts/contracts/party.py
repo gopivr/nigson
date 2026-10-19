@@ -14,6 +14,8 @@ def extend(spec):
     schemas['ProfilePatch'] = {'type': 'object', 'additionalProperties': False, 'minProperties': 1, 'properties': {k: profile[k] for k in ('displayName', 'phone', 'locale')}}
     schemas['AddressInput'] = {'type': 'object', 'additionalProperties': False, 'required': ['recipient', 'phone', 'line1', 'city', 'countryCode'], 'properties': deepcopy(fields)}
     schemas['AddressPatch'] = {'type': 'object', 'additionalProperties': False, 'minProperties': 1, 'properties': deepcopy(fields)}
+    schemas['OrganizationMembershipDTO'] = object_schema({'id':UUID,'name':string(200),'membershipRole':{'type':'string','enum':['OWNER','BUYER']},'entitlementState':{'type':'string','enum':['PENDING','ACTIVE','SUSPENDED','REVOKED']}})
+    schemas['OrganizationMembershipList'] = {'type':'array','maxItems':100,'items':REF('OrganizationMembershipDTO')}
     key = parameter('Idempotency-Key', 'header', {'type': 'string', 'minLength': 1, 'maxLength': 100, 'pattern': '^[ -~]+$'}, True)
     csrf = parameter('X-CSRF-TOKEN', 'header', {'type': 'string', 'minLength': 43, 'maxLength': 43}, True)
     revision = parameter('If-Match', 'header', {'type': 'string', 'pattern': '^"(0|[1-9][0-9]{0,18})"$'}, True)
@@ -28,6 +30,11 @@ def extend(spec):
         if status == '201': result['responses'][status]['headers']['Location'] = {'schema': {'type': 'string'}, 'description': 'Owned address resource path'}
         return result
     spec['paths']['/api/v1/me'] = {'get': op('API-005', 'ProfileDTO', []), 'patch': op('API-006', 'ProfileDTO', [revision,key,csrf], 'ProfilePatch')}
+    organizations=op('API-066','OrganizationMembershipList',[])
+    organizations['description']='Current CUSTOMER only. Return only this verified party’s active Commerce organization memberships, with the configured distributor entitlement state (PENDING when no canonical entitlement is configured or no owned record exists). Suspended entitlements remain visible as SUSPENDED while buying authority is denied. No organization identifier can be supplied by the caller; reject all query parameters and request bodies.'
+    organizations['responses']['200']['headers']={'Cache-Control':{'schema':{'const':'no-store'}}}
+    organizations['responses']['404']['description']='No current party membership or organization resource'
+    spec['paths']['/api/v1/me/organizations']={'get':organizations}
     spec['paths']['/api/v1/me/addresses'] = {'get': op('API-007', 'AddressList', []), 'post': op('API-008', 'AddressDTO', [key,csrf], 'AddressInput', '201')}
     spec['paths']['/api/v1/me/addresses/{id}'] = {'patch': op('API-009', 'AddressDTO', [parameter('id','path',UUID,True),revision,key,csrf], 'AddressPatch'), 'delete': op('API-010', 'AddressDTO', [parameter('id','path',UUID,True),revision,key,csrf], status='204')}
     return spec

@@ -121,6 +121,15 @@ public final class PlatformStore {
             jdbc.update("UPDATE experience.idempotency_record SET state='FAILED_RETRYABLE',lease_until=NULL,version=version+1,updated_at=?,updated_by=? WHERE id=? AND version=? AND state='RUNNING'",stamp(now()),principal,id,generation); throw failure;
         }
     }
+    /** Fast read-only replay check before an external proof/validation call; command correctness still commits through executeLocal. */
+    public Optional<Response> replayLocal(String principal,String operation,String key,JsonNode request) {
+        bounded(principal,200);bounded(operation,120);bounded(key,100);String hash=EventCodec.hash(request);
+        var rows=jdbc.queryForList("SELECT * FROM experience.idempotency_record WHERE principal_key=? AND operation=? AND request_key=?",principal,operation,key);
+        if(rows.isEmpty())return Optional.empty();var row=rows.getFirst();
+        if(!hash.equals(row.get("request_hash"))){metrics.counter("nigson.idempotency.conflicts","owner",experience).increment();throw new Conflict("IDEMPOTENCY_HASH_MISMATCH");}
+        if("SUCCEEDED".equals(row.get("state")))return Optional.of(replay(row));
+        return Optional.empty();
+    }
     private static boolean ledgerTimeout(Throwable failure) {
         for(int n=0;n<8&&failure!=null;n++,failure=failure.getCause()) {
             if(failure instanceof java.sql.SQLException sql&&("55P03".equals(sql.getSQLState())||"57014".equals(sql.getSQLState())))return true;

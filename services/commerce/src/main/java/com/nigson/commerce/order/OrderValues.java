@@ -17,6 +17,7 @@ public final class OrderValues {
  public record Checkout(Order order,Payment payment){}
  public record ProofInput(UUID partyId,UUID orderLineId,UUID productId){}
  public record Proof(boolean eligible,String reasonCode,long revision){}
+ public record AiStatus(String orderNumber,String status,String fulfillmentStatus,String trackingUrl){}
  public record Page(List<Order> items,int page,int size,long totalElements,long totalPages){}
  public record Query(UUID organizationId,String status,String paymentStatus,Instant from,Instant to,int page,int size,String sort){
   public Query{ApiValues.page(page,size);if(status!=null&&!STATES.contains(status)||paymentStatus!=null&&!PAYMENT_STATES.contains(paymentStatus))throw ApiValues.invalid();ApiValues.sort(sort,Set.of("createdAt,asc","createdAt,desc","orderNumber,asc","orderNumber,desc"));if(from!=null&&to!=null&&!from.isBefore(to))throw ApiValues.invalid();}
@@ -27,4 +28,5 @@ public final class OrderValues {
  public static CheckoutInput checkout(JsonNode n){closed(n,Set.of("checkoutQuoteId","quoteHash","paymentMethod"));String hash=text(n,"quoteHash",64,64),method=text(n,"paymentMethod",6,6);if(!hash.matches("[a-f0-9]{64}")||!method.equals("HOSTED"))throw ApiValues.invalid();return new CheckoutInput(ApiValues.uuid(text(n,"checkoutQuoteId",36,36)),hash,method);}
  public static String reason(JsonNode n){closed(n,Set.of("reason"));return text(n,"reason",10,500);}
  public static ProofInput proof(JsonNode n){closed(n,Set.of("partyId","orderLineId","productId"));return new ProofInput(ApiValues.uuid(text(n,"partyId",36,36)),ApiValues.uuid(text(n,"orderLineId",36,36)),ApiValues.uuid(text(n,"productId",36,36)));}
+ public static UUID aiStatusId(JsonNode n){closed(n,Set.of("orderId"));return ApiValues.uuid(text(n,"orderId",36,36));}
 }

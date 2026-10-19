@@ -15,8 +15,8 @@ import com.nigson.shared.observability.WireContext;
 @RestController
 @ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED",havingValue="true")
 public class CatalogueController {
-    private final CatalogueReads reads;private final ProductService products;private final TaxonomyService taxonomy;
-    public CatalogueController(CatalogueReads reads,ProductService products,TaxonomyService taxonomy){this.reads=reads;this.products=products;this.taxonomy=taxonomy;}
+    private final CatalogueReads reads;private final ProductService products;private final TaxonomyService taxonomy;private final RecommendationService recommendations;
+    public CatalogueController(CatalogueReads reads,ProductService products,TaxonomyService taxonomy,RecommendationService recommendations){this.reads=reads;this.products=products;this.taxonomy=taxonomy;this.recommendations=recommendations;}
     private ActorAssertion.Actor actor(){var auth=SecurityContextHolder.getContext().getAuthentication();if(auth==null||!auth.isAuthenticated())throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);if(!(auth.getPrincipal() instanceof ActorAssertion.Actor a))throw new Problem.Failure(ProblemCode.ACCESS_DENIED);return a;}
     private Map<String,String> query(HttpServletRequest request,Set<String> allowed,boolean noBody)throws java.io.IOException{
         if(!allowed.containsAll(request.getParameterMap().keySet()))throw ApiValues.invalid();var result=new HashMap<String,String>();
@@ -39,6 +39,12 @@ public class CatalogueController {
     }
     @GetMapping(value="/api/v1/catalogue/products/{id}",produces="application/json")
     public ResponseEntity<CatalogueValues.Product> product(HttpServletRequest r,@PathVariable String id)throws java.io.IOException{var q=query(r,Set.of("market"),true);var value=reads.product(ApiValues.uuid(id),CatalogueReads.market(q.get("market")));return cached(r,value,value.revision());}
+    @GetMapping(value="/api/v1/catalogue/products/{id}/recommendations",produces="application/json")
+    public List<RecommendationValues.PublicItem> recommendations(HttpServletRequest r,@PathVariable String id)throws java.io.IOException{var q=query(r,Set.of("market","limit"),true);return reads.boundedQuery(()->recommendations.publicList(ApiValues.uuid(id),CatalogueReads.market(q.get("market")),number(q.getOrDefault("limit","6"))));}
+    @PutMapping(value="/api/v1/staff/products/{id}/recommendations",consumes="application/json",produces="application/json")
+    public ResponseEntity<RecommendationValues.Result> replaceRecommendations(HttpServletRequest r,@PathVariable String id,@RequestBody JsonNode input)throws java.io.IOException{query(r,Set.of(),false);var result=recommendations.replace(actor(),ApiValues.uuid(id),ApiValues.version(header(r,"If-Match")),input,header(r,"Idempotency-Key"),correlation());return ResponseEntity.ok().eTag(Long.toString(result.version())).body(result);}
+    @GetMapping(value="/internal/v1/catalogue/knowledge/{id}",produces="application/json")
+    public RecommendationValues.Knowledge knowledge(HttpServletRequest r,@PathVariable String id)throws java.io.IOException{query(r,Set.of(),true);var auth=SecurityContextHolder.getContext().getAuthentication();if(auth==null||!(auth.getPrincipal() instanceof com.nigson.shared.security.PrivateWorkload.Proof proof))throw new Problem.Failure(ProblemCode.ACCESS_DENIED);return reads.boundedQuery(()->recommendations.knowledge(proof,ApiValues.uuid(id)));}
     @GetMapping(value="/api/v1/catalogue/categories",produces="application/json")
     public ResponseEntity<List<CatalogueValues.PublicCategory>> categories(HttpServletRequest r)throws java.io.IOException{var q=query(r,Set.of("market"),true);return cached(r,reads.categories(CatalogueReads.market(q.get("market"))),0);}
     @GetMapping(value="/api/v1/catalogue/brands",produces="application/json")

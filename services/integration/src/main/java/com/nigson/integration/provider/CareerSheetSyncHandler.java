@@ -1,0 +1,18 @@
+package com.nigson.integration.provider;
+
+import java.nio.charset.StandardCharsets;import java.security.MessageDigest;import java.util.*;import javax.crypto.Mac;import javax.crypto.spec.SecretKeySpec;
+import com.nigson.shared.events.EventCodec;import com.nigson.shared.problem.*;
+
+/** Fetches the minimized Experience projection, then performs unlocked stable-key Sheet upsert. */
+public final class CareerSheetSyncHandler implements JobHandler {
+ private final CareerSheetContextPort context;private final SheetSyncRepository records;private final GoogleSheetsPort sheets;private final String spreadsheetKey;private final byte[] rowHashKey;
+ public CareerSheetSyncHandler(CareerSheetContextPort context,SheetSyncRepository records,GoogleSheetsPort sheets,String spreadsheetKey,byte[] rowHashKey){if(spreadsheetKey==null||!spreadsheetKey.matches("[A-Za-z0-9_-]{1,120}")||rowHashKey==null||rowHashKey.length!=32)throw new IllegalArgumentException("SHEETS_SPREADSHEET_KEY_REQUIRED");this.context=context;this.records=records;this.sheets=sheets;this.spreadsheetKey=spreadsheetKey;this.rowHashKey=rowHashKey.clone();}
+ public JobValues.Kind kind(){return JobValues.Kind.SHEETS_SYNC;}public Provider provider(){return Provider.GOOGLE_SHEETS;}
+ public Outcome execute(JobExecution.Claim claim){return sync(claim,false);}public Outcome reconcile(JobExecution.Claim claim){return sync(claim,true);}
+ private Outcome sync(JobExecution.Claim claim,boolean reconcile){if(claim.job().kind()!=kind()||!"experience".equals(claim.job().owner())||!claim.job().businessKey().equals("career-sheet:"+claim.job().resource()+":"+recipientFrom(claim.job().businessKey()))||!claim.job().businessKey().startsWith("career-sheet:"))return failed();UUID app=claim.job().resource();try{var source=context.read(app,UUID.randomUUID());var row=new CareerSheetRow(source.applicationId(),source.opportunityTitle(),source.name(),source.email(),source.submittedAt(),source.state(),source.approvedAnswers());String hash=hash(row);var record=records.prepare(app,spreadsheetKey,hash);String rowKey=app.toString();if(reconcile){var observed=sheets.contentHash(spreadsheetKey,rowKey);if(observed.isPresent()&&MessageDigest.isEqual(observed.get().getBytes(StandardCharsets.US_ASCII),hash.getBytes(StandardCharsets.US_ASCII))){records.synced(record);return success();}if(observed.isEmpty()&&!sheets.safeToCreateAfterConfirmedAbsence())return unknown();}
+   if(!reconcile&&record.state().equals("SYNCED")&&record.contentHash().equals(hash))return success();sheets.upsert(spreadsheetKey,rowKey,row,hash,claim.commandKey());records.synced(record);return success();
+  }catch(Problem.Failure failure){if(Set.of(ProblemCode.NOT_FOUND,ProblemCode.ACCESS_DENIED,ProblemCode.PROVIDER_RULE_VIOLATION).contains(failure.code))return failed();return unknown();}catch(RuntimeException uncertain){return unknown();}}
+ private static String recipientFrom(String key){int last=key.lastIndexOf(':');return last<0?"":key.substring(last+1);}
+ private String hash(CareerSheetRow row){try{Mac mac=Mac.getInstance("HmacSHA256");mac.init(new SecretKeySpec(rowHashKey,"HmacSHA256"));return HexFormat.of().formatHex(mac.doFinal(EventCodec.JSON.writeValueAsBytes(row)));}catch(Exception failure){throw new IllegalStateException("SHEETS_ROW_HASH_FAILED");}}
+ private static Outcome success(){return new Outcome(JobValues.State.SUCCEEDED,null,null);}private static Outcome unknown(){return new Outcome(JobValues.State.UNKNOWN,null,ProblemCode.PROVIDER_OUTCOME_UNKNOWN);}private static Outcome failed(){return new Outcome(JobValues.State.FAILED,null,ProblemCode.PROVIDER_RULE_VIOLATION);}
+}

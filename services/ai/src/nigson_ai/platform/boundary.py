@@ -129,6 +129,8 @@ class RequestBoundary:
                     data.extend(chunk)
                     if not message.get("more_body", False):
                         break
+                # Private actor assertions bind the exact JSON entity bytes.
+                scope["nigson.raw_body"] = bytes(data)
                 if (
                     data
                     and (single(b"content-type") or "").split(";", 1)[0].lower()

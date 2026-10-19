@@ -10,8 +10,9 @@ import com.nigson.shared.security.ActorAssertion;
 
 /** Party locks serialize owner commands; all joins stay in commerce. */
 public final class JdbcPartyRepository implements PartyRepository {
-    private final JdbcTemplate jdbc;private final Clock clock;private final int phase;private final com.nigson.commerce.platform.AuditWriter audit;
-    public JdbcPartyRepository(JdbcTemplate jdbc,Clock clock,int phase,com.nigson.commerce.platform.AuditWriter audit){if(phase<1||phase>5)throw new IllegalArgumentException("PHASE_REQUIRED");this.jdbc=jdbc;this.clock=clock;this.phase=phase;this.audit=audit;}
+    private final JdbcTemplate jdbc;private final Clock clock;private final int phase;private final com.nigson.commerce.platform.AuditWriter audit;private final String entitlement;
+    public JdbcPartyRepository(JdbcTemplate jdbc,Clock clock,int phase,com.nigson.commerce.platform.AuditWriter audit){this(jdbc,clock,phase,audit,"");}
+    public JdbcPartyRepository(JdbcTemplate jdbc,Clock clock,int phase,com.nigson.commerce.platform.AuditWriter audit,String entitlement){if(phase<1||phase>5)throw new IllegalArgumentException("PHASE_REQUIRED");this.jdbc=jdbc;this.clock=clock;this.phase=phase;this.audit=audit;this.entitlement=entitlement==null?"":entitlement;}
     private java.sql.Timestamp now(){return java.sql.Timestamp.from(clock.instant());}
     public void requireCurrent(ActorAssertion.Actor actor,boolean lock){
         if(actor==null)throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);
@@ -36,6 +37,11 @@ public final class JdbcPartyRepository implements PartyRepository {
     public List<PartyValues.Address> addresses(UUID party){
         var result=jdbc.query("SELECT a.* FROM commerce.address a WHERE a.party_id=? AND a.deleted_at IS NULL AND (a.organization_id IS NULL OR (? >= 3 AND EXISTS(SELECT 1 FROM commerce.organization_membership m JOIN commerce.organization o ON o.id=m.organization_id WHERE m.party_id=? AND m.organization_id=a.organization_id AND m.status='ACTIVE' AND o.status='ACTIVE'))) ORDER BY a.created_at,a.id LIMIT 101",(r,n)->row(r),party,phase,party);
         if(result.size()>100)throw new Problem.Failure(ProblemCode.PARTY_RULE_VIOLATION);return List.copyOf(result);
+    }
+    public List<PartyValues.Organization> organizations(UUID party){
+        if(phase<3)throw new Problem.Failure(ProblemCode.FEATURE_DISABLED);
+        var rows=jdbc.query("SELECT o.id,o.name,m.role,coalesce(e.status,'PENDING') AS entitlement_state FROM commerce.organization_membership m JOIN commerce.organization o ON o.id=m.organization_id LEFT JOIN commerce.account_entitlement e ON e.organization_id=o.id AND e.entitlement=? WHERE m.party_id=? AND m.status='ACTIVE' AND o.status='ACTIVE' ORDER BY lower(o.name),o.id LIMIT 101",(r,n)->new PartyValues.Organization(r.getObject("id",UUID.class),r.getString("name"),r.getString("role"),r.getString("entitlement_state")),entitlement,party);
+        if(rows.size()>100)throw new Problem.Failure(ProblemCode.PARTY_RULE_VIOLATION);return List.copyOf(rows);
     }
     public PartyValues.Address address(UUID party,UUID id){
         var rows=jdbc.query("SELECT * FROM commerce.address WHERE party_id=? AND id=? AND deleted_at IS NULL",(r,n)->row(r),party,id);
