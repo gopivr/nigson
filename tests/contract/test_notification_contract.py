@@ -29,3 +29,17 @@ class NotificationContracts(unittest.TestCase):
         self.assertEqual(integration['components']['schemas']['NotificationReceiptAcknowledged']['properties']['acknowledged']['const'],True)
         registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
         self.assertEqual((registry['API-189']['owner'],registry['API-189']['client'],registry['API-189']['scope']),('integration','nigson-commerce','notification.feedback.write'))
+
+    def test_api142_is_exact_private_signed_admin_template_registration(self):
+        integration=json.loads((ROOT/'contracts/openapi/integration.yaml').read_text())
+        operation=integration['paths']['/internal/v1/templates']['post']
+        self.assertEqual(operation['operationId'],'API-142')
+        self.assertEqual(operation['security'],[{'workload':['templates.write_WITH_SIGNED_ADMIN'],'signedActor':[]}])
+        self.assertEqual({p['name'] for p in operation['parameters'] if p['required']},{'Idempotency-Key'})
+        self.assertIn('If-Match',{p['name'] for p in operation['parameters']})
+        body=integration['components']['schemas']['NotificationTemplateInput']
+        self.assertFalse(body['additionalProperties'])
+        self.assertEqual(set(body['required']),{'code','revision','locale','channel','classification','body','variablesSchema','active'})
+        self.assertEqual(set(integration['components']['schemas']['NotificationTemplateView']['properties']),{'id','code','revision','active'})
+        registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
+        self.assertEqual((registry['API-142']['owner'],registry['API-142']['client'],registry['API-142']['scope']),('integration','nigson-commerce','templates.write_WITH_SIGNED_ADMIN'))

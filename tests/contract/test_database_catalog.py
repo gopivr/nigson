@@ -16,11 +16,11 @@ class DatabaseCatalogTest(unittest.TestCase):
         for path, content in generate().items():
             self.assertEqual((ROOT / path).read_text(), content, str(path))
         manifest = json.loads((ROOT / 'database/schema-manifest.json').read_text())
-        self.assertEqual(len(manifest['tables']), 126)
+        self.assertEqual(len(manifest['tables']), 127)
         for name, table in manifest['tables'].items():
-            if name in {'commerce.carrier_cancellation','commerce.file_transfer','integration.carrier_cancellation','integration.notification_dispatch'}:
+            if name in {'commerce.carrier_cancellation','commerce.file_transfer','experience.file_transfer','integration.carrier_cancellation','integration.notification_dispatch'}:
                 base = 'services/' + table['owner'] + '/src/main/resources/db/changelog/'
-                stem = {'commerce.carrier_cancellation':'025-bp1-carrier-cancellation','commerce.file_transfer':'023-bp1-file-transfer','integration.carrier_cancellation':'023-bp1-carrier-cancellation','integration.notification_dispatch':'024-bp1-notification-dispatch'}[name]
+                stem = {'commerce.carrier_cancellation':'025-bp1-carrier-cancellation','commerce.file_transfer':'023-bp1-file-transfer','experience.file_transfer':'025-bp1-file-transfer','integration.carrier_cancellation':'023-bp1-carrier-cancellation','integration.notification_dispatch':'024-bp1-notification-dispatch'}[name]
                 self.assertIn('CREATE TABLE ' + name + ' ', (ROOT / (base + stem + '.sql')).read_text())
                 continue
             self.assertTrue(table['creation_changeset'].startswith(table['owner'] + '-'))

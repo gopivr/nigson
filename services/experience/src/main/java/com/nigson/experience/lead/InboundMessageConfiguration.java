@@ -31,7 +31,7 @@ public class InboundMessageConfiguration {
         return new InboundMessageProcessor(jdbc,audit,store,phones,secrets,metrics,Clock.systemUTC(),manager,
             e.getRequiredProperty("NIGSON_TWILIO_ACCOUNT_SID"),e.getRequiredProperty("NIGSON_TWILIO_AUTH_TOKEN"),
             e.getRequiredProperty("NIGSON_TWILIO_WHATSAPP_FROM"),e.getRequiredProperty("NIGSON_TWILIO_WHATSAPP_PUBLIC_URL"),
-            e.getRequiredProperty("NIGSON_INBOUND_RETENTION_DAYS",Integer.class));
+            e.getRequiredProperty("NIGSON_INBOUND_RETENTION_DAYS",Integer.class),e.getRequiredProperty("NIGSON_LEAD_RECIPIENT_GROUP"));
     }
     @Bean InboundMessageController inboundMessageController(InboundMessageProcessor processor) { return new InboundMessageController(processor); }
     @Bean LeadMessagingContext leadMessagingContext(JdbcTemplate jdbc,com.nigson.experience.consent.PhoneSecrets phones,InboundMessageSecrets content,AuditWriter audit,MeterRegistry metrics,PlatformTransactionManager manager,Environment e){String raw=e.getProperty("NIGSON_MESSAGING_STAFF_REPLY_TEMPLATES","");var templates=raw.isBlank()?java.util.List.<String>of():java.util.List.of(raw.split(",",-1));return new LeadMessagingContext(jdbc,phones,content,audit,metrics,Clock.systemUTC(),manager,templates);}

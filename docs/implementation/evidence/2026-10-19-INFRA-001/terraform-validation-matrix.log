@@ -1,0 +1,155 @@
+
+== network validate ==
+Success! The configuration is valid.
+
+
+== network test ==
+tests/network.tftest.hcl... in progress
+  run "private_topology_plan"... pass
+  run "reject_public_vpc_range"... pass
+tests/network.tftest.hcl... tearing down
+tests/network.tftest.hcl... pass
+
+Success! 2 passed, 0 failed.
+
+== compute validate ==
+Success! The configuration is valid.
+
+
+== compute test ==
+tests/compute.tftest.hcl... in progress
+  run "keep_worker_private_and_deny_internal_paths"... pass
+  run "reject_public_worker_route"... pass
+tests/compute.tftest.hcl... tearing down
+tests/compute.tftest.hcl... pass
+
+Success! 2 passed, 0 failed.
+
+== database validate ==
+Success! The configuration is valid.
+
+
+== database test ==
+tests/database.tftest.hcl... in progress
+  run "production_database_is_private_and_protected"... pass
+  run "reject_invalid_postgres_major"... pass
+tests/database.tftest.hcl... tearing down
+tests/database.tftest.hcl... pass
+
+Success! 2 passed, 0 failed.
+
+== migrations validate ==
+Success! The configuration is valid.
+
+
+== migrations test ==
+tests/migrations.tftest.hcl... in progress
+  run "define_private_owner_migration_tasks"... pass
+  run "include_ai_only_at_bp5"... pass
+  run "reject_future_schema_release"... pass
+tests/migrations.tftest.hcl... tearing down
+tests/migrations.tftest.hcl... pass
+
+Success! 3 passed, 0 failed.
+
+== storage validate ==
+Success! The configuration is valid.
+
+
+== storage test ==
+tests/storage.tftest.hcl... in progress
+  run "secure_versioned_buckets_and_cloudfront_origin"... pass
+tests/storage.tftest.hcl... tearing down
+tests/storage.tftest.hcl... pass
+
+Success! 1 passed, 0 failed.
+
+== secrets validate ==
+Success! The configuration is valid.
+
+
+== secrets test ==
+tests/secrets.tftest.hcl... in progress
+  run "create_secret_metadata_without_values"... pass
+  run "reject_ai_secrets_before_bp5"... pass
+tests/secrets.tftest.hcl... tearing down
+tests/secrets.tftest.hcl... pass
+
+Success! 2 passed, 0 failed.
+
+== messaging validate ==
+Success! The configuration is valid.
+
+
+== messaging test ==
+tests/messaging.tftest.hcl... in progress
+  run "bp1_fanout_is_encrypted_filtered_and_role_scoped"... pass
+  run "ai_consumer_is_phase_five_only"... pass
+tests/messaging.tftest.hcl... tearing down
+tests/messaging.tftest.hcl... pass
+
+Success! 2 passed, 0 failed.
+
+== observability validate ==
+Success! The configuration is valid.
+
+
+== observability test ==
+tests/phases.tftest.hcl... in progress
+  run "bp1"... pass
+  run "bp5"... pass
+  run "operator_required"... pass
+  run "destination_required"... pass
+  run "policy_required"... pass
+  run "sampling_and_alarm_thresholds"... pass
+  run "encryption_required"... pass
+tests/phases.tftest.hcl... tearing down
+tests/phases.tftest.hcl... pass
+
+Success! 7 passed, 0 failed.
+
+== identity validate ==
+Success! The configuration is valid.
+
+
+== identity test ==
+tests/production.tftest.hcl... in progress
+  run "bootstrap_closed"... pass
+  run "two_replicas"... pass
+  run "select_x86_artifact_platform"... pass
+  run "deny_public_admin_cidr"... pass
+  run "deny_mock_image"... pass
+  run "require_retention_policy"... pass
+  run "require_private_admin_hostname"... pass
+  run "require_proxy_sources"... pass
+tests/production.tftest.hcl... tearing down
+tests/production.tftest.hcl... pass
+
+Success! 8 passed, 0 failed.
+
+== private-trust validate ==
+Success! The configuration is valid.
+
+
+== private-trust test ==
+tests/security.tftest.hcl... in progress
+  run "separate_keys_and_least_privilege"... pass
+  run "runtime_cannot_administer_keys"... pass
+  run "runtime_cannot_provision_session_keys"... pass
+  run "no_public_ingress_or_unregistered_hops"... pass
+  run "no_wildcard_key_administrator"... pass
+  run "no_ai_before_bp5"... pass
+tests/security.tftest.hcl... tearing down
+tests/security.tftest.hcl... pass
+
+Success! 6 passed, 0 failed.
+
+== stage validate ==
+Success! The configuration is valid.
+
+
+== prod validate ==
+Success! The configuration is valid.
+
+
+OVERALL_EXIT=0

@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface FileRepository {
     record Stored(UUID id, UUID owner, UUID organization, String key, String purpose, String mime,
-                  long size, String checksum, String classification, String status, long version,
+                  long size, String checksum, String classification, String status, String linkedResourceType, UUID linkedResourceId, long version,
                   String sourceKey, String finalKey, Instant uploadExpires, UUID scanCommand,
                   String sourceVersion, String sourceEtag, String transferState, Instant lease,
                   String scanHash, String scanResult, String scannerVersion) {}

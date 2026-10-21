@@ -27,8 +27,8 @@ public final class PrivateWorkload {
     }
     private static boolean matches(String template,String path) {
         // Explicit segment construction avoids URL decoding and regular-expression input from requests.
-        var regex=new StringBuilder("^");for(String segment:template.split("/",-1)){if(regex.length()>1)regex.append('/');if(segment.startsWith("{")&&segment.endsWith("}"))regex.append("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");else regex.append(Pattern.quote(segment));}regex.append('$');
-        if(!path.matches(regex.toString()))return false;String[] values=path.split("/",-1),segments=template.split("/",-1);for(int i=0;i<segments.length;i++)if(segments[i].startsWith("{")&&values[i].equals("00000000-0000-0000-0000-000000000000"))return false;return true;
+        var regex=new StringBuilder("^");for(String segment:template.split("/",-1)){if(regex.length()>1)regex.append('/');if(segment.equals("{key}"))regex.append("[a-z][a-z0-9.-]{0,119}");else if(segment.startsWith("{")&&segment.endsWith("}"))regex.append("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");else regex.append(Pattern.quote(segment));}regex.append('$');
+        if(!path.matches(regex.toString()))return false;String[] values=path.split("/",-1),segments=template.split("/",-1);for(int i=0;i<segments.length;i++)if(segments[i].startsWith("{")&&segments[i].endsWith("}")&&!segments[i].equals("{key}")&&values[i].equals("00000000-0000-0000-0000-000000000000"))return false;return true;
     }
     public Proof verify(String socketPeer,String method,String path,String authorization,String actorToken,UUID correlation) {
         return verify(socketPeer,method,path,authorization,actorToken,correlation,ActorAssertion.Binding.bodyHash(new byte[0]));

@@ -1,5 +1,32 @@
 [
   {
+    "api": "API-089",
+    "method": "GET",
+    "path": "/api/v1/staff/leads",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "leads.read_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-090",
+    "method": "GET",
+    "path": "/api/v1/staff/leads/{id}",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "leads.read_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
+    "api": "API-091",
+    "method": "PATCH",
+    "path": "/api/v1/staff/leads/{id}",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "leads.update_WITH_SIGNED_ACTOR",
+    "phase": 1
+  },
+  {
     "api": "API-088",
     "method": "POST",
     "path": "/api/v1/quote-requests",
@@ -537,6 +564,15 @@
     "owner": "experience",
     "client": "nigson-integration",
     "scope": "notification.read",
+    "phase": 1
+  },
+  {
+    "api": "API-139",
+    "method": "PUT",
+    "path": "/api/v1/experience/staff/configuration/{key}",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "configuration.write_WITH_SIGNED_ADMIN",
     "phase": 1
   },
   {

@@ -62,6 +62,10 @@ run "bootstrap_closed" {
     error_message = "Public identity entry must default deny; admin ingress is private."
   }
   assert {
+    condition     = aws_lb_listener.public.ssl_policy == "ELBSecurityPolicy-TLS13-1-2-2021-06" && aws_lb_listener.public.certificate_arn == var.public_certificate_arn && aws_lb_listener.admin.ssl_policy == "ELBSecurityPolicy-TLS13-1-2-2021-06" && aws_lb_listener.admin.certificate_arn == var.admin_certificate_arn
+    error_message = "Public and private identity listeners must use the approved TLS policy and their distinct configured certificates."
+  }
+  assert {
     condition     = jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].command == ["start", "--optimized"] && jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].readonlyRootFilesystem && jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].user == "1000:0" && length(jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].secrets) == 4
     error_message = "Permanent tasks must be optimized, non-root and have no bootstrap credentials."
   }

@@ -1,0 +1,13 @@
+EXP-LEAD-001 final native owner harness acceptance summary
+Harness: `ENV=test python3 scripts/experience_lead/verify.py` (exit 0; Java 25.0.2 / Maven 3.10.0)
+Docker state: isolated named test resources removed; platform harness preservation assertion passed.
+
+com.nigson.experience.BuildCompatibilityTest: 2 tests, 0 failures, 0 errors, 0 skipped
+com.nigson.experience.lead.LeadPersistenceTest: 4 tests, 0 failures, 0 errors, 0 skipped
+com.nigson.experience.lead.LeadHttpTest: 1 tests, 0 failures, 0 errors, 0 skipped
+com.nigson.experience.lead.InboundMessagePersistenceTest: 5 tests, 0 failures, 0 errors, 0 skipped
+com.nigson.experience.lead.QuoteLeadPersistenceTest: 4 tests, 0 failures, 0 errors, 0 skipped
+com.nigson.experience.lead.QuoteLeadHttpTest: 1 tests, 0 failures, 0 errors, 0 skipped
+
+Total: 17 tests, 0 failures, 0 errors, 0 skipped.
+Migration logs (fresh/repeat owner BP1 and BP5) use prefix `nigson-test-plat-25e06e36af-` in this directory.

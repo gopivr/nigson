@@ -103,7 +103,12 @@ def experience_contract():
     from distributor import extend_experience as distributor_extend
     from content_knowledge import extend as content_knowledge_extend
     from cms_content import extend as cms_content_extend
-    return cms_content_extend(content_knowledge_extend(report_extend_experience(audit_extend_experience(lead_extend_experience(distributor_extend(engagement_extend(consent_extend(experience_files_extend(extend_experience(contract))))))) )))
+    from experience_leads import extend_experience as experience_leads_extend
+    from experience_notification import extend_experience as experience_notification_extend
+    spec=extend_experience(contract)
+    for extension in (experience_files_extend,consent_extend,engagement_extend,distributor_extend,lead_extend_experience,experience_leads_extend,experience_notification_extend,audit_extend_experience,report_extend_experience,experience_platform_extend,content_knowledge_extend,cms_content_extend):
+        spec=extension(spec)
+    return spec
 
 def audit_extend_experience(spec):
     """API-138 Experience-owned read-only audit page; preserves the shared AuditDTO."""
@@ -128,6 +133,21 @@ def report_extend_experience(spec):
     spec['components']['securitySchemes']['workload']['flows']['clientCredentials']['scopes']['report.read_WITH_SIGNED_ANALYST']='Read sanitized Experience engagement aggregates with a signed current ANALYST actor'
     path='/api/v1/staff/reports/engagement'
     spec['paths'][path]={'get':{'operationId':'API-110','description':'Exact nigson-commerce workload and report.read_WITH_SIGNED_ANALYST scope with signed ANALYST actor proof issued after current staff authorization. Organization-scoped actors are denied because this report has no organization filter. Aggregate only Experience-owned lead, career application, review, newsletter subscription and campaign records over the required UTC [from,to) window (maximum 366 days). Does not return applicant/contact content. The Experience schema stores campaign definitions but no participation records, so entries is zero for currently untracked participation; the service does not infer Commerce reward or wheel data. Reject repeated/unknown parameters and request bodies. Response is no-store; successful reads append a minimal owner-local audit row and bounded metric. Read has no idempotency, If-Match or outbox side effect.','security':[{'workload':['report.read_WITH_SIGNED_ANALYST'],'signedActor':[]}],'parameters':[parameter('from','query',{'type':'string','format':'date-time','maxLength':40},True),parameter('to','query',{'type':'string','format':'date-time','maxLength':40},True)],'responses':{'200':{'description':'Sanitized Experience engagement summary','headers':{'Cache-Control':{'schema':{'const':'no-store'}}},'content':{'application/json':{'schema':REF('ExperienceEngagementReport')}}},**{str(code):{'description':desc,'content':{'application/problem+json':{'schema':{'$ref':'../problem/problem.schema.json'}}}} for code,desc in [(400,'Invalid range or query'),(401,'Authentication required'),(403,'Access denied'),(500,'Safe internal error')]}}}}
+    return spec
+
+def experience_platform_extend(spec):
+    """API-139 closed Experience platform configuration and operator replay."""
+    from authorization import REF, VERSION, object_schema, operation, parameter
+    schemas=spec['components']['schemas']
+    schemas['ExperienceConfigurationInput']=object_schema({'value':{'type':'object','additionalProperties':True,'maxProperties':32},'active':{'type':'boolean'},'reason':{'type':'string','minLength':10,'maxLength':500}})
+    schemas['ExperienceConfiguration']=object_schema({'key':{'type':'string','pattern':'^[a-z][a-z0-9.-]{0,119}$'},'revision':VERSION,'active':{'type':'boolean'},'version':VERSION})
+    spec['components']['securitySchemes']['workload']['flows']['clientCredentials']['scopes']['configuration.write_WITH_SIGNED_ADMIN']='Change typed Experience-owned configuration or replay a terminal Experience outbox event with a signed ADMIN actor'
+    path='/api/v1/experience/staff/configuration/{key}'
+    op=operation('API-139','Exact nigson-commerce workload and configuration.write_WITH_SIGNED_ADMIN with signed ADMIN actor proof; organization-scoped actors are denied. Keys are closed and typed by Experience. Current supported keys are experience.worker.controls (two booleans) and experience.queue.replay (one FAILED Experience outbox event UUID). No credentials or provider secrets are accepted. Immutable revisions use If-Match and Idempotency-Key; same-key replay returns the saved response and a different body conflicts. A queue replay changes only FAILED to PENDING, preserves its attempt count, and appends QUEUE_REPLAY audit in the same transaction. Worker controls are read dynamically by Experience workers; absent config preserves current worker behavior and a DB read failure pauses workers. No external publish occurs in the configuration transaction.','ExperienceConfiguration',[parameter('key','path',{'type':'string','pattern':'^[a-z][a-z0-9.-]{0,119}$'},True),parameter('If-Match','header',{'type':'string','pattern':'^"(0|[1-9][0-9]{0,18})"$'},True),parameter('Idempotency-Key','header',{'type':'string','minLength':1,'maxLength':100},True)])
+    op['security']=[{'workload':['configuration.write_WITH_SIGNED_ADMIN'],'signedActor':[]}]
+    op['requestBody']={'required':True,'content':{'application/json':{'schema':REF('ExperienceConfigurationInput')}}}
+    op['responses']={'200':{'description':'Configuration revision or replay command result','headers':{'ETag':{'schema':{'type':'string'}},'Cache-Control':{'schema':{'const':'no-store'}}},'content':{'application/json':{'schema':REF('ExperienceConfiguration')}}},**{str(code):{'description':desc,'content':{'application/problem+json':{'schema':{'$ref':'../problem/problem.schema.json'}}}} for code,desc in [(400,'Invalid or unknown request fields'),(401,'Authentication required'),(403,'Access denied'),(409,'Conflict or invalid transition'),(412,'Stale version'),(422,'Unregistered or invalid configuration key/value'),(500,'Safe internal error')]}}
+    spec['paths'][path]={'put':op}
     return spec
 
 def main():

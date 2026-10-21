@@ -1,0 +1,22 @@
+RUN scripts/infra/tests/deploy-stage-test.sh
+Stage deployment guard tests PASS
+RUN scripts/infra/tests/dockerfiles-test.sh
+Production Dockerfile input checks PASS
+RUN scripts/infra/tests/migration-target-policy-test.sh
+Migration target policy tests PASS
+RUN scripts/infra/tests/publish-images-test.sh
+Reusing immutable image nigson/stage/commerce:0123456789abcdef0123456789abcdef01234567-arm64 (sha256:0000000000000000000000000000000000000000000000000000000000000001)
+Reusing immutable image nigson/stage/commerce:0123456789abcdef0123456789abcdef01234567-arm64-migration (sha256:0000000000000000000000000000000000000000000000000000000000000001)
+Reusing immutable image nigson/stage/experience:0123456789abcdef0123456789abcdef01234567-arm64 (sha256:0000000000000000000000000000000000000000000000000000000000000001)
+Reusing immutable image nigson/stage/integration:0123456789abcdef0123456789abcdef01234567-arm64 (sha256:0000000000000000000000000000000000000000000000000000000000000001)
+Reusing immutable image nigson/stage/identity:0123456789abcdef0123456789abcdef01234567-arm64 (sha256:0000000000000000000000000000000000000000000000000000000000000001)
+Infrastructure artifact publication tests PASS
+RUN scripts/infra/tests/run-owner-migration-test.sh
+Owner migration launch tests PASS
+RUN scripts/infra/tests/smoke-stage-test.sh
+Stage smoke probe tests PASS
+RUN scripts/infra/tests/verify-rds-restore-test.sh
+RDS restore verification tests PASS
+RUN scripts/infra/tests/workflows-test.sh
+Workflow syntax, pinned actions, and permission boundaries PASS
+OVERALL_EXIT=0

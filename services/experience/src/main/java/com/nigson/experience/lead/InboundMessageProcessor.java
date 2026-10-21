@@ -22,12 +22,12 @@ public final class InboundMessageProcessor {
     private static final Set<String> FIELDS=Set.of("AccountSid","MessageSid","From","To","Body");
     private final JdbcTemplate jdbc; private final AuditWriter audit; private final PlatformStore store; private final PhoneSecrets phones;
     private final InboundMessageSecrets secrets; private final MeterRegistry metrics; private final Clock clock; private final TransactionTemplate tx;
-    private final String account, token, sender, publicUrl; private final int retentionDays;
+    private final String account, token, sender, publicUrl, recipientGroup; private final int retentionDays;
     public InboundMessageProcessor(JdbcTemplate jdbc,AuditWriter audit,PlatformStore store,PhoneSecrets phones,InboundMessageSecrets secrets,
-        MeterRegistry metrics,Clock clock,PlatformTransactionManager manager,String account,String token,String sender,String publicUrl,int retentionDays) {
+        MeterRegistry metrics,Clock clock,PlatformTransactionManager manager,String account,String token,String sender,String publicUrl,int retentionDays,String recipientGroup) {
         this.jdbc=jdbc;this.audit=audit;this.store=store;this.phones=phones;this.secrets=secrets;this.metrics=metrics;this.clock=clock;this.tx=new TransactionTemplate(manager);this.tx.setTimeout(5);
-        if(account==null||!account.matches("AC[0-9a-fA-F]{32}")||token==null||token.length()<32||sender==null||!sender.matches("whatsapp:\\+234[1-9][0-9]{9}")||publicUrl==null||!publicUrl.startsWith("https://")||!publicUrl.endsWith(PATH)||publicUrl.contains("?")||retentionDays<1||retentionDays>3650)throw new IllegalArgumentException("INBOUND_PROVIDER_POLICY_REQUIRED");
-        this.account=account;this.token=token;this.sender=sender;this.publicUrl=publicUrl;this.retentionDays=retentionDays;
+        if(account==null||!account.matches("AC[0-9a-fA-F]{32}")||token==null||token.length()<32||sender==null||!sender.matches("whatsapp:\\+234[1-9][0-9]{9}")||publicUrl==null||!publicUrl.startsWith("https://")||!publicUrl.endsWith(PATH)||publicUrl.contains("?")||retentionDays<1||retentionDays>3650||recipientGroup==null||!recipientGroup.matches("[A-Za-z0-9][A-Za-z0-9._:-]{0,99}"))throw new IllegalArgumentException("INBOUND_PROVIDER_POLICY_REQUIRED");
+        this.account=account;this.token=token;this.sender=sender;this.publicUrl=publicUrl;this.retentionDays=retentionDays;this.recipientGroup=recipientGroup;
     }
     public String accept(String signature,Map<String,String> form,UUID correlation) {
         if(form==null||form.size()<FIELDS.size()||form.size()>100||!form.keySet().containsAll(FIELDS)||form.entrySet().stream().anyMatch(e->e.getKey()==null||!e.getKey().matches("[A-Za-z][A-Za-z0-9_]{0,99}")||e.getValue()==null||e.getValue().length()>4096)||!account.equals(form.get("AccountSid"))||!SID.matcher(form.get("MessageSid")).matches()||!sender.equals(form.get("To"))||form.get("Body").isBlank()||form.get("Body").length()>4096||!form.get("Body").matches("(?s)[^\\p{Cc}]*"))throw ApiValues.invalid();
@@ -46,7 +46,7 @@ public final class InboundMessageProcessor {
                 lead=EventCodec.uuid7(clock.instant());
                 jdbc.update("INSERT INTO experience.lead(id,created_by,updated_by,type,name,email,subject,message,status,priority,source) VALUES (?,'twilio-inbound','twilio-inbound','CONTACT','WhatsApp contact',NULL,'WhatsApp inquiry','Verified WhatsApp inquiry; see linked private inbound record.','NEW','NORMAL','WHATSAPP_INBOUND')",lead);
                 jdbc.update("UPDATE experience.inbound_message SET disposition='LEAD_CREATED',lead_id=?,updated_at=?,updated_by='twilio-inbound',version=version+1 WHERE id=?",lead,Timestamp.from(clock.instant()),message);
-                event("lead.created.v1",lead,0,correlation,Map.of("lead_id",lead,"type","CONTACT","priority","NORMAL","recipient_group","SALES"));
+                event("lead.created.v1",lead,0,correlation,Map.of("lead_id",lead,"type","CONTACT","priority","NORMAL","recipient_group",recipientGroup));
             } else jdbc.update("UPDATE experience.inbound_message SET disposition=?,updated_at=?,updated_by='twilio-inbound',version=version+1 WHERE id=?",disposition,Timestamp.from(clock.instant()),message);
             audit.append("twilio-inbound",AuditValues.ActorKind.SERVICE,AuditValues.Action.CONSENT_CHANGE,AuditValues.Resource.NOTIFICATION,message,correlation,AuditValues.Reason.VERIFIED_PROVIDER,null,Map.of("disposition",disposition,"channel","WHATSAPP"),null);
             if(disposition.equals("OPT_OUT")){var payload=new LinkedHashMap<String,Object>();payload.put("party_id",null);payload.put("destination_hash",hash);payload.put("destination_kind","PHONE");payload.put("email_hash",null);payload.put("channel","WHATSAPP");payload.put("purpose","ALL");payload.put("granted",false);payload.put("revision",1);event("consent.changed.v1",message,1,correlation,payload);}

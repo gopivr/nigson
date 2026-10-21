@@ -6,6 +6,9 @@ on:
       - "infrastructure/terraform/**"
       - ".github/workflows/infra-plan.yml"
       - ".github/workflows/infra-artifacts.yml"
+      - ".github/workflows/deploy-stage.yml"
+      - "services/**/Dockerfile"
+      - "infrastructure/docker/**"
       - "docs/runbooks/deploy.md"
       - "scripts/infra/**"
   workflow_dispatch:
@@ -85,6 +88,8 @@ jobs:
         run: terraform -chdir=infrastructure/terraform/modules/database test
       - name: Test one-shot migration tasks
         run: terraform -chdir=infrastructure/terraform/modules/migrations test
+      - name: Test SNS and SQS ownership boundaries
+        run: terraform -chdir=infrastructure/terraform/modules/messaging test
       - name: Test S3 storage and access controls
         run: terraform -chdir=infrastructure/terraform/modules/storage test
       - name: Test KMS and secret phase gates
@@ -97,6 +102,10 @@ jobs:
         run: terraform -chdir=infrastructure/terraform/modules/private-trust test
       - name: Test immutable artifact publication gates
         run: bash scripts/infra/tests/publish-images-test.sh
+      - name: Test pinned production container inputs
+        run: bash scripts/infra/tests/dockerfiles-test.sh
+      - name: Test workflow permissions and environment boundaries
+        run: bash scripts/infra/tests/workflows-test.sh
       - name: Test production migration destination guards
         run: bash scripts/infra/tests/migration-target-policy-test.sh
       - name: Test one-shot migration launch and no-retry behavior

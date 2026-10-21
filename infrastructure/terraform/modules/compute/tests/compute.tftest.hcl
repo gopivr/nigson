@@ -95,6 +95,10 @@ run "keep_worker_private_and_deny_internal_paths" {
     error_message = "The public listener must explicitly deny /internal paths."
   }
   assert {
+    condition     = aws_lb_listener.https.protocol == "HTTPS" && aws_lb_listener.https.ssl_policy == "ELBSecurityPolicy-TLS13-1-2-2021-06" && aws_lb_listener.https.certificate_arn == var.public_certificate_arn && aws_lb_listener.http.protocol == "HTTP" && aws_lb_listener.http.default_action[0].redirect[0].protocol == "HTTPS"
+    error_message = "Public ingress must use the configured certificate and TLS policy, with HTTP redirected to HTTPS."
+  }
+  assert {
     condition     = jsondecode(aws_ecs_task_definition.service["commerce"].container_definitions)[0].readonlyRootFilesystem == true
     error_message = "Application containers must run with a read-only root filesystem."
   }

@@ -1,0 +1,6 @@
+Date: 2026-10-20 America/New_York
+Result: PASS, offline only
+Harness: scripts/platform/provider_check.py with ENV=test MODE=mock; pinned local WireMock/Testcontainers images; Java 25.0.2 and Maven 3.10.0.
+Observed FedEx mock burst: 24 HTTP rate requests, concurrency 6, elapsed 42 ms, throughput 571.43 requests/second, p50 6 ms, p95 26 ms, max 26 ms. These are local synthetic observations and do not establish a service SLO or route qualification.
+The harness reported success for Paystack/FedEx/SMS/WhatsApp mock success, failure, lost-response, reconciliation, state progression, redacted journal, reset and production isolation. Its own state-preservation assertion completed successfully.
+An initial sandboxed invocation stopped before tests because Docker socket access was denied. The same local-only command passed when run with the authorized Docker socket access. No provider-live endpoint or AWS was contacted.

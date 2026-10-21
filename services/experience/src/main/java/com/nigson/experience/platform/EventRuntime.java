@@ -20,10 +20,13 @@ import java.util.concurrent.*;
 public class EventRuntime implements AutoCloseable {
  private final ScheduledExecutorService executor=Executors.newScheduledThreadPool(2);
  private final EventPump pump;
+ private final WorkerControls controls;
+ private final Telemetry telemetry;
  public EventRuntime(PlatformStore store,Telemetry telemetry,@Value("${APP_ENV}") String environment,
    @Value("${NIGSON_EVENT_ENDPOINT:}") String endpoint,@Value("${AWS_REGION:us-east-1}") String region,
    @Value("${NIGSON_EVENT_TOPIC}") String topic,@Value("${NIGSON_EVENT_QUEUE}") String queue,
-   @Value("${NIGSON_EVENT_DLQ}") String dead,@Value("${SCHEMA_RELEASE:BP1}") String release,org.springframework.beans.factory.ObjectProvider<EventHandler> handlers) {
+   @Value("${NIGSON_EVENT_DLQ}") String dead,@Value("${SCHEMA_RELEASE:BP1}") String release,org.springframework.beans.factory.ObjectProvider<EventHandler> handlers,WorkerControls controls) {
+   this.controls=controls;this.telemetry=telemetry;
    if(!release.matches("BP[1-5]")) throw new IllegalArgumentException("RELEASE_INVALID");
    var sns=SnsClient.builder().region(Region.of(region));var sqs=SqsClient.builder().region(Region.of(region));
    var bounds=ClientOverrideConfiguration.builder().apiCallTimeout(Duration.ofSeconds(10)).apiCallAttemptTimeout(Duration.ofSeconds(8)).build();sns.overrideConfiguration(bounds);sqs.overrideConfiguration(ClientOverrideConfiguration.builder().apiCallTimeout(Duration.ofSeconds(35)).apiCallAttemptTimeout(Duration.ofSeconds(30)).build());
@@ -40,8 +43,8 @@ public class EventRuntime implements AutoCloseable {
    pump=new EventPump(store,sns.build(),sqs.build(),topic,queue,dead,Integer.parseInt(release.substring(2)),registered,telemetry);
  }
  @EventListener(ApplicationReadyEvent.class) public void start() {
-  executor.scheduleWithFixedDelay(() -> { try {pump.relay();} catch(RuntimeException failure) {org.slf4j.LoggerFactory.getLogger(getClass()).warn("OUTBOX_RELAY_UNAVAILABLE");} },0,1,TimeUnit.SECONDS);
-  executor.scheduleWithFixedDelay(() -> {try {pump.poll();} catch(RuntimeException failure) {org.slf4j.LoggerFactory.getLogger(getClass()).warn("EVENT_POLL_UNAVAILABLE");}},0,1,TimeUnit.SECONDS);
+  executor.scheduleWithFixedDelay(() -> { try {if(controls.enabled("relayEnabled"))pump.relay();else this.telemetry.metrics.counter("nigson.worker.paused","owner","experience","worker","relay").increment();} catch(RuntimeException failure) {org.slf4j.LoggerFactory.getLogger(getClass()).warn("OUTBOX_RELAY_UNAVAILABLE");} },0,1,TimeUnit.SECONDS);
+  executor.scheduleWithFixedDelay(() -> {try {if(controls.enabled("consumerEnabled"))pump.poll();else this.telemetry.metrics.counter("nigson.worker.paused","owner","experience","worker","consumer").increment();} catch(RuntimeException failure) {org.slf4j.LoggerFactory.getLogger(getClass()).warn("EVENT_POLL_UNAVAILABLE");}},0,1,TimeUnit.SECONDS);
  }
  @Override public void close() {executor.shutdownNow();pump.close();}
 }
