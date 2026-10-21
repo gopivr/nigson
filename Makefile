@@ -2,6 +2,7 @@
 UV ?= uv
 PROFILE ?= core
 ENV ?= local
+MAVEN_BIN ?= ./mvnw
 export PROFILE ENV
 export MAVEN_USER_HOME := $(CURDIR)/.build/maven
 export UV_CACHE_DIR := $(CURDIR)/.build/uv-cache
@@ -13,10 +14,10 @@ status-check:
 	python3 scripts/check_repository.py
 
 java-build:
-	./mvnw -B verify
+	$(MAVEN_BIN) -B verify
 
 dependency-check:
-	./mvnw -B dependency:tree -DoutputType=json -DoutputFile=target/dependencies.json
+	$(MAVEN_BIN) -B dependency:tree -DoutputType=json -DoutputFile=target/dependencies.json
 	python3 scripts/java_dependency_lock.py --check
 
 build test: java-build

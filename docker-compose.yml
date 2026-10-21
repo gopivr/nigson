@@ -140,6 +140,10 @@ services:
       NIGSON_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?Missing COMMERCE_DB_PASSWORD}
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
       NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
+      NIGSON_BFF_ALLOWED_ORIGINS: http://localhost:8090
+      NIGSON_BFF_CALLBACK: http://localhost:8090/proxy/commerce/bff/callback
+      NIGSON_BFF_RETURN_PATHS: /
+      NIGSON_INSECURE_LOCAL_COOKIE: "true"
       SERVER_PORT: 8081
     ports:
       - "127.0.0.1:${COMMERCE_PORT:-8081}:8081"

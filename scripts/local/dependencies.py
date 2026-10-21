@@ -298,13 +298,15 @@ def main() -> int:
         elif args.action == "run-core":
             migrate()
             command("--profile", "app", "build", *OWNERS)
-            command("--profile", "app", "up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "180", *OWNERS)
+            # `build` may have produced new local images. Let Compose recreate only
+            # services whose image/config changed so run-core actually runs the build.
+            command("--profile", "app", "up", "--detach", "--wait", "--wait-timeout", "180", *OWNERS)
         elif args.action == "run-ai":
             if os.environ.get("PROFILE") != "ai":
                 raise ValueError("run-ai requires PROFILE=ai")
             migrate()
             command("build", "ai")
-            command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "180", "ai")
+            command("up", "--detach", "--wait", "--wait-timeout", "180", "ai")
         elif args.action == "down":
             command("--profile", "*", "down", "--timeout", "30")  # Preserve every named volume.
         elif args.action == "bootstrap":

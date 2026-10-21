@@ -3,11 +3,13 @@ package com.nigson.experience.lead;
 import java.util.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 import com.nigson.shared.observability.WireContext;
 import com.nigson.shared.problem.ApiValues;
 
 @RestController
+@ConditionalOnProperty(name="NIGSON_MESSAGING_INBOUND_ENABLED",havingValue="true")
 public final class InboundMessageController {
     private final InboundMessageProcessor processor;
     public InboundMessageController(InboundMessageProcessor processor){this.processor=processor;}

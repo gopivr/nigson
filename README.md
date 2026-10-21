@@ -28,10 +28,11 @@ commands will be documented when their roadmap tasks implement them. See
 and [session reports](docs/implementation/) for commands actually executed.
 
 Toolchain: Oracle JDK 25.0.2+10-LTS-69, Spring Boot 4.1.1, Modulith 2.1.1,
-checksum-pinned Maven 3.9.11 wrapper, PostgreSQL 18 target and Python 3.12.12/uv
+checksum-pinned Maven 3.10.0 wrapper, PostgreSQL 18 target and Python 3.12.12/uv
 0.9.3 for the AI profile only. See [DEPENDENCY_LOCK.md](docs/DEPENDENCY_LOCK.md)
 for tested locks, compatible security patches and verification commands.
-Set `JAVA_HOME` to that JDK, then run `make verify`. `make verify PROFILE=ai`
+Set `JAVA_HOME` to that JDK, then run `make verify`. `MAVEN_BIN` can select an
+installed Maven 3.10.0 or newer when needed. `make verify PROFILE=ai`
 additionally installs the locked Python dependencies and builds/tests the BP5
 package foundation; core builds never require Python. `UV` can select your
 installed uv executable. Build caches stay in `.build/`. These bootstraps contain
@@ -40,12 +41,15 @@ accounts, senders, approved templates and routes; missing credentials do not
 block offline adapters and stateful mocks. No tax or campaign policy is inferred.
 
 The foundation local workflow is `make local-up`, `make migrate ENV=local`,
-`make seed ENV=local FIXTURE_PROFILE=foundation`, then `make run-core`.
+`make seed ENV=local FIXTURE_PROFILE=foundation`, then `make run-core`. Follow
+the [Run Nigson locally](docs/LOCAL_APPLICATION_GUIDE.md) guide and its
+[interactive API/AI demo](docs/demo/index.html) for local testing. The guide includes the complete
+first-run sequence, service addresses, health checks and shutdown steps.
 `make cold-start` qualifies that workflow twice on fresh isolated test volumes
 and preserves the running `nigson-local` stack. Owner migrations and non-root
 application Docker runtimes, owner schemas and stateful provider mocks are
 implemented; business APIs remain in their roadmap tasks. See the local development
-guide for guards, health URLs and optional vector/AI qualification.
+guide for guards, fixtures and optional vector/AI qualification.
 
 The [platform observability runbook](docs/PLATFORM_OBSERVABILITY.md) documents safe
 errors, transactional audit, correlation, owned SDK telemetry, bounded ADOT exports

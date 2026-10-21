@@ -5,8 +5,9 @@ Specification 1.1.0 / FOUND-002, verified 5 October 2026 on macOS ARM64.
 | Tool or dependency | Pin / source |
 |---|---|
 | Java compiler/runtime | Oracle JDK 25.0.2+10-LTS-69, Oracle Corporation |
-| Maven | 3.9.11, official only-script wrapper 3.3.4 |
-| Maven ZIP SHA256 | `0d7125e8c91097b36edb990ea5934e6c68b4440eef4ea96510a0f6815e7eeadb` |
+| Maven | 3.10.0, official only-script wrapper 3.3.4 |
+| Maven ZIP SHA256 | `1f6d9909266510f039f59aa0e13dcd2c66da85f043e56276e41f2918f8bddaff` |
+| Maven ZIP SHA512 | `22d31676d5b92ed53308c19ecded3245d0efd0cddfec51ec7bab62f4f13ad70ddddceff8e62940e0e8e2421f3cde8106737f4becec0aa034ffeff2a754e88337` |
 | Spring Boot parent/BOM/plugins | 4.1.1 |
 | Spring Modulith BOM | 2.1.1 |
 | Maven Enforcer | 3.6.2 |
@@ -64,7 +65,8 @@ guarantee that the future deployed application has no vulnerabilities.
 ## Reproducible build commands
 
 Set JAVA_HOME to the pinned JDK. Use `make verify` for Java and dependency-lock
-verification. `make verify PROFILE=ai` adds Python; `UV` may specify an installed
+verification. `MAVEN_BIN` can select another installed Maven 3.10.0+ if needed.
+`make verify PROFILE=ai` adds Python; `UV` may specify an installed
 uv 0.9.3 path. Core builds never resolve Python or call model providers.
 
 ```bash
@@ -73,9 +75,10 @@ make verify
 make verify PROFILE=ai UV=.build/uv-package/bin/uv
 ```
 
-The Maven wrapper validates the downloaded ZIP SHA256; the ZIP was independently
-compared to Maven Central's published SHA512. `.mvn/maven.config` puts dependency
-cache in `.build/m2`, and Make puts wrapper/uv/interpreter/environments in `.build/`.
+The Maven wrapper validates the downloaded ZIP SHA256. The Maven 3.10.0 ZIP's
+SHA256 was computed from the archive and its SHA512 matched Apache's published
+checksum. `.mvn/maven.config` puts dependency cache in `.build/m2`, and Make puts
+wrapper/uv/interpreter/environments in `.build/`.
 Do not remove checksum validation to work around a download failure.
 
 After `dependency:tree -DoutputType=json -DoutputFile=target/dependencies.json`,

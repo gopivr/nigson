@@ -2,6 +2,7 @@ package com.nigson.experience.lead;
 
 import java.util.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import com.nigson.shared.problem.*;
 import com.nigson.shared.security.PrivateWorkload;
 
 @RestController
+@ConditionalOnProperty(name="NIGSON_MESSAGING_INBOUND_ENABLED",havingValue="true")
 public final class LeadMessagingSuppressionController {
     private final LeadMessagingSuppressionCheck check;
     public LeadMessagingSuppressionController(LeadMessagingSuppressionCheck check){this.check=check;}

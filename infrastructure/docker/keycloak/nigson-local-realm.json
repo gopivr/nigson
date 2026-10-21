@@ -43,10 +43,12 @@
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": false,
       "redirectUris": [
-        "http://localhost:8081/bff/callback"
+        "http://localhost:8081/bff/callback",
+        "http://localhost:8090/proxy/commerce/bff/callback"
       ],
       "webOrigins": [
-        "http://localhost:8081"
+        "http://localhost:8081",
+        "http://localhost:8090"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
