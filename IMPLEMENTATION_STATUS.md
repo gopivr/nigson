@@ -8,6 +8,16 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+LOCAL-CART-MARKET — DONE locally. Empty markets list blocked frontend cart creation; completed approved synthetic NG destination with guarded repeatable seed_demo_pricing.py --with-cart-destination. Markets now returns NG; real customer/validator cart create201, add-line200 and persisted-read200 pass, prior contents restored.
+
+LOCAL-DEMO-PRICING — DONE locally. User-approved synthetic NGN retail prices for24 demo electronics, zero-tax test policy and synthetic returns revision applied repeat-safely. All24 public price APIs and customer/validator sessions return200 with exact amounts; no application rebuild required. Script: scripts/local/seed_demo_pricing.py.
+
+LOCAL-DOCKER-STORAGE-001 — DONE locally. Diagnosed full macOS Data volume (267 MiB free), recovered Docker storage after authorized restart/cache cleanup, repaired generated Maven metadata and added build disk preflight (22 tests pass). make run-core completed successfully; Commerce/Experience/Integration healthy and Keycloak discovery passed; database volumes preserved. Evidence: docs/implementation/2026-11-02-LOCAL-DOCKER-STORAGE-001.md.
+
+BP2-BP5-AUDIT — VERIFIED locally for audit/scoped corrections. Restored missing review POST contract and registration route catalogs, implemented explicit Bedrock/Titan provider ports. Fresh native57 Java/no skips and38 AI/one real-identity fixture skip,107 contracts and schema/repository checks pass. BP4 operational acceptance and BP5 production runtime/source-worker/provider activation remain open; no production completeness inferred. Evidence: docs/implementation/2026-11-02-BP2-BP5-AUDIT.md.
+
+LOCAL-DISTRIBUTOR-001 — VERIFIED locally. Enabled approved local BP3 migrations/scopes, fixed signed browser relay and nullable entitlement payload, added honest sample document/staff review UI. Fresh customer submission/replay/IDOR/CSRF and distinct reviewer approval202 with actual Commerce entitlement acknowledgement passed. Existing pending command reconciled; duplicate-business rejection fixture retained for investigation. Evidence: docs/implementation/2026-11-02-LOCAL-DISTRIBUTOR-001.md. No production/provider qualification implied.
+
 LOCAL-ADMIN-001 — DONE locally. Existing admin fixture now has all seven Commerce staff roles, including ADMIN. Real Keycloak/BFF session and staff users/products/inventory/orders HTTP200 verified; repeated grant passed. Password/MFA/guards and other accounts unchanged. Guide: `docs/DEMO_VALIDATOR_GUIDE.md`; evidence: `docs/implementation/2026-11-01-LOCAL-ADMIN-001.md`. No commit created.
 
 LOCAL-CATALOGUE-VISIBILITY-001 — DONE locally. Added/applied repeatable local `seed_electronics.py --publish`; all24 electronics are ACTIVE/published and eligible in enabled NG catalogue. Anonymous catalogue/details, eight category filters,20+4 pagination, and separate CUSTOMER-only retailA/retailB sessions passed. No role widening, price/tax/delivery/checkout configuration or unrelated product publication. Evidence: `docs/implementation/2026-11-01-LOCAL-CATALOGUE-VISIBILITY-001.md`. No commit created.

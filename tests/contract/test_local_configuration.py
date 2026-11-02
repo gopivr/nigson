@@ -14,6 +14,18 @@ SPEC.loader.exec_module(local)
 
 
 class LocalIsolationTests(unittest.TestCase):
+    def test_low_disk_space_prevents_docker_build(self):
+        from types import SimpleNamespace
+        with patch.object(local.shutil, "disk_usage", return_value=SimpleNamespace(free=267 * 1024**2)), patch.object(local.subprocess, "run") as docker:
+            with self.assertRaisesRegex(ValueError, "Insufficient host disk space"):
+                local.command("build", "commerce")
+            docker.assert_not_called()
+
+    def test_sufficient_disk_space_allows_preflight(self):
+        from types import SimpleNamespace
+        with patch.object(local.shutil, "disk_usage", return_value=SimpleNamespace(free=10 * 1024**3)):
+            local.require_build_space()
+
     def test_down_includes_every_profile_and_retains_volumes(self):
         with patch("sys.argv", ["dependencies.py", "down"]), patch.object(local, "validate", return_value={}), patch.object(local, "command") as docker:
             self.assertEqual(local.main(), 0)

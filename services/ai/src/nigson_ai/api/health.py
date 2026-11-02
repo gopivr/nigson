@@ -170,6 +170,20 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         LocalOwnerTools() if required("APP_ENV") in {"local", "test"} else None
     )
     application.state.assistant_test_model_enabled = required("APP_ENV") in {"local", "test"}
+    provider_mode = os.environ.get("NIGSON_AI_PROVIDER_MODE", "LOCAL")
+    application.state.ai_embedding_provider = application.state.ai_knowledge_mock
+    if provider_mode == "BEDROCK":
+        # Explicit selection never activates or approves models/policies/rates.
+        # Existing gateway budget and evaluation gates still govern every run.
+        from nigson_ai.providers.bedrock import BedrockProvider, TitanEmbeddingProvider
+
+        approved = frozenset(model for provider, model in application.state.ai_model_capabilities if provider == "BEDROCK")
+        application.state.assistant_provider = BedrockProvider(region, approved)
+        application.state.ai_embedding_provider = TitanEmbeddingProvider(region, approved)
+        application.state.ai_provider_mock = None
+        application.state.assistant_test_model_enabled = False
+    elif provider_mode != "LOCAL":
+        raise ValueError("AI_PROVIDER_MODE_INVALID")
     handler = logging.StreamHandler()
     handler.setFormatter(SafeFormatter(required("APP_ENV")))
     logging.getLogger().handlers = [handler]

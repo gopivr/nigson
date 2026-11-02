@@ -516,7 +516,10 @@ async def send_message(
         await _audit(connection, actor, "AI_RUN_START", "AI_RUN", run_id, {"state": "RUNNING", "policyRevision": int(policy[5]), "promptRevision": prompt_version[:80], "sourceCount": len(evidence), "toolCount": len(tool_facts)})
 
     try:
-        reply = provider.generate(
+        import asyncio
+
+        reply = await asyncio.to_thread(
+            provider.generate,
             str(run_id), str(model_id), str(prompt_template), payload.message,
             tuple((x["id"], x["text"]) for x in evidence), tool_facts=tool_facts,
             max_input_tokens=int(parameters["maximumInputTokens"]),

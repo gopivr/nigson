@@ -41,3 +41,27 @@ Open http://localhost:4200/admin/inventory/products with the validation login. T
 The existing local `admin` fixture (email `admin@example.invalid`) also has all seven application staff roles, including ADMIN, and can use http://localhost:4200/admin. Its password remains the local `KEYCLOAK_FIXTURE_PASSWORD`. Sign out and back in, or refresh an authenticated page, to refresh the browser's session roles. Actual access to staff users, products, inventory and orders was verified.
 
 The local-only grant can be checked/reapplied with `python3 scripts/local/grant_admin.py` after this existing fixture has signed in once. It targets the checked-in admin identity subject and effective issuer, adds an audit record and does not alter passwords or MFA settings. Recent MFA remains required for sensitive changes.
+
+## Local BP3 distributor testing
+
+The local schema and application phase are now BP3. Sign in at
+`http://localhost:4200` with `admin` or `demo.validator@example.invalid` and the
+local fixture password (`mock-local-user`). Distributor applications and staff
+review now go through Commerce, which enforces the browser session, CSRF, staff
+role and signed owner-service delegation.
+
+On localhost, the application form offers an explicitly synthetic sample
+registration document belonging to the signed-in fixture party. Select its
+checkbox before submitting. It represents test bytes only, never a genuine
+business registration or scanner/provider qualification. The staff reviewer must
+confirm document review. Approval requires a different reviewer account: review
+as `admin`, then approve as `demo.validator@example.invalid` (or vice versa).
+The UI waits for the real Commerce entitlement acknowledgement before displaying
+approval. Required commercial prices/taxes/delivery rules remain unconfigured.
+
+After local emulator data loss, restore only the local actor trust and sample
+objects using `python3 scripts/local/restore_actor_key.py` and
+`python3 scripts/local/seed_distributor_documents.py`, then restart Commerce and
+Experience to load changed actor settings. These commands preserve linked
+applications/documents and existing identities. New independent sample sets may
+be created with an explicit `--batch` value. No production deployment is implied.

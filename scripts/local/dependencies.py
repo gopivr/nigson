@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -26,7 +27,22 @@ def profiles() -> list[str]:
     return ["--profile", "provider-mocks"] + ([] if selected == "core" else ["--profile", selected])
 
 
+def require_build_space() -> None:
+    """Stop before Docker writes layers when the host filesystem is nearly full."""
+    free = shutil.disk_usage(ROOT).free
+    minimum = 5 * 1024**3
+    if free < minimum:
+        raise ValueError(
+            f"Insufficient host disk space for Docker build: {free / 1024**3:.1f} GiB free; "
+            "free at least 5 GiB before retrying. If Docker reports metadata_v2.db "
+            "input/output errors, restart Docker Desktop after freeing space. "
+            "Preserve database volumes; do not factory-reset Docker"
+        )
+
+
 def command(*arguments: str, capture: bool = False) -> str:
+    if "build" in arguments:
+        require_build_space()
     envfile = ROOT / ".env"
     if not envfile.is_file():
         envfile = ROOT / ".env.example"
