@@ -40,6 +40,22 @@ make local-status
 
 `run-core` reapplies migrations safely, builds the Commerce, Experience, and Integration images, and starts the services. Commerce contains the BFF and business transaction boundary. Integration remains an internal worker; its local port is bound to loopback for development tools.
 
+## Demo table data
+
+After local migrations, populate every installed application table with synthetic testing records:
+
+```sh
+python3 scripts/local/seed_demo.py --apply
+```
+
+Omit `--apply` to review SQL. Repeating the command preserves existing records and does not duplicate fixture primary keys. It requires a local Unix Docker endpoint and `ENV`/`APP_ENV` set to `local` or `test`. Unique collisions with unrelated records fail and roll back the transaction.
+
+The BP1 local database has 78 installed application tables. Fixtures include a demo solar panel/SKU, NGN test price, warehouse stock, customer/address, cancelled order, failed payment, rejected refund, draft content, lead, and suppressed notifications. Commercial market/price/delivery/promotion configuration stays disabled; these records do not establish tax, provider or market approvals. The base seed creates a customer without a login or active staff grant; the optional validation-user provisioning step links that customer to the dedicated staff/customer test login. File/encryption records are rejected opaque fixtures rather than downloadable files or valid encrypted personal data. The expired synthetic session may be removed by normal session cleanup.
+
+No migrations run, no provider calls are made, and no Keycloak or migration bookkeeping tables are changed. Later-release tables that are absent are reported rather than created. BP1 is verified against PostgreSQL; later-release fixture execution has not been qualified. The optional separate AI database can be targeted with `--service vector-db` when installed.
+
+The dedicated validation account and API request examples are documented in [Demo API validation](DEMO_VALIDATOR_GUIDE.md).
+
 ## Local endpoints
 
 | Component | Address | Health check |
@@ -76,6 +92,12 @@ Open <http://localhost:8090>. The static page embeds operations from the Commerc
 The small Python server serves the static file and proxies only to local Commerce, Experience, and AI ports. It accepts requests from its exact localhost origin, forwards an explicit header allowlist, preserves Commerce BFF cookies, and never forwards browser identity assertions. Integration workload APIs appear as private catalog entries but cannot be called through the demo. The proxy is a local development helper, not a deployment component.
 
 The default Compose configuration leaves application identity/security inputs unset. Commerce's foundation profile permits health checks and denies its API routes; BFF sign-in stays closed, and `/bff/session` or `/bff/login` can return `401 AUTH_REQUIRED`. The workbench checks session readiness before starting Keycloak sign-in and explains this configuration gate. Follow [the session trust runbook](runbooks/session-trust.md) for the complete BFF profile; setting only `NIGSON_SECURITY_ENABLED=true` is insufficient. The workbench does not bypass authorization or fabricate data. Seeded identity users do not imply seeded catalogue, price, tax, carrier, campaign, or policy configuration.
+
+For the MFE on `http://localhost:4200`, the ignored local `.env` may set `NIGSON_SECURITY_ENABLED=true`, `NIGSON_BFF_CALLBACK=http://localhost:4200/bff/callback`, `NIGSON_BFF_ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8090`, and `NIGSON_BFF_RETURN_PATHS=/,/account,/shop,/checkout`. The callback uses the same browser hostname as the MFE so the pending BFF cookie returns to Commerce. Compose passes through the remaining session-encryption, local KMS actor-signing, workload, and pinned actor-public-key settings; supply them only from the local session-trust runbook. The local Keycloak import configures a separate registration service account. The MFE signup form posts to `/bff/register`; Commerce creates the Keycloak identity and never stores the password. After registration, continue through the regular sign-in button. Existing persistent realms are not overwritten by realm import; apply the callback URI and registration client/service-account mapping without deleting identity volumes.
+
+The sign-in button starts the BFF authorization-code/PKCE flow and opens the local Keycloak page at `http://localhost:8180`. That page uses Nigson branding but remains hosted by Keycloak, so the MFE never receives the password. Compose mounts the checked-in theme read-only; the `nigson-local` realm selection persists in the existing identity database. Use `http://localhost:4200` for the MFE; if it is opened at `127.0.0.1:4200`, the sign-in action switches the BFF request to `localhost` to match the configured callback and preserve the host-only pending-session cookie. The BFF retains its server-side session and CSRF protections.
+
+If an old `/bff/callback` page shows `AUTH_REQUIRED`, return to the MFE and start sign-in again; authorization codes and pending state are one-use. The persistent Keycloak `nigson-bff` client secret must match `NIGSON_BFF_CLIENT_SECRET` from `.env`/Compose. If you change that setting, update the local Keycloak client's secret as well; realm import does not overwrite an existing realm.
 
 To exercise implemented APIs before configuring the interactive BFF profile, run their owner acceptance targets. These start real HTTP applications against isolated test databases and stateful local mocks; they do not use or erase the `nigson-local` development volumes. For example:
 

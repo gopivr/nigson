@@ -177,6 +177,100 @@ def wait_identity(config: dict) -> None:
     raise ValueError("Local Keycloak did not become ready within 180 seconds")
 
 
+def configure_registration(config: dict) -> None:
+    """Ensure the local realm has the separate, local-only user-registration client."""
+    values = settings()
+    if values.get("NIGSON_REGISTRATION_ENABLED", "true").lower() not in {"1", "true", "yes"}:
+        return
+    client_id = values.get("NIGSON_REGISTRATION_CLIENT_ID", "nigson-registration")
+    secret = values.get("NIGSON_REGISTRATION_CLIENT_SECRET", "mock-registration-local-secret-32-bytes")
+    if client_id != "nigson-registration" or len(secret) < 32 or len(secret) > 512:
+        raise ValueError("Invalid local registration client settings")
+    port = int(config["services"]["keycloak"]["ports"][0]["published"])
+    base = f"http://127.0.0.1:{port}"
+
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, req, fp, code, msg, headers, newurl):
+            raise ValueError("Local identity redirect refused")
+
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
+
+    def request(path: str, method: str = "GET", payload=None, token=None, form=False):
+        headers = {}; data = None
+        if payload is not None:
+            data = (urllib.parse.urlencode(payload) if form else json.dumps(payload)).encode()
+            headers["Content-Type"] = "application/x-www-form-urlencoded" if form else "application/json"
+        if token: headers["Authorization"] = "Bearer " + token
+        try:
+            with opener.open(urllib.request.Request(base + path, data=data, headers=headers, method=method), timeout=10) as response:
+                body = response.read(65537)
+                if len(body) > 65536: raise ValueError("Local identity response exceeded its bound")
+                return json.loads(body) if body else None
+        except urllib.error.HTTPError as error:
+            # The operation path contains no credentials and pinpoints a local
+            # bootstrap contract mismatch without echoing Keycloak's response.
+            raise ValueError(f"Local Keycloak registration setup refused (HTTP {error.code}, {method} {path})") from None
+
+    # Once installed, the dedicated least-privilege client can verify that it
+    # still has user-management access. This keeps ordinary local restarts from
+    # depending on the temporary/bootstrap administrator password.
+    try:
+        registration_token = request("/realms/nigson-local/protocol/openid-connect/token", "POST", {
+            "grant_type": "client_credentials", "client_id": client_id, "client_secret": secret}, form=True).get("access_token")
+        if registration_token:
+            managed_users = request("/admin/realms/nigson-local/users?max=1", token=registration_token)
+            if isinstance(managed_users, list):
+                print("PASS: existing local Keycloak registration client has user-management access")
+                return
+    except ValueError as error:
+        if not any(f"HTTP {status}" in str(error) for status in (400, 401, 403, 404)):
+            raise
+
+    admin_username, admin_password = keycloak_bootstrap_credentials()
+    admin_token = request("/realms/master/protocol/openid-connect/token", "POST", {
+        "grant_type": "password", "client_id": "admin-cli", "username": admin_username,
+        "password": admin_password}, form=True).get("access_token")
+    if not admin_token:
+        raise ValueError("Local Keycloak registration setup could not authenticate")
+    admin = "/admin/realms/nigson-local"
+    clients = request(admin + "/clients?" + urllib.parse.urlencode({"clientId": client_id}), token=admin_token)
+    desired = {"clientId": client_id, "enabled": True, "protocol": "openid-connect", "publicClient": False,
+               "secret": secret, "serviceAccountsEnabled": True, "standardFlowEnabled": False,
+               "directAccessGrantsEnabled": False, "fullScopeAllowed": False}
+    if not clients:
+        request(admin + "/clients", "POST", desired, admin_token)
+        clients = request(admin + "/clients?" + urllib.parse.urlencode({"clientId": client_id}), token=admin_token)
+    if len(clients) != 1 or any(clients[0].get(key) != value for key, value in desired.items() if key != "secret"):
+        raise ValueError("Local Keycloak registration client drift")
+    client_uuid = clients[0]["id"]
+    current_secret = request(admin + f"/clients/{client_uuid}/client-secret", token=admin_token).get("value")
+    if current_secret != secret:
+        raise ValueError("Local Keycloak registration secret differs from Compose configuration")
+    service_user = request(admin + f"/clients/{client_uuid}/service-account-user", token=admin_token)
+    if not isinstance(service_user, dict) or not service_user.get("id"):
+        raise ValueError("Local Keycloak registration service account is unavailable")
+    management = request(admin + "/clients?" + urllib.parse.urlencode({"clientId": "realm-management"}), token=admin_token)
+    if len(management) != 1:
+        raise ValueError("Local Keycloak registration role owner is unavailable")
+    management_id = management[0]["id"]
+    role = request(admin + f"/clients/{management_id}/roles/manage-users", token=admin_token)
+    mappings_path = f"{admin}/users/{service_user['id']}/role-mappings/clients/{management_id}"
+    mappings = request(mappings_path, token=admin_token)
+    roles = {item.get("name") for item in mappings if item.get("containerId") == management_id}
+    if roles - {"manage-users"}:
+        raise ValueError("Local Keycloak registration service-account role drift")
+    if "manage-users" not in roles:
+        request(mappings_path, "POST", [role], admin_token)
+    scope_path = f"{admin}/clients/{client_uuid}/scope-mappings/clients/{management_id}"
+    scoped = request(scope_path, token=admin_token)
+    scoped_roles = {item.get("name") for item in scoped}
+    if scoped_roles - {"manage-users"}:
+        raise ValueError("Local Keycloak registration token-scope drift")
+    if "manage-users" not in scoped_roles:
+        request(scope_path, "POST", [role], admin_token)
+    print("PASS: local Keycloak registration service account configured; credentials were not emitted")
+
+
 def settings() -> dict[str, str]:
     path = ROOT / ".env"
     if not path.is_file():
@@ -188,6 +282,17 @@ def settings() -> dict[str, str]:
             values[key.strip()] = value.strip().strip('"').strip("'")
     values.update(os.environ)
     return values
+
+
+def keycloak_bootstrap_credentials() -> tuple[str, str]:
+    values = settings()
+    username = values.get("KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME", "local-bootstrap")
+    password = values.get("KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD", "mock-local-identity-admin")
+    if (not re.fullmatch(r"[A-Za-z0-9._-]{1,80}", username)
+        or len(password) < 12 or len(password) > 512
+        or any(ord(char) < 32 for char in password)):
+        raise ValueError("Local Keycloak bootstrap credentials are invalid")
+    return username, password
 
 
 def seed(config: dict) -> None:
@@ -222,9 +327,10 @@ def seed(config: dict) -> None:
             operation = "fixture login" if path.endswith("/token") else "fixture administration"
             raise ValueError(f"Local Keycloak {operation} refused (HTTP {error.code}); check configured credentials and fixture profile") from None
 
+    admin_username, admin_password = keycloak_bootstrap_credentials()
     token = request("/realms/master/protocol/openid-connect/token", "POST", {
-        "grant_type": "password", "client_id": "admin-cli", "username": "local-bootstrap",
-        "password": "mock-local-identity-admin"}, form=True)["access_token"]
+        "grant_type": "password", "client_id": "admin-cli", "username": admin_username,
+        "password": admin_password}, form=True)["access_token"]
     admin = "/admin/realms/nigson-local"
     realm = json.loads((ROOT / "infrastructure/docker/keycloak/nigson-local-realm.json").read_text())
     for fixture in realm["users"]:
@@ -288,6 +394,7 @@ def main() -> int:
                 command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "180", "vector-db")
                 provision("vector-db")
             wait_identity(config)
+            configure_registration(config)
             bootstrap()
             subprocess.run([sys.executable, str(ROOT/"scripts/platform/build_mocks.py")],check=True)
             command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "60", "paystack-mock", "fedex-mock", "twilio-mock")
@@ -298,6 +405,8 @@ def main() -> int:
         elif args.action == "run-core":
             migrate()
             command("--profile", "app", "build", *OWNERS)
+            wait_identity(config)
+            configure_registration(config)
             # `build` may have produced new local images. Let Compose recreate only
             # services whose image/config changed so run-core actually runs the build.
             command("--profile", "app", "up", "--detach", "--wait", "--wait-timeout", "180", *OWNERS)

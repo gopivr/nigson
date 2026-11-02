@@ -4671,6 +4671,21 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, SESSION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
+### API-207 POST /bff/register (ADR-023 local/test extension)
+
+- **Service / module / phase:** commerce / session / BP1 local/test only.
+- **Authentication:** Anonymous browser signup; exact configured MFE Origin when supplied.
+- **Authorization:** PUBLIC, enabled only with local/test APP_ENV and explicit registration configuration.
+- **Headers:** Content-Type application/json; no browser identity token or CSRF token.
+- **Path parameters:** None.
+- **Query:** None; reject unknown parameters.
+- **Request:** `{firstName:string[1..80],lastName:string[1..80],email:email[3..254],password:string[12..128]}`.
+- **Response:** `202` empty/no-store. Existing and newly created addresses receive the same response.
+- **Statuses:** 202 accepted; 400 invalid input/Keycloak password policy; 404 disabled; 429 local per-address budget; 503 identity provider unavailable.
+- **Validation / business rules:** Five attempts per socket address per minute. Commerce sends password only to Keycloak Admin API using the separate local `nigson-registration` service account. Password is not persisted, logged, or returned. Keycloak owns identity/passwords. New accounts are unverified and receive no application roles. Production registration is disabled pending reviewed email verification, fine-grained create-user permission and distributed abuse controls.
+- **Events:** None directly.
+- **Errors:** VALIDATION_ERROR, RATE_LIMITED, PROVIDER_UNAVAILABLE.
+
 ### API-005 GET /api/v1/me
 
 - **Service / module / phase:** commerce / party / BP1.

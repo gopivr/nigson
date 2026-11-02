@@ -3,8 +3,10 @@
   "id": "nigson-local",
   "enabled": true,
   "sslRequired": "none",
-  "registrationAllowed": false,
+  "registrationAllowed": true,
+  "loginTheme": "nigson",
   "resetPasswordAllowed": false,
+  "passwordPolicy": "length(12)",
   "roles": {
     "realm": [
       {
@@ -44,11 +46,13 @@
       "directAccessGrantsEnabled": false,
       "redirectUris": [
         "http://localhost:8081/bff/callback",
-        "http://localhost:8090/proxy/commerce/bff/callback"
+        "http://localhost:8090/proxy/commerce/bff/callback",
+        "http://localhost:4200/bff/callback"
       ],
       "webOrigins": [
         "http://localhost:8081",
-        "http://localhost:8090"
+        "http://localhost:8090",
+        "http://localhost:4200"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
@@ -112,11 +116,22 @@
       ]
     },
     {
+      "clientId": "nigson-registration",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "mock-registration-local-secret-32-bytes",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "fullScopeAllowed": false
+    },
+    {
       "clientId": "nigson-commerce",
       "enabled": true,
       "protocol": "openid-connect",
       "publicClient": false,
-      "secret": "mock-commerce-local",
+      "secret": "mock-commerce-local-workload-secret-32-bytes",
       "serviceAccountsEnabled": true,
       "standardFlowEnabled": false,
       "directAccessGrantsEnabled": false

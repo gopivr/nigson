@@ -1,6 +1,6 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:20 October2026 UTC
+Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:1 November2026 UTC
 
 ## Current Phase
 
@@ -8,7 +8,21 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+LOCAL-ADMIN-001 — DONE locally. Existing admin fixture now has all seven Commerce staff roles, including ADMIN. Real Keycloak/BFF session and staff users/products/inventory/orders HTTP200 verified; repeated grant passed. Password/MFA/guards and other accounts unchanged. Guide: `docs/DEMO_VALIDATOR_GUIDE.md`; evidence: `docs/implementation/2026-11-01-LOCAL-ADMIN-001.md`. No commit created.
+
+LOCAL-CATALOGUE-VISIBILITY-001 — DONE locally. Added/applied repeatable local `seed_electronics.py --publish`; all24 electronics are ACTIVE/published and eligible in enabled NG catalogue. Anonymous catalogue/details, eight category filters,20+4 pagination, and separate CUSTOMER-only retailA/retailB sessions passed. No role widening, price/tax/delivery/checkout configuration or unrelated product publication. Evidence: `docs/implementation/2026-11-01-LOCAL-CATALOGUE-VISIBILITY-001.md`. No commit created.
+
+LOCAL-ELECTRONICS-001 — DONE locally. Added 24 draft electronics products across eight categories, 24 linked SKUs/balances and matching opening movements in an active demo warehouse (489 units, five low-stock, two out-of-stock). Fixed frontend inventory to use staff catalogue and actual SKU/category/stock data; removed invented stock defaults. Live validation-user API checks and repeat seed passed; five focused mapping tests and admin-shop build passed. Existing broad shared-ui spec import failures documented. Shell4200 and admin-shop4206 serve updated loader. Follow-up NF initialization error traced to absent admin-core4205; started it and verified remoteEntry, AdminLayout/AdminDashboard and inventory module HTTP/CORS availability; browser refresh required to reinitialize federation. Evidence: `docs/implementation/2026-11-01-LOCAL-ELECTRONICS-001.md`. No commit created.
+
+LOCAL-DEMO-USER-001 — DONE locally. Created the dedicated demo validator identity, linked the seeded party, and granted all seven application staff roles (plus CUSTOMER). Real Keycloak/BFF access to profile, addresses, staff products, customer orders and staff orders verified HTTP 200 with seeded fixtures. Repaired BP1 address/order queries that referenced absent BP3 tables and completed the synthetic order address snapshot. Final 27 native regressions passed with zero skips and local-state preservation; five seed tests passed. Commerce rebuilt and running healthy. MFA/private-service/release guards remain enforced. Guide: `docs/DEMO_VALIDATOR_GUIDE.md`; evidence: `docs/implementation/2026-11-01-LOCAL-DEMO-USER-001.md`. No commit created.
+
+LOCAL-LOGOUT-001 — DONE locally. Authenticated POST /bff/logout now passes the exact security route rule with existing CSRF guards. All 24 isolated session/security tests passed; local Commerce image rebuilt and restarted healthy. Real Keycloak + frontend-proxy verification passed: logout 204, expired cookie, old-cookie replay anonymous, and fresh credentials required on next login. No database reset or unrelated service restart. Evidence: `docs/implementation/2026-11-01-LOCAL-LOGOUT-001.md`. No commit created.
+
+LOCAL-DEMO-001 — APPLIED locally. All 78 installed BP1 application tables contain deterministic synthetic fixtures (existing NGN baseline reused). First and repeat runs passed against PostgreSQL with constraints enabled; 5 focused safety/integrity tests passed; queued demo work count is zero. Later-release/separate-AI tables are absent (49) and were not migrated. Existing identities and unrelated work preserved. No commit created. Evidence: `docs/implementation/2026-11-01-LOCAL-DEMO-001.md`.
+
 INFRA-001 — IN_PROGRESS (EP10 / platform). Credential-free ECS/Terraform foundation and immutable delivery controls are implemented; offline network isolation, private `/internal` denial, image provenance/immutability, rollback, database TLS and ALB/Keycloak TLS assumptions are covered and verified. Stage deployment, AWS plan/apply, restore execution and stage/fixture gates remain NOT_RUN or input-bound; no AWS resources will be changed.
+
+LOCAL-IDP-001 — IN_PROGRESS (fresh user browser sign-in acceptance pending). Signup remains application-owned at local-only `POST /bff/register`; sign-in uses BFF authorization-code/PKCE and a Nigson-branded Keycloak page. Latest correlation `4b88a963` identified `OIDC_TRUST_DENIED category=ACCESS_SIGNATURE` during provider exchange. Inspection found the persistent Keycloak `nigson-bff` client lacked its checked-in `audience-nigson-commerce` mapper, so access tokens omitted the `nigson-commerce` audience required by Commerce validation. Added the mapper from the checked-in realm policy; direct database verification confirmed protocol mapper, audience and access/id token flags, and temporary recovery admins count is zero. A fresh sign-in must confirm the updated access token validates. The log encoder now allows only enumerated callback stages and constrained OIDC statuses, and the running Commerce image contains that safe allowlist. Existing users and volumes were preserved. No callback success for the user's account is claimed. Local config tests pass 20/20; production registration remains disabled pending reviewed verification and abuse controls. Evidence/history: `docs/implementation/2026-11-01-LOCAL-IDP-001.md`. INFRA-001 continues independently.
 
 INT-NOTIF-001 — DONE (EP05 / Integration, offline engineering). API-142 now registers validated immutable template revisions through exact signed ADMIN authorization, durable replay, optimistic version checks, atomic redacted audit and generated OpenAPI. Native PostgreSQL/actual HTTP, 30 focused owner tests, 105 contract/security tests, schema/migration and repository checks passed. Existing fresh-consent, attempt accounting, suppression and UNKNOWN reconciliation behavior is retained. No live sender/template/policy/retention approval or provider qualification is claimed. Evidence: `docs/implementation/2026-10-20-INT-NOTIF-001.md`.
 
@@ -74,6 +88,7 @@ CARRIER-001 durable EVT-027 intake increment — accepted offline at 2c3ccd8b041
 CARRIER-001 initial quote/creation safeguard — accepted offline at 828bb46eab3c05d3d4c70e74f6fa699dedcb77fd; native51/no skips, affected financial71/no skips, full120 Java/251 gated,69 contracts,15 AI/five gated and nine reproduced artifacts PASS. Actual BFF/private signed mode and owned quote binding qualified offline. INT-PROVI-001 accepted at 7c02b3b63db4e9909d8239be24305208e9ec23d7.
 
 ## Completed Tasks
+
 
 - [x] EXP-LEAD-001 — DONE offline engineering; APIs 087/089/090/091/129 and EVT-016, native PostgreSQL/actual signed HTTP acceptance, assignment/history, ownership, replay, stale-version denial and outbox retry durability PASS. 17 owner tests/no skips, 102 contract/security tests, OpenAPI/authorization/schema checks and fresh/repeat migrations PASS. Live recipient/provider/privacy activation remains gated. Evidence: `docs/implementation/2026-10-19-EXP-LEAD-001.md` and `docs/implementation/evidence/2026-10-19-EXP-LEAD-001/`.
 
@@ -249,6 +264,8 @@ Most recently completed: INT-NOTIF-001 — DONE offline engineering. API-142 Int
 Offline engineering for INFRA-001, OPS-001 and OPS-002 is complete and verified. No remaining dependency-ready EP10 code work is recorded. Next action: provide the reviewed stage account/network/backend/certificate/retention/operator inputs, immutable image digest and isolated restore target; then execute the separately reviewed INFRA-001 and OPS-002 qualification steps. Until those inputs exist, retain INFRA-001 and OPS-002 as open acceptance gates and REL-001 as dependency-bound. Do not claim stage smoke, load, rollback, restore, or release qualification.
 
 ## Session Evidence / Protocol
+
+PASS (initial capability checks) — LOCAL-IDP-001: realm/config contract test17/no skips, auth MFE build, Compose config and diff checks PASS. Commerce readiness and `/bff/session` returned 200; `/bff/login` returned 302 with exact MFE callback; Keycloak login form included Register; MFE proxy returned 302. Follow-up found missing callback response-suppression attributes in the persisted client; they are now set, but a fresh user callback is pending. Report: `docs/implementation/2026-11-01-LOCAL-IDP-001.md`.
 
 PASS — EXP-LEAD-001 offline engineering: native PostgreSQL fresh/repeat owner migrations and actual HTTP lead acceptance passed 17 Java tests/no skips; contract/security suite102; generated OpenAPI/authorization/database catalog, onboarding task-registry and diff checks PASS. API-087/089/090/091/129 and EVT-016 use owner-local idempotency/outbox/audit/activity, exact signed scopes, concealed foreign assignment, safe errors and configured recipient context. Live recipient/anti-abuse/provider/privacy activation remains gated. Evidence/report: `docs/implementation/2026-10-19-EXP-LEAD-001.md` and `docs/implementation/evidence/2026-10-19-EXP-LEAD-001/`. Initial compile, contract and harness failures plus fixes are recorded in the report.
 
