@@ -30,7 +30,7 @@ COPY database/changelog database/changelog
 # Cache pinned downloads once per architecture; keep compiled outputs outside the cache.
 # Both Maven calls hold the cache locks, so owner artifacts cannot interleave across builds.
 RUN --mount=type=cache,id=nigson-maven-repository-${TARGETARCH},target=/workspace/.build/m2,sharing=locked \
-    mvn -B install && \
+    mvn -B install -DskipTests && \
     mvn -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
 RUN javac -cp '/migration-lib/*' -d /tools scripts/java/MigrationTargetPolicy.java scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
 RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre

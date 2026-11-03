@@ -140,10 +140,28 @@ services:
       NIGSON_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?Missing COMMERCE_DB_PASSWORD}
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
       NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
-      NIGSON_BFF_ALLOWED_ORIGINS: http://localhost:8090
-      NIGSON_BFF_CALLBACK: http://localhost:8090/proxy/commerce/bff/callback
-      NIGSON_BFF_RETURN_PATHS: /
+      NIGSON_BFF_ALLOWED_ORIGINS: http://localhost:8090,http://localhost:4200
+      NIGSON_BFF_CALLBACK: http://localhost:4200/bff/callback
+      NIGSON_BFF_RETURN_PATHS: /,/account,/shop,/checkout
       NIGSON_INSECURE_LOCAL_COOKIE: "true"
+      NIGSON_SECURITY_ENABLED: "true"
+      NIGSON_AWS_REGION: us-east-1
+      NIGSON_KMS_LOCAL_ENDPOINT: http://localstack:4566
+      NIGSON_SESSION_KEY_REVISION: v1
+      NIGSON_SESSION_LOCAL_KEY: OwZlbuL7R0IFk09HGrITnfICZMPbCLYXzyxi1OUa+yU=
+      NIGSON_BFF_CLIENT_SECRET: mock-bff-local-confidential-secret-32-bytes
+      NIGSON_COMMERCE_WORKLOAD_SECRET: mock-commerce-workload-secret-32b
+      NIGSON_ACTOR_KMS_KEY: arn:aws:kms:us-east-1:000000000000:key/12345678-1234-1234-1234-123456789abc
+      NIGSON_ACTOR_KEY_ID: active
+      NIGSON_ACTOR_PUBLIC_KEY: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==
+      NIGSON_ACTOR_PUBLIC_KEYS: "{\"active\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==\"}"
+      NIGSON_PRIVATE_PEER_CIDRS: 127.0.0.1/32,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
+      NIGSON_PRODUCT_PHASE: "4"
+      NIGSON_QUOTES_ENABLED: "true"
+      NIGSON_REWARD_REFERRAL_BASE_URL: https://shop.synthetic.test/referrals
+      NIGSON_EXPERIENCE_BASE_URL: http://experience:8082
+      NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT: SYNTHETIC_DISTRIBUTOR_BUY
+      NIGSON_PUBLIC_ASSET_BASE_URL: https://cdn.synthetic.test/assets/
       SERVER_PORT: 8081
     ports:
       - "127.0.0.1:${COMMERCE_PORT:-8081}:8081"
@@ -194,6 +212,10 @@ services:
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
       NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
       SERVER_PORT: 8082
+      NIGSON_SECURITY_ENABLED: "true"
+      NIGSON_PRODUCT_PHASE: "4"
+      NIGSON_PRIVATE_PEER_CIDRS: 127.0.0.1/32,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
+      NIGSON_ACTOR_PUBLIC_KEYS: "{\"active\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==\"}"
     ports:
       - "127.0.0.1:${EXPERIENCE_PORT:-8082}:8082"
     read_only: true
@@ -369,3 +391,4 @@ volumes:
   nigson-paystack-mock:
   nigson-fedex-mock:
   nigson-twilio-mock:
+

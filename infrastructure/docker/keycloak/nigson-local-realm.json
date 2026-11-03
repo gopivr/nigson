@@ -3,8 +3,8 @@
   "id": "nigson-local",
   "enabled": true,
   "sslRequired": "none",
-  "registrationAllowed": false,
-  "resetPasswordAllowed": false,
+  "registrationAllowed": true,
+  "resetPasswordAllowed": true,
   "roles": {
     "realm": [
       {
@@ -44,11 +44,15 @@
       "directAccessGrantsEnabled": false,
       "redirectUris": [
         "http://localhost:8081/bff/callback",
-        "http://localhost:8090/proxy/commerce/bff/callback"
+        "http://localhost:8090/proxy/commerce/bff/callback",
+        "http://localhost:4200/bff/callback",
+        "http://localhost:4200/*"
       ],
       "webOrigins": [
         "http://localhost:8081",
-        "http://localhost:8090"
+        "http://localhost:8090",
+        "http://localhost:4200",
+        "+"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
@@ -110,6 +114,26 @@
           }
         }
       ]
+    },
+    {
+      "clientId": "nigson-frontend",
+      "name": "Nigson Micro-Frontend",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "http://localhost:4200"
+      ],
+      "webOrigins": [
+        "http://localhost:4200",
+        "+"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
     },
     {
       "clientId": "nigson-commerce",
