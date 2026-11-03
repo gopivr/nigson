@@ -7,14 +7,19 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 /** Reusable security use cases. Public session DTO/provisioning/controllers belong to COM-SESSI-001. */
 public final class SessionLifecycle {
+    private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(SessionLifecycle.class);
     public interface PartyMapping { UUID mappedActiveParty(OidcTrust.Tokens identity); }
     private final SessionStore sessions;private final OidcTrust oidc;private final PartyMapping mapping;private final Clock clock;private final MeterRegistry metrics;
     public SessionLifecycle(SessionStore sessions,OidcTrust oidc,PartyMapping mapping,Clock clock,MeterRegistry metrics){this.sessions=sessions;this.oidc=oidc;this.mapping=mapping;this.clock=clock;this.metrics=metrics;}
     public record Callback(String sessionId,String returnTo) { @Override public String toString(){return "Callback[protected]";} }
     public String callback(String id,String state,String code) {return completeCallback(id,state,code).sessionId();}
     public Callback completeCallback(String id,String state,String code) {
-        PendingLogin flow=sessions.consume(id,state);
-        try {var token=oidc.exchange(code,flow);UUID party=mapping.mappedActiveParty(token);
+        PendingLogin flow;
+        try {flow=sessions.consume(id,state);}catch(RuntimeException denied){LOG.warn("BFF_CALLBACK_REJECTED stage=pending_state");throw denied;}
+        try {OidcTrust.Tokens token;
+            try{token=oidc.exchange(code,flow);}catch(RuntimeException denied){LOG.warn("BFF_CALLBACK_REJECTED stage=provider_exchange");throw denied;}
+            UUID party;
+            try{party=mapping.mappedActiveParty(token);}catch(RuntimeException denied){LOG.warn("BFF_CALLBACK_REJECTED stage=identity_mapping");throw denied;}
             var record=new SessionRecord(1,party,token.issuer(),token.subject(),clock.instant(),token.mfaAt(),token.access(),token.refresh(),token.expires(),JdbcSessionTrust.opaque(),SessionRecord.TokenState.READY);
             String rotated=sessions.authenticate(id,record);metrics.counter("nigson.security.login").increment();return new Callback(rotated,flow.returnTo());
         }catch(RuntimeException failed){sessions.logout(id);metrics.counter("nigson.security.denied").increment();throw ActorAssertion.denied();}

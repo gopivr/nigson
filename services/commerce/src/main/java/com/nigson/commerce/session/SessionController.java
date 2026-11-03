@@ -6,6 +6,7 @@ import java.util.*;
 @RestController
 @ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED",havingValue="true")
 public class SessionController {
+ private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(SessionController.class);
  private final SessionStore sessions;private final SessionLifecycle lifecycle;private final SessionCookies cookies;private final OidcTrust oidc;private final SessionService service;private final byte[] abuseKey;
  public SessionController(SessionStore sessions,SessionLifecycle lifecycle,SessionCookies cookies,OidcTrust oidc,SessionService service,@org.springframework.beans.factory.annotation.Value("${NIGSON_BFF_CLIENT_SECRET}")String secret){this.sessions=sessions;this.lifecycle=lifecycle;this.cookies=cookies;this.oidc=oidc;this.service=service;this.abuseKey=secret.getBytes(java.nio.charset.StandardCharsets.UTF_8);}
  private void query(HttpServletRequest r,Set<String> allowed){for(var e:r.getParameterMap().entrySet())if(!allowed.contains(e.getKey())||e.getValue().length!=1||e.getValue()[0].isBlank()||e.getValue()[0].length()>200)throw ApiValues.invalid();}
@@ -15,7 +16,7 @@ public class SessionController {
   query(r,Set.of("returnTo"));noBody(r);String target=r.getParameter("returnTo");if(target==null)target="/account";sessions.requireReturnPath(target);String existing=cookies.read(r);if(existing!=null)sessions.logout(existing);var flow=sessions.begin(target,AuditValues.ipFingerprint(abuseKey,r.getRemoteAddr()));cookies.write(r,s,flow.sessionId());return ResponseEntity.status(302).location(oidc.authorization(flow.flow(),false)).build();
  }
  @GetMapping("/bff/callback")public ResponseEntity<Void> callback(HttpServletRequest r,HttpServletResponse s)throws java.io.IOException{
-  query(r,Set.of("code","state"));noBody(r);String code=required(r,"code",200),state=required(r,"state",43);if(!state.matches("[A-Za-z0-9_-]{43}"))throw ApiValues.invalid();String id=cookies.read(r);if(id==null)throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);
+  query(r,Set.of("code","state"));noBody(r);String code=required(r,"code",200),state=required(r,"state",43);if(!state.matches("[A-Za-z0-9_-]{43}"))throw ApiValues.invalid();String id=cookies.read(r);if(id==null){LOG.warn("BFF_CALLBACK_REJECTED stage=session_cookie");throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);}
   try{var result=lifecycle.completeCallback(id,state,code);cookies.write(r,s,result.sessionId());return ResponseEntity.status(302).location(java.net.URI.create(result.returnTo())).build();}catch(org.springframework.security.access.AccessDeniedException failed){cookies.clear(r,s);throw new Problem.Failure(ProblemCode.AUTH_REQUIRED);}
  }
  @GetMapping(value="/bff/session",produces="application/json")public SessionView view(HttpServletRequest r)throws java.io.IOException{query(r,Set.of());noBody(r);return service.view(cookies.read(r));}

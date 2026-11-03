@@ -1,0 +1,118 @@
+:root {
+  --nigson-red: #d71920;
+  --nigson-red-deep: #a10f15;
+  --nigson-ink: #171717;
+  --nigson-muted: #686868;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: #f7f7f7;
+}
+
+body {
+  color: var(--nigson-ink);
+  background:
+    radial-gradient(ellipse at 18% 16%, rgb(215 25 32 / 9%), transparent 34rem),
+    linear-gradient(145deg, #fff 12%, #f7f7f7 70%, #f0f0f0);
+}
+
+#kc-header-wrapper {
+  padding: 2rem 0 1rem;
+  color: var(--nigson-ink);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+#kc-header-wrapper::before {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.65rem;
+  place-items: center;
+  border-radius: 0.45rem;
+  background: var(--nigson-red);
+  color: white;
+  content: "N";
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.login-pf-page {
+  padding-top: 1rem;
+}
+
+.card-pf {
+  border: 1px solid #e8e8e8;
+  border-top: 4px solid var(--nigson-red);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 1.25rem 3.5rem rgb(23 23 23 / 10%);
+}
+
+.card-pf h1,
+#kc-page-title {
+  color: var(--nigson-ink);
+  font-weight: 750;
+}
+
+.pf-c-form-control,
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  min-height: 2.75rem;
+  border-color: #d7d7d7;
+  border-radius: 0.6rem;
+  box-shadow: none;
+}
+
+.pf-c-form-control:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+  border-color: var(--nigson-red);
+  box-shadow: 0 0 0 3px rgb(215 25 32 / 13%);
+}
+
+#kc-login,
+.pf-c-button.pf-m-primary {
+  min-height: 2.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--nigson-red);
+  font-weight: 700;
+  transition: background-color 120ms ease, transform 120ms ease;
+}
+
+#kc-login:hover,
+.pf-c-button.pf-m-primary:hover {
+  background: var(--nigson-red-deep);
+  transform: translateY(-1px);
+}
+
+a,
+.login-pf-page .login-pf-signup a {
+  color: var(--nigson-red-deep);
+}
+
+.login-pf-page .login-pf-signup a:hover {
+  color: var(--nigson-red);
+}
+
+#kc-info-wrapper,
+.login-pf-page .login-pf-signup {
+  color: var(--nigson-muted);
+  background: transparent;
+}
+
+@media (max-width: 767px) {
+  #kc-header-wrapper {
+    padding-top: 1rem;
+  }
+
+  .card-pf {
+    border-radius: 0.75rem;
+  }
+}

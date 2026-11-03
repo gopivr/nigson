@@ -35,6 +35,7 @@ public final class JdbcPartyRepository implements PartyRepository {
     }
     private PartyValues.Address row(java.sql.ResultSet r)throws java.sql.SQLException{return new PartyValues.Address(r.getObject("id",UUID.class),r.getString("label"),r.getString("recipient"),r.getString("phone"),r.getString("line1"),r.getString("line2"),r.getString("city"),r.getString("region"),r.getString("postal_code"),r.getString("country_code"),r.getObject("organization_id",UUID.class),r.getBoolean("is_default"),r.getLong("version"));}
     public List<PartyValues.Address> addresses(UUID party){
+        if(phase<3){var result=jdbc.query("SELECT a.* FROM commerce.address a WHERE a.party_id=? AND a.deleted_at IS NULL AND a.organization_id IS NULL ORDER BY a.created_at,a.id LIMIT 101",(r,n)->row(r),party);if(result.size()>100)throw new Problem.Failure(ProblemCode.PARTY_RULE_VIOLATION);return List.copyOf(result);}
         var result=jdbc.query("SELECT a.* FROM commerce.address a WHERE a.party_id=? AND a.deleted_at IS NULL AND (a.organization_id IS NULL OR (? >= 3 AND EXISTS(SELECT 1 FROM commerce.organization_membership m JOIN commerce.organization o ON o.id=m.organization_id WHERE m.party_id=? AND m.organization_id=a.organization_id AND m.status='ACTIVE' AND o.status='ACTIVE'))) ORDER BY a.created_at,a.id LIMIT 101",(r,n)->row(r),party,phase,party);
         if(result.size()>100)throw new Problem.Failure(ProblemCode.PARTY_RULE_VIOLATION);return List.copyOf(result);
     }

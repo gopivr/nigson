@@ -14,6 +14,18 @@ SPEC.loader.exec_module(local)
 
 
 class LocalIsolationTests(unittest.TestCase):
+    def test_low_disk_space_prevents_docker_build(self):
+        from types import SimpleNamespace
+        with patch.object(local.shutil, "disk_usage", return_value=SimpleNamespace(free=267 * 1024**2)), patch.object(local.subprocess, "run") as docker:
+            with self.assertRaisesRegex(ValueError, "Insufficient host disk space"):
+                local.command("build", "commerce")
+            docker.assert_not_called()
+
+    def test_sufficient_disk_space_allows_preflight(self):
+        from types import SimpleNamespace
+        with patch.object(local.shutil, "disk_usage", return_value=SimpleNamespace(free=10 * 1024**3)):
+            local.require_build_space()
+
     def test_down_includes_every_profile_and_retains_volumes(self):
         with patch("sys.argv", ["dependencies.py", "down"]), patch.object(local, "validate", return_value={}), patch.object(local, "command") as docker:
             self.assertEqual(local.main(), 0)
@@ -25,11 +37,60 @@ class LocalIsolationTests(unittest.TestCase):
         self.assertTrue(manifest["localOnly"])
         self.assertEqual(manifest["fixtureClock"], "2026-10-04T00:00:00Z")
         self.assertEqual(manifest["identityRealm"], realm["realm"])
+        self.assertTrue(realm["registrationAllowed"])
+        self.assertEqual(realm["loginTheme"], "nigson")
+        self.assertFalse(realm["resetPasswordAllowed"])
+        self.assertEqual(realm["passwordPolicy"], "length(12)")
+        bff = next(client for client in realm["clients"] if client["clientId"] == "nigson-bff")
+        self.assertEqual(bff["secret"], "mock-bff-local-confidential-secret-32-bytes")
+        self.assertIn("http://localhost:4200/bff/callback", bff["redirectUris"])
+        self.assertIn("http://localhost:4200", bff["webOrigins"])
+        self.assertEqual(bff["attributes"]["exclude.issuer.from.auth.response"], "true")
+        self.assertEqual(bff["attributes"]["exclude.session.state.from.auth.response"], "true")
+        registration = next(client for client in realm["clients"] if client["clientId"] == "nigson-registration")
+        self.assertTrue(registration["serviceAccountsEnabled"])
+        self.assertFalse(registration["standardFlowEnabled"])
+        self.assertFalse(registration["directAccessGrantsEnabled"])
+        self.assertFalse(any(user.get("serviceAccountClientId") == "nigson-registration" for user in realm["users"]))
         self.assertEqual(len(manifest["subjects"]), 13)
         self.assertEqual(len({user["id"] for user in realm["users"]}), 13)
         fields = ("id", "username", "email", "realmRoles", "firstName", "lastName")
-        self.assertEqual(manifest["subjects"], [{key: user[key] for key in fields} for user in realm["users"]])
-        self.assertTrue(all(user["email"].endswith("@example.invalid") for user in realm["users"]))
+        fixtures = [user for user in realm["users"] if not user.get("serviceAccountClientId")]
+        self.assertEqual(manifest["subjects"], [{key: user[key] for key in fields} for user in fixtures])
+        self.assertTrue(all(user["email"].endswith("@example.invalid") for user in fixtures))
+
+    def test_local_bff_callback_matches_the_mfe_origin_and_signup_is_gated(self):
+        compose = (ROOT / "docker-compose.yml").read_text()
+        self.assertIn("NIGSON_BFF_CLIENT_SECRET: ${NIGSON_BFF_CLIENT_SECRET:-mock-bff-local-confidential-secret-32-bytes}", compose)
+        self.assertIn("NIGSON_BFF_CALLBACK: ${NIGSON_BFF_CALLBACK:-http://localhost:4200/bff/callback}", compose)
+        self.assertIn("NIGSON_REGISTRATION_ENABLED: ${NIGSON_REGISTRATION_ENABLED:-true}", compose)
+        self.assertIn("NIGSON_REGISTRATION_CLIENT_ID: ${NIGSON_REGISTRATION_CLIENT_ID:-nigson-registration}", compose)
+
+    def test_nigson_login_theme_is_local_and_selected_by_realm(self):
+        theme = ROOT / "infrastructure/docker/keycloak/themes/nigson/login"
+        properties = (theme / "theme.properties").read_text()
+        messages = (theme / "messages/messages_en.properties").read_text()
+        css = (theme / "resources/css/nigson.css").read_text()
+        realm = json.loads((ROOT / "infrastructure/docker/keycloak/nigson-local-realm.json").read_text())
+        self.assertEqual(realm["loginTheme"], "nigson")
+        self.assertIn("parent=keycloak", properties)
+        self.assertIn("styles=css/login.css css/nigson.css", properties)
+        self.assertIn("loginTitle=Sign in to Nigson", messages)
+        self.assertIn("#d71920", css)
+        compose = (ROOT / "docker-compose.yml").read_text()
+        self.assertIn("./infrastructure/docker/keycloak/themes/nigson:/opt/keycloak/themes/nigson:ro", compose)
+
+    def test_local_keycloak_admin_credentials_are_injected_without_hardcoding_in_setup(self):
+        compose = (ROOT / "docker-compose.yml").read_text()
+        setup = (ROOT / "scripts/local/dependencies.py").read_text()
+        self.assertIn("KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME:-local-bootstrap}", compose)
+        self.assertIn("KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD:-mock-local-identity-admin}", compose)
+        self.assertIn("./infrastructure/docker/keycloak/themes/nigson:/opt/keycloak/themes/nigson:ro", compose)
+        self.assertIn('values.get("KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME", "local-bootstrap")', setup)
+        self.assertIn('values.get("KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD", "mock-local-identity-admin")', setup)
+        self.assertNotIn('"password": "mock-local-identity-admin"}, form=True', setup)
+        self.assertIn("existing local Keycloak registration client has user-management access", setup)
+        self.assertIn('request("/realms/nigson-local/protocol/openid-connect/token", "POST"', setup)
 
     def test_remote_docker_host_refused_before_docker(self):
         with patch.dict(os.environ, {"ENV": "local", "DOCKER_HOST": "tcp://production.example.invalid:2376"}), patch.object(local, "command") as docker:

@@ -1863,6 +1863,76 @@
         }
       }
     },
+    "/bff/register": {
+      "post": {
+        "operationId": "API-207",
+        "description": "Local/test-only application signup. Commerce sends the validated request directly to Keycloak through the separate nigson-registration service account; no password is stored in Commerce. Address existence is not disclosed: an existing identity receives the same accepted response. New identities are unverified and receive no application roles. Five attempts per socket address per minute; production registration remains disabled pending reviewed verification and abuse controls.",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "202": {
+            "description": "Accepted without revealing whether the address already exists; no response body",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid registration fields or Keycloak password policy rejection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registration is disabled in this environment",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Local registration attempt budget exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Identity provider unavailable; retry registration",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationInput"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/commerce/staff/configuration/{key}": {
       "put": {
         "operationId": "API-135",
@@ -19841,6 +19911,41 @@
                 "type": "null"
               }
             ]
+          }
+        }
+      },
+      "RegistrationInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 3,
+            "maxLength": 254
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "writeOnly": true,
+            "minLength": 12,
+            "maxLength": 128
           }
         }
       },

@@ -150,6 +150,7 @@
   "/bff/callback",
   "/bff/login",
   "/bff/logout",
+  "/bff/register",
   "/bff/session",
   "/health/live",
   "/health/ready",

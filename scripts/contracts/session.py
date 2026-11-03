@@ -1,4 +1,4 @@
-"""Implemented BFF API-001–004 contracts, composed into commerce OpenAPI."""
+"""Implemented BFF API-001–004 and local registration API-207 contracts."""
 def extend(spec):
     from authorization import UUID, REF, object_schema, parameter, operation
     null=lambda value: {'anyOf':[value,{'type':'null'}]}
@@ -17,5 +17,12 @@ def extend(spec):
     logout=operation('API-004','Exact empty JSON object and session-bound CSRF. Atomically audit and delete JDBC session before provider revocation HTTP. Always clear cookie after valid request. Provider failure returns 503 with local session already deleted; no fabricated provider success. No domain event.','SessionDTO',[parameter('X-CSRF-TOKEN','header',{'type':'string','pattern':'^[A-Za-z0-9_-]{43}$'},True)])
     logout['requestBody']={'required':True,'content':{'application/json':{'schema':{'type':'object','additionalProperties':False,'maxProperties':0}}}}
     logout['responses'].pop('200');logout['responses']['204']={'description':'Local deletion and supported provider revocation complete; no body'};logout['responses']['503']={'description':'Provider unavailable; local session already deleted','content':{'application/problem+json':{'schema':{'$ref':'../problem/problem.schema.json'}}}}
-    spec['paths']['/bff/login']={'get':login};spec['paths']['/bff/callback']={'get':callback};spec['paths']['/bff/session']={'get':view};spec['paths']['/bff/logout']={'post':logout}
+    registration=operation('API-207','Local/test-only application signup. Commerce sends the validated request directly to Keycloak through the separate nigson-registration service account; no password is stored in Commerce. Address existence is not disclosed: an existing identity receives the same accepted response. New identities are unverified and receive no application roles. Five attempts per socket address per minute; production registration remains disabled pending reviewed verification and abuse controls.','SessionDTO',[])
+    registration['security']=[];registration['parameters']=[]
+    registration['requestBody']={'required':True,'content':{'application/json':{'schema':REF('RegistrationInput')}}}
+    registration['responses']={'202':{'description':'Accepted without revealing whether the address already exists; no response body','headers':{'Cache-Control':{'schema':{'const':'no-store'}}}}}
+    for code,description in [(400,'Invalid registration fields or Keycloak password policy rejection'),(404,'Registration is disabled in this environment'),(429,'Local registration attempt budget exceeded'),(503,'Identity provider unavailable; retry registration')]:
+        registration['responses'][str(code)]={'description':description,'content':{'application/problem+json':{'schema':{'$ref':'../problem/problem.schema.json'}}}}
+    schemas['RegistrationInput']=object_schema({'firstName':{'type':'string','minLength':1,'maxLength':80},'lastName':{'type':'string','minLength':1,'maxLength':80},'email':{'type':'string','format':'email','minLength':3,'maxLength':254},'password':{'type':'string','format':'password','writeOnly':True,'minLength':12,'maxLength':128}})
+    spec['paths']['/bff/login']={'get':login};spec['paths']['/bff/callback']={'get':callback};spec['paths']['/bff/session']={'get':view};spec['paths']['/bff/logout']={'post':logout};spec['paths']['/bff/register']={'post':registration}
     return spec

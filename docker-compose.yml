@@ -40,14 +40,15 @@ services:
       KC_DB_URL: jdbc:postgresql://identity-db:5432/keycloak
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: mock-local-identity-db
-      KC_BOOTSTRAP_ADMIN_USERNAME: local-bootstrap
-      KC_BOOTSTRAP_ADMIN_PASSWORD: mock-local-identity-admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME:-local-bootstrap}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD:-mock-local-identity-admin}
       KC_HEALTH_ENABLED: "true"
       KC_HOSTNAME: http://localhost:${KEYCLOAK_PORT:-8180}
     ports:
       - "127.0.0.1:${KEYCLOAK_PORT:-8180}:8080"
     volumes:
       - ./infrastructure/docker/keycloak/nigson-local-realm.json:/opt/keycloak/data/import/nigson-local-realm.json:ro
+      - ./infrastructure/docker/keycloak/themes/nigson:/opt/keycloak/themes/nigson:ro
     depends_on:
       identity-db:
         condition: service_healthy
@@ -55,7 +56,7 @@ services:
     image: localstack/localstack:4.14.0@sha256:3ebc37595918b8accb852f8048fef2aff047d465167edd655528065b07bc364a
     environment:
       APP_ENV: ${APP_ENV:-local}
-      SERVICES: sns,sqs,s3,ses
+      SERVICES: kms,sns,sqs,s3,ses
       AWS_DEFAULT_REGION: us-east-1
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
@@ -131,6 +132,7 @@ services:
       NIGSON_EVENT_DLQ: http://localstack:4566/queue/us-east-1/000000000000/commerce-domain-dlq
       SCHEMA_RELEASE: ${SCHEMA_RELEASE:-BP1}
       APP_ENV: ${APP_ENV:-local}
+      NIGSON_SECURITY_ENABLED: ${NIGSON_SECURITY_ENABLED:-false}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=commerce
       NIGSON_PROVIDERS_ENABLED: "true"
       PAYSTACK_MODE: MOCK
@@ -138,30 +140,35 @@ services:
       PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY:-sk_mock_nigson}
       NIGSON_DB_USER: nigson_commerce_app
       NIGSON_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?Missing COMMERCE_DB_PASSWORD}
+      # Public issuer is browser/token identity; Commerce uses the private JWKS
+      # endpoint below for backchannel traffic from inside the Compose network.
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
       NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
-      NIGSON_BFF_ALLOWED_ORIGINS: http://localhost:8090,http://localhost:4200
-      NIGSON_BFF_CALLBACK: http://localhost:4200/bff/callback
-      NIGSON_BFF_RETURN_PATHS: /,/account,/shop,/checkout
+      NIGSON_BFF_CLIENT_SECRET: ${NIGSON_BFF_CLIENT_SECRET:-mock-bff-local-confidential-secret-32-bytes}
+      NIGSON_REGISTRATION_ENABLED: ${NIGSON_REGISTRATION_ENABLED:-true}
+      NIGSON_REGISTRATION_CLIENT_ID: ${NIGSON_REGISTRATION_CLIENT_ID:-nigson-registration}
+      NIGSON_REGISTRATION_CLIENT_SECRET: ${NIGSON_REGISTRATION_CLIENT_SECRET:-mock-registration-local-secret-32-bytes}
+      NIGSON_BFF_ALLOWED_ORIGINS: ${NIGSON_BFF_ALLOWED_ORIGINS:-http://localhost:8090,http://localhost:4200}
+      NIGSON_BFF_CALLBACK: ${NIGSON_BFF_CALLBACK:-http://localhost:4200/bff/callback}
+      NIGSON_BFF_RETURN_PATHS: ${NIGSON_BFF_RETURN_PATHS:-/,/account,/shop,/checkout}
+      NIGSON_EXPERIENCE_BASE_URL: ${NIGSON_EXPERIENCE_BASE_URL:-http://experience:8082}
+      NIGSON_INTEGRATION_BASE_URL: ${NIGSON_INTEGRATION_BASE_URL:-http://integration:8083}
+      NIGSON_COMMERCE_WORKLOAD_SECRET: ${NIGSON_COMMERCE_WORKLOAD_SECRET:-mock-commerce-local-workload-secret-32-bytes}
+      NIGSON_PRODUCT_PHASE: ${NIGSON_PRODUCT_PHASE:-1}
+      NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT: ${NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT:-}
+      NIGSON_PRIVATE_PEER_CIDRS: ${NIGSON_PRIVATE_PEER_CIDRS:-}
+      NIGSON_AWS_REGION: ${NIGSON_AWS_REGION:-us-east-1}
+      NIGSON_KMS_LOCAL_ENDPOINT: ${NIGSON_KMS_LOCAL_ENDPOINT:-http://localstack:4566}
+      NIGSON_SESSION_KEY_REVISION: ${NIGSON_SESSION_KEY_REVISION:-}
+      NIGSON_SESSION_KMS_KEY: ${NIGSON_SESSION_KMS_KEY:-}
+      NIGSON_SESSION_WRAPPED_KEY: ${NIGSON_SESSION_WRAPPED_KEY:-}
+      NIGSON_SESSION_PREVIOUS_WRAPPED_KEYS: ${NIGSON_SESSION_PREVIOUS_WRAPPED_KEYS:-{}}
+      NIGSON_SESSION_LOCAL_KEY: ${NIGSON_SESSION_LOCAL_KEY:-}
+      NIGSON_ACTOR_KMS_KEY: ${NIGSON_ACTOR_KMS_KEY:-}
+      NIGSON_ACTOR_KEY_ID: ${NIGSON_ACTOR_KEY_ID:-}
+      NIGSON_ACTOR_PUBLIC_KEY: ${NIGSON_ACTOR_PUBLIC_KEY:-}
+      NIGSON_ACTOR_PUBLIC_KEYS: ${NIGSON_ACTOR_PUBLIC_KEYS:-}
       NIGSON_INSECURE_LOCAL_COOKIE: "true"
-      NIGSON_SECURITY_ENABLED: "true"
-      NIGSON_AWS_REGION: us-east-1
-      NIGSON_KMS_LOCAL_ENDPOINT: http://localstack:4566
-      NIGSON_SESSION_KEY_REVISION: v1
-      NIGSON_SESSION_LOCAL_KEY: OwZlbuL7R0IFk09HGrITnfICZMPbCLYXzyxi1OUa+yU=
-      NIGSON_BFF_CLIENT_SECRET: mock-bff-local-confidential-secret-32-bytes
-      NIGSON_COMMERCE_WORKLOAD_SECRET: mock-commerce-workload-secret-32b
-      NIGSON_ACTOR_KMS_KEY: arn:aws:kms:us-east-1:000000000000:key/12345678-1234-1234-1234-123456789abc
-      NIGSON_ACTOR_KEY_ID: active
-      NIGSON_ACTOR_PUBLIC_KEY: MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==
-      NIGSON_ACTOR_PUBLIC_KEYS: "{\"active\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==\"}"
-      NIGSON_PRIVATE_PEER_CIDRS: 127.0.0.1/32,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
-      NIGSON_PRODUCT_PHASE: "4"
-      NIGSON_QUOTES_ENABLED: "true"
-      NIGSON_REWARD_REFERRAL_BASE_URL: https://shop.synthetic.test/referrals
-      NIGSON_EXPERIENCE_BASE_URL: http://experience:8082
-      NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT: SYNTHETIC_DISTRIBUTOR_BUY
-      NIGSON_PUBLIC_ASSET_BASE_URL: https://cdn.synthetic.test/assets/
       SERVER_PORT: 8081
     ports:
       - "127.0.0.1:${COMMERCE_PORT:-8081}:8081"
@@ -207,15 +214,21 @@ services:
       SCHEMA_RELEASE: ${SCHEMA_RELEASE:-BP1}
       APP_ENV: ${APP_ENV:-local}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=experience
+      NIGSON_SECURITY_ENABLED: "true"
+      NIGSON_PRODUCT_PHASE: "4"
+      NIGSON_PRIVATE_PEER_CIDRS: 127.0.0.1/32,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
+      NIGSON_ACTOR_PUBLIC_KEYS: "{\"active\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==\"}"
+      NIGSON_DISTRIBUTOR_REQUIRED_DOCUMENT_TYPES: ${NIGSON_DISTRIBUTOR_REQUIRED_DOCUMENT_TYPES:-}
+      NIGSON_DISTRIBUTOR_RECIPIENT_GROUP: ${NIGSON_DISTRIBUTOR_RECIPIENT_GROUP:-}
+      NIGSON_DISTRIBUTOR_COMMERCE_MODE: ${NIGSON_DISTRIBUTOR_COMMERCE_MODE:-}
+      NIGSON_COMMERCE_PRIVATE_URL: ${NIGSON_COMMERCE_PRIVATE_URL:-http://commerce:8081}
+      NIGSON_DISTRIBUTOR_WORKLOAD_CLIENT_ID: nigson-experience
+      NIGSON_DISTRIBUTOR_WORKLOAD_CLIENT_SECRET: ${NIGSON_EXPERIENCE_WORKLOAD_SECRET:-mock-experience-local-workload-secret-32-bytes}
       NIGSON_DB_USER: nigson_experience_app
       NIGSON_DB_PASSWORD: ${EXPERIENCE_DB_PASSWORD:?Missing EXPERIENCE_DB_PASSWORD}
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
       NIGSON_OIDC_JWKS: http://keycloak:8080/realms/nigson-local/protocol/openid-connect/certs
       SERVER_PORT: 8082
-      NIGSON_SECURITY_ENABLED: "true"
-      NIGSON_PRODUCT_PHASE: "4"
-      NIGSON_PRIVATE_PEER_CIDRS: 127.0.0.1/32,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
-      NIGSON_ACTOR_PUBLIC_KEYS: "{\"active\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==\"}"
     ports:
       - "127.0.0.1:${EXPERIENCE_PORT:-8082}:8082"
     read_only: true
@@ -391,4 +404,3 @@ volumes:
   nigson-paystack-mock:
   nigson-fedex-mock:
   nigson-twilio-mock:
-

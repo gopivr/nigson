@@ -14,3 +14,7 @@ class SessionContracts(unittest.TestCase):
         self.assertIn('503',logout['responses'])
         self.assertFalse(logout['requestBody']['content']['application/json']['schema']['additionalProperties'])
         self.assertNotIn('accessToken',s['components']['schemas']['SessionDTO']['properties'])
+        signup=s['paths']['/bff/register']['post']
+        self.assertEqual(signup['operationId'],'API-207')
+        self.assertEqual(signup['security'],[])
+        self.assertIn('429',signup['responses'])

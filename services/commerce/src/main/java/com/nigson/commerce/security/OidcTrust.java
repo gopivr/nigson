@@ -15,11 +15,17 @@ public final class OidcTrust {
     public record Tokens(String access,String refresh,Instant expires,String issuer,String subject,Instant mfaAt,String email,boolean emailVerified,String displayName) {
         @Override public String toString(){return "Tokens[protected]";}
     }
-    private final String issuer,client,secret,callback;private final HttpClient http;private final JwtDecoder access,id;private final Clock clock;
+    private final String issuer,backchannel,client,secret,callback;private final HttpClient http;private final JwtDecoder access,id;private final Clock clock;
     public OidcTrust(String environment,String issuer,String client,String secret,String callback,SSLContext tls,Clock clock) {
-        var c=URI.create(callback);var policy=new KeycloakIdentity.Policy(environment,issuer,issuer+"/protocol/openid-connect/certs","nigson-commerce",Set.of(client),Set.of("openid"));
+        this(environment,issuer,issuer+"/protocol/openid-connect/certs",client,secret,callback,tls,clock);
+    }
+    public OidcTrust(String environment,String issuer,String jwks,String client,String secret,String callback,SSLContext tls,Clock clock) {
+        var c=URI.create(callback);var keyUri=URI.create(jwks);String suffix="/protocol/openid-connect/certs";
+        if(!keyUri.getPath().endsWith(suffix))throw new IllegalArgumentException("OIDC_BACKCHANNEL_CONFIG_REQUIRED");
+        String backchannel=jwks.substring(0,jwks.length()-suffix.length());
+        var policy=new KeycloakIdentity.Policy(environment,issuer,jwks,"nigson-commerce",Set.of(client),Set.of("openid"));
         if(secret==null||secret.length()<32||secret.length()>512||!"nigson-bff".equals(client)||c.getHost()==null||c.getUserInfo()!=null||c.getQuery()!=null||c.getFragment()!=null||!c.getPath().equals("/bff/callback")||!"https".equals(c.getScheme())&&!(environment.equals("local")&&"http".equals(c.getScheme())&&Set.of("localhost","127.0.0.1").contains(c.getHost()))||!Set.of("local","test").contains(environment)&&(c.getHost().endsWith(".test")||c.getHost().endsWith(".example")||c.getHost().equals("localhost")||secret.startsWith("mock-")||secret.startsWith("dummy-")))throw new IllegalArgumentException("BFF_IDENTITY_CONFIG_REQUIRED");
-        this.issuer=issuer;this.client=client;this.secret=secret;this.callback=callback;this.clock=clock;
+        this.issuer=issuer;this.backchannel=backchannel;this.client=client;this.secret=secret;this.callback=callback;this.clock=clock;
         var b=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER);if(tls!=null)b.sslContext(tls);http=b.build();
         access=KeycloakIdentity.decoder(policy,clock,tls);id=KeycloakIdentity.idTokenDecoder(new KeycloakIdentity.Policy(environment,issuer,policy.jwks(),client,Set.of(client),Set.of("openid")),clock,tls);
     }
@@ -58,9 +64,9 @@ public final class OidcTrust {
         IdentityKeys.outsideTransaction();
         try {
             var fields=new TreeMap<>(values);fields.put("client_id",client);fields.put("client_secret",secret);
-            var req=HttpRequest.newBuilder(URI.create(issuer+"/protocol/openid-connect/"+operation)).timeout(Duration.ofSeconds(5)).header("Content-Type","application/x-www-form-urlencoded").header("Accept","application/json").POST(HttpRequest.BodyPublishers.ofString(form(fields))).build();
+            var req=HttpRequest.newBuilder(URI.create(backchannel+"/protocol/openid-connect/"+operation)).timeout(Duration.ofSeconds(5)).header("Content-Type","application/x-www-form-urlencoded").header("Accept","application/json").POST(HttpRequest.BodyPublishers.ofString(form(fields))).build();
             var response=http.send(req,HttpResponse.BodyHandlers.ofInputStream());byte[] bytes;try(var stream=response.body()){bytes=stream.readNBytes(65537);}
-            if(bytes.length>65536||response.statusCode()!=200&&response.statusCode()!=204)throw rejected();if(response.statusCode()==204&&operation.equals("logout"))return new tools.jackson.databind.json.JsonMapper().createObjectNode();
+            if(bytes.length>65536||response.statusCode()!=200&&response.statusCode()!=204){org.slf4j.LoggerFactory.getLogger(OidcTrust.class).warn("OIDC_PROVIDER_REJECTED operation={} status={}",operation,response.statusCode());throw rejected();}if(response.statusCode()==204&&operation.equals("logout"))return new tools.jackson.databind.json.JsonMapper().createObjectNode();
             if(!response.headers().firstValue("Content-Type").orElse("").startsWith("application/json"))throw rejected();
             return tools.jackson.databind.json.JsonMapper.builder(tools.jackson.core.json.JsonFactory.builder().enable(tools.jackson.core.StreamReadFeature.STRICT_DUPLICATE_DETECTION).streamReadConstraints(tools.jackson.core.StreamReadConstraints.builder().maxNestingDepth(8).maxStringLength(20000).maxNumberLength(20).build()).build()).build().readTree(bytes);
         }catch(Exception failure){if(failure instanceof InterruptedException)Thread.currentThread().interrupt();throw rejected();}
