@@ -191,5 +191,6 @@
   "/internal/v1/quote-sku-eligibility",
   "/internal/v1/shipments/{id}/provider-context",
   "/internal/v1/shipments/{id}/provider-result",
-  "/internal/v1/templates"
+  "/internal/v1/templates",
+  "/wh/paystack"
 ]

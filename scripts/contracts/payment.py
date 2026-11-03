@@ -46,4 +46,9 @@ def extend(spec):
         op['responses']['413'] = {'description': 'Body exceeds allowed byte limit', 'content': {'application/problem+json': {'schema': {'$ref': '../problem/problem.schema.json'}}}}
         op['responses']['503'] = {'description': 'Safe provider or owned persistence unavailable', 'content': {'application/problem+json': {'schema': {'$ref': '../problem/problem.schema.json'}}}}
         spec['paths'][route] = {method: op}
+    import copy
+    alias = copy.deepcopy(spec['paths']['/api/v1/webhooks/payments/paystack'])
+    alias['post']['operationId'] = 'paystackWebhookCompatibility'
+    alias['post']['x-canonical-operation'] = 'API-042'
+    spec['paths']['/wh/paystack'] = alias
     return spec

@@ -42,7 +42,7 @@ public final class ProviderHttp {
   var span=wire==null?io.opentelemetry.api.trace.Span.getInvalid():wire.tracer.spanBuilder("http.provider").setSpanKind(io.opentelemetry.api.trace.SpanKind.CLIENT).setAttribute("http.request.method",method).setAttribute("nigson.provider",provider).setAttribute("nigson.provider_mode",mode.name()).startSpan();
   java.util.concurrent.CompletableFuture<HttpResponse<byte[]>> pending=null;
   try(var scope=span.makeCurrent()){
-   var builder=HttpRequest.newBuilder(target).timeout(Duration.ofSeconds(8)).header("Content-Type",contentType);
+   var builder=HttpRequest.newBuilder(target).timeout(Duration.ofSeconds(8)).header("Content-Type",contentType).header("Accept","application/json").header("User-Agent","Nigson-provider/1.0");
    if(authorization!=null&&!authorization.isBlank())builder.header("Authorization",authorization);
    if(wire!=null){builder.header("X-Correlation-ID",wire.correlationId.toString());String trace=com.nigson.shared.observability.WireContext.traceparent();if(trace!=null)builder.header("traceparent",trace);}
    var request=builder.method(method,body.isEmpty()?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body)).build();
