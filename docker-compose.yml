@@ -135,8 +135,8 @@ services:
       NIGSON_SECURITY_ENABLED: ${NIGSON_SECURITY_ENABLED:-false}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=commerce
       NIGSON_PROVIDERS_ENABLED: "true"
-      PAYSTACK_MODE: MOCK
-      PAYSTACK_BASE_URL: http://paystack-mock:8080
+      PAYSTACK_MODE: ${PAYSTACK_MODE:-MOCK}
+      PAYSTACK_BASE_URL: ${PAYSTACK_BASE_URL:-http://paystack-mock:8080}
       PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY:-sk_mock_nigson}
       NIGSON_DB_USER: nigson_commerce_app
       NIGSON_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?Missing COMMERCE_DB_PASSWORD}

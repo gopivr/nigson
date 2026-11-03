@@ -57,7 +57,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(a->a.requestMatchers("/actuator/health/liveness","/actuator/health/readiness").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS,"/bff/**","/api/v1/**").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/bff/login","/bff/callback","/bff/session","/api/v1/catalogue/products","/api/v1/catalogue/products/*","/api/v1/catalogue/products/*/recommendations","/api/v1/catalogue/skus/*/price","/api/v1/catalogue/categories","/api/v1/catalogue/brands","/api/v1/markets").permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.POST,"/bff/register","/api/v1/webhooks/payments/paystack","/api/v1/webhooks/notifications/twilio/status","/api/v1/webhooks/logistics/*").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/bff/register","/api/v1/webhooks/payments/paystack","/wh/paystack","/api/v1/webhooks/notifications/twilio/status","/api/v1/webhooks/logistics/*").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/bff/logout").authenticated()
                 .requestMatchers("/api/v1/**","/internal/**").authenticated().anyRequest().denyAll())
             .exceptionHandling(e->e.authenticationEntryPoint((r,s,f)->problems.write(r,s,com.nigson.shared.problem.ProblemCode.AUTH_REQUIRED,List.of())).accessDeniedHandler((r,s,f)->problems.write(r,s,com.nigson.shared.problem.ProblemCode.ACCESS_DENIED,List.of())))

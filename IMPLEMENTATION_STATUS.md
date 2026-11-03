@@ -8,6 +8,8 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+PROVIDER-ACCOUNTS-001 — IN_PROGRESS; scoped ports verified, activation pending. Paystack TEST read-only authentication passes; signed /wh/paystack alias and Termii/Dellyman HTTP ports implemented. Native78/no skips, HTTP18/no skips and108 contracts pass. Termii/Dellyman owner workflow bindings remain incomplete pending account base/sender, delivery credentials/pickup/service and merchant integration inputs; Railway URL availability returned404, no deployment claimed. Keys stored only in ignored mode600 account file. Evidence: docs/implementation/2026-11-03-PROVIDER-ACCOUNTS-001.md.
+
 LOCAL-CART-MARKET — DONE locally. Empty markets list blocked frontend cart creation; completed approved synthetic NG destination with guarded repeatable seed_demo_pricing.py --with-cart-destination. Markets now returns NG; real customer/validator cart create201, add-line200 and persisted-read200 pass, prior contents restored.
 
 LOCAL-DEMO-PRICING — DONE locally. User-approved synthetic NGN retail prices for24 demo electronics, zero-tax test policy and synthetic returns revision applied repeat-safely. All24 public price APIs and customer/validator sessions return200 with exact amounts; no application rebuild required. Script: scripts/local/seed_demo_pricing.py.

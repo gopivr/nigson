@@ -3,6 +3,15 @@ from pathlib import Path
 import unittest
 ROOT = Path(__file__).resolve().parents[2]
 class PaymentContracts(unittest.TestCase):
+    def test_railway_callback_alias_retains_signature_and_body_limits(self):
+        paths = json.loads((ROOT / 'contracts/openapi/commerce.yaml').read_text())['paths']
+        alias = paths['/wh/paystack']['post']
+        canonical = paths['/api/v1/webhooks/payments/paystack']['post']
+        self.assertEqual(alias['x-canonical-operation'], 'API-042')
+        self.assertEqual(alias['security'], canonical['security'])
+        self.assertEqual(alias['parameters'], canonical['parameters'])
+        self.assertEqual(alias['x-raw-body-max-bytes'], 262144)
+
     def test_callback_private_and_finance_contracts_have_distinct_trust(self):
         spec = json.loads((ROOT / 'contracts/openapi/commerce.yaml').read_text())
         paths = spec['paths']

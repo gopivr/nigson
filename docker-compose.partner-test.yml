@@ -1,0 +1,20 @@
+# Opt in with both .env and the ignored .local/provider-accounts.env.
+# Adds partner HTTP ports only; financial/OTP/carrier workflow gates stay explicit.
+services:
+  commerce:
+    environment:
+      PAYSTACK_MODE: TEST
+      PAYSTACK_BASE_URL: https://api.paystack.co
+      PAYSTACK_SECRET_KEY: ${PAYSTACK_TEST_SECRET_KEY:?Supply the Paystack TEST secret in the ignored account file}
+  integration:
+    environment:
+      NIGSON_TERMII_ENABLED: ${NIGSON_TERMII_ENABLED:-false}
+      TERMII_MODE: LIVE
+      TERMII_BASE_URL: ${TERMII_BASE_URL:-}
+      TERMII_API_KEY: ${TERMII_API_KEY:-}
+      TERMII_SENDER_ID: ${TERMII_SENDER_ID:-}
+      NIGSON_DELLYMAN_ENABLED: ${NIGSON_DELLYMAN_ENABLED:-false}
+      DELLYMAN_MODE: ${DELLYMAN_MODE:-TEST}
+      DELLYMAN_BASE_URL: ${DELLYMAN_BASE_URL:-https://dev.dellyman.com}
+      DELLYMAN_API_KEY: ${DELLYMAN_API_KEY:-}
+      DELLYMAN_WEBHOOK_SECRET: ${DELLYMAN_WEBHOOK_SECRET:-}

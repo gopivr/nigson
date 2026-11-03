@@ -1,0 +1,3 @@
+# ADR-024: User-selected provider accounts
+
+User decision, 2 November 2026: Paystack test payments, Termii OTP and Dellyman delivery supersede the earlier exclusive Twilio/FedEx selection for these use cases. Keycloak identity and owner boundaries remain intact. Retain legacy adapters for existing work; never label a Dellyman shipment as FedEx or a Termii PIN as a Twilio message. New HTTP ports are opt-in and fail closed. Activation requires provider-specific sender/account/route configuration and durable workflow bindings; missing credentials are not mock success. No production deployment or paid message/booking is authorized by an offline test result.
