@@ -8,6 +8,10 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+LOCAL-DISTRIBUTOR-FORM — VERIFIED locally. Fixed invisible form errors, session/profile hydration mismatch, duplicate clicks and unsafe retry keys; refreshed synthetic proof documents for all9 active local customers. Six UI/service tests and marketing build pass; actual BFF submission201/replay/ownership/CSRF checks pass. Marketing remote4201 restarted.
+
+LOCAL-DELIVERY-AVAILABILITY — VERIFIED locally. Disabled rate workflow previously removed its controller (404); authenticated endpoint now returns FEATURE_DISABLED422 and checkout shows a clear unavailable message. Native inactive/active route tests18, focused architecture/controller5, contracts108 and shop/image builds pass. Installed Commerce healthy; real BFF/cart request verified422 through4200. Actual Dellyman activation still awaits credentials/pickup/service configuration.
+
 PROVIDER-ACCOUNTS-001 — IN_PROGRESS; scoped ports verified, activation pending. Paystack TEST read-only authentication passes; signed /wh/paystack alias and Termii/Dellyman HTTP ports implemented. Native78/no skips, HTTP18/no skips and108 contracts pass. Termii/Dellyman owner workflow bindings remain incomplete pending account base/sender, delivery credentials/pickup/service and merchant integration inputs; Railway URL availability returned404, no deployment claimed. Keys stored only in ignored mode600 account file. Evidence: docs/implementation/2026-11-03-PROVIDER-ACCOUNTS-001.md.
 
 LOCAL-CART-MARKET — DONE locally. Empty markets list blocked frontend cart creation; completed approved synthetic NG destination with guarded repeatable seed_demo_pricing.py --with-cart-destination. Markets now returns NG; real customer/validator cart create201, add-line200 and persisted-read200 pass, prior contents restored.

@@ -22,7 +22,7 @@ def sample_pdf():
 
 
 def main():
- parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--batch',default='initial');args=parser.parse_args()
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--batch',default='initial');parser.add_argument('--all-local-customers',action='store_true');args=parser.parse_args()
  if not re.fullmatch('[a-z0-9-]{1,40}',args.batch):raise ValueError('Invalid local fixture batch')
  if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith('unix://'):raise ValueError('Local Docker required')
  if not json.loads(command('context','inspect'))[0]['Endpoints']['docker']['Host'].startswith('unix://'):raise ValueError('Local Docker required')
@@ -35,6 +35,8 @@ def main():
  if state.exists():subjects.append(json.loads(state.read_text())['id'])
  sqlbase=('compose','exec','-T','postgres','psql','-X','-qAt','-U','nigson_bootstrap','-d','nigson','-v','ON_ERROR_STOP=1')
  parties=command(*sqlbase,'-c',f"SELECT id FROM commerce.party WHERE identity_issuer={literal(env['NIGSON_OIDC_ISSUER'])} AND identity_subject IN ({','.join(literal(s) for s in subjects)}) AND status='ACTIVE' ORDER BY id").splitlines()
+ if args.all_local_customers:
+  parties=command(*sqlbase,'-c',f"SELECT p.id FROM commerce.party p JOIN commerce.customer_profile c ON c.party_id=p.id WHERE p.identity_issuer={literal(env['NIGSON_OIDC_ISSUER'])} AND p.status='ACTIVE' ORDER BY p.id").splitlines()
  if not parties:raise ValueError('Local fixture accounts must sign in first')
  data=sample_pdf();checksum=hashlib.sha256(data).hexdigest();bucket='nigson-local-distributor-documents'
  try:command('compose','exec','-T','localstack','awslocal','s3api','head-bucket','--bucket',bucket)
