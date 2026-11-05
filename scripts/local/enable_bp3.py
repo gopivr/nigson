@@ -48,7 +48,9 @@ def main():
    except (OSError,RuntimeError):time.sleep(0.5)
   if not admin_token:raise RuntimeError('Local identity startup timeout')
   prefix='/admin/realms/nigson-local'
-  policy=realm_policy('nigson-local','https://local.synthetic.test/bff/callback',3,'local-bp3','test',3600)
+  phase=int(config['services']['commerce']['environment']['NIGSON_PRODUCT_PHASE'])
+  if phase not in (3,4,5):raise ValueError('Local BP3-BP5 required')
+  policy=realm_policy('nigson-local','https://local.synthetic.test/bff/callback',phase,'local-bp3','test',3600)
   wanted_clients=[c for c in policy['clients'] if c['clientId'] in ('nigson-commerce','nigson-experience')]
   wanted_scopes={name for c in wanted_clients for name in c['defaultClientScopes']}
   existing={scope['name']:scope for scope in request(prefix+'/client-scopes',token=admin_token)}
@@ -79,7 +81,7 @@ def main():
    result=request('/realms/nigson-local/protocol/openid-connect/token','POST',{'grant_type':'client_credentials','client_id':client['clientId'],'client_secret':client_secrets[client['clientId']]},form=True)
    part=result['access_token'].split('.')[1];claims=json.loads(base64.urlsafe_b64decode(part+'='*(-len(part)%4)))
    if claims['azp']!=client['clientId'] or not set(client['defaultClientScopes']).issubset(set(claims['scope'].split())):raise RuntimeError('Local workload scope verification failed')
-   print('PASS:',client['clientId'],'canonical BP3 service scopes and subject mapper configured',flush=True)
+   print('PASS:',client['clientId'],'canonical local service scopes and subject mapper configured',flush=True)
  finally:
   if created:
    if not admin_token:

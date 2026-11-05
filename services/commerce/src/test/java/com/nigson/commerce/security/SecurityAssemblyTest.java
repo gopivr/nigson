@@ -32,6 +32,7 @@ class SecurityAssemblyTest {
   if(System.getenv("NIGSON_TEST_NOTIFICATION")!=null)properties.put("NIGSON_NOTIFICATION_TEMPLATES_ENABLED","true");
   try(workload;phone;jobs;orders;payments;var app=new SpringApplicationBuilder(CommerceApplication.class).properties(properties).run();var http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build()) {
    assertThat(app.getBeansOfType(org.springframework.security.web.SecurityFilterChain.class)).containsOnlyKeys("trustedSecurity");assertThat(app.getBean("springSessionConversionService",org.springframework.core.convert.ConversionService.class)).isNotNull();assertThat(app.getBean(SessionCookies.class)).isNotNull();String base="http://127.0.0.1:"+((WebServerApplicationContext)app).getWebServer().getPort();
+   assertThat(app.containsBean("deliveryQuoteController")).isTrue();
    com.nigson.acceptance.AuthorizationHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.AuditHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.party.PartyHttpAcceptance.run(app,http,base);

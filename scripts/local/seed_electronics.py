@@ -20,17 +20,17 @@ CATEGORIES = {
   ('11-inch Drawing Tablet', 6, {'display': '11 inch', 'storage': '256 GB', 'accessory': 'Stylus'}),
   ('8-inch Kids Tablet', 22, {'display': '8 inch', 'storage': '64 GB', 'accessory': 'Protective case'})],
  'Audio': [
-  ('Wireless Noise-Cancelling Headphones', 28, {'connection': 'Bluetooth', 'batteryLife': '30 hours'}),
-  ('True Wireless Earbuds', 45, {'connection': 'Bluetooth', 'batteryLife': '6 hours'}),
+  ('Wireless Noise-Cancelling Headphones', 28, {'connection': 'Bluetooth', 'battery_life': '30 hours'}),
+  ('True Wireless Earbuds', 45, {'connection': 'Bluetooth', 'battery_life': '6 hours'}),
   ('Portable Bluetooth Speaker', 8, {'output': '20 W', 'connection': 'Bluetooth'})],
  'Gaming': [
   ('Mechanical Gaming Keyboard', 20, {'connection': 'USB-C', 'switches': 'Mechanical'}),
   ('Wireless Gaming Mouse', 30, {'connection': '2.4 GHz', 'sensitivity': '16000 DPI'}),
-  ('27-inch Gaming Monitor', 7, {'resolution': '2560 x 1440', 'refreshRate': '144 Hz'})],
+  ('27-inch Gaming Monitor', 7, {'resolution': '2560 x 1440', 'refresh_rate': '144 Hz'})],
  'Networking': [
-  ('Wi-Fi 6 Dual-Band Router', 15, {'wirelessStandard': 'Wi-Fi 6', 'ports': '4 LAN'}),
+  ('Wi-Fi 6 Dual-Band Router', 15, {'wireless_standard': 'Wi-Fi 6', 'ports': '4 LAN'}),
   ('8-Port Gigabit Switch', 19, {'ports': '8 Ethernet', 'speed': '1 Gbps'}),
-  ('USB Wi-Fi Adapter', 0, {'connection': 'USB 3.0', 'wirelessStandard': 'Wi-Fi 5'})],
+  ('USB Wi-Fi Adapter', 0, {'connection': 'USB 3.0', 'wireless_standard': 'Wi-Fi 5'})],
  'Storage': [
   ('1 TB Portable SSD', 32, {'capacity': '1 TB', 'connection': 'USB-C'}),
   ('2 TB External Hard Drive', 14, {'capacity': '2 TB', 'connection': 'USB 3.0'}),
@@ -38,7 +38,7 @@ CATEGORIES = {
  'Power and Accessories': [
   ('65 W USB-C GaN Charger', 38, {'output': '65 W', 'ports': '2 USB-C'}),
   ('20000 mAh Power Bank', 26, {'capacity': '20000 mAh', 'output': '22.5 W'}),
-  ('6-Outlet Surge Protector', 5, {'outlets': '6', 'cableLength': '2 m'})],
+  ('6-Outlet Surge Protector', 5, {'outlets': '6', 'cable_length': '2 m'})],
 }
 
 
@@ -64,7 +64,7 @@ def render(publish=False):
             product_slug = 'demo-' + name.lower().replace(' ', '-').replace('.', '')
             insert('product', row('product/' + key, name='Demo ' + name, slug=product_slug,
                 description=name + '. Synthetic electronics product for local catalogue and inventory validation.',
-                brand_id=brand, specifications=specs, status='DRAFT', revision=1))
+                brand_id=brand, division_code='SYNTHETIC_ELECTRONICS', specifications=specs, status='DRAFT', revision=1))
             insert('product_category', row('product-category/' + key, product_id=product, category_id=category_id))
             insert('sku', row('sku/' + key, product_id=product, code=code, variant_name='Standard', unit='unit', active=True))
             insert('inventory_balance', row('balance/' + key, sku_id=sku, location_id=location, on_hand=stock, reserved=0, allocated=0))

@@ -26,10 +26,9 @@ public final class CommerceAuthority {
     }
     public ActorAssertion.Actor forDelegation(SessionRecord session,ActorAssertion.Binding binding,UUID organization) {return forDelegation(session,binding,organization,null);}
     public ActorAssertion.Actor forDelegation(SessionRecord session,ActorAssertion.Binding binding,UUID organization,String requiredEntitlement) {
-        var route=com.nigson.shared.security.PrivateWorkload.ROUTES.stream().filter(r->r.owner().equals(binding.audience())&&r.method().equals(binding.method())&&r.scope().equals(binding.operation())&&r.phase()<=phase&&r.scope().contains("_WITH_SIGNED_")).findFirst().orElseThrow(ActorAssertion::denied);
-        // Match resource against the compiled target registry, independently of the caller's body.
         var matcher=new com.nigson.shared.security.PrivateWorkload(binding.audience(),phase,new com.nigson.shared.security.PrivateIngress(List.of("127.0.0.1/32")),r->token->{throw ActorAssertion.denied();},Map.of(),Set.of(session.issuer()),clock);
-        if(!matcher.match(binding.method(),binding.resource()).api().equals(route.api()))throw ActorAssertion.denied();
+        var route=matcher.match(binding.method(),binding.resource());
+        if(!route.owner().equals(binding.audience())||!route.client().equals("nigson-commerce")||!route.scope().equals(binding.operation())||!route.scope().contains("_WITH_SIGNED_"))throw ActorAssertion.denied();
         var actor=resolve(session,organization,requiredEntitlement,Set.of(route.scope()));
         if(route.scope().endsWith("_WITH_SIGNED_ADMIN")){if(!actor.roles().contains("ADMIN"))throw ActorAssertion.denied();ActorAssertion.recentMfa(actor,clock);}
         if(route.scope().endsWith("_WITH_SIGNED_STAFF")){if(!actor.roles().contains("OPERATIONS"))throw ActorAssertion.denied();ActorAssertion.recentMfa(actor,clock);}

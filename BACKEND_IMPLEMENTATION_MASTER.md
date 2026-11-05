@@ -4671,6 +4671,22 @@ Modes: provider mocks use local-only configurable HTTP URLs and dummy credential
 - **Events:** None directly; owned audit/history where applicable.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, SESSION_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
+### API-208 GET /api/v1/staff/content
+
+Experience BP1; current signed CONTENT_EDITOR via Commerce BFF and content.read_WITH_SIGNED_ACTOR. Bounded page/size; latest revision plus content item version. No writes/events; no-store. Canonical schema: StaffContentSummaryPage.
+
+### API-209 GET /api/v1/staff/quotes
+
+Commerce BP3; current SALES. Bounded page/size; owner-local quote/revision summaries. No writes/events; no-store. Canonical schema: StaffQuoteSummaryPage.
+
+### API-210 GET /api/v1/staff/inventory-movements
+
+Commerce BP1; current OPERATIONS. Bounded page/size; owner-local immutable stock ledger. No writes/events; no-store. Canonical schema: InventoryMovementSummaryPage.
+
+### API-211 GET /api/v1/staff/customers
+
+Commerce BP1; current SALES. Bounded page/size; customer profiles and Commerce order/quote aggregates. No writes/events; no-store. Canonical schema: StaffCustomerSummaryPage.
+
 ### API-207 POST /bff/register (ADR-023 local/test extension)
 
 - **Service / module / phase:** commerce / session / BP1 local/test only.
