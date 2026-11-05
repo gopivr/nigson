@@ -15,6 +15,15 @@ import urllib.error
 import urllib.request
 import urllib.parse
 
+if sys.platform == "win32" and not shutil.which("docker"):
+    for _docker_candidate in [
+        Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "DockerDesktop" / "resources" / "bin",
+        Path(r"C:\Program Files\Docker\Docker\resources\bin"),
+    ]:
+        if (_docker_candidate / "docker.exe").is_file():
+            os.environ["PATH"] = str(_docker_candidate) + os.pathsep + os.environ.get("PATH", "")
+            break
+
 ROOT = Path(__file__).resolve().parents[2]
 BASE_SERVICES = ("postgres", "identity-db", "keycloak", "localstack", "mailpit")
 OWNERS = ("commerce", "experience", "integration")
@@ -118,7 +127,7 @@ def migrate() -> None:
 def validate() -> dict:
     if os.environ.get("ENV", "local") not in {"local", "test"}:
         raise ValueError("Local commands require ENV=local|test")
-    if os.environ.get("DOCKER_HOST") and not os.environ["DOCKER_HOST"].startswith("unix://"):
+    if os.environ.get("DOCKER_HOST") and not os.environ["DOCKER_HOST"].startswith(("unix://", "npipe://")):
         raise ValueError("Local commands refuse remote Docker hosts")
     if os.environ.get("DOCKER_CONTEXT", "default") not in {"default", "desktop-linux"}:
         raise ValueError("Local commands refuse remote Docker contexts")
@@ -131,7 +140,7 @@ def validate() -> dict:
     if not os.environ.get("DOCKER_HOST"):
         endpoint = subprocess.run(["docker", "context", "inspect", "--format", "{{json .Endpoints.docker.Host}}"],
                                   check=True, text=True, capture_output=True, timeout=15).stdout.strip()
-        if not json.loads(endpoint).startswith("unix://"):
+        if not json.loads(endpoint).startswith(("unix://", "npipe://")):
             raise ValueError("Local commands refuse the active remote Docker endpoint")
     if os.environ.get("COMPOSE_PROFILES") or os.environ.get("PROFILES", "") not in {"", "provider-mocks"}:
         raise ValueError("Use PROFILE=core|app|ai and optional PROFILES=provider-mocks")

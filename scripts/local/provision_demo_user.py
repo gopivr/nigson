@@ -31,10 +31,10 @@ def command(*args, input=None):
 
 def main():
     # Obtain effective Compose settings without printing its sensitive config.
-    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith('unix://'):
+    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith(('unix://', 'npipe://')):
         raise ValueError('Local Unix Docker endpoint required')
     context = json.loads(command('context', 'inspect'))[0]
-    if not context['Endpoints']['docker']['Host'].startswith('unix://'):
+    if not context['Endpoints']['docker']['Host'].startswith(('unix://', 'npipe://')):
         raise ValueError('Local Unix Docker endpoint required')
     config = json.loads(command('compose', '--profile', 'app', 'config', '--format', 'json'))
     services = config['services']

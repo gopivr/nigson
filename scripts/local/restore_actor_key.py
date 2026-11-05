@@ -10,6 +10,17 @@ import os
 from pathlib import Path
 import subprocess
 import uuid
+import shutil
+import sys
+
+if sys.platform == "win32" and not shutil.which("docker"):
+    for _docker_candidate in [
+        Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "DockerDesktop" / "resources" / "bin",
+        Path(r"C:\Program Files\Docker\Docker\resources\bin"),
+    ]:
+        if (_docker_candidate / "docker.exe").is_file():
+            os.environ["PATH"] = str(_docker_candidate) + os.pathsep + os.environ.get("PATH", "")
+            break
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -18,12 +29,12 @@ def main():
     env = dict(line.split('=', 1) for line in (ROOT / '.env').read_text().splitlines() if line and not line.startswith('#') and '=' in line)
     if env.get('APP_ENV', 'local') != 'local' or os.environ.get('ENV', 'local') != 'local':
         raise ValueError('LOCAL_ONLY')
-    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith('unix://'):
+    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith(('unix://', 'npipe://')):
         raise ValueError('LOCAL_DOCKER_REQUIRED')
     if os.environ.get('COMPOSE_PROJECT_NAME', 'nigson-local') != 'nigson-local':
         raise ValueError('LOCAL_PROJECT_REQUIRED')
     endpoint = subprocess.run(['docker', 'context', 'inspect', '--format', '{{json .Endpoints.docker.Host}}'], check=True, capture_output=True, text=True, timeout=15).stdout
-    if not json.loads(endpoint).startswith('unix://'):
+    if not json.loads(endpoint).startswith(('unix://', 'npipe://')):
         raise ValueError('LOCAL_DOCKER_REQUIRED')
     region = env.get('NIGSON_AWS_REGION', 'us-east-1')
     def kms(*args):

@@ -99,10 +99,10 @@ def main():
     args = parser.parse_args()
     if os.environ.get('ENV', 'local') not in ('local', 'test') or os.environ.get('APP_ENV', 'local') not in ('local', 'test'):
         raise ValueError('Local/test environment required')
-    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith('unix://'):
+    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith(('unix://', 'npipe://')):
         raise ValueError('Local Unix Docker endpoint required')
     context = json.loads(docker('context', 'inspect'))[0]
-    if not context['Endpoints']['docker']['Host'].startswith('unix://'):
+    if not context['Endpoints']['docker']['Host'].startswith(('unix://', 'npipe://')):
         raise ValueError('Local Unix Docker endpoint required')
     config = json.loads(docker('compose', 'config', '--format', 'json'))
     if config.get('name') != 'nigson-local' or config['services']['postgres']['environment'].get('APP_ENV') != 'local':

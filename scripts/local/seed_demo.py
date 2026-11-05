@@ -231,7 +231,7 @@ def main():
     if os.environ.get('APP_ENV', 'local') not in ('local', 'test') or os.environ.get('ENV', 'local') not in ('local', 'test'):
         parser.error('Demo seed requires local/test environment')
     context = json.loads(docker('context', 'inspect'))[0]
-    if not context['Endpoints']['docker']['Host'].startswith('unix://') or os.environ.get('DOCKER_HOST', 'unix://').startswith(('tcp:', 'ssh:')):
+    if not context['Endpoints']['docker']['Host'].startswith(('unix://', 'npipe://')) or os.environ.get('DOCKER_HOST', 'unix://').startswith(('tcp:', 'ssh:')):
         parser.error('Demo seed requires a local Unix Docker endpoint')
     database = 'nigson' if args.service == 'postgres' else 'nigson_vector_test'
     base = ('compose', 'exec', '-T', args.service, 'psql', '-X', '-qAt', '-U', 'nigson_bootstrap', '-d', database, '-v', 'ON_ERROR_STOP=1')

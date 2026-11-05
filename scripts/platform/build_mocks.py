@@ -28,5 +28,9 @@ link=target/'provider-state.jar'
 if link.is_symlink() and link.resolve()==immutable:pass
 else:
  if link.exists() or link.is_symlink():link.unlink()
- link.symlink_to(immutable.name)
+ try:
+  link.symlink_to(immutable.name)
+ except OSError:
+  import shutil
+  shutil.copyfile(immutable, link)
 print('PASS: pinned immutable local mock extension')
