@@ -70,6 +70,8 @@ def contract():
     result = audit_extend(result)
     result = cart_recovery_extend(result)
     result = reporting_extend(result)
+    from admin_reads import extend as admin_reads_extend
+    result = admin_reads_extend(result, "commerce")
     result = extend_distributor_entitlements(result)
     return result
 

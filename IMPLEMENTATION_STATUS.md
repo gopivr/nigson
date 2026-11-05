@@ -8,6 +8,8 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+ADMIN-PORTAL-REPAIR — IN_PROGRESS. Auditing all admin routes and persistent actions; fixing authenticated owner relays, versioned writes and CMS persistence.
+
 LOCAL-DISTRIBUTOR-FORM — VERIFIED locally. Fixed invisible form errors, session/profile hydration mismatch, duplicate clicks and unsafe retry keys; refreshed synthetic proof documents for all9 active local customers. Six UI/service tests and marketing build pass; actual BFF submission201/replay/ownership/CSRF checks pass. Marketing remote4201 restarted.
 
 LOCAL-DELIVERY-AVAILABILITY — VERIFIED locally. Disabled rate workflow previously removed its controller (404); authenticated endpoint now returns FEATURE_DISABLED422 and checkout shows a clear unavailable message. Native inactive/active route tests18, focused architecture/controller5, contracts108 and shop/image builds pass. Installed Commerce healthy; real BFF/cart request verified422 through4200. Actual Dellyman activation still awaits credentials/pickup/service configuration.

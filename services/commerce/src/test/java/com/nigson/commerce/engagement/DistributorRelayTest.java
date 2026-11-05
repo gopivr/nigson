@@ -38,4 +38,13 @@ class DistributorRelayTest {
   var bp1=new EngagementRelay("test",endpoint,r->"test-workload",delegation,sessions,authority,1);assertThatThrownBy(()->bp1.execute(actor,"session","API-093","/api/v1/me/distributor-applications",null,null,null,null,null,UUID.randomUUID())).hasMessage("FEATURE_DISABLED");verifyNoInteractions(delegation);
  }
  @Test void staleActorCannotBorrowOtherSession(){var stranger=new ActorAssertion.Actor(UUID.randomUUID(),record.issuer(),record.subject(),null,actor.roles(),Set.of(),null);assertThatThrownBy(()->relay.execute(stranger,"session","API-093","/api/v1/me/distributor-applications",null,null,null,null,null,UUID.randomUUID())).hasMessage("ACCESS_DENIED");verifyNoInteractions(delegation);}
+ @Test void adminReadsAndVersionedLeadPatchUseSignedOwnerRoutes(){
+  var bp4=new EngagementRelay("test",endpoint,r->"test-workload",delegation,sessions,authority,4);
+  for(var row:List.of(new String[]{"API-089","/api/v1/staff/leads","SALES"},new String[]{"API-208","/api/v1/staff/content","CONTENT_EDITOR"},new String[]{"API-110","/api/v1/staff/reports/engagement","ANALYST"})){
+   assertThat(bp4.execute(actor,"session",row[0],row[1],null,null,null,null,null,UUID.randomUUID()).status()).isEqualTo(200);verify(authority,atLeastOnce()).requireRole(actor,row[2]);assertThat(cookie.get()).isNull();
+  }
+  var path="/api/v1/staff/leads/"+UUID.randomUUID();var input=EventCodec.JSON.readTree("{\"state\":\"IN_PROGRESS\",\"note\":\"Sales follow-up started\"}");
+  assertThat(bp4.execute(actor,"session","API-091",path,null,input,"lead-update","\"7\"",record.csrfToken(),UUID.randomUUID()).status()).isEqualTo(200);
+  verify(delegation).issue(eq("session"),argThat(b->b.method().equals("PATCH")&&b.resource().equals(path)),isNull());verify(sessions).csrf(record,record.csrfToken());
+ }
 }

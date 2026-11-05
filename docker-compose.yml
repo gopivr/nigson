@@ -13,7 +13,7 @@ services:
       - nigson-postgres:/var/lib/postgresql
       - ./infrastructure/docker/postgres/10-local-bootstrap.sql:/docker-entrypoint-initdb.d/10-local-bootstrap.sql:ro
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "nigson_bootstrap", "-d", "nigson"]
+      test: [ "CMD", "pg_isready", "-U", "nigson_bootstrap", "-d", "nigson" ]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -27,13 +27,13 @@ services:
     volumes:
       - nigson-identity:/var/lib/postgresql
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "keycloak", "-d", "keycloak"]
+      test: [ "CMD", "pg_isready", "-U", "keycloak", "-d", "keycloak" ]
       interval: 5s
       timeout: 3s
       retries: 20
   keycloak:
     image: quay.io/keycloak/keycloak:26.8.0@sha256:b0f60d489d51c5d113390bdf5461d4c06e6051be026c05549f2e1e10ec352bcc
-    command: ["start-dev", "--import-realm"]
+    command: [ "start-dev", "--import-realm" ]
     environment:
       APP_ENV: ${APP_ENV:-local}
       KC_DB: postgres
@@ -68,7 +68,7 @@ services:
     volumes:
       - nigson-localstack:/var/lib/localstack
     healthcheck:
-      test: ["CMD", "awslocal", "sqs", "list-queues"]
+      test: [ "CMD", "awslocal", "sqs", "list-queues" ]
       interval: 5s
       timeout: 5s
       retries: 30
@@ -84,7 +84,7 @@ services:
       - nigson-mailpit:/data
 
   vector-db:
-    profiles: [ai]
+    profiles: [ ai ]
     image: pgvector/pgvector:0.8.2-pg18@sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d
     environment:
       APP_ENV: ${APP_ENV:-local}
@@ -95,12 +95,12 @@ services:
       - nigson-vector:/var/lib/postgresql
       - ./infrastructure/docker/postgres/10-local-bootstrap.sql:/docker-entrypoint-initdb.d/10-local-bootstrap.sql:ro
     healthcheck:
-      test: [CMD, pg_isready, -U, nigson_bootstrap, -d, nigson_vector_test]
+      test: [ CMD, pg_isready, -U, nigson_bootstrap, -d, nigson_vector_test ]
       interval: 5s
       timeout: 3s
       retries: 20
   migrate-commerce:
-    profiles: [app]
+    profiles: [ app ]
     image: nigson/migration:local
     build:
       context: .
@@ -113,12 +113,12 @@ services:
       MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
       MIGRATION_PASSWORD: ${COMMERCE_MIGRATION_PASSWORD:?Missing COMMERCE_MIGRATION_PASSWORD}
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     depends_on:
       postgres:
         condition: service_healthy
   commerce:
-    profiles: [app]
+    profiles: [ app ]
     image: nigson/commerce:local
     build:
       context: .
@@ -151,6 +151,7 @@ services:
       NIGSON_BFF_ALLOWED_ORIGINS: ${NIGSON_BFF_ALLOWED_ORIGINS:-http://localhost:8090,http://localhost:4200}
       NIGSON_BFF_CALLBACK: ${NIGSON_BFF_CALLBACK:-http://localhost:4200/bff/callback}
       NIGSON_BFF_RETURN_PATHS: ${NIGSON_BFF_RETURN_PATHS:-/,/account,/shop,/checkout,/admin}
+      NIGSON_QUOTES_ENABLED: ${NIGSON_QUOTES_ENABLED:-false}
       NIGSON_EXPERIENCE_BASE_URL: ${NIGSON_EXPERIENCE_BASE_URL:-http://experience:8082}
       NIGSON_INTEGRATION_BASE_URL: ${NIGSON_INTEGRATION_BASE_URL:-http://integration:8083}
       NIGSON_COMMERCE_WORKLOAD_SECRET: ${NIGSON_COMMERCE_WORKLOAD_SECRET:-mock-commerce-workload-secret-32b}
@@ -171,7 +172,7 @@ services:
     ports:
       - "127.0.0.1:${COMMERCE_PORT:-8081}:8081"
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     stop_grace_period: 35s
     depends_on:
       migrate-commerce:
@@ -179,7 +180,7 @@ services:
       keycloak:
         condition: service_started
   migrate-experience:
-    profiles: [app]
+    profiles: [ app ]
     image: nigson/migration:local
     build:
       context: .
@@ -192,12 +193,12 @@ services:
       MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
       MIGRATION_PASSWORD: ${EXPERIENCE_MIGRATION_PASSWORD:?Missing EXPERIENCE_MIGRATION_PASSWORD}
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     depends_on:
       postgres:
         condition: service_healthy
   experience:
-    profiles: [app]
+    profiles: [ app ]
     image: nigson/experience:local
     build:
       context: .
@@ -212,10 +213,11 @@ services:
       SCHEMA_RELEASE: ${SCHEMA_RELEASE:-BP1}
       APP_ENV: ${APP_ENV:-local}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=experience
-      NIGSON_SECURITY_ENABLED: "true"
-      NIGSON_PRODUCT_PHASE: "4"
-      NIGSON_PRIVATE_PEER_CIDRS: 127.0.0.1/32,172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
-      NIGSON_ACTOR_PUBLIC_KEYS: ${NIGSON_ACTOR_PUBLIC_KEYS:-"{\"active\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEptppM0acP6MZRynwzPWmdShHfFPbg/WRvpGXbxkP/6ps7W0/21TtADgT/3NwT9hh36k+mxY6dMnfnezBfXTtiA==\"}"}
+      NIGSON_SECURITY_ENABLED: ${NIGSON_SECURITY_ENABLED:-false}
+      NIGSON_PRODUCT_PHASE: ${NIGSON_PRODUCT_PHASE:-1}
+      NIGSON_PRIVATE_PEER_CIDRS: ${NIGSON_PRIVATE_PEER_CIDRS:-}
+      NIGSON_ACTOR_PUBLIC_KEYS: ${NIGSON_ACTOR_PUBLIC_KEYS:-}
+      NIGSON_CONTENT_MARKET_CODES: ${NIGSON_CONTENT_MARKET_CODES:-}
       NIGSON_DISTRIBUTOR_REQUIRED_DOCUMENT_TYPES: ${NIGSON_DISTRIBUTOR_REQUIRED_DOCUMENT_TYPES:-}
       NIGSON_DISTRIBUTOR_RECIPIENT_GROUP: ${NIGSON_DISTRIBUTOR_RECIPIENT_GROUP:-}
       NIGSON_DISTRIBUTOR_COMMERCE_MODE: ${NIGSON_DISTRIBUTOR_COMMERCE_MODE:-}
@@ -230,7 +232,7 @@ services:
     ports:
       - "127.0.0.1:${EXPERIENCE_PORT:-8082}:8082"
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     stop_grace_period: 35s
     depends_on:
       migrate-experience:
@@ -238,7 +240,7 @@ services:
       keycloak:
         condition: service_started
   migrate-integration:
-    profiles: [app]
+    profiles: [ app ]
     image: nigson/migration:local
     build:
       context: .
@@ -251,12 +253,12 @@ services:
       MIGRATION_JDBC_URL: jdbc:postgresql://postgres:5432/nigson
       MIGRATION_PASSWORD: ${INTEGRATION_MIGRATION_PASSWORD:?Missing INTEGRATION_MIGRATION_PASSWORD}
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     depends_on:
       postgres:
         condition: service_healthy
   integration:
-    profiles: [app]
+    profiles: [ app ]
     image: nigson/integration:local
     build:
       context: .
@@ -294,7 +296,7 @@ services:
     ports:
       - "127.0.0.1:${INTEGRATION_PORT:-8083}:8083"
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     stop_grace_period: 35s
     depends_on:
       migrate-integration:
@@ -302,7 +304,7 @@ services:
       keycloak:
         condition: service_started
   migrate-ai:
-    profiles: [ai]
+    profiles: [ ai ]
     image: nigson/migration:local
     build:
       context: .
@@ -315,12 +317,12 @@ services:
       MIGRATION_JDBC_URL: jdbc:postgresql://vector-db:5432/nigson_vector_test
       MIGRATION_PASSWORD: ${AI_MIGRATION_PASSWORD:?Missing AI_MIGRATION_PASSWORD}
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     depends_on:
       vector-db:
         condition: service_healthy
   ai:
-    profiles: [ai]
+    profiles: [ ai ]
     image: nigson/ai:local
     build:
       context: services/ai
@@ -333,61 +335,61 @@ services:
     ports:
       - "127.0.0.1:${AI_PORT:-8084}:8084"
     read_only: true
-    tmpfs: [/tmp]
+    tmpfs: [ /tmp ]
     stop_grace_period: 35s
     depends_on:
       migrate-ai:
         condition: service_completed_successfully
 
   paystack-mock:
-    profiles: [provider-mocks]
+    profiles: [ provider-mocks ]
     image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
     environment:
       APP_ENV: local
       MOCK_PROVIDER: paystack
-    command: ["--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal"]
+    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
     volumes:
       - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
       - nigson-paystack-mock:/home/wiremock/state
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}"]
+      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
       interval: 10s
       timeout: 5s
       start_period: 10s
       retries: 6
 
   fedex-mock:
-    profiles: [provider-mocks]
+    profiles: [ provider-mocks ]
     image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
     environment:
       APP_ENV: local
       MOCK_PROVIDER: fedex
-    command: ["--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal"]
+    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
     volumes:
       - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
       - nigson-fedex-mock:/home/wiremock/state
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}"]
+      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
       interval: 10s
       timeout: 5s
       start_period: 10s
       retries: 6
 
   twilio-mock:
-    profiles: [provider-mocks]
+    profiles: [ provider-mocks ]
     image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
     environment:
       APP_ENV: local
       MOCK_PROVIDER: twilio
-    command: ["--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal"]
+    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
     volumes:
       - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
       - nigson-twilio-mock:/home/wiremock/state
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}"]
+      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
       interval: 10s
       timeout: 5s
       start_period: 10s
