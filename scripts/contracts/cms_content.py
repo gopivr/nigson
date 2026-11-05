@@ -51,5 +51,6 @@ def extend(spec):
     paths['/api/v1/seo/sitemap']={'get':op('API-084','Public sitemap contains only configured canonical HTTPS URLs for current approved public Experience content; empty until approved SEO origin configuration exists.', 'ContentSitemap',public=True)}
     paths['/api/v1/channels']={'get':op('API-085','Public active channel projection; never returns lead recipient groups or provider secrets.', 'PublicChannels',public=True)}
     paths['/api/v1/staff/channel-configurations/{id}']={'put':op('API-086','ADMIN with current signed assertion and recent MFA; versioned typed channel configuration update. No channel values are preconfigured.', 'ChannelConfigurationDTO',params(True,True,True),role='ADMIN',scope='channels.write_WITH_SIGNED_ADMIN',method='put',body='ChannelConfigurationInput')}
-    return spec
+    from admin_reads import extend as admin_reads_extend
+    return admin_reads_extend(spec, "experience")
 

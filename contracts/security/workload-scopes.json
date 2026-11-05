@@ -655,5 +655,14 @@
     "client": "nigson-commerce",
     "scope": "channels.write_WITH_SIGNED_ADMIN",
     "phase": 1
+  },
+  {
+    "api": "API-208",
+    "method": "GET",
+    "path": "/api/v1/staff/content",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "content.read_WITH_SIGNED_ACTOR",
+    "phase": 1
   }
 ]
