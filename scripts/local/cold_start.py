@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import socket
+import shutil
 import subprocess
 import time
 import urllib.error
@@ -85,7 +86,7 @@ def problem(port: int, token: str | None, expected: int, code: str) -> None:
 
 
 def run(action: str, succeeds: bool = True, overrides: dict | None = None) -> None:
-    result = subprocess.run(["make", action], cwd=ROOT, env={**os.environ, **(overrides or {})}, timeout=1200)
+    result = subprocess.run([shutil.which("make") or "make", action], cwd=ROOT, env={**os.environ, **(overrides or {})}, timeout=1200)
     assert (result.returncode == 0) == succeeds, action
 
 

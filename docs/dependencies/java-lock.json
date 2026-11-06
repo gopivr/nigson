@@ -2851,26 +2851,6 @@
             },
             {
               "artifactId": "http-auth-aws",
-              "children": [
-                {
-                  "artifactId": "checksums-spi",
-                  "classifier": "",
-                  "groupId": "software.amazon.awssdk",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.55.10"
-                },
-                {
-                  "artifactId": "checksums",
-                  "classifier": "",
-                  "groupId": "software.amazon.awssdk",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.55.10"
-                }
-              ],
               "classifier": "",
               "groupId": "software.amazon.awssdk",
               "optional": "false",
@@ -2881,15 +2861,6 @@
             {
               "artifactId": "sdk-core",
               "children": [
-                {
-                  "artifactId": "profiles",
-                  "classifier": "",
-                  "groupId": "software.amazon.awssdk",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "2.55.10"
-                },
                 {
                   "artifactId": "retries",
                   "classifier": "",
@@ -3265,6 +3236,120 @@
           "version": "2.55.10"
         },
         {
+          "artifactId": "s3",
+          "children": [
+            {
+              "artifactId": "aws-xml-protocol",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "arns",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "profiles",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "crt-core",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "checksums",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            },
+            {
+              "artifactId": "checksums-spi",
+              "classifier": "",
+              "groupId": "software.amazon.awssdk",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "2.55.10"
+            }
+          ],
+          "classifier": "",
+          "groupId": "software.amazon.awssdk",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.55.10"
+        },
+        {
+          "artifactId": "apache-client",
+          "children": [
+            {
+              "artifactId": "httpclient",
+              "children": [
+                {
+                  "artifactId": "commons-logging",
+                  "classifier": "",
+                  "groupId": "commons-logging",
+                  "optional": "false",
+                  "scope": "compile",
+                  "type": "jar",
+                  "version": "1.3.6"
+                }
+              ],
+              "classifier": "",
+              "groupId": "org.apache.httpcomponents",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.5.13"
+            },
+            {
+              "artifactId": "httpcore",
+              "classifier": "",
+              "groupId": "org.apache.httpcomponents",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "4.4.16"
+            },
+            {
+              "artifactId": "commons-codec",
+              "classifier": "",
+              "groupId": "commons-codec",
+              "optional": "false",
+              "scope": "compile",
+              "type": "jar",
+              "version": "1.21.0"
+            }
+          ],
+          "classifier": "",
+          "groupId": "software.amazon.awssdk",
+          "optional": "false",
+          "scope": "compile",
+          "type": "jar",
+          "version": "2.55.10"
+        },
+        {
           "artifactId": "common-problem",
           "children": [
             {
@@ -3588,15 +3673,6 @@
             {
               "artifactId": "twilio",
               "children": [
-                {
-                  "artifactId": "commons-codec",
-                  "classifier": "",
-                  "groupId": "commons-codec",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.21.0"
-                },
                 {
                   "artifactId": "commons-io",
                   "classifier": "",
@@ -5026,17 +5102,6 @@
             },
             {
               "artifactId": "spring-core",
-              "children": [
-                {
-                  "artifactId": "commons-logging",
-                  "classifier": "",
-                  "groupId": "commons-logging",
-                  "optional": "false",
-                  "scope": "compile",
-                  "type": "jar",
-                  "version": "1.3.6"
-                }
-              ],
               "classifier": "",
               "groupId": "org.springframework",
               "optional": "false",
