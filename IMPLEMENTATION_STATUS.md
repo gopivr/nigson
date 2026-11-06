@@ -8,7 +8,7 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
-ADMIN-PORTAL-REPAIR — IN_PROGRESS. Auditing all admin routes and persistent actions; fixing authenticated owner relays, versioned writes and CMS persistence.
+ADMIN-PORTAL-REPAIR — VERIFIED locally: 21 admin routes and 32 authenticated read/write checks plus six product/SKU/stock form checks pass; 108 contracts and all four frontend builds pass. Stock/product test values restored; temporary CMS articles withdrawn. Role and Finance decisions still require recent MFA and their existing approval rules.
 
 LOCAL-DISTRIBUTOR-FORM — VERIFIED locally. Fixed invisible form errors, session/profile hydration mismatch, duplicate clicks and unsafe retry keys; refreshed synthetic proof documents for all9 active local customers. Six UI/service tests and marketing build pass; actual BFF submission201/replay/ownership/CSRF checks pass. Marketing remote4201 restarted.
 
