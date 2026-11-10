@@ -1,0 +1,37 @@
+# TEST-only opt-in for provider-specific delivery quotes. Live remains separately gated.
+services:
+  commerce:
+    environment:
+      NIGSON_SECURITY_ENABLED: "true"
+      NIGSON_CARRIER_QUOTES_ENABLED: "true"
+      NIGSON_CARRIER_PROVIDER: PANDAGO
+      NIGSON_CARRIER_ACCOUNT_FINGERPRINT: ${NIGSON_PANDAGO_ACCOUNT_FINGERPRINT:?Set the verified PandaGo account fingerprint}
+      NIGSON_FULFILLMENT_ENABLED: "true"
+      NIGSON_FULFILLMENT_MODE: SANDBOX
+      NIGSON_FULFILLMENT_APPROVAL: ${NIGSON_PANDAGO_APPROVAL:?Set the approved PandaGo qualification reference}
+      NIGSON_FULFILLMENT_APPROVAL_UNTIL: ${NIGSON_PANDAGO_APPROVAL_UNTIL:?Set the PandaGo TEST approval expiry}
+      NIGSON_PRICING_CHECKOUT_ENABLED: "true"
+      NIGSON_PRICING_PROVIDER_MODE: TEST
+      NIGSON_PRICING_PAYMENT_APPROVAL: ${NIGSON_PAYSTACK_APPROVAL:?Set the approved Paystack TEST reference}
+      NIGSON_PRICING_CARRIER_APPROVAL: ${NIGSON_PANDAGO_APPROVAL:?Set the approved PandaGo qualification reference}
+      NIGSON_PRICING_PROVIDER_APPROVAL_UNTIL: ${NIGSON_PANDAGO_APPROVAL_UNTIL:?Set the provider approval expiry}
+      NIGSON_ORDER_CHECKOUT_ENABLED: "false"
+  integration:
+    environment:
+      NIGSON_SECURITY_ENABLED: "true"
+      NIGSON_PANDAGO_ENABLED: "true"
+      NIGSON_PANDAGO_APPROVAL: ${NIGSON_PANDAGO_APPROVAL:?Set the approved PandaGo qualification reference}
+      NIGSON_PANDAGO_APPROVAL_UNTIL: ${NIGSON_PANDAGO_APPROVAL_UNTIL:?Set the PandaGo TEST approval expiry}
+      PANDAGO_MODE: ${PANDAGO_MODE:?Set the confirmed Delivery Hero environment}
+      PANDAGO_BASE_URL: ${PANDAGO_BASE_URL:?Set the official NG API origin}
+      PANDAGO_AUTH_BASE_URL: ${PANDAGO_AUTH_BASE_URL:?Set the matching STS origin}
+      PANDAGO_CLIENT_ID: ${PANDAGO_CLIENT_ID:?Missing Pandago client ID}
+      PANDAGO_KEY_ID: ${PANDAGO_KEY_ID:?Missing Pandago key ID}
+      PANDAGO_SCOPE: ${PANDAGO_SCOPE:?Missing Pandago scope}
+      PANDAGO_CLIENT_VENDOR_ID: ${PANDAGO_CLIENT_VENDOR_ID:?Missing outlet ID}
+      PANDAGO_PRIVATE_KEY_FILE: /run/secrets/pandago_private_key
+    secrets:
+      - pandago_private_key
+secrets:
+  pandago_private_key:
+    file: ${PANDAGO_PRIVATE_KEY_FILE:?Set local private-key file path}

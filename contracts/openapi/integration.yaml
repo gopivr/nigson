@@ -676,7 +676,7 @@
             }
           }
         },
-        "description": "Private SERVICE_COMMERCE carrier.quote_WITH_SIGNED_ACTOR. Closed NG/NGN server address/packing only. Configured account/service/pickup and current approval; exact single ACCOUNT rate in NGN. No exchange conversion, route assumption or manual fallback. Actual OAuth/rate HTTP occurs outside local locks; commandId durably replays the original acknowledgement/audit. Returned rate expires within five minutes; commerce must revalidate the cart/address/packages before binding. This command never books or dispatches.",
+        "description": "Private SERVICE_COMMERCE carrier.quote_WITH_SIGNED_ACTOR. Closed NG/NGN server address/packing only. FedEx requires the approved shipper origin and configured service/pickup; PandaGo uses the configured outlet and destination coordinates without a fabricated origin or service code. PandaGo fee/time are pre-checkout estimates for server-calculated merchandise subtotal; historical delivery times are not live traffic predictions. The short-lived quote fee remains the bound checkout fee and is not replaced by the estimate. Current provider/account approval and exact NGN fee required. Actual provider HTTP occurs outside local locks; commandId durably replays the original acknowledgement/audit. Returned rate expires within five minutes; commerce revalidates the cart/address/packages before binding. This command never books or dispatches.",
         "parameters": [
           {
             "name": "X-Correlation-ID",
@@ -1474,7 +1474,9 @@
           "city",
           "region",
           "postalCode",
-          "countryCode"
+          "countryCode",
+          "latitude",
+          "longitude"
         ],
         "properties": {
           "recipient": {
@@ -1504,8 +1506,10 @@
             "maxLength": 100
           },
           "region": {
-            "type": "string",
-            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ],
             "maxLength": 100
           },
           "postalCode": {
@@ -1518,6 +1522,24 @@
           "countryCode": {
             "const": "NG",
             "type": "string"
+          },
+          "latitude": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": -90,
+            "maximum": 90,
+            "multipleOf": 1e-06
+          },
+          "longitude": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": -180,
+            "maximum": 180,
+            "multipleOf": 1e-06
           }
         }
       },
@@ -1572,9 +1594,9 @@
           "cartId",
           "market",
           "currency",
-          "shipper",
           "destination",
-          "packages"
+          "packages",
+          "orderAmount"
         ],
         "properties": {
           "commandId": {
@@ -1594,7 +1616,14 @@
             "const": "NGN"
           },
           "shipper": {
-            "$ref": "#/components/schemas/CarrierAddress"
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CarrierAddress"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "destination": {
             "$ref": "#/components/schemas/CarrierAddress"
@@ -1611,6 +1640,10 @@
             "type": "string",
             "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
             "maxLength": 80
+          },
+          "orderAmount": {
+            "type": "string",
+            "pattern": "^[0-9]{1,15}(\\.[0-9]{1,2})?$"
           }
         }
       },
@@ -1623,12 +1656,21 @@
           "currency",
           "amount",
           "expiresAt",
-          "providerReference"
+          "providerReference",
+          "estimatedDeliveryAmount",
+          "estimatedPickupTime",
+          "estimatedDeliveryTime",
+          "deliveryDuration",
+          "lowerBound",
+          "upperBound"
         ],
         "properties": {
           "provider": {
             "type": "string",
-            "const": "FEDEX"
+            "enum": [
+              "FEDEX",
+              "PANDAGO"
+            ]
           },
           "serviceCode": {
             "type": "string",
@@ -1653,6 +1695,52 @@
               "null"
             ],
             "maxLength": 160
+          },
+          "estimatedDeliveryAmount": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]{1,15}\\.[0-9]{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "estimatedPickupTime": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "estimatedDeliveryTime": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "deliveryDuration": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 40
+          },
+          "lowerBound": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 40
+          },
+          "upperBound": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 40
           }
         }
       },

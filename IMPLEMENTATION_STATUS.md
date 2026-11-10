@@ -1,12 +1,16 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:1 November2026 UTC
+Specification:1.1.0 | Architecture source:1.0 + ADR-008/ADR-009 | Updated:7 November2026 UTC
 
 ## Current Phase
 
 EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). INT-NOTIF-001 offline engineering is complete; stage, restore and genuine provider qualification gates remain input-bound. BP1 launch composition remains section46.
 
 ## Current Task
+
+RUNTIME-MOCK-REMOVAL — IN_PROGRESS. Removing browser authentication/data fallbacks and mock provider routing from normal runtime; preserving explicit isolated test fixtures. Public `GET /api/v1/markets` now bypasses stale session-cookie validation as required by API-029; market HTTP acceptance passes with an unknown session ID. Local BFF security is enabled using local-only session/actor keys, and frontend `/bff/login` now redirects to the Nigson-branded Keycloak login page. Evidence: `docs/implementation/2026-11-07-RUNTIME-MOCK-REMOVAL.md`.
+
+PANDAGO-001 — IN_PROGRESS; provider-aware NG/NGN cart quotes and quote-to-order provider snapshots implemented, but booking/status/tracking remains incomplete and activation is input-blocked. The explicit PandaGo TEST quote pilot is recorded in ADR-009; FedEx remains the ADR-008 launch-carrier decision. The opt-in Compose overlay enables quotes only after PandaGo and pricing approval inputs; order checkout is forced off until the no-label booking/UNKNOWN/reconciliation workflow is complete. NG stage STS previously returned401 invalid_client; registered2048-bit key/KeyID and verified account approval remain required. No real provider requests or deliveries were created. Compose syntax passes; interpolation with the current `.env` is blocked because `NIGSON_PANDAGO_APPROVAL_UNTIL` is unset. Evidence: docs/implementation/2026-11-07-PANDAGO-001.md.
 
 ADMIN-PORTAL-REPAIR — VERIFIED locally: 21 admin routes and 32 authenticated read/write checks plus six product/SKU/stock form checks pass; 108 contracts and all four frontend builds pass. Stock/product test values restored; temporary CMS articles withdrawn. Role and Finance decisions still require recent MFA and their existing approval rules.
 

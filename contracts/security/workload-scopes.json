@@ -36,6 +36,15 @@
     "phase": 3
   },
   {
+    "api": "API-212",
+    "method": "GET",
+    "path": "/api/v1/quote-requests",
+    "owner": "experience",
+    "client": "nigson-commerce",
+    "scope": "lead.quote.read_WITH_SIGNED_CUSTOMER",
+    "phase": 3
+  },
+  {
     "api": "API-206",
     "method": "POST",
     "path": "/internal/v1/quote-sku-eligibility",

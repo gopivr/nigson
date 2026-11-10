@@ -2,6 +2,7 @@ package com.nigson.experience.lead;
 
 import com.nigson.shared.problem.ApiValues;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 import tools.jackson.databind.JsonNode;
 
@@ -12,6 +13,9 @@ public final class QuoteLeadValues {
  public record Request(UUID marketId,UUID organizationId,List<Product> products,String subject,String message,Contact contact){ public Request{products=List.copyOf(products);} }
  public record Created(UUID leadId,String state){}
  public record EligibleSku(UUID skuId,int quantityScale){}
+ public record RequestedProduct(UUID skuId,String quantity){}
+ public record HistoryItem(UUID leadId,String subject,String message,String state,UUID quoteId,Instant createdAt,Instant updatedAt,List<RequestedProduct> products){ public HistoryItem{products=List.copyOf(products);} }
+ public record HistoryPage(List<HistoryItem> items,int page,int size,long totalElements,long totalPages){ public HistoryPage{items=List.copyOf(items);} }
  public static Request parse(JsonNode n){
   exact(n,Set.of("marketId","products","subject","message","contact"),Set.of("organizationId"));
   UUID market=uuid(n,"marketId"),org=uuidOptional(n,"organizationId");JsonNode items=n.path("products");if(!items.isArray()||items.isEmpty()||items.size()>50)throw ApiValues.invalid();

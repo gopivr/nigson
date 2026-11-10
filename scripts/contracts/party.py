@@ -5,7 +5,8 @@ def extend(spec):
     from authorization import UUID, VERSION, REF, object_schema, parameter, operation
     string = lambda n: {'type': 'string', 'minLength': 1, 'maxLength': n}
     nullable = lambda value: {'anyOf': [value, {'type': 'null'}]}
-    fields = {'label': nullable(string(60)), 'recipient': string(160), 'phone': string(32), 'line1': string(200), 'line2': nullable(string(200)), 'city': string(100), 'region': nullable(string(100)), 'postalCode': nullable(string(24)), 'countryCode': {'type': 'string', 'pattern': '^[A-Z]{2}$', 'description': 'Assigned ISO 3166 alpha-2 country with an enabled, consistent market destination policy.'}, 'organizationId': nullable(UUID), 'isDefault': {'type': 'boolean'}}
+    coordinate = {'type': 'number', 'minimum': -180, 'maximum': 180}
+    fields = {'label': nullable(string(60)), 'recipient': string(160), 'phone': string(32), 'line1': string(200), 'line2': nullable(string(200)), 'city': string(100), 'region': nullable(string(100)), 'postalCode': nullable(string(24)), 'countryCode': {'type': 'string', 'pattern': '^[A-Z]{2}$', 'description': 'Assigned ISO 3166 alpha-2 country with an enabled, consistent market destination policy.'}, 'latitude': nullable({**coordinate, 'maximum': 90}), 'longitude': nullable(coordinate), 'organizationId': nullable(UUID), 'isDefault': {'type': 'boolean'}}
     profile = {'id': UUID, 'displayName': string(160), 'email': {'type': 'string', 'format': 'email', 'maxLength': 254}, 'emailVerified': {'type': 'boolean'}, 'phone': nullable(string(32)), 'locale': string(16), 'version': VERSION}
     schemas = spec['components']['schemas']
     schemas['ProfileDTO'] = object_schema(profile)

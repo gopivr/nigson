@@ -29,6 +29,18 @@
         "file": "../043-bp3-quote-cart.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../044-bp3-address-coordinates.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../045-bp3-pandago-carrier-quotes.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

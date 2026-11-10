@@ -8,8 +8,8 @@ class AuthorizationContracts(unittest.TestCase):
     def test_reviewed_generation_and_exact_implemented_routes(self):
         subprocess.run([sys.executable, 'scripts/contracts/authorization.py', '--check'], cwd=ROOT, check=True)
         spec = json.loads((ROOT / 'contracts/openapi/commerce.yaml').read_text())
-        self.assertEqual(len(spec['paths']), 114)
-        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()}, {f'API-{n:03}' for n in range(1,26)} | {'API-062','API-063','API-064','API-065','API-066','API-067','API-161','API-111', 'API-112', 'API-113', 'API-117', 'API-132', 'API-135', 'API-149', 'API-163', 'API-164', 'API-122', 'API-133', 'API-165', 'API-045', 'API-046', 'API-170', 'API-029', 'API-031', 'API-162', 'API-169', 'API-026', 'API-027', 'API-028', 'API-036', 'API-150', 'API-151', 'API-032', 'API-033', 'API-034', 'API-035', 'API-047', 'API-048', 'API-049', 'API-050', 'API-171', 'API-174', 'API-037', 'API-038', 'API-039', 'API-040', 'API-043', 'API-044', 'API-121', 'API-124', 'API-041', 'API-042', 'API-052', 'API-053', 'API-054', 'API-118', 'API-181', 'API-119', 'API-120', 'API-051', 'API-160', 'API-191', 'API-192', 'API-197', 'API-199', 'API-200', 'API-183', 'API-184', 'API-185', 'API-186', 'API-188', 'API-068','API-069','API-070','API-071','API-072','API-073','API-074','API-123','API-173','API-195','API-206','API-055','API-056','API-057','API-058','API-059','API-060','API-061','API-152','API-153','API-154','API-155', 'API-134','API-159','API-075','API-030','API-207','API-209','API-210','API-211','paystackWebhookCompatibility'})
+        self.assertEqual(len(spec['paths']), 115)
+        self.assertEqual({op['operationId'] for path in spec['paths'].values() for op in path.values()}, {f'API-{n:03}' for n in range(1,26)} | {'API-062','API-063','API-064','API-065','API-066','API-067','API-161','API-111', 'API-112', 'API-113', 'API-117', 'API-132', 'API-135', 'API-149', 'API-163', 'API-164', 'API-122', 'API-133', 'API-165', 'API-045', 'API-046', 'API-170', 'API-029', 'API-031', 'API-162', 'API-169', 'API-026', 'API-027', 'API-028', 'API-036', 'API-150', 'API-151', 'API-032', 'API-033', 'API-034', 'API-035', 'API-047', 'API-048', 'API-049', 'API-050', 'API-171', 'API-174', 'API-037', 'API-038', 'API-039', 'API-040', 'API-043', 'API-044', 'API-121', 'API-124', 'API-041', 'API-042', 'API-052', 'API-053', 'API-054', 'API-118', 'API-181', 'API-119', 'API-120', 'API-051', 'API-160', 'API-191', 'API-192', 'API-197', 'API-199', 'API-200', 'API-183', 'API-184', 'API-185', 'API-186', 'API-188', 'API-068','API-069','API-070','API-071','API-072','API-073','API-074','API-123','API-173','API-195','API-206','API-055','API-056','API-057','API-058','API-059','API-060','API-061','API-152','API-153','API-154','API-155', 'API-134','API-159','API-075','API-030','API-207','API-209','API-210','API-211','API-088','API-212','paystackWebhookCompatibility'})
         organizations = spec['paths']['/api/v1/me/organizations']['get']
         self.assertEqual(organizations['operationId'], 'API-066')
         self.assertEqual(organizations['security'], [{'bffSession': []}])
@@ -20,6 +20,14 @@ class AuthorizationContracts(unittest.TestCase):
         self.assertIn('412', entitlement['responses'])
         self.assertFalse(spec['components']['schemas']['DistributorEntitlementCommand']['additionalProperties'])
         self.assertEqual(spec['paths']['/api/v1/me/rewards']['get']['operationId'],'API-062')
+        quote_create = spec['paths']['/api/v1/quote-requests']['post']
+        quote_history = spec['paths']['/api/v1/quote-requests']['get']
+        self.assertEqual(quote_create['operationId'], 'API-088')
+        self.assertEqual(quote_history['operationId'], 'API-212')
+        self.assertEqual(quote_create['security'], [{'bffSession': []}])
+        self.assertEqual(quote_history['security'], [{'bffSession': []}])
+        self.assertEqual({p['name'] for p in quote_create['parameters'] if p['required']}, {'Idempotency-Key', 'X-CSRF-TOKEN'})
+        self.assertEqual({p['name'] for p in quote_history['parameters']}, {'page', 'size'})
         self.assertEqual(spec['paths']['/api/v1/me/referral-code']['get']['operationId'],'API-063')
         self.assertEqual(spec['paths']['/api/v1/me/referral-code']['post']['operationId'],'API-161')
         self.assertEqual(spec['paths']['/api/v1/me/referral-attribution']['post']['operationId'],'API-064')
