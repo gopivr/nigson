@@ -1,4 +1,7 @@
-package com.nigson.integration.providers;
+package com.nigson.integration.carrier;
+
+import com.nigson.integration.providers.PandagoAdapter;
+import com.nigson.integration.providers.PartnerConfiguration;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -13,7 +16,7 @@ import static org.mockito.Mockito.mock;
 
 class PandagoConfigurationTest {
     @TempDir Path directory;
-    final ApplicationContextRunner runner = new ApplicationContextRunner().withUserConfiguration(PartnerConfiguration.class);
+    final ApplicationContextRunner runner = new ApplicationContextRunner().withUserConfiguration(PartnerConfiguration.class, PandagoConfiguration.class);
     @Test void disabledProviderDoesNotRequireCredentials() { runner.run(context -> assertThat(context).doesNotHaveBean(PandagoAdapter.class)); }
     @Test void enabledProviderRequiresPrivateServiceSecurity() {
         runner.withPropertyValues("NIGSON_PANDAGO_ENABLED=true").run(context -> assertThat(context).hasFailed());
