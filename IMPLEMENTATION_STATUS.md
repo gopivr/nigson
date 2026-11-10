@@ -8,7 +8,7 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
-INTEGRATION-BUILD-FIX — IN_PROGRESS. Repairing Pandago module cycle and carrier context coordinate compatibility; rerunning integration reactor tests.
+INTEGRATION-BUILD-FIX — VERIFIED. Removed Pandago carrier/providers module cycle and fixed API-119 postal-address coordinate conversion. Clean integration tests and full `./mvnw -B install` pass; integration 201 tests, 105 database-gated skips, zero failures/errors. Docker rebuild not run. Evidence: `docs/implementation/2026-11-10-INTEGRATION-BUILD-FIX.md`.
 
 RUNTIME-MOCK-REMOVAL — IN_PROGRESS. Removing browser authentication/data fallbacks and mock provider routing from normal runtime; preserving explicit isolated test fixtures. Public `GET /api/v1/markets` now bypasses stale session-cookie validation as required by API-029; market HTTP acceptance passes with an unknown session ID. Local BFF security is enabled using local-only session/actor keys, and frontend `/bff/login` now redirects to the Nigson-branded Keycloak login page. Evidence: `docs/implementation/2026-11-07-RUNTIME-MOCK-REMOVAL.md`.
 
