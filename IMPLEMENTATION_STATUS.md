@@ -8,6 +8,10 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+AUTOMATIC-ADDRESS-LOOKUP — IN_PROGRESS. Removing manual coordinates and resolving street addresses inside the provider quote workflow; provider selection/credential requested.
+
+LOCAL-PANDAGO-QUOTES — VERIFIED locally. User-approved sandbox quote configuration persists across run-core through 2026-11-17T23:59:59Z. Fixed Integration internal JWKS routing, added checkout coordinate entry/persistence, and seeded approved synthetic packaging only on 24 demo SKUs. Actual authenticated delivery-quotes API returned PANDAGO/NGN26.00. Docker Integration build, Angular shop build, 23 configuration and 5 checkout tests pass. Booking/payment remain disabled. Evidence: `docs/implementation/2026-11-10-LOCAL-PANDAGO-QUOTES.md`.
+
 INTEGRATION-BUILD-FIX — VERIFIED. Removed Pandago carrier/providers module cycle and fixed API-119 postal-address coordinate conversion. Clean integration tests and full `./mvnw -B install` pass; integration 201 tests, 105 database-gated skips, zero failures/errors. Docker rebuild not run. Evidence: `docs/implementation/2026-11-10-INTEGRATION-BUILD-FIX.md`.
 
 RUNTIME-MOCK-REMOVAL — IN_PROGRESS. Removing browser authentication/data fallbacks and mock provider routing from normal runtime; preserving explicit isolated test fixtures. Public `GET /api/v1/markets` now bypasses stale session-cookie validation as required by API-029; market HTTP acceptance passes with an unknown session ID. Local BFF security is enabled using local-only session/actor keys, and frontend `/bff/login` now redirects to the Nigson-branded Keycloak login page. Evidence: `docs/implementation/2026-11-07-RUNTIME-MOCK-REMOVAL.md`.

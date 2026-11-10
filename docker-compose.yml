@@ -278,6 +278,8 @@ services:
       dockerfile: services/integration/Dockerfile
       target: application
     environment:
+      NIGSON_GEOCODING_PROVIDER: ${NIGSON_GEOCODING_PROVIDER:-}
+      GOOGLE_GEOCODING_API_KEY: ${GOOGLE_GEOCODING_API_KEY:-${GOOGLE_MAP_API_KEY:-}}
       NIGSON_EVENTS_ENABLED: "true"
       NIGSON_EVENT_ENDPOINT: http://localstack:4566
       NIGSON_EVENT_TOPIC: arn:aws:sns:us-east-1:000000000000:nigson-local-domain-events

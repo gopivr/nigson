@@ -4,6 +4,7 @@ import java.time.*;
 import java.util.*;
 import com.nigson.integration.platform.*;
 import com.nigson.integration.providers.PandagoAdapter;
+import com.nigson.integration.providers.GeocodingProvider;
 import com.nigson.shared.events.EventCodec;
 import com.nigson.shared.problem.*;
 import com.nigson.shared.security.*;
@@ -11,8 +12,12 @@ import tools.jackson.databind.JsonNode;
 
 /** Side-effect-free PandaGo rate read. Order confirmation is a separate durable workflow. */
 public final class PandagoQuoteService {
+ private final GeocodingProvider geocoder;
  private final PandagoAdapter provider;private final PlatformStore store;private final AuditWriter audit;private final Clock clock;private final String approval;private final Instant approvedUntil;
- public PandagoQuoteService(PandagoAdapter provider,PlatformStore store,AuditWriter audit,Clock clock,String approval,Instant approvedUntil){
+ public PandagoQuoteService(PandagoAdapter provider,PlatformStore store,AuditWriter audit,Clock clock,String approval,Instant approvedUntil){this(provider,store,audit,clock,approval,approvedUntil,address->{throw new Problem.Failure(ProblemCode.GEOCODING_NOT_CONFIGURED);});
+ }
+ public PandagoQuoteService(PandagoAdapter provider,PlatformStore store,AuditWriter audit,Clock clock,String approval,Instant approvedUntil,GeocodingProvider geocoder){
+  this.geocoder=Objects.requireNonNull(geocoder);
   if(provider==null||store==null||audit==null||clock==null||approval==null||!approval.matches("[A-Za-z0-9][A-Za-z0-9:_-]{0,119}")||approvedUntil==null)throw new IllegalArgumentException("PANDAGO_APPROVAL_REQUIRED");
   this.provider=provider;this.store=store;this.audit=audit;this.clock=clock;this.approval=approval;this.approvedUntil=approvedUntil;
  }
@@ -22,10 +27,12 @@ public final class PandagoQuoteService {
   var route=PrivateWorkload.ROUTES.stream().filter(r->r.api().equals("API-182")).findFirst().orElseThrow(ActorAssertion::denied);
   if(proof==null||!route.equals(proof.route())||!route.client().equals(proof.client())||proof.subject()==null||!proof.subject().matches("[\\x21-\\x7e]{1,100}")||proof.actor()==null||!proof.actor().scopes().contains(route.scope()))throw ActorAssertion.denied();
  }
- private static PandagoAdapter.Location location(CarrierValues.Address address){
-  if(address.latitude()==null||address.longitude()==null)throw CarrierValues.rule();
+ private PandagoAdapter.Location location(CarrierValues.Address address){
+  var point=address.latitude()!=null&&address.longitude()!=null
+   ? new GeocodingProvider.Point(address.latitude(),address.longitude())
+   : geocoder.resolve(new GeocodingProvider.Address(address.line1(),address.line2(),address.city(),address.region(),address.postalCode(),address.countryCode()));
   var lines=new ArrayList<String>();lines.add(address.line1());if(address.line2()!=null)lines.add(address.line2());lines.add(address.city());if(address.region()!=null)lines.add(address.region());if(address.postalCode()!=null)lines.add(address.postalCode());
-  return new PandagoAdapter.Location(String.join(", ",lines),address.latitude(),address.longitude());
+  return new PandagoAdapter.Location(String.join(", ",lines),point.latitude(),point.longitude());
  }
  public CarrierValues.Quote quote(PrivateWorkload.Proof proof,CarrierValues.QuoteInput input,UUID correlation){
   proof(proof);if(input==null||input.shipper()!=null||input.serviceCode()!=null||correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();

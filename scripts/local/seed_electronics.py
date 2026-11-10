@@ -42,7 +42,7 @@ CATEGORIES = {
 }
 
 
-def render(publish=False):
+def render(publish=False, with_packaging=False):
     statements = ['BEGIN;', "SET LOCAL lock_timeout='5s';", "SET LOCAL statement_timeout='30s';"]
     def insert(table, values):
         statements.append('INSERT INTO commerce.' + table + '(' + ','.join(values) + ') VALUES (' + ','.join(literal(v) for v in values.values()) + ') ON CONFLICT (id) DO NOTHING;')
@@ -86,6 +86,11 @@ def render(publish=False):
         statements.append("UPDATE commerce.product SET status='ACTIVE',published_at=coalesce(published_at,now()),updated_at=now(),updated_by='demo-electronics-publication',version=version+1,revision=revision+1 WHERE created_by='demo-electronics-v1' AND status='DRAFT' AND deleted_at IS NULL;")
         statements.append("DO $$ BEGIN IF (SELECT count(*) FROM commerce.product p JOIN commerce.product_market_eligibility e ON e.product_id=p.id JOIN commerce.market m ON m.id=e.market_id WHERE p.created_by='demo-electronics-v1' AND p.status='ACTIVE' AND p.deleted_at IS NULL AND e.eligible AND m.enabled AND m.code='NG') <> 24 THEN RAISE EXCEPTION 'Expected all 24 demo products to be publicly eligible'; END IF; END $$;")
         statements.append(f"INSERT INTO commerce.audit_record(id,created_by,actor_subject,actor_kind,action,resource_type,resource_id,occurred_at,correlation_id,reason,new_value) VALUES ({literal(uid('electronics/publication-audit'))},'demo-electronics-publication','local-demo-provisioner','SYSTEM','DEMO_CATALOGUE_PUBLICATION','catalogue',{literal(brand)},now(),{literal(uid('electronics/publication-correlation'))},'User requested demo products visible to other local users', '{{\"market\":\"NG\",\"products\":24}}'::jsonb) ON CONFLICT(id) DO NOTHING;")
+    if with_packaging:
+        # User-approved synthetic sandbox fixture measurements; never real merchandise.
+        packaging = {'schemaVersion': 1, 'maximumUnitsPerPackage': '1', 'unitWeightKg': '0.5', 'tareWeightKg': '0.1', 'lengthCm': '20', 'widthCm': '15', 'heightCm': '10'}
+        statements.append(f"UPDATE commerce.sku SET carrier_packaging={literal(packaging)}::jsonb, version=version+1, updated_at=now(), updated_by='synthetic-local-packaging' WHERE created_by='demo-electronics-v1' AND code LIKE 'DEMO-EL-%' AND carrier_packaging IS NULL AND deleted_at IS NULL;")
+        statements.append(f"INSERT INTO commerce.audit_record(id,created_by,actor_subject,actor_kind,action,resource_type,resource_id,occurred_at,correlation_id,reason,new_value) VALUES ({literal(uid('electronics/packaging-audit'))},'synthetic-local-packaging','local-demo-provisioner','SYSTEM','DEMO_PACKAGING_SEEDED','catalogue',{literal(brand)},now(),{literal(uid('electronics/packaging-correlation'))},'User approved synthetic local demo measurements for sandbox quotes; not measured product data',{literal(packaging)}::jsonb) ON CONFLICT(id) DO NOTHING;")
     statements.append('COMMIT;')
     statements.append("SELECT 'products|'||count(*) FROM commerce.product WHERE created_by='demo-electronics-v1';")
     statements.append("SELECT 'categories|'||count(*) FROM commerce.category WHERE created_by='demo-electronics-v1';")
@@ -96,6 +101,7 @@ def render(publish=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--publish', action='store_true', help='Publish synthetic electronics for all local users in NG; no price/tax/delivery policy changes')
+    parser.add_argument('--with-packaging', action='store_true', help='Add user-approved synthetic measurements only to local demo SKUs missing packaging')
     args = parser.parse_args()
     if os.environ.get('ENV', 'local') not in ('local', 'test') or os.environ.get('APP_ENV', 'local') not in ('local', 'test'):
         raise ValueError('Local/test environment required')
@@ -107,7 +113,7 @@ def main():
     config = json.loads(docker('compose', 'config', '--format', 'json'))
     if config.get('name') != 'nigson-local' or config['services']['postgres']['environment'].get('APP_ENV') != 'local':
         raise ValueError('Expected local nigson-local Compose database')
-    output = docker('compose', 'exec', '-T', 'postgres', 'psql', '-X', '-qAt', '-U', 'nigson_bootstrap', '-d', 'nigson', '-v', 'ON_ERROR_STOP=1', input=render(publish=args.publish))
+    output = docker('compose', 'exec', '-T', 'postgres', 'psql', '-X', '-qAt', '-U', 'nigson_bootstrap', '-d', 'nigson', '-v', 'ON_ERROR_STOP=1', input=render(publish=args.publish, with_packaging=args.with_packaging))
     if set(output.splitlines()) != {'products|24', 'categories|8', 'balances|24'}:
         raise RuntimeError('Electronics fixture coverage failed: ' + output)
     print(output)
