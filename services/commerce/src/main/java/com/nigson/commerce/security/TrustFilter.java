@@ -67,6 +67,7 @@ public final class TrustFilter extends OncePerRequestFilter {
                 proof = privateTrust.verify(req.getRemoteAddr(), req.getMethod(), req.getRequestURI(), authorization,
                         actor, correlation, body.hash());
             } else {
+<<<<<<< HEAD
                 stage = "browser_credentials";
                 if (single(req, "X-Nigson-Actor") != null || single(req, "Authorization") != null)
                     throw ActorAssertion.denied();
@@ -93,6 +94,19 @@ public final class TrustFilter extends OncePerRequestFilter {
                     if (Set.of("POST", "PUT", "PATCH", "DELETE").contains(req.getMethod()))
                         sessions.csrf(record, single(req, "X-CSRF-TOKEN"));
                     proof = authority.resolve(record, null, Set.of());
+=======
+                stage="browser_credentials";
+                if(single(req,"X-Nigson-Actor")!=null||single(req,"Authorization")!=null)throw ActorAssertion.denied();
+                boolean publicRead=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands","/api/v1/markets").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}(?:/recommendations)?"));
+                boolean providerCallback=req.getMethod().equals("POST")&&Set.of("/api/v1/webhooks/payments/paystack","/wh/paystack","/api/v1/webhooks/notifications/twilio/status").contains(req.getRequestURI());
+                if(req.getRequestURI().equals("/api/v1/webhooks/notifications/twilio/status")&&(req.getHeader("Origin")!=null||req.getCookies()!=null))throw ActorAssertion.denied();
+                stage="session_cookie";
+                String id=publicRead||providerCallback?null:cookies.read(req);
+                // Login/callback/session public controllers (next task) explicitly invoke their own typed flow.
+                if(id!=null&&!publicRead&&!Set.of("/bff/login","/bff/callback","/bff/session","/bff/register").contains(req.getRequestURI())){
+                    stage="session_authority";
+                    var record=sessions.read(id,true);if(Set.of("POST","PUT","PATCH","DELETE").contains(req.getMethod()))sessions.csrf(record,single(req,"X-CSRF-TOKEN"));proof=authority.resolve(record,null,Set.of());
+>>>>>>> 9cf9e0ba7d3e017c8a66f62e452b2245a5fd1dd5
                 }
             }
             if (proof != null)

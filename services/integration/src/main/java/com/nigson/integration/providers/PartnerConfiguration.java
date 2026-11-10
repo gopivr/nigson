@@ -8,6 +8,15 @@ import org.springframework.core.env.Environment;
 /** Explicit opt-in: missing partner/account data fails startup; no mock fallback. */
 @Configuration(proxyBeanMethods=false)
 public class PartnerConfiguration {
+ @Bean @ConditionalOnProperty(name="NIGSON_PANDAGO_ENABLED",havingValue="true")
+ PandagoAdapter pandago(Environment e) {
+  if(!e.getProperty("NIGSON_SECURITY_ENABLED",Boolean.class,false))throw new IllegalArgumentException("PANDAGO_PRIVATE_SECURITY_REQUIRED");
+  try {
+   var path=java.nio.file.Path.of(e.getRequiredProperty("PANDAGO_PRIVATE_KEY_FILE"));
+   if(!java.nio.file.Files.isRegularFile(path)||java.nio.file.Files.size(path)>16384)throw new IllegalArgumentException("PANDAGO_PRIVATE_KEY_FILE_INVALID");
+   return new PandagoAdapter(e.getRequiredProperty("APP_ENV"),ProviderHttp.Mode.valueOf(e.getRequiredProperty("PANDAGO_MODE")),e.getRequiredProperty("PANDAGO_BASE_URL"),e.getRequiredProperty("PANDAGO_AUTH_BASE_URL"),e.getRequiredProperty("PANDAGO_CLIENT_ID"),e.getRequiredProperty("PANDAGO_KEY_ID"),e.getRequiredProperty("PANDAGO_SCOPE"),e.getRequiredProperty("PANDAGO_CLIENT_VENDOR_ID"),java.nio.file.Files.readString(path),java.time.Clock.systemUTC());
+  }catch(java.io.IOException failure){throw new IllegalArgumentException("PANDAGO_PRIVATE_KEY_FILE_UNREADABLE");}
+ }
  @Bean @ConditionalOnProperty(name="NIGSON_TERMII_ENABLED",havingValue="true")
  TermiiTokenAdapter termiiToken(Environment e){return new TermiiTokenAdapter(e.getRequiredProperty("APP_ENV"),ProviderHttp.Mode.valueOf(e.getRequiredProperty("TERMII_MODE")),e.getRequiredProperty("TERMII_BASE_URL"),e.getRequiredProperty("TERMII_API_KEY"),e.getRequiredProperty("TERMII_SENDER_ID"));}
  @Bean @ConditionalOnProperty(name="NIGSON_DELLYMAN_ENABLED",havingValue="true")

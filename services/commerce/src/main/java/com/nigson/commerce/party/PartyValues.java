@@ -2,6 +2,7 @@ package com.nigson.commerce.party;
 
 import java.util.*;
 import java.text.Normalizer;
+import java.math.BigDecimal;
 import tools.jackson.databind.JsonNode;
 import com.nigson.shared.problem.ApiValues;
 
@@ -9,7 +10,7 @@ import com.nigson.shared.problem.ApiValues;
 public final class PartyValues {
     private PartyValues() {}
     public record Profile(UUID id,String displayName,String email,boolean emailVerified,String phone,String locale,long version) {}
-    public record Address(UUID id,String label,String recipient,String phone,String line1,String line2,String city,String region,String postalCode,String countryCode,UUID organizationId,boolean isDefault,long version) {}
+    public record Address(UUID id,String label,String recipient,String phone,String line1,String line2,String city,String region,String postalCode,String countryCode,BigDecimal latitude,BigDecimal longitude,UUID organizationId,boolean isDefault,long version) {}
     public record Organization(UUID id,String name,String membershipRole,String entitlementState) {}
     public record VerifiedIdentity(String issuer,String subject,String email,boolean emailVerified,String displayName) {
         public VerifiedIdentity {
@@ -38,13 +39,22 @@ public final class PartyValues {
         var value=node.get(key);if(value==null||value.isNull()){if(nullable)return null;throw ApiValues.invalid();}
         if(!value.isString())throw ApiValues.invalid();return text(value.asString(),max,nullable);
     }
-    public static final Set<String> ADDRESS_FIELDS=Set.of("label","recipient","phone","line1","line2","city","region","postalCode","countryCode","organizationId","isDefault");
+    public static final Set<String> ADDRESS_FIELDS=Set.of("label","recipient","phone","line1","line2","city","region","postalCode","countryCode","latitude","longitude","organizationId","isDefault");
+    private static BigDecimal coordinate(JsonNode node,String key,BigDecimal limit) {
+        var value=node.get(key);if(value==null||value.isNull())return null;
+        if(!value.isNumber())throw ApiValues.invalid();
+        BigDecimal result=value.decimalValue();
+        if(result.abs().compareTo(limit)>0||result.stripTrailingZeros().scale()>6)throw ApiValues.invalid();
+        return result;
+    }
     public static Address address(JsonNode input,Address previous) {
         object(input,ADDRESS_FIELDS,false);var merged=input.deepCopy();
         if(previous!=null){var original=com.nigson.shared.events.EventCodec.JSON.valueToTree(previous);for(String key:ADDRESS_FIELDS)if(!merged.has(key))((tools.jackson.databind.node.ObjectNode)merged).set(key,original.get(key));}
         UUID organization=null;var org=merged.get("organizationId");if(org!=null&&!org.isNull()){if(!org.isString())throw ApiValues.invalid();organization=ApiValues.uuid(org.asString());}
         boolean isDefault=false;var d=merged.get("isDefault");if(d!=null){if(!d.isBoolean())throw ApiValues.invalid();isDefault=d.asBoolean();}
-        return new Address(previous==null?null:previous.id(),value(merged,"label",60,true),value(merged,"recipient",160,false),value(merged,"phone",32,false),value(merged,"line1",200,false),value(merged,"line2",200,true),value(merged,"city",100,false),value(merged,"region",100,true),value(merged,"postalCode",24,true),country(value(merged,"countryCode",2,false)),organization,isDefault,previous==null?0:previous.version());
+        BigDecimal latitude=coordinate(merged,"latitude",BigDecimal.valueOf(90)),longitude=coordinate(merged,"longitude",BigDecimal.valueOf(180));
+        if((latitude==null)!=(longitude==null))throw ApiValues.invalid();
+        return new Address(previous==null?null:previous.id(),value(merged,"label",60,true),value(merged,"recipient",160,false),value(merged,"phone",32,false),value(merged,"line1",200,false),value(merged,"line2",200,true),value(merged,"city",100,false),value(merged,"region",100,true),value(merged,"postalCode",24,true),country(value(merged,"countryCode",2,false)),latitude,longitude,organization,isDefault,previous==null?0:previous.version());
     }
     public static JsonNode profilePatch(JsonNode input) {
         object(input,Set.of("displayName","phone","locale"),false);

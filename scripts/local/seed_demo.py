@@ -81,6 +81,7 @@ OVERRIDES = {
     'asset_reference': {'status': 'REJECTED', 'mime_type': 'image/png'},
     'file_asset': {'scan_status': 'REJECTED', 'mime_type': 'application/pdf'},
     'staff_role_assignment': {'role': 'ANALYST', 'revoked_at': '2026-01-01T00:00:00Z'},
+    'referral_attribution': {'referrer_party_id': uid('commerce.party/referrer')},
     'webhook_receipt': {'provider': 'PAYSTACK', 'state': 'REJECTED', 'verified_signature': False},
     'notification_job': {'state': 'SUPPRESSED', 'channel': 'EMAIL', 'classification': 'TRANSACTIONAL',
                          'template_code': 'demo-notification', 'template_revision': 1},
@@ -207,6 +208,9 @@ def render(names):
         # Conflict only on fixture primary keys; unrelated unique collisions fail.
         pk = ','.join(primary_fields(table))
         statements.append(f'INSERT INTO {table} ({columns}) VALUES ({",".join(expressions)}) ON CONFLICT ({pk}) DO NOTHING;')
+        if table == 'commerce.party':
+            ref_id = uid('commerce.party/referrer')
+            statements.append(f"INSERT INTO commerce.party (id, created_by, updated_by, identity_issuer, identity_subject, email, display_name, status) VALUES ('{ref_id}', 'demo-seed', 'demo-seed', 'https://identity.example.invalid', 'demo-referrer', 'demo.referrer@example.invalid', 'Demo Referrer', 'ACTIVE') ON CONFLICT (id) DO NOTHING;")
     statements.append('COMMIT;')
     # Verify every fixture by its primary key, never merely by table nonemptiness.
     for table, row in rows:
@@ -231,8 +235,9 @@ def main():
     if os.environ.get('APP_ENV', 'local') not in ('local', 'test') or os.environ.get('ENV', 'local') not in ('local', 'test'):
         parser.error('Demo seed requires local/test environment')
     context = json.loads(docker('context', 'inspect'))[0]
-    if not context['Endpoints']['docker']['Host'].startswith('unix://') or os.environ.get('DOCKER_HOST', 'unix://').startswith(('tcp:', 'ssh:')):
-        parser.error('Demo seed requires a local Unix Docker endpoint')
+    host = context['Endpoints']['docker']['Host']
+    if not (host.startswith('unix://') or host.startswith('npipe://')) or os.environ.get('DOCKER_HOST', 'unix://').startswith(('tcp:', 'ssh:')):
+        parser.error('Demo seed requires a local Docker endpoint')
     database = 'nigson' if args.service == 'postgres' else 'nigson_vector_test'
     base = ('compose', 'exec', '-T', args.service, 'psql', '-X', '-qAt', '-U', 'nigson_bootstrap', '-d', database, '-v', 'ON_ERROR_STOP=1')
     names = docker(*base, '-c', "SELECT schemaname||'.'||tablename FROM pg_tables WHERE schemaname IN ('commerce','experience','integration','ai') AND tablename NOT LIKE 'databasechangelog%' ORDER BY 1").splitlines()

@@ -25,7 +25,7 @@ public final class PartyService {
         actor(actor);var data=PartyValues.address(input,null);ApiValues.idempotencyKey(key);
         var response=commands.executeLocal(actor.party().toString(),"API-008",key,EventCodec.JSON.valueToTree(data),jdbc->{
             repository.requireCurrent(actor,true);repository.requireOrganization(actor.party(),data.organizationId(),true);repository.validateCountry(data);
-            UUID id=EventCodec.uuid7(clock.instant());var created=new PartyValues.Address(id,data.label(),data.recipient(),data.phone(),data.line1(),data.line2(),data.city(),data.region(),data.postalCode(),data.countryCode(),data.organizationId(),data.isDefault(),0);
+            UUID id=EventCodec.uuid7(clock.instant());var created=new PartyValues.Address(id,data.label(),data.recipient(),data.phone(),data.line1(),data.line2(),data.city(),data.region(),data.postalCode(),data.countryCode(),data.latitude(),data.longitude(),data.organizationId(),data.isDefault(),0);
             repository.insertAddress(actor.party(),created,correlation);evidence(actor,AuditValues.Action.ADDRESS_CREATE,AuditValues.Resource.ADDRESS,id,correlation,0,0);return new PlatformStore.Response(201,EventCodec.JSON.valueToTree(created),id);
         });return EventCodec.JSON.treeToValue(response.body(),PartyValues.Address.class);
     }

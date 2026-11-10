@@ -102,8 +102,9 @@ def main():
     if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith('unix://'):
         raise ValueError('Local Unix Docker endpoint required')
     context = json.loads(docker('context', 'inspect'))[0]
-    if not context['Endpoints']['docker']['Host'].startswith('unix://'):
-        raise ValueError('Local Unix Docker endpoint required')
+    host = context['Endpoints']['docker']['Host']
+    if not (host.startswith('unix://') or host.startswith('npipe://')):
+        raise ValueError('Local Docker endpoint required')
     config = json.loads(docker('compose', 'config', '--format', 'json'))
     if config.get('name') != 'nigson-local' or config['services']['postgres']['environment'].get('APP_ENV') != 'local':
         raise ValueError('Expected local nigson-local Compose database')

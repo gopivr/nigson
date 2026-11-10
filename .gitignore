@@ -1,7 +1,4 @@
 .DS_Store
-.env
-.env.*
-!.env.example
 **/target/
 **/__pycache__/
 **/.pytest_cache/
@@ -14,10 +11,7 @@
 **/*.tfstate.*
 **/*.tfvars
 !**/*.tfvars.example
-*.pem
-*.key
 .idea/
 .vscode/
 .build/
-.local/
 artifacts/
