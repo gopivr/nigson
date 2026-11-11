@@ -8,5 +8,7 @@ public interface CatalogueQueryRepository {
     CatalogueValues.Product product(UUID id,String market);
     List<CatalogueValues.PublicCategory> categories(String market);
     List<CatalogueValues.PublicBrand> brands();
+    CatalogueValues.ProductAdmin staffProduct(UUID id);
+    CatalogueValues.SkuDetail staffSku(UUID id);
     CatalogueValues.Page<CatalogueValues.ProductAdmin> staff(String q,String status,int page,int size,String sort);
 }

@@ -8,6 +8,8 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+ADMIN-FUNCTIONAL-AUDIT — IN_PROGRESS. Audit every admin read/action, remove fabricated proxy/local success and verify real owner APIs with reversible local test data.
+
 ADMIN-NAVIGATION — VERIFIED locally. Added /admin to explicit BFF login return paths, restored previously authorized local admin fixture roles and removed display-name/ID-based admin UI inference. Dashboard summary cards now link to their corresponding views. Actual browser verified all 19 sidebar links, four cards and mobile menu with no browser/HTTP errors. Admin-core/shell production builds, TypeScript and 26 local configuration tests pass. Evidence: `docs/implementation/2026-11-11-ADMIN-NAVIGATION.md`.
 
 LOCAL-QUOTE-RECOVERY — VERIFIED locally. Restored lost LocalStack actor signing key; run-core now checks/recovers local signing trust before starting apps. Enabled approved local BP3 quotes and fixed Experience SKU-validation service identity/token backchannel. Actual authenticated quote request POST returned NEW and appeared in own history. Twenty-eight local tests, two HTTP adapter tests and Docker Experience build passed. Payment/checkout remain disabled. Evidence: `docs/implementation/2026-11-11-LOCAL-QUOTE-RECOVERY.md`.
