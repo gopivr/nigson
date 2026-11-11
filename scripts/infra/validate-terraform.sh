@@ -8,7 +8,7 @@ for selected in aws ovh; do
   [[ "$cloud" == all || "$cloud" == "$selected" ]] || continue
   root="infrastructure/terraform/$selected"
   terraform fmt -check -recursive "$root"
-  for directory in "$root"/modules/* "$root"/environments/* "$root"/database; do
+  for directory in "$root"/modules/* "$root"/environments/* "$root"/frontend/* "$root"/database; do
     [[ -f "$directory/main.tf" || -f "$directory/versions.tf" ]] || continue
     terraform -chdir="$directory" init -backend=false -input=false
     terraform -chdir="$directory" validate

@@ -8,6 +8,8 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+MICROFRONTEND-HOSTING — Code verified locally. Added independent AWS/OVH frontend stage/prod roots, private AWS S3/CloudFront hosting and OVH HTTPS frontend VMs. Production shell/seven remotes build and Docker HTTPS acceptance pass; 22 Terraform roots validate with 51 mocked tests passing. Same-origin API/BFF routing preserves session/CSRF/errors without caching. No cloud apply or live DNS/login qualification. Evidence: `docs/implementation/2026-11-10-MICROFRONTEND-HOSTING.md`.
+
 OVH-INFRA — Code validated. AWS roots preserved byte-for-byte under terraform/aws with tooling/CI paths updated. Added independent OVH stage/prod roots for private Docker VMs, HTTPS load balancing, managed PostgreSQL, registry and encrypted/versioned storage. All 16 roots validate; 35 AWS and 7 OVH mocked tests pass. No cloud apply; live OVH catalog/account/database compatibility and AWS-dependent application activation remain unqualified. Evidence: `docs/implementation/2026-11-10-OVH-INFRA.md`.
 
 PUBLIC-RETAIL-PRICE — VERIFIED locally. Retail price GET succeeds anonymously and with expired/malformed session cookies (200); organization pricing and private carts remain protected (401). Eleven targeted tests and Docker Commerce build passed; running container updated. Evidence: `docs/implementation/2026-11-10-PUBLIC-RETAIL-PRICE.md`.

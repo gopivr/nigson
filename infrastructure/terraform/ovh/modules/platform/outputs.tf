@@ -41,3 +41,13 @@ output "compose_files" {
     } }
   }) }
 }
+
+output "frontend_network" {
+  value = {
+    network_id          = openstack_networking_subnet_v2.application.network_id
+    subnet_id           = openstack_networking_subnet_v2.application.id
+    subnet_cidr         = var.subnet_cidr
+    external_network_id = var.external_network_id
+    ssh_key_pair        = openstack_compute_keypair_v2.deployment.name
+  }
+}

@@ -4,3 +4,5 @@
 - `ovh/`: separate OVH Public Cloud configuration, state and credentials. See `ovh/README.md`.
 
 Validate without creating resources: `bash scripts/infra/validate-terraform.sh all`.
+
+Frontend hosting: `aws/frontend/{stage,prod}` and `ovh/frontend/{stage,prod}`; see `shared/frontend/README.md`.

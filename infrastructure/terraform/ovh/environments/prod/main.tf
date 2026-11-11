@@ -46,3 +46,5 @@ output "deployment" {
 output "bootstrap_sql" { value = module.platform.bootstrap_sql }
 
 output "compose_files" { value = module.platform.compose_files }
+
+output "frontend_network" { value = module.platform.frontend_network }
