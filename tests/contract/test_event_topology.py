@@ -13,7 +13,7 @@ class EventTopologyTests(unittest.TestCase):
   self.assertEqual(28,len(registry))
   self.assertEqual(registry,json.loads((ROOT/'shared/common-events/src/main/resources/events/registry.json').read_text()))
   self.assertEqual(registry,json.loads((ROOT/'services/ai/src/nigson_ai/platform/registry.json').read_text()))
-  policies=json.loads((ROOT/'infrastructure/terraform/modules/messaging/filters.json').read_text())
+  policies=json.loads((ROOT/'infrastructure/terraform/aws/modules/messaging/filters.json').read_text())
   for phase in range(1,6):
    expected={topology.QUEUES[owner]:topology.filters(owner,phase) for owner in topology.QUEUES if owner!='ai' or phase==5}
    self.assertEqual(expected,policies[str(phase)])

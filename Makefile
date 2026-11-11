@@ -74,9 +74,9 @@ schema-check:
 	python3 scripts/database/generate.py --check
 
 database-check: schema-check
-	terraform -chdir=infrastructure/terraform/database init -backend=false
-	terraform -chdir=infrastructure/terraform/database validate
-	terraform -chdir=infrastructure/terraform/database apply -auto-approve
+	terraform -chdir=infrastructure/terraform/aws/database init -backend=false
+	terraform -chdir=infrastructure/terraform/aws/database validate
+	terraform -chdir=infrastructure/terraform/aws/database apply -auto-approve
 	docker build --file services/commerce/Dockerfile --target migration --tag nigson/migration:local .
 	ENV=test python3 scripts/database/verify.py
 
@@ -106,9 +106,9 @@ provider-live-check:
 observability-check: ai-sync
 	ENV=test python3 scripts/platform/observability_check.py
 observability-infra-check:
-	terraform -chdir=infrastructure/terraform/modules/observability init -backend=false
-	terraform -chdir=infrastructure/terraform/modules/observability validate
-	terraform -chdir=infrastructure/terraform/modules/observability test
+	terraform -chdir=infrastructure/terraform/aws/modules/observability init -backend=false
+	terraform -chdir=infrastructure/terraform/aws/modules/observability validate
+	terraform -chdir=infrastructure/terraform/aws/modules/observability test
 
 .PHONY: collector-config-check
 collector-config-check:
@@ -122,17 +122,17 @@ identity-policy-check: identity-sync
 identity-check: identity-policy-check
 	ENV=test $(CURDIR)/.build/identity-env/bin/python scripts/identity/qualify.py
 identity-infra-check:
-	terraform -chdir=infrastructure/terraform/modules/identity init -backend=false
-	terraform -chdir=infrastructure/terraform/modules/identity validate
-	terraform -chdir=infrastructure/terraform/modules/identity test
+	terraform -chdir=infrastructure/terraform/aws/modules/identity init -backend=false
+	terraform -chdir=infrastructure/terraform/aws/modules/identity validate
+	terraform -chdir=infrastructure/terraform/aws/modules/identity test
 
 .PHONY: security-check security-infra-check
 security-check:
 	ENV=test python3 scripts/security/verify.py
 security-infra-check:
-	terraform -chdir=infrastructure/terraform/modules/private-trust init -backend=false
-	terraform -chdir=infrastructure/terraform/modules/private-trust validate
-	terraform -chdir=infrastructure/terraform/modules/private-trust test
+	terraform -chdir=infrastructure/terraform/aws/modules/private-trust init -backend=false
+	terraform -chdir=infrastructure/terraform/aws/modules/private-trust validate
+	terraform -chdir=infrastructure/terraform/aws/modules/private-trust test
 
 .PHONY: authorization-check
 authorization-check:
