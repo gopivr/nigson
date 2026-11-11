@@ -33,9 +33,9 @@ production environment and release decision.
 Example offline syntax check (does not contact AWS):
 
 ```sh
-terraform -chdir=infrastructure/terraform/modules/network fmt -check -recursive
-terraform -chdir=infrastructure/terraform/environments/stage fmt -check -recursive
-terraform -chdir=infrastructure/terraform/environments/prod fmt -check -recursive
+terraform -chdir=infrastructure/terraform/aws/modules/network fmt -check -recursive
+terraform -chdir=infrastructure/terraform/aws/environments/stage fmt -check -recursive
+terraform -chdir=infrastructure/terraform/aws/environments/prod fmt -check -recursive
 ```
 
 Before any stage apply, build and publish an immutable service image digest,

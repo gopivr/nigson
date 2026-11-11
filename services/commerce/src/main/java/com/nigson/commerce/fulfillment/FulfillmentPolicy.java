@@ -9,7 +9,8 @@ public final class FulfillmentPolicy {
  public String require(String carrierMode,String provider){if(!enabled||until==null||!until.isAfter(clock.instant()))throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);if(!mode.equals(carrierMode))throw new Problem.Failure(ProblemCode.PROVIDER_MODE_MISMATCH);if(provider.equals("MANUAL")&&(manual==null||manual.isEmpty()))throw FulfillmentValues.rule();return provider.equals("MANUAL")?manual:approval;}
  public void requireExistingMode(String carrierMode){if(!enabled||mode==null||!mode.equals(carrierMode))throw new Problem.Failure(ProblemCode.PROVIDER_MODE_MISMATCH);}
  public void tracking(String url){if(url==null)return;FulfillmentValues.https(url);String host=java.net.URI.create(url).getHost().toLowerCase(Locale.ROOT);if(!trackingHosts.contains(host))throw FulfillmentValues.rule();}
- public Instant qualifiedUntil(String carrierMode){require(carrierMode,"FEDEX");return until;}
+ public Instant qualifiedUntil(String carrierMode){return qualifiedUntil(carrierMode,"FEDEX");}
+ public Instant qualifiedUntil(String carrierMode,String provider){require(carrierMode,provider);return until;}
  public String accountHash(){if(!enabled||accountHash==null||!accountHash.matches("[a-f0-9]{64}"))throw new Problem.Failure(ProblemCode.PROVIDER_MODE_MISMATCH);return accountHash;}
  public void requireAccount(String value){if(value==null||!accountHash().equals(value))throw new Problem.Failure(ProblemCode.PROVIDER_MODE_MISMATCH);}
 

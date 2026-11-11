@@ -1,0 +1,34 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "commerce-20261107-001",
+        "author": "nigson-platform",
+        "logicalFilePath": "commerce/044-bp3-address-coordinates.yaml",
+        "preConditions": [
+          {"onFail": "HALT"},
+          {"dbms": {"type": "postgresql"}},
+          {"sqlCheck": {"expectedResult": "1", "sql": "SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"}}
+        ],
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "044-bp3-address-coordinates.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ],
+        "rollback": [
+          {
+            "sqlFile": {
+              "path": "044-bp3-address-coordinates-rollback.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

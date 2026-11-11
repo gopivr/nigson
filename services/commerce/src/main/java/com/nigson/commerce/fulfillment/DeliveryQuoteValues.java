@@ -10,7 +10,11 @@ public final class DeliveryQuoteValues {
  private DeliveryQuoteValues(){}
  public record Input(UUID addressId,String serviceCode){public Input{if(addressId==null||addressId.equals(new UUID(0,0))||serviceCode!=null&&!serviceCode.matches("[A-Z][A-Z0-9_]{0,79}"))throw ApiValues.invalid();}}
  public record QuoteInput(UUID revisionId,UUID addressId,String serviceCode){public QuoteInput{if(revisionId==null||revisionId.equals(new UUID(0,0))||addressId==null||addressId.equals(new UUID(0,0))||serviceCode!=null&&!serviceCode.matches("[A-Z][A-Z0-9_]{0,79}"))throw ApiValues.invalid();}}
- public record Quote(UUID id,String provider,String serviceCode,String currency,String deliveryAmount,Instant expiresAt,long cartVersion,String mode){}
+ public record Quote(UUID id,String provider,String serviceCode,String currency,String deliveryAmount,Instant expiresAt,long cartVersion,String mode,
+                     String estimatedDeliveryAmount,Instant estimatedPickupTime,Instant estimatedDeliveryTime,
+                     String deliveryDuration,String lowerBound,String upperBound){
+  public Quote(UUID id,String provider,String serviceCode,String currency,String deliveryAmount,Instant expiresAt,long cartVersion,String mode){this(id,provider,serviceCode,currency,deliveryAmount,expiresAt,cartVersion,mode,null,null,null,null,null,null);}
+ }
  private static String text(JsonNode node,String name){var value=node.get(name);if(value==null||!value.isString())throw ApiValues.invalid();return value.asString();}
  public static Input input(JsonNode node){if(node==null||!node.isObject()||!node.has("addressId")||!Set.of("addressId","serviceCode").containsAll(node.propertyNames()))throw ApiValues.invalid();return new Input(ApiValues.uuid(text(node,"addressId")),node.has("serviceCode")?text(node,"serviceCode"):null);}
  public static QuoteInput quoteInput(JsonNode node){if(node==null||!node.isObject()||!node.propertyNames().containsAll(Set.of("revisionId","addressId"))||!Set.of("revisionId","addressId","serviceCode").containsAll(node.propertyNames()))throw ApiValues.invalid();return new QuoteInput(ApiValues.uuid(text(node,"revisionId")),ApiValues.uuid(text(node,"addressId")),node.has("serviceCode")?text(node,"serviceCode"):null);}

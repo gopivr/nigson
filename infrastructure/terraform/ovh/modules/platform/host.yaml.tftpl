@@ -1,0 +1,47 @@
+#cloud-config
+package_update: true
+packages:
+  - docker.io
+  - docker-compose-v2
+ssh_pwauth: false
+disable_root: true
+write_files:
+  - path: /etc/apt/apt.conf.d/99nigson-ipv4
+    permissions: '0644'
+    content: 'Acquire::ForceIPv4 "true";'
+  - path: /etc/systemd/timesyncd.conf.d/nigson.conf
+    permissions: '0644'
+    content: |
+      [Time]
+      NTP=${join(" ", ntp_servers)}
+      FallbackNTP=
+  - path: /etc/nigson/role
+    permissions: '0644'
+    content: '${role}'
+  - path: /etc/systemd/system/nigson.service
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=Nigson ${role} containers
+      Requires=docker.service
+      After=docker.service network-online.target
+      Wants=network-online.target
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      WorkingDirectory=/etc/nigson
+      ExecStartPre=/usr/bin/test -s /etc/nigson/runtime.env
+      ExecStartPre=/usr/bin/test -s /etc/nigson/compose.yaml
+      ExecStartPre=/usr/bin/docker compose --env-file /etc/nigson/runtime.env -f /etc/nigson/compose.yaml config --quiet
+      ExecStart=/usr/bin/docker compose --env-file /etc/nigson/runtime.env -f /etc/nigson/compose.yaml up -d --wait
+      ExecStop=/usr/bin/docker compose --env-file /etc/nigson/runtime.env -f /etc/nigson/compose.yaml stop
+      TimeoutStartSec=600
+      [Install]
+      WantedBy=multi-user.target
+runcmd:
+  - [systemctl, restart, systemd-timesyncd]
+  - [install, -d, -m, '0700', /etc/nigson/secrets]
+  - [chmod, '0700', /etc/nigson]
+  - [systemctl, enable, --now, docker]
+  - [systemctl, daemon-reload]
+  - [systemctl, enable, nigson]

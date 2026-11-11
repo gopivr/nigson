@@ -1,0 +1,30 @@
+name: Frontend Terraform validation
+on:
+  pull_request:
+    paths:
+      - "infrastructure/terraform/aws/modules/frontend/**"
+      - "infrastructure/terraform/aws/frontend/**"
+      - "infrastructure/terraform/ovh/modules/frontend/**"
+      - "infrastructure/terraform/ovh/frontend/**"
+      - "infrastructure/terraform/shared/frontend/**"
+      - "scripts/infra/validate-terraform.sh"
+      - ".github/workflows/infra-frontend-validate.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        cloud: [aws, ovh]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+        with:
+          terraform_version: 1.12.2
+          terraform_wrapper: false
+      - run: bash scripts/infra/validate-terraform.sh "${{ matrix.cloud }}"
+      - name: Verify CDN navigation and error routing
+        run: node scripts/infra/tests/frontend-routing-test.cjs

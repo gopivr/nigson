@@ -62,12 +62,20 @@ class PartyPersistenceTest {
         assertThat(service.addresses(actor(party))).hasSize(2);assertThat(jdbc.queryForObject("SELECT deleted_at IS NOT NULL FROM commerce.address WHERE id=?",Boolean.class,first.id())).isTrue();
         assertThatThrownBy(()->service.deleteAddress(actor(party),first.id(),current.version(),"other-delete",UUID.randomUUID())).hasMessage("NOT_FOUND");
     }
+    @Test void addressCoordinatesRoundTripAndPatchTogether(){
+        var a=actor(party);var created=service.createAddress(a,json("{\"recipient\":\"Coordinate recipient\",\"phone\":\"+2348000000000\",\"line1\":\"Synthetic road\",\"city\":\"Synthetic city\",\"countryCode\":\"NG\",\"latitude\":6.5244,\"longitude\":3.3792}"),"coordinate-address",UUID.randomUUID());
+        assertThat(created.latitude()).isEqualByComparingTo("6.5244");assertThat(created.longitude()).isEqualByComparingTo("3.3792");
+        var loaded=service.addresses(a).stream().filter(value->value.id().equals(created.id())).findFirst().orElseThrow();
+        assertThat(loaded.latitude()).isEqualByComparingTo("6.5244");assertThat(loaded.longitude()).isEqualByComparingTo("3.3792");
+        var updated=service.patchAddress(a,created.id(),created.version(),json("{\"latitude\":6.5,\"longitude\":3.4}"),"coordinate-address-update",UUID.randomUUID());
+        assertThat(updated.latitude()).isEqualByComparingTo("6.5");assertThat(updated.longitude()).isEqualByComparingTo("3.4");
+    }
     @Test void countryRulesFailClosedAndBoundRegex(){
         jdbc.update("UPDATE commerce.market SET enabled=false WHERE id=?",market);assertThatThrownBy(()->create("missing-policy",false)).hasMessage("FEATURE_DISABLED");jdbc.update("UPDATE commerce.market SET enabled=true WHERE id=?",market);
         jdbc.update("UPDATE commerce.market_destination SET address_rules=?::jsonb WHERE market_id=?","{\"schemaVersion\":1,\"requiredFields\":[\"REGION\",\"POSTAL_CODE\"],\"postalPattern\":\"^[0-9]{6}$\",\"regionCodes\":[\"SYNTHETIC\"]}",market);
         assertThatThrownBy(()->create("missing-region",false)).hasMessage("PARTY_RULE_VIOLATION");var valid=(tools.jackson.databind.node.ObjectNode)address(false);valid.put("region","SYNTHETIC");valid.put("postalCode","000000");assertThat(service.createAddress(actor(party),valid,"valid-policy",UUID.randomUUID()).postalCode()).isEqualTo("000000");
         for(String invalid:List.of("{\"schemaVersion\":1,\"requiredFields\":[],\"postalPattern\":\"(a)\\\\1\",\"regionCodes\":[]}","{\"schemaVersion\":4294967297,\"requiredFields\":[],\"postalPattern\":null,\"regionCodes\":[]}"))assertThatThrownBy(()->AddressRules.parse(json(invalid))).hasMessage("VALIDATION_ERROR");
-        var safe=AddressRules.parse(json("{\"schemaVersion\":1,\"requiredFields\":[],\"postalPattern\":\"(a+)+$\",\"regionCodes\":[]}"));assertThatThrownBy(()->safe.validate(new PartyValues.Address(null,null,"r","p","l",null,"c",null,"aaaaaaaaaaaaaaaaaaaaaaab","NG",null,false,0))).hasMessage("PARTY_RULE_VIOLATION");
+        var safe=AddressRules.parse(json("{\"schemaVersion\":1,\"requiredFields\":[],\"postalPattern\":\"(a+)+$\",\"regionCodes\":[]}"));assertThatThrownBy(()->safe.validate(new PartyValues.Address(null,null,"r","p","l",null,"c",null,"aaaaaaaaaaaaaaaaaaaaaaab","NG",null,null,null,false,0))).hasMessage("PARTY_RULE_VIOLATION");
     }
     @Test void auditFailureRollsBackDefaultChangesAndCanRetry(){
         var first=create("first-default",true);var bootstrap=new JdbcTemplate(new DriverManagerDataSource(System.getenv("NIGSON_TEST_JDBC_URL"),"nigson_bootstrap","mock-bootstrap"));bootstrap.execute("REVOKE INSERT ON commerce.audit_record FROM nigson_commerce_app");

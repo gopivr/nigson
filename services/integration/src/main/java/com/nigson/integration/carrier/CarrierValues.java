@@ -10,19 +10,24 @@ import com.nigson.shared.events.EventCodec;
 /** Closed private logistics values; no browser account, transport URL or provider request is accepted. */
 public final class CarrierValues {
  private CarrierValues(){}
- public record Address(String recipient,String phone,String line1,String line2,String city,String region,String postalCode,String countryCode){
-  public Address{text(recipient,160);text(line1,200);optional(line2,200);text(city,100);text(region,100);optional(postalCode,24);if(phone==null||!phone.matches("\\+[1-9][0-9]{7,14}")||!"NG".equals(countryCode))throw ApiValues.invalid();}
+ public record Address(String recipient,String phone,String line1,String line2,String city,String region,String postalCode,String countryCode,BigDecimal latitude,BigDecimal longitude){
+  public Address(String recipient,String phone,String line1,String line2,String city,String region,String postalCode,String countryCode){this(recipient,phone,line1,line2,city,region,postalCode,countryCode,null,null);}
+  public Address{text(recipient,160);text(line1,200);optional(line2,200);optional(region,100);optional(postalCode,24);if(phone==null||!phone.matches("\\+[1-9][0-9]{7,14}")||!"NG".equals(countryCode)||(latitude==null)!=(longitude==null)||latitude!=null&&(latitude.abs().compareTo(BigDecimal.valueOf(90))>0||longitude.abs().compareTo(BigDecimal.valueOf(180))>0||latitude.stripTrailingZeros().scale()>6||longitude.stripTrailingZeros().scale()>6))throw ApiValues.invalid();}
   @Override public String toString(){return "CarrierAddress[protected]";}
  }
  public record Parcel(UUID skuId,String quantity,String weightKg,String lengthCm,String widthCm,String heightCm){
   public Parcel{id(skuId);ApiValues.quantity(quantity);ApiValues.quantity(weightKg);dimension(lengthCm);dimension(widthCm);dimension(heightCm);}
  }
- public record QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode){
-  public QuoteInput{id(commandId);id(cartId);if(!"NG".equals(market)||!"NGN".equals(currency)||shipper==null||destination==null||packages==null||packages.isEmpty()||packages.size()>100)throw ApiValues.invalid();packages=List.copyOf(packages);if(serviceCode!=null)service(serviceCode);}
+ public record QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode,String orderAmount){
+  public QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode){this(commandId,cartId,market,currency,shipper,destination,packages,serviceCode,"0.00");}
+  public QuoteInput{id(commandId);id(cartId);if(!"NG".equals(market)||!"NGN".equals(currency)||destination==null||packages==null||packages.isEmpty()||packages.size()>100)throw ApiValues.invalid();packages=List.copyOf(packages);if(serviceCode!=null)service(serviceCode);money(orderAmount);}
   @Override public String toString(){return "CarrierQuoteInput[protected]";}
  }
- public record Quote(String provider,String serviceCode,String currency,String amount,Instant expiresAt,String providerReference){
-  public Quote{if(!"FEDEX".equals(provider)||!"NGN".equals(currency)||expiresAt==null)throw rule();service(serviceCode);money(amount);optional(providerReference,160);}
+ public record Quote(String provider,String serviceCode,String currency,String amount,Instant expiresAt,String providerReference,
+                     String estimatedDeliveryAmount,Instant estimatedPickupTime,Instant estimatedDeliveryTime,
+                     String deliveryDuration,String lowerBound,String upperBound){
+  public Quote(String provider,String serviceCode,String currency,String amount,Instant expiresAt,String providerReference){this(provider,serviceCode,currency,amount,expiresAt,providerReference,null,null,null,null,null,null);}
+  public Quote{if(!Set.of("FEDEX","PANDAGO").contains(provider)||!"NGN".equals(currency)||expiresAt==null)throw rule();service(serviceCode);money(amount);optional(providerReference,160);if(estimatedDeliveryAmount!=null)money(estimatedDeliveryAmount);if((estimatedPickupTime==null)!=(estimatedDeliveryTime==null)||(estimatedDeliveryTime==null)!=(deliveryDuration==null)||(deliveryDuration==null)!=(lowerBound==null)||(lowerBound==null)!=(upperBound==null))throw rule();}
  }
  public static Problem.Failure rule(){return new Problem.Failure(ProblemCode.PROVIDER_RULE_VIOLATION);}
  private static void id(UUID id){if(id==null||id.equals(new UUID(0,0)))throw ApiValues.invalid();}
@@ -34,10 +39,11 @@ public final class CarrierValues {
  private static void closed(JsonNode node,Set<String> required,Set<String> allowed){if(node==null||!node.isObject()||!node.propertyNames().containsAll(required)||!allowed.containsAll(node.propertyNames()))throw ApiValues.invalid();}
  private static String str(JsonNode node,String name){var value=node.get(name);if(value==null||!value.isString())throw ApiValues.invalid();return value.asString();}
  private static String nullable(JsonNode node,String name){var value=node.get(name);return value==null||value.isNull()?null:str(node,name);}
- public static Address address(JsonNode node){var fields=Set.of("recipient","phone","line1","line2","city","region","postalCode","countryCode");closed(node,fields,fields);return new Address(str(node,"recipient"),str(node,"phone"),str(node,"line1"),nullable(node,"line2"),str(node,"city"),str(node,"region"),nullable(node,"postalCode"),str(node,"countryCode"));}
+ public static Address address(JsonNode node){var fields=Set.of("recipient","phone","line1","line2","city","region","postalCode","countryCode","latitude","longitude");closed(node,fields,fields);return new Address(str(node,"recipient"),str(node,"phone"),str(node,"line1"),nullable(node,"line2"),str(node,"city"),nullable(node,"region"),nullable(node,"postalCode"),str(node,"countryCode"),coordinate(node,"latitude"),coordinate(node,"longitude"));}
+ private static BigDecimal coordinate(JsonNode node,String name){var value=node.get(name);if(value==null||value.isNull())return null;if(!value.isNumber())throw ApiValues.invalid();var result=value.decimalValue();BigDecimal limit=name.equals("latitude")?BigDecimal.valueOf(90):BigDecimal.valueOf(180);if(result.abs().compareTo(limit)>0||result.stripTrailingZeros().scale()>6)throw ApiValues.invalid();return result;}
  public static QuoteInput quoteInput(JsonNode node){
-  closed(node,Set.of("commandId","cartId","market","currency","shipper","destination","packages"),Set.of("commandId","cartId","market","currency","shipper","destination","packages","serviceCode"));var rows=node.get("packages");if(!rows.isArray()||rows.isEmpty()||rows.size()>100)throw ApiValues.invalid();var parcels=new ArrayList<Parcel>();for(var row:rows){var fields=Set.of("skuId","quantity","weightKg","lengthCm","widthCm","heightCm");closed(row,fields,fields);parcels.add(new Parcel(ApiValues.uuid(str(row,"skuId")),str(row,"quantity"),str(row,"weightKg"),str(row,"lengthCm"),str(row,"widthCm"),str(row,"heightCm")));}
-  return new QuoteInput(ApiValues.uuid(str(node,"commandId")),ApiValues.uuid(str(node,"cartId")),str(node,"market"),str(node,"currency"),address(node.get("shipper")),address(node.get("destination")),parcels,node.has("serviceCode")?str(node,"serviceCode"):null);
+  closed(node,Set.of("commandId","cartId","market","currency","destination","packages","orderAmount"),Set.of("commandId","cartId","market","currency","shipper","destination","packages","serviceCode","orderAmount"));var rows=node.get("packages");if(!rows.isArray()||rows.isEmpty()||rows.size()>100)throw ApiValues.invalid();var parcels=new ArrayList<Parcel>();for(var row:rows){var fields=Set.of("skuId","quantity","weightKg","lengthCm","widthCm","heightCm");closed(row,fields,fields);parcels.add(new Parcel(ApiValues.uuid(str(row,"skuId")),str(row,"quantity"),str(row,"weightKg"),str(row,"lengthCm"),str(row,"widthCm"),str(row,"heightCm")));}
+  var shipper=node.get("shipper");return new QuoteInput(ApiValues.uuid(str(node,"commandId")),ApiValues.uuid(str(node,"cartId")),str(node,"market"),str(node,"currency"),shipper==null||shipper.isNull()?null:address(shipper),address(node.get("destination")),parcels,node.has("serviceCode")?str(node,"serviceCode"):null,str(node,"orderAmount"));
  }
  private static Map<String,Object> providerAddress(Address value){var street=new ArrayList<String>();street.add(value.line1());if(value.line2()!=null)street.add(value.line2());var address=new LinkedHashMap<String,Object>();address.put("streetLines",street);address.put("city",value.city());address.put("stateOrProvinceCode",value.region());address.put("countryCode",value.countryCode());if(value.postalCode()!=null)address.put("postalCode",value.postalCode());return Map.of("address",address);}
  /** FedEx Ship limits apply before a rate can fund checkout. Never truncate or transliterate. */
