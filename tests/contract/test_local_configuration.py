@@ -14,6 +14,10 @@ SPEC.loader.exec_module(local)
 
 
 class LocalIsolationTests(unittest.TestCase):
+    def test_example_allows_the_frontend_admin_login_destination(self):
+        settings = dict(line.split('=', 1) for line in (ROOT / '.env.example').read_text().splitlines() if '=' in line and not line.startswith('#'))
+        self.assertIn('/admin', settings['NIGSON_BFF_RETURN_PATHS'].split(','))
+
     def test_run_core_recovers_signing_trust_before_starting_apps(self):
         events = []
         with patch('sys.argv', ['dependencies.py', 'run-core']), patch.object(local, 'validate', return_value={}), patch.object(local, 'migrate'), patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), patch.object(local, 'ensure_actor_key', side_effect=lambda: events.append('recover')), patch.object(local, 'command', side_effect=lambda *args: events.append(args)):
