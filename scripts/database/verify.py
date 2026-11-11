@@ -49,7 +49,7 @@ class Database:
                 assert time.monotonic() < deadline, 'Database startup timeout'
                 time.sleep(1)
         if suffix == 'fresh':
-            provision = subprocess.run(['terraform', '-chdir=' + str(ROOT / 'infrastructure/terraform/database'), 'output', '-raw', 'bootstrap_sql'], check=True, capture_output=True, text=True).stdout
+            provision = subprocess.run(['terraform', '-chdir=' + str(ROOT / 'infrastructure/terraform/aws/database'), 'output', '-raw', 'bootstrap_sql'], check=True, capture_output=True, text=True).stdout
             variables = []
             for owner in OWNERS:
                 variables += ['-v', f'nigson_{owner}_migrator_password=mock-{owner}-migration',

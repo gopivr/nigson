@@ -14,6 +14,19 @@ SPEC.loader.exec_module(local)
 
 
 class LocalIsolationTests(unittest.TestCase):
+    def test_enabled_pandago_survives_local_restart(self):
+        import tempfile
+        from types import SimpleNamespace
+        for enabled in (True, False):
+            with self.subTest(enabled=enabled), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / '.env').write_text('NIGSON_PANDAGO_ENABLED=' + str(enabled).lower() + '\n')
+                with patch.object(local, 'ROOT', root), patch.dict(os.environ, {'NIGSON_PANDAGO_ENABLED': str(enabled).lower()}), patch.object(local.subprocess, 'run', return_value=SimpleNamespace(stdout='')) as docker:
+                    local.command('up', '-d', 'integration')
+                    args = docker.call_args.args[0]
+                    self.assertEqual(str(root / 'docker-compose.pandago.yml') in args, enabled)
+                    self.assertIn(str(root / 'docker-compose.yml'), args)
+
     def test_low_disk_space_prevents_docker_build(self):
         from types import SimpleNamespace
         with patch.object(local.shutil, "disk_usage", return_value=SimpleNamespace(free=267 * 1024**2)), patch.object(local.subprocess, "run") as docker:

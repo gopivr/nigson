@@ -17,6 +17,31 @@ class StrictModel(BaseModel):
 
 # Identical safe vocabulary to the shared Java wire contract.
 CODES: dict[str, tuple[int, str, str]] = {
+    "GEOCODING_NOT_CONFIGURED": (
+        503,
+        "Address lookup unavailable",
+        "Automatic address lookup is not configured. Contact the store to enable its geocoding provider.",
+    ),
+    "ADDRESS_NOT_LOCATED": (
+        422,
+        "Address could not be located",
+        "Enter a complete street address, including the building number, city and state. The address could not be located precisely enough for delivery.",
+    ),
+    "GEOCODING_ACCESS_DENIED": (
+        503,
+        "Address lookup access denied",
+        "The address lookup provider rejected the configured API key or billing access. Contact the store.",
+    ),
+    "GEOCODING_RATE_LIMITED": (
+        503,
+        "Address lookup limit reached",
+        "The address lookup provider has reached its request limit. Try again later.",
+    ),
+    "GEOCODING_UNAVAILABLE": (
+        503,
+        "Address lookup unavailable",
+        "The address lookup provider could not return a valid response. Try again later.",
+    ),
     "VALIDATION_ERROR": (400, "Invalid request", "Supply valid request fields."),
     "AUTH_REQUIRED": (
         401,

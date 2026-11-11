@@ -1,0 +1,41 @@
+# Fill using your project's actual regional catalog; these are not credentials.
+project_id = "REPLACE_OVH_PROJECT_ID"
+openstack_project_id = "REPLACE_OPENSTACK_TENANT_ID"
+region = "REPLACE_OPENSTACK_REGION"
+external_network_id = "REPLACE_EXTERNAL_NETWORK_UUID"
+image_id = "REPLACE_UBUNTU_2404_IMAGE_UUID"
+ssh_public_key = "ssh-ed25519 REPLACE_PUBLIC_KEY"
+admin_cidrs = ["REPLACE_VPN_CIDR"]
+dns_servers = ["REPLACE_APPROVED_DNS_IP"]
+nodes = {
+  edge-1 = { role = "edge", flavor_id = "REPLACE_FLAVOR_ID" }
+  edge-2 = { role = "edge", flavor_id = "REPLACE_FLAVOR_ID" }
+  commerce-1 = { role = "commerce", flavor_id = "REPLACE_FLAVOR_ID" }
+  commerce-2 = { role = "commerce", flavor_id = "REPLACE_FLAVOR_ID" }
+  experience-1 = { role = "experience", flavor_id = "REPLACE_FLAVOR_ID" }
+  experience-2 = { role = "experience", flavor_id = "REPLACE_FLAVOR_ID" }
+  integration-1 = { role = "integration", flavor_id = "REPLACE_FLAVOR_ID" }
+  integration-2 = { role = "integration", flavor_id = "REPLACE_FLAVOR_ID" }
+  identity-1 = { role = "identity", flavor_id = "REPLACE_FLAVOR_ID" }
+  identity-2 = { role = "identity", flavor_id = "REPLACE_FLAVOR_ID" }
+}
+database = {
+  region = "REPLACE_MATCHING_DATABASE_REGION"
+  version = "18"
+  plan = "business"
+  flavor = "REPLACE_DATABASE_FLAVOR"
+  node_count = 2
+  capabilities_verified = false # Set true only after verifying PG18, pgvector 0.8.2 and owner-role bootstrap support.
+}
+storage_region = "REPLACE_STORAGE_REGION"
+bucket_names = ["replace-with-globally-unique-private-bucket"]
+registry = { region = "REPLACE_REGISTRY_REGION", plan_id = "REPLACE_REGISTRY_PLAN_UUID" }
+
+workloads = {
+  edge = { image = "REPLACE_REGISTRY/edge@sha256:REPLACE_DIGEST", health_command = ["CMD", "REPLACE_REAL_HEALTH_COMMAND"], memory_mb = 2048 }
+  commerce = { image = "REPLACE_REGISTRY/commerce@sha256:REPLACE_DIGEST", health_command = ["CMD", "REPLACE_REAL_HEALTH_COMMAND"], memory_mb = 2048 }
+  experience = { image = "REPLACE_REGISTRY/experience@sha256:REPLACE_DIGEST", health_command = ["CMD", "REPLACE_REAL_HEALTH_COMMAND"], memory_mb = 2048 }
+  integration = { image = "REPLACE_REGISTRY/integration@sha256:REPLACE_DIGEST", health_command = ["CMD", "REPLACE_REAL_HEALTH_COMMAND"], memory_mb = 2048 }
+  identity = { image = "REPLACE_REGISTRY/identity@sha256:REPLACE_DIGEST", health_command = ["CMD", "REPLACE_REAL_HEALTH_COMMAND"], memory_mb = 2048 }
+}
+ntp_servers = ["REPLACE_APPROVED_NTP_IP"]

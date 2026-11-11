@@ -8,6 +8,14 @@ import org.springframework.core.env.Environment;
 /** Explicit opt-in: missing partner/account data fails startup; no mock fallback. */
 @Configuration(proxyBeanMethods=false)
 public class PartnerConfiguration {
+ @Bean GeocodingProvider geocodingProvider(Environment e){
+  String provider=e.getProperty("NIGSON_GEOCODING_PROVIDER", "");
+  String key=e.getProperty("GOOGLE_GEOCODING_API_KEY", "");
+  if(provider.isBlank()||key.isBlank())return address->{throw new com.nigson.shared.problem.Problem.Failure(com.nigson.shared.problem.ProblemCode.GEOCODING_NOT_CONFIGURED);};
+  if(!provider.equals("GOOGLE"))throw new IllegalArgumentException("GEOCODING_PROVIDER_UNSUPPORTED");
+  return new GoogleGeocodingAdapter(e.getRequiredProperty("APP_ENV"),ProviderHttp.Mode.LIVE,"https://maps.googleapis.com",key);
+ }
+
  @Bean @ConditionalOnProperty(name="NIGSON_PANDAGO_ENABLED",havingValue="true")
  PandagoAdapter pandago(Environment e) {
   if(!e.getProperty("NIGSON_SECURITY_ENABLED",Boolean.class,false))throw new IllegalArgumentException("PANDAGO_PRIVATE_SECURITY_REQUIRED");
