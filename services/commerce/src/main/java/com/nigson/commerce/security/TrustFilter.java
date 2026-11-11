@@ -32,7 +32,7 @@ public final class TrustFilter extends OncePerRequestFilter {
             } else {
                 stage="browser_credentials";
                 if(single(req,"X-Nigson-Actor")!=null||single(req,"Authorization")!=null)throw ActorAssertion.denied();
-                boolean publicRead=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands","/api/v1/markets").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}(?:/recommendations)?"));
+                boolean publicRead=req.getMethod().equals("GET")&&(Set.of("/api/v1/catalogue/products","/api/v1/catalogue/categories","/api/v1/catalogue/brands","/api/v1/markets").contains(req.getRequestURI())||req.getRequestURI().matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}(?:/recommendations)?")||req.getRequestURI().matches("/api/v1/catalogue/skus/[a-fA-F0-9-]{36}/price")&&!req.getParameterMap().containsKey("organizationId"));
                 boolean providerCallback=req.getMethod().equals("POST")&&Set.of("/api/v1/webhooks/payments/paystack","/wh/paystack","/api/v1/webhooks/notifications/twilio/status").contains(req.getRequestURI());
                 if(req.getRequestURI().equals("/api/v1/webhooks/notifications/twilio/status")&&(req.getHeader("Origin")!=null||req.getCookies()!=null))throw ActorAssertion.denied();
                 stage="session_cookie";

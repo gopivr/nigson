@@ -8,6 +8,8 @@ EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). IN
 
 ## Current Task
 
+PUBLIC-RETAIL-PRICE — VERIFIED locally. Retail price GET succeeds anonymously and with expired/malformed session cookies (200); organization pricing and private carts remain protected (401). Eleven targeted tests and Docker Commerce build passed; running container updated. Evidence: `docs/implementation/2026-11-10-PUBLIC-RETAIL-PRICE.md`.
+
 AUTOMATIC-ADDRESS-LOOKUP — Implemented; live qualification blocked by Google billing. Checkout sends postal addresses without manual coordinates; Integration resolves Google coordinates before Pandago quotes. Authenticated acceptance reaches GEOCODING_ACCESS_DENIED; direct Google diagnostic confirms REQUEST_DENIED: billing must be enabled. Targeted Java tests (18), checkout tests (5), Angular build and Docker build passed. Evidence: `docs/implementation/2026-11-10-AUTOMATIC-ADDRESS-LOOKUP.md`.
 
 LOCAL-PANDAGO-QUOTES — VERIFIED locally. User-approved sandbox quote configuration persists across run-core through 2026-11-17T23:59:59Z. Fixed Integration internal JWKS routing, added checkout coordinate entry/persistence, and seeded approved synthetic packaging only on 24 demo SKUs. Actual authenticated delivery-quotes API returned PANDAGO/NGN26.00. Docker Integration build, Angular shop build, 23 configuration and 5 checkout tests pass. Booking/payment remain disabled. Evidence: `docs/implementation/2026-11-10-LOCAL-PANDAGO-QUOTES.md`.

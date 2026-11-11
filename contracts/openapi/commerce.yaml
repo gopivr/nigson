@@ -7845,7 +7845,7 @@
     "/api/v1/catalogue/skus/{id}/price": {
       "get": {
         "operationId": "API-026",
-        "description": "Current approved NG/NGN2 retail price from the explicitly selected effective active book. Greatest qualifying tier; exact quantity scale/pack and minor units. Public retail only; organization requires current authenticated membership and the explicitly configured distributor buying entitlement at BP3. An invalid assignment never falls back. Bounded replica budget and repeatable-read/no-store.",
+        "description": "Current approved NG/NGN2 retail price from the explicitly selected effective active book. Greatest qualifying tier; exact quantity scale/pack and minor units. Public retail reads ignore stale browser sessions and require no login; organization requires current authenticated membership and the explicitly configured distributor buying entitlement at BP3. An invalid assignment never falls back. Bounded replica budget and repeatable-read/no-store.",
         "security": [
           {},
           {
