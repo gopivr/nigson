@@ -35,6 +35,16 @@ class ProductPersistenceTest {
         var tx=new TransactionTemplate(manager);tx.setReadOnly(true);tx.setIsolationLevel(org.springframework.transaction.TransactionDefinition.ISOLATION_REPEATABLE_READ);tx.setTimeout(3);
         reads=new CatalogueReads(new JdbcCatalogueQueries(jdbc,repository,assets),authority,jdbc,tx,clock,10000);
     }
+    @Test void staffDraftDetailsExposeCurrentVersionsAndPackagingButRequireEditor(){
+        var p=create("Synthetic editable draft");
+        var sku=service.sku(editor(),p.id(),true,0,sku("SYN-"+UUID.randomUUID()),UUID.randomUUID().toString(),UUID.randomUUID());
+        assertThat(reads.staffProduct(editor(),p.id()).id()).isEqualTo(p.id());
+        var detail=reads.staffSku(editor(),sku.id());
+        assertThat(detail.version()).isEqualTo(sku.version());
+        assertThat(detail.carrierPackaging().path("lengthCm").asString()).isEqualTo("10");
+        assertThatThrownBy(()->reads.staffSku(actor(sales,"SALES"),sku.id())).hasMessage("ACCESS_DENIED");
+        assertThatThrownBy(()->reads.staffProduct(actor(sales,"SALES"),p.id())).hasMessage("ACCESS_DENIED");
+    }
     @AfterEach void clean(){if(jdbc!=null){jdbc.update("DELETE FROM commerce.feature_configuration WHERE key='catalogue.metadata' AND created_by='test'");for(var id:List.of(editor,publisher,sales)){jdbc.update("DELETE FROM commerce.staff_role_assignment WHERE party_id=?",id);jdbc.update("DELETE FROM commerce.party WHERE id=?",id);}}}
     UUID party(String role){UUID id=UUID.randomUUID();jdbc.update("INSERT INTO commerce.party(id,created_by,updated_by,identity_issuer,identity_subject,email,display_name) VALUES (?,'test','test',?,?,?,'Synthetic catalogue actor')",id,issuer,id.toString(),id+"@example.invalid");jdbc.update("INSERT INTO commerce.staff_role_assignment(id,created_by,updated_by,party_id,role,granted_by) VALUES (?,'test','test',?,?,?)",UUID.randomUUID(),id,role,id);return id;}
     ActorAssertion.Actor actor(UUID id,String role){return new ActorAssertion.Actor(id,issuer,id.toString(),null,Set.of(role),Set.of(),clock.instant());}
