@@ -404,6 +404,18 @@ def seed(config: dict) -> None:
     print("PASS: 13 deterministic Keycloak fixtures and real signed logins; domain seeds pending DATA-001")
 
 
+def ensure_actor_key() -> None:
+    """Recover only explicitly enabled local signing trust before recreating apps."""
+    envfile = ROOT / ".env"
+    if not envfile.is_file():
+        return
+    settings = dict(line.split("=", 1) for line in envfile.read_text().splitlines()
+                    if line and not line.startswith("#") and "=" in line)
+    if settings.get("NIGSON_SECURITY_ENABLED", "false") == "true":
+        subprocess.run([sys.executable, str(ROOT / "scripts/local/restore_actor_key.py")],
+                       cwd=ROOT, check=True, timeout=120)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["validate", "up", "down", "bootstrap", "status", "migrate", "seed", "run-core", "run-ai"])
@@ -430,6 +442,7 @@ def main() -> int:
             command("--profile", "app", "build", *OWNERS)
             wait_identity(config)
             configure_registration(config)
+            ensure_actor_key()
             # `build` may have produced new local images. Let Compose recreate only
             # services whose image/config changed so run-core actually runs the build.
             command("--profile", "app", "up", "--detach", "--wait", "--wait-timeout", "180", *OWNERS)
