@@ -14,7 +14,7 @@ def main():
  endpoint=json.loads(subprocess.run(['docker','context','inspect','--format','{{json .Endpoints.docker.Host}}'],capture_output=True,text=True,check=True).stdout)
  if not endpoint.startswith('unix://'):raise ValueError('Local Docker required')
  if os.environ.get('DOCKER_HOST') and os.environ['DOCKER_HOST']!=endpoint:raise ValueError('Local Docker required')
- config=(ROOT/'infrastructure/terraform/modules/observability/collector.yaml.tftpl').read_text()
+ config=(ROOT/'infrastructure/terraform/aws/modules/observability/collector.yaml.tftpl').read_text()
  # Explicit non-deployable fixtures; these are not region or retention approvals.
  for name,value in {'region':'us-east-1','environment':'test','namespace':'Nigson/test','log_group':'/nigson/test/metrics'}.items():config=config.replace('${'+name+'}',value)
  path=ROOT/'.build/collector-qualification.yaml';path.parent.mkdir(exist_ok=True);path.write_text(config)

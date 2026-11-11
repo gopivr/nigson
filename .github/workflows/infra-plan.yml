@@ -40,66 +40,66 @@ jobs:
           terraform_wrapper: false
       - name: Check formatting
         run: |
-          terraform -chdir=infrastructure/terraform/modules/network fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/compute fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/database fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/migrations fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/storage fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/secrets fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/messaging fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/observability fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/identity fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/modules/private-trust fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/environments/stage fmt -check -recursive
-          terraform -chdir=infrastructure/terraform/environments/prod fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/network fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/compute fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/database fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/migrations fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/storage fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/secrets fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/messaging fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/observability fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/identity fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/modules/private-trust fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/environments/stage fmt -check -recursive
+          terraform -chdir=infrastructure/terraform/aws/environments/prod fmt -check -recursive
       - name: Initialize without a backend
         run: |
-          terraform -chdir=infrastructure/terraform/modules/network init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/compute init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/database init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/migrations init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/storage init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/secrets init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/messaging init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/observability init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/identity init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/modules/private-trust init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/environments/stage init -backend=false -input=false
-          terraform -chdir=infrastructure/terraform/environments/prod init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/network init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/compute init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/database init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/migrations init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/storage init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/secrets init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/messaging init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/observability init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/identity init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/modules/private-trust init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/environments/stage init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform/aws/environments/prod init -backend=false -input=false
       - name: Validate configuration
         run: |
-          terraform -chdir=infrastructure/terraform/modules/network validate
-          terraform -chdir=infrastructure/terraform/modules/compute validate
-          terraform -chdir=infrastructure/terraform/modules/database validate
-          terraform -chdir=infrastructure/terraform/modules/migrations validate
-          terraform -chdir=infrastructure/terraform/modules/storage validate
-          terraform -chdir=infrastructure/terraform/modules/secrets validate
-          terraform -chdir=infrastructure/terraform/modules/messaging validate
-          terraform -chdir=infrastructure/terraform/modules/observability validate
-          terraform -chdir=infrastructure/terraform/modules/identity validate
-          terraform -chdir=infrastructure/terraform/modules/private-trust validate
-          terraform -chdir=infrastructure/terraform/environments/stage validate
-          terraform -chdir=infrastructure/terraform/environments/prod validate
+          terraform -chdir=infrastructure/terraform/aws/modules/network validate
+          terraform -chdir=infrastructure/terraform/aws/modules/compute validate
+          terraform -chdir=infrastructure/terraform/aws/modules/database validate
+          terraform -chdir=infrastructure/terraform/aws/modules/migrations validate
+          terraform -chdir=infrastructure/terraform/aws/modules/storage validate
+          terraform -chdir=infrastructure/terraform/aws/modules/secrets validate
+          terraform -chdir=infrastructure/terraform/aws/modules/messaging validate
+          terraform -chdir=infrastructure/terraform/aws/modules/observability validate
+          terraform -chdir=infrastructure/terraform/aws/modules/identity validate
+          terraform -chdir=infrastructure/terraform/aws/modules/private-trust validate
+          terraform -chdir=infrastructure/terraform/aws/environments/stage validate
+          terraform -chdir=infrastructure/terraform/aws/environments/prod validate
       - name: Test private network topology
-        run: terraform -chdir=infrastructure/terraform/modules/network test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/network test
       - name: Test private ECS and ALB boundaries
-        run: terraform -chdir=infrastructure/terraform/modules/compute test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/compute test
       - name: Test private database boundaries
-        run: terraform -chdir=infrastructure/terraform/modules/database test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/database test
       - name: Test one-shot migration tasks
-        run: terraform -chdir=infrastructure/terraform/modules/migrations test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/migrations test
       - name: Test SNS and SQS ownership boundaries
-        run: terraform -chdir=infrastructure/terraform/modules/messaging test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/messaging test
       - name: Test S3 storage and access controls
-        run: terraform -chdir=infrastructure/terraform/modules/storage test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/storage test
       - name: Test KMS and secret phase gates
-        run: terraform -chdir=infrastructure/terraform/modules/secrets test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/secrets test
       - name: Test identity network boundaries
-        run: terraform -chdir=infrastructure/terraform/modules/identity test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/identity test
       - name: Test observability phase gates
-        run: terraform -chdir=infrastructure/terraform/modules/observability test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/observability test
       - name: Test private service trust
-        run: terraform -chdir=infrastructure/terraform/modules/private-trust test
+        run: terraform -chdir=infrastructure/terraform/aws/modules/private-trust test
       - name: Test immutable artifact publication gates
         run: bash scripts/infra/tests/publish-images-test.sh
       - name: Test pinned production container inputs
@@ -218,7 +218,7 @@ jobs:
           TARGET_ENVIRONMENT: ${{ inputs.environment }}
         run: |
           set -euo pipefail
-          terraform -chdir="infrastructure/terraform/environments/${TARGET_ENVIRONMENT}" init -input=false \
+          terraform -chdir="infrastructure/terraform/aws/environments/${TARGET_ENVIRONMENT}" init -input=false \
             -backend-config="bucket=${TF_STATE_BUCKET}" \
             -backend-config="key=nigson/${TARGET_ENVIRONMENT}/terraform.tfstate" \
             -backend-config="region=${AWS_REGION}" \
@@ -230,7 +230,7 @@ jobs:
           TARGET_ENVIRONMENT: ${{ inputs.environment }}
         run: |
           set -euo pipefail
-          root="infrastructure/terraform/environments/${TARGET_ENVIRONMENT}"
+          root="infrastructure/terraform/aws/environments/${TARGET_ENVIRONMENT}"
           terraform -chdir="$root" plan -input=false -lock-timeout=5m -out="$RUNNER_TEMP/nigson.tfplan"
           terraform -chdir="$root" show -json "$RUNNER_TEMP/nigson.tfplan" | python3 -c '
           import json, sys

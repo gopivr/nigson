@@ -2,7 +2,7 @@
 """Recover an emulator-only actor signing key after local KMS state loss.
 
 Rotates only the local actor key, retaining sessions and owner data. Restart the
-Commerce and Experience containers after this changes their .env key settings.
+Commerce, Experience and Integration containers after this changes their .env key settings.
 """
 import base64
 import json
@@ -27,7 +27,7 @@ def main():
         raise ValueError('LOCAL_DOCKER_REQUIRED')
     region = env.get('NIGSON_AWS_REGION', 'us-east-1')
     def kms(*args):
-        result = subprocess.run(['docker', 'compose', 'exec', '-T', 'localstack', 'awslocal', '--region', region, 'kms', *args], cwd=ROOT, check=True, capture_output=True, text=True, timeout=30)
+        result = subprocess.run(['docker', 'compose', '--project-name', 'nigson-local', '--env-file', str(ROOT / '.env'), '--file', str(ROOT / 'docker-compose.yml'), 'exec', '-T', 'localstack', 'awslocal', '--region', region, 'kms', *args], cwd=ROOT, check=True, capture_output=True, text=True, timeout=30)
         return json.loads(result.stdout)
     old = env.get('NIGSON_ACTOR_KMS_KEY')
     if old:
@@ -36,8 +36,9 @@ def main():
             if found['PublicKey'] == env.get('NIGSON_ACTOR_PUBLIC_KEY'):
                 print('PASS: configured local actor key exists and matches public trust; unchanged')
                 return
-        except subprocess.CalledProcessError:
-            pass
+        except subprocess.CalledProcessError as failure:
+            if 'NotFoundException' not in (failure.stderr or ''):
+                raise
     key = kms('create-key', '--key-spec', 'ECC_NIST_P256', '--key-usage', 'SIGN_VERIFY', '--description', 'Nigson explicit local testing actor key')['KeyMetadata']['Arn']
     public = kms('get-public-key', '--key-id', key)['PublicKey']
     base64.b64decode(public, validate=True)
@@ -51,7 +52,7 @@ def main():
             lines[number] = name + '=' + remaining.pop(name)
     lines.extend(name + '=' + value for name, value in remaining.items())
     (ROOT / '.env').write_text('\n'.join(lines) + '\n')
-    print('PASS: emulator-only actor key rotated; restart Commerce and Experience to load matching trust. Database/session data unchanged.')
+    print('PASS: emulator-only actor key rotated; restart Commerce, Experience and Integration to load matching trust. Database/session data unchanged.')
 
 
 if __name__ == '__main__':

@@ -50,10 +50,13 @@ class ProviderContracts(unittest.TestCase):
         self.assertEqual(op['responses']['200']['headers']['X-Nigson-Carrier-Mode']['schema']['enum'],['MOCK','SANDBOX','LIVE'])
         schemas=spec['components']['schemas'];request=schemas['CarrierQuoteInput']
         self.assertFalse(request['additionalProperties'])
-        self.assertEqual(set(request['properties']),{'commandId','cartId','market','currency','shipper','destination','packages','serviceCode'})
+        self.assertEqual(set(request['properties']),{'commandId','cartId','market','currency','shipper','destination','packages','serviceCode','orderAmount'})
         self.assertEqual(request['properties']['packages']['maxItems'],100)
         self.assertNotIn('serviceCode',request['required'])
+        self.assertIn('orderAmount',request['required'])
         self.assertEqual(schemas['CarrierQuoteDTO']['properties']['currency']['const'],'NGN')
+        self.assertEqual(set(schemas['CarrierQuoteDTO']['properties']) & {'estimatedDeliveryAmount','estimatedPickupTime','estimatedDeliveryTime','deliveryDuration','lowerBound','upperBound'},
+                         {'estimatedDeliveryAmount','estimatedPickupTime','estimatedDeliveryTime','deliveryDuration','lowerBound','upperBound'})
         self.assertEqual(schemas['CarrierAddress']['properties']['countryCode']['const'],'NG')
         registry={r['api']:r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text())}
         self.assertEqual(registry['API-182']['scope'],'carrier.quote_WITH_SIGNED_ACTOR')

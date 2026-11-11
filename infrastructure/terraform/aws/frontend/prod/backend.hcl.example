@@ -1,0 +1,5 @@
+bucket = "REPLACE_PRIVATE_STATE_BUCKET"
+key = "nigson/aws/frontend/prod/terraform.tfstate"
+region = "REPLACE_STATE_REGION"
+use_lockfile = true
+encrypt = true

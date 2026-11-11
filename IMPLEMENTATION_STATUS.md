@@ -1,12 +1,32 @@
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008 | Updated:1 November2026 UTC
+Specification:1.1.0 | Architecture source:1.0 + ADR-008/ADR-009 | Updated:7 November2026 UTC
 
 ## Current Phase
 
 EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). INT-NOTIF-001 offline engineering is complete; stage, restore and genuine provider qualification gates remain input-bound. BP1 launch composition remains section46.
 
 ## Current Task
+
+ADMIN-NAVIGATION — VERIFIED locally. Added /admin to explicit BFF login return paths, restored previously authorized local admin fixture roles and removed display-name/ID-based admin UI inference. Dashboard summary cards now link to their corresponding views. Actual browser verified all 19 sidebar links, four cards and mobile menu with no browser/HTTP errors. Admin-core/shell production builds, TypeScript and 26 local configuration tests pass. Evidence: `docs/implementation/2026-11-11-ADMIN-NAVIGATION.md`.
+
+LOCAL-QUOTE-RECOVERY — VERIFIED locally. Restored lost LocalStack actor signing key; run-core now checks/recovers local signing trust before starting apps. Enabled approved local BP3 quotes and fixed Experience SKU-validation service identity/token backchannel. Actual authenticated quote request POST returned NEW and appeared in own history. Twenty-eight local tests, two HTTP adapter tests and Docker Experience build passed. Payment/checkout remain disabled. Evidence: `docs/implementation/2026-11-11-LOCAL-QUOTE-RECOVERY.md`.
+
+MICROFRONTEND-HOSTING — Code verified locally. Added independent AWS/OVH frontend stage/prod roots, private AWS S3/CloudFront hosting and OVH HTTPS frontend VMs. Production shell/seven remotes build and Docker HTTPS acceptance pass; 22 Terraform roots validate with 51 mocked tests passing. Same-origin API/BFF routing preserves session/CSRF/errors without caching. No cloud apply or live DNS/login qualification. Evidence: `docs/implementation/2026-11-10-MICROFRONTEND-HOSTING.md`.
+
+OVH-INFRA — Code validated. AWS roots preserved byte-for-byte under terraform/aws with tooling/CI paths updated. Added independent OVH stage/prod roots for private Docker VMs, HTTPS load balancing, managed PostgreSQL, registry and encrypted/versioned storage. All 16 roots validate; 35 AWS and 7 OVH mocked tests pass. No cloud apply; live OVH catalog/account/database compatibility and AWS-dependent application activation remain unqualified. Evidence: `docs/implementation/2026-11-10-OVH-INFRA.md`.
+
+PUBLIC-RETAIL-PRICE — VERIFIED locally. Retail price GET succeeds anonymously and with expired/malformed session cookies (200); organization pricing and private carts remain protected (401). Eleven targeted tests and Docker Commerce build passed; running container updated. Evidence: `docs/implementation/2026-11-10-PUBLIC-RETAIL-PRICE.md`.
+
+AUTOMATIC-ADDRESS-LOOKUP — Implemented; live qualification blocked by Google billing. Checkout sends postal addresses without manual coordinates; Integration resolves Google coordinates before Pandago quotes. Authenticated acceptance reaches GEOCODING_ACCESS_DENIED; direct Google diagnostic confirms REQUEST_DENIED: billing must be enabled. Targeted Java tests (18), checkout tests (5), Angular build and Docker build passed. Evidence: `docs/implementation/2026-11-10-AUTOMATIC-ADDRESS-LOOKUP.md`.
+
+LOCAL-PANDAGO-QUOTES — VERIFIED locally. User-approved sandbox quote configuration persists across run-core through 2026-11-17T23:59:59Z. Fixed Integration internal JWKS routing, added checkout coordinate entry/persistence, and seeded approved synthetic packaging only on 24 demo SKUs. Actual authenticated delivery-quotes API returned PANDAGO/NGN26.00. Docker Integration build, Angular shop build, 23 configuration and 5 checkout tests pass. Booking/payment remain disabled. Evidence: `docs/implementation/2026-11-10-LOCAL-PANDAGO-QUOTES.md`.
+
+INTEGRATION-BUILD-FIX — VERIFIED. Removed Pandago carrier/providers module cycle and fixed API-119 postal-address coordinate conversion. Clean integration tests and full `./mvnw -B install` pass; integration 201 tests, 105 database-gated skips, zero failures/errors. Docker rebuild not run. Evidence: `docs/implementation/2026-11-10-INTEGRATION-BUILD-FIX.md`.
+
+RUNTIME-MOCK-REMOVAL — IN_PROGRESS. Removing browser authentication/data fallbacks and mock provider routing from normal runtime; preserving explicit isolated test fixtures. Public `GET /api/v1/markets` now bypasses stale session-cookie validation as required by API-029; market HTTP acceptance passes with an unknown session ID. Local BFF security is enabled using local-only session/actor keys, and frontend `/bff/login` now redirects to the Nigson-branded Keycloak login page. Evidence: `docs/implementation/2026-11-07-RUNTIME-MOCK-REMOVAL.md`.
+
+PANDAGO-001 — IN_PROGRESS; provider-aware NG/NGN cart quotes and quote-to-order provider snapshots implemented, but booking/status/tracking remains incomplete and activation is input-blocked. The explicit PandaGo TEST quote pilot is recorded in ADR-009; FedEx remains the ADR-008 launch-carrier decision. The opt-in Compose overlay enables quotes only after PandaGo and pricing approval inputs; order checkout is forced off until the no-label booking/UNKNOWN/reconciliation workflow is complete. NG stage STS previously returned401 invalid_client; registered2048-bit key/KeyID and verified account approval remain required. No real provider requests or deliveries were created. Compose syntax passes; interpolation with the current `.env` is blocked because `NIGSON_PANDAGO_APPROVAL_UNTIL` is unset. Evidence: docs/implementation/2026-11-07-PANDAGO-001.md.
 
 ADMIN-PORTAL-REPAIR — VERIFIED locally: 21 admin routes and 32 authenticated read/write checks plus six product/SKU/stock form checks pass; 108 contracts and all four frontend builds pass. Stock/product test values restored; temporary CMS articles withdrawn. Role and Finance decisions still require recent MFA and their existing approval rules.
 

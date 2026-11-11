@@ -33,7 +33,7 @@ if rg -qi 'start-dev|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC )?PRIVATE KEY-----' "$
   echo "development mode or credential material found in production Dockerfiles" >&2
   exit 1
 fi
-rg -q 'readonlyRootFilesystem = true' "$repo_root/infrastructure/terraform/modules/compute/main.tf"
-rg -q 'readonlyRootFilesystem = true' "$repo_root/infrastructure/terraform/modules/identity/main.tf"
+rg -q 'readonlyRootFilesystem = true' "$repo_root/infrastructure/terraform/aws/modules/compute/main.tf"
+rg -q 'readonlyRootFilesystem = true' "$repo_root/infrastructure/terraform/aws/modules/identity/main.tf"
 
 echo "Production Dockerfile input checks PASS"

@@ -1,0 +1,16 @@
+region = "REPLACE_OPENSTACK_REGION"
+openstack_project_id = "REPLACE_OPENSTACK_TENANT_ID"
+network_id = "REPLACE_EXISTING_PRIVATE_NETWORK_ID"
+subnet_id = "REPLACE_EXISTING_PRIVATE_SUBNET_ID"
+subnet_cidr = "10.70.10.0/24"
+external_network_id = "REPLACE_EXTERNAL_NETWORK_ID"
+image_id = "REPLACE_UBUNTU_2404_IMAGE_ID"
+flavor_id = "REPLACE_FRONTEND_VM_FLAVOR"
+ssh_key_pair = "REPLACE_EXISTING_SSH_KEYPAIR_NAME"
+admin_cidrs = ["REPLACE_PRIVATE_VPN_CIDR"]
+dns_servers = ["REPLACE_APPROVED_DNS_IP"]
+ntp_servers = ["REPLACE_APPROVED_NTP_IP"]
+replicas = 2
+frontend_image = "REPLACE_REGISTRY/nigson-frontend@sha256:REPLACE_DIGEST"
+domain_name = "www.example.com"
+backend_origin_hostname = "api.example.com"

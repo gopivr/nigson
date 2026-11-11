@@ -49,9 +49,14 @@ def command(*arguments: str, capture: bool = False) -> str:
     project = os.environ.get("COMPOSE_PROJECT_NAME", "nigson-local")
     if project != "nigson-local" and not re.fullmatch(r"nigson-test-[a-z0-9-]+", project):
         raise ValueError("Refusing nonlocal Compose project name")
+    # Persist the explicitly enabled sandbox quote overlay across run-core restarts.
+    settings = dict(line.strip().split("=", 1) for line in envfile.read_text().splitlines()
+                    if line.strip() and not line.lstrip().startswith("#") and "=" in line)
+    pandago = os.environ.get("NIGSON_PANDAGO_ENABLED", settings.get("NIGSON_PANDAGO_ENABLED", "false")) == "true"
+    overlays = ["--file", str(ROOT / "docker-compose.pandago.yml")] if pandago else []
     result = subprocess.run(
         ["docker", "compose", "--project-name", project, "--env-file", str(envfile),
-         "--file", str(ROOT / "docker-compose.yml"), *profiles(), *arguments],
+         "--file", str(ROOT / "docker-compose.yml"), *overlays, *profiles(), *arguments],
         cwd=ROOT, check=True, text=True, capture_output=capture, timeout=900 if "build" in arguments else 240,
     )
     return result.stdout if capture else ""
@@ -398,6 +403,18 @@ def seed(config: dict) -> None:
     print("PASS: 13 deterministic Keycloak fixtures and real signed logins; domain seeds pending DATA-001")
 
 
+def ensure_actor_key() -> None:
+    """Recover only explicitly enabled local signing trust before recreating apps."""
+    envfile = ROOT / ".env"
+    if not envfile.is_file():
+        return
+    settings = dict(line.split("=", 1) for line in envfile.read_text().splitlines()
+                    if line and not line.startswith("#") and "=" in line)
+    if settings.get("NIGSON_SECURITY_ENABLED", "false") == "true":
+        subprocess.run([sys.executable, str(ROOT / "scripts/local/restore_actor_key.py")],
+                       cwd=ROOT, check=True, timeout=120)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["validate", "up", "down", "bootstrap", "status", "migrate", "seed", "run-core", "run-ai"])
@@ -423,6 +440,7 @@ def main() -> int:
             command("--profile", "app", "build", *OWNERS)
             wait_identity(config)
             configure_registration(config)
+            ensure_actor_key()
             # `build` may have produced new local images. Let Compose recreate only
             # services whose image/config changed so run-core actually runs the build.
             command("--profile", "app", "up", "--detach", "--wait", "--wait-timeout", "180", *OWNERS)

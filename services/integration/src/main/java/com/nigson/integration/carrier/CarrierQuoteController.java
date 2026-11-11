@@ -12,6 +12,7 @@ import com.nigson.shared.observability.WireContext;
 
 @RestController
 @ConditionalOnProperty(name="NIGSON_CARRIER_ENABLED",havingValue="true")
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name="NIGSON_PANDAGO_ENABLED",havingValue="false",matchIfMissing=true)
 public final class CarrierQuoteController {
  private final CarrierQuoteService service;public CarrierQuoteController(CarrierQuoteService service){this.service=service;}
  @PostMapping(value="/internal/v1/carrier/quotes",consumes="application/json",produces="application/json")

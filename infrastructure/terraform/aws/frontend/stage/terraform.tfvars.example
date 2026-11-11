@@ -1,0 +1,9 @@
+region = "REPLACE_AWS_REGION"
+expected_account_id = "REPLACE_ACCOUNT_ID"
+bucket_name = "replace-globally-unique-frontend-bucket"
+domain_name = "www.example.com"
+backend_origin_hostname = "api.example.com"
+certificate_arn = "arn:aws:acm:us-east-1:REPLACE_ACCOUNT:certificate/REPLACE_CERTIFICATE_ID"
+web_acl_arn = "arn:aws:wafv2:us-east-1:REPLACE_ACCOUNT:global/webacl/REPLACE_NAME/REPLACE_ID"
+release_id = "REPLACE_RELEASE_ID"
+zone_id = null # Supply Route53 zone ID or configure your DNS provider manually.

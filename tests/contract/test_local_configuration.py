@@ -14,6 +14,43 @@ SPEC.loader.exec_module(local)
 
 
 class LocalIsolationTests(unittest.TestCase):
+    def test_example_allows_the_frontend_admin_login_destination(self):
+        settings = dict(line.split('=', 1) for line in (ROOT / '.env.example').read_text().splitlines() if '=' in line and not line.startswith('#'))
+        self.assertIn('/admin', settings['NIGSON_BFF_RETURN_PATHS'].split(','))
+
+    def test_run_core_recovers_signing_trust_before_starting_apps(self):
+        events = []
+        with patch('sys.argv', ['dependencies.py', 'run-core']), patch.object(local, 'validate', return_value={}), patch.object(local, 'migrate'), patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), patch.object(local, 'ensure_actor_key', side_effect=lambda: events.append('recover')), patch.object(local, 'command', side_effect=lambda *args: events.append(args)):
+            self.assertEqual(local.main(), 0)
+        self.assertEqual(events[0][2], 'build')
+        self.assertEqual(events[1], 'recover')
+        self.assertEqual(events[2][2], 'up')
+
+    def test_actor_recovery_runs_only_for_enabled_local_security(self):
+        import tempfile
+        for enabled in (True, False):
+            with self.subTest(enabled=enabled), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / '.env').write_text('NIGSON_SECURITY_ENABLED=' + str(enabled).lower() + '\n')
+                with patch.object(local, 'ROOT', root), patch.object(local.subprocess, 'run') as execute:
+                    local.ensure_actor_key()
+                    self.assertEqual(execute.call_count, 1 if enabled else 0)
+                    if enabled:
+                        self.assertEqual(execute.call_args.args[0][1], str(root / 'scripts/local/restore_actor_key.py'))
+
+    def test_enabled_pandago_survives_local_restart(self):
+        import tempfile
+        from types import SimpleNamespace
+        for enabled in (True, False):
+            with self.subTest(enabled=enabled), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / '.env').write_text('NIGSON_PANDAGO_ENABLED=' + str(enabled).lower() + '\n')
+                with patch.object(local, 'ROOT', root), patch.dict(os.environ, {'NIGSON_PANDAGO_ENABLED': str(enabled).lower()}), patch.object(local.subprocess, 'run', return_value=SimpleNamespace(stdout='')) as docker:
+                    local.command('up', '-d', 'integration')
+                    args = docker.call_args.args[0]
+                    self.assertEqual(str(root / 'docker-compose.pandago.yml') in args, enabled)
+                    self.assertIn(str(root / 'docker-compose.yml'), args)
+
     def test_low_disk_space_prevents_docker_build(self):
         from types import SimpleNamespace
         with patch.object(local.shutil, "disk_usage", return_value=SimpleNamespace(free=267 * 1024**2)), patch.object(local.subprocess, "run") as docker:

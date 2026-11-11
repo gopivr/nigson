@@ -11,7 +11,7 @@ owner=$2
 [[ "$owner" == "commerce" || "$owner" == "experience" || "$owner" == "integration" || "$owner" == "ai" ]]
 [[ -n "${AWS_REGION:-}" && "${AWS_EXPECTED_ACCOUNT_ID:-}" =~ ^[0-9]{12}$ ]]
 
-root="infrastructure/terraform/environments/${environment}"
+root="infrastructure/terraform/aws/environments/${environment}"
 outputs=$(terraform -chdir="$root" output -json migrations)
 [[ "$(jq -r .environment <<<"$outputs")" == "$environment" ]]
 [[ "$(jq -r .region <<<"$outputs")" == "$AWS_REGION" ]]
