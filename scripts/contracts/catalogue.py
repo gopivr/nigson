@@ -73,6 +73,12 @@ def extend(spec):
     for path, dto in [('/api/v1/catalogue/categories','PublicCategoryDTO'),('/api/v1/catalogue/brands','PublicBrandDTO')]:
         spec['paths'][path]['get']['responses']['200']['content']['application/json']['schema']={'type':'array','maxItems':1000,'items':REF(dto)}
     spec['paths']['/api/v1/staff/products']={'get':op('API-149','ProductAdminPage',[*pages,parameter('status','query',{'enum':['DRAFT','ACTIVE','ARCHIVED']}),parameter('sort','query',{'enum':sorts,'default':'createdAt,desc'})])}
+    schemas['SkuDetailAdminDTO'] = object_schema({'id':UUID,'productId':UUID,'code':text(80),'variantName':text(160),'unit':text(20),'quantityScale':{'type':'integer','minimum':0,'maximum':3},'packSize':quantity,'active':{'type':'boolean'},'weightKg':nullable(quantity),'carrierPackaging':nullable({'$ref':'../rules/carrier-packaging.schema.json'}),'version':VERSION})
+    for api,path,dto in [('API-213','/api/v1/staff/products/{id}','ProductAdminDTO'),('API-214','/api/v1/staff/skus/{id}','SkuDetailAdminDTO')]:
+        read = op(api,dto,[parameter('id','path',UUID,True)])
+        read['description'] = 'Current CONTENT_EDITOR; exact bounded owner read, including draft records and current optimistic version. No-store; no query/body permitted.'
+        read['responses']['200']['headers'] = {'Cache-Control':{'schema':{'const':'no-store'}},'ETag':{'schema':{'type':'string'}}}
+        spec['paths'][path] = {'get':read}
     mutations=[(17,'post','/api/v1/staff/products','ProductCreate','ProductAdminDTO',201,False),(18,'patch','/api/v1/staff/products/{id}','ProductPatch','ProductAdminDTO',200,True),(19,'post','/api/v1/staff/products/{id}/publication','PublicationCommand','ProductAdminDTO',201,True),(20,'post','/api/v1/staff/products/{id}/skus','SkuCreate','SkuAdminDTO',201,True),(21,'patch','/api/v1/staff/skus/{id}','SkuPatch','SkuAdminDTO',200,True),(22,'post','/api/v1/staff/brands','BrandCreate','TaxonomyDTO',201,False),(23,'patch','/api/v1/staff/brands/{id}','BrandPatch','TaxonomyDTO',200,True),(24,'post','/api/v1/staff/categories','CategoryCreate','TaxonomyDTO',201,False),(25,'patch','/api/v1/staff/categories/{id}','CategoryPatch','TaxonomyDTO',200,True)]
     for number, method, path, request, response, status, versioned in mutations:
         params=[parameter('Idempotency-Key','header',{'type':'string','minLength':1,'maxLength':100,'pattern':'^[ -~]+$'},True),parameter('X-CSRF-TOKEN','header',{'type':'string','minLength':43,'maxLength':43},True)]

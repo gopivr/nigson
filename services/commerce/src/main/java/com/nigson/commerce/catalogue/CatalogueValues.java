@@ -15,6 +15,7 @@ public final class CatalogueValues {
  public record Taxonomy(UUID id,String name,String slug,UUID parentId,boolean active,long version){}
  public record PublicCategory(UUID id,UUID parentId,String name,String slug,int sortOrder){}
  public record PublicBrand(UUID id,String name,String slug){}
+ public record SkuDetail(UUID id,UUID productId,String code,String variantName,String unit,int quantityScale,String packSize,boolean active,String weightKg,JsonNode carrierPackaging,long version){}
  public record SkuAdmin(UUID id,String code,String variantName,String unit,int quantityScale,String packSize,long version){}
  public static final Set<String> PRODUCT_FIELDS=Set.of("name","slug","description","brandId","divisionCode","specifications","categoryIds");
  public record ProductInput(String name,String slug,String description,UUID brandId,String divisionCode,JsonNode specifications,List<UUID> categoryIds){}
