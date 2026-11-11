@@ -58,6 +58,7 @@ def command(*arguments: str, capture: bool = False) -> str:
         ["docker", "compose", "--project-name", project, "--env-file", str(envfile),
          "--file", str(ROOT / "docker-compose.yml"), *overlays, *profiles(), *arguments],
         cwd=ROOT, check=True, text=True, capture_output=capture, timeout=900 if "build" in arguments else 240,
+        env={**os.environ, **settings},
     )
     return result.stdout if capture else ""
 
@@ -425,6 +426,7 @@ def main() -> int:
             seed(config)
         elif args.action == "run-core":
             migrate()
+            bootstrap()
             command("--profile", "app", "build", *OWNERS)
             wait_identity(config)
             configure_registration(config)

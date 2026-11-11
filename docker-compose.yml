@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: mock-local-bootstrap
       POSTGRES_DB: nigson
     ports:
-      - "127.0.0.1:${NIGSON_DB_PORT:-5432}:5432"
+      - "127.0.0.1:${NIGSON_DB_PORT:-5433}:5432"
     volumes:
       - nigson-postgres:/var/lib/postgresql
       - ./infrastructure/docker/postgres/10-local-bootstrap.sql:/docker-entrypoint-initdb.d/10-local-bootstrap.sql:ro
