@@ -1,0 +1,12 @@
+# Local integration revalidation
+Date: 2026-11-11. Status: DONE for configuration/build/public-route repair; authenticated UI qualification requires a registered account.
+
+- Fixed foundation-only security and stopped services behind session 502/content 401. `make local-app-config` configures local identity trust without business data. Startup preflight names missing settings.
+- Per latest user direction: Paystack TEST and PandaGo stage locally, LIVE-only production; FedEx/Twilio are not required by the selected local providers. Dummy Termii/SMTP credentials fail on use without HTTP or fabricated success.
+- Public content requests now supply their required type and accept the actual pagination DTO. Proxy errors and configuration failures retain actionable guidance.
+- `PROFILE=app make run-core`: PASS; all three services healthy; rate-limit migration applied. Maven service tests, 115 contract checks, 23 frontend tests, all eight frontend builds, TypeScript and diff checks: PASS. Native isolated database suites were not run in this session; their default skips are not acceptance evidence.
+- Read-only provider checks: PandaGo TEST OAuth/outlet PASS; Paystack TEST authentication HTTP 200. Google geocoding REQUEST_DENIED: billing not enabled. No payments, messages or deliveries created.
+- Browser: anonymous session/content PASS, invalid query HTTP 400, missing intake configuration HTTP 503 with guidance. Authenticated admin/logout checks NOT_RUN: prior demo admin does not exist (`user_not_found`); no identity recreated.
+- Evidence: `.build/local-live-final-startup.log`, `.build/local-live-revalidation-contract.log`, `.build/local-live-provider-selection.log`, `.build/local-live-browser-evidence.json`, `.build/local-live-provider-readiness.log`; frontend logs `/private/tmp/nigson-live-{build-all,distributor-tests,admin-tests}.log` and proxy test log.
+- Main files: `docker-compose.yml`, `docker-compose.pandago.yml`, `scripts/local/configure_application.py`, `scripts/local/dependencies.py`, shared provider transport/problem protocol, service provider configuration/error advice; frontend `proxy.conf.js`, shared API errors, CMS/marketing content mapping.
+- Last successful commit: `5ef973b`; these changes remain uncommitted. Next: enable Google billing, configure separate reCAPTCHA keys and approved messaging/email inputs, and validate with a real registered staff account.

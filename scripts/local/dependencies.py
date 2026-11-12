@@ -33,7 +33,7 @@ def profiles() -> list[str]:
     selected = os.environ.get("PROFILE", "core")
     if selected not in {"core", "app", "ai"}:
         raise ValueError("Supported local profiles: core, app, ai")
-    return ["--profile", "provider-mocks"] + ([] if selected == "core" else ["--profile", selected])
+    return [] if selected == "core" else ["--profile", selected]
 
 
 def require_build_space() -> None:
@@ -58,7 +58,7 @@ def command(*arguments: str, capture: bool = False) -> str:
     project = os.environ.get("COMPOSE_PROJECT_NAME", "nigson-local")
     if project != "nigson-local" and not re.fullmatch(r"nigson-test-[a-z0-9-]+", project):
         raise ValueError("Refusing nonlocal Compose project name")
-    # Persist the explicitly enabled sandbox quote overlay across run-core restarts.
+    # Persist the explicitly enabled live quote overlay across run-core restarts.
     settings = dict(line.strip().split("=", 1) for line in envfile.read_text().splitlines()
                     if line.strip() and not line.lstrip().startswith("#") and "=" in line)
     pandago = os.environ.get("NIGSON_PANDAGO_ENABLED", settings.get("NIGSON_PANDAGO_ENABLED", "false")) == "true"
@@ -147,8 +147,8 @@ def validate() -> dict:
                                   check=True, text=True, capture_output=True, timeout=15).stdout.strip()
         if not json.loads(endpoint).startswith(("unix://", "npipe://")):
             raise ValueError("Local commands refuse the active remote Docker endpoint")
-    if os.environ.get("COMPOSE_PROFILES") or os.environ.get("PROFILES", "") not in {"", "provider-mocks"}:
-        raise ValueError("Use PROFILE=core|app|ai and optional PROFILES=provider-mocks")
+    if os.environ.get("COMPOSE_PROFILES") or os.environ.get("PROFILES"):
+        raise ValueError("Use PROFILE=core|app|ai; provider simulators are test-only")
     config = json.loads(command("--profile", "*", "config", "--format", "json", capture=True))
     return validate_config(config)
 
@@ -325,13 +325,17 @@ def keycloak_bootstrap_credentials() -> tuple[str, str]:
     return username, password
 
 
-def seed(config: dict) -> None:
+def seed_test_identities(config: dict) -> None:
+    if os.environ.get("ENV") != "test":
+        raise ValueError("Test identity fixtures require ENV=test")
+    if not re.fullmatch(r"nigson-test-[a-z0-9-]+", str(config.get("name", ""))):
+        raise ValueError("Test identity fixtures require an isolated nigson-test-* project")
     values = settings()
     if values.get("FIXTURE_PROFILE") != "foundation":
-        raise ValueError("Seed requires explicit FIXTURE_PROFILE=foundation; domain fixtures await DATA-001")
+        raise ValueError("Test identities require explicit FIXTURE_PROFILE=foundation")
     password = values.get("KEYCLOAK_FIXTURE_PASSWORD")
     if not password:
-        raise ValueError("Missing local KEYCLOAK_FIXTURE_PASSWORD")
+        raise ValueError("Missing ephemeral KEYCLOAK_FIXTURE_PASSWORD")
     port = int(config["services"]["keycloak"]["ports"][0]["published"])
     base = f"http://127.0.0.1:{port}"
     # No redirects/proxies: local credentials must never reach a remote host.
@@ -363,10 +367,21 @@ def seed(config: dict) -> None:
         "password": admin_password}, form=True)["access_token"]
     admin = "/admin/realms/nigson-local"
     realm = json.loads((ROOT / "infrastructure/docker/keycloak/nigson-local-realm.json").read_text())
-    for fixture in realm["users"]:
+    manifest = json.loads((ROOT / "tests/fixtures/local-identities.json").read_text())
+    if not manifest.get("localOnly") or manifest.get("identityRealm") != realm["realm"]:
+        raise ValueError("Test identity manifest does not match the local test realm")
+    fixtures = [
+        {
+            **subject,
+            "enabled": True,
+            "emailVerified": True,
+            "credentials": [{"type": "password", "value": password, "temporary": False}],
+        }
+        for subject in manifest["subjects"]
+    ]
+    for fixture in fixtures:
         matches = request(admin + "/users?" + urllib.parse.urlencode({"username": fixture["username"], "exact": "true"}), token=token)
         if not matches:
-            fixture["credentials"][0]["value"] = password
             request(admin + "/users", "POST", fixture, token)
             matches = request(admin + "/users?" + urllib.parse.urlencode({"username": fixture["username"], "exact": "true"}), token=token)
         user = matches[0]
@@ -403,13 +418,13 @@ def seed(config: dict) -> None:
             request(admin + "/clients/" + fixture_client["id"] + "/protocol-mappers/models", "POST", wanted, token)
         elif any(found[0].get(k) != v for k, v in wanted.items()):
             raise ValueError("Fixture audience mapper drift")
-    for fixture in realm["users"]:
+    for fixture in fixtures:
         signed = request("/realms/nigson-local/protocol/openid-connect/token", "POST", {
             "grant_type": "password", "client_id": "nigson-local-fixtures",
             "username": fixture["username"], "password": password, "scope": "openid"}, form=True)
         if not signed.get("access_token"):
             raise ValueError("Real local identity fixture login failed")
-    print("PASS: 13 deterministic Keycloak fixtures and real signed logins; domain seeds pending DATA-001")
+    print("PASS: isolated test-only Keycloak identities and real signed logins")
 
 
 def ensure_actor_key() -> None:
@@ -424,9 +439,38 @@ def ensure_actor_key() -> None:
                        cwd=ROOT, check=True, timeout=120)
 
 
+def application_preflight(config: dict) -> None:
+    """Report setting names only, before a costly build or application restart."""
+    errors = []
+    for owner in OWNERS:
+        env = config.get('services', {}).get(owner, {}).get('environment', {})
+        if not env:
+            continue
+        if str(env.get('NIGSON_SECURITY_ENABLED', '')).lower() != 'true':
+            errors.append('NIGSON_SECURITY_ENABLED=true is required for application routes; run make local-app-config after make local-up')
+        if str(env.get('NIGSON_SECURITY_ENABLED', '')).lower() == 'true':
+            required = ['NIGSON_PRIVATE_PEER_CIDRS', 'NIGSON_ACTOR_PUBLIC_KEYS']
+            if owner == 'commerce':
+                required += ['NIGSON_ACTOR_KMS_KEY', 'NIGSON_ACTOR_KEY_ID', 'NIGSON_ACTOR_PUBLIC_KEY', 'NIGSON_SESSION_KEY_REVISION', 'NIGSON_COMMERCE_WORKLOAD_SECRET']
+                if not env.get('NIGSON_SESSION_LOCAL_KEY') and not env.get('NIGSON_SESSION_WRAPPED_KEY'):
+                    errors.append('Configure a BFF session encryption key; run make local-app-config for local identity setup')
+            missing = [key for key in required if not env.get(key)]
+            if missing:
+                errors.append(owner + ' application identity requires ' + ', '.join(missing) + '; run make local-app-config')
+        if str(env.get('NIGSON_PROVIDERS_ENABLED', '')).lower() == 'true':
+            required = {'commerce': ('PAYSTACK_SECRET_KEY',), 'integration': ('SMTP_HOST', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_FROM')}.get(owner, ())
+            missing = [key for key in required if not env.get(key)]
+            if missing:
+                errors.append(owner + ' live providers require ' + ', '.join(missing) + '; configure them or set NIGSON_PROVIDERS_ENABLED=false to keep these integrations unavailable')
+            if owner == 'commerce' and env.get('PAYSTACK_SECRET_KEY') and not str(env['PAYSTACK_SECRET_KEY']).startswith('sk_test_' if env.get('APP_ENV') == 'local' and env.get('PAYSTACK_MODE') == 'TEST' else 'sk_live_'):
+                errors.append('PAYSTACK_SECRET_KEY must match PAYSTACK_MODE; local TEST requires sk_test_, production requires LIVE and sk_live_')
+    if errors:
+        raise ValueError('; '.join(dict.fromkeys(errors)))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["validate", "up", "down", "bootstrap", "status", "migrate", "seed", "run-core", "run-ai"])
+    parser.add_argument("action", choices=["validate", "up", "down", "bootstrap", "status", "migrate", "test-identities", "run-core", "run-ai"])
     args = parser.parse_args()
     try:
         config = validate()
@@ -438,13 +482,12 @@ def main() -> int:
             wait_identity(config)
             configure_registration(config)
             bootstrap()
-            subprocess.run([sys.executable, str(ROOT/"scripts/platform/build_mocks.py")],check=True)
-            command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "60", "paystack-mock", "fedex-mock", "twilio-mock")
         elif args.action == "migrate":
             migrate()
-        elif args.action == "seed":
-            seed(config)
+        elif args.action == "test-identities":
+            seed_test_identities(config)
         elif args.action == "run-core":
+            application_preflight(config)
             migrate()
             command("--profile", "app", "build", *OWNERS)
             wait_identity(config)

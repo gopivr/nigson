@@ -16,14 +16,19 @@ class PaystackModeTest {
   String key="sk_test_abcdef0123456789abcdef0123456789abcdef01"; // shape-only constructor fixture; never sent
   for(String endpoint:new String[]{"http://api.paystack.co","https://api.paystack.co.evil.invalid","https://127.0.0.1","https://api.paystack.co:443","https://operator@api.paystack.co","https://api.paystack.co?redirect=1","https://api.paystack.co/transaction"})
    assertThatThrownBy(()->new PaystackAdapter("stage",ProviderHttp.Mode.TEST,endpoint,key)).isInstanceOf(IllegalArgumentException.class);
-  assertThatThrownBy(()->new PaystackAdapter("prod",ProviderHttp.Mode.TEST,"https://api.paystack.co",key)).hasMessage("PRODUCTION_MODE_INVALID");
+  assertThatThrownBy(()->new PaystackAdapter("prod",ProviderHttp.Mode.TEST,"https://api.paystack.co",key)).hasMessage("LIVE_PROVIDER_MODE_REQUIRED");
+  assertThatThrownBy(()->new PaystackAdapter("local",ProviderHttp.Mode.MOCK,"http://127.0.0.1:8080","sk_mock_nigson")).hasMessage("MOCK_TARGET_INVALID");
   assertThatThrownBy(()->new PaystackAdapter("stage",ProviderHttp.Mode.MOCK,"http://paystack-mock:8080","sk_mock_nigson")).hasMessage("MOCK_TARGET_INVALID");
   assertThatThrownBy(()->new PaystackAdapter("prod",ProviderHttp.Mode.MOCK,"http://paystack-mock:8080","sk_mock_nigson")).hasMessage("MOCK_TARGET_INVALID");
+ }
+ @Test void localUsesRealTestCredentialsWhileProductionRejectsThem(){
+  assertThat(new PaystackAdapter("local",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_test_abcdef0123456789abcdef0123456789abcdef01")).isNotNull();
  }
  @Test void modeSwitchUsesSameAdapterWithoutNetworkOrFallback(){
   assertThat(new PaystackAdapter("test",ProviderHttp.Mode.MOCK,"http://127.0.0.1:1","sk_mock_nigson")).isNotNull();
   // Only syntactic mode/endpoint/key validation is exercised here. No genuine qualification implied.
-  assertThat(new PaystackAdapter("stage",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_test_abcdef0123456789abcdef0123456789abcdef01")).isNotNull();
+  assertThatThrownBy(()->new PaystackAdapter("stage",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_test_abcdef0123456789abcdef0123456789abcdef01")).hasMessage("LIVE_PROVIDER_MODE_REQUIRED");
+  assertThat(new PaystackAdapter("test",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_test_abcdef0123456789abcdef0123456789abcdef01")).isNotNull();
   assertThat(new PaystackAdapter("prod",ProviderHttp.Mode.LIVE,"https://api.paystack.co","sk_live_ab12")).isNotNull();
   assertThatThrownBy(()->new PaystackAdapter("stage",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_live_ab12")).hasMessage("PAYSTACK_KEY_MODE_INVALID");
  }

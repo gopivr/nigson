@@ -37,7 +37,7 @@ public final class JobExecution {
   });
  }
  public boolean finish(Claim claim,JobHandler.Provider provider,JobHandler.Outcome outcome,UUID correlation){
-  Objects.requireNonNull(claim);Objects.requireNonNull(provider);Objects.requireNonNull(outcome);JobHandler.Provider expected=switch(claim.job().kind()){case PAYMENT_RECONCILE->JobHandler.Provider.COMMERCE_PAYMENT;case LOGISTICS_CREATE->JobHandler.Provider.FEDEX;case SHEETS_SYNC->JobHandler.Provider.GOOGLE_SHEETS;case ASSET_SCAN->JobHandler.Provider.S3;case REPORT_EXPORT->JobHandler.Provider.COMMERCE_REPORTS;};if(provider!=expected)throw new Problem.Failure(ProblemCode.PROVIDER_MODE_MISMATCH);if(correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();
+  Objects.requireNonNull(claim);Objects.requireNonNull(provider);Objects.requireNonNull(outcome);JobHandler.Provider expected=switch(claim.job().kind()){case PAYMENT_RECONCILE->JobHandler.Provider.COMMERCE_PAYMENT;case LOGISTICS_CREATE->JobHandler.Provider.PANDAGO;case SHEETS_SYNC->JobHandler.Provider.GOOGLE_SHEETS;case ASSET_SCAN->JobHandler.Provider.S3;case REPORT_EXPORT->JobHandler.Provider.COMMERCE_REPORTS;};if(provider!=expected)throw new Problem.Failure(ProblemCode.PROVIDER_MODE_MISMATCH);if(correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();
   return tx.execute(status->{
    var before=repository.find(claim.job().id(),true);if(before.version()!=claim.generation()||before.state()!=JobValues.State.CLAIMED)return false;
    if(!before.businessKey().equals(claim.job().businessKey())||before.kind()!=claim.job().kind()||!before.resource().equals(claim.job().resource()))throw new Problem.Failure(ProblemCode.PROVIDER_RULE_VIOLATION);

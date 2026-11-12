@@ -149,7 +149,7 @@ class PandagoAdapterTest {
     @Test void productionCannotUseMockOrWrongEnvironmentOrAnInvalidKey() {
         assertThatThrownBy(() -> new PandagoAdapter("prod", ProviderHttp.Mode.MOCK, "http://pandago-mock:8080", "http://pandago-mock:8080", "mock-client", "mock-key", "pandago.api.ng.*", "mock-outlet", pem, clock)).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new PandagoAdapter("local", ProviderHttp.Mode.TEST, "https://ondemand-api-glovoapp.deliveryhero.io", "https://sts-st.deliveryhero.io", "client", "key", "pandago.api.ng.*", "outlet", pem, clock)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new PandagoAdapter("local", ProviderHttp.Mode.TEST, "https://api-infra-eu-central-1.stg.ondemandrider.net", "https://sts-st.deliveryhero.io", "client", "key", "pandago.api.ng.*", "outlet", "invalid", clock)).hasMessage("PANDAGO_PRIVATE_KEY_INVALID");
+        assertThatThrownBy(() -> new PandagoAdapter("test", ProviderHttp.Mode.TEST, "https://api-infra-eu-central-1.stg.ondemandrider.net", "https://sts-st.deliveryhero.io", "client", "key", "pandago.api.ng.*", "outlet", "invalid", clock)).hasMessage("PANDAGO_PRIVATE_KEY_INVALID");
     }
     @Test void transactionAndMissingOrInvalidGeolocationFailClosed() {
         assertThatThrownBy(() -> new PandagoAdapter.Location("Synthetic", null, BigDecimal.ONE)).isInstanceOf(IllegalArgumentException.class);
@@ -159,7 +159,7 @@ class PandagoAdapterTest {
     @Test void legacy1024BitKeyIsRejectedBeforeAnyHttp() throws Exception {
         var generator = KeyPairGenerator.getInstance("RSA"); generator.initialize(1024);
         String weak = "-----BEGIN PRIVATE KEY-----\n" + Base64.getEncoder().encodeToString(generator.generateKeyPair().getPrivate().getEncoded()) + "\n-----END PRIVATE KEY-----";
-        assertThatThrownBy(() -> new PandagoAdapter("local", ProviderHttp.Mode.TEST, "https://api-infra-eu-central-1.stg.ondemandrider.net", "https://sts-st.deliveryhero.io", "client", "key", "pandago.api.ng.*", "outlet", weak, clock)).hasMessage("PANDAGO_PRIVATE_KEY_INVALID");
+        assertThatThrownBy(() -> new PandagoAdapter("test", ProviderHttp.Mode.TEST, "https://api-infra-eu-central-1.stg.ondemandrider.net", "https://sts-st.deliveryhero.io", "client", "key", "pandago.api.ng.*", "outlet", weak, clock)).hasMessage("PANDAGO_PRIVATE_KEY_INVALID");
         assertThat(tokens.get()).isZero();
     }
     static final class TestClock extends Clock {

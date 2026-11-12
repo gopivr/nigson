@@ -32,6 +32,12 @@
     },
     {
       "include": {
+        "file": "../026-bp1-lead-rate-limit.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
         "file": "../023-msg-001-lead-email-nullable.yaml",
         "relativeToChangelogFile": true
       }

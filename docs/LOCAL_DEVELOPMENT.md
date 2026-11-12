@@ -21,7 +21,6 @@ cp .env.example .env
 make local-config-check
 make local-up
 make migrate ENV=local
-make seed ENV=local FIXTURE_PROFILE=foundation
 make run-core
 make local-status
 make verify
@@ -41,7 +40,8 @@ Python health runtime. `local-up` starts dependencies only, waits for real
 Keycloak discovery, and bootstraps LocalStack. `--no-recreate` preserves existing
 container identities; configuration changes requiring recreation must be applied
 explicitly after assessing their persisted state. `local-down` retains all named
-volumes. No reset or prune is performed by setup, seed or acceptance tests.
+volumes. Local startup does not seed users or domain records; no reset or prune
+is performed by setup or acceptance tests.
 
 Java health paths are `/actuator/health/liveness` and
 `/actuator/health/readiness` on localhost:8081/8082/8083. Python uses
@@ -64,16 +64,23 @@ SQL before applying, then checks bootstrap privileges and session constraints.
 Applications never run Liquibase or Hibernate/session DDL. Do not clear checksums,
 drop schemas or delete volumes to conceal drift.
 
-`FIXTURE_PROFILE=foundation` explicitly selects the 13 deterministic synthetic
-Keycloak subjects in `tests/fixtures/local-identities.json`. Seed fills missing
-synthetic profile names, verifies stable IDs/emails/roles, and obtains a genuine
-signed token for every subject using KEYCLOAK_FIXTURE_PASSWORD. Password drift
-fails; existing passwords are not overwritten. The test-only
-`nigson-local-fixtures` client enables direct grants for local integration tests;
-the BFF client retains authorization-code/PKCE settings. No token bypass exists.
-Seed creates no domain tables, catalog prices, tax policies or provider accounts.
-Foundation Spring Session tables are real locked-version framework tables;
-DATA-001 must retain them when adding business tables, rather than recreate them.
+Local startup imports no example user identities or synthetic business data.
+The checked-in identity manifest is consumed only by the isolated automated
+cold-start test. That test creates a fresh `nigson-test-*` project and ephemeral
+password; its direct-grant client and signed test logins are not available in
+the `nigson-local` application environment. Existing local identity and database
+volumes are preserved and are not rewritten or cleaned by this workflow.
+
+Public enquiry intake remains disabled until the approved recipient group,
+Google reCAPTCHA v3 secret/allowed hostnames, database rate-limit HMAC key, and
+trusted proxy CIDRs are configured. Production uses
+`NIGSON_LEADS_ANTISPAM_MODE=google-recaptcha-v3` and
+`NIGSON_LEADS_RATE_LIMIT_MODE=database`; set the secret and HMAC values through
+the secret manager, not source control. The rate-limit key must be shared across
+Experience instances and contain at least 32 random bytes, base64-encoded. The
+limit defaults to 10 requests per client address per UTC minute. Trust only the
+CIDRs of the actual ingress proxies; forwarded client addresses from any other
+peer are ignored. Local/test anti-spam mocks remain test-only.
 
 `make command-surface-check` runs repository/local command contracts, also included
 in `make verify`. `make cold-start` executes the full workflow twice in a unique
@@ -98,7 +105,6 @@ commands below remain specified outputs, not successful placeholder targets.
 
 Profiles local, dev, test, qa, stage, prod; qa may reuse staging infrastructure shape with its own state/secrets. Use typed @ConfigurationProperties/Pydantic Settings with startup validation. Local/test may supply deterministic adapters; stage/prod reject fake payment/model adapters, permissive CORS, HTTP issuer and embedded credentials.
 
-Required groups: service identity/public/internal base URLs; JDBC owner URL/user/secret ref; OIDC issuer/client/resource scopes; BFF allowed return origins and signing KMS ref; SNS/SQS ARNs/URLs; S3 bucket/purpose policies; payment provider/secret/merchant/approved currencies; email provider/sender/recipient groups; Sheet ID/credential ref/field allowlist; required FedEx carrier; feature flags; market/tax/reward/retention policies; AI region/model/prompt/rate/budget revisions; observability exporters and sampling. No environment-specific URL in Java/Python source. `.env.example` contains examples/empty secret references only, no production endpoint assumption.
 
 Runtime flags default false for rewards/wheel/international/AI/carrier/MCP. Activation validates complete policy plus approval evidence and writes audit. A feature disabled still rejects unauthorized access and reports FEATURE_DISABLED consistently; flags cannot bypass role checks. Missing enabled-provider config causes startup/activation failure, not silent fallback to a mock. Session/financial deadlines must be within documented limits. Use Secrets Manager runtime references and ECS task IAM; no secrets in Terraform state values, image args, Git history, completion reports or .env.example.
 
@@ -108,14 +114,24 @@ Runtime flags default false for rewards/wheel/international/AI/carrier/MCP. Acti
 | Group | Required settings |
 |---|---|
 | Market | LAUNCH_MARKET=NG, LAUNCH_COUNTRY=NG, LAUNCH_CURRENCY=NGN, minor_unit2; tax/returns/book/origin/service-area policies separately versioned |
-| Paystack | PAYMENT_PROVIDER=paystack only; PAYSTACK_MODE=mock\|test\|live, PAYSTACK_BASE_URL, PAYSTACK_SECRET_KEY_REF, merchant/account reference, public callback/webhook URLs |
-| FedEx | CARRIER_PROVIDER=fedex; FEDEX_MODE=mock\|sandbox\|live, FEDEX_BASE_URL, CLIENT_ID/SECRET refs, account number ref, shipper origin, enabled service/package policies, poll interval and label bucket |
-| Twilio | SMS_PROVIDER=twilio, WHATSAPP_PROVIDER=twilio; independent channel enabled flags; TWILIO_MODE=mock\|sandbox\|live, BASE_URL, ACCOUNT_SID/AUTH_TOKEN refs, SMS sender/MessagingServiceSid, WhatsApp sender/ContentSid map, exact status/inbound public URLs |
+| Paystack | PAYMENT_PROVIDER=paystack only; runtime PAYSTACK_MODE=LIVE, official PAYSTACK_BASE_URL, PAYSTACK_SECRET_KEY_REF, merchant/account reference, public callback/webhook URLs |
+| Twilio | SMS_PROVIDER=twilio, WHATSAPP_PROVIDER=twilio; independent channel enabled flags; runtime TWILIO_MODE=LIVE, official BASE_URL, ACCOUNT_SID/AUTH_TOKEN refs, SMS sender/MessagingServiceSid, WhatsApp sender/ContentSid map, exact status/inbound public URLs |
 | Keycloak | KEYCLOAK_IMAGE_DIGEST, dedicated DB/secret refs, realm issuer, public hostname/private admin hostname, trusted proxy settings, BFF/workload client secret refs, MFA/realm/client/audience policy |
 
-Local/test defaults point to private Compose mock hostnames and visibly synthetic credentials such as mock-paystack-secret, mock-fedex-client and mock-twilio-token. .env.example may include these non-secret mock values and empty real secret references. No fake key is sent to a genuine provider endpoint. Mode selects target/auth/config, never skips business invariants or callback signature verification. Mock callback secrets/signatures are real algorithms over dummy secrets.
+Application Compose defaults use official live provider hosts and require real
+credentials from an ignored local secret file or secret manager. No provider
+request is routed to a mock service. Isolated automated tests may use loopback
+HTTP simulators and synthetic fixtures. Mode never skips business invariants or
+callback signature verification.
 
-Production profile rejects mock/sandbox targets or dummy credentials for enabled financial/carrier/messaging features; real test/trial credentials run against provider staging or explicitly non-production release verification. Missing enabled-provider config fails validation rather than silently falling back. Staging can run mock or genuine sandbox with recipient allowlist and separate data. A live environment with features disabled may start for infrastructure checks but cannot claim completed live checkout/fulfillment/messages. Keycloak production configuration is required for production identity regardless of provider test mode.
+Every application profile rejects mock/sandbox targets or dummy credentials for
+enabled financial/carrier/messaging features. Missing enabled-provider config
+fails validation rather than silently falling back. Live provider qualification
+requires explicit approval and controlled accounts/recipients; no provider
+requests are made by ordinary tests. A live environment with features disabled
+may start for infrastructure checks but cannot claim completed live
+checkout/fulfillment/messages. Keycloak production configuration is required
+for production identity.
 
 
 # Master section31: Docker
@@ -124,19 +140,34 @@ Generate a multi-stage Dockerfile for each Java/Python deployable during impleme
 
 Health: GET /actuator/health/liveness and /actuator/health/readiness Java; GET /health/live and /health/ready Python. Liveness proves process/event-loop responsiveness, not third-party payment/AI availability. Readiness checks essential owned DB/schema initialization and safe configuration; external email/model outages do not restart otherwise healthy core services. Worker health includes its ability to poll/commit work; probe binds private interface and no public route. Container healthcheck uses the actual port and shell-free minimal command available in image; ECS/ALB health checks duplicate only necessary signals.
 
-Local docker-compose.yml baseline: PostgreSQL18 pgvector-capable image (extension used only AI profile), LocalStack SNS/SQS/S3/SES emulation, Keycloak local realm, Mailpit, optional OTel collector. Full-app profile starts commerce8081, experience8082, worker8083 private, AI8084 only ai profile; dependencies ports localhost only. Valkey is optional cache profile, not default. No Kafka/OpenSearch/Kubernetes/Helm services. DB healthcheck plus one-shot migrations precede application readiness. Persistent named volumes are never deleted by default stop. LocalStack IAM emulation does not replace live staging IAM/security tests.
+Local docker-compose.yml baseline: PostgreSQL18 pgvector-capable image
+(extension used only AI profile), LocalStack SNS/SQS/S3/SES infrastructure
+emulation, Keycloak local realm, Mailpit utility, optional OTel collector.
+Application business-provider traffic bypasses Mailpit and uses official live
+endpoints. Full-app profile starts commerce8081, experience8082, worker8083
+private, AI8084 only ai profile; dependencies ports localhost only. Valkey is
+optional cache profile, not default. No Kafka/OpenSearch/Kubernetes/Helm
+services. DB healthcheck plus one-shot migrations precede application
+readiness. Persistent named volumes are never deleted by default stop.
+LocalStack IAM emulation does not replace live staging IAM/security tests.
 
 
-## Mock-first Compose and production identity
+## Live provider Compose and production identity
 
-Add provider-mocks profile with separate stateful paystack-mock, fedex-mock and twilio-mock services using pinned WireMock images plus versioned test-only scenario extension/controllers. Compose core local setup includes these mocks and real local Keycloak. Testcontainers starts equivalent instances for CI; mock administration/reset/journal is localhost/internal-test-network only. Callback dispatcher sends signed HTTP to the real app facades; failure/scenario controls are never public production APIs. Tests prohibit external paid network access. Production builds exclude mock controllers, images, dummy credentials and test admin routes.
+other configured live APIs. Required credentials are supplied out of band;
+starting the app without them fails closed. Compose does not start business
+provider mocks or route app requests to Mailpit. LocalStack and Mailpit remain
+local infrastructure utilities only. Stateful HTTP simulators and callback
+scenarios are confined to automated tests on isolated loopback/test networks;
+tests prohibit external paid network access. Production builds exclude mock
+controllers, images, dummy credentials and test admin routes.
 
 Keycloak image is pinned/optimized in production, supported external PostgreSQL, private management/health/admin, TLS/proxy/hostname and cluster settings; local start-dev is local only. Do not reuse Keycloak development filesystem DB or default admin credentials for release.
 
 
 # Master section36: Test Data
 
-Fixtures live at service src/test/resources/fixtures and shared tests/fixtures; deterministic UUIDs, fixed Clock `2026-10-04T00:00:00Z`, seeded randomness only in tests, synthetic `example.invalid` emails and no real staff/customer data. Fixture identities: retailA, retailB, orgA owner/buyer, orgB buyer, editor, publisher, sales, financeA/financeB, operations, analyst and admin. Local Keycloak users are examples with credentials from local-only env, never production seeds.
+Fixtures live at service src/test/resources/fixtures and shared tests/fixtures; deterministic UUIDs, fixed Clock `2026-10-04T00:00:00Z`, seeded randomness only in tests, synthetic `example.invalid` emails and no real staff/customer data. The local Keycloak realm imports no example users; test identities are provisioned only in an isolated automated test namespace.
 
 Catalogue: three categories, two brands, five products/ten SKUs, one initial location, some out-of-stock/ineligible/archived variants. Default synthetic NG market countryNG/NGN minor-unit2 reflects confirmed launch metadata; addresses/users/tax/rates remain local/test-only; tests add a currency with3 decimals, fractional SKU, international-ineligible product, two price tiers and ambiguous delivery configurations that must fail. Tax tests use a clearly synthetic configured10 percent rate, not a legal tax recommendation. Promotion/reward fixtures use finite test budgets and verified policy revision; prod features remain disabled.
 
@@ -147,7 +178,6 @@ Never seed arbitrary production ADMIN or a working merchant credential. Provisio
 
 ## Approved launch fixtures and mock scenarios
 
-Default market NG/Nigeria/NGN2; synthetic Nigerian address/package metadata, fake users/numbers/provider accounts only. NGN examples1.00,1234.56 and overprecision1.001; wrong-currency USD is a negative test. No actual tax rate is inferred from country approval; synthetic tax/rates are labeled tests. Provision Paystack pending/success/failed/mismatch/duplicate/late/unknown/refund scenarios; FedEx OAuth-expiry/rate-unavailable/currency-mismatch/booked/response-lost/cancel/scan-progression; Twilio queued/sent/delivered/failed/undelivered/signed-invalid/out-of-order/STOP/proof-expiry. Use real local Keycloak, issuer/client negative cases and separate staff/organization actors. All recipient examples are mock-only; real sandbox allowlist is explicit and never automatically populated from examples.
 
 
 # Master section39: Local Development Setup
@@ -158,7 +188,6 @@ Implementation must generate README.md, .env.example, docker-compose.yml, Makefi
 cp .env.example .env
 make local-up
 make migrate ENV=local
-make seed ENV=local
 make run-core
 make verify
 # only when reaching EP12/BP5
@@ -166,26 +195,30 @@ make local-up PROFILE=ai
 make run-ai
 ```
 
-`local-up` starts required dependencies and waits on bounded health checks; it creates local SNS subscriptions/S3 buckets/Keycloak realm through deterministic scripts. `migrate` executes each owner role/master, fails on any schema drift and does not use Hibernate DDL. `seed` rejects any nonlocal/test env and requires explicit approved fixture profile. `run-core` starts Java services in separate processes/Compose app profile; reports URLs/health checks and clean stop handling. User login uses local OIDC flow; direct API tests obtain real local signed access tokens. Do not add a universal insecure bypass header.
+`local-up` starts required dependencies and waits on bounded health checks; it creates local SNS subscriptions/S3 buckets and imports Keycloak clients/roles without example identities. `migrate` executes each owner role/master, fails on any schema drift and does not use Hibernate DDL. Local startup seeds no users or business data. `run-core` starts Java services in separate processes/Compose app profile; reports URLs/health checks and clean stop handling. User login uses the configured local OIDC registration flow; direct API tests obtain real signed access tokens in isolated test projects. Do not add a universal insecure bypass header.
 
-Local services binds: BFF/core http://localhost:8081, experience8082, worker8083 localhost/private only, AI8084 optional, PostgreSQL5432 localhost, LocalStack4566, Keycloak8180, Mailpit8025. Origin URLs configurable and not compile-time constants. Use named volumes and separate test DB. .env is gitignored. Local dummy keys are clearly local-only and forbidden by prod validation; local HTTP cookie/issuer exception is profile-limited. Health/smoke checks confirm real persistence and identity flow before showing ready.
+The local application profile calls configured live business-provider APIs.
+credentials and approved account metadata in the ignored `.env`; do not copy
+test fixture credentials into an application runtime. Provider simulators are
+available only to isolated automated tests. LocalStack remains for infrastructure
+emulation and is not a business-provider fallback.
+
+Local services binds: BFF/core http://localhost:8081, experience8082, worker8083 localhost/private only, AI8084 optional, PostgreSQL5432 localhost, LocalStack4566, Keycloak8180, Mailpit8025. Origin URLs configurable and not compile-time constants. Use named volumes and separate test DB. `.env` is gitignored. LocalStack credentials are emulator-only; enabled business-provider integrations require approved live credentials. Local HTTP cookie/issuer exceptions are profile-limited. Health/smoke checks confirm real persistence and identity flow before showing ready.
 
 
-## Credential-free integration setup
+## Isolated provider test setup
 
 ```bash
-make local-up PROFILES=provider-mocks
-make migrate ENV=local
-make seed ENV=local MARKET=NG CURRENCY=NGN
-make mock-reset
 make provider-contract-test PROVIDER=all MODE=mock
-make provider-scenario PROVIDER=paystack SCENARIO=success
-make provider-scenario PROVIDER=fedex SCENARIO=booking-response-lost
-make provider-scenario PROVIDER=twilio SCENARIO=duplicate-status
 make keycloak-config-check ENV=local
 ```
 
-Implementation must create these commands in MOCK-001/IDP-001; they are specified commands, not scripts generated in this document-only task. make provider-live-check ENV=stage requires actual user-supplied account/credentials/sender/service config and may perform real provider sandbox operations; never run it automatically while keys are dummy.
+Provider contract tests start simulators in an isolated test harness; they do
+not start the local application against mock or sandbox business-provider
+endpoints. Do not configure or control simulators through the local Compose
+stack. `make provider-live-check ENV=stage` requires approved live account,
+credential, sender, and service configuration and may make real provider
+requests; do not run it automatically.
 
 
 # Master section40: Developer Experience
@@ -198,7 +231,7 @@ Implementation must create these commands in MOCK-001/IDP-001; they are specifie
 | make local-up / local-down | Bounded start / graceful stop; never deletes volumes |
 | make run-core / run-ai | Environment-validated processes, AI only at enabled phase |
 | make migrate ENV=local | Owner Liquibase masters; each role used separately |
-| make seed ENV=local | Deterministic local/test fixtures only |
+| make cold-start | Isolated test identities and disposable test volumes; preserves local volumes |
 | make reset-db ENV=local CONFIRM=reset-local | Explicit destructive local operation only, refuses remote/prod URLs and preserves backup option |
 | make contracts | Regenerate OpenAPI and schemas; diff checked and reviewed |
 | make load-test / restore-test | Realistic staging-safe synthetic workloads and isolated restore |
@@ -209,11 +242,9 @@ Scripts use strict shell error handling, quote paths/variables, bounded readines
 
 | Added command | Required behavior |
 |---|---|
-| make mock-reset | Reset local/test provider state only; refuse real targets. |
-| make provider-contract-test PROVIDER=all MODE=mock | Adapters through HTTP mocks, signatures and schema/scenario assertions. |
-| make provider-scenario PROVIDER=<name> SCENARIO=<fixture> | Bounded local fixture transition/callback; no arbitrary external URL. |
+| make provider-contract-test PROVIDER=all MODE=mock | Run provider adapter contracts against isolated test simulators; no provider sandbox/live calls. |
 | make keycloak-config-check ENV=<env> | Realm/client/audience/MFA/hostname/admin/prod profile validation. |
-| make provider-live-check ENV=stage | Explicit genuine sandbox credentials/account/sender/route smoke; record results honestly. |
+| make provider-live-check ENV=stage | Explicit live-provider qualification; use approved credentials/accounts and record results honestly. |
 
 ### Schema release gates
 

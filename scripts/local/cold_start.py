@@ -6,6 +6,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import secrets
 import socket
 import subprocess
 import time
@@ -92,7 +93,8 @@ def run(action: str, succeeds: bool = True, overrides: dict | None = None) -> No
 def main() -> None:
     before = existing()
     project = "nigson-test-cold-" + uuid.uuid4().hex[:10]
-    os.environ.update(COMPOSE_PROJECT_NAME=project, PROFILE="ai", ENV="test", FIXTURE_PROFILE="foundation")
+    os.environ.update(COMPOSE_PROJECT_NAME=project, PROFILE="ai", ENV="test", FIXTURE_PROFILE="foundation",
+                      KEYCLOAK_FIXTURE_PASSWORD=secrets.token_urlsafe(24))
     # Reserve all configurable host ports until Compose is validated.
     sockets = []
     for name in ("NIGSON_DB_PORT", "KEYCLOAK_PORT", "LOCALSTACK_PORT", "MAILPIT_HTTP_PORT", "MAILPIT_SMTP_PORT",
@@ -110,14 +112,14 @@ def main() -> None:
     evidence = {"test": "TEST-LOCAL-COLD-START", "project": project, "checks": [], "result": "FAIL"}
     try:
         for iteration in range(2):
-            for action in ("local-up", "migrate", "seed", "run-core", "run-ai"):
+            for action in ("local-up", "migrate", "test-identities", "run-core", "run-ai"):
                 run(action)
             current = snapshot(config)
             if iteration == 0:
                 first = current
             else:
                 assert first == current, "Migration/subscription/health drift after repeated setup"
-            evidence["checks"].append(f"setup-pass-{iteration + 1}: real DB, migrations, 13 signed fixture logins, four healthy apps, vector query, subscriptions")
+            evidence["checks"].append(f"setup-pass-{iteration + 1}: real DB, migrations, isolated signed test logins, four healthy apps, vector query, subscriptions")
         for owner in local.OWNERS:
             sql("CREATE TABLE " + owner + ".forbidden_runtime_ddl(id int)", role=f"nigson_{owner}_app", succeeds=False)
             for other in local.OWNERS:
@@ -156,8 +158,8 @@ def main() -> None:
         for action in ("local-up", "migrate", "seed", "run-core", "run-ai"):
             run(action, succeeds=False, overrides={"ENV": "prod"})
         run("migrate", succeeds=False, overrides={"COMMERCE_MIGRATION_PASSWORD": ""})
-        run("seed", succeeds=False, overrides={"KEYCLOAK_FIXTURE_PASSWORD": ""})
-        run("seed", succeeds=False, overrides={"FIXTURE_PROFILE": "production"})
+        run("test-identities", succeeds=False, overrides={"KEYCLOAK_FIXTURE_PASSWORD": ""})
+        run("test-identities", succeeds=False, overrides={"FIXTURE_PROFILE": "production"})
         evidence["checks"].append("production commands, missing credentials and unapproved fixtures refused")
         port = int(config["services"]["commerce"]["ports"][0]["published"])
         local.command("stop", "postgres")

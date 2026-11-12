@@ -420,8 +420,8 @@
   <header>
     <div>
       <div class="eyebrow">Local-only backend workbench</div>
-      <h1>Nigson API demo</h1>
-      <p>Explore the running owner services and the deterministic AI assistant mock.</p>
+      <h1>Nigson API workbench</h1>
+      <p>Explore the running owner services and configured AI API.</p>
     </div>
     <div class="toolbar"><button class="secondary" id="checkAll">Check services</button><button id="login">Sign in with
         local Keycloak</button><button class="secondary" id="session">Check BFF session</button></div>
@@ -445,8 +445,8 @@
             placeholder="Search products, orders, content…">
           <div class="list" id="endpointList"></div>
           <div class="notice">Commerce owns the browser BFF. Experience APIs are served on 8082. Integration is private
-            by design; call it only through owner workflows. Read endpoints can return empty results because local seed
-            data does not create products, prices, routes, tax, or campaign rules.</div>
+            by design; call it only through owner workflows. Local startup seeds no users or business data, so read
+            endpoints may return empty results.</div>
         </div>
         <div class="card">
           <h2>Request console</h2>
@@ -487,8 +487,8 @@
       <div class="grid columns">
         <div class="card">
           <h2>Grounded assistant</h2>
-          <p>The optional BP5 service uses a deterministic local provider, approved public knowledge and owner-checked
-            tools. It never calls a remote model in this local setup.</p>
+          <p>The optional BP5 service requires an approved policy, prompt, and live AI provider configuration before it
+            can answer. Missing configuration fails closed.</p>
           <label for="aiBase">AI service route</label><input id="aiBase" value="/proxy/ai" readonly>
           <div class="row" style="margin-top:10px"><button id="aiHealth" class="secondary">Check AI
               readiness</button><button id="newConversation">Start conversation · NG / en-NG</button></div>
@@ -511,34 +511,30 @@
     </section>
     <section class="pane" id="pane-help">
       <div class="card">
-        <h2>Start the demo</h2>
+        <h2>Start the workbench</h2>
         <p>From the repository root, copy the local template once and start the core services:</p>
         <pre class="response">cp .env.example .env
 make local-config-check
 make local-up
 make migrate ENV=local
-make seed ENV=local FIXTURE_PROFILE=foundation
 make run-core
 python3 scripts/local/demo_server.py</pre>
         <p>Open <a href="http://localhost:8090" style="color:var(--mint)">http://localhost:8090</a>. The local server
           serves this static page and forwards only to loopback Commerce, Experience and AI ports. The private
-          Integration API is intentionally not exposed. Use the “Sign in” button for the real Keycloak BFF flow when the
-          local security profile is configured; fixture accounts are documented in <span
-            class="mono">infrastructure/docker/keycloak/nigson-local-realm.json</span> and use the fixture password
-          <span class="mono">mock-local-user</span>.
-        </p>
+          Integration API is intentionally not exposed. Use the “Sign in” button for the real Keycloak BFF flow after
+          configuring the local security profile and registering an account; no sample identities or passwords are
+          provided.</p>
         <div class="notice">The standard Compose profile intentionally leaves domain security inputs unset. Health
           checks work, while protected business routes and BFF login stay closed until those inputs are configured. The
-          demo server does not bypass authorization or create tokens. Never copy local mock credentials into a live
-          provider configuration.</div>
+          workbench does not bypass authorization or create tokens. Provider calls require approved live credentials; do
+          not use simulator or sandbox endpoints in the application stack.</div>
         <h2 style="margin-top:22px">Optional AI profile</h2>
         <p>The AI service is not started by the core profile. For BP5 exploration, set <span
             class="mono">SCHEMA_RELEASE=BP5</span>, then run the optional AI commands in <a href="/local-guide"
             style="color:var(--mint)">the local application guide</a>. Conversation creation needs locally managed
           anonymous and checkpoint keys, TTL settings, locale and allowed market. A message also needs an approved
-          policy and prompt revision in the AI schema. The local provider is deterministic, but no policy, model, budget
-          or retention values are seeded by this demo. Staff policy/model activation routes remain gated by real
-          approval inputs.</p>
+          policy, prompt revision, and live model provider configuration in the AI schema. Missing provider
+          configuration fails closed. Staff policy/model activation routes remain gated by real approval inputs.</p>
         <h2 style="margin-top:22px">Request behavior</h2>
         <p>API calls use JSON request bodies, optional idempotency/version headers, and a correlation ID. Commerce BFF
           cookies pass through only to Commerce. The page does not mint identity assertions or bypass service
@@ -546,7 +542,7 @@ python3 scripts/local/demo_server.py</pre>
           downloads when an endpoint returns a file.</p>
       </div>
     </section>
-    <footer>Local demo only · no live payment, carrier, email, SMS, WhatsApp, or AI provider calls. See <a
+    <footer>Local API workbench · business-provider requests require live configuration and may incur charges. See <a
         href="/local-guide" style="color:var(--mint)">Local Application Guide</a>.</footer>
   </main>
   <script>

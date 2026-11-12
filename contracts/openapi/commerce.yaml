@@ -11366,7 +11366,7 @@
     "/api/v1/carts/{id}/delivery-quotes": {
       "post": {
         "operationId": "API-181",
-        "description": "Current CUSTOMER and owned cart/address/current organization. Capture only the configured provider inputs: approved FedEx origin or PandaGo destination coordinates, plus server packing and current cart version. Release local locks before private signed API-182 HTTP. Require exact NGN fee and trusted runtime mode/account metadata. Revalidate current cart/address/packing/market/approval before persisting a bound provider quote; expiry at most five minutes and no later than current provider approvals. Matching key replays the original acknowledgement without another HTTP/KMS call; current authority remains mandatory. No inferred route, exchange conversion, manual fallback, reservation or stock dispatch.",
+        "description": "Current CUSTOMER and owned cart/address/current organization. Capture only the configured provider inputs: approved carrier origin or PandaGo destination coordinates, plus server packing and current cart version. Release local locks before private signed API-182 HTTP. Require exact NGN fee and trusted runtime mode/account metadata. Revalidate current cart/address/packing/market/approval before persisting a bound provider quote; expiry at most five minutes and no later than current provider approvals. Matching key replays the original acknowledgement without another HTTP/KMS call; current authority remains mandatory. No inferred route, exchange conversion, manual fallback, reservation or stock dispatch.",
         "security": [
           {
             "bffSession": []
@@ -11547,7 +11547,7 @@
     "/api/v1/quotes/{id}/delivery-quotes": {
       "post": {
         "operationId": "API-195",
-        "description": "Current CUSTOMER and owned current approved nonexpired offered quote revision. Create/reuse Commerce-owned read-only temporary cart from frozen quantities; calculate the configured FedEx or PandaGo rate outside the transaction; revalidate revision/address/server packing/mode; persist source_quote_revision_id, provider identity, NGN and bounded expiry. No negotiated price mutation, customer rate, invented route, reservation or stock dispatch.",
+        "description": "Current CUSTOMER and owned current approved nonexpired offered quote revision. Create/reuse Commerce-owned read-only temporary cart from frozen quantities; calculate the configured carrier or PandaGo rate outside the transaction; revalidate revision/address/server packing/mode; persist source_quote_revision_id, provider identity, NGN and bounded expiry. No negotiated price mutation, customer rate, invented route, reservation or stock dispatch.",
         "security": [
           {
             "bffSession": []
@@ -13337,7 +13337,7 @@
     "/internal/v1/shipments/{id}/provider-context": {
       "get": {
         "operationId": "API-119",
-        "description": "Private phase1 nigson-integration logistics.read; no actor/cookie/query/body. Bounded repeatable-read snapshot of verified paid unheld order and FEDEX shipment intent; current qualified mode. Frozen minimal order address (CF-ORDER-001), original shipper and hash-bound parcels/reference. Only outstanding CREATED/EXCEPTION creation intents; completed operational states reject409 (CF-CARRIER-004). Missing historical shipper fails closed; no current configuration fallback, stock/payment writes or provider HTTP.",
+        "description": "Private phase1 nigson-integration logistics.read; no actor/cookie/query/body. Bounded repeatable-read snapshot of verified paid unheld order and PANDAGO shipment intent; current qualified mode. Frozen minimal order address (CF-ORDER-001), original shipper and hash-bound parcels/reference. Only outstanding CREATED/EXCEPTION creation intents; completed operational states reject409 (CF-CARRIER-004). Missing historical shipper fails closed; no current configuration fallback, stock/payment writes or provider HTTP.",
         "security": [
           {
             "carrierIntegrationWorkload": [
@@ -13615,7 +13615,7 @@
     "/api/v1/webhooks/logistics/{provider}": {
       "post": {
         "operationId": "API-160",
-        "description": "Disabled for launch FedEx. Always rejects with FEATURE_DISABLED and makes no state change because no provider webhook signature contract is approved. FedEx polling remains authoritative; do not enable or accept callback payloads until a separately approved signature and deduplication contract exists.",
+        "description": "Disabled for launch carrier. Always rejects with FEATURE_DISABLED and makes no state change because no provider webhook signature contract is approved. carrier polling remains authoritative; do not enable or accept callback payloads until a separately approved signature and deduplication contract exists.",
         "security": [],
         "parameters": [
           {
@@ -24983,7 +24983,7 @@
             "type": "string",
             "enum": [
               "MANUAL",
-              "FEDEX"
+              "PANDAGO"
             ],
             "default": "MANUAL"
           },
@@ -25265,7 +25265,6 @@
           "provider": {
             "type": "string",
             "enum": [
-              "FEDEX",
               "PANDAGO"
             ]
           },
@@ -25798,7 +25797,7 @@
           },
           "provider": {
             "type": "string",
-            "const": "FEDEX"
+            "const": "PANDAGO"
           },
           "reference": {
             "type": "string",

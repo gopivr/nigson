@@ -8,7 +8,7 @@ def main():
  path=ROOT/'.local/pandago/account.env'
  if path.stat().st_mode & 0o077:raise ValueError('Private account file permissions must be 600')
  env=dict(line.split('=',1) for line in path.read_text().splitlines() if line and not line.startswith('#'))
- mode=env['PANDAGO_MODE'];targets={'TEST':('https://sts-st.deliveryhero.io','https://api-infra-eu-central-1.stg.ondemandrider.net'),'LIVE':('https://sts.deliveryhero.io','https://ondemand-api-glovoapp.deliveryhero.io')}
+ mode=env['PANDAGO_MODE'];targets={'LIVE':('https://sts.deliveryhero.io','https://ondemand-api-glovoapp.deliveryhero.io'),'TEST':('https://sts-st.deliveryhero.io','https://api-infra-eu-central-1.stg.ondemandrider.net')}
  if mode not in targets or env['PANDAGO_AUTH_BASE_URL']!=targets[mode][0] or env['PANDAGO_BASE_URL']!=targets[mode][1] or env['PANDAGO_SCOPE']!='pandago.api.ng.*':raise ValueError('Confirmed Nigeria mode/targets required')
  key=ROOT/env['PANDAGO_PRIVATE_KEY_FILE']
  if not key.is_file() or key.stat().st_mode & 0o077:raise ValueError('Private key permissions must be 600')

@@ -226,9 +226,9 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 - **Request:** `none`.
 - **Response:** `Page<ProductSummaryDTO{id:UUID,name:string,slug:string,brandName:string|null,imageUrl:HTTPS|null,available:boolean,revision:int64}>`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Only ACTIVE products in enabled market with explicit eligibility; no wholesale prices.
+- **Validation / business rules:** Only ACTIVE products in enabled market with explicit eligibility; no wholesale prices. A configured but disabled market returns422 MARKET_RULE_VIOLATION; an unknown market returns404.
 - **Events:** None directly; owned audit/history where applicable.
-- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, CATALOGUE_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, CATALOGUE_RULE_VIOLATION, MARKET_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
 ### API-014 GET /api/v1/catalogue/products/{id}
 
@@ -241,9 +241,9 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 - **Request:** `none`.
 - **Response:** `ProductDTO{id:UUID,name:string,slug:string,description:string,specifications:object,brand:{id:UUID,name:string}|null,categories:[{id:UUID,name:string}],skus:[{id:UUID,code:string,variantName:string,unit:string,packSize:Quantity,available:boolean}],assets:[{id:UUID,purpose:string,url:HTTPS}],revision:int64}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Reject ineligible or archived products with 404.
+- **Validation / business rules:** Reject ineligible or archived products with 404. A configured but disabled market returns422 MARKET_RULE_VIOLATION; an unknown market returns404.
 - **Events:** None directly; owned audit/history where applicable.
-- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, CATALOGUE_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, CATALOGUE_RULE_VIOLATION, MARKET_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
 ### API-015 GET /api/v1/catalogue/categories
 
@@ -256,9 +256,9 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 - **Request:** `none`.
 - **Response:** `[{id:UUID,parentId:UUID|null,name:string,slug:string,sortOrder:int}]`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Only active categories with eligible products.
+- **Validation / business rules:** Only active categories with eligible products. A configured but disabled market returns422 MARKET_RULE_VIOLATION; an unknown market returns404.
 - **Events:** None directly; owned audit/history where applicable.
-- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, CATALOGUE_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, CATALOGUE_RULE_VIOLATION, MARKET_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
 ### API-016 GET /api/v1/catalogue/brands
 

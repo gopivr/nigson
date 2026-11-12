@@ -134,17 +134,17 @@ services:
       APP_ENV: ${APP_ENV:-local}
       NIGSON_SECURITY_ENABLED: ${NIGSON_SECURITY_ENABLED:-false}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=commerce
-      NIGSON_PROVIDERS_ENABLED: "true"
+      NIGSON_PROVIDERS_ENABLED: ${NIGSON_PROVIDERS_ENABLED:-false}
       NIGSON_CARRIER_QUOTES_ENABLED: ${NIGSON_CARRIER_QUOTES_ENABLED:-false}
-      NIGSON_CARRIER_PROVIDER: ${NIGSON_CARRIER_PROVIDER:-FEDEX}
+      NIGSON_CARRIER_PROVIDER: ${NIGSON_CARRIER_PROVIDER:-PANDAGO}
       NIGSON_CARRIER_ACCOUNT_FINGERPRINT: ${NIGSON_CARRIER_ACCOUNT_FINGERPRINT:-}
       NIGSON_FULFILLMENT_ENABLED: ${NIGSON_FULFILLMENT_ENABLED:-false}
       NIGSON_FULFILLMENT_MODE: ${NIGSON_FULFILLMENT_MODE:-}
       NIGSON_FULFILLMENT_APPROVAL: ${NIGSON_FULFILLMENT_APPROVAL:-}
       NIGSON_FULFILLMENT_APPROVAL_UNTIL: ${NIGSON_FULFILLMENT_APPROVAL_UNTIL:-}
-      PAYSTACK_MODE: ${PAYSTACK_MODE:-MOCK}
-      PAYSTACK_BASE_URL: ${PAYSTACK_BASE_URL:-http://paystack-mock:8080}
-      PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY:-sk_mock_nigson}
+      PAYSTACK_MODE: ${PAYSTACK_MODE:-LIVE}
+      PAYSTACK_BASE_URL: ${PAYSTACK_BASE_URL:-https://api.paystack.co}
+      PAYSTACK_SECRET_KEY: ${PAYSTACK_SECRET_KEY:-}
       NIGSON_DB_USER: nigson_commerce_app
       NIGSON_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?Missing COMMERCE_DB_PASSWORD}
       # Public issuer is browser/token identity; Commerce uses the private JWKS
@@ -164,6 +164,8 @@ services:
       NIGSON_COMMERCE_WORKLOAD_SECRET: ${NIGSON_COMMERCE_WORKLOAD_SECRET-mock-commerce-local-workload-secret-32-bytes}
       NIGSON_PRODUCT_PHASE: ${NIGSON_PRODUCT_PHASE:-1}
       NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT: ${NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT:-}
+      # Local-only synthetic selling fixture. Ignored unless APP_ENV=local.
+      NIGSON_LOCAL_SYNTHETIC_SELLING: ${NIGSON_LOCAL_SYNTHETIC_SELLING:-false}
       NIGSON_PRIVATE_PEER_CIDRS: ${NIGSON_PRIVATE_PEER_CIDRS:-}
       NIGSON_AWS_REGION: ${NIGSON_AWS_REGION:-us-east-1}
       NIGSON_KMS_LOCAL_ENDPOINT: ${NIGSON_KMS_LOCAL_ENDPOINT:-http://localstack:4566}
@@ -237,6 +239,15 @@ services:
       NIGSON_DISTRIBUTOR_RECIPIENT_GROUP: ${NIGSON_DISTRIBUTOR_RECIPIENT_GROUP:-}
       NIGSON_DISTRIBUTOR_COMMERCE_MODE: ${NIGSON_DISTRIBUTOR_COMMERCE_MODE:-}
       NIGSON_LEAD_RECIPIENT_GROUP: ${NIGSON_LEAD_RECIPIENT_GROUP:-}
+      NIGSON_LEADS_ANTISPAM_MODE: ${NIGSON_LEADS_ANTISPAM_MODE:-}
+      NIGSON_LEADS_RECAPTCHA_SECRET: ${NIGSON_LEADS_RECAPTCHA_SECRET:-}
+      NIGSON_LEADS_RECAPTCHA_HOSTNAMES: ${NIGSON_LEADS_RECAPTCHA_HOSTNAMES:-}
+      NIGSON_LEADS_RECAPTCHA_ACTION: ${NIGSON_LEADS_RECAPTCHA_ACTION:-lead_submit}
+      NIGSON_LEADS_RECAPTCHA_MIN_SCORE: ${NIGSON_LEADS_RECAPTCHA_MIN_SCORE:-0.5}
+      NIGSON_LEADS_RATE_LIMIT_MODE: ${NIGSON_LEADS_RATE_LIMIT_MODE:-}
+      NIGSON_LEADS_RATE_LIMIT_PER_MINUTE: ${NIGSON_LEADS_RATE_LIMIT_PER_MINUTE:-10}
+      NIGSON_LEADS_RATE_LIMIT_HMAC_KEY: ${NIGSON_LEADS_RATE_LIMIT_HMAC_KEY:-}
+      NIGSON_LEADS_TRUSTED_PROXY_CIDRS: ${NIGSON_LEADS_TRUSTED_PROXY_CIDRS:-}
       NIGSON_QUOTE_CATALOGUE_MODE: ${NIGSON_QUOTE_CATALOGUE_MODE:-}
       NIGSON_QUOTE_CATALOGUE_WORKLOAD_CLIENT_ID: ${NIGSON_QUOTE_CATALOGUE_WORKLOAD_CLIENT_ID:-nigson-experience}
       NIGSON_QUOTE_CATALOGUE_WORKLOAD_CLIENT_SECRET: ${NIGSON_EXPERIENCE_WORKLOAD_SECRET:-mock-experience-local-workload-secret-32-bytes}
@@ -295,24 +306,35 @@ services:
       APP_ENV: ${APP_ENV:-local}
       NIGSON_SECURITY_ENABLED: ${NIGSON_SECURITY_ENABLED:-false}
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=integration
-      NIGSON_PROVIDERS_ENABLED: "true"
+      NIGSON_PROVIDERS_ENABLED: ${NIGSON_PROVIDERS_ENABLED:-false}
       NIGSON_PRODUCT_PHASE: ${NIGSON_PRODUCT_PHASE:-1}
       NIGSON_PRIVATE_PEER_CIDRS: ${NIGSON_PRIVATE_PEER_CIDRS:-}
       NIGSON_ACTOR_PUBLIC_KEYS: ${NIGSON_ACTOR_PUBLIC_KEYS:-}
-      FEDEX_MODE: MOCK
-      FEDEX_BASE_URL: http://fedex-mock:8080
-      FEDEX_CLIENT_ID: ${FEDEX_CLIENT_ID:-mock-fedex-client}
-      FEDEX_CLIENT_SECRET: ${FEDEX_CLIENT_SECRET:-mock-fedex-secret}
-      FEDEX_ACCOUNT_NUMBER: ${FEDEX_ACCOUNT_NUMBER:-mock-fedex-account}
-      TWILIO_MODE: MOCK
-      TWILIO_BASE_URL: http://twilio-mock:8080
-      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-AC00000000000000000000000000000000}
-      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-mock-twilio-token}
-      TWILIO_MESSAGING_SERVICE_SID: ${TWILIO_MESSAGING_SERVICE_SID:-MG00000000000000000000000000000000}
-      EMAIL_MODE: MOCK
-      SMTP_HOST: mailpit
-      SMTP_PORT: "1025"
-      SMTP_FROM: synthetic@example.invalid
+      NIGSON_MESSAGING_PROVIDER: ${NIGSON_MESSAGING_PROVIDER:-TERMII}
+      NIGSON_TERMII_ENABLED: ${NIGSON_TERMII_ENABLED:-false}
+      TERMII_MODE: ${TERMII_MODE:-LIVE}
+      TERMII_BASE_URL: ${TERMII_BASE_URL:-https://api.ng.termii.com}
+      TERMII_API_KEY: ${TERMII_API_KEY:-}
+      TERMII_SENDER_ID: ${TERMII_SENDER_ID:-UNSET}
+      NIGSON_PROVIDER_JOBS_ENABLED: ${NIGSON_PROVIDER_JOBS_ENABLED:-false}
+      NIGSON_SHEETS_MODE: ${NIGSON_SHEETS_MODE:-}
+      NIGSON_CAREER_SHEET_RECIPIENT_GROUP: ${NIGSON_CAREER_SHEET_RECIPIENT_GROUP:-}
+      NIGSON_CAREER_SHEET_SPREADSHEET_KEY: ${NIGSON_CAREER_SHEET_SPREADSHEET_KEY:-}
+      NIGSON_CAREER_SHEET_TAB: ${NIGSON_CAREER_SHEET_TAB:-}
+      NIGSON_GOOGLE_SERVICE_ACCOUNT_EMAIL: ${NIGSON_GOOGLE_SERVICE_ACCOUNT_EMAIL:-}
+      NIGSON_GOOGLE_PRIVATE_KEY_PKCS8_BASE64: ${NIGSON_GOOGLE_PRIVATE_KEY_PKCS8_BASE64:-}
+      NIGSON_CAREER_SHEETS_ROW_HASH_KEY_BASE64: ${NIGSON_CAREER_SHEETS_ROW_HASH_KEY_BASE64:-}
+      TWILIO_MODE: ${TWILIO_MODE:-LIVE}
+      TWILIO_BASE_URL: ${TWILIO_BASE_URL:-https://api.twilio.com}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_MESSAGING_SERVICE_SID: ${TWILIO_MESSAGING_SERVICE_SID:-}
+      EMAIL_MODE: ${EMAIL_MODE:-LIVE}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
       NIGSON_DB_USER: nigson_integration_app
       NIGSON_DB_PASSWORD: ${INTEGRATION_DB_PASSWORD:?Missing INTEGRATION_DB_PASSWORD}
       NIGSON_OIDC_ISSUER: http://localhost:${KEYCLOAK_PORT:-8180}/realms/nigson-local
@@ -354,6 +376,10 @@ services:
       dockerfile: Dockerfile
     environment:
       APP_ENV: ${APP_ENV:-local}
+      NIGSON_AI_PROVIDER_MODE: ${NIGSON_AI_PROVIDER_MODE:-BEDROCK}
+      NIGSON_AI_BEDROCK_REGION: ${NIGSON_AI_BEDROCK_REGION:-}
+      NIGSON_AI_APPROVED_BEDROCK_MODELS: ${NIGSON_AI_APPROVED_BEDROCK_MODELS:-}
+      NIGSON_AI_RATE_APPROVAL_REFERENCES: ${NIGSON_AI_RATE_APPROVAL_REFERENCES:-}
       NIGSON_DB_HOST: vector-db
       NIGSON_DB_NAME: nigson_vector_test
       NIGSON_DB_PASSWORD: ${AI_DB_PASSWORD:?Missing AI_DB_PASSWORD}
@@ -366,66 +392,9 @@ services:
       migrate-ai:
         condition: service_completed_successfully
 
-  paystack-mock:
-    profiles: [ provider-mocks ]
-    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
-    environment:
-      APP_ENV: local
-      MOCK_PROVIDER: paystack
-    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
-    volumes:
-      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
-      - nigson-paystack-mock:/home/wiremock/state
-    restart: unless-stopped
-    healthcheck:
-      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
-      interval: 10s
-      timeout: 5s
-      start_period: 10s
-      retries: 6
-
-  fedex-mock:
-    profiles: [ provider-mocks ]
-    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
-    environment:
-      APP_ENV: local
-      MOCK_PROVIDER: fedex
-    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
-    volumes:
-      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
-      - nigson-fedex-mock:/home/wiremock/state
-    restart: unless-stopped
-    healthcheck:
-      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
-      interval: 10s
-      timeout: 5s
-      start_period: 10s
-      retries: 6
-
-  twilio-mock:
-    profiles: [ provider-mocks ]
-    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
-    environment:
-      APP_ENV: local
-      MOCK_PROVIDER: twilio
-    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
-    volumes:
-      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
-      - nigson-twilio-mock:/home/wiremock/state
-    restart: unless-stopped
-    healthcheck:
-      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
-      interval: 10s
-      timeout: 5s
-      start_period: 10s
-      retries: 6
-
 volumes:
   nigson-postgres:
   nigson-identity:
   nigson-localstack:
   nigson-mailpit:
   nigson-vector:
-  nigson-paystack-mock:
-  nigson-fedex-mock:
-  nigson-twilio-mock:

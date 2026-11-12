@@ -319,7 +319,9 @@ async def run_evaluation(
     assertion = verify_admin_actor(request, "ai.manage_WITH_SIGNED_ADMIN")
     actor = assertion["identity_subject"]
     pool = _pool(request)
-    mock = request.app.state.evaluation_model
+    mock = getattr(request.app.state, "evaluation_model", None)
+    if mock is None:
+        raise Failure("FEATURE_DISABLED")
     data = payload.model_dump(mode="json")
     digest = request_hash(data)
     now = datetime.now(UTC)
