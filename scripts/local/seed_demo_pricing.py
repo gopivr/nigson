@@ -72,10 +72,10 @@ def main():
     args = parser.parse_args()
     if os.environ.get('ENV', 'local') != 'local' or os.environ.get('APP_ENV', 'local') != 'local':
         raise ValueError('LOCAL_ONLY')
-    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith('unix://'):
+    if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith(('unix://', 'npipe://')):
         raise ValueError('LOCAL_DOCKER_REQUIRED')
     context = json.loads(docker('context', 'inspect'))[0]
-    if not context['Endpoints']['docker']['Host'].startswith('unix://'):
+    if not context['Endpoints']['docker']['Host'].startswith(('unix://', 'npipe://')):
         raise ValueError('LOCAL_DOCKER_REQUIRED')
     config = json.loads(docker('compose', 'config', '--format', 'json'))
     if config.get('name') != 'nigson-local' or config['services']['postgres']['environment'].get('APP_ENV') != 'local':
