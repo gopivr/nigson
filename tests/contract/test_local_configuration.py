@@ -14,6 +14,15 @@ SPEC.loader.exec_module(local)
 
 
 class LocalIsolationTests(unittest.TestCase):
+    def test_subprocess_failures_are_actionable_and_do_not_echo_secrets(self):
+        import subprocess
+        stopped=subprocess.CalledProcessError(1,['docker','compose','exec','postgres'],stderr='service "postgres" is not running')
+        self.assertIn('postgres is not running',local.subprocess_failure_detail(stopped))
+        missing=subprocess.CalledProcessError(1,['docker','compose','config'],stderr='required variable SOME_REQUIRED_KEY is missing a value: private-secret-value')
+        self.assertEqual(local.subprocess_failure_detail(missing),'Missing required configuration setting: SOME_REQUIRED_KEY')
+        unknown=subprocess.CalledProcessError(1,['docker','compose','config'],stderr='private-secret-value')
+        self.assertNotIn('private-secret-value',local.subprocess_failure_detail(unknown))
+
     def test_application_preflight_explains_foundation_only_routes(self):
         with self.assertRaisesRegex(ValueError, 'NIGSON_SECURITY_ENABLED=true.*local-app-config'):
             local.application_preflight({'services': {'experience': {'environment': {'NIGSON_SECURITY_ENABLED': 'false'}}}})
@@ -27,9 +36,15 @@ class LocalIsolationTests(unittest.TestCase):
         settings = dict(line.split('=', 1) for line in (ROOT / '.env.example').read_text().splitlines() if '=' in line and not line.startswith('#'))
         self.assertIn('/admin', settings['NIGSON_BFF_RETURN_PATHS'].split(','))
 
+    def test_run_core_starts_dependencies_before_database_migration(self):
+        events=[]
+        with patch('sys.argv',['dependencies.py','run-core']), patch.object(local,'validate',return_value={}), patch.object(local,'application_preflight'), patch.object(local,'start_dependencies',side_effect=lambda config:events.append('dependencies')), patch.object(local,'migrate',side_effect=lambda:events.append('migration')), patch.object(local,'ensure_actor_key',side_effect=lambda:events.append('trust')), patch.object(local,'command',side_effect=lambda *args:events.append('build' if 'build' in args else 'apps')):
+            self.assertEqual(local.main(),0)
+        self.assertEqual(events,['dependencies','migration','build','trust','apps'])
+
     def test_run_core_recovers_signing_trust_before_starting_apps(self):
         events = []
-        with patch('sys.argv', ['dependencies.py', 'run-core']), patch.object(local, 'validate', return_value={}), patch.object(local, 'migrate'), patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), patch.object(local, 'ensure_actor_key', side_effect=lambda: events.append('recover')), patch.object(local, 'command', side_effect=lambda *args: events.append(args)):
+        with patch('sys.argv', ['dependencies.py', 'run-core']), patch.object(local, 'validate', return_value={}), patch.object(local, 'migrate'), patch.object(local, 'start_dependencies'), patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), patch.object(local, 'ensure_actor_key', side_effect=lambda: events.append('recover')), patch.object(local, 'command', side_effect=lambda *args: events.append(args)):
             self.assertEqual(local.main(), 0)
         self.assertEqual(events[0][2], 'build')
         self.assertEqual(events[1], 'recover')
@@ -82,10 +97,40 @@ class LocalIsolationTests(unittest.TestCase):
         with patch.object(local.shutil, "disk_usage", return_value=SimpleNamespace(free=10 * 1024**3)):
             local.require_build_space()
 
-    def test_down_includes_every_profile_and_retains_volumes(self):
-        with patch("sys.argv", ["dependencies.py", "down"]), patch.object(local, "validate", return_value={}), patch.object(local, "command") as docker:
+    def test_down_does_not_validate_broken_startup_configuration(self):
+        with patch("sys.argv", ["dependencies.py", "down"]), patch.object(local, "validate", side_effect=AssertionError("Must not read broken env")), patch.object(local, "shutdown_project") as shutdown:
             self.assertEqual(local.main(), 0)
-            docker.assert_called_once_with("--profile", "*", "down", "--timeout", "30")
+            shutdown.assert_called_once_with()
+
+    def test_shutdown_selects_all_project_containers_without_deleting_volumes(self):
+        from types import SimpleNamespace
+        responses = [SimpleNamespace(stdout="app-id db-id"), SimpleNamespace(stdout=""), SimpleNamespace(stdout=""), SimpleNamespace(stdout="network-id"), SimpleNamespace(stdout="")]
+        with patch.dict(os.environ, {"ENV": "local", "DOCKER_HOST": "unix:///var/run/docker.sock", "DOCKER_CONTEXT": "default", "COMPOSE_PROJECT_NAME": "nigson-local"}), patch.object(local.subprocess, "run", side_effect=responses) as docker:
+            local.shutdown_project()
+        commands = [call.args[0] for call in docker.call_args_list]
+        self.assertEqual(commands[0], ['docker', 'ps', '-aq', '--filter', 'label=com.docker.compose.project=nigson-local'])
+        self.assertEqual(commands[1], ['docker', 'stop', '--time', '30', 'app-id', 'db-id'])
+        self.assertEqual(commands[2], ['docker', 'rm', 'app-id', 'db-id'])
+        self.assertFalse(any('-v' in cmd or '--volumes' in cmd for cmd in commands))
+
+    def test_shutdown_rejects_nonlocal_targets_before_docker(self):
+        defaults={"ENV":"local","DOCKER_HOST":"unix:///var/run/docker.sock","DOCKER_CONTEXT":"default","COMPOSE_PROJECT_NAME":"nigson-local"}
+        for override in ({"ENV":"prod"},{"DOCKER_HOST":"tcp://remote:2375"},{"DOCKER_CONTEXT":"production"},{"COMPOSE_PROJECT_NAME":"production"}):
+            with self.subTest(override=override), patch.dict(os.environ,{**defaults,**override}), patch.object(local.subprocess,"run") as docker:
+                with self.assertRaises(ValueError):
+                    local.shutdown_project()
+                docker.assert_not_called()
+
+    def test_merge_conflict_reports_line_without_secret_values(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            (root/'.env').write_text('APP_ENV=local\n<<<<<<< HEAD\nPRIVATE_KEY=do-not-log\n=======\n>>>>>>> other\n')
+            with patch.object(local,'ROOT',root), patch.object(local.subprocess,'run') as docker:
+                with self.assertRaisesRegex(ValueError,'merge conflict in .env at line 2') as error:
+                    local.command('config')
+                self.assertNotIn('do-not-log',str(error.exception))
+                docker.assert_not_called()
 
     def test_fixture_identities_are_test_only_and_not_imported_into_local_realm(self):
         manifest = json.loads((ROOT / "tests/fixtures/local-identities.json").read_text())

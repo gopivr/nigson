@@ -1,4 +1,8 @@
-PROVIDER-REMOVAL — IN_PROGRESS. Remove retired carrier adapters, credentials and provider-specific execution; preserve PandaGo and stored order data.
+RUN-CORE-REPAIR — IN_PROGRESS. Start dependencies before migration and surface safe, actionable subprocess failures.
+
+LOCAL-DOWN-REPAIR — DONE. Shutdown selects only the local project by Docker labels without parsing Compose/.env, preserves named volumes, and reports configuration conflict lines without secrets. Actual shutdown/volume verification passed. Evidence: `.build/provider-removal/local-down-verification.log`.
+
+PROVIDER-REMOVAL — DONE. Retired carrier adapters, workers, credentials, contracts/examples and UI labels removed; PandaGo retained. Clean builds, contract checks, isolated manual-fulfillment and quote-binding tests pass. Applied migration history preserved; new quotes restricted to the selected carrier. Stack intentionally stopped at the user’s request. Evidence: `docs/implementation/2026-11-12-PROVIDER-REMOVAL.md`.
 
 CATALOGUE-MARKET-UNAVAILABLE — DONE locally. `GET /api/v1/catalogue/{products,categories}` and API-073 now return 422 `MARKET_RULE_VIOLATION` for a configured but disabled market and 404 `NOT_FOUND` only for an unknown market, instead of collapsing both into 404. The shop renders an explicit "Catalogue is not available yet" state and admin/API errors explain the market activation requirement. No market or catalogue data was enabled. Commerce rebuilt via `make run-core` and healthy; live HTTP 422/404/422/200 verified; Java compile/test-compile, native PostgreSQL catalogue acceptance (22 commerce tests, no skips, including the HTTP harness), shop and shell builds and 31 configured frontend tests pass. NG market remains disabled pending approved tax, returns, price-book, delivery and provider inputs. Evidence: `docs/implementation/2026-11-11-CATALOGUE-MARKET-UNAVAILABLE.md`.
 
