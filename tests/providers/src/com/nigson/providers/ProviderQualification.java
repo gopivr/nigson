@@ -46,7 +46,7 @@ public final class ProviderQualification {
  public static void main(String[] args)throws Exception {
   try{HTTP.send(HttpRequest.newBuilder(URI.create("https://api.paystack.co")).GET().build(),HttpResponse.BodyHandlers.discarding());throw new AssertionError("External HTTP permitted");}
   catch(IllegalArgumentException blocked){check("OFFLINE_HTTP_TARGET_DENIED".equals(blocked.getMessage()),"External HTTP did not fail at the offline boundary");}
-  try(var network=org.testcontainers.containers.Network.newNetwork();var pay=mock("paystack",network);var fed=mock("fedex",network);var twilio=mock("twilio",network);var mail=new GenericContainer<>(DockerImageName.parse("axllent/mailpit:v1.27.10@sha256:b1f1be18af530d939a11ee8820b379e0c88eeec204d904bfad68862adced3a5a")).withNetwork(network).withExposedPorts(1025,8025).withCreateContainerCmdModifier(cmd->cmd.getHostConfig().withPortBindings(new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1",0),new ExposedPort(1025)),new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1",0),new ExposedPort(8025))))){
+  try(var network=org.testcontainers.containers.Network.newNetwork();var pay=mock("paystack",network);var twilio=mock("twilio",network);var mail=new GenericContainer<>(DockerImageName.parse("axllent/mailpit:v1.27.10@sha256:b1f1be18af530d939a11ee8820b379e0c88eeec204d904bfad68862adced3a5a")).withNetwork(network).withExposedPorts(1025,8025).withCreateContainerCmdModifier(cmd->cmd.getHostConfig().withPortBindings(new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1",0),new ExposedPort(1025)),new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1",0),new ExposedPort(8025))))){
    String root=Path.of("").toAbsolutePath().toString();
    String callbackClasspath=System.getProperty("java.class.path");
    try(var callback=new GenericContainer<>(DockerImageName.parse("nigson/migration:local"))
@@ -56,8 +56,8 @@ public final class ProviderQualification {
     .withCreateContainerCmdModifier(cmd->cmd.withEntrypoint("java").withCmd("-cp",callbackClasspath,"com.nigson.providers.CallbackReceiver"))
     .withExposedPorts(8080).withCreateContainerCmdModifier(cmd->cmd.getHostConfig().withPortBindings(new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1",0),new ExposedPort(8080))))) {
    callback.start();
-   pay.start();fed.start();twilio.start();mail.start();
-   String p="http://127.0.0.1:"+pay.getMappedPort(8080),f="http://127.0.0.1:"+fed.getMappedPort(8080),t="http://127.0.0.1:"+twilio.getMappedPort(8080);
+   pay.start();twilio.start();mail.start();
+   String p="http://127.0.0.1:"+pay.getMappedPort(8080),t="http://127.0.0.1:"+twilio.getMappedPort(8080);
    var adapter=new PaystackAdapter("test",ProviderHttp.Mode.MOCK,p,"sk_mock_nigson");
    check(PaystackAdapter.kobo("1234.56")==123456,"NGN kobo mismatch");rejected(()->PaystackAdapter.kobo("1.234"));
    org.springframework.transaction.support.TransactionSynchronizationManager.setActualTransactionActive(true);
@@ -74,27 +74,6 @@ public final class ProviderQualification {
    for(String scenario:List.of("decline","rate-limit","unavailable")){admin(p,"configure",Map.of("scenario",scenario));failure(()->adapter.initialize("error-"+scenario,"synthetic@example.invalid","1.00"),scenario.equals("unavailable"));}
    admin(p,"configure",Map.of("scenario","timeout-after-acceptance"));failure(()->adapter.initialize("uncertain-1","synthetic@example.invalid","1.00"),true);check(adapter.verify("uncertain-1",100).path("status").asString().equals("pending"),"Lost-response reconciliation");
    check(admin(p,"state",null).path("operations").size()==3,"Uncertain operation was blindly repeated");
-   var carrier=new FedExAdapter("test",ProviderHttp.Mode.MOCK,f,"mock-fedex-client","mock-fedex-secret","mock-fedex-account");
-   var shipment=EventCodec.JSON.readTree(Files.readString(Path.of("contracts/providers/fedex/ship-request.json")));
-   check(carrier.rates(shipment).path("rateReplyDetails").isArray(),"Carrier rates");
-   // Bounded concurrent mock burst checks adapter and stateful HTTP behavior without inventing a live SLO.
-   int sequenceBefore=admin(f,"state",null).path("sequence").asInt();var pool=Executors.newFixedThreadPool(6);var burst=new ArrayList<Future<?>>();var latency=new long[24];long burstStarted=System.nanoTime();
-   for(int n=0;n<latency.length;n++){final int index=n;burst.add(pool.submit(()->{long started=System.nanoTime();try{check(carrier.rates(shipment).path("rateReplyDetails").isArray(),"Concurrent carrier rate failed");}catch(Exception failure){throw new CompletionException(failure);}finally{latency[index]=TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-started);}}));}
-   try{for(var result:burst)result.get(20,TimeUnit.SECONDS);}finally{pool.shutdownNow();}long burstMillis=TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-burstStarted);
-   int sequenceAfter=admin(f,"state",null).path("sequence").asInt();check(sequenceAfter-sequenceBefore==24,"Concurrent rate mock lost or duplicated a request");
-   var sortedLatency=Arrays.stream(latency).sorted().toArray();long p95=sortedLatency[(int)Math.ceil(sortedLatency.length*.95)-1];
-   System.out.printf(Locale.ROOT,"CARRIER_MOCK_RATE_BURST requests=%d concurrency=%d elapsed_ms=%d throughput_rps=%.2f p50_ms=%d p95_ms=%d max_ms=%d%n",latency.length,6,burstMillis,latency.length*1000.0/Math.max(1,burstMillis),sortedLatency[sortedLatency.length/2],p95,sortedLatency[sortedLatency.length-1]);
-   var booking=carrier.book(shipment);String tracking=booking.path("transactionShipments").path(0).path("masterTrackingNumber").asString();check(com.nigson.integration.carrier.CarrierLabelCodec.decode(booking,tracking,1).pages()==1,"Carrier mock PDF label profile");check(com.nigson.integration.carrier.CarrierTrackingValues.parse(carrier.track(List.of(tracking)),List.of(tracking),java.time.Instant.now()).getFirst().code().equals("OC"),"Carrier tracking scan profile");carrier.cancel(tracking);check(admin(f,"state",null).path("operations").path(tracking).path("status").asString().equals("cancelled"),"Carrier cancellation");check(com.nigson.integration.carrier.CarrierTrackingValues.parse(carrier.track(tracking),List.of(tracking),java.time.Instant.now()).getFirst().code().equals("CA"),"Carrier cancelled scan profile");
-   var uncertainShipment=shipment.deepCopy();((tools.jackson.databind.node.ObjectNode)uncertainShipment.path("requestedShipment").path("requestedPackageLineItems").path(0).path("customerReferences").path(0)).put("value","synthetic-booking-lost");
-   admin(f,"configure",Map.of("scenario","timeout-after-acceptance"));failure(()->carrier.book(uncertainShipment),true);check(admin(f,"state",null).path("operations").size()==2,"Carrier uncertain booking repeated");
-   admin(f,"configure",Map.of("scenario","success"));var recovered=carrier.trackReference("synthetic-booking-lost",java.time.LocalDate.now().minusDays(1),java.time.LocalDate.now());check(recovered.path("completeTrackResults").size()==1,"Reference reconciliation did not locate accepted booking");check(admin(f,"state",null).path("operations").size()==2,"Reference lookup created another booking");
-   check(carrier.trackReference("synthetic-absent-reference",java.time.LocalDate.now().minusDays(1),java.time.LocalDate.now()).path("completeTrackResults").isEmpty(),"Missing reference fabricated a booking");
-   admin(f,"configure",Map.of("scenario","async-booking"));int beforeAsync=admin(f,"state",null).path("operations").size();String acceptedJob=carrier.book(shipment).path("jobId").asString();check(!acceptedJob.isBlank(),"Async booking acknowledgement missing");failure(()->carrier.confirmed(acceptedJob),false);var asyncState=admin(f,"state",null);String acceptedTracking=null;for(var op:asyncState.path("operations"))if(op.path("jobId").asString().equals(acceptedJob))acceptedTracking=op.path("id").asString();check(acceptedTracking!=null,"Accepted async intent not persisted");admin(f,"progress",Map.of("id",acceptedTracking,"status","processed"));check(carrier.confirmed(acceptedJob).path("transactionShipments").path(0).path("masterTrackingNumber").asString().equals(acceptedTracking),"Async results did not identify original shipment");check(admin(f,"state",null).path("operations").size()==beforeAsync+1,"Async polling recreated shipment");carrier.confirmed(acceptedJob);check(admin(f,"state",null).path("operations").size()==beforeAsync+1,"Repeated async results created shipment");check(com.nigson.integration.carrier.CarrierLabelCodec.decode(carrier.confirmed(acceptedJob),acceptedTracking,1).pages()==1,"Async mock PDF label profile");
-   admin(f,"configure",Map.of("scenario","wrong-currency"));try{com.nigson.integration.carrier.CarrierValues.rate(carrier.rates(shipment),"FEDEX_INTERNATIONAL_PRIORITY",java.time.Instant.now().plusSeconds(300));throw new AssertionError("Carrier foreign currency accepted");}catch(com.nigson.shared.problem.Problem.Failure expected){check(expected.code==com.nigson.shared.problem.ProblemCode.PROVIDER_RULE_VIOLATION,"Wrong carrier currency error");}
-   admin(f,"configure",Map.of("scenario","decline"));failure(()->carrier.book(shipment),false);
-   admin(f,"configure",Map.of("scenario","rate-limit"));failure(()->carrier.rates(shipment),false);
-   admin(f,"configure",Map.of("scenario","unavailable"));failure(()->carrier.book(shipment),true);
-   failure(()->new FedExAdapter("test",ProviderHttp.Mode.MOCK,f,"mock-fedex-client","mock-invalid-secret","mock-fedex-account").rates(shipment),false);
    var messaging=new TwilioAdapter("test",ProviderHttp.Mode.MOCK,t,"AC"+"0".repeat(32),"mock-twilio-token","MG"+"0".repeat(32));
    String sid=messaging.sms("+2348000000001","Synthetic fixture","http://callback-receiver:8080/twilio").path("sid").asString();
    admin(t,"progress",Map.of("id",sid,"status","delivered"));check(messaging.status(sid).path("status").asString().equals("delivered"),"SMS progression");
@@ -102,9 +81,8 @@ public final class ProviderQualification {
    admin(t,"configure",Map.of("scenario","timeout-after-acceptance"));failure(()->messaging.sms("+2348000000001","Synthetic fixture","http://callback-receiver:8080/twilio"),true);check(admin(t,"state",null).path("operations").size()==3,"Message uncertain send repeated");
    for(String scenario:List.of("decline","rate-limit","unavailable")){admin(t,"configure",Map.of("scenario",scenario));failure(()->messaging.sms("+2348000000001","Synthetic fixture","http://callback-receiver:8080/twilio"),scenario.equals("unavailable"));}
    failure(()->new TwilioAdapter("test",ProviderHttp.Mode.MOCK,t,"AC"+"0".repeat(32),"mock-invalid-token","MG"+"0".repeat(32)).status(sid),false);
-   for(String base:List.of(p,f,t)){String journal=admin(base,"state",null).path("journal").toString();check(!journal.contains("mock-")&&!journal.contains("synthetic@example.invalid")&&!journal.contains("+234")&&!journal.contains("Authorization"),"Journal contains credentials/PII");}
+   for(String base:List.of(p,t)){String journal=admin(base,"state",null).path("journal").toString();check(!journal.contains("mock-")&&!journal.contains("synthetic@example.invalid")&&!journal.contains("+234")&&!journal.contains("Authorization"),"Journal contains credentials/PII");}
    rejected(()->new PaystackAdapter("prod",ProviderHttp.Mode.MOCK,p,"sk_mock_nigson"));rejected(()->new PaystackAdapter("test",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_mock_nigson"));
-   rejected(()->new FedExAdapter("prod",ProviderHttp.Mode.LIVE,"https://apis.fedex.com","mock-client","mock-secret","mock-account"));
    rejected(()->new TwilioAdapter("prod",ProviderHttp.Mode.LIVE,"https://api.twilio.com","AC"+"0".repeat(32),"mock-token","MG"+"0".repeat(32)));
    // Configuration-only fixture credentials must never reach a genuine provider.
    rejected(()->new PaystackAdapter("stage",ProviderHttp.Mode.TEST,"https://api.paystack.co","sk_test_configuration_validation_only"));
@@ -149,7 +127,7 @@ public final class ProviderQualification {
    for(int n=0;n<130;n++)restartedAdapter.verify("order-1",123456);
    check(admin(restartedBase,"state",null).path("journal").size()==128,"Journal not bounded");
    admin(restartedBase,"reset",Map.of());check(admin(restartedBase,"state",null).path("operations").isEmpty(),"Reset failed");
-   System.out.println("PASS: real HTTP Paystack/FedEx/SMS/WhatsApp success, failures, lost responses, reconciliation, state progression, redacted journal, reset and production isolation");
+   System.out.println("PASS: real HTTP Paystack/SMS/WhatsApp success, failures, lost responses, reconciliation, state progression, redacted journal, reset and production isolation");
    }
   }
  }

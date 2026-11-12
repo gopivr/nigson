@@ -23,7 +23,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
  public String getName(){return "nigson-provider-state";}
  public ProviderStateExtension(){
   if(!Set.of("local","test").contains(System.getenv("APP_ENV")))throw new IllegalArgumentException("MOCK_ENVIRONMENT_INVALID");
-  if(!Set.of("paystack","fedex","twilio").contains(provider)) throw new IllegalArgumentException("MOCK_PROVIDER_INVALID");
+  if(!Set.of("paystack","twilio").contains(provider)) throw new IllegalArgumentException("MOCK_PROVIDER_INVALID");
   try{Files.createDirectories(file.getParent());state=Files.exists(file)?(ObjectNode)JSON.readTree(Files.readString(file)):fresh();}catch(Exception e){throw new IllegalStateException("MOCK_STATE_UNAVAILABLE");}
  }
  private ObjectNode fresh(){var n=JSON.createObjectNode();n.put("sequence",0);n.put("scenario","success");n.set("operations",JSON.createObjectNode());n.set("journal",JSON.createArrayNode());n.set("callbacks",JSON.createArrayNode());return n;}
@@ -46,7 +46,7 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
    if(path.equals("/__scenario/progress")&&method.equals("POST")){
     var input=JSON.readTree(request.getBodyAsString());var op=operations().get(input.path("id").asText());String status=input.path("status").asText();
     if(op==null||!Set.of("success","failed","pending","processed","queued","sent","delivered","undelivered","cancelled","in_transit").contains(status))return reply(400,Map.of("code","PROGRESSION_INVALID"),0);
-    if(provider.equals("fedex")&&!status.equals(op.path("status").asText()))((ObjectNode)op).put("scanAt",java.time.Instant.now().toString());((ObjectNode)op).put("status",status);if(provider.equals("paystack")&&status.equals("success")&&!op.has("transaction")&&!op.has("paid_at"))((ObjectNode)op).put("paid_at",java.time.Instant.now().toString());save();return reply(200,op,0);
+    ((ObjectNode)op).put("status",status);if(provider.equals("paystack")&&status.equals("success")&&!op.has("transaction")&&!op.has("paid_at"))((ObjectNode)op).put("paid_at",java.time.Instant.now().toString());save();return reply(200,op,0);
    }
    if(path.equals("/__scenario/inbound")&&method.equals("POST")){
     if(!provider.equals("twilio")||operations().size()>=128)return reply(400,Map.of("code","INBOUND_SCENARIO_INVALID"),0);
@@ -59,12 +59,12 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
    journal.add(JSON.createObjectNode().put("method",method).put("route",route(path)).put("sequence",state.path("sequence").asInt()));
    if(operations().size()>=128&&method.equals("POST")&&(path.equals("/transaction/initialize")||path.equals("/refund")||path.equals("/ship/v1/shipments")||path.endsWith("/Messages.json"))){save();return reply(429,Map.of("code","STATE_CAPACITY"),0);}
    String auth=request.getHeader("Authorization");
-   boolean authorized=provider.equals("paystack")?"Bearer sk_mock_nigson".equals(auth):provider.equals("fedex")?(path.equals("/oauth/token")||"Bearer mock-fedex-access-token".equals(auth)): ("Basic "+Base64.getEncoder().encodeToString(("AC"+"0".repeat(32)+":mock-twilio-token").getBytes(StandardCharsets.UTF_8))).equals(auth);
+   boolean authorized=provider.equals("paystack")?"Bearer sk_mock_nigson".equals(auth):("Basic "+Base64.getEncoder().encodeToString(("AC"+"0".repeat(32)+":mock-twilio-token").getBytes(StandardCharsets.UTF_8))).equals(auth);
    if(!authorized){save();return reply(401,Map.of("code","AUTHENTICATION_FAILED"),0);}
    String scenario=state.path("scenario").asText();if(scenario.equals("booking-response-lost"))scenario="timeout-after-acceptance";if(method.equals("POST")&&!path.equals("/oauth/token")&&Set.of("decline","rate-limit","unavailable").contains(scenario)){
     int code=scenario.equals("rate-limit")?429:scenario.equals("unavailable")?503:422;save();return reply(code,Map.of("status",false,"code","MOCK_"+scenario.toUpperCase(Locale.ROOT)),0);
    }
-   ResponseDefinition response=provider.equals("paystack")?paystack(method,path,request.getUrl(),request.getBodyAsString(),scenario):provider.equals("fedex")?fedex(method,path,request.getBodyAsString(),scenario):twilio(method,path,request.getBodyAsString(),scenario);
+   ResponseDefinition response=provider.equals("paystack")?paystack(method,path,request.getUrl(),request.getBodyAsString(),scenario):twilio(method,path,request.getBodyAsString(),scenario);
    save();return response;
   } catch(wiremock.com.fasterxml.jackson.core.JsonProcessingException|IllegalArgumentException invalid){return new ResponseDefinitionBuilder().withStatus(400).withHeader("Content-Type","application/json").withBody("{\"code\":\"MOCK_REQUEST_INVALID\"}").build();}
    catch(Exception unavailable){return new ResponseDefinitionBuilder().withStatus(503).withHeader("Content-Type","application/json").withBody("{\"code\":\"MOCK_STATE_OR_TRANSPORT_UNAVAILABLE\"}").build();}
@@ -91,32 +91,8 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
   if(method.equals("GET")&&path.equals("/refund")){var params=form(Objects.toString(URI.create(url).getRawQuery(),""));int page=Integer.parseInt(params.getOrDefault("page","1")),perPage=Integer.parseInt(params.getOrDefault("perPage","50"));if(page<1||page>10||perPage<1||perPage>100)return reply(400,Map.of("status",false),0);var matches=JSON.createArrayNode();for(var op:operations())if(op.has("transaction")&&(!params.containsKey("transaction")||op.path("transaction").asText().equals(params.get("transaction"))))matches.add(op);var list=JSON.createArrayNode();for(int n=(page-1)*perPage;n<Math.min(matches.size(),page*perPage);n++){var op=matches.get(n);if(scenario.equals("invalid-refund-verification")){op=op.deepCopy();((ObjectNode)op).put("amount",op.path("amount").asLong()+1);}list.add(op);}return reply(200,Map.of("status",true,"data",list),0);}
   return reply(404,Map.of("code","NOT_FOUND"),0);
  }
- private ResponseDefinition fedex(String method,String path,String body,String scenario) throws Exception {
-  if(method.equals("POST")&&path.equals("/oauth/token")){var input=form(body);if(!input.getOrDefault("client_id","").equals("mock-fedex-client")||!input.getOrDefault("client_secret","").equals("mock-fedex-secret")||!input.getOrDefault("grant_type","").equals("client_credentials"))return reply(401,Map.of("error","invalid_client"),0);return reply(200,Map.of("access_token","mock-fedex-access-token","token_type","bearer","expires_in",3600),0);}
-  var input=body.isBlank()?JSON.createObjectNode():JSON.readTree(body);
-  if(method.equals("POST")&&path.equals("/rate/v1/rates/quotes"))return reply(200,Map.of("transactionId",next("RATE"),"output",Map.of("rateReplyDetails",List.of(Map.of("serviceType","FEDEX_INTERNATIONAL_PRIORITY","ratedShipmentDetails",List.of(Map.of("rateType","ACCOUNT","totalNetCharge",15000,"shipmentRateDetail",Map.of("currency",scenario.equals("wrong-currency")?"USD":"NGN"))))))),0);
-  if(method.equals("POST")&&path.equals("/ship/v1/shipments")){
-   if(!input.path("accountNumber").path("value").asText().equals("mock-fedex-account")||input.path("requestedShipment").isMissingNode())return reply(400,Map.of("errors",List.of(Map.of("code","INVALID_INPUT"))),0);
-   var requested=input.path("requestedShipment");var packages=requested.path("requestedPackageLineItems");if(!packages.isArray()||packages.isEmpty()||packages.size()>100||!input.path("labelResponseOptions").asText().equals("LABEL"))return reply(400,Map.of("errors",List.of(Map.of("code","INVALID_INPUT"))),0);for(String field:List.of("shipper","recipients","pickupType","serviceType","packagingType","shippingChargesPayment","labelSpecification","totalWeight"))if(!requested.hasNonNull(field))return reply(400,Map.of("errors",List.of(Map.of("code","INVALID_INPUT"))),0);
-   String id=next("TRACK");var op=JSON.createObjectNode().put("id",id).put("status","pending").put("scanAt",java.time.Instant.now().toString()).put("packages",packages.size()).put("reference",packages.path(0).path("customerReferences").path(0).path("value").asText());operations().set(id,op);if(scenario.equals("async-booking")){String job="JOB_"+id;op.put("jobId",job);return reply(200,Map.of("output",Map.of("jobId",job)),0);}return reply(200,Map.of("transactionId",id,"output",shipmentResult(id)),scenario.equals("timeout-after-acceptance")?12000:0);
-  }
-  if(method.equals("POST")&&path.equals("/ship/v1/shipments/results")){
-   if(!input.path("accountNumber").path("value").asText().equals("mock-fedex-account"))return reply(400,Map.of("errors",List.of(Map.of("code","INVALID_INPUT"))),0);
-   String job=input.path("jobId").asText();for(var op:operations())if(op.path("jobId").asText().equals(job)&&!job.isBlank())return reply(200,Map.of("output",op.path("status").asText().equals("pending")?Map.of("transactionShipments",List.of()):shipmentResult(op.path("id").asText())),0);
-   return reply(404,Map.of("errors",List.of(Map.of("code","JOB_NOT_FOUND"))),0);
-  }
-  if(method.equals("PUT")&&path.equals("/ship/v1/shipments/cancel")){var op=operations().get(input.path("trackingNumber").asText());if(op==null)return reply(404,Map.of("errors",List.of(Map.of("code","TRACKING_NUMBER_NOT_FOUND"))),0);((ObjectNode)op).put("status","cancelled").put("scanAt",java.time.Instant.now().toString());return reply(200,Map.of("output",Map.of("cancelledShipment",true)),0);}
-  if(method.equals("POST")&&path.equals("/track/v1/trackingnumbers")){var infos=input.path("trackingInfo");if(!infos.isArray()||infos.isEmpty()||infos.size()>30)return reply(400,Map.of("code","BATCH_INVALID"),0);var results=new ArrayList<Object>();var seen=new HashSet<String>();for(var info:infos){String id=info.path("trackingNumberInfo").path("trackingNumber").asText();if(!seen.add(id))return reply(400,Map.of("code","BATCH_DUPLICATE"),0);wiremock.com.fasterxml.jackson.databind.JsonNode found=null;for(var op:operations())for(int i=0;i<op.path("packages").asInt(1);i++)if(pieceId(op.path("id").asText(),i).equals(id))found=op;if(found==null)return reply(404,Map.of("code","NOT_FOUND"),0);String code=switch(found.path("status").asText()){case "in_transit"->"IT";case "delivered"->"DL";case "cancelled"->"CA";case "failed"->"SE";default->"OC";};String at=found.path("scanAt").asText();results.add(Map.of("trackingNumber",id,"trackResults",List.of(Map.of("trackingNumberInfo",Map.of("trackingNumber",id),"latestStatusDetail",Map.of("code",code),"scanEvents",List.of(Map.of("eventType",code,"date",at)),"dateAndTimes",code.equals("DL")?List.of(Map.of("type","ACTUAL_DELIVERY","dateTime",at)):List.of()))));}return reply(200,Map.of("output",Map.of("completeTrackResults",results)),0);}
-  if(method.equals("POST")&&path.equals("/track/v1/referencenumbers")){
-   var ref=input.path("referencesInformation");if(!ref.path("accountNumber").asText().equals("mock-fedex-account")||!ref.path("type").asText().equals("CUSTOMER_REFERENCE"))return reply(400,Map.of("errors",List.of(Map.of("code","INVALID_INPUT"))),0);
-   var matches=new ArrayList<Map<String,Object>>();for(var op:operations())if(op.path("reference").asText().equals(ref.path("value").asText()))matches.add(Map.of("trackingNumber",op.path("id").asText(),"trackResults",List.of(Map.of("trackingNumberInfo",Map.of("trackingNumber",op.path("id").asText()),"latestStatusDetail",Map.of("code",op.path("status").asText())))));
-   return reply(200,Map.of("output",Map.of("completeTrackResults",matches)),0);
-  }
-  return reply(404,Map.of("code","NOT_FOUND"),0);
- }
- private static String pieceId(String id,int i){return i==0?id:"P"+id.substring(5)+String.format(Locale.ROOT,"%03d",i);}
- private Map<String,Object> shipmentResult(String id){var pieces=new ArrayList<Object>();int count=operations().get(id).path("packages").asInt(1);for(int i=0;i<count;i++)pieces.add(Map.of("trackingNumber",pieceId(id,i),"packageDocuments",List.of(Map.of("contentType","LABEL","docType","PDF","encodedLabel",syntheticPdf()))));return Map.of("transactionShipments",List.of(Map.of("masterTrackingNumber",id,"serviceType","FEDEX_INTERNATIONAL_PRIORITY","pieceResponses",pieces)));}
- private static String syntheticPdf(){var pdf=new StringBuilder("%PDF-1.4\n% SYNTHETIC MOCK LABEL - NOT FOR SHIPPING\n");String[] objects={"<< /Type /Catalog /Pages 2 0 R >>","<< /Type /Pages /Kids [3 0 R] /Count 1 >>","<< /Type /Page /Parent 2 0 R /MediaBox [0 0 288 432] /Resources << >> >>"};var offsets=new ArrayList<Integer>();for(int i=0;i<objects.length;i++){offsets.add(pdf.length());pdf.append(i+1).append(" 0 obj\n").append(objects[i]).append("\nendobj\n");}int xref=pdf.length();pdf.append("xref\n0 4\n0000000000 65535 f \n");for(int offset:offsets)pdf.append(String.format(Locale.ROOT,"%010d 00000 n \n",offset));pdf.append("trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n").append(xref).append("\n%%EOF\n");return Base64.getEncoder().encodeToString(pdf.toString().getBytes(StandardCharsets.US_ASCII));}
+
+
  private ResponseDefinition twilio(String method,String path,String body,String scenario) throws Exception {
   String root="/2010-04-01/Accounts/AC"+"0".repeat(32)+"/Messages";
   if(method.equals("POST")&&path.equals(root+".json")){
@@ -129,7 +105,6 @@ public final class ProviderStateExtension implements ResponseDefinitionTransform
  private ResponseDefinition callback(JsonNode input) throws Exception {
   String id=input.path("id").asText();var op=operations().get(id);String url=input.path("url").asText();int repeat=input.path("repeat").asInt(state.path("scenario").asText().equals("duplicate-status")?2:1);
   if(op==null||repeat<1||repeat>3||!callbackTarget(url))return reply(400,Map.of("code","CALLBACK_INVALID"),0);
-  if(provider.equals("fedex"))return reply(400,Map.of("code","FEDEX_POLLING_ONLY"),0);
   String canonical=input.path("external_url").asText(url);
   URI transport=URI.create(url),external=URI.create(canonical);
   if(!canonical.equals(url)&&(!external.getScheme().equals("http")||!Set.of("localhost","127.0.0.1").contains(external.getHost())||external.getPort()<1||external.getUserInfo()!=null||external.getFragment()!=null||!Objects.equals(external.getRawPath(),transport.getRawPath())||!Objects.equals(external.getRawQuery(),transport.getRawQuery())))return reply(400,Map.of("code","CALLBACK_CANONICAL_URL_INVALID"),0);

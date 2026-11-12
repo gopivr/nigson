@@ -24,13 +24,17 @@ class EventTopologyTests(unittest.TestCase):
     self.assertEqual(exact,allowed)
     for _,name in exact:
      schema=registry[name]['schema'];self.assertFalse(schema['additionalProperties']);self.assertFalse(schema['properties']['payload']['additionalProperties'])
- def test_local_provider_mocks_have_no_published_ports(self):
-  # Compose materialization is checked by local-config-check; this protects the checked-in surface.
+ def test_application_compose_excludes_provider_simulators_and_uses_live_defaults(self):
   import subprocess
   result=subprocess.run(['docker','compose','--env-file','.env.example','--profile','*','config','--format','json'],cwd=ROOT,check=True,capture_output=True,text=True)
   config=json.loads(result.stdout)
-  for provider in ('paystack','fedex','twilio'):
-   service=config['services'][provider+'-mock']
-   self.assertFalse(service.get('ports'))
-   self.assertIn('--no-request-journal',service['command'])
-   self.assertIn('@sha256:',service['image'])
+  for provider in ('paystack','twilio'):
+   self.assertNotIn(provider+'-mock',config['services'])
+  commerce=config['services']['commerce']['environment']
+  integration=config['services']['integration']['environment']
+  self.assertEqual('LIVE',commerce['PAYSTACK_MODE'])
+  self.assertEqual('https://api.paystack.co',commerce['PAYSTACK_BASE_URL'])
+  self.assertEqual('LIVE',integration['TWILIO_MODE'])
+  self.assertEqual('https://api.twilio.com',integration['TWILIO_BASE_URL'])
+  self.assertEqual('LIVE',integration['EMAIL_MODE'])
+  self.assertNotEqual('mailpit',integration['SMTP_HOST'])

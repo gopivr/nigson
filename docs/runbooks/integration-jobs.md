@@ -14,7 +14,6 @@ Metrics nigson.provider.commands have bounded ACKNOWLEDGED/UNKNOWN outcomes. QUE
 
 Contract conflicts: API-163's generic prose says signed actor, while the exact API-140 permission and compiled registry use jobs.read and explicitly reject an actor. The specific registered read contract governs; signed staff is required for API-141 retries. JobDTO omits version although retries require If-Match. This implementation forwards an explicitly supplied expected version and returns the actual accepted ETag; it cannot provide initial per-job version discovery from the specified list DTO. Proposed future contract resolution: approve a version field on JobDTO across API-140/141/163/164, or a separate compiled versioned read endpoint. Neither change is silently introduced. Staff UI version discovery remains NOT_RUN/contract-dependent.
 
-`make integration-jobs-check` executes isolated owner migrations, native persistence/races/audit rollback and real HTTP/KMS/JWT/MFA/CSRF qualification. Stateful worker mock acceptance is not a completed integration worker, staging release or live Paystack/FedEx/messaging qualification. INT-PROVI-001 and provider activation gates retain their own acceptance requirements.
 
 
 ## Integration-owned execution and recovery

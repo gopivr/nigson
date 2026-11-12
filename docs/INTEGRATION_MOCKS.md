@@ -1,24 +1,24 @@
-# Provider Mock Implementation Contracts
+# Isolated Provider Test Simulator Contracts
 
-Specification1.1.0; master authoritative. Mock server source must be created during implementation, not included in this authoring task.
+Specification1.1.0; master authoritative. Provider simulators are test-only and
+run in the isolated automated test harness, never as local application
+dependencies. Non-test application profiles require live provider APIs.
 
 Implement these concrete launch adapters behind typed ports; deployment configuration switches endpoints/credentials without changing domain code.
 
-| Provider / owner | Required operations | Local mock and real mode |
+| Provider / owner | Required operations | Runtime mode and test support |
 |---|---|---|
-| Paystack / commerce PaymentProvider | Hosted initialize, verify, refund/create/query, signed webhook receipts | Stateful Paystack mock with dummy key; test/live use real Paystack key and official allowlisted endpoint |
-| FedEx / integration CarrierProvider, commerce rate facade | OAuth, rate/service lookup, shipment creation/private label, cancellation, tracking polling/reference reconciliation | Stateful FedEx mock with dummy client/account; real sandbox/live endpoints and account/service configuration |
-| Twilio / integration SmsProvider and WhatsAppProvider | SMS/WhatsApp send, status query, approved templates, signed DLR/inbound facade | Stateful Twilio mock and synthetic callbacks; sandbox/trial/live require actual Twilio account/senders/templates |
+| Paystack / commerce PaymentProvider | Hosted initialize, verify, refund/create/query, signed webhook receipts | LIVE official endpoint for every application runtime; stateful simulator with dummy credentials in isolated tests only |
+| Twilio / integration SmsProvider and WhatsAppProvider | SMS/WhatsApp send, status query, approved templates, signed DLR/inbound facade | LIVE official endpoint for every application runtime; stateful simulator and synthetic callbacks in isolated tests only |
 | Keycloak / identity, BFF/workloads | Discovery/JWKS, code+PKCE, refresh/logout, client credentials, staff MFA | Real local Keycloak container; same provider in production with hardened deployment |
-| SES/SMTP, Sheets, S3/scanner, Bedrock | Existing mail/sync/files/BP5 AI ports | Existing bounded private adapters and test fixtures retained; email remains supported |
+| SMTP, Sheets, S3/scanner, Bedrock | Existing mail/sync/files/BP5 AI ports | Runtime uses live SMTP/Google/Bedrock APIs; LocalStack remains infrastructure emulation; test fixtures/simulators are isolated |
 
-Paystack HTTP: POST /transaction/initialize sends exact NGN kobo integer, stable reference/email/server metadata/callback allowlist; GET /transaction/verify/{reference} independently verifies terminal status/reference/merchant/amount/currency. POST /refund always specifies transaction and refund amount; GET /refund/{id}, transaction-scoped listing for uncertain issuance. Refund lifecycle maps pending/processing to pending, processed to succeeded, authoritative failure to failed. SHA512 HMAC over raw webhook bytes with x-paystack-signature and constant-time check; durable event/reference dedup, no invented timestamp header or native idempotency guarantee. Original payment/order locks and UNKNOWN handling unchanged. Base https://api.paystack.co for genuine test/live; dummy secrets accepted only by local mock. Docs: https://paystack.com/docs/api/transaction/ and https://paystack.com/docs/api/refund/.
+Paystack HTTP: POST /transaction/initialize sends exact NGN kobo integer, stable reference/email/server metadata/callback allowlist; GET /transaction/verify/{reference} independently verifies terminal status/reference/merchant/amount/currency. POST /refund always specifies transaction and refund amount; GET /refund/{id}, transaction-scoped listing for uncertain issuance. Refund lifecycle maps pending/processing to pending, processed to succeeded, authoritative failure to failed. SHA512 HMAC over raw webhook bytes with x-paystack-signature and constant-time check; durable event/reference dedup, no invented timestamp header or native idempotency guarantee. Original payment/order locks and UNKNOWN handling unchanged. The application uses https://api.paystack.co with approved LIVE credentials; test simulators use dummy keys and never call Paystack. Docs: https://paystack.com/docs/api/transaction/ and https://paystack.com/docs/api/refund/.
 
-FedEx contract snapshots: capture official versioned JSON/OpenAPI fixtures under contracts/providers/fedex during CARRIER-001. POST /oauth/token form grant_type=client_credentials, client_id/client_secret; cache returned token until actual expires_in minus60s, refresh single-flight and never persist plaintext in logs. POST /rate/v1/rates/quotes reads eligible services/rates from a server-owned shipment request. POST /ship/v1/shipments uses accountNumber/requestedShipment/labelResponseOptions, stable customer reference and approved service/package/address; normalize tracking/private label response. PUT /ship/v1/shipments/cancel sends the saved account/tracking request. POST /track/v1/trackingnumbers or /track/v1/referencenumbers polls authoritative tracking. Import the provider's exact payload schemas rather than a guessed generic carrier schema; contract fixtures test required fields and nested responses. Mapping: label created -> BOOKED (not SHIPPED), accepted/in-transit -> handover evidence/SHIPPED, delivery -> DELIVERED, exception -> visible hold without payment rollback; terminal status cannot regress. Poll active bookings every15m initially, batches<=30/provider lower quota, stop delivered/cancelled; provider reference after ambiguous create must reconcile or enter operator review, never blindly rebook. Connection2s/read8s/total10s; safe reads max2 bounded retries; create/cancel UNKNOWN preserved. FedEx is the initial selected adapter; real Nigeria route/service/currency eligibility is account-specific and verified at release. Docs: https://developer.fedex.com/api/en-us/catalog/authorization/v1/docs.html, https://developer.fedex.com/api/en-us/catalog/rate/v1/docs.html, https://developer.fedex.com/api/en-us/catalog/ship/v1/docs.html, https://developer.fedex.com/api/en-us/catalog/track/v1/docs.html.
 
 Twilio HTTP: POST /2010-04-01/Accounts/{AccountSid}/Messages.json form with To, approved From or MessagingServiceSid, StatusCallback; SMS Body; WhatsApp recipients/sender prefixed whatsapp: and approved ContentSid/ContentVariables for proactive templates. Use account/auth credentials through secrets, not a dummy live call. GET message resource by returned SID reconciles known sends. SDK signature validation uses the exact external callback URL/query and complete received parameter set; do not hand-roll a subset check, trust arbitrary proxy headers or disable validation for mocks. StatusCallback includes owned jobId and maps SID/account/channel to the durable job. WhatsApp inbound creates consent-aware contact leads; approved templates are default for all outbound staff/transactional messages, avoiding a hardcoded conversational window assumption. Production sender/WhatsApp business onboarding/template approval and Nigerian SMS routing permissions are configuration/release inputs, not implied by an API key alone. Docs: https://www.twilio.com/docs/messaging/api/message-resource, https://www.twilio.com/docs/whatsapp/quickstart, https://www.twilio.com/docs/usage/webhooks/webhooks-security, https://www.twilio.com/en-us/guidelines/ng/sms.
 
-All adapters have allowlisted targets, redirects disabled, response limits,2s connect/8s read/10s total initial bounds, safe-read retry<=2, side-effect UNKNOWN reconciliation, bounded concurrency and safe provider/status metrics. Domain transaction never holds locks across network calls. Real account credentials plus endpoint/mode/identity/service/template configuration replace mock configuration; no provider adapter source rewrite is required.
+All adapters have allowlisted targets, redirects disabled, response limits,2s connect/8s read/10s total initial bounds, safe-read retry<=2, side-effect UNKNOWN reconciliation, bounded concurrency and safe provider/status metrics. Domain transaction never holds locks across network calls. Every non-test profile uses LIVE mode; the shared provider transport blocks sandbox/test HTTP calls. Automated tests use isolated simulators; no provider adapter source rewrite is required.
 
 Notification remains a module of the private integration worker. EMAIL, SMS and WHATSAPP are required launch channels, with separate typed provider ports and explicitly configured routing; no new notification microservice. Email newsletters/double opt-in remain BP2; transactional SMS/WhatsApp and opt-in destination proof are BP1.
 
@@ -39,9 +39,8 @@ Health: GET /actuator/health/liveness and /actuator/health/readiness Java; GET /
 Local docker-compose.yml baseline: PostgreSQL18 pgvector-capable image (extension used only AI profile), LocalStack SNS/SQS/S3/SES emulation, Keycloak local realm, Mailpit, optional OTel collector. Full-app profile starts commerce8081, experience8082, worker8083 private, AI8084 only ai profile; dependencies ports localhost only. Valkey is optional cache profile, not default. No Kafka/OpenSearch/Kubernetes/Helm services. DB healthcheck plus one-shot migrations precede application readiness. Persistent named volumes are never deleted by default stop. LocalStack IAM emulation does not replace live staging IAM/security tests.
 
 
-## Mock-first Compose and production identity
+## Test-only provider simulators and production identity
 
-Add provider-mocks profile with separate stateful paystack-mock, fedex-mock and twilio-mock services using pinned WireMock images plus versioned test-only scenario extension/controllers. Compose core local setup includes these mocks and real local Keycloak. Testcontainers starts equivalent instances for CI; mock administration/reset/journal is localhost/internal-test-network only. Callback dispatcher sends signed HTTP to the real app facades; failure/scenario controls are never public production APIs. Tests prohibit external paid network access. Production builds exclude mock controllers, images, dummy credentials and test admin routes.
 
 Keycloak image is pinned/optimized in production, supported external PostgreSQL, private management/health/admin, TLS/proxy/hostname and cluster settings; local start-dev is local only. Do not reuse Keycloak development filesystem DB or default admin credentials for release.
 
@@ -66,7 +65,7 @@ CI should use deterministic Clock and injectable random source for unit tests; p
 | TEST-MODE-ISOLATION | Given LIVE configuration, when dummy key/mock hostname or MOCK quote enters checkout, then configuration/command fails before provider side effect. |
 | TEST-NGN-KOBO | Given NGN1234.56, when initialize/refund converts, then integer123456; overprecision/foreign currency rejected without floating point. |
 | TEST-NGN-MARKET | Given approved NG/NGN metadata, when setup runs twice, then one baseline exists and missing tax/returns/book/routes still prevents selling. |
-| TEST-PAYSTACK-MODE-SWITCH | Given same adapter/domain suite, when config changes mock->real test credential, then contract responses match; recorded sandbox result required, never assumed from mocks. |
+| TEST-PAYSTACK-MODE-SWITCH | Given the adapter/domain suite, when application mode is not LIVE or a sandbox request is attempted, then configuration/transport fails closed; isolated contract tests use simulators and do not call Paystack. |
 | TEST-CARRIER-RATE-BINDING | Given unexpired quote, when cart/address/packages/service/currency/mode change, then checkout rejects stale/mismatched quote rather than undercharging. |
 | TEST-CARRIER-UNKNOWN | Given create accepted but response lost, when job replays, then one booking attempt remains UNKNOWN/reconciled and no blind second label appears. |
 | TEST-CARRIER-TRACKING | Given duplicate/out-of-order tracking and label creation, when processed, then label alone does not dispatch, stock dispatch once, delivery terminal does not regress. |
@@ -87,7 +86,6 @@ Implementation must generate README.md, .env.example, docker-compose.yml, Makefi
 cp .env.example .env
 make local-up
 make migrate ENV=local
-make seed ENV=local
 make run-core
 make verify
 # only when reaching EP12/BP5
@@ -95,23 +93,19 @@ make local-up PROFILE=ai
 make run-ai
 ```
 
-`local-up` starts required dependencies and waits on bounded health checks; it creates local SNS subscriptions/S3 buckets/Keycloak realm through deterministic scripts. `migrate` executes each owner role/master, fails on any schema drift and does not use Hibernate DDL. `seed` rejects any nonlocal/test env and requires explicit approved fixture profile. `run-core` starts Java services in separate processes/Compose app profile; reports URLs/health checks and clean stop handling. User login uses local OIDC flow; direct API tests obtain real local signed access tokens. Do not add a universal insecure bypass header.
+`local-up` starts required dependencies and waits on bounded health checks; it creates local SNS subscriptions/S3 buckets and imports Keycloak clients/roles without example identities. `migrate` executes each owner role/master, fails on any schema drift and does not use Hibernate DDL. Local startup seeds no users or business data. `run-core` starts Java services in separate processes/Compose app profile; reports URLs/health checks and clean stop handling. User login uses the configured local OIDC registration flow; direct API tests obtain real signed access tokens in isolated test projects. Do not add a universal insecure bypass header.
 
 Local services binds: BFF/core http://localhost:8081, experience8082, worker8083 localhost/private only, AI8084 optional, PostgreSQL5432 localhost, LocalStack4566, Keycloak8180, Mailpit8025. Origin URLs configurable and not compile-time constants. Use named volumes and separate test DB. .env is gitignored. Local dummy keys are clearly local-only and forbidden by prod validation; local HTTP cookie/issuer exception is profile-limited. Health/smoke checks confirm real persistence and identity flow before showing ready.
 
 
-## Credential-free integration setup
+## Local infrastructure and offline provider tests
 
 ```bash
-make local-up PROFILES=provider-mocks
+make local-up
 make migrate ENV=local
-make seed ENV=local MARKET=NG CURRENCY=NGN
-make mock-reset
+make run-core
 make provider-contract-test PROVIDER=all MODE=mock
-make provider-scenario PROVIDER=paystack SCENARIO=success
-make provider-scenario PROVIDER=fedex SCENARIO=booking-response-lost
-make provider-scenario PROVIDER=twilio SCENARIO=duplicate-status
 make keycloak-config-check ENV=local
 ```
 
-Implementation must create these commands in MOCK-001/IDP-001; they are specified commands, not scripts generated in this document-only task. make provider-live-check ENV=stage requires actual user-supplied account/credentials/sender/service config and may perform real provider sandbox operations; never run it automatically while keys are dummy.
+`make provider-contract-test PROVIDER=all MODE=mock` runs the isolated automated test harness. Provider simulators are not started through local Compose and have no local reset/scenario/journal commands. Local application startup requires live provider configuration. `make provider-live-check ENV=stage` requires approved live account/credentials/sender/service configuration and may make genuine read-only live API requests; never run it automatically or with unapproved live data.
