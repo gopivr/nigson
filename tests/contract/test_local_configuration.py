@@ -14,6 +14,15 @@ SPEC.loader.exec_module(local)
 
 
 class LocalIsolationTests(unittest.TestCase):
+    def test_application_preflight_explains_foundation_only_routes(self):
+        with self.assertRaisesRegex(ValueError, 'NIGSON_SECURITY_ENABLED=true.*local-app-config'):
+            local.application_preflight({'services': {'experience': {'environment': {'NIGSON_SECURITY_ENABLED': 'false'}}}})
+
+    def test_application_preflight_names_missing_live_settings_without_values(self):
+        with self.assertRaisesRegex(ValueError, 'PAYSTACK_SECRET_KEY'):
+            local.application_preflight({'services': {'commerce': {'environment': {'NIGSON_SECURITY_ENABLED': 'true', 'NIGSON_PROVIDERS_ENABLED': 'true'}}}})
+        local.application_preflight({'services': {}})
+
     def test_example_allows_the_frontend_admin_login_destination(self):
         settings = dict(line.split('=', 1) for line in (ROOT / '.env.example').read_text().splitlines() if '=' in line and not line.startswith('#'))
         self.assertIn('/admin', settings['NIGSON_BFF_RETURN_PATHS'].split(','))
@@ -25,6 +34,16 @@ class LocalIsolationTests(unittest.TestCase):
         self.assertEqual(events[0][2], 'build')
         self.assertEqual(events[1], 'recover')
         self.assertEqual(events[2][2], 'up')
+
+    def test_local_up_does_not_start_provider_simulators(self):
+        commands = []
+        with patch('sys.argv', ['dependencies.py', 'up']), patch.object(local, 'validate', return_value={}), \
+                patch.object(local, 'command', side_effect=lambda *args, **kwargs: commands.append(args)), \
+                patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), \
+                patch.object(local, 'bootstrap'), patch.object(local.subprocess, 'run') as execute:
+            self.assertEqual(local.main(), 0)
+        execute.assert_not_called()
+        self.assertFalse(any(any(name in args for name in ('paystack-mock', 'twilio-mock')) for args in commands))
 
     def test_actor_recovery_runs_only_for_enabled_local_security(self):
         import tempfile
@@ -68,12 +87,13 @@ class LocalIsolationTests(unittest.TestCase):
             self.assertEqual(local.main(), 0)
             docker.assert_called_once_with("--profile", "*", "down", "--timeout", "30")
 
-    def test_fixture_manifest_matches_real_identity_import(self):
+    def test_fixture_identities_are_test_only_and_not_imported_into_local_realm(self):
         manifest = json.loads((ROOT / "tests/fixtures/local-identities.json").read_text())
         realm = json.loads((ROOT / "infrastructure/docker/keycloak/nigson-local-realm.json").read_text())
         self.assertTrue(manifest["localOnly"])
         self.assertEqual(manifest["fixtureClock"], "2026-10-04T00:00:00Z")
         self.assertEqual(manifest["identityRealm"], realm["realm"])
+        self.assertEqual(realm.get("users", []), [])
         self.assertTrue(realm["registrationAllowed"])
         self.assertEqual(realm["loginTheme"], "nigson")
         self.assertFalse(realm["resetPasswordAllowed"])
@@ -88,13 +108,9 @@ class LocalIsolationTests(unittest.TestCase):
         self.assertTrue(registration["serviceAccountsEnabled"])
         self.assertFalse(registration["standardFlowEnabled"])
         self.assertFalse(registration["directAccessGrantsEnabled"])
-        self.assertFalse(any(user.get("serviceAccountClientId") == "nigson-registration" for user in realm["users"]))
         self.assertEqual(len(manifest["subjects"]), 13)
-        self.assertEqual(len({user["id"] for user in realm["users"]}), 13)
-        fields = ("id", "username", "email", "realmRoles", "firstName", "lastName")
-        fixtures = [user for user in realm["users"] if not user.get("serviceAccountClientId")]
-        self.assertEqual(manifest["subjects"], [{key: user[key] for key in fields} for user in fixtures])
-        self.assertTrue(all(user["email"].endswith("@example.invalid") for user in fixtures))
+        self.assertEqual(len({user["id"] for user in manifest["subjects"]}), 13)
+        self.assertTrue(all(user["email"].endswith("@example.invalid") for user in manifest["subjects"]))
 
     def test_local_bff_callback_matches_the_mfe_origin_and_signup_is_gated(self):
         compose = (ROOT / "docker-compose.yml").read_text()
@@ -154,15 +170,27 @@ class LocalIsolationTests(unittest.TestCase):
             docker.assert_not_called()
 
     def test_unapproved_fixture_profile_refused_before_identity(self):
-        with patch.object(local, "settings", return_value={"FIXTURE_PROFILE": "production"}), patch("urllib.request.build_opener") as http:
+        with patch.dict(os.environ, {"ENV": "test", "COMPOSE_PROJECT_NAME": "nigson-test-unit"}), patch.object(local, "settings", return_value={"FIXTURE_PROFILE": "production"}), patch("urllib.request.build_opener") as http:
             with self.assertRaises(ValueError):
-                local.seed({})
+                local.seed_test_identities({"name": "nigson-test-unit"})
             http.assert_not_called()
 
     def test_missing_fixture_password_refused_before_identity(self):
-        with patch.object(local, "settings", return_value={"FIXTURE_PROFILE": "foundation"}), patch("urllib.request.build_opener") as http:
+        with patch.dict(os.environ, {"ENV": "test", "COMPOSE_PROJECT_NAME": "nigson-test-unit"}), patch.object(local, "settings", return_value={"FIXTURE_PROFILE": "foundation"}), patch("urllib.request.build_opener") as http:
             with self.assertRaises(ValueError):
-                local.seed({})
+                local.seed_test_identities({"name": "nigson-test-unit"})
+            http.assert_not_called()
+
+    def test_local_application_cannot_seed_test_identities(self):
+        with patch.dict(os.environ, {"ENV": "local", "COMPOSE_PROJECT_NAME": "nigson-local"}), patch("urllib.request.build_opener") as http:
+            with self.assertRaisesRegex(ValueError, "ENV=test"):
+                local.seed_test_identities({"name": "nigson-local"})
+            http.assert_not_called()
+
+    def test_test_identities_require_an_isolated_test_project(self):
+        with patch.dict(os.environ, {"ENV": "test", "COMPOSE_PROJECT_NAME": "nigson-local"}), patch("urllib.request.build_opener") as http:
+            with self.assertRaisesRegex(ValueError, "isolated nigson-test"):
+                local.seed_test_identities({"name": "nigson-local"})
             http.assert_not_called()
 
     def test_remote_migration_target_rejected(self):
@@ -193,8 +221,9 @@ class LocalIsolationTests(unittest.TestCase):
 
     def test_foundation_make_targets_have_real_entrypoints(self):
         content = (ROOT / "Makefile").read_text()
-        for action in ("local-up", "local-down", "local-status", "migrate", "seed", "run-core", "run-ai", "cold-start", "command-surface-check"):
+        for action in ("local-up", "local-down", "local-status", "migrate", "test-identities", "run-core", "run-ai", "cold-start", "command-surface-check"):
             self.assertIn(action + ":", content)
+        self.assertNotIn("\nseed:", content)
         self.assertIn("export PROFILE ENV", content)
 
     def test_prod_environment_rejected_before_docker(self):

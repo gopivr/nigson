@@ -1,6 +1,6 @@
 # Run Nigson locally
 
-This guide starts the Nigson backend on your machine using Docker Compose. It uses local PostgreSQL, Keycloak, LocalStack, Mailpit, and stateful provider mocks. It does not connect to live payment, carrier, SMS, WhatsApp, or cloud accounts. Nigson is a backend repository; this workflow does not start a storefront UI.
+This guide starts the Nigson backend on your machine using Docker Compose. PostgreSQL, Keycloak, LocalStack, and Mailpit are local infrastructure services; business-provider simulators are not started. Application requests use configured live provider APIs or fail closed when live configuration is missing. Nigson is a backend repository; this workflow does not start a storefront UI.
 
 ## Requirements
 
@@ -19,42 +19,20 @@ cp .env.example .env
 make local-config-check
 ```
 
-The template contains synthetic local passwords and dummy provider credentials. Keep them pointed at the Compose mocks. Do not replace a mock URL with a real provider URL while keeping dummy credentials. `.env` is gitignored.
+The template contains local infrastructure credentials and empty provider secret settings. Provider credentials and accounts must be approved and configured before enabling provider-backed features. `.env` is gitignored.
 
-Start local dependencies and mocks, apply the owner database migrations, then seed test identities:
+Start local dependencies, apply the owner database migrations, then build and start the backend:
 
 ```sh
 make local-up
 make migrate ENV=local
-make seed ENV=local FIXTURE_PROFILE=foundation
-```
-
-The seed command creates deterministic test-only Keycloak identities and verifies real signed local logins. It does not create product catalogues, prices, tax rules, provider accounts, or commercial approvals.
-
-Build and start the Java backend services:
-
-```sh
 make run-core
 make local-status
 ```
 
 `run-core` reapplies migrations safely, builds the Commerce, Experience, and Integration images, and starts the services. Commerce contains the BFF and business transaction boundary. Integration remains an internal worker; its local port is bound to loopback for development tools.
 
-## Demo table data
-
-After local migrations, populate every installed application table with synthetic testing records:
-
-```sh
-python3 scripts/local/seed_demo.py --apply
-```
-
-Omit `--apply` to review SQL. Repeating the command preserves existing records and does not duplicate fixture primary keys. It requires a local Unix Docker endpoint and `ENV`/`APP_ENV` set to `local` or `test`. Unique collisions with unrelated records fail and roll back the transaction.
-
-The BP1 local database has 78 installed application tables. Fixtures include a demo solar panel/SKU, NGN test price, warehouse stock, customer/address, cancelled order, failed payment, rejected refund, draft content, lead, and suppressed notifications. Commercial market/price/delivery/promotion configuration stays disabled; these records do not establish tax, provider or market approvals. The base seed creates a customer without a login or active staff grant; the optional validation-user provisioning step links that customer to the dedicated staff/customer test login. File/encryption records are rejected opaque fixtures rather than downloadable files or valid encrypted personal data. The expired synthetic session may be removed by normal session cleanup.
-
-No migrations run, no provider calls are made, and no Keycloak or migration bookkeeping tables are changed. Later-release tables that are absent are reported rather than created. BP1 is verified against PostgreSQL; later-release fixture execution has not been qualified. The optional separate AI database can be targeted with `--service vector-db` when installed.
-
-The dedicated validation account and API request examples are documented in [Demo API validation](DEMO_VALIDATOR_GUIDE.md).
+Local startup creates no example Keycloak users or synthetic business records. Use the registration flow only after configuring the complete local BFF/security profile. Existing database and identity volumes are preserved and may still contain data from earlier local runs; startup does not delete or rewrite that data.
 
 ## Local endpoints
 
@@ -91,7 +69,7 @@ Open <http://localhost:8090>. The static page embeds operations from the Commerc
 
 The small Python server serves the static file and proxies only to local Commerce, Experience, and AI ports. It accepts requests from its exact localhost origin, forwards an explicit header allowlist, preserves Commerce BFF cookies, and never forwards browser identity assertions. Integration workload APIs appear as private catalog entries but cannot be called through the demo. The proxy is a local development helper, not a deployment component.
 
-The default Compose configuration leaves application identity/security inputs unset. Commerce's foundation profile permits health checks and denies its API routes; BFF sign-in stays closed, and `/bff/session` or `/bff/login` can return `401 AUTH_REQUIRED`. The workbench checks session readiness before starting Keycloak sign-in and explains this configuration gate. Follow [the session trust runbook](runbooks/session-trust.md) for the complete BFF profile; setting only `NIGSON_SECURITY_ENABLED=true` is insufficient. The workbench does not bypass authorization or fabricate data. Seeded identity users do not imply seeded catalogue, price, tax, carrier, campaign, or policy configuration.
+The default Compose configuration leaves application identity/security inputs unset. Commerce's foundation profile permits health checks and denies its API routes; BFF sign-in stays closed, and `/bff/session` or `/bff/login` can return `401 AUTH_REQUIRED`. The workbench checks session readiness before starting Keycloak sign-in and explains this configuration gate. Follow [the session trust runbook](runbooks/session-trust.md) for the complete BFF profile; For local identity setup after `make local-up`, run `make local-app-config`; setting only `NIGSON_SECURITY_ENABLED=true` is insufficient. The workbench does not bypass authorization or fabricate data. No local identities, catalogue, prices, taxes, carrier data, campaigns, or policies are seeded.
 
 For the MFE on `http://localhost:4200`, the ignored local `.env` may set `NIGSON_SECURITY_ENABLED=true`, `NIGSON_BFF_CALLBACK=http://localhost:4200/bff/callback`, `NIGSON_BFF_ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8090`, and `NIGSON_BFF_RETURN_PATHS=/,/account,/shop,/checkout`. The callback uses the same browser hostname as the MFE so the pending BFF cookie returns to Commerce. Compose passes through the remaining session-encryption, local KMS actor-signing, workload, and pinned actor-public-key settings; supply them only from the local session-trust runbook. The local Keycloak import configures a separate registration service account. The MFE signup form posts to `/bff/register`; Commerce creates the Keycloak identity and never stores the password. After registration, continue through the regular sign-in button. Existing persistent realms are not overwritten by realm import; apply the callback URI and registration client/service-account mapping without deleting identity volumes.
 
@@ -130,7 +108,7 @@ make migrate ENV=local PROFILE=ai
 make run-ai PROFILE=ai
 ```
 
-Conversation setup only enables the anonymous session capability. Sending a message also requires an approved AI policy and prompt revision in the AI owner schema. The deterministic local provider never contacts a live model; this guide does not supply approval, model, rate, budget, or retention values. Integration and internal workload endpoints remain private.
+Conversation setup only enables the anonymous session capability. Sending a message also requires an approved AI policy, prompt revision, and live provider configuration in the AI owner schema; missing configuration fails closed. This guide does not supply approval, model, rate, budget, or retention values. Integration and internal workload endpoints remain private.
 
 ## Optional AI profile
 
@@ -167,11 +145,11 @@ Feature-specific acceptance commands are listed in the root `Makefile` and their
 make local-down
 ```
 
-This stops the Compose containers and preserves named volumes, including local databases and mock state. Restart with `make local-up`; do not use volume deletion as a routine shutdown step. Inspect running containers with `make local-status`.
+This stops the Compose containers and preserves named volumes, including local databases and any pre-existing records. Restart with `make local-up`; do not use volume deletion as a routine shutdown step. Inspect running containers with `make local-status`.
 
 ## Troubleshooting
 
-- If startup reports a missing local setting, copy the current `.env.example` again and verify the required local-only values. Do not add real provider credentials to make local mocks work.
+- If startup reports a missing local setting, copy the current `.env.example` again and verify the required local-only values. Local uses real Paystack TEST and PandaGo stage credentials. Dummy Termii/SMTP credentials fail on access; production requires real LIVE credentials.
 - If Docker is unavailable, start Docker Desktop and rerun `make local-config-check` before starting services.
 - If migrations fail, keep the full error output and inspect the owner-specific migration logs with `docker compose --project-name nigson-local --env-file .env --file docker-compose.yml --profile app logs migrate-commerce migrate-experience migrate-integration`. Fix the cause and rerun `make migrate ENV=local`; do not drop owner schemas or clear Liquibase checksums to bypass drift.
 - If a port is occupied, set a different loopback host port in `.env` or the shell environment, then run `make local-config-check` again.

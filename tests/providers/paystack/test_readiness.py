@@ -15,9 +15,9 @@ spec.loader.exec_module(readiness)
 class PaystackReadiness(unittest.TestCase):
     def config(self):
         # These are syntactic fixtures only; positive tests invoke pure validation, never HTTP.
-        return {'ENV': 'stage', 'PROVIDER': 'paystack', 'PAYSTACK_MODE': 'TEST',
+        return {'ENV': 'stage', 'PROVIDER': 'paystack', 'PAYSTACK_MODE': 'LIVE',
                 'PAYSTACK_BASE_URL': 'https://api.paystack.co',
-                'PAYSTACK_SECRET_KEY': 'sk_test_abcdef0123456789abcdef0123456789abcdef01',
+                'PAYSTACK_SECRET_KEY': 'sk_live_abcdef0123456789abcdef0123456789abcdef01',
                 'PAYSTACK_QUALIFICATION_REFERENCE': 'qualification-123',
                 'PAYSTACK_QUALIFICATION_KOBO': '123456'}
 
@@ -38,12 +38,12 @@ class PaystackReadiness(unittest.TestCase):
                 env = self.config(); env[setting] = ''; self.blocked(env)
 
     def test_known_fixture_credentials_cannot_reach_provider(self):
-        for value in ('sk_mock_nigson', 'sk_test_configuration_validation_only', 'sk_test_synthetic', 'sk_test_fixture', 'sk_test_shape_only', 'sk_test_dummy', 'sk_test_placeholder', 'sk_test_changeme', 'sk_test_your_secret', 'sk_test_0000000000000', 'sk_test_value\n', 'sk_live_ab12'):
+        for value in ('sk_mock_nigson', 'sk_test_abcdef0123456789abcdef0123456789abcdef01', 'sk_live_configuration_validation_only', 'sk_live_synthetic', 'sk_live_fixture', 'sk_live_shape_only', 'sk_live_dummy', 'sk_live_placeholder', 'sk_live_changeme', 'sk_live_your_secret', 'sk_live_0000000000000', 'sk_live_value\n'):
             with self.subTest(value=value):
                 env = self.config(); env['PAYSTACK_SECRET_KEY'] = value; self.blocked(env)
 
     def test_mode_and_official_target_checked_before_build(self):
-        for setting, values in {'ENV': ('test', 'prod', 'local'), 'PAYSTACK_MODE': ('MOCK', 'LIVE', 'test'), 'PAYSTACK_BASE_URL': ('http://api.paystack.co', 'https://api.paystack.co.evil.invalid', 'https://api.paystack.co:443', 'https://operator@api.paystack.co', 'https://api.paystack.co?token=1', 'https://127.0.0.1')}.items():
+        for setting, values in {'ENV': ('test', 'prod', 'local'), 'PAYSTACK_MODE': ('MOCK', 'TEST', 'test'), 'PAYSTACK_BASE_URL': ('http://api.paystack.co', 'https://api.paystack.co.evil.invalid', 'https://api.paystack.co:443', 'https://operator@api.paystack.co', 'https://api.paystack.co?token=1', 'https://127.0.0.1')}.items():
             for value in values:
                 with self.subTest(setting=setting, value=value):
                     env = self.config(); env[setting] = value; self.blocked(env)
@@ -62,6 +62,20 @@ class PaystackReadiness(unittest.TestCase):
         self.assertEqual(readiness.validate(self.config()), ('paystack',))
         env = self.config(); env['PAYSTACK_BASE_URL'] += '/'
         self.assertEqual(readiness.validate(env), ('paystack',))
+
+    def test_twilio_qualification_also_requires_live_mode(self):
+        configs = (
+            {'ENV': 'stage', 'PROVIDER': 'twilio', 'TWILIO_MODE': 'LIVE',
+             'TWILIO_BASE_URL': 'https://api.twilio.com', 'TWILIO_ACCOUNT_SID': 'AC' + 'a' * 32,
+             'TWILIO_AUTH_TOKEN': 'credential-live-002', 'TWILIO_MESSAGING_SERVICE_SID': 'MG' + 'b' * 32,
+             'TWILIO_QUALIFICATION_MESSAGE_SID': 'SM' + 'c' * 32},
+        )
+        for config in configs:
+            with self.subTest(provider=config['PROVIDER']):
+                self.assertEqual(readiness.validate(config), (config['PROVIDER'],))
+                config[next(key for key in config if key.endswith('_MODE'))] = 'TEST'
+                with self.assertRaisesRegex(ValueError, 'must be LIVE'):
+                    readiness.validate(config)
 
     def test_all_providers_preflight_before_any_selected_provider_runs(self):
         env = self.config(); env['PROVIDER'] = 'all'

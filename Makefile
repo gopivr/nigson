@@ -55,11 +55,11 @@ local-config-check:
 local-status:
 	python3 scripts/local/dependencies.py status
 
-.PHONY: migrate seed run-core run-ai cold-start command-surface-check
+.PHONY: migrate run-core run-ai test-identities cold-start command-surface-check
 migrate:
 	python3 scripts/local/dependencies.py migrate
-seed:
-	python3 scripts/local/dependencies.py seed
+test-identities:
+	ENV=test python3 scripts/local/dependencies.py test-identities
 run-core:
 	python3 scripts/local/dependencies.py run-core
 run-ai:
@@ -84,17 +84,11 @@ database-check: schema-check
 database-rollback-check:
 	ENV=test python3 scripts/database/rollback_check.py
 
-.PHONY: platform-check mock-build mock-reset provider-scenario provider-journal provider-contract-test
+.PHONY: platform-check mock-build provider-contract-test
 platform-check: ai-sync
 	ENV=test python3 scripts/platform/verify.py
 mock-build:
 	python3 scripts/platform/build_mocks.py
-mock-reset:
-	python3 scripts/local/mock_admin.py reset
-provider-scenario:
-	python3 scripts/local/mock_admin.py configure
-provider-journal:
-	python3 scripts/local/mock_admin.py state
 provider-contract-test:
 	ENV=test python3 scripts/platform/provider_check.py
 
@@ -231,10 +225,14 @@ integration-provider-check:
 carrier-check:
 	python3 scripts/contracts/authorization.py --check
 	python3 scripts/contracts/integration.py --check
-	ENV=test python3 scripts/carrier/verify.py
+	./mvnw -B -pl services/integration -am -Dtest=PandagoAdapterTest,PandagoAutomaticAddressTest,PandagoConfigurationTest,CarrierValuesTest -Dsurefire.failIfNoSpecifiedTests=false test
 
 .PHONY: messaging-check
 messaging-check:
 	python3 scripts/contracts/authorization.py --check
 	python3 scripts/contracts/phone.py --check
 	NIGSON_TEST_PHONE=true python3 scripts/messaging/verify.py
+
+.PHONY: local-app-config
+local-app-config:
+	python3 scripts/local/configure_application.py

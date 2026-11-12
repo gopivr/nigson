@@ -7,6 +7,8 @@ public record Problem(String type,String title,int status,String detail,String i
  public Problem { violations=List.copyOf(violations); }
  public static final class Failure extends RuntimeException {
   public final ProblemCode code;
-  public Failure(ProblemCode code){super(code.name());this.code=Objects.requireNonNull(code);}
+  public final List<Violation> violations;
+  public Failure(ProblemCode code){this(code,List.of());}
+  public Failure(ProblemCode code,List<Violation> violations){super(code.name());this.code=Objects.requireNonNull(code);this.violations=List.copyOf(violations);}
  }
 }

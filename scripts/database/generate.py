@@ -15,6 +15,7 @@ from catalog import ROOT, catalog
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
 ADDITIVE_TABLES = {
     'experience.file_transfer': ('025-bp1-file-transfer', 'experience-20261019-files-001', 'nigson-files', 'EXP-FILES-001: Experience-owned pinned file scan/promotion intent; existing migrations preserved.'),
+    'experience.lead_rate_limit': ('026-bp1-lead-rate-limit', 'experience-20261111-lead-rate-limit', 'nigson-platform', 'Public lead rate limiting stores only a keyed source hash; prior migrations preserved.'),
     'integration.notification_dispatch': ('024-bp1-notification-dispatch', 'integration-20261017-msg-001', 'nigson-messaging', 'ADR-018: additive owned immutable notification dispatch identity; prior migrations preserved.'),
     'commerce.file_transfer': ('023-bp1-file-transfer', 'commerce-20261010-files-001', 'nigson-files', 'ADR-009: additive owned file transfer intent; existing migrations preserved.'),
     'commerce.carrier_cancellation': ('025-bp1-carrier-cancellation', 'commerce-20261016-carrier-001', 'nigson-carrier', 'ADR-014: additive owned cancellation/dispatch exclusion; prior migrations preserved.'),
@@ -36,7 +37,7 @@ def predicate(value):
     value = re.sub(r'\bIN \(([^)]+)\)', lambda m: 'IN (' + ','.join(
         item if re.fullmatch(r'-?\d+', item.strip()) else "'" + item.strip() + "'"
         for item in m[1].split(',')) + ')', value)
-    return re.sub(r'=\s*(ACTIVE|PENDING|FEDEX|WHATSAPP|object|array)\b', r"='\1'", value)
+    return re.sub(r'=\s*([A-Z][A-Z0-9_]*|object|array)\b', r"='\1'", value)
 
 
 def column(field, force_not_null=False):
@@ -307,6 +308,13 @@ def generate():
     for name in SESSION_TABLES:
         tables[name]['creation_changeset'] = 'commerce-20261005-002'
         tables[name]['creation_file'] = 'services/commerce/src/main/resources/db/changelog/001-framework-sessions.sql'
+    # Selected carrier restriction is additive: preserve applied migration checksums and historic rows.
+    base=Path('services/commerce/src/main/resources/db/changelog');stem='026-bp1-selected-carrier';change='commerce-20261111-selected-carrier'
+    files[base/(stem+'.sql')]=("-- Retain historic provider identities; new or updated quotes use only the selected carrier.\nALTER TABLE commerce.carrier_quote DROP CONSTRAINT carrier_quote_rule_1_ck;\nALTER TABLE commerce.carrier_quote ADD CONSTRAINT carrier_quote_rule_1_ck CHECK (provider='PANDAGO') NOT VALID;\nALTER TABLE commerce.carrier_quote ADD CONSTRAINT carrier_quote_selected_provider_ck CHECK (provider='PANDAGO') NOT VALID;\n")
+    files[base/(stem+'-rollback.sql')]="DO $$ BEGIN RAISE EXCEPTION 'Carrier retirement requires a reviewed forward migration; automatic provider reactivation is forbidden'; END $$;\n"
+    guard="SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+    payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-commerce','logicalFilePath':'commerce/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
+    files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';wrapper=base/'releases/BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
     files[Path('database/schema-manifest.json')] = json.dumps(manifest,indent=2,sort_keys=True)+'\n'
     return files
 
