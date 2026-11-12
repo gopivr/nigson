@@ -32,8 +32,8 @@ class RepositoryChecks(unittest.TestCase):
         self.assertEqual([], checker.check(self.root, tracked=True))
 
     def test_missing_required_directory(self):
-        shutil.rmtree(self.root / "tests/mocks/fedex")
-        self.assertTrue(any("Missing required directory: tests/mocks/fedex" in error
+        shutil.rmtree(self.root / "tests/mocks/paystack")
+        self.assertTrue(any("Missing required directory: tests/mocks/paystack" in error
                             for error in checker.check(self.root)))
 
     def test_missing_status_task(self):

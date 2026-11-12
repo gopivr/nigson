@@ -125,7 +125,7 @@
             }
           }
         },
-        "description": "Exact nigson-commerce carrier.cancel workload, no actor/cookie. Persist original source intent and existing booking/account/pieces. One fenced cancel write; submitted/restored/unknown intents reconcile by read-only physical tracking. Replay returns current durable state and original saved receipt.",
+        "description": "Private authenticated endpoint; automatic carrier execution is unavailable and fails closed without submitting a provider operation.",
         "parameters": [
           {
             "name": "Idempotency-Key",
@@ -676,7 +676,7 @@
             }
           }
         },
-        "description": "Private SERVICE_COMMERCE carrier.quote_WITH_SIGNED_ACTOR. Closed NG/NGN server address/packing only. FedEx requires the approved shipper origin and configured service/pickup; PandaGo uses the configured outlet and destination coordinates without a fabricated origin or service code. PandaGo fee/time are pre-checkout estimates for server-calculated merchandise subtotal; historical delivery times are not live traffic predictions. The short-lived quote fee remains the bound checkout fee and is not replaced by the estimate. Current provider/account approval and exact NGN fee required. Actual provider HTTP occurs outside local locks; commandId durably replays the original acknowledgement/audit. Returned rate expires within five minutes; commerce revalidates the cart/address/packages before binding. This command never books or dispatches. PandaGo resolves an address without coordinates through the configured server-side geocoder before requesting a quote. Ambiguous or imprecise addresses are rejected; missing geocoding credentials return GEOCODING_NOT_CONFIGURED. Lookup coordinates are transient and never replaced with city-centre defaults.",
+        "description": "Private SERVICE_COMMERCE carrier.quote_WITH_SIGNED_ACTOR. Closed NG/NGN server address/packing only. carrier requires the approved shipper origin and configured service/pickup; PandaGo uses the configured outlet and destination coordinates without a fabricated origin or service code. PandaGo fee/time are pre-checkout estimates for server-calculated merchandise subtotal; historical delivery times are not live traffic predictions. The short-lived quote fee remains the bound checkout fee and is not replaced by the estimate. Current provider/account approval and exact NGN fee required. Actual provider HTTP occurs outside local locks; commandId durably replays the original acknowledgement/audit. Returned rate expires within five minutes; commerce revalidates the cart/address/packages before binding. This command never books or dispatches.",
         "parameters": [
           {
             "name": "X-Correlation-ID",
@@ -828,7 +828,7 @@
             }
           }
         },
-        "description": "ADR-013; exact carrier.reconcile_WITH_SIGNED_STAFF, originating OPERATIONS/recent MFA and no selected organization. Bind original shipment/business reference/mode/account and real existing LOGISTICS_CREATE job. Preserve active leases and immutable request/cursor/attempt/provider evidence. Schedule UNKNOWN read-only recovery without fresh create permission; booked jobs stay SUCCEEDED and terminal tracking stays stopped. Missing records never fabricate a booking/job. Command UUID dedup and atomic audit; no provider HTTP.",
+        "description": "Private authenticated endpoint; automatic carrier execution is unavailable and fails closed without submitting a provider operation.",
         "parameters": [
           {
             "name": "id",
@@ -1668,7 +1668,6 @@
           "provider": {
             "type": "string",
             "enum": [
-              "FEDEX",
               "PANDAGO"
             ]
           },

@@ -51,6 +51,10 @@ public class CatalogueController {
     public ResponseEntity<List<CatalogueValues.PublicBrand>> brands(HttpServletRequest r)throws java.io.IOException{query(r,Set.of(),true);return cached(r,reads.brands(),0);}
     @GetMapping(value="/api/v1/staff/products",produces="application/json")
     public CatalogueValues.Page<CatalogueValues.ProductAdmin> staff(HttpServletRequest r)throws java.io.IOException{var q=query(r,Set.of("q","status","page","size","sort"),true);return reads.staff(actor(),q.getOrDefault("q",""),q.get("status"),number(q.getOrDefault("page","0")),number(q.getOrDefault("size","20")),q.getOrDefault("sort","createdAt,desc"));}
+    @GetMapping(value="/api/v1/staff/products/{id}",produces="application/json")
+    public ResponseEntity<CatalogueValues.ProductAdmin> staffProduct(HttpServletRequest r,@PathVariable String id)throws java.io.IOException{query(r,Set.of(),true);var result=reads.staffProduct(actor(),ApiValues.uuid(id));return ResponseEntity.ok().header("Cache-Control","no-store").eTag(Long.toString(result.version())).body(result);}
+    @GetMapping(value="/api/v1/staff/skus/{id}",produces="application/json")
+    public ResponseEntity<CatalogueValues.SkuDetail> staffSku(HttpServletRequest r,@PathVariable String id)throws java.io.IOException{query(r,Set.of(),true);var result=reads.staffSku(actor(),ApiValues.uuid(id));return ResponseEntity.ok().header("Cache-Control","no-store").eTag(Long.toString(result.version())).body(result);}
     @PostMapping(value="/api/v1/staff/products",consumes="application/json",produces="application/json")
     public ResponseEntity<CatalogueValues.ProductAdmin> create(HttpServletRequest r,@RequestBody JsonNode input)throws java.io.IOException{query(r,Set.of(),false);var result=products.write(actor(),null,0,input,header(r,"Idempotency-Key"),correlation());return ResponseEntity.created(java.net.URI.create("/api/v1/staff/products/"+result.id())).eTag(Long.toString(result.version())).body(result);}
     @PatchMapping(value="/api/v1/staff/products/{id}",consumes="application/json",produces="application/json")

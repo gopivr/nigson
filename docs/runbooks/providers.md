@@ -1,42 +1,40 @@
-# Provider mocks and qualification
+# Provider test simulators and live qualification
 
-Specification1.1.0 / ADR-008 / MOCK-001. Local setup starts three pinned WireMock
-servers and Mailpit. Mocks have no published Compose ports. State lives in named
-local volumes; administration is available only inside their containers. Genuine
-credentials are never required for offline setup.
+Provider simulators are available only inside isolated automated tests. The
+application Compose profile does not start business-provider mocks or route
+application traffic to Mailpit; LocalStack and Mailpit remain infrastructure
+utilities. Every non-test provider request uses the official live API.
 
-Use the pinned Oracle Java25 toolchain and existing Maven wrapper:
+Run the offline contract harness with the pinned Oracle Java25 toolchain and
+existing Maven wrapper:
 
 ```sh
-make local-up PROFILES=provider-mocks
-make mock-reset ENV=local
-make provider-scenario PROVIDER=fedex SCENARIO=booking-response-lost
-make provider-scenario PROVIDER=twilio SCENARIO=duplicate-status
-make provider-journal PROVIDER=all
 make provider-contract-test PROVIDER=all MODE=mock
 ```
 
-`success`, `decline`, `rate-limit`, `unavailable`, `timeout-after-acceptance`,
-`booking-response-lost`, `duplicate-status`, `out-of-order-status` and `invalid-verification, invalid-refund-verification` (Paystack malformed settlement timestamp) are bounded
-registered scenarios. Progress/reset/state/callback controls are test-only. A
-lost response occurs after persisted acceptance; verify/status/state inspection
-reconciles it rather than resending. Refund and message sends do not pretend to
-have native exactly-once guarantees. References, status transitions and operation
-IDs persist across restart; reset is explicit. State and redacted journals are
-bounded to128 operations/entries. Journals omit headers, bodies, recipient PII
-and query strings. WireMock's built-in request journal/logging is disabled.
+The isolated harness covers registered success, decline, rate-limit,
+unavailable, timeout-after-acceptance, booking-response-lost, duplicate-status,
+out-of-order-status, and malformed Paystack verification scenarios. Scenario,
+reset, state, and callback controls are confined to automated tests. A lost
+response occurs after persisted acceptance;
+verify/status/state inspection reconciles it rather than resending. Refund and
+message sends do not pretend to have native exactly-once guarantees. State and
+redacted test journals are bounded to128 operations/entries and omit headers,
+bodies, recipient PII and query strings. WireMock's built-in request
+journal/logging is disabled.
 
 Paystack's commerce HTTP adapter initializes exact integer NGN kobo amounts,
 verifies saved reference/amount/currency, creates partial refunds and queries
-refunds. FedEx's private integration adapter obtains/caches OAuth tokens and
 calls rates, booking, cancellation and tracking APIs. Integration's Twilio
 adapter uses actual Messages form HTTP for SMS and approved WhatsApp ContentSid/
-variables, with SID status queries. SMTP sends go to Mailpit in mock mode; genuine
-SMTP requires authentication, STARTTLS and server identity verification. Provider
-configuration is explicit in application beans. TEST/LIVE changes endpoint/mode/
-credential configuration, rather than domain code. Production rejects mock
-endpoints/keys and non-LIVE modes; redirects are refused. Mutating timeouts,
-server failures and malformed successful responses remain uncertain.
+variables, with SID status queries. Automated SMTP capture is test-only; runtime
+SMTP requires authentication, STARTTLS and server identity verification.
+Provider configuration is explicit in application beans. Automated tests use
+isolated simulators and make no provider sandbox/live calls; all non-test
+application requests use LIVE mode. Provider sandbox calls are blocked. Mock
+endpoints/keys and non-LIVE modes are rejected outside tests; redirects are
+refused. Mutating timeouts, server failures and malformed successful responses
+remain uncertain.
 
 The Testcontainers harness uses the actual provider adapters and production
 signature verifier: raw-byte constant-time Paystack SHA512 and the official
@@ -60,18 +58,15 @@ and mode guards. Test ports bind127.0.0.1; callback traffic uses its private tes
 network. Production Docker images omit mock source/controllers/test dependencies.
 
 Genuine qualification remains NOT_RUN until actual credentials/account/sender/
-template/route context is supplied. No Nigerian FedEx service area, tax policy,
 SMTP sender approval or Twilio onboarding is inferred from synthetic fixtures.
-The synthetic FedEx JSON exercises documented field structure; CARRIER-001 must
 capture the account-qualified official versioned schemas and normalized label/
 reference reconciliation contract before release.
 
-`make provider-live-check ENV=stage PROVIDER=paystack|fedex|twilio|all` is an
-explicit, genuine **read-only** HTTP check. It requires the provider's mode/base
-URL/credentials and an existing Paystack qualification reference+expected kobo,
-an operator-supplied FedEx shipment-request file, or an existing Twilio message
-SID. Missing/dummy input is refused before a provider call. No live check runs
-automatically. Read-only success does not qualify financial settlement, route
-eligibility, template/sender approval or the complete release workflow.
+explicit, genuine **read-only live API** check. It requires LIVE mode and
+approved credentials plus an existing Paystack qualification reference+expected
+message SID. Missing/dummy input is refused before a provider call. No live
+check runs automatically. Read-only success does not qualify financial
+settlement, route eligibility, template/sender approval or the complete release
+workflow.
 
 Paystack launch adapter and financial qualification: [offline and genuine qualification](paystack-qualification.md). `make paystack-check` adds native owned financial workflows and fail-closed release preflight to the provider HTTP regression. Genuine qualification remains independent of synthetic acceptance.

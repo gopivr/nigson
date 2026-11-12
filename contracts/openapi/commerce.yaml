@@ -3498,6 +3498,141 @@
       }
     },
     "/api/v1/staff/products/{id}": {
+      "get": {
+        "operationId": "API-213",
+        "description": "Current CONTENT_EDITOR; exact bounded owner read, including draft records and current optimistic version. No-store; no query/body permitted.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductAdminDTO"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Catalogue rule violation or unapproved metadata/asset delivery configuration",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "operationId": "API-018",
         "description": "Exact closed catalogue contract. Reject unknown/repeated query parameters and request bodies on queries. Staff commands check current owned role with no organization context before replay and again under Party lock. No wholesale price or shipping label is exposed. See docs/runbooks/catalogue.md for aggregate locking, publication, availability and search behavior. Requires CONTENT_EDITOR. API-020 If-Match is the parent Product version; API-021 If-Match is the SKU version.",
@@ -3664,6 +3799,314 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ProductPatch"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/skus/{id}": {
+      "get": {
+        "operationId": "API-214",
+        "description": "Current CONTENT_EDITOR; exact bounded owner read, including draft records and current optimistic version. No-store; no query/body permitted.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkuDetailAdminDTO"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Catalogue rule violation or unapproved metadata/asset delivery configuration",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "API-021",
+        "description": "Exact closed catalogue contract. Reject unknown/repeated query parameters and request bodies on queries. Staff commands check current owned role with no organization context before replay and again under Party lock. No wholesale price or shipping label is exposed. See docs/runbooks/catalogue.md for aggregate locking, publication, availability and search behavior. Requires CONTENT_EDITOR. API-020 If-Match is the parent Product version; API-021 If-Match is the SKU version.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "^[ -~]+$"
+            }
+          },
+          {
+            "name": "X-CSRF-TOKEN",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 43,
+              "maxLength": 43
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Catalogue rule violation or unapproved metadata/asset delivery configuration",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkuAdminDTO"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "description": "Quoted mutation resource version",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkuPatch"
               }
             }
           }
@@ -4010,179 +4453,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SkuCreate"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/staff/skus/{id}": {
-      "patch": {
-        "operationId": "API-021",
-        "description": "Exact closed catalogue contract. Reject unknown/repeated query parameters and request bodies on queries. Staff commands check current owned role with no organization context before replay and again under Party lock. No wholesale price or shipping label is exposed. See docs/runbooks/catalogue.md for aggregate locking, publication, availability and search behavior. Requires CONTENT_EDITOR. API-020 If-Match is the parent Product version; API-021 If-Match is the SKU version.",
-        "security": [
-          {
-            "bffSession": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
-            }
-          },
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 100,
-              "pattern": "^[ -~]+$"
-            }
-          },
-          {
-            "name": "X-CSRF-TOKEN",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 43,
-              "maxLength": 43
-            }
-          },
-          {
-            "name": "If-Match",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^\"(0|[1-9][0-9]{0,18})\"$"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflicting or in-progress request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "412": {
-            "description": "Version mismatch",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Catalogue rule violation or unapproved metadata/asset delivery configuration",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Unsupported content type",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Safe internal error",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "../problem/problem.schema.json"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SkuAdminDTO"
-                }
-              }
-            },
-            "headers": {
-              "ETag": {
-                "description": "Quoted mutation resource version",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SkuPatch"
               }
             }
           }
@@ -7025,6 +7295,122 @@
             }
           }
         }
+      },
+      "get": {
+        "operationId": "API-215",
+        "description": "Current OPERATIONS. Active warehouse locations, bounded to 100, no-store. No query or body.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "maxItems": 100,
+                  "items": {
+                    "$ref": "#/components/schemas/StockLocation"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/markets": {
@@ -7845,7 +8231,7 @@
     "/api/v1/catalogue/skus/{id}/price": {
       "get": {
         "operationId": "API-026",
-        "description": "Current approved NG/NGN2 retail price from the explicitly selected effective active book. Greatest qualifying tier; exact quantity scale/pack and minor units. Public retail reads ignore stale browser sessions and require no login; organization requires current authenticated membership and the explicitly configured distributor buying entitlement at BP3. An invalid assignment never falls back. Bounded replica budget and repeatable-read/no-store.",
+        "description": "Current approved NG/NGN2 retail price from the explicitly selected effective active book. Greatest qualifying tier; exact quantity scale/pack and minor units. Public retail only; organization requires current authenticated membership and the explicitly configured distributor buying entitlement at BP3. An invalid assignment never falls back. Bounded replica budget and repeatable-read/no-store.",
         "security": [
           {},
           {
@@ -10980,7 +11366,7 @@
     "/api/v1/carts/{id}/delivery-quotes": {
       "post": {
         "operationId": "API-181",
-        "description": "Current CUSTOMER and owned cart/address/current organization. Capture only the configured provider inputs: approved FedEx origin or PandaGo destination coordinates, plus server packing and current cart version. Release local locks before private signed API-182 HTTP. Require exact NGN fee and trusted runtime mode/account metadata. Revalidate current cart/address/packing/market/approval before persisting a bound provider quote; expiry at most five minutes and no later than current provider approvals. Matching key replays the original acknowledgement without another HTTP/KMS call; current authority remains mandatory. No inferred route, exchange conversion, manual fallback, reservation or stock dispatch.",
+        "description": "Current CUSTOMER and owned cart/address/current organization. Capture only the configured provider inputs: approved carrier origin or PandaGo destination coordinates, plus server packing and current cart version. Release local locks before private signed API-182 HTTP. Require exact NGN fee and trusted runtime mode/account metadata. Revalidate current cart/address/packing/market/approval before persisting a bound provider quote; expiry at most five minutes and no later than current provider approvals. Matching key replays the original acknowledgement without another HTTP/KMS call; current authority remains mandatory. No inferred route, exchange conversion, manual fallback, reservation or stock dispatch.",
         "security": [
           {
             "bffSession": []
@@ -11161,7 +11547,7 @@
     "/api/v1/quotes/{id}/delivery-quotes": {
       "post": {
         "operationId": "API-195",
-        "description": "Current CUSTOMER and owned current approved nonexpired offered quote revision. Create/reuse Commerce-owned read-only temporary cart from frozen quantities; calculate the configured FedEx or PandaGo rate outside the transaction; revalidate revision/address/server packing/mode; persist source_quote_revision_id, provider identity, NGN and bounded expiry. No negotiated price mutation, customer rate, invented route, reservation or stock dispatch.",
+        "description": "Current CUSTOMER and owned current approved nonexpired offered quote revision. Create/reuse Commerce-owned read-only temporary cart from frozen quantities; calculate the configured carrier or PandaGo rate outside the transaction; revalidate revision/address/server packing/mode; persist source_quote_revision_id, provider identity, NGN and bounded expiry. No negotiated price mutation, customer rate, invented route, reservation or stock dispatch.",
         "security": [
           {
             "bffSession": []
@@ -12951,7 +13337,7 @@
     "/internal/v1/shipments/{id}/provider-context": {
       "get": {
         "operationId": "API-119",
-        "description": "Private phase1 nigson-integration logistics.read; no actor/cookie/query/body. Bounded repeatable-read snapshot of verified paid unheld order and FEDEX shipment intent; current qualified mode. Frozen minimal order address (CF-ORDER-001), original shipper and hash-bound parcels/reference. Only outstanding CREATED/EXCEPTION creation intents; completed operational states reject409 (CF-CARRIER-004). Missing historical shipper fails closed; no current configuration fallback, stock/payment writes or provider HTTP.",
+        "description": "Private phase1 nigson-integration logistics.read; no actor/cookie/query/body. Bounded repeatable-read snapshot of verified paid unheld order and PANDAGO shipment intent; current qualified mode. Frozen minimal order address (CF-ORDER-001), original shipper and hash-bound parcels/reference. Only outstanding CREATED/EXCEPTION creation intents; completed operational states reject409 (CF-CARRIER-004). Missing historical shipper fails closed; no current configuration fallback, stock/payment writes or provider HTTP.",
         "security": [
           {
             "carrierIntegrationWorkload": [
@@ -13229,7 +13615,7 @@
     "/api/v1/webhooks/logistics/{provider}": {
       "post": {
         "operationId": "API-160",
-        "description": "Disabled for launch FedEx. Always rejects with FEATURE_DISABLED and makes no state change because no provider webhook signature contract is approved. FedEx polling remains authoritative; do not enable or accept callback payloads until a separately approved signature and deduplication contract exists.",
+        "description": "Disabled for launch carrier. Always rejects with FEATURE_DISABLED and makes no state change because no provider webhook signature contract is approved. carrier polling remains authoritative; do not enable or accept callback payloads until a separately approved signature and deduplication contract exists.",
         "security": [],
         "parameters": [
           {
@@ -22165,6 +22551,85 @@
         },
         "minProperties": 1
       },
+      "SkuDetailAdminDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "productId",
+          "code",
+          "variantName",
+          "unit",
+          "quantityScale",
+          "packSize",
+          "active",
+          "weightKg",
+          "carrierPackaging",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "productId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "variantName": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "unit": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "quantityScale": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "packSize": {
+            "type": "string",
+            "pattern": "^[0-9]{1,17}(\\.[0-9]{1,3})?$"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "weightKg": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]{1,17}(\\.[0-9]{1,3})?$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "carrierPackaging": {
+            "anyOf": [
+              {
+                "$ref": "../rules/carrier-packaging.schema.json"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      },
       "FileUpload": {
         "type": "object",
         "additionalProperties": false,
@@ -24518,7 +24983,7 @@
             "type": "string",
             "enum": [
               "MANUAL",
-              "FEDEX"
+              "PANDAGO"
             ],
             "default": "MANUAL"
           },
@@ -24800,7 +25265,6 @@
           "provider": {
             "type": "string",
             "enum": [
-              "FEDEX",
               "PANDAGO"
             ]
           },
@@ -25333,7 +25797,7 @@
           },
           "provider": {
             "type": "string",
-            "const": "FEDEX"
+            "const": "PANDAGO"
           },
           "reference": {
             "type": "string",

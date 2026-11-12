@@ -12,4 +12,4 @@ if __name__ == '__main__':
         evidence=ROOT / '.build/partners/native-evidence',
         run_python=False,
         java_environment=payment['payment_fixture'],
-        completion='PASS: isolated native payment/refund/UNKNOWN and signed callback alias checks plus stateful Termii/Dellyman HTTP protocol tests; partner workflow activation and production deployment not implied')
+        completion='PASS: isolated native payment/refund/UNKNOWN and signed callback alias checks plus stateful Termii HTTP protocol tests; partner workflow activation and production deployment not implied')

@@ -14,9 +14,14 @@ import com.nigson.experience.platform.*;
 @Configuration(proxyBeanMethods=false)
 public class LeadConfiguration {
     @Bean @ConditionalOnProperty(name="NIGSON_LEADS_ANTISPAM_MODE",havingValue="mock")
-    LeadService.AntiSpamVerifier leadAntiSpam(Environment env){if(!Set.of("local","test").contains(env.getRequiredProperty("APP_ENV")))throw new IllegalArgumentException("LEAD_ANTISPAM_MOCK_LOCAL_ONLY");return new LocalLeadMocks.AntiSpam(env.getRequiredProperty("NIGSON_LEADS_LOCAL_ANTISPAM_HMAC_KEY"));}
+    LeadService.AntiSpamVerifier leadAntiSpam(Environment env){if(!"test".equals(env.getRequiredProperty("APP_ENV")))throw new IllegalArgumentException("LEAD_ANTISPAM_MOCK_TEST_ONLY");return new LocalLeadMocks.AntiSpam(env.getRequiredProperty("NIGSON_LEADS_LOCAL_ANTISPAM_HMAC_KEY"));}
     @Bean @ConditionalOnProperty(name="NIGSON_LEADS_RATE_LIMIT_MODE",havingValue="local")
     LeadService.RateLimiter leadRateLimit(Environment env){if(!Set.of("local","test").contains(env.getRequiredProperty("APP_ENV")))throw new IllegalArgumentException("LEAD_RATE_LIMIT_LOCAL_ONLY");return new LocalLeadMocks.RateLimit(env.getRequiredProperty("NIGSON_LEADS_RATE_LIMIT_PER_MINUTE",Integer.class),Clock.systemUTC());}
+    @Bean @ConditionalOnProperty(name="NIGSON_LEADS_ANTISPAM_MODE",havingValue="google-recaptcha-v3")
+    LeadService.AntiSpamVerifier googleRecaptcha(Environment env){return GoogleRecaptchaAntiSpamVerifier.from(env);}
+    @Bean @ConditionalOnProperty(name="NIGSON_LEADS_RATE_LIMIT_MODE",havingValue="database")
+    LeadService.RateLimiter databaseLeadRateLimit(JdbcTemplate jdbc,Environment env){return new DatabaseLeadRateLimiter(jdbc,env.getRequiredProperty("NIGSON_LEADS_RATE_LIMIT_HMAC_KEY"),env.getProperty("NIGSON_LEADS_RATE_LIMIT_PER_MINUTE",Integer.class,10),Clock.systemUTC());}
+    @Bean LeadRequestSource leadRequestSource(Environment env){String profile=env.getProperty("APP_ENV","local"),rateMode=env.getProperty("NIGSON_LEADS_RATE_LIMIT_MODE","");LeadRequestSource source=LeadRequestSource.from(env);if("database".equals(rateMode)&&!Set.of("local","test").contains(profile)&&env.getProperty("NIGSON_LEADS_TRUSTED_PROXY_CIDRS","").isBlank())throw new IllegalArgumentException("LEAD_TRUSTED_PROXY_CIDRS_REQUIRED");return source;}
     @Bean LeadService leadService(JdbcTemplate jdbc,PlatformStore store,AuditWriter audit,MeterRegistry metrics,PlatformTransactionManager manager,
             ObjectProvider<LeadService.AntiSpamVerifier> antiSpam,ObjectProvider<LeadService.RateLimiter> rateLimit,Environment env){
         String recipient=env.getProperty("NIGSON_LEAD_RECIPIENT_GROUP","");String admin=env.getProperty("NIGSON_LEAD_ADMIN_BASE_URL","");

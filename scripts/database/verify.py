@@ -240,7 +240,7 @@ class Database:
         row('inventory_balance', balance, False)
         for changes in ({'on_hand':-1},{'reserved':-1},{'allocated':-1},{'reserved':9}):
             self.sql('UPDATE commerce.inventory_balance SET ' + ','.join(k+'='+str(v) for k,v in changes.items()) + " WHERE sku_id='"+sku+"'", 'nigson_commerce_app', False)
-        carrier = row('carrier_quote', {'cart_id':cart,'cart_version':0,'market_id':market,'provider':'FEDEX','mode':'MOCK','service_code':'OFFLINE_TEST','currency_code':'NGN','delivery_amount':0,'address_hash':'0'*64,'package_hash':'1'*64,'package_snapshot':'{}','provider_snapshot':'{}','expires_at':'2026-10-07T00:00:00Z','status':'QUOTED'})
+        carrier = row('carrier_quote', {'cart_id':cart,'cart_version':0,'market_id':market,'provider':'PANDAGO','mode':'MOCK','service_code':'OFFLINE_TEST','currency_code':'NGN','delivery_amount':0,'address_hash':'0'*64,'package_hash':'1'*64,'package_snapshot':'{}','provider_snapshot':'{}','expires_at':'2026-10-07T00:00:00Z','status':'QUOTED'})
         order_values = {'order_number':'OFFLINE_TEST','party_id':party,'market_id':market,'status':'PENDING','payment_status':'UNPAID','fulfillment_status':'UNFULFILLED','currency_code':'NGN','subtotal':10,'discount_total':0,'tax_total':0,'delivery_total':0,'grand_total':10,'address_snapshot':'{}','commercial_snapshot':'{}','carrier_quote_id':carrier,'carrier_snapshot':'{}'}
         row('sales_order', {**order_values,'grand_total':11}, False)
         row('sales_order', {**order_values,'refunded_total':11}, False)

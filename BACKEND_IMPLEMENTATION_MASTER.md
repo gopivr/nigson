@@ -121,17 +121,17 @@ Primary technical references, verified for this specification: [Spring Boot](htt
 
 ### ASSUMPTION-003
 
-- **Status:** Confirmed by user; replaces specification1.0.0.
+- **Status:** Confirmed by user; runtime mode superseded by ADR-026.
 - **Description:** Paystack is the only launch payment gateway
-- **Reason:** User explicitly selected Paystack and requested a mock server before adding demo/live credentials.
-- **Implementation impact:** Implement real initialize/verify/refund adapters and signed webhook verification through PaymentProvider. Implement a local stateful HTTP mock with dummy keys; PAYSTACK_MODE=mock|test|live selects configuration, not different domain logic. Real test/live keys are added on release; no other payment gateway in launch code.
+- **Reason:** User selected Paystack and later directed that application runtime use real live provider APIs.
+- **Implementation impact:** Implement real initialize/verify/refund adapters and signed webhook verification through PaymentProvider. Local, dev, qa, stage and prod application runtimes use the official live API with real credentials; deterministic HTTP mocks are restricted to isolated automated tests. No other payment gateway in launch code.
 
 ### ASSUMPTION-004
 
-- **Status:** Confirmed by user; replaces specification1.0.0.
+- **Status:** Confirmed by user; runtime mode superseded by ADR-026.
 - **Description:** Carrier API logistics required at launch; FedEx selected as initial adapter
-- **Reason:** User authorized FedEx or another prominent Nigeria carrier and mock-first implementation.
-- **Implementation impact:** Implement FedEx OAuth, rate requests, shipment creation/labels, cancellation and tracking polling through CarrierProvider, plus local stateful mocks. Carrier work is BP1 required, not deferred to BP4. Real service/account/route availability is checked with release credentials; no claim that every domestic Nigerian route supports a FedEx service. Manual exception handling is a contingency only.
+- **Reason:** User authorized FedEx or another prominent Nigeria carrier and later directed live APIs for application runtime.
+- **Implementation impact:** Implement FedEx OAuth, rate requests, shipment creation/labels, cancellation and tracking polling through CarrierProvider. Application runtime uses the official live API; provider simulators are test-only. Carrier work is BP1 required, not deferred to BP4. Real service/account/route availability is checked with release credentials; no claim that every domestic Nigerian route supports a FedEx service. Manual exception handling is a contingency only.
 
 ### ASSUMPTION-005
 
@@ -180,7 +180,7 @@ Primary technical references, verified for this specification: [Spring Boot](htt
 - **Status:** Confirmed by user; replaces specification1.0.0.
 - **Description:** Email, SMS and WhatsApp integrations required
 - **Reason:** User expanded automated communications beyond entry links.
-- **Implementation impact:** Keep email and newsletter double opt-in; add Twilio SMS and Twilio WhatsApp Business adapters, signed status/inbound callbacks, verified destinations, purpose/channel consent and templates. Mock-first implementation uses dummy credentials and synthetic recipients. Credentials, sender identities and approved WhatsApp templates are supplied for provider testing/release.
+- **Implementation impact:** Keep email and newsletter double opt-in; add Twilio SMS and Twilio WhatsApp Business adapters, signed status/inbound callbacks, verified destinations, purpose/channel consent and templates. Application runtime uses real configured email/Twilio APIs; HTTP simulators and synthetic recipients are test-only. Credentials, sender identities and approved WhatsApp templates are required before provider qualification/activation.
 
 ### ASSUMPTION-013
 
@@ -243,7 +243,7 @@ Primary technical references, verified for this specification: [Spring Boot](htt
 - **Reason:** Independent APIs need trusted context without trusting model/body IDs.
 - **Implementation impact:** Workload OAuth token plus short-lived signed actor assertion; audience-bound, operation-scoped, validated at target; detailed security contract in section 15.
 
-Missing real credentials/account configuration, catalogue, tax/returns and service-area policy are production activation blockers only. Continue independent local/sandbox implementation and record their status. Never mark their production tests as passed without evidence.
+Missing real credentials/account configuration, catalogue, tax/returns and service-area policy are production activation blockers only. Continue independent local/test implementation and record their status. Never mark their production tests as passed without evidence.
 
 
 Remaining activation inputs are credentials/accounts/senders/templates, Nigeria tax/returns/prices/service areas, hosting/data location and unchanged campaign/AI policies. Nigeria/NGN, Paystack selection, automated messaging and production Keycloak are no longer unresolved provider/market decisions. Dummy values are local/test-only and cannot authenticate to real providers.
@@ -2922,6 +2922,26 @@ related_quote_id uuid NULL EXTERNAL commerce.quote
 - **Keys and indexes:** IX(status,priority,created_at); IX(assigned_to,follow_up_at).
 - **Checks:** type IN (CONTACT,COMPLAINT,QUOTE,DISTRIBUTOR); status IN (NEW,ASSIGNED,IN_PROGRESS,RESOLVED,CLOSED); priority IN (NORMAL,HIGH).
 - **Business invariant:** Notification recipient group is configuration; complaint details never enter shared events.
+
+### experience.lead_rate_limit
+
+Owner: `experience`; module: `platform`; introduced: BP1; mutation: mutable.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+source_hash char(64) NN
+window_start timestamptz NN
+request_count integer NN
+```
+
+- **Keys and indexes:** UQ(source_hash); IX(window_start).
+- **Checks:** source_hash ~ '^[a-f0-9]{64}$'; request_count>0.
+- **Business invariant:** Public lead rate-limit state stores only a keyed hash of the source address and expires old windows.
 
 ### experience.lead_activity
 
@@ -6438,7 +6458,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
-- **Request:** `{commandId:UUID,provider:FEDEX,reference:string,status:ShipmentState,occurredAt:Instant,trackingUrl?:HTTPS,labelObjectKey?:string,labelChecksum?:string,bookingState?:BOOKED|UNKNOWN|FAILED,mode:MOCK|SANDBOX|LIVE}`.
+- **Request:** `{commandId:UUID,provider:PANDAGO,reference:string,status:ShipmentState,occurredAt:Instant,trackingUrl?:HTTPS,labelObjectKey?:string,labelChecksum?:string,bookingState?:BOOKED|UNKNOWN|FAILED,mode:MOCK|SANDBOX|LIVE}`.
 - **Response:** `ShipmentDTO`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Dedup command; verify configured provider and state; no financial state mutation. Label key must be under configured private label prefix and match trusted booking/checksum; create private SHIPPING_LABEL metadata idempotently, never user URL/download fetch. BOOKED maps created label without stock dispatch.
@@ -7369,7 +7389,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `{addressId:UUID,serviceCode?:string}`.
-- **Response:** `DeliveryQuoteDTO{id:UUID,provider:FEDEX,serviceCode:string,currency:NGN,deliveryAmount:Money,expiresAt:Instant,cartVersion:int64,mode:MOCK|SANDBOX|LIVE}`.
+- **Response:** `DeliveryQuoteDTO{id:UUID,provider:PANDAGO,serviceCode:string,currency:NGN,deliveryAmount:Money,expiresAt:Instant,cartVersion:int64,mode:MOCK|SANDBOX|LIVE}`.
 - **Statuses:** 201 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Idempotent owned cart; validated Nigerian address, positive server packing; commerce calls private rate port before transaction, persists exact approved result. Reject unsupported route/non-NGN response, no mock/live mixing.
 - **Events:** None directly; owned audit/history where applicable.
@@ -7384,7 +7404,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `{commandId:UUID,cartId:UUID,market:NG,currency:NGN,shipper:CarrierAddress,destination:CarrierAddress,packages:[CarrierPackage],serviceCode?:string}`.
-- **Response:** `{provider:FEDEX,serviceCode:string,currency:NGN,amount:Money,expiresAt:Instant,providerReference:string|null}`.
+- **Response:** `{provider:PANDAGO,serviceCode:string,currency:NGN,amount:Money,expiresAt:Instant,providerReference:string|null}`.
 - **Response metadata:** `X-Nigson-Carrier-Mode: MOCK|SANDBOX|LIVE` from the actual adapter configuration; TEST transport maps to SANDBOX. Commerce must match its approved mode before binding the fee. The closed request/response body shapes are unchanged; caller input cannot select this metadata.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Allowlisted server packing/address only, bounded OAuth/rate request, no provider account or base URL from caller.
@@ -7749,7 +7769,7 @@ Closed fields below take precedence over shorthand ...request/plus/as API notati
 | ContentDTO | {id:UUID,type:ContentType,slug:string,locale:string,revision:int,title:string,body:object,metadata:SeoDTO,publishedAt:Instant} |
 | ContentRevisionDTO | {id:UUID,contentItemId:UUID,revision:int,state:ContentState,type:ContentType,slug:string,locale:BCP47,title:string,body:ContentBody,metadata:SeoDTO,version:int64} |
 | CouponDTO | {id:UUID,code:string,active:boolean,remainingUses:int,version:int64} |
-| DeliveryQuoteDTO | {id:UUID,provider:FEDEX,serviceCode:string,currency:NGN,deliveryAmount:Money,expiresAt:Instant,cartVersion:int64,mode:MOCK\|SANDBOX\|LIVE} |
+| DeliveryQuoteDTO | {id:UUID,provider:PANDAGO,serviceCode:string,currency:NGN,deliveryAmount:Money,expiresAt:Instant,cartVersion:int64,mode:MOCK\|SANDBOX\|LIVE} |
 | DeliveryRuleDTO | {id:UUID,marketId:UUID,countryCode:ISO3166,regionCode:string\|null,postalPrefix:string\|null,fee:Money,freeAbove:Money\|null,priority:int,active:boolean,version:int64} |
 | DestinationDTO | {id:UUID,channel:SMS\|WHATSAPP,maskedAddress:string,status:PENDING\|ACTIVE\|UNSUBSCRIBED\|SUPPRESSED,version:int64} |
 | JobDTO | {id:UUID,state:string,attemptCount:int,nextAttemptAt:Instant,lastErrorCode:string\|null} |
@@ -8139,7 +8159,7 @@ Partition key means logical `aggregate_id` for ordering checks; standard SQS has
 - **Producer / phase:** commerce / BP1.
 - **Consumers:** integration; exact event filter and owning queue.
 - **Topic:** nigson-<env>-domain-events.
-- **Payload:** `shipment_id:UUID,booking_request_id:UUID,provider:FEDEX`; section16 envelope and closed JSON schema.
+- **Payload:** `shipment_id:UUID,booking_request_id:UUID,provider:PANDAGO`; section16 envelope and closed JSON schema.
 - **Logical ordering key:** aggregate_id/aggregate_version; SQS standard is unordered.
 - **Delivery/retry/DLQ:** at least once; existing bounded lease/visibility/retry/maxReceiveCount5/DLQ policies.
 - **Idempotency:** consumer processed_event plus business key; commit durable job/local effect before delete.
@@ -8305,15 +8325,15 @@ If activated through ADR-MCP: expose only search_catalog/get_product_details/get
 
 Implement these concrete launch adapters behind typed ports; deployment configuration switches endpoints/credentials without changing domain code.
 
-| Provider / owner | Required operations | Local mock and real mode |
+| Provider / owner | Required operations | Runtime mode and test support |
 |---|---|---|
-| Paystack / commerce PaymentProvider | Hosted initialize, verify, refund/create/query, signed webhook receipts | Stateful Paystack mock with dummy key; test/live use real Paystack key and official allowlisted endpoint |
-| FedEx / integration CarrierProvider, commerce rate facade | OAuth, rate/service lookup, shipment creation/private label, cancellation, tracking polling/reference reconciliation | Stateful FedEx mock with dummy client/account; real sandbox/live endpoints and account/service configuration |
-| Twilio / integration SmsProvider and WhatsAppProvider | SMS/WhatsApp send, status query, approved templates, signed DLR/inbound facade | Stateful Twilio mock and synthetic callbacks; sandbox/trial/live require actual Twilio account/senders/templates |
+| Paystack / commerce PaymentProvider | Hosted initialize, verify, refund/create/query, signed webhook receipts | LIVE official endpoint for every application runtime; stateful simulator with dummy credentials in isolated tests only |
+| FedEx / integration CarrierProvider, commerce rate facade | OAuth, rate/service lookup, shipment creation/private label, cancellation, tracking polling/reference reconciliation | LIVE official endpoint for every application runtime; stateful simulator with dummy credentials in isolated tests only |
+| Twilio / integration SmsProvider and WhatsAppProvider | SMS/WhatsApp send, status query, approved templates, signed DLR/inbound facade | LIVE official endpoint for every application runtime; stateful simulator and synthetic callbacks in isolated tests only |
 | Keycloak / identity, BFF/workloads | Discovery/JWKS, code+PKCE, refresh/logout, client credentials, staff MFA | Real local Keycloak container; same provider in production with hardened deployment |
-| SES/SMTP, Sheets, S3/scanner, Bedrock | Existing mail/sync/files/BP5 AI ports | Existing bounded private adapters and test fixtures retained; email remains supported |
+| SMTP, Sheets, S3/scanner, Bedrock | Existing mail/sync/files/BP5 AI ports | Runtime uses live SMTP/Google/Bedrock APIs; LocalStack remains infrastructure emulation; test fixtures/simulators are isolated |
 
-Paystack HTTP: POST /transaction/initialize sends exact NGN kobo integer, stable reference/email/server metadata/callback allowlist; GET /transaction/verify/{reference} independently verifies terminal status/reference/merchant/amount/currency. POST /refund always specifies transaction and refund amount; GET /refund/{id}, transaction-scoped listing for uncertain issuance. Refund lifecycle maps pending/processing to pending, processed to succeeded, authoritative failure to failed. SHA512 HMAC over raw webhook bytes with x-paystack-signature and constant-time check; durable event/reference dedup, no invented timestamp header or native idempotency guarantee. Original payment/order locks and UNKNOWN handling unchanged. Base https://api.paystack.co for genuine test/live; dummy secrets accepted only by local mock. Docs: https://paystack.com/docs/api/transaction/ and https://paystack.com/docs/api/refund/.
+Paystack HTTP: POST /transaction/initialize sends exact NGN kobo integer, stable reference/email/server metadata/callback allowlist; GET /transaction/verify/{reference} independently verifies terminal status/reference/merchant/amount/currency. POST /refund always specifies transaction and refund amount; GET /refund/{id}, transaction-scoped listing for uncertain issuance. Refund lifecycle maps pending/processing to pending, processed to succeeded, authoritative failure to failed. SHA512 HMAC over raw webhook bytes with x-paystack-signature and constant-time check; durable event/reference dedup, no invented timestamp header or native idempotency guarantee. Original payment/order locks and UNKNOWN handling unchanged. Application calls use https://api.paystack.co with approved LIVE credentials; test simulators use dummy keys and never call Paystack. Docs: https://paystack.com/docs/api/transaction/ and https://paystack.com/docs/api/refund/.
 
 FedEx contract snapshots: capture official versioned JSON/OpenAPI fixtures under contracts/providers/fedex during CARRIER-001. POST /oauth/token form grant_type=client_credentials, client_id/client_secret; cache returned token until actual expires_in minus60s, refresh single-flight and never persist plaintext in logs. POST /rate/v1/rates/quotes reads eligible services/rates from a server-owned shipment request. POST /ship/v1/shipments uses accountNumber/requestedShipment/labelResponseOptions, stable customer reference and approved service/package/address; normalize tracking/private label response. PUT /ship/v1/shipments/cancel sends the saved account/tracking request. POST /track/v1/trackingnumbers or /track/v1/referencenumbers polls authoritative tracking. Import the provider's exact payload schemas rather than a guessed generic carrier schema; contract fixtures test required fields and nested responses. Mapping: label created -> BOOKED (not SHIPPED), accepted/in-transit -> handover evidence/SHIPPED, delivery -> DELIVERED, exception -> visible hold without payment rollback; terminal status cannot regress. Poll active bookings every15m initially, batches<=30/provider lower quota, stop delivered/cancelled; provider reference after ambiguous create must reconcile or enter operator review, never blindly rebook. Connection2s/read8s/total10s; safe reads max2 bounded retries; create/cancel UNKNOWN preserved. FedEx is the initial selected adapter; real Nigeria route/service/currency eligibility is account-specific and verified at release. Docs: https://developer.fedex.com/api/en-us/catalog/authorization/v1/docs.html, https://developer.fedex.com/api/en-us/catalog/rate/v1/docs.html, https://developer.fedex.com/api/en-us/catalog/ship/v1/docs.html, https://developer.fedex.com/api/en-us/catalog/track/v1/docs.html.
 
@@ -8374,9 +8394,9 @@ Audit insertion is in the owner transaction for mutations; sensitive read audit 
 
 # 30. Configuration Management
 
-Profiles local, dev, test, qa, stage, prod; qa may reuse staging infrastructure shape with its own state/secrets. Use typed @ConfigurationProperties/Pydantic Settings with startup validation. Local/test may supply deterministic adapters; stage/prod reject fake payment/model adapters, permissive CORS, HTTP issuer and embedded credentials.
+Profiles local, dev, test, qa, stage, prod; qa may reuse staging infrastructure shape with its own state/secrets. Use typed @ConfigurationProperties/Pydantic Settings with startup validation. Application runtimes outside the isolated `test` profile require official live provider endpoints and real credentials. Only automated tests may use deterministic provider adapters; all runtime profiles reject mock/sandbox targets and dummy provider credentials, permissive CORS, HTTP issuer and embedded credentials.
 
-Required groups: service identity/public/internal base URLs; JDBC owner URL/user/secret ref; OIDC issuer/client/resource scopes; BFF allowed return origins and signing KMS ref; SNS/SQS ARNs/URLs; S3 bucket/purpose policies; payment provider/secret/merchant/approved currencies; email provider/sender/recipient groups; Sheet ID/credential ref/field allowlist; required FedEx carrier; feature flags; market/tax/reward/retention policies; AI region/model/prompt/rate/budget revisions; observability exporters and sampling. No environment-specific URL in Java/Python source. `.env.example` contains examples/empty secret references only, no production endpoint assumption.
+Required groups: service identity/public/internal base URLs; JDBC owner URL/user/secret ref; OIDC issuer/client/resource scopes; BFF allowed return origins and signing KMS ref; SNS/SQS ARNs/URLs; S3 bucket/purpose policies; payment provider/secret/merchant/approved currencies; email provider/sender/recipient groups; Sheet ID/credential ref/field allowlist; required FedEx carrier; feature flags; market/tax/reward/retention policies; AI region/model/prompt/rate/budget revisions; observability exporters and sampling. No environment-specific URL in Java/Python source. `.env.example` may show official API hosts but contains no provider credentials.
 
 Runtime flags default false for rewards/wheel/international/AI/carrier/MCP. Activation validates complete policy plus approval evidence and writes audit. A feature disabled still rejects unauthorized access and reports FEATURE_DISABLED consistently; flags cannot bypass role checks. Missing enabled-provider config causes startup/activation failure, not silent fallback to a mock. Session/financial deadlines must be within documented limits. Use Secrets Manager runtime references and ECS task IAM; no secrets in Terraform state values, image args, Git history, completion reports or .env.example.
 
@@ -8386,14 +8406,14 @@ Runtime flags default false for rewards/wheel/international/AI/carrier/MCP. Acti
 | Group | Required settings |
 |---|---|
 | Market | LAUNCH_MARKET=NG, LAUNCH_COUNTRY=NG, LAUNCH_CURRENCY=NGN, minor_unit2; tax/returns/book/origin/service-area policies separately versioned |
-| Paystack | PAYMENT_PROVIDER=paystack only; PAYSTACK_MODE=mock\|test\|live, PAYSTACK_BASE_URL, PAYSTACK_SECRET_KEY_REF, merchant/account reference, public callback/webhook URLs |
-| FedEx | CARRIER_PROVIDER=fedex; FEDEX_MODE=mock\|sandbox\|live, FEDEX_BASE_URL, CLIENT_ID/SECRET refs, account number ref, shipper origin, enabled service/package policies, poll interval and label bucket |
-| Twilio | SMS_PROVIDER=twilio, WHATSAPP_PROVIDER=twilio; independent channel enabled flags; TWILIO_MODE=mock\|sandbox\|live, BASE_URL, ACCOUNT_SID/AUTH_TOKEN refs, SMS sender/MessagingServiceSid, WhatsApp sender/ContentSid map, exact status/inbound public URLs |
+| Paystack | PAYMENT_PROVIDER=paystack only; runtime `PAYSTACK_MODE=LIVE`, official `PAYSTACK_BASE_URL`, `PAYSTACK_SECRET_KEY_REF`, merchant/account reference, public callback/webhook URLs |
+| FedEx | CARRIER_PROVIDER=fedex; runtime `FEDEX_MODE=LIVE`, official `FEDEX_BASE_URL`, CLIENT_ID/SECRET refs, account number ref, shipper origin, enabled service/package policies, poll interval and label bucket |
+| Twilio | SMS_PROVIDER=twilio, WHATSAPP_PROVIDER=twilio; independent channel enabled flags; runtime `TWILIO_MODE=LIVE`, official BASE_URL, ACCOUNT_SID/AUTH_TOKEN refs, SMS sender/MessagingServiceSid, WhatsApp sender/ContentSid map, exact status/inbound public URLs |
 | Keycloak | KEYCLOAK_IMAGE_DIGEST, dedicated DB/secret refs, realm issuer, public hostname/private admin hostname, trusted proxy settings, BFF/workload client secret refs, MFA/realm/client/audience policy |
 
-Local/test defaults point to private Compose mock hostnames and visibly synthetic credentials such as mock-paystack-secret, mock-fedex-client and mock-twilio-token. .env.example may include these non-secret mock values and empty real secret references. No fake key is sent to a genuine provider endpoint. Mode selects target/auth/config, never skips business invariants or callback signature verification. Mock callback secrets/signatures are real algorithms over dummy secrets.
+Application Compose defaults use official live API hosts and require externally supplied credentials; no provider URL resolves to a mock service. Isolated automated tests may use loopback HTTP simulators and synthetic fixtures, never application runtime. Mode selects target/auth/config, never skips business invariants or callback signature verification.
 
-Production profile rejects mock/sandbox targets or dummy credentials for enabled financial/carrier/messaging features; real test/trial credentials run against provider staging or explicitly non-production release verification. Missing enabled-provider config fails validation rather than silently falling back. Staging can run mock or genuine sandbox with recipient allowlist and separate data. A live environment with features disabled may start for infrastructure checks but cannot claim completed live checkout/fulfillment/messages. Keycloak production configuration is required for production identity regardless of provider test mode.
+Every application runtime profile rejects mock/sandbox targets and dummy credentials for enabled financial/carrier/messaging features. Missing enabled-provider configuration fails validation rather than silently falling back. Real provider calls are never part of ordinary automated tests; separately approved live qualification is an explicit release activity with controlled accounts and recipients. A live environment with features disabled may start for infrastructure checks but cannot claim completed live checkout/fulfillment/messages. Keycloak production configuration is required for production identity.
 
 
 # 31. Docker
@@ -8405,9 +8425,9 @@ Health: GET /actuator/health/liveness and /actuator/health/readiness Java; GET /
 Local docker-compose.yml baseline: PostgreSQL18 pgvector-capable image (extension used only AI profile), LocalStack SNS/SQS/S3/SES emulation, Keycloak local realm, Mailpit, optional OTel collector. Full-app profile starts commerce8081, experience8082, worker8083 private, AI8084 only ai profile; dependencies ports localhost only. Valkey is optional cache profile, not default. No Kafka/OpenSearch/Kubernetes/Helm services. DB healthcheck plus one-shot migrations precede application readiness. Persistent named volumes are never deleted by default stop. LocalStack IAM emulation does not replace live staging IAM/security tests.
 
 
-## Mock-first Compose and production identity
+## Test-only provider simulators and production identity
 
-Add provider-mocks profile with separate stateful paystack-mock, fedex-mock and twilio-mock services using pinned WireMock images plus versioned test-only scenario extension/controllers. Compose core local setup includes these mocks and real local Keycloak. Testcontainers starts equivalent instances for CI; mock administration/reset/journal is localhost/internal-test-network only. Callback dispatcher sends signed HTTP to the real app facades; failure/scenario controls are never public production APIs. Tests prohibit external paid network access. Production builds exclude mock controllers, images, dummy credentials and test admin routes.
+Provider simulators are available only to automated tests through isolated loopback servers or Testcontainers. The application Compose profile does not start provider mocks and uses official provider APIs with required credentials. Mock administration/reset/journal is test-network only. Callback dispatcher sends signed HTTP to the real app facades; failure/scenario controls are never public production APIs. Automated tests prohibit external paid network access. Production builds exclude mock controllers, images, dummy credentials and test admin routes.
 
 Keycloak image is pinned/optimized in production, supported external PostgreSQL, private management/health/admin, TLS/proxy/hostname and cluster settings; local start-dev is local only. Do not reuse Keycloak development filesystem DB or default admin credentials for release.
 
@@ -8477,7 +8497,7 @@ CI should use deterministic Clock and injectable random source for unit tests; p
 | TEST-MODE-ISOLATION | Given LIVE configuration, when dummy key/mock hostname or MOCK quote enters checkout, then configuration/command fails before provider side effect. |
 | TEST-NGN-KOBO | Given NGN1234.56, when initialize/refund converts, then integer123456; overprecision/foreign currency rejected without floating point. |
 | TEST-NGN-MARKET | Given approved NG/NGN metadata, when setup runs twice, then one baseline exists and missing tax/returns/book/routes still prevents selling. |
-| TEST-PAYSTACK-MODE-SWITCH | Given same adapter/domain suite, when config changes mock->real test credential, then contract responses match; recorded sandbox result required, never assumed from mocks. |
+| TEST-PAYSTACK-MODE-SWITCH | Given the adapter/domain suite, when application mode is not LIVE or a sandbox request is attempted, then configuration/transport fails closed; isolated contract tests use simulators and do not call Paystack. |
 | TEST-CARRIER-RATE-BINDING | Given unexpired quote, when cart/address/packages/service/currency/mode change, then checkout rejects stale/mismatched quote rather than undercharging. |
 | TEST-CARRIER-UNKNOWN | Given create accepted but response lost, when job replays, then one booking attempt remains UNKNOWN/reconciled and no blind second label appears. |
 | TEST-CARRIER-TRACKING | Given duplicate/out-of-order tracking and label creation, when processed, then label alone does not dispatch, stock dispatch once, delivery terminal does not regress. |
@@ -8490,12 +8510,12 @@ CI should use deterministic Clock and injectable random source for unit tests; p
 | TEST-KEYCLOAK-REPLICA | Given tested2-replica identity cluster, when one replica stops, then login/refresh/session continuity follows configured policy and BFF remains resource-authorized. |
 | TEST-IDENTITY-RESTORE | Given isolated backup, when identity database/realm/config restore occurs, then login/signing/role mapping verified without exposing credentials. |
 
-Existing payment/refund/race/IDOR/audit/restore/AI tests remain mandatory. Provider credentials absent means live/sandbox qualification NOT_RUN/BLOCKED, not mock-test failure; independently complete all offline adapter/contract tests.
+Existing payment/refund/race/IDOR/audit/restore/AI tests remain mandatory. Provider credentials absent means live-provider qualification NOT_RUN/BLOCKED, not mock-test failure; independently complete all offline adapter/contract tests.
 
 
 # 36. Test Data
 
-Fixtures live at service src/test/resources/fixtures and shared tests/fixtures; deterministic UUIDs, fixed Clock `2026-10-04T00:00:00Z`, seeded randomness only in tests, synthetic `example.invalid` emails and no real staff/customer data. Fixture identities: retailA, retailB, orgA owner/buyer, orgB buyer, editor, publisher, sales, financeA/financeB, operations, analyst and admin. Local Keycloak users are examples with credentials from local-only env, never production seeds.
+Fixtures live at service src/test/resources/fixtures and shared tests/fixtures; deterministic UUIDs, fixed Clock `2026-10-04T00:00:00Z`, seeded randomness only in tests, synthetic `example.invalid` emails and no real staff/customer data. The local Keycloak realm imports no example users; test identities are provisioned only in an isolated automated test namespace.
 
 Catalogue: three categories, two brands, five products/ten SKUs, one initial location, some out-of-stock/ineligible/archived variants. Default synthetic NG market countryNG/NGN minor-unit2 reflects confirmed launch metadata; addresses/users/tax/rates remain local/test-only; tests add a currency with3 decimals, fractional SKU, international-ineligible product, two price tiers and ambiguous delivery configurations that must fail. Tax tests use a clearly synthetic configured10 percent rate, not a legal tax recommendation. Promotion/reward fixtures use finite test budgets and verified policy revision; prod features remain disabled.
 
@@ -8506,7 +8526,7 @@ Never seed arbitrary production ADMIN or a working merchant credential. Provisio
 
 ## Approved launch fixtures and mock scenarios
 
-Default market NG/Nigeria/NGN2; synthetic Nigerian address/package metadata, fake users/numbers/provider accounts only. NGN examples1.00,1234.56 and overprecision1.001; wrong-currency USD is a negative test. No actual tax rate is inferred from country approval; synthetic tax/rates are labeled tests. Provision Paystack pending/success/failed/mismatch/duplicate/late/unknown/refund scenarios; FedEx OAuth-expiry/rate-unavailable/currency-mismatch/booked/response-lost/cancel/scan-progression; Twilio queued/sent/delivered/failed/undelivered/signed-invalid/out-of-order/STOP/proof-expiry. Use real local Keycloak, issuer/client negative cases and separate staff/organization actors. All recipient examples are mock-only; real sandbox allowlist is explicit and never automatically populated from examples.
+Default market NG/Nigeria/NGN2; synthetic Nigerian address/package metadata, fake users/numbers/provider accounts only. NGN examples1.00,1234.56 and overprecision1.001; wrong-currency USD is a negative test. No actual tax rate is inferred from country approval; synthetic tax/rates are labeled tests. Provision Paystack pending/success/failed/mismatch/duplicate/late/unknown/refund scenarios; FedEx OAuth-expiry/rate-unavailable/currency-mismatch/booked/response-lost/cancel/scan-progression; Twilio queued/sent/delivered/failed/undelivered/signed-invalid/out-of-order/STOP/proof-expiry in isolated automated tests. Use real local Keycloak, issuer/client negative cases and separate staff/organization actors. Synthetic recipients/provider accounts are test fixtures only; never populate live allowlists or provider accounts from these examples.
 
 
 # 37. Code Quality
@@ -8540,7 +8560,6 @@ Implementation must generate README.md, .env.example, docker-compose.yml, Makefi
 cp .env.example .env
 make local-up
 make migrate ENV=local
-make seed ENV=local
 make run-core
 make verify
 # only when reaching EP12/BP5
@@ -8548,26 +8567,14 @@ make local-up PROFILE=ai
 make run-ai
 ```
 
-`local-up` starts required dependencies and waits on bounded health checks; it creates local SNS subscriptions/S3 buckets/Keycloak realm through deterministic scripts. `migrate` executes each owner role/master, fails on any schema drift and does not use Hibernate DDL. `seed` rejects any nonlocal/test env and requires explicit approved fixture profile. `run-core` starts Java services in separate processes/Compose app profile; reports URLs/health checks and clean stop handling. User login uses local OIDC flow; direct API tests obtain real local signed access tokens. Do not add a universal insecure bypass header.
+`local-up` starts required dependencies and waits on bounded health checks; it creates local SNS subscriptions/S3 buckets and imports Keycloak clients/roles without example identities. `migrate` executes each owner role/master, fails on any schema drift and does not use Hibernate DDL. Local startup seeds no users or business data. `run-core` starts Java services in separate processes/Compose app profile; reports URLs/health checks and clean stop handling. User login uses the configured local OIDC registration flow; direct API tests obtain real signed access tokens in isolated test projects. Do not add a universal insecure bypass header.
 
 Local services binds: BFF/core http://localhost:8081, experience8082, worker8083 localhost/private only, AI8084 optional, PostgreSQL5432 localhost, LocalStack4566, Keycloak8180, Mailpit8025. Origin URLs configurable and not compile-time constants. Use named volumes and separate test DB. .env is gitignored. Local dummy keys are clearly local-only and forbidden by prod validation; local HTTP cookie/issuer exception is profile-limited. Health/smoke checks confirm real persistence and identity flow before showing ready.
 
 
 ## Credential-free integration setup
 
-```bash
-make local-up PROFILES=provider-mocks
-make migrate ENV=local
-make seed ENV=local MARKET=NG CURRENCY=NGN
-make mock-reset
-make provider-contract-test PROVIDER=all MODE=mock
-make provider-scenario PROVIDER=paystack SCENARIO=success
-make provider-scenario PROVIDER=fedex SCENARIO=booking-response-lost
-make provider-scenario PROVIDER=twilio SCENARIO=duplicate-status
-make keycloak-config-check ENV=local
-```
-
-Implementation must create these commands in MOCK-001/IDP-001; they are specified commands, not scripts generated in this document-only task. make provider-live-check ENV=stage requires actual user-supplied account/credentials/sender/service config and may perform real provider sandbox operations; never run it automatically while keys are dummy.
+Automated provider contracts use `make provider-contract-test PROVIDER=all MODE=mock`; simulators are started by the isolated test harness, not local Compose. `make provider-live-check ENV=stage` requires approved live account/credentials/sender/service configuration and may make genuine read-only live API requests; never run it automatically or with unapproved live data.
 
 
 # 40. Developer Experience
@@ -8580,7 +8587,7 @@ Implementation must create these commands in MOCK-001/IDP-001; they are specifie
 | make local-up / local-down | Bounded start / graceful stop; never deletes volumes |
 | make run-core / run-ai | Environment-validated processes, AI only at enabled phase |
 | make migrate ENV=local | Owner Liquibase masters; each role used separately |
-| make seed ENV=local | Deterministic local/test fixtures only |
+| make cold-start | Isolated test identities and disposable test volumes; preserves local volumes |
 | make reset-db ENV=local CONFIRM=reset-local | Explicit destructive local operation only, refuses remote/prod URLs and preserves backup option |
 | make contracts | Regenerate OpenAPI and schemas; diff checked and reviewed |
 | make load-test / restore-test | Realistic staging-safe synthetic workloads and isolated restore |
@@ -8591,11 +8598,9 @@ Scripts use strict shell error handling, quote paths/variables, bounded readines
 
 | Added command | Required behavior |
 |---|---|
-| make mock-reset | Reset local/test provider state only; refuse real targets. |
-| make provider-contract-test PROVIDER=all MODE=mock | Adapters through HTTP mocks, signatures and schema/scenario assertions. |
-| make provider-scenario PROVIDER=<name> SCENARIO=<fixture> | Bounded local fixture transition/callback; no arbitrary external URL. |
+| make provider-contract-test PROVIDER=all MODE=mock | Run provider adapter contracts against isolated test simulators; no provider sandbox/live calls. |
 | make keycloak-config-check ENV=<env> | Realm/client/audience/MFA/hostname/admin/prod profile validation. |
-| make provider-live-check ENV=stage | Explicit genuine sandbox credentials/account/sender/route smoke; record results honestly. |
+| make provider-live-check ENV=stage | Explicit live-provider qualification; use approved credentials/accounts and record results honestly. |
 
 
 # 41. Coding Standards
@@ -8606,7 +8611,7 @@ Money uses BigDecimal/Python Decimal and configured currency scale; quantities a
 
 Persistence mappings expose explicit fetch plans, bounded pagination and optimistic locking. Inventory/payment workflows use documented pessimistic locks and stable acquisition order. Do not add reactive end-to-end APIs merely for fashion; Spring MVC is sufficient; Java virtual threads are optional after JDBC/provider bulkhead tests and do not create unlimited connections. Python async code must not call blocking SDKs on the event loop without bounded executor/compatible async adapter.
 
-An endpoint/controller/task is complete only with behavior, validation, authorization, documented contract, persistence/migration and tests. Production feature blocks are clear activation dependencies, not empty TODO handlers returning canned success. Provider test doubles live under local/test profiles; stage/prod tests use actual sandbox where configured. Changes to public DTOs/event payloads require compatibility analysis and contract updates.
+An endpoint/controller/task is complete only with behavior, validation, authorization, documented contract, persistence/migration and tests. Production feature blocks are clear activation dependencies, not empty TODO handlers returning canned success. Provider test doubles are test-profile-only; application runtime profiles use official live APIs. Changes to public DTOs/event payloads require compatibility analysis and contract updates.
 
 
 # 42. Performance Standards
@@ -8719,7 +8724,7 @@ BP1 launch gate now additionally requires MOCK-001, IDP-001, NGN-001, PAYSTACK-0
 5. Run targeted tests and relevant build/format/migration/security checks. On failure retain FAIL and useful safe diagnostics; fix within scope before proceeding. Never mark NOT_RUN/BLOCKED as PASS or reinterpret a failed business invariant as flaky.
 6. Validate API/event/schema backward compatibility. Include repository, provider, permissions and negative paths; do not stop at controller unit tests. Never access another owner's tables to shortcut a missing API.
 7. Update status after every session, including failed/partial sessions: phase/task IDs, changed files, actual commands/results, commit if created, blockers, next task. Use section48 report. A commit hash is recorded only after git confirms it; document-only deliverables are not runtime implementations.
-8. Do not expose secrets/PII in reports or fixtures. Implement test adapters under test profile, never production defaults. Obtain real provider/market/rule approvals through the project's agreed governance before activation.
+8. Do not expose secrets/PII in reports or fixtures. Implement provider test adapters under the isolated test profile only; application runtime uses official live APIs and never falls back to mocks. Obtain real provider/market/rule approvals through the project's agreed governance before activation.
 9. Continue authorized reversible implementation independently. Ask for missing business facts only when the next dependent decision cannot be resolved from the contract/approved config; do not stall unrelated dependency-ready tasks. Publishing/production changes follow the project's existing release authority, not an invented blueprint approval requirement.
 10. Stop the current dependent rollout on integrity/security failure, unexplained schema drift or UNKNOWN financial outcome. Preserve durable records, investigate/reconcile and report the precise blocker. Never delete financial evidence to make tests or deployment pass.
 
@@ -9407,15 +9412,15 @@ Permanent task IDs; existing IDs retained. Specification1.1.0 adds six explicit 
 - **Tests:** TEST-NGN-MARKET; TEST-NGN-KOBO; TEST-MARKET-ACTIVATION.
 - **Acceptance AC-NGN-001:** Given approved baseline, when NGN1234.56 is initialized, then Paystack amount123456;3rd decimal is rejected, wrong currency fails, and missing tax/returns/service config does not silently activate sales.
 
-### PAYSTACK-001 — Complete exclusive Paystack launch adapter and mock qualification
+### PAYSTACK-001 — Complete exclusive Paystack launch adapter and isolated test qualification
 
 - **Phase / service:** EP05 / commerce.
 - **Dependencies:** MOCK-001, NGN-001, PLAT-001
 - **Files/packages:** `services/commerce/payment/internal/infrastructure/external/paystack/`, `contracts/providers/paystack/`, `tests/providers/paystack/`
-- **Implementation:** Use only Paystack launch provider, hosted initialize/verify/refund/receipt pipeline. Mock/test/live configuration runs same adapter, no fake core success. Test mode uses genuine provider test key on official endpoint; mock dummy credentials only local server. Stable order/reference and UNKNOWN/partial-refund logic section17 remain mandatory.
+- **Implementation:** Use only Paystack launch provider, hosted initialize/verify/refund/receipt pipeline. Non-test runtime uses LIVE mode; automated tests use isolated simulators and never call sandbox/live APIs. Stable order/reference and UNKNOWN/partial-refund logic section17 remain mandatory.
 - **Contracts:** APIs API-041, API-042, API-052, API-053, API-054, API-118; tables Owned existing tables; events None directly
 - **Tests:** TEST-WEBHOOK-DUP; TEST-PAYMENT-UNKNOWN; TEST-PARTIAL-REFUND; TEST-NGN-KOBO; TEST-PAYSTACK-MODE-SWITCH.
-- **Acceptance AC-PAYSTACK-001:** Given local dummy credentials, when checkout/refund and signed callbacks run, then once-only financial state matches provider mock; replacing endpoint/mode/credential refs with real test/live configuration requires no source change.
+- **Acceptance AC-PAYSTACK-001:** Given the isolated provider simulator, when checkout/refund and signed callbacks run, then once-only financial state matches the provider contract without external calls; approved LIVE configuration works without a source change.
 
 ### CARRIER-001 — Implement required FedEx rate booking cancellation and tracking
 
@@ -10176,3 +10181,6 @@ The companion SPECIFICATION_VALIDATION.md records mechanical coverage/ID/DAG che
 
 Revision1.1.0 completeness additionally covers approved Nigeria/NGN, Paystack exclusivity, stateful mock contracts, required FedEx quote/booking/tracking, SMS/WhatsApp/destination proof/consent/receipts/inbound and production Keycloak deployment/DB/restore. Each has schema/API/task/test/acceptance mapping; real mock servers and backend source remain future implementation outputs, not generated code in this task.
 
+Local provider update, 11 November 2026: the user authorizes real Paystack TEST and PandaGo stage APIs locally, Google geocoding with the supplied key, and Termii/SMTP dummy credentials that fail on access. Production remains LIVE-only; no runtime mock fallback.
+
+Provider removal, 11 November 2026: only PandaGo remains an application carrier. Retired adapters, SDK request conversion and workers are removed. Automatic shipment creation fails closed until an enabled carrier execution workflow exists; manual approved fulfillment and PandaGo quotes remain. Applied migrations and historic records are preserved.

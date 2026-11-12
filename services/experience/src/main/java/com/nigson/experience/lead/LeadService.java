@@ -48,13 +48,15 @@ public final class LeadService {
     private UUID correlation(){var wire=WireContext.current();return wire==null?WireContext.correlation(null):wire.correlationId;}
 
     public LeadValues.Created create(LeadValues.Enquiry input,String key,String requestSource,UUID corr){
-        if(!recipientReady()||antiSpam==null||rateLimiter==null)throw new Problem.Failure(ProblemCode.FEATURE_DISABLED);
+        if(!recipientReady())throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE,List.of(new Problem.Violation("leadIntake","CONFIGURATION_REQUIRED","Lead intake recipient configuration is missing. Contact the store.")));
+        if(antiSpam==null)throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE,List.of(new Problem.Violation("antiSpamToken","CONFIGURATION_REQUIRED","Google reCAPTCHA verification is not configured. Contact the store.")));
+        if(rateLimiter==null)throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE,List.of(new Problem.Violation("leadIntake","CONFIGURATION_REQUIRED","Lead intake rate limiting is not configured. Contact the store.")));
         key=ApiValues.idempotencyKey(key);LeadValues.validate(input);if(corr==null||corr.equals(new UUID(0,0)))throw ApiValues.invalid();
         JsonNode request=EventCodec.JSON.valueToTree(input);var replay=store.replayLocal("public:lead","API-087",key,request);
         if(replay.isPresent())return EventCodec.JSON.treeToValue(replay.get().body(),LeadValues.Created.class);
         if(requestSource==null||requestSource.length()>256||!rateLimiter.allow(requestSource))throw new Problem.Failure(ProblemCode.RATE_LIMITED);
         boolean verified;try{verified=antiSpam.verify(input.antiSpamToken(),key);}catch(RuntimeException unavailable){throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);}
-        if(!verified)throw new Problem.Failure(ProblemCode.BUSINESS_RULE_VIOLATION);
+        if(!verified)throw new Problem.Failure(ProblemCode.BUSINESS_RULE_VIOLATION,List.of(new Problem.Violation("antiSpamToken","VERIFICATION_FAILED","reCAPTCHA verification failed or expired. Refresh the page and submit again.")));
         UUID id=EventCodec.uuid7(clock.instant());String email=input.email().strip().toLowerCase(Locale.ROOT);String phone=input.phone()==null?null:input.phone().strip();
         var saved=store.executeLocal("public:lead","API-087",key,request,db->{Instant now=clock.instant();
             db.update("INSERT INTO experience.lead(id,created_by,updated_by,type,name,email,phone,subject,message,status,priority,source) VALUES (?,?,?,?,?,?,?,?,?,'NEW','NORMAL','WEB_ENQUIRY')",

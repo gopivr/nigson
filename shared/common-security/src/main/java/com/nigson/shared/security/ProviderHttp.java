@@ -15,18 +15,24 @@ public final class ProviderHttp {
   public Failure(String code,boolean uncertain,int status){super(code);this.uncertain=uncertain;this.status=status;}
  }
  private final URI base;
- private final String provider;private final Mode mode;
+ private final String provider;private final Mode mode;private final boolean sandboxCalls,credentialsConfigured;
  private final HttpClient client;
  public ProviderHttp(String environment,Mode mode,String endpoint,String mockHost,Set<String> officialHosts,String... credentials) {
   if(endpoint==null||endpoint.length()>2048||mode==null)throw new IllegalArgumentException("PROVIDER_TARGET_INVALID");
   base=URI.create(endpoint);this.provider=mockHost.replace("-mock","");this.mode=mode;
   if(base.getHost()==null||base.getUserInfo()!=null||base.getQuery()!=null||base.getFragment()!=null||!Set.of("","/").contains(base.getPath()))throw new IllegalArgumentException("PROVIDER_TARGET_INVALID");
-  boolean local=Set.of("local","test").contains(environment);
-  if(mode==Mode.MOCK){if(!local||!base.getScheme().equals("http")||!(base.getHost().equals(mockHost)&&base.getPort()==8080||environment.equals("test")&&base.getHost().equals("127.0.0.1")&&base.getPort()>0))throw new IllegalArgumentException("MOCK_TARGET_INVALID");}
+  boolean test=environment.equals("test"),local=environment.equals("local");sandboxCalls=local;
+  if(mode==Mode.MOCK){if(!test||!base.getScheme().equals("http")||!base.getHost().equals("127.0.0.1")||base.getPort()<1)throw new IllegalArgumentException("MOCK_TARGET_INVALID");}
   else if(!base.getScheme().equals("https")||!officialHosts.contains(base.getHost())||base.getPort()!=-1)throw new IllegalArgumentException("PROVIDER_TARGET_INVALID");
-  if(environment.equals("prod")&&mode!=Mode.LIVE)throw new IllegalArgumentException("PRODUCTION_MODE_INVALID");
   if(!Set.of("local","test","dev","qa","stage","prod").contains(environment))throw new IllegalArgumentException("ENVIRONMENT_INVALID");
-  for(String key:credentials){if(key==null||key.isBlank()||key.length()>2048)throw new IllegalArgumentException("PROVIDER_CREDENTIAL_MISSING");boolean dummy=key.toLowerCase(Locale.ROOT).matches(".*(mock|dummy|placeholder|example).*" )||key.matches("(?:AC|MG|HX)?0{8,}");if(mode==Mode.MOCK&&!dummy||mode!=Mode.MOCK&&dummy)throw new IllegalArgumentException("PROVIDER_CREDENTIAL_MODE_INVALID");}
+  if(!test&&!local&&mode!=Mode.LIVE)throw new IllegalArgumentException("LIVE_PROVIDER_MODE_REQUIRED");
+  boolean configured=true;
+  for(String key:credentials){boolean absent=key==null||key.isBlank();boolean dummy=!absent&&(key.toLowerCase(Locale.ROOT).matches(".*(mock|dummy|placeholder|example|unconfigured).*" )||key.matches("(?:AC|MG|HX)?0{8,}"));
+   if(key!=null&&key.length()>2048)throw new IllegalArgumentException("PROVIDER_CREDENTIAL_MISSING");
+   if(mode==Mode.MOCK&&(absent||!dummy)||!local&&mode!=Mode.MOCK&&(absent||dummy))throw new IllegalArgumentException("PROVIDER_CREDENTIAL_MODE_INVALID");
+   if(absent||dummy)configured=false;
+  }
+  credentialsConfigured=mode==Mode.MOCK||configured;
   client=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER).build();
  }
  public Result call(String method,String path,String contentType,String body,String authorization) {return call(method,path,contentType,body,authorization,!method.equals("GET"));}
@@ -37,6 +43,8 @@ public final class ProviderHttp {
  public Result call(String method,String path,String contentType,String body,String authorization,boolean sideEffect,int responseLimit) {
   if(responseLimit<1||responseLimit>16*1024*1024)throw new IllegalArgumentException("PROVIDER_RESPONSE_LIMIT_INVALID");
   if(!Set.of("GET","POST","PUT","DELETE").contains(method)||!path.startsWith("/")||path.startsWith("//")||path.contains("..")||body.getBytes(StandardCharsets.UTF_8).length>65536)throw new IllegalArgumentException("PROVIDER_REQUEST_INVALID");
+  if(!credentialsConfigured)throw new Failure(provider.toUpperCase(Locale.ROOT)+"_CREDENTIALS_NOT_CONFIGURED",false,0);
+  if(mode==Mode.TEST&&!sandboxCalls)throw new Failure("SANDBOX_PROVIDER_CALL_DISABLED",false,0);
   URI target=base.resolve(path);if(!Objects.equals(target.getAuthority(),base.getAuthority()))throw new IllegalArgumentException("PROVIDER_TARGET_INVALID");
   var wire=com.nigson.shared.observability.WireContext.current();
   var span=wire==null?io.opentelemetry.api.trace.Span.getInvalid():wire.tracer.spanBuilder("http.provider").setSpanKind(io.opentelemetry.api.trace.SpanKind.CLIENT).setAttribute("http.request.method",method).setAttribute("nigson.provider",provider).setAttribute("nigson.provider_mode",mode.name()).startSpan();

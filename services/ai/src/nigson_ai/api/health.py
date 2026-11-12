@@ -22,8 +22,9 @@ def required(name: str) -> str:
 
 @asynccontextmanager
 async def lifespan(application: FastAPI) -> AsyncIterator[None]:
-    if required("APP_ENV") not in {"local", "test"}:
-        raise ValueError("AI foundation runtime requires APP_ENV=local|test")
+    runtime_env = required("APP_ENV")
+    if runtime_env not in {"local", "test", "dev", "qa", "stage", "prod"}:
+        raise ValueError("AI environment invalid")
     from psycopg.conninfo import make_conninfo
 
     dsn = make_conninfo(
@@ -122,13 +123,8 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         ):
             raise ValueError("AI_RATE_APPROVAL_POLICY_INVALID")
         application.state.ai_approved_rate_references = frozenset(approved_rate_values)
-    from nigson_ai.evaluation.mock import LocalEvaluationModel
-    from nigson_ai.gateway.provider import LocalProviderMock
-
-    application.state.evaluation_model = LocalEvaluationModel()
-    application.state.ai_provider_mock = (
-        LocalProviderMock() if required("APP_ENV") in {"local", "test"} else None
-    )
+    application.state.evaluation_model = None
+    application.state.ai_provider_mock = None
     from nigson_ai.assistant.provider import LocalAssistantProvider
     from nigson_ai.assistant.security import CheckpointCipher, ConversationCapabilities
     from nigson_ai.assistant.tools import LocalOwnerTools
@@ -160,19 +156,28 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
                 raise ValueError("AI_RETENTION_CONFIGURATION_INVALID")
             setattr(application.state, attr, int(raw))
 
-    application.state.ai_knowledge_mock = (
-        LocalKnowledgeProvider() if required("APP_ENV") in {"local", "test"} else None
-    )
+    application.state.ai_knowledge_mock = None
     application.state.assistant_provider = (
-        LocalAssistantProvider() if required("APP_ENV") in {"local", "test"} else None
+        LocalAssistantProvider() if runtime_env == "test" else None
     )
     application.state.assistant_owner_tools = (
-        LocalOwnerTools() if required("APP_ENV") in {"local", "test"} else None
+        LocalOwnerTools() if runtime_env == "test" else None
     )
-    application.state.assistant_test_model_enabled = required("APP_ENV") in {"local", "test"}
-    provider_mode = os.environ.get("NIGSON_AI_PROVIDER_MODE", "LOCAL")
+    application.state.assistant_test_model_enabled = runtime_env == "test"
+    if runtime_env == "test":
+        from nigson_ai.evaluation.mock import LocalEvaluationModel
+        from nigson_ai.gateway.provider import LocalProviderMock
+
+        application.state.evaluation_model = LocalEvaluationModel()
+        application.state.ai_provider_mock = LocalProviderMock()
+        application.state.ai_knowledge_mock = LocalKnowledgeProvider()
+    provider_mode = os.environ.get(
+        "NIGSON_AI_PROVIDER_MODE", "LOCAL" if runtime_env == "test" else "BEDROCK"
+    )
     application.state.ai_embedding_provider = application.state.ai_knowledge_mock
     if provider_mode == "BEDROCK":
+        if not region or not application.state.ai_model_capabilities:
+            raise ValueError("AI_BEDROCK_CONFIGURATION_REQUIRED")
         # Explicit selection never activates or approves models/policies/rates.
         # Existing gateway budget and evaluation gates still govern every run.
         from nigson_ai.providers.bedrock import BedrockProvider, TitanEmbeddingProvider
@@ -182,6 +187,8 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         application.state.ai_embedding_provider = TitanEmbeddingProvider(region, approved)
         application.state.ai_provider_mock = None
         application.state.assistant_test_model_enabled = False
+    elif provider_mode == "LOCAL" and runtime_env != "test":
+        raise ValueError("AI_LOCAL_PROVIDER_TEST_ONLY")
     elif provider_mode != "LOCAL":
         raise ValueError("AI_PROVIDER_MODE_INVALID")
     handler = logging.StreamHandler()
