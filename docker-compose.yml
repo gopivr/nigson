@@ -447,3 +447,6 @@ volumes:
   nigson-localstack:
   nigson-mailpit:
   nigson-vector:
+  nigson-paystack-mock:
+  nigson-fedex-mock:
+  nigson-twilio-mock:
