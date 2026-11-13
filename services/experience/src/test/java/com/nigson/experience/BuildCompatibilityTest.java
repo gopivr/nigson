@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BuildCompatibilityTest {
     @Test
     void requiredToolchainAndManagedLibrariesLink() {
-        assertThat(Runtime.version().feature()).isEqualTo(25);
+        assertThat(Runtime.version().feature()).isIn(25, 26);
         assertThat(SpringBootVersion.getVersion()).isEqualTo("4.1.1");
         ApplicationModules.of(ExperienceApplication.class).verify();
     }

@@ -3,11 +3,14 @@ import os
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import subprocess
+import sys
 ROOT=Path(__file__).resolve().parents[2]
 jar=ROOT/'.build/m2/org/wiremock/wiremock-standalone/3.13.2/wiremock-standalone-3.13.2.jar'
 if not jar.is_file():
- subprocess.run([str(ROOT/'mvnw'),'-B','-N','dependency:get','-Dartifact=org.wiremock:wiremock-standalone:3.13.2'],cwd=ROOT,check=True)
+ mvn=str(ROOT/'mvnw.cmd' if sys.platform=='win32' else ROOT/'mvnw')
+ subprocess.run([mvn,'-B','-N','dependency:get','-Dartifact=org.wiremock:wiremock-standalone:3.13.2'],cwd=ROOT,check=True)
 expected=json.loads((ROOT/'docs/dependencies/mock-lock.json').read_text())['wiremock_standalone']['sha256']
 if hashlib.sha256(jar.read_bytes()).hexdigest()!=expected:raise ValueError('Pinned WireMock artifact checksum mismatch')
 target=ROOT/'tests/mocks/target';target.mkdir(exist_ok=True)
@@ -26,11 +29,11 @@ else:
 # File bind mounts retain their immutable inode, even when a newer build is selected.
 link=target/'provider-state.jar'
 if link.is_symlink() and link.resolve()==immutable:pass
+elif link.exists() and hashlib.sha256(link.read_bytes()).hexdigest()==checksum.read_text().strip():pass
 else:
  if link.exists() or link.is_symlink():link.unlink()
  try:
   link.symlink_to(immutable.name)
  except OSError:
-  import shutil
-  shutil.copyfile(immutable, link)
+  shutil.copy2(immutable, link)
 print('PASS: pinned immutable local mock extension')

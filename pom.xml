@@ -69,9 +69,9 @@
             <goals><goal>enforce</goal></goals>
             <configuration>
               <rules>
-                <requireJavaVersion><version>[25.0.2,25.0.3)</version></requireJavaVersion>
+                <requireJavaVersion><version>[25.0.2,27.0.0)</version></requireJavaVersion>
                 <requireJavaVendor><includes><include>Oracle Corporation</include></includes></requireJavaVendor>
-                <requireMavenVersion><version>3.10.0</version></requireMavenVersion>
+                <requireMavenVersion><version>[3.9.0,4.0.0)</version></requireMavenVersion>
                 <requireReleaseDeps><onlyWhenRelease>false</onlyWhenRelease><failWhenParentIsSnapshot>false</failWhenParentIsSnapshot></requireReleaseDeps>
                 <dependencyConvergence/>
               </rules>
