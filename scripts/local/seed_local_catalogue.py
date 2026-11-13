@@ -188,7 +188,7 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="print the SQL instead of applying it")
     arguments = parser.parse_args()
     try:
-        if not json.loads(docker("context", "inspect"))[0]["Endpoints"]["docker"]["Host"].startswith("unix://"):
+        if not json.loads(docker("context", "inspect"))[0]["Endpoints"]["docker"]["Host"].startswith(("unix://", "npipe://")):
             raise ValueError("Local Docker context required")
         config = json.loads(docker("compose", "--profile", "app", "config", "--format", "json"))
         if config.get("name") != "nigson-local":

@@ -186,7 +186,7 @@ def generate():
                     for fullname, table in selected.items():
                         if (table['module']=='platform') == (kind=='platform-tables'):
                             table['creation_changeset']=change
-                            table['creation_file']=str(sqlpath)
+                            table['creation_file']=sqlpath.as_posix()
             chain = [] if phase==1 else [{'include':{'file':f'BP{phase-1}.yaml','relativeToChangelogFile':True}}]
             files[base/'releases'/f'BP{phase}.yaml'] = json.dumps({'databaseChangeLog':chain+includes},indent=2)+'\n'
     # New owned durability tables are separate increments; never rewrite applied DATA-001 DDL.

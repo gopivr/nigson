@@ -20,7 +20,7 @@ class DistributorRelayTest {
   server.createContext("/",x->{try {
    assertThat(x.getRequestHeaders().getFirst("Authorization")).isEqualTo("Bearer test-workload");assertThat(x.getRequestHeaders().getFirst("X-Nigson-Actor")).isEqualTo("test-signed-actor");
    cookie.set(x.getRequestHeaders().getFirst("Cookie"));key.set(x.getRequestHeaders().getFirst("Idempotency-Key"));body.set(new String(x.getRequestBody().readAllBytes(),java.nio.charset.StandardCharsets.UTF_8));
-   boolean post=x.getRequestMethod().equals("POST"),mine=x.getRequestURI().getPath().contains("/me/");int status=post?(x.getRequestURI().getPath().endsWith("/decision")?202:201):200;
+   boolean post=x.getRequestMethod().equals("POST"),mine=x.getRequestURI().getPath().contains("/me/");int status=post?(x.getRequestURI().getPath().endsWith("/decision")||x.getRequestURI().getPath().endsWith("/completion")?202:201):200;
    byte[] data=(mine?"[]":"{\"version\":0}").getBytes(java.nio.charset.StandardCharsets.UTF_8);x.getResponseHeaders().set("Content-Type","application/json");x.sendResponseHeaders(status,data.length);x.getResponseBody().write(data);x.close();
   }catch(Throwable failure){x.sendResponseHeaders(500,-1);x.close();}});
   server.start();endpoint="http://127.0.0.1:"+server.getAddress().getPort();relay=new EngagementRelay("test",endpoint,r->"test-workload",delegation,sessions,authority,3);
@@ -47,5 +47,15 @@ class DistributorRelayTest {
   var path="/api/v1/staff/leads/"+UUID.randomUUID();var input=EventCodec.JSON.readTree("{\"state\":\"IN_PROGRESS\",\"note\":\"Sales follow-up started\"}");
   assertThat(bp4.execute(actor,"session","API-091",path,null,input,"lead-update","\"7\"",record.csrfToken(),UUID.randomUUID()).status()).isEqualTo(200);
   verify(delegation).issue(eq("session"),argThat(b->b.method().equals("PATCH")&&b.resource().equals(path)),isNull());verify(sessions).csrf(record,record.csrfToken());
+ }
+ @Test void experienceFileUploadCompletionAndDownloadRelaySignedCustomerRoutes(){
+  UUID fileId=UUID.randomUUID();
+  var uploadBody=EventCodec.JSON.readTree("{\"purpose\":\"DISTRIBUTOR_PROOF\",\"filename\":\"cac.pdf\",\"mimeType\":\"application/pdf\",\"size\":2048,\"checksumSha256\":\""+"a".repeat(64)+"\"}");
+  assertThat(relay.execute(actor,"session","API-114","/api/v1/experience/files/uploads",null,uploadBody,"upload-key",null,record.csrfToken(),UUID.randomUUID()).status()).isEqualTo(201);
+  var completePath="/api/v1/experience/files/"+fileId+"/completion";
+  var completeBody=EventCodec.JSON.readTree("{\"checksumSha256\":\""+"a".repeat(64)+"\"}");
+  assertThat(relay.execute(actor,"session","API-115",completePath,null,completeBody,"complete-key","\"0\"",record.csrfToken(),UUID.randomUUID()).status()).isEqualTo(202);
+  assertThat(relay.execute(actor,"session","API-116","/api/v1/experience/files/"+fileId+"/download",null,null,null,null,null,UUID.randomUUID()).status()).isEqualTo(200);
+  assertThatThrownBy(()->relay.execute(actor,"session","API-115",completePath,null,completeBody,"complete-key",null,record.csrfToken(),UUID.randomUUID())).hasMessage("VALIDATION_ERROR");
  }
 }

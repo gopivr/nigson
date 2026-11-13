@@ -157,7 +157,7 @@ services:
       NIGSON_REGISTRATION_CLIENT_SECRET: ${NIGSON_REGISTRATION_CLIENT_SECRET:-mock-registration-local-secret-32-bytes}
       NIGSON_BFF_ALLOWED_ORIGINS: ${NIGSON_BFF_ALLOWED_ORIGINS:-http://localhost:8090,http://localhost:4200}
       NIGSON_BFF_CALLBACK: ${NIGSON_BFF_CALLBACK:-http://localhost:4200/bff/callback}
-      NIGSON_BFF_RETURN_PATHS: ${NIGSON_BFF_RETURN_PATHS:-/,/account,/shop,/checkout,/admin}
+      NIGSON_BFF_RETURN_PATHS: ${NIGSON_BFF_RETURN_PATHS:-/,/account,/shop,/checkout,/admin,/distributor}
       NIGSON_QUOTES_ENABLED: ${NIGSON_QUOTES_ENABLED:-false}
       NIGSON_EXPERIENCE_BASE_URL: ${NIGSON_EXPERIENCE_BASE_URL:-http://experience:8082}
       NIGSON_INTEGRATION_BASE_URL: ${NIGSON_INTEGRATION_BASE_URL:-http://integration:8083}

@@ -15,6 +15,8 @@ import com.nigson.experience.platform.*;
 public class LeadConfiguration {
     @Bean @ConditionalOnProperty(name="NIGSON_LEADS_ANTISPAM_MODE",havingValue="mock")
     LeadService.AntiSpamVerifier leadAntiSpam(Environment env){if(!"test".equals(env.getRequiredProperty("APP_ENV")))throw new IllegalArgumentException("LEAD_ANTISPAM_MOCK_TEST_ONLY");return new LocalLeadMocks.AntiSpam(env.getRequiredProperty("NIGSON_LEADS_LOCAL_ANTISPAM_HMAC_KEY"));}
+    @Bean @ConditionalOnProperty(name="NIGSON_LEADS_ANTISPAM_MODE",havingValue="bypass")
+    LeadService.AntiSpamVerifier localLeadAntiSpamBypass(Environment env){if(!"local".equals(env.getRequiredProperty("APP_ENV")))throw new IllegalArgumentException("LEAD_ANTISPAM_BYPASS_LOCAL_ONLY");return (token,idempotencyKey)->token!=null&&!token.isBlank()&&token.length()<=4096;}
     @Bean @ConditionalOnProperty(name="NIGSON_LEADS_RATE_LIMIT_MODE",havingValue="local")
     LeadService.RateLimiter leadRateLimit(Environment env){if(!Set.of("local","test").contains(env.getRequiredProperty("APP_ENV")))throw new IllegalArgumentException("LEAD_RATE_LIMIT_LOCAL_ONLY");return new LocalLeadMocks.RateLimit(env.getRequiredProperty("NIGSON_LEADS_RATE_LIMIT_PER_MINUTE",Integer.class),Clock.systemUTC());}
     @Bean @ConditionalOnProperty(name="NIGSON_LEADS_ANTISPAM_MODE",havingValue="google-recaptcha-v3")
