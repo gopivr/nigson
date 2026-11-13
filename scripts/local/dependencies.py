@@ -40,6 +40,56 @@ def require_build_space() -> None:
         )
 
 
+def shutdown_project() -> None:
+    """Stop the selected local project even if its Compose/env files are broken."""
+    if os.environ.get('ENV', 'local') not in {'local', 'test'}:
+        raise ValueError('Local commands require ENV=local|test')
+    project = os.environ.get('COMPOSE_PROJECT_NAME', 'nigson-local')
+    if project != 'nigson-local' and not re.fullmatch(r'nigson-test-[a-z0-9-]+', project):
+        raise ValueError('Refusing nonlocal Compose project name')
+    if os.environ.get('DOCKER_CONTEXT', 'default') not in {'default', 'desktop-linux'}:
+        raise ValueError('Local commands refuse remote Docker contexts')
+    host = os.environ.get('DOCKER_HOST', '')
+    if host and not host.startswith(('unix://', 'npipe://')):
+        raise ValueError('Local commands refuse remote Docker hosts')
+
+    def docker(*args):
+        try:
+            return subprocess.run(['docker', *args], check=True, text=True, capture_output=True, timeout=240).stdout.strip()
+        except subprocess.CalledProcessError as error:
+            reason = 'Docker operation failed; check Docker Desktop.'
+            detail = (error.stderr or '').lower()
+            if 'cannot connect' in detail or 'is the docker daemon running' in detail:
+                reason = 'Docker engine is unavailable. Start Docker Desktop and retry.'
+            elif 'active endpoints' in detail or 'in use' in detail:
+                reason = 'The project network is still in use. Project containers were stopped; inspect its remaining endpoints.'
+            elif 'permission denied' in detail:
+                reason = 'Docker denied access to the local engine.'
+            raise ValueError(reason) from None
+    if not host:
+        endpoint = json.loads(docker('context', 'inspect', '--format', '{{json .Endpoints.docker.Host}}'))
+        if not endpoint.startswith(('unix://', 'npipe://')):
+            raise ValueError('Local commands refuse the active remote Docker endpoint')
+    label = 'label=com.docker.compose.project=' + project
+    containers = docker('ps', '-aq', '--filter', label).split()
+    if containers:
+        docker('stop', '--time', '30', *containers)
+        docker('rm', *containers)
+    networks = docker('network', 'ls', '--filter', label, '--format', '{{.ID}}').split()
+    if networks:
+        docker('network', 'rm', *networks)
+    print(f'Stopped {project}; named database and identity volumes preserved.')
+
+
+def read_env_settings(path: Path) -> dict[str, str]:
+    lines = path.read_text().splitlines()
+    for number, line in enumerate(lines, 1):
+        if line.startswith(('<<<<<<< ', '=======', '>>>>>>> ')):
+            raise ValueError(f'Unresolved Git merge conflict in {path.name} at line {number}. Resolve the conflict before starting services; local-down remains available.')
+    return dict(line.strip().split('=', 1) for line in lines
+                if line.strip() and not line.lstrip().startswith('#') and '=' in line)
+
+
 def command(*arguments: str, capture: bool = False) -> str:
     if "build" in arguments:
         require_build_space()
@@ -50,8 +100,7 @@ def command(*arguments: str, capture: bool = False) -> str:
     if project != "nigson-local" and not re.fullmatch(r"nigson-test-[a-z0-9-]+", project):
         raise ValueError("Refusing nonlocal Compose project name")
     # Persist the explicitly enabled live quote overlay across run-core restarts.
-    settings = dict(line.strip().split("=", 1) for line in envfile.read_text().splitlines()
-                    if line.strip() and not line.lstrip().startswith("#") and "=" in line)
+    settings = read_env_settings(envfile)
     pandago = os.environ.get("NIGSON_PANDAGO_ENABLED", settings.get("NIGSON_PANDAGO_ENABLED", "false")) == "true"
     overlays = ["--file", str(ROOT / "docker-compose.pandago.yml")] if pandago else []
     result = subprocess.run(
@@ -95,6 +144,16 @@ def validate_config(config: dict) -> dict:
             if port.get("host_ip") != "127.0.0.1":
                 raise ValueError(f"Refusing externally published dependency port: {name}")
     return config
+
+
+def start_dependencies(config: dict) -> None:
+    command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "180", *BASE_SERVICES)
+    if os.environ.get("PROFILE") == "ai":
+        command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "180", "vector-db")
+        provision("vector-db")
+    wait_identity(config)
+    configure_registration(config)
+    bootstrap()
 
 
 def provision(database: str = "postgres") -> None:
@@ -297,11 +356,7 @@ def settings() -> dict[str, str]:
     path = ROOT / ".env"
     if not path.is_file():
         path = ROOT / ".env.example"
-    values = {}
-    for line in path.read_text().splitlines():
-        if line.strip() and not line.lstrip().startswith("#") and "=" in line:
-            key, value = line.split("=", 1)
-            values[key.strip()] = value.strip().strip('"').strip("'")
+    values = {key.strip(): value.strip().strip('"').strip("'") for key, value in read_env_settings(path).items()}
     values.update(os.environ)
     return values
 
@@ -460,31 +515,55 @@ def application_preflight(config: dict) -> None:
         raise ValueError('; '.join(dict.fromkeys(errors)))
 
 
+def subprocess_failure_detail(error: subprocess.SubprocessError) -> str:
+    if isinstance(error, subprocess.TimeoutExpired):
+        return 'Local Docker/startup operation timed out. Check Docker Desktop and service health'
+    if not isinstance(error, subprocess.CalledProcessError):
+        return 'Local process could not complete'
+    stderr = error.stderr if isinstance(error.stderr, str) else ''
+    stopped = re.search(r'service "([a-z][a-z0-9-]{0,63})" is not running', stderr)
+    if stopped:
+        return f'Local service {stopped[1]} is not running. Start dependencies with make local-up'
+    missing = re.search(r'required variable ([A-Z][A-Z0-9_]{1,99})', stderr)
+    if missing:
+        return 'Missing required configuration setting: ' + missing[1]
+    if 'password authentication failed' in stderr.lower():
+        return 'Database authentication failed. Check the local database and migration credential settings'
+    if 'cannot connect to the docker daemon' in stderr.lower():
+        return 'Docker engine is unavailable. Start Docker Desktop and retry'
+    args = error.cmd if isinstance(error.cmd, (list, tuple)) else []
+    if 'build' in args:
+        return 'Docker image build failed. Inspect the Maven/test or build error above'
+    if 'psql' in args:
+        return 'Database preparation failed. Check PostgreSQL health and local migration credentials'
+    if 'config' in args:
+        return 'Docker Compose configuration failed. Check .env and Compose syntax; no configuration values were logged'
+    if 'up' in args:
+        return 'Application startup failed. Inspect the unhealthy/exited service logs in Docker Desktop'
+    return f'Local subprocess failed with exit code {error.returncode}; inspect the command output above'
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["validate", "up", "down", "bootstrap", "status", "migrate", "test-identities", "run-core", "run-ai"])
     args = parser.parse_args()
     try:
+        if args.action == "down":
+            shutdown_project()
+            return 0
         config = validate()
         if args.action == "up":
-            command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "180", *BASE_SERVICES)
-            if os.environ.get("PROFILE") == "ai":
-                command("up", "--detach", "--no-recreate", "--wait", "--wait-timeout", "180", "vector-db")
-                provision("vector-db")
-            wait_identity(config)
-            configure_registration(config)
-            bootstrap()
+            start_dependencies(config)
         elif args.action == "migrate":
             migrate()
         elif args.action == "test-identities":
             seed_test_identities(config)
         elif args.action == "run-core":
             application_preflight(config)
+            start_dependencies(config)
             migrate()
             bootstrap()
             command("--profile", "app", "build", *OWNERS)
-            wait_identity(config)
-            configure_registration(config)
             ensure_actor_key()
             # `build` may have produced new local images. Let Compose recreate only
             # services whose image/config changed so run-core actually runs the build.
@@ -495,8 +574,6 @@ def main() -> int:
             migrate()
             command("build", "ai")
             command("up", "--detach", "--wait", "--wait-timeout", "180", "ai")
-        elif args.action == "down":
-            command("--profile", "*", "down", "--timeout", "30")  # Preserve every named volume.
         elif args.action == "bootstrap":
             bootstrap()
         elif args.action == "status":
@@ -506,7 +583,7 @@ def main() -> int:
         return 0
     except (ValueError, subprocess.SubprocessError, OSError) as exc:
         # Never echo config bodies, credentials or entire failed subprocess arguments.
-        detail = str(exc) if isinstance(exc, ValueError) else type(exc).__name__
+        detail = str(exc) if isinstance(exc, ValueError) else subprocess_failure_detail(exc) if isinstance(exc, subprocess.SubprocessError) else type(exc).__name__
         print(f"Local dependency operation failed: {detail}. Check local daemon/configuration.", file=sys.stderr)
         return 1
 
