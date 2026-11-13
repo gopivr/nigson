@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: mock-local-bootstrap
       POSTGRES_DB: nigson
     ports:
-      - "127.0.0.1:${NIGSON_DB_PORT:-5432}:5432"
+      - "127.0.0.1:${NIGSON_DB_PORT:-5433}:5432"
     volumes:
       - nigson-postgres:/var/lib/postgresql
       - ./infrastructure/docker/postgres/10-local-bootstrap.sql:/docker-entrypoint-initdb.d/10-local-bootstrap.sql:ro
@@ -132,7 +132,7 @@ services:
       NIGSON_EVENT_DLQ: http://localstack:4566/queue/us-east-1/000000000000/commerce-domain-dlq
       SCHEMA_RELEASE: ${SCHEMA_RELEASE:-BP1}
       APP_ENV: ${APP_ENV:-local}
-      NIGSON_SECURITY_ENABLED: ${NIGSON_SECURITY_ENABLED:-false}
+      NIGSON_SECURITY_ENABLED: "true"
       NIGSON_JDBC_URL: jdbc:postgresql://postgres:5432/nigson?currentSchema=commerce
       NIGSON_PROVIDERS_ENABLED: ${NIGSON_PROVIDERS_ENABLED:-false}
       NIGSON_CARRIER_QUOTES_ENABLED: ${NIGSON_CARRIER_QUOTES_ENABLED:-false}
@@ -185,6 +185,7 @@ services:
       NIGSON_LEADS_RATE_LIMIT_MODE: ${NIGSON_LEADS_RATE_LIMIT_MODE:-local}
       NIGSON_LEADS_RATE_LIMIT_PER_MINUTE: ${NIGSON_LEADS_RATE_LIMIT_PER_MINUTE:-1000}
       NIGSON_INSECURE_LOCAL_COOKIE: "true"
+      NIGSON_PUBLIC_ASSET_BASE_URL: ${NIGSON_PUBLIC_ASSET_BASE_URL:-https://cdn.synthetic.test/assets/}
       SERVER_PORT: 8081
     ports:
       - "127.0.0.1:${COMMERCE_PORT:-8081}:8081"
@@ -396,9 +397,66 @@ services:
       migrate-ai:
         condition: service_completed_successfully
 
+  paystack-mock:
+    profiles: [ provider-mocks ]
+    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
+    environment:
+      APP_ENV: local
+      MOCK_PROVIDER: paystack
+    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
+    volumes:
+      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
+      - nigson-paystack-mock:/home/wiremock/state
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+
+  fedex-mock:
+    profiles: [ provider-mocks ]
+    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
+    environment:
+      APP_ENV: local
+      MOCK_PROVIDER: fedex
+    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
+    volumes:
+      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
+      - nigson-fedex-mock:/home/wiremock/state
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+
+  twilio-mock:
+    profiles: [ provider-mocks ]
+    image: wiremock/wiremock:3.13.2@sha256:0d4ecb3e4dc8213fd7a4d37d6a78f6e6b553a6d2e15bd51b0999781282ac61b3
+    environment:
+      APP_ENV: local
+      MOCK_PROVIDER: twilio
+    command: [ "--extensions", "com.nigson.mocks.ProviderStateExtension", "--disable-request-logging", "--no-request-journal" ]
+    volumes:
+      - ./tests/mocks/target/provider-state.jar:/var/wiremock/extensions/provider-state.jar:ro
+      - nigson-twilio-mock:/home/wiremock/state
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "java", "-cp", "/var/wiremock/extensions/provider-state.jar", "com.nigson.mocks.AdminClient", "state", "{}" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+
 volumes:
   nigson-postgres:
   nigson-identity:
   nigson-localstack:
   nigson-mailpit:
   nigson-vector:
+  nigson-paystack-mock:
+  nigson-fedex-mock:
+  nigson-twilio-mock:

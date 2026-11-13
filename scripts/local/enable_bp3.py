@@ -18,8 +18,8 @@ def docker(*args,env=None):
 
 
 def main():
- if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith(('unix://','npipe://')):raise ValueError('Local Docker required')
- if not json.loads(docker('context','inspect'))[0]['Endpoints']['docker']['Host'].startswith(('unix://','npipe://')):raise ValueError('Local Docker required')
+ if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith(('unix://', 'npipe://')):raise ValueError('Local Docker required')
+ if not json.loads(docker('context','inspect'))[0]['Endpoints']['docker']['Host'].startswith(('unix://', 'npipe://')):raise ValueError('Local Docker required')
  config=json.loads(docker('compose','--profile','app','config','--format','json'))
  if config.get('name')!='nigson-local' or config['services']['commerce']['environment'].get('APP_ENV')!='local':raise ValueError('Local nigson project required')
  port=int(config['services']['keycloak']['ports'][0]['published']);base=f'http://127.0.0.1:{port}'

@@ -116,6 +116,7 @@ def command(*arguments: str, capture: bool = False) -> str:
         ["docker", "compose", "--project-name", project, "--env-file", str(envfile),
          "--file", str(ROOT / "docker-compose.yml"), *overlays, *profiles(), *arguments],
         cwd=ROOT, check=True, text=True, capture_output=capture, timeout=900 if "build" in arguments else 240,
+        env={**os.environ, **settings},
     )
     return result.stdout if capture else ""
 
@@ -570,6 +571,7 @@ def main() -> int:
             application_preflight(config)
             start_dependencies(config)
             migrate()
+            bootstrap()
             command("--profile", "app", "build", *OWNERS)
             ensure_actor_key()
             # `build` may have produced new local images. Let Compose recreate only

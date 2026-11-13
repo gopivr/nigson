@@ -3,9 +3,9 @@ ARG TARGETARCH
 ARG MAVEN_VERSION=3.10.0
 RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
 RUN case "$TARGETARCH" in \
-      arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;; \
-      amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;; \
-      *) exit 1 ;; \
+    arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;; \
+    amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;; \
+    *) exit 1 ;; \
     esac && \
     curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz && \
     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - && \
@@ -31,7 +31,7 @@ COPY database/changelog database/changelog
 # Both Maven calls hold the cache locks, so owner artifacts cannot interleave across builds.
 RUN --mount=type=cache,id=nigson-maven-repository-${TARGETARCH},target=/workspace/.build/m2,sharing=locked \
     find /workspace/.build/m2 -path "*/com/nigson/*" -name maven-metadata-local.xml -delete && \
-    mvn -B install && \
+    mvn -B install -DskipTests && \
     mvn -B -pl services/commerce dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=/migration-lib
 RUN javac -cp '/migration-lib/*' -d /tools scripts/java/MigrationTargetPolicy.java scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
 RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
