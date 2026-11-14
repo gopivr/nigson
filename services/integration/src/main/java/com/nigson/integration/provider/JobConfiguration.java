@@ -15,7 +15,7 @@ public class JobConfiguration {
  @Configuration(proxyBeanMethods=false)
  @ConditionalOnProperty(name="NIGSON_PROVIDER_JOBS_ENABLED",havingValue="true")
  public static class Active {
-  @Bean WorkloadIdentity integrationWorkerIdentity(Environment env){return new WorkloadIdentity(env.getRequiredProperty("APP_ENV"),env.getRequiredProperty("NIGSON_OIDC_ISSUER"),env.getRequiredProperty("NIGSON_INTEGRATION_WORKLOAD_SECRET"),env.getProperty("NIGSON_PRODUCT_PHASE",Integer.class,1),Clock.systemUTC());}
+  @Bean WorkloadIdentity integrationWorkerIdentity(Environment env){return new WorkloadIdentity(env.getRequiredProperty("APP_ENV"),env.getRequiredProperty("NIGSON_OIDC_ISSUER"),env.getProperty("NIGSON_OIDC_JWKS",""),env.getRequiredProperty("NIGSON_INTEGRATION_WORKLOAD_SECRET"),env.getProperty("NIGSON_PRODUCT_PHASE",Integer.class,1),Clock.systemUTC());}
   @Bean PaymentReconciliationHandler paymentReconciliationHandler(Environment env,WorkloadIdentity identity){return new PaymentReconciliationHandler(env.getRequiredProperty("APP_ENV"),env.getRequiredProperty("NIGSON_COMMERCE_BASE_URL"),env.getProperty("NIGSON_PAYMENT_RECONCILIATION_LIMIT",Integer.class,25),identity::token);}
   @Bean OrderPendingHandler orderPendingHandler(JobRepository jobs,AuditWriter audit){return new OrderPendingHandler(jobs,audit);}
   @Bean @org.springframework.boot.autoconfigure.condition.ConditionalOnProperties({@ConditionalOnProperty(name="NIGSON_CAREER_SHEET_RECIPIENT_GROUP"),@ConditionalOnProperty(name="NIGSON_SHEETS_MODE")}) CareerApplicationCreatedHandler careerApplicationCreatedHandler(JobRepository jobs,AuditWriter audit,Environment env){return new CareerApplicationCreatedHandler(jobs,audit,env.getRequiredProperty("NIGSON_CAREER_SHEET_RECIPIENT_GROUP"));}

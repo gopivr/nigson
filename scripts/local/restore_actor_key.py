@@ -10,6 +10,17 @@ import os
 from pathlib import Path
 import subprocess
 import uuid
+import shutil
+import sys
+
+if sys.platform == "win32" and not shutil.which("docker"):
+    for _docker_candidate in [
+        Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "DockerDesktop" / "resources" / "bin",
+        Path(r"C:\Program Files\Docker\Docker\resources\bin"),
+    ]:
+        if (_docker_candidate / "docker.exe").is_file():
+            os.environ["PATH"] = str(_docker_candidate) + os.pathsep + os.environ.get("PATH", "")
+            break
 
 ROOT = Path(__file__).resolve().parents[2]
 
