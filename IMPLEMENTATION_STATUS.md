@@ -1,3 +1,7 @@
+ADMIN-NORMAL-LOGIN-PRICING - IN_PROGRESS (local verification complete). Per explicit user decision/ADR-027, current persisted ADMIN may manage price books and retail binding using normal login without OTP. Other Finance/general market MFA checks are unchanged. Backend build and 18 unit tests pass; 15 database tests skipped. Frontend 24 tests and admin-shop/shell production builds pass. Running backend restart and live acceptance pending. Evidence: docs/implementation/2026-11-14-ADMIN-NORMAL-LOGIN-PRICING.md.
+
+PRODUCT-SELLING-PRICE ? IN_PROGRESS (implementation verified locally). Product editor uses authorized immutable retail price-book replacement; storefront/cart use backend pricing. Frontend 21 tests and admin-shop/shop/shell builds pass. Java 25 build and 12 unit tests pass; 15 isolated-database tests skipped. Runtime restart and authenticated database acceptance remain pending. Evidence: docs/implementation/2026-11-14-PRODUCT-SELLING-PRICE.md.
+
 RUN-CORE-REPAIR — IN_PROGRESS. Start dependencies before migration and surface safe, actionable subprocess failures.
 
 LOCAL-DOWN-REPAIR — DONE. Shutdown selects only the local project by Docker labels without parsing Compose/.env, preserves named volumes, and reports configuration conflict lines without secrets. Actual shutdown/volume verification passed. Evidence: `.build/provider-removal/local-down-verification.log`.

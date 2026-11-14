@@ -429,7 +429,7 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 
 - **Service / module / phase:** commerce / pricing / BP1.
 - **Authentication:** Verified session/bearer or explicitly described capability/OIDC flow.
-- **Authorization:** SALES; resource/organization/market checks required.
+- **Authorization:** Current persisted ADMIN with normal login (no OTP/MFA), or the existing SALES/FINANCE role appropriate to this operation; non-admin FINANCE actions still require recent MFA. Resource/market checks remain required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -444,7 +444,7 @@ Implemented API-013–025/149 catalogue behavior, current-role policy, publicati
 
 - **Service / module / phase:** commerce / pricing / BP1.
 - **Authentication:** Verified session/bearer or explicitly described capability/OIDC flow.
-- **Authorization:** FINANCE; resource/organization/market checks required.
+- **Authorization:** Current persisted ADMIN with normal login (no OTP/MFA), or the existing SALES/FINANCE role appropriate to this operation; non-admin FINANCE actions still require recent MFA. Resource/market checks remain required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -2276,7 +2276,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / pricing / BP1.
 - **Authentication:** Verified session/bearer or explicitly described capability/OIDC flow.
-- **Authorization:** SALES; resource/organization/market checks required.
+- **Authorization:** Current persisted ADMIN with normal login (no OTP/MFA), or the existing SALES/FINANCE role appropriate to this operation; non-admin FINANCE actions still require recent MFA. Resource/market checks remain required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** None; section13 common UUID/identifier types.
 - **Query:** segment,currency:optional; page,size,sort
@@ -2291,7 +2291,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / pricing / BP1.
 - **Authentication:** Verified session/bearer or explicitly described capability/OIDC flow.
-- **Authorization:** SALES; resource/organization/market checks required.
+- **Authorization:** Current persisted ADMIN with normal login (no OTP/MFA), or the existing SALES/FINANCE role appropriate to this operation; non-admin FINANCE actions still require recent MFA. Resource/market checks remain required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
@@ -2456,14 +2456,14 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 
 - **Service / module / phase:** commerce / market / BP1.
 - **Authentication:** Verified session/bearer or explicitly described capability/OIDC flow.
-- **Authorization:** FINANCE; resource/organization/market checks required.
+- **Authorization:** Current persisted ADMIN with normal login (no OTP/MFA), or the existing SALES/FINANCE role appropriate to this operation; non-admin FINANCE actions still require recent MFA. Resource/market checks remain required.
 - **Headers:** section12; CSRF on cookie mutations, If-Match on versioned commands, Idempotency-Key on creates/external side effects; provider callback uses its signature header and exact content type.
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `{priceBookId:UUID,reason:string}`.
 - **Response:** `MarketDTO`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Recent MFA and If-Match; book RETAIL/currency/effective dates valid; atomically update policy revision.
+- **Validation / business rules:** If-Match (recent MFA required only for the non-admin FINANCE alternative); book RETAIL/currency/effective dates valid; atomically update policy revision.
 - **Events:** market.changed.v1
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, MARKET_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -3174,3 +3174,16 @@ API-029/031/162/169 are implemented in the reviewed commerce OpenAPI. API-031 us
 Implemented commerce pricing increment: exact API-026/027/028/036/150/151 reviewed in contracts/openapi/commerce.yaml (44 paths/49 operations). Current SALES draft/page/copy-on-write revisions, FINANCE/recent MFA activation and CUSTOMER immutable carrier-bound quote creation; explicit retail/current entitled wholesale/frozen approved offered-price precedence, exact minor-unit/tax rounding, no-store and bounded queries. Same-key replay rechecks current authority and both current/original organization entitlement. No stock reservation/provider HTTP in quote creation. Missing business/provider/promotion approvals fail closed; live qualification and downstream checkout composition remain separate. See docs/runbooks/pricing.md and implementation 40b0eb99600f50a7c03fa04d0cd118c0186fd93a.
 
 Pricing common-contract correction accepted in 59f5f1decfcd4a6ca105274cbd50ee867f6d0770: maximum100 book entries/parcels, exact currency-scale staff amounts and canonical PostgreSQL-microsecond quote expiry. Native28/full73 Java and all54 contract checks PASS; original implementation/failure history preserved. No provider/business activation implied.
+
+## Product editor retail pricing integration (14 November 2026)
+
+API-150 adds a required retailBindings array (at most the NG market): marketId, code, priceBookId (nullable), and market version. SALES authorization and the existing repeatable-read transaction apply to both the page and binding. No tax, provider or identity configuration is exposed.
+
+The editor uses an immutable replacement RETAIL/NGN book under a unique code, preserving every existing SKU and quantity tier except the explicitly edited base entry. API-027 creates it; API-028 requires FINANCE and recent MFA for activation; API-162 binds it with the captured market If-Match version. No published book is mutated, no market is enabled, and no approval checks are bypassed. A failed or uncertain activation/binding must not be reported as a saved selling price. The market version prevents a stale copy from overwriting another price edit; unused replacement books remain audit evidence. Product metadata is saved separately, and the UI reports partial completion explicitly.
+
+Product metadata starting_price, wholesale_rate and distributor_rate are not selling-price authority. The storefront fetches API-026 prices for the actual quantity; the product editor does not infer distributor discounts. Existing metadata is not bulk-migrated into prices.
+
+
+### Normal admin pricing policy amendment (ADR-027)
+
+API-150/027/151/028/162 accept a current persisted ADMIN session without OTP, as explicitly requested by the user. Earlier descriptions of FINANCE-only activation/binding above or in historical reports are superseded for this admin path. Existing non-admin Sales/Finance authorization and recent MFA rules remain unchanged, as do all other Finance and general market operations.

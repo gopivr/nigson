@@ -13,7 +13,8 @@ public final class PricingValues {
  public record Input(String code,String currency,String segment,Instant effectiveFrom,Instant effectiveUntil,List<Entry> entries){public Input{entries=List.copyOf(entries);}}
  public record Book(UUID id,String code,long revision,String currency,String segment,Instant effectiveFrom,Instant effectiveUntil,boolean active,List<Entry> entries,long version){}
  public record Query(String segment,String currency,int page,int size,String sort){public Query{ApiValues.page(page,size);if(segment!=null&&!Set.of("RETAIL","DISTRIBUTOR").contains(segment))throw ApiValues.invalid();if(currency!=null)PricingValues.currency(currency);ApiValues.sort(sort,Set.of("code,asc","code,desc","revision,asc","revision,desc","effectiveFrom,asc","effectiveFrom,desc"));}}
- public record Page(List<Book> items,int page,int size,long totalElements,long totalPages){}
+ public record RetailBinding(UUID marketId,String code,UUID priceBookId,long version){}
+ public record Page(List<Book> items,int page,int size,long totalElements,long totalPages,List<RetailBinding> retailBindings){public Page(List<Book> items,int page,int size,long totalElements,long totalPages){this(items,page,size,totalElements,totalPages,List.of());}}
  public record Price(UUID skuId,String unitAmount,String currency,String minimumQuantity,String packMultiple,long priceBookRevision,Instant validUntil){}
  public record QuoteInput(UUID cartId,UUID addressId,UUID carrierQuoteId,String couponCode){}
  public record Line(UUID skuId,String quantity,String unitAmount,String lineTotal){}

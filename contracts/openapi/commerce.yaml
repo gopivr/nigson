@@ -7869,7 +7869,7 @@
     "/api/v1/staff/markets/{id}/retail-price-book": {
       "put": {
         "operationId": "API-162",
-        "description": "Current FINANCE/recent MFA/CSRF/If-Match. Require active RETAIL book of matching approved currency and current effective interval. Lock Party/market/currency/book; atomically increment market version/policy revision with EVT-008/audit/response. Assignment never enables a market.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -8395,7 +8395,7 @@
     "/api/v1/staff/price-books": {
       "get": {
         "operationId": "API-150",
-        "description": "Current SALES, no organization. Bounded repeatable-read staff page of draft and active revisions; fixed sort plus UUID tie-break. Entries loaded in one bounded batch.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. Returns retailBindings for NG from the same repeatable-read snapshot.",
         "security": [
           {
             "bffSession": []
@@ -8574,7 +8574,7 @@
       },
       "post": {
         "operationId": "API-027",
-        "description": "Current SALES/CSRF/key. Explicit nonempty draft revision1; active approved currency, SKU scale and exact minor units. Numeric duplicate thresholds rejected; family advisory lock plus durable idempotency and atomic audit. No prices or market activation invented.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -8731,7 +8731,7 @@
     "/api/v1/staff/price-books/{id}/activation": {
       "post": {
         "operationId": "API-028",
-        "description": "Current FINANCE/recent MFA15m/CSRF/key/If-Match. Effective nonexpired valid draft and nonoverlapping active family interval. Immutable published entries; atomically activate/version/audit/EVT-007/ack. Does not choose a default market book; API-162 remains explicit.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -8907,7 +8907,7 @@
     "/api/v1/staff/price-books/{id}/revisions": {
       "post": {
         "operationId": "API-151",
-        "description": "Current SALES/CSRF/key/If-Match of parent. Serialize family, require latest revision and next effective interval, same currency/segment. Copy-on-write new draft/revision; published prices never changed. An open-ended active parent cannot be silently shortened.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -24000,7 +24000,8 @@
           "page",
           "size",
           "totalElements",
-          "totalPages"
+          "totalPages",
+          "retailBindings"
         ],
         "properties": {
           "items": {
@@ -24028,6 +24029,41 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          },
+          "retailBindings": {
+            "type": "array",
+            "maxItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "marketId",
+                "code",
+                "priceBookId",
+                "version"
+              ],
+              "properties": {
+                "marketId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "code": {
+                  "type": "string",
+                  "const": "NG"
+                },
+                "priceBookId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "version": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
           }
         }
       },
