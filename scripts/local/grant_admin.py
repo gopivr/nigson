@@ -3,8 +3,9 @@
 import json
 import os
 import uuid
-from seed_demo import ROOT, uid, literal
-from provision_demo_user import command, ROLES
+from seed_demo import ROOT, uid, literal, docker as command
+
+ROLES = ('ADMIN', 'CONTENT_EDITOR', 'CONTENT_PUBLISHER', 'SALES', 'OPERATIONS', 'FINANCE', 'ANALYST')
 
 
 def main():
