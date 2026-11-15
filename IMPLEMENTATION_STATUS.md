@@ -1,3 +1,5 @@
+LOCAL-PANDAGO-STAGING-QUOTES — DONE locally. Enabled the PandaGo stage delivery provider using the verified mode-600 `.local/pandago/account.env` credentials. `run-core` now selects `docker-compose.pandago.yml`, loads the staging account, refuses LIVE targets or credential drift, and the local seed now adds synthetic carton packaging for the eight catalogue SKUs. Live authenticated BFF `POST /api/v1/carts/{id}/delivery-quotes` returned 201 PANDAGO / SANDBOX / NGN 26.00. Postal-only addresses still fail closed with 503 `GEOCODING_ACCESS_DENIED` because Google Cloud billing remains disabled; that is the remaining UI blocker. No booking, order or payment was created; `NIGSON_ORDER_CHECKOUT_ENABLED=false`. Evidence: `docs/implementation/2026-11-14-LOCAL-PANDAGO-STAGING-QUOTES.md`.
+
 ADMIN-NORMAL-LOGIN-PRICING - IN_PROGRESS (local verification complete). Per explicit user decision/ADR-027, current persisted ADMIN may manage price books and retail binding using normal login without OTP. Other Finance/general market MFA checks are unchanged. Backend build and 18 unit tests pass; 15 database tests skipped. Frontend 24 tests and admin-shop/shell production builds pass. Running backend restart and live acceptance pending. Evidence: docs/implementation/2026-11-14-ADMIN-NORMAL-LOGIN-PRICING.md.
 
 PRODUCT-SELLING-PRICE ? IN_PROGRESS (implementation verified locally). Product editor uses authorized immutable retail price-book replacement; storefront/cart use backend pricing. Frontend 21 tests and admin-shop/shop/shell builds pass. Java 25 build and 12 unit tests pass; 15 isolated-database tests skipped. Runtime restart and authenticated database acceptance remain pending. Evidence: docs/implementation/2026-11-14-PRODUCT-SELLING-PRICE.md.
@@ -14,13 +16,15 @@ LOCAL-LIVE-REVALIDATION — DONE for local startup/public-route repair. Real Pay
 
 # Backend Implementation Status
 
-Specification:1.1.0 | Architecture source:1.0 + ADR-008/ADR-009 | Updated:7 November2026 UTC
+Specification:1.1.0 | Architecture source:1.0 + ADR-008/ADR-009 | Updated:14 November2026 UTC
 
 ## Current Phase
 
 EP10 — Platform infrastructure and immutable delivery pipeline (INFRA-001). INT-NOTIF-001 offline engineering is complete; stage, restore and genuine provider qualification gates remain input-bound. BP1 launch composition remains section46.
 
 ## Current Task
+
+LOCAL-FULL-STACK-ACTIVATION — DONE locally. Enabled the local storefront against real owner APIs with a guarded, synthetic-only local seed. NG/NGN market `enabled=true` with six categories, two brands, eight active products/SKUs and eight retail prices (`scripts/local/seed_local_catalogue.py`, refuses non-local Docker/project/`APP_ENV`). Local activation stays behind `NIGSON_LOCAL_SYNTHETIC_SELLING` (refused outside `APP_ENV=local`) with a new regression test; production activation still fails closed. Raised local `SCHEMA_RELEASE` to `BP5` so API-073 exists, enabled local quotes, and run-core now applies canonical Keycloak workload scopes so Commerce→Experience relays no longer return `503 PROVIDER_UNAVAILABLE`. Storefront product list/detail now derive SKU, category, assets and price from the real catalogue APIs instead of `DEMO_SKU_MAP` heuristics. Verified: live markets/categories/products/detail/price/brands/recommendations 200; authenticated BFF `GET /api/v1/quote-requests` 200 and `POST` 201 `NEW` with the created lead in own history; 22 catalogue + 26 market + 15 lead + 18 lead-intake native tests, 0 skipped; 40 frontend tests; shop/shell builds; `make run-core` healthy. Checkout and other provider features remain enabled=false and return `FEATURE_DISABLED`/`PROVIDER_UNAVAILABLE`, never mock success; delivery quotes are enabled locally only through the verified PandaGo stage overlay (see LOCAL-PANDAGO-STAGING-QUOTES). Evidence: `docs/implementation/2026-11-14-LOCAL-FULL-STACK-ACTIVATION.md`.
 
 ADMIN-FUNCTIONAL-AUDIT — IN_PROGRESS. Audit every admin read/action, remove fabricated proxy/local success and verify real owner APIs with reversible local test data.
 
