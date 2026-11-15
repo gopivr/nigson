@@ -34,4 +34,20 @@ class PandagoAutomaticAddressTest {
  }
  @Test void retainsExistingSavedCoordinatesWithoutAnotherLookup(){providerReady();service().quote(proof(),input(new BigDecimal("6.5"),new BigDecimal("3.4")),UUID.randomUUID());verifyNoInteractions(geocoder);}
  @Test void failedAddressLookupNeverCallsCarrierOrPersistsAQuote(){when(geocoder.resolve(any())).thenThrow(new Problem.Failure(ProblemCode.ADDRESS_NOT_LOCATED));assertThatThrownBy(()->service().quote(proof(),input(null,null),UUID.randomUUID())).isInstanceOfSatisfying(Problem.Failure.class,e->assertThat(e.code).isEqualTo(ProblemCode.ADDRESS_NOT_LOCATED));verifyNoInteractions(provider,store);}
+ @Test void providerFeeRejectionIsARuleOutcomeAndIsNotPersisted(){
+  when(provider.estimate(any(),any(),any(),any())).thenThrow(new ProviderHttp.Failure("PROVIDER_HTTP_422",false,422));
+  assertThatThrownBy(()->service().quote(proof(),input(new BigDecimal("6.5"),new BigDecimal("3.4")),UUID.randomUUID())).isInstanceOfSatisfying(Problem.Failure.class,e->assertThat(e.code).isEqualTo(ProblemCode.PROVIDER_RULE_VIOLATION));
+  verifyNoInteractions(store);
+ }
+ @Test void providerQuoteRejectionIsARuleOutcomeAndIsNotPersisted(){
+  when(provider.estimate(any(),any(),any(),any())).thenReturn(new PandagoAdapter.Estimate(new BigDecimal("26.00"),"NGN",clock.instant().plusSeconds(60),clock.instant().plusSeconds(600),"PT9M","PT8M","PT10M"));
+  when(provider.quote(any())).thenThrow(new ProviderHttp.Failure("PROVIDER_HTTP_422",false,422));
+  assertThatThrownBy(()->service().quote(proof(),input(new BigDecimal("6.5"),new BigDecimal("3.4")),UUID.randomUUID())).isInstanceOfSatisfying(Problem.Failure.class,e->assertThat(e.code).isEqualTo(ProblemCode.PROVIDER_RULE_VIOLATION));
+  verifyNoInteractions(store);
+ }
+ @Test void providerOutageIsNotReclassifiedAsARuleOutcome(){
+  when(provider.estimate(any(),any(),any(),any())).thenThrow(new ProviderHttp.Failure("PROVIDER_HTTP_503",true,503));
+  assertThatThrownBy(()->service().quote(proof(),input(new BigDecimal("6.5"),new BigDecimal("3.4")),UUID.randomUUID())).isInstanceOf(ProviderHttp.Failure.class);
+  verifyNoInteractions(store);
+ }
 }

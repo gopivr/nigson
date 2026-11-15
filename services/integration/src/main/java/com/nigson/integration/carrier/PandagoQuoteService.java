@@ -37,8 +37,17 @@ public final class PandagoQuoteService {
  public CarrierValues.Quote quote(PrivateWorkload.Proof proof,CarrierValues.QuoteInput input,UUID correlation){
   proof(proof);if(input==null||input.shipper()!=null||input.serviceCode()!=null||correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();
   if(!approvedUntil.isAfter(clock.instant()))throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);
-  var destination=location(input.destination());var estimate=provider.estimate(input.commandId(),new PandagoAdapter.Recipient(input.destination().recipient(),input.destination().phone(),destination),new java.math.BigDecimal(input.orderAmount()),"Nigson checkout order "+input.cartId());
-  var quote=provider.quote(destination);Instant latest=clock.instant().plusSeconds(300);Instant expires=quote.expiresAt().isBefore(approvedUntil)?quote.expiresAt():approvedUntil;if(latest.isBefore(expires))expires=latest;
+  var destination=location(input.destination());
+  PandagoAdapter.Estimate estimate;PandagoAdapter.Quote quote;
+  try{
+   estimate=provider.estimate(input.commandId(),new PandagoAdapter.Recipient(input.destination().recipient(),input.destination().phone(),destination),new java.math.BigDecimal(input.orderAmount()),"Nigson checkout order "+input.cartId());
+   quote=provider.quote(destination);
+  }catch(ProviderHttp.Failure rejected){
+   // A read-only quote the provider refuses (for example an address outside the
+   // deliverable range) is a rule outcome, not an outage; retrying cannot help.
+   if(!rejected.uncertain&&rejected.status==422)throw new Problem.Failure(ProblemCode.PROVIDER_RULE_VIOLATION);
+   throw rejected;
+  }Instant latest=clock.instant().plusSeconds(300);Instant expires=quote.expiresAt().isBefore(approvedUntil)?quote.expiresAt():approvedUntil;if(latest.isBefore(expires))expires=latest;
   if(!expires.isAfter(clock.instant()))throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE);
   var result=new CarrierValues.Quote("PANDAGO","PANDAGO","NGN",quote.fee().setScale(2).toPlainString(),expires,quote.id(),
    estimate.fee().setScale(2).toPlainString(),estimate.estimatedPickupTime(),estimate.estimatedDeliveryTime(),estimate.deliveryDuration(),estimate.lowerBound(),estimate.upperBound());

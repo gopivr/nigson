@@ -34,7 +34,10 @@ public final class PaystackAdapter {
  }
  public JsonNode verify(String ref,long expectedKobo){
   var data=call("GET","/transaction/verify/"+reference(ref),null);
-  if(expectedKobo<=0||!data.path("domain").asString().equals(mode==ProviderHttp.Mode.LIVE?"live":"test")||!data.path("amount").isIntegralNumber()||data.path("amount").asLong()!=expectedKobo||!data.path("currency").asString().equals("NGN")||!data.path("reference").asString().equals(ref)||!Set.of("abandoned","failed","ongoing","pending","processing","queued","reversed","success").contains(data.path("status").asString()))throw new IllegalArgumentException("PAYSTACK_VERIFICATION_MISMATCH");return data;
+  // Paystack reports the base request in requested_amount; amount can include pass-through fees.
+  var requested=data.get("requested_amount");
+  long reported=requested!=null&&requested.isIntegralNumber()?requested.asLong():data.path("amount").asLong();
+  if(expectedKobo<=0||!data.path("amount").isIntegralNumber()||data.path("amount").asLong()<reported||reported!=expectedKobo||!data.path("domain").asString().equals(mode==ProviderHttp.Mode.LIVE?"live":"test")||!data.path("currency").asString().equals("NGN")||!data.path("reference").asString().equals(ref)||!Set.of("abandoned","failed","ongoing","pending","processing","queued","reversed","success").contains(data.path("status").asString()))throw new IllegalArgumentException("PAYSTACK_VERIFICATION_MISMATCH");return data;
  }
  public JsonNode refund(String ref,String amount){return call("POST","/refund",Map.of("transaction",reference(ref),"amount",kobo(amount)));}
  public JsonNode refund(String ref,String amount,String businessReference){if(businessReference==null||!businessReference.matches("[A-Za-z0-9_-]{1,120}"))throw new IllegalArgumentException("REFUND_REFERENCE_INVALID");return call("POST","/refund",Map.of("transaction",reference(ref),"amount",kobo(amount),"currency","NGN","merchant_note",businessReference));}
