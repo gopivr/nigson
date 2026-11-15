@@ -219,8 +219,9 @@ not a provider qualification.
 
 ## Last successful commit
 
-`4684591` (`enabling carrier`). This session's changes are uncommitted in the
-working tree.
+`d8a2619` (`feat(checkout): enable local Paystack TEST checkout and provider rule
+mapping`), on top of `4684591` (`enabling carrier`). The local `.env` runtime
+values stay uncommitted on purpose (see the security note above).
 
 ## Open issues/activation inputs
 
