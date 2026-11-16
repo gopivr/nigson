@@ -399,3 +399,57 @@ tracking route was mounted in the shell and no invoice API exists.
   (7 checkout + 4 order mapping + 3 invoice document). `ng build account`,
   `ng build shop` and `ng build support` PASS.
 - Commit `ecafb73` in the storefront repository.
+
+## Follow-up 2026-11-16: referral code 404
+
+`GET /api/v1/me/referral-code` answered `404 NOT_FOUND`. That is API-063's
+documented answer when no code exists; the real defects were on either side of
+it:
+
+- The account page let the global API-error interceptor render the expected 404
+  as a failure banner, and offered no way to call API-161, so the card could
+  never leave the empty state. Its copy claimed the code "will activate
+  automatically after your first verified order", which no backend path
+  implements.
+- Compose never passed `NIGSON_REWARD_REFERRAL_BASE_URL`, so even a correct
+  POST would have failed closed with `FEATURE_DISABLED`.
+- The hand-started commerce container also carried `NIGSON_ORDER_*` activation
+  values that Compose did not declare. A plain `make run-core` recreate failed
+  at startup with `PAYMENT_PROVIDER_BINDING_REQUIRED`, so the approved local
+  TEST checkout was not reproducible from the tracked configuration.
+
+Changes:
+
+- `AccountService.loadReferral` marks `404:NOT_FOUND` through
+  `LOCAL_API_FAILURE_CODES`, so the documented empty state no longer raises the
+  error banner. Non-404 failures set `referralError` and render inside the card.
+- The profile referral card now has an explicit **Create referral code** button
+  that calls the idempotent API-161 POST, disables while in flight and shows the
+  stable code/link afterwards. API-063 stays a pure read; no code is invented.
+- Compose passes `NIGSON_REWARD_REFERRAL_BASE_URL` (empty by default, which
+  keeps creation closed) and the checkout activation values
+  (`NIGSON_ORDER_CHECKOUT_ENABLED`, `NIGSON_ORDER_PAYMENT_MODE`,
+  `NIGSON_ORDER_MERCHANT_ACCOUNT`, `NIGSON_ORDER_STOCK_LOCATION_PRIORITY`,
+  `NIGSON_ORDER_RESERVATION_SECONDS`). `.env.example` documents both.
+- `scripts/local/referral_smoke.py` proves the flow with a temporary realm
+  customer; the BFF login flow moved into `checkout_smoke.bff_login` so both
+  harnesses share it.
+
+Evidence:
+
+- `python3 scripts/local/referral_smoke.py` PASS: GET before creation
+  `404 NOT_FOUND`; POST `201` with a code and a link under the configured base;
+  GET `200` with the same body; same-key replay `201` identical; new-key replay
+  `201` with the same stable code. Temporary identity and commerce rows removed.
+- `python3 scripts/local/checkout_smoke.py` PASS after the login refactor and
+  the Compose fix: real PandaGo `SANDBOX` quote, checkout quote, attempt `201`,
+  `checkout.paystack.com`, cleanup `200 CANCELLED`.
+- Frontend: `npx vitest run --config vitest.checkout.config.mjs` 19/19 PASS
+  (4 new referral service tests, 2 profile action tests); `ng build account`
+  PASS.
+- Commits: `042682d` (commerce/Compose harness) and `4b8e7e4` (storefront).
+
+Local-only caveat: the working tree has no public storefront base, so the local
+`.env` uses the synthetic `https://shop.synthetic.test/referrals/` placeholder.
+Deployments must set the real public HTTPS storefront base before referral links
+are shared; the tracked default stays empty and fails closed.
