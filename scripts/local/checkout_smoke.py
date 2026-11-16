@@ -91,6 +91,55 @@ def bff_json(path, token, method='GET', body=None, version=None, idempotency=Non
     return status, parsed, raw
 
 
+def bff_login(username, password, return_to='/checkout'):
+    """Complete the real BFF OIDC login form and return the CSRF token."""
+    status, headers, _ = call(BFF + '/bff/login?returnTo=' + return_to, cookie_header=False)
+    if status != 302:
+        raise RuntimeError(f'/bff/login HTTP {status}')
+    authorization = headers['Location']
+    if not authorization.startswith(KC + f'/realms/{REALM}/protocol/openid-connect/auth'):
+        raise RuntimeError('unexpected authorization endpoint')
+    status, headers, html = call(authorization)
+    if status != 200:
+        raise RuntimeError(f'login form HTTP {status}')
+    text = html.decode()
+    action = None
+    for fragment in text.split('<form')[1:]:
+        if 'action=' in fragment:
+            action = fragment.split('action="', 1)[1].split('"', 1)[0].replace('&amp;', '&')
+            break
+    if not action:
+        raise RuntimeError('login form action missing')
+    fields = []
+    for chunk in text.split('<input')[1:]:
+        if 'name="' not in chunk:
+            continue
+        name = chunk.split('name="', 1)[1].split('"', 1)[0]
+        value = ''
+        if 'value="' in chunk:
+            value = chunk.split('value="', 1)[1].split('"', 1)[0]
+        fields.append((name, value.replace('&amp;', '&')))
+    form = [(n, v) for n, v in fields if n not in ('username', 'password')]
+    form += [('username', username), ('password', password)]
+    status, headers, _ = call(
+        action, 'POST', urllib.parse.urlencode(form).encode(),
+        {'Content-Type': 'application/x-www-form-urlencoded'},
+    )
+    if status != 302 or '/bff/callback' not in headers.get('Location', ''):
+        raise RuntimeError(f'credential submit HTTP {status}')
+    callback = headers['Location']
+    if callback.startswith('/'):
+        callback = BFF + callback
+    status, headers, _ = call(callback)
+    if status != 302:
+        raise RuntimeError(f'/bff/callback HTTP {status}')
+    status, _, raw = call(BFF + '/bff/session')
+    session = json.loads(raw)
+    if not session.get('authenticated'):
+        raise RuntimeError('BFF session not authenticated')
+    return session['csrfToken']
+
+
 def main():
     admin = admin_token()
     admin_base = f'{KC}/admin/realms/{REALM}'
@@ -138,51 +187,7 @@ def main():
         if status not in (201, 204):
             raise RuntimeError(f'assign role HTTP {status}')
 
-        status, headers, _ = call(BFF + '/bff/login?returnTo=/checkout', cookie_header=False)
-        if status != 302:
-            raise RuntimeError(f'/bff/login HTTP {status}')
-        authorization = headers['Location']
-        if not authorization.startswith(KC + f'/realms/{REALM}/protocol/openid-connect/auth'):
-            raise RuntimeError('unexpected authorization endpoint')
-        status, headers, html = call(authorization)
-        if status != 200:
-            raise RuntimeError(f'login form HTTP {status}')
-        text = html.decode()
-        action = None
-        for fragment in text.split('<form')[1:]:
-            if 'action=' in fragment:
-                action = fragment.split('action="', 1)[1].split('"', 1)[0].replace('&amp;', '&')
-                break
-        if not action:
-            raise RuntimeError('login form action missing')
-        fields = []
-        for chunk in text.split('<input')[1:]:
-            if 'name="' not in chunk:
-                continue
-            name = chunk.split('name="', 1)[1].split('"', 1)[0]
-            value = ''
-            if 'value="' in chunk:
-                value = chunk.split('value="', 1)[1].split('"', 1)[0]
-            fields.append((name, value.replace('&amp;', '&')))
-        form = [(n, v) for n, v in fields if n not in ('username', 'password')]
-        form += [('username', username), ('password', password)]
-        status, headers, _ = call(
-            action, 'POST', urllib.parse.urlencode(form).encode(),
-            {'Content-Type': 'application/x-www-form-urlencoded'},
-        )
-        if status != 302 or '/bff/callback' not in headers.get('Location', ''):
-            raise RuntimeError(f'credential submit HTTP {status}')
-        callback = headers['Location']
-        if callback.startswith('/'):
-            callback = BFF + callback
-        status, headers, _ = call(callback)
-        if status != 302:
-            raise RuntimeError(f'/bff/callback HTTP {status}')
-        status, _, raw = call(BFF + '/bff/session')
-        session = json.loads(raw)
-        if not session.get('authenticated'):
-            raise RuntimeError('BFF session not authenticated')
-        csrf = session['csrfToken']
+        csrf = bff_login(username, password)
         print('PASS authenticated checkout smoke session')
 
         status, markets, _ = bff_json('/api/v1/markets', csrf)
