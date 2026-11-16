@@ -376,3 +376,26 @@ raw-shape bug affected `cancelOrder` and the hosted-checkout return page.
   `ng build support` PASS.
 - Commit `20d7ddb` in the storefront repository
   (`nigson-micro-frontend/`).
+
+## Follow-up 2026-11-16: Track and Invoice actions
+
+The orders list rendered Track and Invoice as buttons with no handlers; no
+tracking route was mounted in the shell and no invoice API exists.
+
+- **Track** now links to `/account/orders/:id` with `fragment="tracking"`; the
+  detail page scrolls the Order Progress card into view after the order loads.
+  This uses the already-authorized API-051 tracking data instead of adding a
+  new support remote route.
+- **Invoice** is generated in the browser from the mapped order record and
+  opened in a print-ready window (`window.print()`), with an HTML download
+  fallback when the popup is blocked. It includes order number, date, payment
+  state, billed/delivery addresses, items, discount, delivery, tax, total and
+  refunded amount. All values come from API-039; no seller tax id, company
+  registration number or address is invented. Freely-typed product and address
+  text is HTML-escaped.
+- `BackendOrder` now carries `discountMinorUnits` and `refundedMinorUnits` from
+  the order totals.
+- Tests: `npx vitest run --config vitest.checkout.config.mjs` 14/14 PASS
+  (7 checkout + 4 order mapping + 3 invoice document). `ng build account`,
+  `ng build shop` and `ng build support` PASS.
+- Commit `ecafb73` in the storefront repository.
