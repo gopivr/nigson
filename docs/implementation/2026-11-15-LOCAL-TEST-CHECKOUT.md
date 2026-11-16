@@ -241,3 +241,103 @@ Enable the Paystack webhook/settlement path (API-038/API-039) with a real
 integration/merchant reference, a registered callback and a completed hosted TEST
 payment when the user supplies those activation inputs. The out-of-range mapping
 is now approved and implemented, so it no longer blocks the storefront.
+
+# Follow-up 2026-11-15: hosted checkout return and local TEST settlement
+
+Task status: DONE locally (refund execution and production activation remain
+BLOCKED)
+
+## Request addressed
+
+The customer completed a real Paystack TEST payment but the browser stayed on
+`checkout.paystack.com` instead of returning to the storefront, and the order
+stayed `PENDING` because no settlement path was active. The user chose
+"Redirect + local TEST settlement": return to the storefront and settle a
+completed TEST payment locally, still without live money or a PandaGo booking.
+
+## Root causes
+
+1. `PaystackAdapter.initialize` never sent `callback_url`, so the hosted page had
+   no return target at all. Paystack only redirects when that field is supplied.
+2. `NIGSON_PAYMENT_ENABLED` was off, so no receipt processor, reconciler or
+   polling worker existed; even a correct return page could only poll an attempt
+   that would never leave `PENDING`.
+
+## Changes
+
+- `PaystackAdapter.initialize(..., callbackUrl)` sends `callback_url`. The value
+  must be an absolute `https` URL without query, fragment or user-info;
+  `http` is accepted only for `localhost`/`127.0.0.1` in `local`/`test`.
+  Invalid values fail with `PAYSTACK_CALLBACK_INVALID` before any HTTP call.
+- `OrderPolicy.checkoutReturnUrl` requires `NIGSON_CHECKOUT_RETURN_URL` whenever
+  checkout is enabled outside `MOCK` and applies the same rules; missing or
+  unsafe values fail closed with `CHECKOUT_RETURN_URL_REQUIRED`.
+  `CheckoutPaymentCoordinator` passes the validated URL to `initialize`.
+- Local `.env` sets
+  `NIGSON_CHECKOUT_RETURN_URL=http://localhost:4200/checkout/success`. Compose
+  and `.env.example` document the variable, worker delay, receipt-key inputs and
+  the integration id. The return route already existed but only read `id`; the
+  storefront did not persist the order id before leaving the app.
+- `checkout.component` stores `nigson.checkout.payment.<reference>` and
+  `nigson.checkout.last` in `sessionStorage` before redirecting.
+- `order-success.component` reads `reference`/`trxref`, resolves the order from
+  the query or `sessionStorage`, polls API-041 every 3s for up to 60s and shows
+  distinct CHECKING/PAID/PENDING/FAILED/UNVERIFIED states. It never claims
+  "paid" before the API reports a verified or settled attempt.
+- `shared-ui` adds `OrderPayment` and `OrderService.getPayment(orderId)` for
+  API-041.
+- Local TEST settlement is enabled with `NIGSON_PAYMENT_ENABLED=true` so the
+  payment worker polls `INITIATING/PENDING/UNKNOWN` attempts. `RefundCoordinator`
+  still requires the real Paystack integration id; locally `refunds` is replaced
+  by `SettlementOnlyRefunds`, which fails closed with
+  `PAYSTACK_REFUND_ACCOUNT_REQUIRED` for submit/inspect. Outside `local`/`test`
+  the missing integration id still refuses startup. No account identifier is
+  invented and no provider mock acts as Paystack.
+
+## Evidence
+
+- Targeted Java tests PASS, 12 tests / 0 failures / 0 errors:
+  `CheckoutPaymentReturnUrlTest` (6), `NigeriaKoboTest` (4, including
+  `callback_url` sent and unsafe URL rejection), `SettlementOnlyRefundsTest` (2).
+  `./mvnw -B -pl services/commerce -am
+  -Dtest=SettlementOnlyRefundsTest,NigeriaKoboTest,CheckoutPaymentReturnUrlTest
+  -Dsurefire.failIfNoSpecifiedTests=false test` → `BUILD SUCCESS`.
+- Isolated order verification PASS, 25 tests / 0 failures / 0 errors:
+  `ENV=test python3 scripts/order/verify.py` → `BUILD SUCCESS`,
+  `PASS: native atomic checkout/frozen orders/current authority/verified stock
+  lifecycle and actual stateful Paystack HTTP`.
+- Storefront `ng build shop` PASS; `npx vitest run --config
+  vitest.checkout.config.mjs` 7/7 PASS.
+- Authenticated BFF checkout smoke PASS after enabling settlement:
+  delivery quote `201 PANDAGO / SANDBOX / NGN 26.00`, checkout quote `201`
+  `13025.00`, attempt `201 PENDING`, hosted host `checkout.paystack.com`,
+  cleanup `200 CANCELLED`. This attempt used the new `callback_url`.
+- Real previously paid TEST transaction settled without another provider call
+  beyond verification. Reference `nigson-01a1e1bb25387b419e4fb2fe406bf6fd`
+  (provider amount `1333198`, requested `1303200`, paid
+  `2026-11-16T00:22:03Z`):
+  - attempt `SUCCEEDED`, `verified_at=2026-11-16T00:40:35Z`
+  - transaction `6768137602`, settled `13032.0000`, provider status `success`
+  - order `01a1e1bb-2538-71dc-80df-8849ce77a42a` `PAID / PAID / UNFULFILLED`,
+    version 2
+  - reservation `ALLOCATED`; outbox `order.paid.v1` aggregate version 2
+- Angular return route `GET http://localhost:4200/checkout/success?...` → `200`.
+- Evidence: `.build/local-test-checkout-redirect/` (`targeted-tests.log`,
+  `order-verify.log`, `checkout-smoke.log`, `shop-build.log`, `shop-vitest.log`,
+  `database-settlement.txt`, `container-env.txt`).
+
+## Remaining limits
+
+- Paystack does not expose this account's integration id on
+  `transaction/verify`, `transaction/{id}` or the list response, and
+  `GET /integration` returns 500 for the TEST key. Refund execution therefore
+  stays fail-closed locally until the real id is supplied.
+- Local webhooks cannot be delivered because `localhost` is not public. Local
+  settlement depends on worker polling; webhook qualification remains
+  NOT_RUN.
+- The settlement worker verifies with the real Paystack TEST API; no live money
+  moved and no PandaGo booking was created. Local TEST only.
+- The merchant label `nigson-local-paystack-test` and
+  `NIGSON_CHECKOUT_RETURN_URL=http://localhost:4200/...` are local values and
+  must be replaced before production activation.
+- `.env` remains intentionally uncommitted (live Google Maps key).

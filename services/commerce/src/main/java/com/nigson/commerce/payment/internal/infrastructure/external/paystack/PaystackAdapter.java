@@ -25,9 +25,19 @@ public final class PaystackAdapter {
   try {var json=EventCodec.JSON.readTree(response.body());if(!json.path("status").asBoolean()||json.path("data").isMissingNode())throw new IllegalArgumentException("PAYSTACK_RESPONSE_INVALID");return json.get("data");}catch(RuntimeException e){throw new ProviderHttp.Failure("PAYSTACK_RESPONSE_INVALID",!method.equals("GET"),response.status());}
  }
  private static String reference(String ref){if(ref==null||!ref.matches("[a-zA-Z0-9.=_-]{1,100}"))throw new IllegalArgumentException("PAYSTACK_REFERENCE_INVALID");return ref;}
- public JsonNode initialize(String ref,String email,String amount){
+ /** Return target for the hosted page; the browser must land on our own storefront route. */
+ private static String callback(String url){
+  if(url.length()>1000||url.indexOf('#')>=0||url.indexOf('?')>=0)throw new IllegalArgumentException("PAYSTACK_CALLBACK_INVALID");
+  java.net.URI value;try{value=java.net.URI.create(url);}catch(IllegalArgumentException invalid){throw new IllegalArgumentException("PAYSTACK_CALLBACK_INVALID");}
+  if(value.getHost()==null||value.getUserInfo()!=null||value.getFragment()!=null||value.getRawQuery()!=null||!("https".equals(value.getScheme())||"http".equals(value.getScheme())))throw new IllegalArgumentException("PAYSTACK_CALLBACK_INVALID");
+  return url;
+ }
+ public JsonNode initialize(String ref,String email,String amount){return initialize(ref,email,amount,null);}
+ public JsonNode initialize(String ref,String email,String amount,String callbackUrl){
   reference(ref);if(email==null||email.length()>254||!email.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+"))throw new IllegalArgumentException("PAYSTACK_EMAIL_INVALID");
-  var data=call("POST","/transaction/initialize",Map.of("reference",ref,"email",email,"amount",kobo(amount),"currency","NGN"));
+  var body=new LinkedHashMap<String,Object>();body.put("reference",ref);body.put("email",email);body.put("amount",kobo(amount));body.put("currency","NGN");
+  if(callbackUrl!=null)body.put("callback_url",callback(callbackUrl));
+  var data=call("POST","/transaction/initialize",body);
   if(!data.path("reference").asString().equals(ref)||!data.path("authorization_url").isString()||!data.path("access_code").isString())throw new ProviderHttp.Failure("PAYSTACK_INITIALIZATION_UNCERTAIN",true,200);
   java.net.URI hosted=java.net.URI.create(data.path("authorization_url").asString());
   if(hosted.getUserInfo()!=null||hosted.getHost()==null||(mode==ProviderHttp.Mode.MOCK?!(hosted.getScheme().equals("http")&&hosted.getHost().equals("paystack-mock")):!(hosted.getScheme().equals("https")&&hosted.getHost().equals("checkout.paystack.com"))))throw new ProviderHttp.Failure("PAYSTACK_HOSTED_URL_UNCERTAIN",true,200);return data;

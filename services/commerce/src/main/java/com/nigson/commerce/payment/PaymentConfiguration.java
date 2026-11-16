@@ -1,5 +1,6 @@
 package com.nigson.commerce.payment;
 
+import java.util.*;
 import java.time.Clock;
 import org.springframework.context.annotation.*;
 import org.springframework.beans.factory.ObjectProvider;
@@ -24,7 +25,16 @@ public class PaymentConfiguration {
   @Bean PaystackWebhookProtocol paystackWebhookProtocol(PaystackAdapter provider,OrderPolicy binding,@Value("${PAYSTACK_MODE:}")String mode){if(!binding.enabled()||!mode.equals(binding.mode()))throw new IllegalArgumentException("PAYMENT_PROVIDER_BINDING_REQUIRED");return new PaystackWebhookProtocol(provider::authenticWebhook,provider::webhookDigest,binding.mode());}
   @Bean PaymentPayloadCipher paymentPayloadCipher(ObjectProvider<KmsClient> kms,PaymentPolicy policy,@Value("${NIGSON_PAYMENT_RECEIPT_KEY_REVISION:}")String revision,@Value("${NIGSON_PAYMENT_RECEIPT_KMS_KEY:}")String arn,@Value("${NIGSON_PAYMENT_RECEIPT_WRAPPED_KEY:}")String wrapped,@Value("${NIGSON_PAYMENT_RECEIPT_LOCAL_KEY:}")String local,@Value("${NIGSON_PAYMENT_RECEIPT_PREVIOUS_WRAPPED_KEYS:{}}")String previous){return PaymentReceiptKeys.load(kms.getIfAvailable(),policy.environment(),revision,arn,wrapped,local,previous);}
   @Bean WebhookReceipts webhookReceipts(JdbcTemplate jdbc){return new JdbcWebhookReceipts(jdbc,Clock.systemUTC());}
-  @Bean RefundOperations refundOperations(JdbcTemplate jdbc,PlatformTransactionManager manager,PaystackAdapter provider,OrderPolicy binding,PaymentPolicy policy,@Value("${NIGSON_PAYSTACK_INTEGRATION_ID:}")String integration,AuditWriter audit,PlatformStore events,com.nigson.commerce.reward.RewardOperations rewards,io.micrometer.core.instrument.MeterRegistry metrics){return new RefundCoordinator(jdbc,manager,provider,binding,policy,integration,audit,events,rewards,Clock.systemUTC(),metrics);}
+  @Bean RefundOperations refundOperations(JdbcTemplate jdbc,PlatformTransactionManager manager,PaystackAdapter provider,OrderPolicy binding,PaymentPolicy policy,@Value("${NIGSON_PAYSTACK_INTEGRATION_ID:}")String integration,AuditWriter audit,PlatformStore events,com.nigson.commerce.reward.RewardOperations rewards,io.micrometer.core.instrument.MeterRegistry metrics,@Value("${APP_ENV:local}")String environment){
+   boolean integrationMissing=integration==null||!integration.matches("[1-9][0-9]{0,18}");
+   if(policy.enabled()&&integrationMissing){
+    // Payment settlement (worker verification) needs no refund credentials. Outside local/test the
+    // real merchant integration id remains mandatory; locally refunds fail closed instead of
+    // inventing an account identifier that no provider would accept.
+    if(!Set.of("local","test").contains(environment))throw new IllegalArgumentException("PAYSTACK_REFUND_ACCOUNT_REQUIRED");
+    return new SettlementOnlyRefunds(environment);
+   }
+   return new RefundCoordinator(jdbc,manager,provider,binding,policy,integration,audit,events,rewards,Clock.systemUTC(),metrics);}
   @Bean WebhookIngress webhookIngress(WebhookReceipts receipts,PaystackWebhookProtocol protocol,PaymentPayloadCipher cipher,OrderPolicy binding,PaymentPolicy policy,JdbcTemplate jdbc,PlatformTransactionManager manager,AuditWriter audit,io.micrometer.core.instrument.MeterRegistry metrics){return new WebhookIngress(receipts,protocol,cipher,binding,policy,jdbc,manager,audit,Clock.systemUTC(),metrics);}
   @Bean PaymentReceiptProcessor paymentReceiptProcessor(WebhookReceipts receipts,PaystackWebhookProtocol protocol,PaymentPayloadCipher cipher,OrderPolicy binding,PaymentPolicy policy,CheckoutPayments payments,RefundOperations refunds,JdbcTemplate jdbc,PlatformTransactionManager manager,AuditWriter audit,io.micrometer.core.instrument.MeterRegistry metrics){return new PaymentReceiptProcessor(receipts,protocol,cipher,binding,policy,payments,refunds,jdbc,manager,audit,metrics);}
   @Bean PaymentReconciler paymentReconciler(JdbcTemplate jdbc,PlatformStore commands,OrderPolicy binding,PaymentPolicy policy,CheckoutPayments payments,RefundOperations refunds,PaymentReceiptProcessor receipts){return new PaymentReconciler(jdbc,commands,binding,policy,payments,refunds,receipts,Clock.systemUTC());}
