@@ -2,17 +2,21 @@
 
 Date/time: 2026-11-15T17:50Z
 Specification/architecture version: 1.1.0
-Task status: DONE locally (paid settlement and production payment activation remain BLOCKED)
+Task status: DONE locally for checkout and local TEST settlement (production
+payment activation, webhooks and refund execution remain BLOCKED; see the
+follow-up section below)
 Current engineering/product phase: BP1 commerce order/payment, bootstrap payments disabled
 Summary: The local storefront can now complete `POST /api/v1/checkout/attempts`
 against real local services. Both a located address and the storefront's
 postal-only payload (resolved by server-side Google geocoding) get a real
 PandaGo SANDBOX delivery quote and a real checkout quote; the checkout quote
 replays without `CHECKOUT_REPRICE_REQUIRED`; the order is created PENDING with
-stock reserved and a Paystack **TEST** hosted checkout URL is returned. Payment
-settlement, webhooks, refunds and delivery booking remain intentionally off. The
-order was cancelled through API-040 with the documented If-Match refresh,
-releasing stock and expiring the cart.
+stock reserved and a Paystack **TEST** hosted checkout URL is returned. Hosted
+checkout now returns to the storefront and local TEST settlement verifies the
+payment. Webhooks, refund execution, delivery booking and production activation
+remain intentionally off or blocked. The initial order was cancelled through
+API-040 with the documented If-Match refresh, releasing stock and expiring the
+cart.
 
 ## Request addressed
 
@@ -25,7 +29,7 @@ TEST only; no live money moves and no PandaGo booking is created.
 - Checkout activation is `NIGSON_ORDER_CHECKOUT_ENABLED=true` with
   `NIGSON_ORDER_PAYMENT_MODE=TEST`. `NIGSON_PAYMENT_ENABLED` stays unset, so no
   webhook receiver, refund worker, receipt processor or payment polling bean is
-  registered.
+  registered. (Superseded for local settlement by the follow-up below.)
 - Approval reference `user-approved-local-test-checkout-20261115` records the
   explicit user approval of 2026-11-15. It replaces the previous local
   "quote-only, no payment authorized" reference for local provider activation.
@@ -341,3 +345,10 @@ completed TEST payment locally, still without live money or a PandaGo booking.
   `NIGSON_CHECKOUT_RETURN_URL=http://localhost:4200/...` are local values and
   must be replaced before production activation.
 - `.env` remains intentionally uncommitted (live Google Maps key).
+
+## Commits
+
+- `7a4437f` — backend: callback URL, return validation, local TEST settlement
+  and fail-closed local refunds.
+- `504571a` — storefront repository: remember the order and verify it on
+  `/checkout/success` (separate Git repository under `nigson-micro-frontend/`).
