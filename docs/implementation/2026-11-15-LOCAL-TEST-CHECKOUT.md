@@ -352,3 +352,27 @@ completed TEST payment locally, still without live money or a PandaGo booking.
   and fail-closed local refunds.
 - `504571a` — storefront repository: remember the order and verify it on
   `/checkout/success` (separate Git repository under `nigson-micro-frontend/`).
+
+## Follow-up 2026-11-16: order detail rendered empty
+
+API-039 returned the expected commerce DTO, but `OrderService.getOrder`
+returned it unchanged while `BackendOrder`/the order detail template expect
+`items`, `totalMinorUnits`, `deliveryAddress` and `buyerContact`. Everything the
+page read was `undefined`, so a `200` response produced an empty page. The same
+raw-shape bug affected `cancelOrder` and the hosted-checkout return page.
+
+- `OrderService.mapOrder` now maps `id`, `lines`, `totals.*`, `address` and
+  `fulfillmentStatus` once for the list, detail and cancellation paths.
+- `BackendOrder` and the status labels/colors match the real states
+  (`PAID`, `PROCESSING`, `PAYMENT_HOLD`, `REFUNDING`, `REFUNDED`), and the
+  progress timeline is `PENDING → PAID → PROCESSING → SHIPPED → DELIVERED`.
+- `getTracking` maps the real `{orderId, shipments, events}` envelope to the
+  storefront `OrderTracking` shape. An unfulfilled order legitimately has no
+  shipment or event rows; the detail page now says so instead of leaving the
+  section blank. The support tracking page renders the `PROCESSING` card.
+- The return page reads the mapped order shape.
+- Tests: `npx vitest run --config vitest.checkout.config.mjs` 11/11 PASS
+  (7 checkout + 4 new mapping tests). `ng build account`, `ng build shop` and
+  `ng build support` PASS.
+- Commit `20d7ddb` in the storefront repository
+  (`nigson-micro-frontend/`).
