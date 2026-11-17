@@ -3192,3 +3192,9 @@ API-150/027/151/028/162 accept a current persisted ADMIN session without OTP, as
 ## Distributor decision presentation (ADR-028, 14 November 2026)
 
 API-177 adds nullable decisionReason, containing the latest reason already stored in the Experience decision payload. It is distinct from reviewReason and remains behind the existing SALES authorization. The frontend must retain SUBMITTED, UNDER_REVIEW, ACTIVATION_PENDING, APPROVED, REJECTED, SUSPENSION_PENDING and SUSPENDED as separate states. A pending entitlement acknowledgement is not approval. Lead RESOLVED/CLOSED states do not confer distributor entitlement. API-172 review and API-095 decision constraints, including clean/private/owned documents and a different approving actor, are unchanged. No file access rule was broadened.
+
+## Account wishlist (ADR-029, 17 November 2026)
+
+API-216 GET /api/v1/me/wishlist returns at most 100 {skuId, productId, savedAt, available} associations ordered savedAt descending then skuId. Current ACTIVE personal CUSTOMER only; no query/body/client account id, no-store. available means published NG catalogue eligibility, not stock. Unavailable saved entries reveal no unpublished metadata and remain removable.
+
+API-217 PUT /api/v1/me/wishlist/items/{skuId} and API-218 DELETE on the same path require the normal BFF session, CSRF and Idempotency-Key. No OTP or If-Match. Body/query are forbidden. Success is 204, including already-present eligible membership and absent removal. Save of unavailable SKU returns 404. Saving beyond 100 distinct SKUs returns 422 BUSINESS_RULE_VIOLATION. Durable replay is scoped by actor/API/key and does not reapply an old mutation; GET is current-state authority. Actual changes alone append WISHLIST_SAVE/WISHLIST_REMOVE with resource WISHLIST and SKU resource id; actor identifies the account. No event/provider call. See commerce OpenAPI for schemas and remaining errors.

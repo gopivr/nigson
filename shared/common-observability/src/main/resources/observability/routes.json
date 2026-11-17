@@ -194,5 +194,7 @@
   "/internal/v1/shipments/{id}/provider-context",
   "/internal/v1/shipments/{id}/provider-result",
   "/internal/v1/templates",
-  "/wh/paystack"
+  "/wh/paystack",
+  "/api/v1/me/wishlist",
+  "/api/v1/me/wishlist/items/{skuId}"
 ]

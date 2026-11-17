@@ -127,8 +127,8 @@ class Database:
                         assert count == '1', (name, field)
             app = 'nigson_' + table['owner'] + '_app'
             assert self.sql("SELECT has_table_privilege('" + app + "','" + name + "','SELECT,INSERT')") == 't'
-            mutable = table['mutation'] != 'append-only'
             for privilege in ('UPDATE', 'DELETE'):
+                mutable = table['mutation'] != 'append-only' and not (table['mutation'] == 'set-membership' and privilege == 'UPDATE')
                 assert self.sql("SELECT has_table_privilege('" + app + "','" + name + "','" + privilege + "')") == ('t' if mutable else 'f'), name
         assert self.sql("SELECT count(*) FROM pg_constraint c JOIN pg_class a ON a.oid=c.conrelid JOIN pg_class b ON b.oid=c.confrelid WHERE c.contype='f' AND a.relnamespace<>b.relnamespace") == '0'
         assert self.sql("SELECT count(*) FROM pg_constraint WHERE connamespace IN ('commerce'::regnamespace,'experience'::regnamespace,'integration'::regnamespace,'ai'::regnamespace) AND NOT convalidated") == '0'

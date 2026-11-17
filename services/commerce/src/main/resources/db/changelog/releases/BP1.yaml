@@ -47,6 +47,12 @@
         "file": "../026-bp1-selected-carrier.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../027-bp1-wishlist.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

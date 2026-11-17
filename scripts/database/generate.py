@@ -20,6 +20,7 @@ ADDITIVE_TABLES = {
     'commerce.file_transfer': ('023-bp1-file-transfer', 'commerce-20261010-files-001', 'nigson-files', 'ADR-009: additive owned file transfer intent; existing migrations preserved.'),
     'commerce.carrier_cancellation': ('025-bp1-carrier-cancellation', 'commerce-20261016-carrier-001', 'nigson-carrier', 'ADR-014: additive owned cancellation/dispatch exclusion; prior migrations preserved.'),
     'integration.carrier_cancellation': ('023-bp1-carrier-cancellation', 'integration-20261016-carrier-001', 'nigson-carrier', 'ADR-014: additive owned cancellation checkpoint; prior migrations preserved.'),
+    'commerce.wishlist_item': ('027-bp1-wishlist', 'commerce-20261117-wishlist', 'nigson-commerce', 'ADR-029: account-owned wishlist membership; previous migrations preserved.'),
 }
 SESSION_TABLES = {'commerce.spring_session', 'commerce.spring_session_attributes'}
 ADDITIVE_CHANGES = {
@@ -47,7 +48,7 @@ def column(field, force_not_null=False):
     if default is not None:
         if default in ('{}', '[]'):
             default = "'" + default + "'::jsonb"
-        elif not re.fullmatch(r'-?\d+(?:\.\d+)?|true|false|now\(\)', default):
+        elif not re.fullmatch(r'-?\d+(?:\.\d+)?|true|false|now\(\)|uuidv7\(\)', default):
             default = "'" + default + "'"
         result += ' DEFAULT ' + default
     return result
@@ -206,7 +207,8 @@ def generate():
         for i, check in enumerate(checks, 1):
             fields.append(f'CONSTRAINT {name}_rule_{i}_ck CHECK ({predicate(check.strip())})')
         statements = [f'CREATE TABLE {fullname} (\n    ' + ',\n    '.join(fields) + '\n);']
-        statements.append(f'GRANT SELECT, INSERT, UPDATE, DELETE ON {fullname} TO nigson_{owner}_app;')
+        privileges = 'SELECT, INSERT, DELETE' if table['mutation'] == 'set-membership' else 'SELECT, INSERT, UPDATE, DELETE'
+        statements.append(f'GRANT {privileges} ON {fullname} TO nigson_{owner}_app;')
         for key in table['keys'].split(';'):
             match = re.fullmatch(r'(UQ|IX)\((.*?)\)(?: WHERE (.*))?', key.strip())
             if not match:
@@ -217,7 +219,8 @@ def generate():
         for field in table['fields']:
             if field['foreign']:
                 target = field['foreign'].split('.')[0]
-                statements.append(f"ALTER TABLE {fullname} ADD CONSTRAINT {name}_{field['name']}_fk FOREIGN KEY ({field['name']}) REFERENCES {owner}.{target} (id) ON DELETE RESTRICT;")
+                deletion = 'CASCADE' if field['cascade'] else 'RESTRICT'
+                statements.append(f"ALTER TABLE {fullname} ADD CONSTRAINT {name}_{field['name']}_fk FOREIGN KEY ({field['name']}) REFERENCES {owner}.{target} (id) ON DELETE {deletion};")
         stem, change, author, header = ADDITIVE_TABLES[fullname]
         files[base/(stem+'.sql')] = '-- '+header+'\n' + '\n\n'.join(statements)+'\n'
         files[base/(stem+'-rollback.sql')] = rollback_sql(owner, statements)
@@ -315,6 +318,12 @@ def generate():
     guard="SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
     payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-commerce','logicalFilePath':'commerce/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
     files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';wrapper=base/'releases/BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    # Keep the new wishlist after every previously released BP1 increment.
+    wrapper = Path('services/commerce/src/main/resources/db/changelog/releases/BP1.yaml')
+    payload = json.loads(files[wrapper])
+    wishlist = [entry for entry in payload['databaseChangeLog'] if entry['include']['file'] == '../027-bp1-wishlist.yaml']
+    payload['databaseChangeLog'] = [entry for entry in payload['databaseChangeLog'] if entry not in wishlist] + wishlist
+    files[wrapper] = json.dumps(payload, indent=2)+'\n'
     files[Path('database/schema-manifest.json')] = json.dumps(manifest,indent=2,sort_keys=True)+'\n'
     return files
 

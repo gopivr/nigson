@@ -53,4 +53,23 @@ def extend(spec):
     spec['paths']['/api/v1/staff/price-books/{id}/revisions']={'post':revise}
     spec['paths']['/api/v1/staff/organizations/{id}/price-assignment']={'put':assign}
     spec['paths']['/api/v1/checkout/quotes']={'post':checkout}
+    # Preserve the already-reviewed ADR-027 normal ADMIN pricing contract on regeneration.
+    admin_pricing_policy = 'ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. '
+    for path, method in (('/api/v1/staff/markets/{id}/retail-price-book', 'put'),
+                         ('/api/v1/staff/price-books', 'post'),
+                         ('/api/v1/staff/price-books/{id}/activation', 'post'),
+                         ('/api/v1/staff/price-books/{id}/revisions', 'post')):
+        spec['paths'][path][method]['description'] = admin_pricing_policy
+    spec['paths']['/api/v1/staff/price-books']['get']['description'] = 'ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. Returns retailBindings for NG from the same repeatable-read snapshot.'
+    page = spec['components']['schemas']['PriceBooksPage']
+    page['properties']['retailBindings'] = {'type': 'array',
+ 'maxItems': 1,
+ 'items': {'type': 'object',
+           'additionalProperties': False,
+           'required': ['marketId', 'code', 'priceBookId', 'version'],
+           'properties': {'marketId': {'type': 'string', 'format': 'uuid'},
+                          'code': {'type': 'string', 'const': 'NG'},
+                          'priceBookId': {'type': ['string', 'null'], 'format': 'uuid'},
+                          'version': {'type': 'integer', 'minimum': 0}}}}
+    page['required'].append('retailBindings')
     return spec
