@@ -2686,7 +2686,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 - **Path parameters:** id; section13 common UUID/identifier types.
 - **Query:** None; reject unknown parameters.
 - **Request:** `none`.
-- **Response:** `ApplicationDetailDTO{id:UUID,organizationName:string,countryCode:ISO3166,businessReference:string|null,state:ApplicationState,documents:[{fileId:UUID,documentType:string,scanStatus:string}],reviewerPartyId:UUID|null,reviewReason:string|null,organizationId:UUID|null,version:int64}`.
+- **Response:** `ApplicationDetailDTO{id:UUID,organizationName:string,countryCode:ISO3166,businessReference:string|null,state:ApplicationState,documents:[{fileId:UUID,documentType:string,scanStatus:string}],reviewerPartyId:UUID|null,reviewReason:string|null,decisionReason:string|null,organizationId:UUID|null,version:int64}`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Authorized staff only; document signed download obtained separately through ownership/role check.
 - **Events:** None directly; owned audit/history where applicable.
@@ -3187,3 +3187,8 @@ Product metadata starting_price, wholesale_rate and distributor_rate are not sel
 ### Normal admin pricing policy amendment (ADR-027)
 
 API-150/027/151/028/162 accept a current persisted ADMIN session without OTP, as explicitly requested by the user. Earlier descriptions of FINANCE-only activation/binding above or in historical reports are superseded for this admin path. Existing non-admin Sales/Finance authorization and recent MFA rules remain unchanged, as do all other Finance and general market operations.
+
+
+## Distributor decision presentation (ADR-028, 14 November 2026)
+
+API-177 adds nullable decisionReason, containing the latest reason already stored in the Experience decision payload. It is distinct from reviewReason and remains behind the existing SALES authorization. The frontend must retain SUBMITTED, UNDER_REVIEW, ACTIVATION_PENDING, APPROVED, REJECTED, SUSPENSION_PENDING and SUSPENDED as separate states. A pending entitlement acknowledgement is not approval. Lead RESOLVED/CLOSED states do not confer distributor entitlement. API-172 review and API-095 decision constraints, including clean/private/owned documents and a different approving actor, are unchanged. No file access rule was broadened.

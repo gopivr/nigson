@@ -10189,3 +10189,8 @@ Provider removal, 11 November 2026: only PandaGo remains an application carrier.
 ## User amendment: normal admin login for selling prices (14 November 2026)
 
 Per explicit user decision and ADR-027, current persisted ADMIN authority permits price-book listing, creation, revision, activation and retail market binding without OTP/recent MFA (API-150/027/151/028/162). Existing SALES/FINANCE alternatives keep their current checks. This narrowly scoped pricing exception supersedes earlier MFA/FINANCE-only statements for those operations; all other financial and administrative MFA policies, actor/session checks, validation, idempotency, versioning, audit and immutable pricing remain unchanged.
+
+
+## Implementation clarification: distributor staff detail (ADR-028)
+
+The user-authorized distributor workflow presentation adds nullable decisionReason to API-177, exposing the latest saved Experience decision-payload reason separately from reviewReason. Existing SALES authorization, owner isolation, review/document verification, independent approval, versioning and Commerce acknowledgement requirements remain unchanged. No file-access permission or new application state is introduced.

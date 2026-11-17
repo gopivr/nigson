@@ -11,7 +11,7 @@ public final class DistributorValues {
  public record Document(UUID fileId,String type){}
  public record Decision(String decision,String reason,UUID marketId,UUID priceBookId){}
  public record Application(UUID id,String state,UUID organizationId,java.time.Instant submittedAt,long version){}
- public record Detail(UUID id,String organizationName,String countryCode,String businessReference,String state,List<DocumentDetail> documents,UUID reviewerPartyId,String reviewReason,UUID organizationId,long version){}
+ public record Detail(UUID id,String organizationName,String countryCode,String businessReference,String state,List<DocumentDetail> documents,UUID reviewerPartyId,String reviewReason,String decisionReason,UUID organizationId,long version){}
  public record DocumentDetail(UUID fileId,String type,String scanStatus){}
  public record Page(List<Application> content,int page,int size,long totalElements,int totalPages,String sort){}
  public static Submission submission(JsonNode n){exact(n,Set.of("organizationName","countryCode","documentIds"),Set.of("businessReference"));String name=text(n,"organizationName",200),country=text(n,"countryCode",2);if(!country.matches("[A-Z]{2}"))throw ApiValues.invalid();String ref=n.has("businessReference")?text(n,"businessReference",100):null;JsonNode docs=n.path("documentIds");if(!docs.isArray()||docs.isEmpty()||docs.size()>20)throw ApiValues.invalid();var list=new ArrayList<Document>();var seen=new HashSet<UUID>();for(JsonNode d:docs){if(!d.isString())throw ApiValues.invalid();UUID id=ApiValues.uuid(d.asString());if(!seen.add(id))throw ApiValues.invalid();list.add(new Document(id,""));}return new Submission(name,country,ref,List.copyOf(list));}
