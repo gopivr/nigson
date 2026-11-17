@@ -19,7 +19,7 @@ actual_account=$(aws sts get-caller-identity --query Account --output text --no-
 release=$(jq -e '
   .environment == $environment and
   (.release_id | type == "string" and test("^[A-Za-z0-9._-]{1,80}$")) and
-  (.cluster_arn | type == "string" and . == "arn:aws:ecs:" + $region + ":" + $account + ":cluster/nigson-" + $environment) and
+  (.cluster_arn | type == "string" and test("^arn:aws[a-z-]*:ecs:" + $region + ":" + $account + ":cluster/nigson-" + $environment + "$")) and
   (.product_phase | type == "number" and . >= 1 and . <= 5) and
   ((.owners | type == "array") and ((.owners | sort) == ["commerce", "experience", "integration"] or (.product_phase == 5 and (.owners | sort) == ["ai", "commerce", "experience", "integration"]))) and
   (.services | type == "object" and length >= 3) and
