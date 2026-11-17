@@ -99,19 +99,30 @@ PASS for the scoped modules and both affected Angular applications.
   change does not relax selling policy.
 - Public error bodies remain the closed safe vocabulary; no SQL or provider detail is exposed.
 
+## Follow-up (14 November 2026)
+
+The disabled-market behaviour above is unchanged for production. Locally, a guarded
+synthetic fixture now activates NG/NGN and seeds a catalogue so the storefront can be
+exercised end to end. That work, the BP5/quote-enablement details and the live evidence are
+recorded in `docs/implementation/2026-11-14-LOCAL-FULL-STACK-ACTIVATION.md`. No production
+approval is implied.
+
 ## Last successful commit
 
-Backend `5ef973b`; frontend `b460a57`. These changes remain uncommitted.
+Backend `5ef973b`; frontend `b460a57` for the original split. These changes were subsequently
+committed by the operator and extended on top of backend `89c4a78` / frontend `539b26f`.
 
 ## Open issues/activation inputs
 
-- The NG market remains `enabled=false` with no tax policy, returns revision, retail price book,
-  enabled destination or catalogue rows. Activating it still requires approved business inputs
-  (ADR-008/ADR-026); the storefront intentionally shows the "not available yet" state.
+- The NG market remains `enabled=false` in every non-local environment with no tax policy,
+  returns revision, retail price book, enabled destination or catalogue rows. Activating it
+  still requires approved business inputs (ADR-008/ADR-026); the storefront intentionally
+  shows the "not available yet" state outside local.
 - Existing unrelated repository-check failures (stale Terraform paths, tracked `.env`/PEM
   files) are unchanged and outside this scope.
 
 ## Next dependency-ready task
 
-Continue ADMIN-FUNCTIONAL-AUDIT; the remaining blocker for catalogue UI qualification is real
-approved market and catalogue configuration.
+Genuine provider qualification for delivery quotes, fulfillment and checkout; the remaining
+blocker for production catalogue UI qualification is real approved market and catalogue
+configuration.

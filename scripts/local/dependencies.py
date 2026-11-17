@@ -2,6 +2,7 @@
 """Start/stop and verify the explicitly local Nigson dependency environment."""
 
 import argparse
+import hashlib
 import http.client
 import json
 import os
@@ -108,17 +109,63 @@ def command(*arguments: str, capture: bool = False) -> str:
     project = os.environ.get("COMPOSE_PROJECT_NAME", "nigson-local")
     if project != "nigson-local" and not re.fullmatch(r"nigson-test-[a-z0-9-]+", project):
         raise ValueError("Refusing nonlocal Compose project name")
-    # Persist the explicitly enabled live quote overlay across run-core restarts.
+    # Persist the explicitly enabled staging quote overlay across run-core restarts.
     settings = read_env_settings(envfile)
     pandago = os.environ.get("NIGSON_PANDAGO_ENABLED", settings.get("NIGSON_PANDAGO_ENABLED", "false")) == "true"
-    overlays = ["--file", str(ROOT / "docker-compose.pandago.yml")] if pandago else []
+    overlays: list[str] = []
+    provider_settings: dict[str, str] = {}
+    compose = ["docker", "compose", "--project-name", project, "--env-file", str(envfile)]
+    if pandago:
+        # Local quotes use the verified stage account, never a LIVE target or inline PEM.
+        provider_settings = read_pandago_staging_settings(settings)
+        compose += ["--env-file", str(ROOT / ".local/pandago/account.env")]
+        overlays = ["--file", str(ROOT / "docker-compose.pandago.yml")]
+    compose += ["--file", str(ROOT / "docker-compose.yml"), *overlays, *profiles(), *arguments]
     result = subprocess.run(
-        ["docker", "compose", "--project-name", project, "--env-file", str(envfile),
-         "--file", str(ROOT / "docker-compose.yml"), *overlays, *profiles(), *arguments],
-        cwd=ROOT, check=True, text=True, capture_output=capture, timeout=900 if "build" in arguments else 240,
-        env={**os.environ, **settings},
+        compose, cwd=ROOT, check=True, text=True, capture_output=capture,
+        timeout=900 if "build" in arguments else 240,
+        env={**os.environ, **settings, **provider_settings},
     )
     return result.stdout if capture else ""
+
+
+def read_pandago_staging_settings(settings: dict[str, str]) -> dict[str, str]:
+    """Load the verified PandaGo stage account for local delivery quotes.
+
+    ``.local/pandago/account.env`` is the single credential source; the tracked
+    ``.env`` only selects the overlay and carries the non-secret approval/fingerprint.
+    Local startup refuses LIVE targets, remote credentials or a drifted fingerprint.
+    """
+    if settings.get("APP_ENV", "local") != "local":
+        raise ValueError("PandaGo staging quotes require APP_ENV=local")
+    path = ROOT / ".local/pandago/account.env"
+    if not path.is_file():
+        raise ValueError("Enable delivery quotes requires the verified staging account at .local/pandago/account.env")
+    if path.stat().st_mode & 0o077:
+        raise ValueError("PandaGo staging account file permissions must be 600")
+    account = read_env_settings(path)
+    if account.get("PANDAGO_MODE") != "TEST":
+        raise ValueError("Local delivery quotes only accept PANDAGO_MODE=TEST staging credentials")
+    if account.get("PANDAGO_BASE_URL") != "https://api-infra-eu-central-1.stg.ondemandrider.net" or account.get("PANDAGO_AUTH_BASE_URL") != "https://sts-st.deliveryhero.io":
+        raise ValueError("Local delivery quotes only accept the confirmed PandaGo staging endpoints")
+    if settings.get("NIGSON_FULFILLMENT_MODE") != "SANDBOX" or settings.get("NIGSON_PRICING_PROVIDER_MODE") != "TEST":
+        raise ValueError("Local delivery quotes require SANDBOX fulfillment and TEST pricing modes")
+    expected = pandago_account_fingerprint(account)
+    if settings.get("NIGSON_PANDAGO_ACCOUNT_FINGERPRINT") != expected:
+        raise ValueError("NIGSON_PANDAGO_ACCOUNT_FINGERPRINT does not match the verified staging account")
+    return account
+
+
+def pandago_account_fingerprint(account: dict[str, str]) -> str:
+    identity = {
+        "provider": "PANDAGO",
+        "mode": account["PANDAGO_MODE"],
+        "clientId": account["PANDAGO_CLIENT_ID"],
+        "vendorId": account["PANDAGO_CLIENT_VENDOR_ID"],
+        "scope": account["PANDAGO_SCOPE"],
+    }
+    canonical = json.dumps(identity, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(canonical).hexdigest()
 
 
 def validate_config(config: dict) -> dict:
@@ -162,6 +209,7 @@ def start_dependencies(config: dict) -> None:
         provision("vector-db")
     wait_identity(config)
     configure_registration(config)
+    configure_workload_scopes()
     bootstrap()
 
 
@@ -247,6 +295,20 @@ def bootstrap() -> None:
     command("exec", "-T", "localstack", "awslocal", "s3api", "create-bucket", "--bucket", "nigson-local-quarantine")
     command("exec", "-T", "localstack", "awslocal", "s3api", "create-bucket", "--bucket", "nigson-local-private")
     print("Local infrastructure bootstrap applied; production/provider activation remains disabled")
+
+
+def configure_workload_scopes() -> None:
+    """Apply canonical local service-account scopes so owner relays never 503.
+
+    The BP3 script is idempotent, guarded to the local Compose project, and keeps
+    existing users/data. Without these scopes Commerce cannot obtain a
+    client-credentials token with the Experience operation scopes and every
+    relayed read fails closed with PROVIDER_UNAVAILABLE.
+    """
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts/local/enable_bp3.py")],
+        cwd=ROOT, check=True, timeout=300,
+    )
 
 
 def wait_identity(config: dict) -> None:

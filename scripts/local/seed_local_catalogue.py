@@ -10,6 +10,7 @@ Guards:
   * refuses unless the resolved commerce `APP_ENV` is `local`
   * never runs as part of a migration; call it explicitly
   * no provider is mocked or called
+  * carrier packaging is a synthetic local fixture measurement, not real merchandise
 """
 
 import argparse
@@ -84,6 +85,19 @@ def sql_literal(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
 
+def carrier_packaging(unit_weight: str) -> str:
+    """Synthetic local carton rule; not measured or approved merchandise data."""
+    return json.dumps({
+        "schemaVersion": 1,
+        "maximumUnitsPerPackage": "1",
+        "unitWeightKg": unit_weight,
+        "tareWeightKg": "0.1",
+        "lengthCm": "20",
+        "widthCm": "15",
+        "heightCm": "10",
+    }, separators=(",", ":"))
+
+
 def build_sql() -> str:
     statements = ["SET client_min_messages TO WARNING;"]
     statements.append(
@@ -123,11 +137,12 @@ def build_sql() -> str:
             f"ON CONFLICT (product_id,category_id) DO NOTHING;"
         )
         statements.append(
-            f"INSERT INTO commerce.sku(id,created_by,updated_by,product_id,code,variant_name,unit,quantity_scale,pack_size,weight_kg,active) "
+            f"INSERT INTO commerce.sku(id,created_by,updated_by,product_id,code,variant_name,unit,quantity_scale,pack_size,weight_kg,carrier_packaging,active) "
             f"VALUES ({sql_literal(sku_id)},{sql_literal(ACTOR)},{sql_literal(ACTOR)},{sql_literal(product_id)},"
-            f"{sql_literal(sku)},{sql_literal(name)},{sql_literal(unit)},0,{pack},{weight},true) "
+            f"{sql_literal(sku)},{sql_literal(name)},{sql_literal(unit)},0,{pack},{weight},{sql_literal(carrier_packaging(weight))}::jsonb,true) "
             f"ON CONFLICT (code) DO UPDATE SET product_id=EXCLUDED.product_id,variant_name=EXCLUDED.variant_name,"
-            f"unit=EXCLUDED.unit,pack_size=EXCLUDED.pack_size,weight_kg=EXCLUDED.weight_kg,active=true,deleted_at=NULL,"
+            f"unit=EXCLUDED.unit,pack_size=EXCLUDED.pack_size,weight_kg=EXCLUDED.weight_kg,"
+            f"carrier_packaging=EXCLUDED.carrier_packaging,active=true,deleted_at=NULL,"
             f"updated_by=EXCLUDED.updated_by,updated_at=now();"
         )
         statements.append(
@@ -143,6 +158,14 @@ def build_sql() -> str:
             f"ON CONFLICT (sku_id,location_id) DO UPDATE SET on_hand=EXCLUDED.on_hand,updated_by=EXCLUDED.updated_by,updated_at=now();"
         )
     book_id = identify("price-book", PRICE_BOOK_CODE)
+    statements.append(
+        f"INSERT INTO commerce.audit_record(id,created_by,actor_subject,actor_kind,action,resource_type,resource_id,occurred_at,correlation_id,reason,new_value) "
+        f"VALUES ({sql_literal(identify('audit', 'local-synthetic-packaging'))},{sql_literal(ACTOR)},'local-demo-provisioner','SYSTEM',"
+        f"'DEMO_PACKAGING_SEEDED','catalogue',{sql_literal(identify('location', STOCK_LOCATION[0]))},now(),"
+        f"{sql_literal(identify('correlation', 'local-synthetic-packaging'))},"
+        f"'Synthetic local carton fixture for staging delivery quotes; not measured merchandise',"
+        f"{sql_literal(carrier_packaging('0.1'))}::jsonb) ON CONFLICT(id) DO NOTHING;"
+    )
     statements.append(
         f"INSERT INTO commerce.price_book(id,created_by,updated_by,code,currency_code,segment,revision,effective_from,effective_until,active) "
         f"VALUES ({sql_literal(book_id)},{sql_literal(ACTOR)},{sql_literal(ACTOR)},{sql_literal(PRICE_BOOK_CODE)},'NGN','RETAIL',1,now()-interval '1 day',NULL,true) "
@@ -211,7 +234,8 @@ def main() -> int:
                      "SELECT 'market='||enabled||' categories='||(SELECT count(*) FROM commerce.category WHERE active)||"
                      "' products='||(SELECT count(*) FROM commerce.product WHERE status='ACTIVE')||"
                      "' skus='||(SELECT count(*) FROM commerce.sku WHERE active)||"
-                     "' prices='||(SELECT count(*) FROM commerce.price_entry e JOIN commerce.price_book b ON b.id=e.price_book_id WHERE b.active AND b.segment='RETAIL')"
+                     "' prices='||(SELECT count(*) FROM commerce.price_entry e JOIN commerce.price_book b ON b.id=e.price_book_id WHERE b.active AND b.segment='RETAIL')||"
+                     "' packaging='||(SELECT count(*) FROM commerce.sku WHERE active AND carrier_packaging IS NOT NULL)"
                      " FROM commerce.market WHERE code='NG'"))
         return 0
     except Exception as failure:  # noqa: BLE001 - explicit CLI failure

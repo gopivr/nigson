@@ -12,10 +12,13 @@ services:
       NIGSON_FULFILLMENT_APPROVAL_UNTIL: ${NIGSON_PANDAGO_APPROVAL_UNTIL:?Set the approved PandaGo live qualification expiry}
       NIGSON_PRICING_CHECKOUT_ENABLED: "true"
       NIGSON_PRICING_PROVIDER_MODE: ${NIGSON_PRICING_PROVIDER_MODE:-LIVE}
-      NIGSON_PRICING_PAYMENT_APPROVAL: ${NIGSON_PAYSTACK_APPROVAL:?Set the approved Paystack live qualification reference}
+      NIGSON_PRICING_PAYMENT_APPROVAL: ${NIGSON_PAYSTACK_APPROVAL:?Set the approved payment qualification reference}
       NIGSON_PRICING_CARRIER_APPROVAL: ${NIGSON_PANDAGO_APPROVAL:?Set the approved PandaGo qualification reference}
       NIGSON_PRICING_PROVIDER_APPROVAL_UNTIL: ${NIGSON_PANDAGO_APPROVAL_UNTIL:?Set the approved live qualification expiry}
-      NIGSON_ORDER_CHECKOUT_ENABLED: "false"
+      NIGSON_ORDER_CHECKOUT_ENABLED: "true"
+      NIGSON_ORDER_PAYMENT_MODE: ${NIGSON_ORDER_PAYMENT_MODE:-TEST}
+      NIGSON_ORDER_MERCHANT_ACCOUNT: ${NIGSON_ORDER_MERCHANT_ACCOUNT:?Set the Paystack TEST merchant binding}
+      NIGSON_ORDER_STOCK_LOCATION_PRIORITY: ${NIGSON_ORDER_STOCK_LOCATION_PRIORITY:?Set the local stock location priority}
   integration:
     environment:
       NIGSON_SECURITY_ENABLED: "true"
