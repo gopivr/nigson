@@ -2750,7 +2750,7 @@ ADR-016: private response includes required accountHash (lowercase SHA256) froze
 - **Statuses:** 201 success; common section13 errors;202 for explicitly uncertain/queued external actions.
 - **Validation / business rules:** Idempotent owned cart; validated Nigerian address, positive server packing; commerce calls private rate port before transaction, persists exact approved result. Reject unsupported route/non-NGN response, no mock/live mixing.
 - **Events:** None directly; owned audit/history where applicable.
-- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
+- **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, FULFILLMENT_RULE_VIOLATION, PROVIDER_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
 ### API-182 POST /internal/v1/carrier/quotes
 

@@ -40,7 +40,8 @@ public final class JdbcCheckoutQuoteRepository implements CheckoutQuoteRepositor
   CheckoutPricing.Snapshot current;
   try{current=build(actor,input,false);}catch(Problem.Failure failure){if(Set.of("PRICING_RULE_VIOLATION","MARKET_RULE_VIOLATION","INVALID_TRANSITION").contains(failure.getMessage()))throw new Problem.Failure(ProblemCode.CHECKOUT_REPRICE_REQUIRED);throw failure;}
   var before=(tools.jackson.databind.node.ObjectNode)saved.deepCopy();var after=(tools.jackson.databind.node.ObjectNode)current.commercial().deepCopy();before.remove("expiresAt");after.remove("expiresAt");
-  if(!EventCodec.hash(before).equals(EventCodec.hash(after))||!CarrierPacking.hash(current.address()).equals(saved.path("addressHash").asString())||!EventCodec.JSON.valueToTree(current.address()).equals(row[3]))throw new Problem.Failure(ProblemCode.CHECKOUT_REPRICE_REQUIRED);
+  // Canonical hash: jsonb rereads decimals as floating nodes, so raw node equality is type-sensitive.
+  if(!EventCodec.hash(before).equals(EventCodec.hash(after))||!CarrierPacking.hash(current.address()).equals(saved.path("addressHash").asString())||!EventCodec.hash(EventCodec.JSON.valueToTree(current.address())).equals(EventCodec.hash((JsonNode)row[3])))throw new Problem.Failure(ProblemCode.CHECKOUT_REPRICE_REQUIRED);
   var quote=current.quote();return new CheckoutPricing.Snapshot(new PricingValues.Quote(id,(Long)row[1],quote.currency(),quote.lines(),quote.totals(),hash,(Instant)row[5]),saved,current.address());
  }
 

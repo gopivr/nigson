@@ -1,9 +1,10 @@
-package com.nigson.experience;
+package com.nigson.fixtures;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.*;
 import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jwt.*;
+import com.nigson.experience.ExperienceApplication;
 import com.nigson.shared.events.EventCodec;
 import com.nigson.shared.security.ActorAssertion;
 import com.sun.net.httpserver.HttpServer;

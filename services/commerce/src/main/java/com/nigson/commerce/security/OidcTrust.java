@@ -29,8 +29,12 @@ public final class OidcTrust {
         var b=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER);if(tls!=null)b.sslContext(tls);http=b.build();
         access=KeycloakIdentity.decoder(policy,clock,tls);id=KeycloakIdentity.idTokenDecoder(new KeycloakIdentity.Policy(environment,issuer,policy.jwks(),client,Set.of(client),Set.of("openid")),clock,tls);
     }
-    public URI authorization(PendingLogin flow,boolean stepUp) {
-        try{var q=new LinkedHashMap<String,String>();q.put("client_id",client);q.put("redirect_uri",callback);q.put("response_type","code");q.put("scope","openid profile email");q.put("state",flow.state());q.put("nonce",flow.nonce());q.put("code_challenge",Base64.getUrlEncoder().withoutPadding().encodeToString(MessageDigest.getInstance("SHA-256").digest(flow.verifier().getBytes(StandardCharsets.US_ASCII))));q.put("code_challenge_method","S256");if(stepUp){q.put("max_age","0");q.put("prompt","login");}return URI.create(issuer+"/protocol/openid-connect/auth?"+form(q));}catch(Exception e){throw rejected();}
+    public URI authorization(PendingLogin flow,boolean stepUp){return authorization(flow,stepUp,null);}
+    public URI authorization(PendingLogin flow,boolean stepUp,String action){return authorizationUrl(issuer,client,callback,flow,stepUp,action);}
+    /** Build the PKCE authorization URL; `action` is a closed Keycloak required-action name. */
+    static URI authorizationUrl(String issuer,String client,String callback,PendingLogin flow,boolean stepUp,String action) {
+        if(action!=null&&!Set.of("UPDATE_PASSWORD").contains(action))throw new IllegalArgumentException("OIDC_ACTION_INVALID");
+        try{var q=new LinkedHashMap<String,String>();q.put("client_id",client);q.put("redirect_uri",callback);q.put("response_type","code");q.put("scope","openid profile email");q.put("state",flow.state());q.put("nonce",flow.nonce());q.put("code_challenge",Base64.getUrlEncoder().withoutPadding().encodeToString(MessageDigest.getInstance("SHA-256").digest(flow.verifier().getBytes(StandardCharsets.US_ASCII))));q.put("code_challenge_method","S256");if(stepUp){q.put("max_age","0");q.put("prompt","login");}if(action!=null)q.put("kc_action",action);return URI.create(issuer+"/protocol/openid-connect/auth?"+form(q));}catch(Exception e){throw rejected();}
     }
     public Tokens exchange(String code,PendingLogin flow) {
         if(code==null||code.length()>2048||code.isBlank()||!clock.instant().isBefore(flow.expiresAt()))throw rejected();

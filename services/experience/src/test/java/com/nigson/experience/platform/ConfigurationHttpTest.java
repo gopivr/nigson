@@ -1,6 +1,6 @@
 package com.nigson.experience.platform;
 
-import com.nigson.experience.ExperienceHttpFixtures;
+import com.nigson.fixtures.ExperienceHttpFixtures;
 import com.nigson.shared.events.EventCodec;
 import java.nio.file.*;
 import java.time.Duration;
