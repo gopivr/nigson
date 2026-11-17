@@ -43,6 +43,8 @@ Implementation commits `3c5d71e`, `c60880a` and `de58fee`.
 
 - `bash scripts/infra/validate-terraform.sh aws` — PASS; 16 roots initialized
   and validated, 39 mocked Terraform tests passed.
+- `bash scripts/infra/validate-terraform.sh ovh` — PASS; 6 roots validated and
+  12 mocked Terraform tests passed.
 - `bash scripts/infra/tests/workflows-test.sh` — PASS; YAML parses, actions are
   pinned, and the deploy workflow keeps its permission boundaries.
 - `bash scripts/infra/tests/deploy-environment-test.sh` — PASS for both stage
