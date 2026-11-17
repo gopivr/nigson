@@ -48,7 +48,7 @@ for environment in stage prod; do
   fi
 done
 
-if bash "$repo_root/scripts/infra/smoke-environment.sh" development "$temporary_dir/smoke-stage.json" >/dev/null 2>&1; then
+if bash "$repo_root/scripts/infra/smoke-environment.sh" development "$temporary_dir/smoke-prod.json" >/dev/null 2>&1; then
   echo "expected unsupported environment rejection" >&2; exit 1
 fi
 echo "Stage and production smoke probe tests PASS"
