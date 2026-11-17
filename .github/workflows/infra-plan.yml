@@ -6,7 +6,7 @@ on:
       - "infrastructure/terraform/**"
       - ".github/workflows/infra-plan.yml"
       - ".github/workflows/infra-artifacts.yml"
-      - ".github/workflows/deploy-stage.yml"
+      - ".github/workflows/deploy-environment.yml"
       - "services/**/Dockerfile"
       - "infrastructure/docker/**"
       - "docs/runbooks/deploy.md"
@@ -110,10 +110,10 @@ jobs:
         run: bash scripts/infra/tests/migration-target-policy-test.sh
       - name: Test one-shot migration launch and no-retry behavior
         run: bash scripts/infra/tests/run-owner-migration-test.sh
-      - name: Test stage deployment migration gate and rollback behavior
-        run: bash scripts/infra/tests/deploy-stage-test.sh
-      - name: Test stage private and public smoke probes
-        run: bash scripts/infra/tests/smoke-stage-test.sh
+      - name: Test stage and production deployment migration gate and rollback behavior
+        run: bash scripts/infra/tests/deploy-environment-test.sh
+      - name: Test stage and production private and public smoke probes
+        run: bash scripts/infra/tests/smoke-environment-test.sh
       - name: Test isolated RDS restore verifier
         run: bash scripts/infra/tests/verify-rds-restore-test.sh
 
