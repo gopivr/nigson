@@ -11879,6 +11879,96 @@
       "owner": "commerce",
       "phase": 3
     },
+    "commerce.wishlist_item": {
+      "checks": "created_by=updated_by",
+      "fields": [
+        {
+          "cascade": false,
+          "default": "uuidv7()",
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": true,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "party_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": true,
+          "default": null,
+          "external": null,
+          "foreign": "sku",
+          "name": "sku_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        }
+      ],
+      "keys": "UQ(party_id,sku_id); IX(party_id,created_at DESC,sku_id); IX(sku_id)",
+      "module": "wishlist",
+      "mutation": "set-membership",
+      "owner": "commerce",
+      "phase": 1
+    },
     "experience.application_document": {
       "checks": "No additional table-level predicate",
       "creation_changeset": "experience-20261006-018",

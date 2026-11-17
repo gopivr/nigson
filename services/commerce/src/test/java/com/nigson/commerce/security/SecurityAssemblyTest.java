@@ -33,6 +33,7 @@ class SecurityAssemblyTest {
    com.nigson.acceptance.AuthorizationHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.AuditHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.party.PartyHttpAcceptance.run(app,http,base);
+   com.nigson.commerce.wishlist.WishlistHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.reward.RewardHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.configuration.ConfigurationHttpAcceptance.run(app,http,base);
    com.nigson.acceptance.catalogue.CatalogueHttpAcceptance.run(app,http,base,workload);

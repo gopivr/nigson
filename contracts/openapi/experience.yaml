@@ -11164,7 +11164,8 @@
           "reviewerPartyId",
           "reviewReason",
           "organizationId",
-          "version"
+          "version",
+          "decisionReason"
         ],
         "properties": {
           "id": {
@@ -11273,6 +11274,18 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          },
+          "decisionReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Latest saved staff decision reason. Null before a decision; distinct from the review note."
           }
         }
       },

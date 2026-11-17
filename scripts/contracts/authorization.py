@@ -73,6 +73,8 @@ def contract():
     from admin_reads import extend as admin_reads_extend
     result = admin_reads_extend(result, "commerce")
     result = extend_distributor_entitlements(result)
+    from wishlist import extend as wishlist_extend
+    result = wishlist_extend(result)
     return result
 
 def extend_distributor_entitlements(spec):

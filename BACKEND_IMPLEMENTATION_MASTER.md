@@ -4584,6 +4584,25 @@ CarrierPackaging is closed `{schemaVersion:1,maximumUnitsPerPackage:Quantity>0,u
 Phone hashes are HMAC-SHA256 over canonical E164, keyed/versioned separately from encryption. `destination_hash` is the common email/phone suppression key; email legacy hash may be null for phones. Keycloak owns a separate logical PostgreSQL database `keycloak` and its vendor tables; none of the four business services can query it. Its vendor migrations are the explicit exception to business Liquibase ownership, coordinated with pinned Keycloak upgrade/backup/runbook; never attempt to invent or maintain Keycloak's vendor columns in commerce Liquibase.
 
 
+### commerce.wishlist_item
+
+Owner: `commerce`; module: `wishlist`; introduced: BP1; mutation: set-membership.
+
+```text
+id uuid NN PK DEFAULT uuidv7()
+party_id uuid NN FK party ON DELETE CASCADE
+sku_id uuid NN FK sku ON DELETE CASCADE
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+```
+
+- **Keys and indexes:** UQ(party_id,sku_id); IX(party_id,created_at DESC,sku_id); IX(sku_id).
+- **Checks:** created_by=updated_by.
+- **Business invariant:** Current personal account owns at most 100 unique saved SKUs. Membership inserts/deletes serialize on Party; runtime UPDATE is forbidden. No price snapshot. See ADR-029.
+
 # 11. Liquibase Architecture
 
 Each owner has `db/changelog/master.yaml` in its Java service resources; AI changesets live in `database/changelog/ai/master.yaml`. A standalone migration CLI/container uses Liquibase JDBC against each owner. Root `database/master-all-local.yaml` is convenience only for local integration tests and must never grant one runtime service access to all schemas.
@@ -10189,3 +10208,12 @@ Provider removal, 11 November 2026: only PandaGo remains an application carrier.
 ## User amendment: normal admin login for selling prices (14 November 2026)
 
 Per explicit user decision and ADR-027, current persisted ADMIN authority permits price-book listing, creation, revision, activation and retail market binding without OTP/recent MFA (API-150/027/151/028/162). Existing SALES/FINANCE alternatives keep their current checks. This narrowly scoped pricing exception supersedes earlier MFA/FINANCE-only statements for those operations; all other financial and administrative MFA policies, actor/session checks, validation, idempotency, versioning, audit and immutable pricing remain unchanged.
+
+
+## Implementation clarification: distributor staff detail (ADR-028)
+
+The user-authorized distributor workflow presentation adds nullable decisionReason to API-177, exposing the latest saved Experience decision-payload reason separately from reviewReason. Existing SALES authorization, owner isolation, review/document verification, independent approval, versioning and Commerce acknowledgement requirements remain unchanged. No file-access permission or new application state is introduced.
+
+## User-authorized account wishlist, 17 November 2026 (ADR-029)
+
+Implement the existing wishlist as an account-owned Commerce SKU set, with authenticated API-216/217/218, additive BP1 migration 027, normal personal CUSTOMER session/CSRF, bounded 100 unique associations and atomic audit/idempotency. No owner boundary/provider/OTP changes. Current catalogue/pricing and actual SKU ids drive the UI. See ADR-029 and the implementation report for exact invariants, tests and activation evidence.
