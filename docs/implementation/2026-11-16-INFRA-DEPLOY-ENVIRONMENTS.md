@@ -8,7 +8,7 @@ the workflow, deployment script, smoke runner and tests were stage-only, with
 `docs/releases/stage/` hard-coded. A production dispatch could not use the same
 reviewed controls, and environment mistakes were not rejected before ECS calls.
 
-Implementation commit `3c5d71e`.
+Implementation commits `3c5d71e`, `c60880a` and `de58fee`.
 
 ## Changes
 
