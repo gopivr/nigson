@@ -16315,6 +16315,66 @@
           "nullable": true,
           "primary": false,
           "type": "varchar(80)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "booking_reference",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "creation_generation",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "source_occurred_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "prepared_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "account_hash",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "result_body",
+          "nullable": true,
+          "primary": false,
+          "type": "jsonb"
         }
       ],
       "keys": "UQ(shipment_id,provider); UQ(business_key); IX(state,next_poll_at)",

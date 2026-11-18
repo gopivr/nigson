@@ -22,7 +22,7 @@ class FulfillmentContracts(unittest.TestCase):
         spec=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text());op=spec['paths']['/api/v1/carts/{id}/delivery-quotes']['post'];schemas=spec['components']['schemas']
         self.assertEqual(op['operationId'],'API-181');self.assertEqual(op['security'],[{'bffSession':[]}])
         self.assertEqual({p['name'] for p in op['parameters'] if p.get('required')},{'id','Idempotency-Key','X-CSRF-TOKEN','If-Match'})
-        self.assertEqual(set(schemas['DeliveryQuoteInput']['properties']),{'addressId','serviceCode'});self.assertFalse(schemas['DeliveryQuoteInput']['additionalProperties'])
+        self.assertEqual(set(schemas['DeliveryQuoteInput']['properties']),{'addressId','serviceCode','deliveryMode','scheduledFor'});self.assertFalse(schemas['DeliveryQuoteInput']['additionalProperties'])
         self.assertEqual(schemas['DeliveryQuoteInput']['required'],['addressId']);self.assertEqual(schemas['DeliveryQuoteDTO']['properties']['currency']['const'],'NGN');self.assertEqual(schemas['DeliveryQuoteDTO']['properties']['mode']['enum'],['MOCK','SANDBOX','LIVE'])
         self.assertIn('201',op['responses']);self.assertIn('503',op['responses']);self.assertNotIn('ETag',op['responses']['201']['headers'])
 

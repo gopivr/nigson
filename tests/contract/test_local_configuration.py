@@ -32,19 +32,44 @@ class LocalIsolationTests(unittest.TestCase):
             local.application_preflight({'services': {'commerce': {'environment': {'NIGSON_SECURITY_ENABLED': 'true', 'NIGSON_PROVIDERS_ENABLED': 'true'}}}})
         local.application_preflight({'services': {}})
 
+    def test_preflight_rejects_expired_or_malformed_enabled_approval_without_values(self):
+        env = {'NIGSON_PRICING_CHECKOUT_ENABLED': 'true', 'NIGSON_CARRIER_PROVIDER': 'PANDAGO'}
+        for value in ('2000-01-01T00:00:00Z', 'private-invalid-value', '2099-01-01T00:00:00'):
+            env['NIGSON_PRICING_PROVIDER_APPROVAL_UNTIL'] = value
+            with self.assertRaises(ValueError) as error:
+                local.application_preflight({'services': {'commerce': {'environment': env}}})
+            self.assertIn('NIGSON_PRICING_PROVIDER_APPROVAL_UNTIL', str(error.exception))
+            self.assertNotIn(value, str(error.exception))
+        env['NIGSON_PRICING_PROVIDER_APPROVAL_UNTIL'] = '2000-01-01T00:00:00Z'
+        with self.assertRaisesRegex(ValueError, 'renew NIGSON_PANDAGO_APPROVAL_UNTIL'):
+            local.application_preflight({'services': {'commerce': {'environment': env}}})
+
+    def test_preflight_allows_future_approval_and_ignores_disabled_gate(self):
+        env = {'NIGSON_SECURITY_ENABLED': 'true', 'NIGSON_PRIVATE_PEER_CIDRS': '127.0.0.1/32', 'NIGSON_ACTOR_PUBLIC_KEYS': 'test',
+               'NIGSON_PANDAGO_ENABLED': 'true', 'NIGSON_PANDAGO_APPROVAL_UNTIL': '2099-01-01T00:00:00Z'}
+        local.application_preflight({'services': {'integration': {'environment': env}}})
+        env['NIGSON_PANDAGO_ENABLED'] = 'false'
+        env['NIGSON_PANDAGO_APPROVAL_UNTIL'] = 'invalid'
+        local.application_preflight({'services': {'integration': {'environment': env}}})
+
+    def test_booking_preflight_requires_a_durable_generation_and_cutoff(self):
+        for owner in ('commerce','integration'):
+            with self.assertRaisesRegex(ValueError, 'NIGSON_CARRIER_CREATION_NOT_BEFORE'):
+                local.application_preflight({'services': {owner: {'environment': {'NIGSON_PANDAGO_BOOKING_ENABLED': 'true'}}}})
+
     def test_example_allows_the_frontend_admin_login_destination(self):
         settings = dict(line.split('=', 1) for line in (ROOT / '.env.example').read_text().splitlines() if '=' in line and not line.startswith('#'))
         self.assertIn('/admin', settings['NIGSON_BFF_RETURN_PATHS'].split(','))
 
     def test_run_core_starts_dependencies_before_database_migration(self):
         events=[]
-        with patch('sys.argv',['dependencies.py','run-core']), patch.object(local,'validate',return_value={}), patch.object(local,'application_preflight'), patch.object(local,'start_dependencies',side_effect=lambda config:events.append('dependencies')), patch.object(local,'migrate',side_effect=lambda:events.append('migration')), patch.object(local,'ensure_actor_key',side_effect=lambda:events.append('trust')), patch.object(local,'command',side_effect=lambda *args:events.append('build' if 'build' in args else 'apps')):
+        with patch('sys.argv',['dependencies.py','run-core']), patch.object(local,'validate',return_value={}), patch.object(local,'application_preflight'), patch.object(local,'start_dependencies',side_effect=lambda config:events.append('dependencies')), patch.object(local,'migrate',side_effect=lambda:events.append('migration')), patch.object(local,'bootstrap'), patch.object(local,'ensure_actor_key',side_effect=lambda:events.append('trust')), patch.object(local,'command',side_effect=lambda *args:events.append('build' if 'build' in args else 'apps')):
             self.assertEqual(local.main(),0)
         self.assertEqual(events,['dependencies','migration','build','trust','apps'])
 
     def test_run_core_recovers_signing_trust_before_starting_apps(self):
         events = []
-        with patch('sys.argv', ['dependencies.py', 'run-core']), patch.object(local, 'validate', return_value={}), patch.object(local, 'migrate'), patch.object(local, 'start_dependencies'), patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), patch.object(local, 'ensure_actor_key', side_effect=lambda: events.append('recover')), patch.object(local, 'command', side_effect=lambda *args: events.append(args)):
+        with patch('sys.argv', ['dependencies.py', 'run-core']), patch.object(local, 'validate', return_value={}), patch.object(local, 'migrate'), patch.object(local, 'start_dependencies'), patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), patch.object(local, 'bootstrap'), patch.object(local, 'ensure_actor_key', side_effect=lambda: events.append('recover')), patch.object(local, 'command', side_effect=lambda *args: events.append(args)):
             self.assertEqual(local.main(), 0)
         self.assertEqual(events[0][2], 'build')
         self.assertEqual(events[1], 'recover')
@@ -55,7 +80,7 @@ class LocalIsolationTests(unittest.TestCase):
         with patch('sys.argv', ['dependencies.py', 'up']), patch.object(local, 'validate', return_value={}), \
                 patch.object(local, 'command', side_effect=lambda *args, **kwargs: commands.append(args)), \
                 patch.object(local, 'wait_identity'), patch.object(local, 'configure_registration'), \
-                patch.object(local, 'bootstrap'), patch.object(local.subprocess, 'run') as execute:
+                patch.object(local, 'bootstrap'), patch.object(local, 'configure_workload_scopes'), patch.object(local.subprocess, 'run') as execute:
             self.assertEqual(local.main(), 0)
         execute.assert_not_called()
         self.assertFalse(any(any(name in args for name in ('paystack-mock', 'twilio-mock')) for args in commands))
@@ -79,7 +104,7 @@ class LocalIsolationTests(unittest.TestCase):
             with self.subTest(enabled=enabled), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 (root / '.env').write_text('NIGSON_PANDAGO_ENABLED=' + str(enabled).lower() + '\n')
-                with patch.object(local, 'ROOT', root), patch.dict(os.environ, {'NIGSON_PANDAGO_ENABLED': str(enabled).lower()}), patch.object(local.subprocess, 'run', return_value=SimpleNamespace(stdout='')) as docker:
+                with patch.object(local, 'ROOT', root), patch.object(local, 'read_pandago_staging_settings', return_value={}), patch.dict(os.environ, {'NIGSON_PANDAGO_ENABLED': str(enabled).lower()}), patch.object(local.subprocess, 'run', return_value=SimpleNamespace(stdout='')) as docker:
                     local.command('up', '-d', 'integration')
                     args = docker.call_args.args[0]
                     self.assertEqual(str(root / 'docker-compose.pandago.yml') in args, enabled)

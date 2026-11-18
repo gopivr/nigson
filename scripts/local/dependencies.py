@@ -2,6 +2,7 @@
 """Start/stop and verify the explicitly local Nigson dependency environment."""
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import http.client
 import json
@@ -15,6 +16,7 @@ import time
 import urllib.error
 import urllib.request
 import urllib.parse
+import uuid
 
 if sys.platform == "win32" and not shutil.which("docker"):
     for _docker_candidate in [
@@ -564,6 +566,33 @@ def application_preflight(config: dict) -> None:
         env = config.get('services', {}).get(owner, {}).get('environment', {})
         if not env:
             continue
+        if str(env.get('NIGSON_PANDAGO_BOOKING_ENABLED', '')).lower() == 'true':
+            try:
+                cutoff = datetime.fromisoformat(str(env.get('NIGSON_CARRIER_CREATION_NOT_BEFORE', '')).replace('Z', '+00:00'))
+                if cutoff.tzinfo is None:
+                    raise ValueError('Timezone required')
+                if owner == 'integration' and uuid.UUID(str(env.get('NIGSON_CARRIER_CREATION_GENERATION', ''))).int == 0:
+                    raise ValueError('Generation required')
+            except (ValueError, AttributeError):
+                errors.append(owner + ' automatic booking requires NIGSON_CARRIER_CREATION_NOT_BEFORE with timezone and Integration requires a nonnil NIGSON_CARRIER_CREATION_GENERATION; preserve these outside database restore scope')
+        approval_gates = (
+            ('NIGSON_PRICING_CHECKOUT_ENABLED', 'NIGSON_PRICING_PROVIDER_APPROVAL_UNTIL'),
+            ('NIGSON_FULFILLMENT_ENABLED', 'NIGSON_FULFILLMENT_APPROVAL_UNTIL'),
+            ('NIGSON_PANDAGO_ENABLED', 'NIGSON_PANDAGO_APPROVAL_UNTIL'),
+        )
+        for enabled_key, expiry_key in approval_gates:
+            if str(env.get(enabled_key, '')).lower() != 'true':
+                continue
+            try:
+                expiry = datetime.fromisoformat(str(env.get(expiry_key, '')).replace('Z', '+00:00'))
+                if expiry.tzinfo is None:
+                    raise ValueError('Timezone required')
+            except ValueError:
+                errors.append(owner + ' requires ' + expiry_key + ' as a valid approval expiry with timezone; update the approved local configuration before make run-core')
+                continue
+            if expiry <= datetime.now(timezone.utc):
+                source = 'NIGSON_PANDAGO_APPROVAL_UNTIL' if env.get('NIGSON_CARRIER_PROVIDER') == 'PANDAGO' else expiry_key
+                errors.append(owner + ' provider approval expired (' + expiry_key + '); renew ' + source + ' in .env with an approved future expiry before make run-core')
         if str(env.get('NIGSON_SECURITY_ENABLED', '')).lower() != 'true':
             errors.append('NIGSON_SECURITY_ENABLED=true is required for application routes; run make local-app-config after make local-up')
         if str(env.get('NIGSON_SECURITY_ENABLED', '')).lower() == 'true':

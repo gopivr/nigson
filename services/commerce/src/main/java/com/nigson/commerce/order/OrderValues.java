@@ -8,6 +8,7 @@ public final class OrderValues {
  private OrderValues(){}
  public static final Set<String> STATES=Set.of("PENDING","PAID","PROCESSING","SHIPPED","DELIVERED","CANCELLED","PAYMENT_HOLD","REFUNDING","REFUNDED");
  public static final Set<String> PAYMENT_STATES=Set.of("UNPAID","PENDING","PAID","PARTIALLY_REFUNDED","REFUNDED","FAILED");
+ public static final Set<String> PAYMENT_METHODS=Set.of("HOSTED","CASH_ON_DELIVERY");
  public record CheckoutInput(UUID checkoutQuoteId,String quoteHash,String paymentMethod){}
  public record Totals(String subtotal,String discount,String tax,String delivery,String grandTotal,String refunded){}
  public record Line(UUID id,UUID skuId,String skuCode,String name,String quantity,String unitAmount,String lineTotal){}
@@ -25,7 +26,7 @@ public final class OrderValues {
  public static Problem.Failure rule(){return new Problem.Failure(ProblemCode.ORDER_RULE_VIOLATION);}
  private static void closed(JsonNode n,Set<String> fields){if(n==null||!n.isObject()||!n.propertyNames().equals(fields))throw ApiValues.invalid();}
  private static String text(JsonNode n,String key,int min,int max){var value=n.get(key);if(value==null||!value.isString())throw ApiValues.invalid();String raw=value.asString();if(raw.length()<min||raw.length()>max||!raw.equals(raw.strip())||raw.codePoints().anyMatch(c->Character.isISOControl(c)||Character.getType(c)==Character.FORMAT))throw ApiValues.invalid();return raw;}
- public static CheckoutInput checkout(JsonNode n){closed(n,Set.of("checkoutQuoteId","quoteHash","paymentMethod"));String hash=text(n,"quoteHash",64,64),method=text(n,"paymentMethod",6,6);if(!hash.matches("[a-f0-9]{64}")||!method.equals("HOSTED"))throw ApiValues.invalid();return new CheckoutInput(ApiValues.uuid(text(n,"checkoutQuoteId",36,36)),hash,method);}
+ public static CheckoutInput checkout(JsonNode n){closed(n,Set.of("checkoutQuoteId","quoteHash","paymentMethod"));String hash=text(n,"quoteHash",64,64),method=text(n,"paymentMethod",6,16);if(!hash.matches("[a-f0-9]{64}")||!PAYMENT_METHODS.contains(method))throw ApiValues.invalid();return new CheckoutInput(ApiValues.uuid(text(n,"checkoutQuoteId",36,36)),hash,method);}
  public static String reason(JsonNode n){closed(n,Set.of("reason"));return text(n,"reason",10,500);}
  public static ProofInput proof(JsonNode n){closed(n,Set.of("partyId","orderLineId","productId"));return new ProofInput(ApiValues.uuid(text(n,"partyId",36,36)),ApiValues.uuid(text(n,"orderLineId",36,36)),ApiValues.uuid(text(n,"productId",36,36)));}
  public static UUID aiStatusId(JsonNode n){closed(n,Set.of("orderId"));return ApiValues.uuid(text(n,"orderId",36,36));}

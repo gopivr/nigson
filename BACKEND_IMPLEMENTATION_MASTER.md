@@ -4403,6 +4403,12 @@ next_poll_at timestamptz NULL
 lease_until timestamptz NULL
 last_provider_status varchar(80) NULL
 error_code varchar(80) NULL
+booking_reference uuid NULL
+creation_generation uuid NULL
+source_occurred_at timestamptz NULL
+prepared_at timestamptz NULL
+account_hash varchar(64) NULL
+result_body jsonb NULL
 ```
 
 - **Keys and indexes:** UQ(shipment_id,provider); UQ(business_key); IX(state,next_poll_at).

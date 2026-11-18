@@ -1,0 +1,12 @@
+package com.nigson.integration.carrier;
+import java.net.*;
+import java.util.*;
+import java.nio.charset.StandardCharsets;
+import com.sun.net.httpserver.HttpServer;
+import org.junit.jupiter.api.Test;
+import com.nigson.shared.events.EventCodec;
+import static org.assertj.core.api.Assertions.*;
+class PandagoCommerceClientTest {
+ @Test void onlyCompiledAuthenticatedOwnerRoutesAreUsed()throws Exception{UUID shipment=UUID.randomUUID();var requests=new ArrayList<String>();var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);server.createContext("/",exchange->{try{assertThat(exchange.getRequestHeaders().getFirst("Authorization")).isEqualTo("Bearer test-token");assertThat(exchange.getRequestHeaders().getFirst("X-Correlation-ID")).isNotBlank();requests.add(exchange.getRequestMethod()+" "+exchange.getRequestURI().getPath());String response=exchange.getRequestMethod().equals("GET")?"{\"shipmentId\":\""+shipment+"\"}":"{\"id\":\""+shipment+"\",\"providerOrderId\":\"stage-order\"}";if(exchange.getRequestMethod().equals("POST"))assertThat(EventCodec.JSON.readTree(exchange.getRequestBody().readAllBytes()).path("reference").asString()).isEqualTo("stage-order");byte[] bytes=response.getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().add("Content-Type","application/json");exchange.sendResponseHeaders(200,bytes.length);exchange.getResponseBody().write(bytes);}finally{exchange.close();}});server.start();try{var apis=new ArrayList<String>();var client=new PandagoCommerceClient("test","http://127.0.0.1:"+server.getAddress().getPort(),route->{apis.add(route.api());return "test-token";});assertThat(client.context(shipment).path("shipmentId").asString()).isEqualTo(shipment.toString());client.acknowledge(shipment,EventCodec.JSON.valueToTree(Map.of("reference","stage-order","bookingState","BOOKED")));assertThat(apis).containsExactly("API-119","API-120");assertThat(requests).containsExactly("GET /internal/v1/shipments/"+shipment+"/provider-context","POST /internal/v1/shipments/"+shipment+"/provider-result");}finally{server.stop(0);}}
+ @Test void untrustedPrivateTargetsAreRejected(){for(String target:List.of("http://external.example","http://commerce/path","http://user:secret@commerce","http://commerce?query=1"))assertThatThrownBy(()->new PandagoCommerceClient("local",target,r->"token")).isInstanceOf(IllegalArgumentException.class);assertThatThrownBy(()->new PandagoCommerceClient("prod","http://commerce",r->"token")).isInstanceOf(IllegalArgumentException.class);}
+}
