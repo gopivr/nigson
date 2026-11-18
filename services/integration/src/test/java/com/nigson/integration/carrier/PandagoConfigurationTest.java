@@ -29,4 +29,14 @@ class PandagoConfigurationTest {
     @Test void enabledProviderRejectsMissingFileInsteadOfFallingBackToMocks() {
         runner.withPropertyValues("NIGSON_PANDAGO_ENABLED=true", "NIGSON_SECURITY_ENABLED=true", "PANDAGO_PRIVATE_KEY_FILE=" + directory.resolve("absent.pem")).run(context -> assertThat(context).hasFailed());
     }
+    @Test void bookingClientDoesNotEnableOrDependOnGenericProviderJobs() {
+        var environment = new org.springframework.mock.env.MockEnvironment()
+            .withProperty("NIGSON_SECURITY_ENABLED", "true").withProperty("APP_ENV", "test")
+            .withProperty("NIGSON_OIDC_ISSUER", "http://127.0.0.1:12345/realms/test")
+            .withProperty("NIGSON_INTEGRATION_WORKLOAD_SECRET", "synthetic-integration-workload-identity-only")
+            .withProperty("NIGSON_COMMERCE_BASE_URL", "http://127.0.0.1:12345");
+        assertThat(new PandagoConfiguration.Booking().pandagoCommerceClient(environment)).isNotNull();
+        assertThat(environment.getProperty("NIGSON_PROVIDER_JOBS_ENABLED")).isNull();
+    }
+
 }

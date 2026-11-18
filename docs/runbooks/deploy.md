@@ -13,6 +13,31 @@ sensitive values. Configure encrypted S3 state and S3 lockfile locking in the
 state account before the first plan. Separate stage and production accounts and
 short-lived GitHub OIDC roles are required.
 
+## Environment-specific configuration
+
+Stage and production use the same module source but never share values. The
+`stage` and `prod` GitHub Environments hold independent repository variables;
+the plan workflow maps them into `TF_VAR_*`, and the release workflow maps them
+into `AWS_*`. Configure at least:
+
+| Setting | Stage | Production |
+| --- | --- | --- |
+| GitHub Environment | `stage` with branch restrictions and reviewers | `prod` with a separate required approval and no bypass |
+| AWS account | dedicated stage account | dedicated production account |
+| `AWS_REGION` | stage region | production region |
+| `AWS_EXPECTED_ACCOUNT_ID` | stage account ID | production account ID |
+| `AWS_PLAN_ROLE_ARN` / `AWS_DEPLOY_ROLE_ARN` | stage-scoped OIDC roles | production-scoped OIDC roles |
+| `TF_STATE_BUCKET` and key | `nigson/stage/terraform.tfstate` | `nigson/prod/terraform.tfstate` |
+| `TF_VAR_*` network, phase, sizing, retention and route values | stage inputs | independently reviewed production inputs |
+| Resource names | `nigson-stage-*` | `nigson-prod-*` |
+| ECR repositories | `nigson/stage/*` | `nigson/prod/*` |
+| Private service namespace | `*.svc.stage.nigson.internal` | `*.svc.prod.nigson.internal` |
+| Release manifests | `docs/releases/stage/` | `docs/releases/prod/` |
+
+Copy `environments/<environment>/backend.hcl.example` to an untracked backend
+configuration for that environment's state. Never point stage and production at
+the same state key, account, role, bucket, or ECR repository.
+
 Before planning, provide reviewed non-secret `TF_VAR_*` values for the target
 region, account ID, policy revision, VPC range, AZs and per-AZ edge/application/
 data CIDRs; product phase, private namespace, KMS key ARN, WAF ACL ARN, TLS
@@ -106,40 +131,51 @@ execution roles; the task role has no application permissions.
 
 Only after every required owner migration has a confirmed exit code of zero
 should the separately reviewed application deployment proceed. Use the manual
-`deploy reviewed stage release` workflow, whose `stage` GitHub environment must
-have required reviewers and branch restrictions configured. Commit both
-reviewed JSON manifests beneath `docs/releases/stage/`; enter their
-repository-relative paths at dispatch. The workflow accepts only those paths,
-uses short-lived OIDC credentials, and checks the resolved AWS account. Its
-`AWS_DEPLOY_ROLE_ARN` must be limited to the stage cluster/services, named task
-definitions and required `iam:PassRole` ARNs. It must not have Terraform,
-Secrets Manager, IAM administration, or production access. For local operator
-execution, use `scripts/infra/deploy-stage.sh <release.json> <rollback.json>`
-with stage-scoped credentials, `AWS_REGION`, and `AWS_EXPECTED_ACCOUNT_ID`.
-The release manifest
-must name the stage cluster, product phase, exact required owner list, each
-successful migration task ARN and zero exit code, immutable service task
-definition ARNs and matching ECR image digests, plus HTTPS health URLs. The
-rollback manifest must contain the previously reviewed task definition for
-each service. The script checks the AWS account and actual stopped migration
-tasks, verifies task definition image digests, rolls services, waits for ECS
-stability, checks HTTPS health, and submits the reviewed prior task definitions
-if rollout or health fails. Rollback is refused unless it covers the same exact
-service set. The ECS deployment role should be restricted to these stage
-services and task definitions. It should not have Terraform, Secrets Manager,
-IAM administration, or production permissions.
+`deploy reviewed release` workflow and select `stage` or `prod`. The job runs
+inside that GitHub Environment, so it receives only that environment's
+`AWS_REGION`, `AWS_EXPECTED_ACCOUNT_ID`, and `AWS_DEPLOY_ROLE_ARN`; configure
+each environment's variables separately and never reuse stage values in prod.
+Commit both reviewed JSON manifests beneath `docs/releases/<environment>/`;
+enter their repository-relative paths at dispatch. The workflow accepts only a
+path inside the selected environment's directory, uses short-lived OIDC
+credentials, and checks the resolved AWS account. The release and rollback
+manifests must also declare that same environment, and the deploy script
+rejects service names, task definitions, ECR images, and migration tasks that
+do not carry the `nigson-<environment>-` / `nigson/<environment>/` prefix.
 
-Run `scripts/infra/smoke-stage.sh <approved-smoke.json>` from the required
-network vantages. Its JSON lists private service readiness URLs that must return
-HTTP 200 and public `/internal` URLs that must return HTTP 404. Run private
-probes inside the VPC and public-denial probes outside it; a failed connection
-is never treated as a successful denial. Record both vantage locations and
-results before accepting stage. The smoke runner validates targets but cannot
-create or prove the network vantage itself. For rollback, restore the previous
-task-definition image digest only when schema changes remain backward
-compatible; repair forward when data has crossed an incompatible boundary.
-Record plan and image digests, migration IDs, smoke results and recovery action
-without credentials or customer data.
+The `stage` GitHub Environment must have required reviewers and branch
+restrictions. The `prod` GitHub Environment must additionally require a
+separate approval with no bypass, and its `AWS_DEPLOY_ROLE_ARN` must be limited
+to the production cluster/services, named task definitions and required
+`iam:PassRole` ARNs. Neither environment's deploy role may have Terraform,
+Secrets Manager, IAM administration, or cross-environment access. For local
+operator execution, use
+`scripts/infra/deploy-environment.sh <stage|prod> <release.json> <rollback.json>`
+with that environment's credentials, `AWS_REGION`, and
+`AWS_EXPECTED_ACCOUNT_ID`. The release manifest must name the environment
+cluster, product phase, exact required owner list, each successful migration
+task ARN and zero exit code, immutable service task definition ARNs and matching
+ECR image digests, plus HTTPS health URLs. The rollback manifest must contain the
+previously reviewed task definition for each service. The script checks the AWS
+account and actual stopped migration tasks, verifies task definition image
+digests, rolls services, waits for ECS stability, checks HTTPS health, and
+submits the reviewed prior task definitions if rollout or health fails.
+Rollback is refused unless it covers the same exact service set. The ECS
+deployment role should be restricted to these services and task definitions.
+
+Run `scripts/infra/smoke-environment.sh <stage|prod> <approved-smoke.json>` from
+the required network vantages. Its JSON lists private service readiness URLs
+that must return HTTP 200 and public `/internal` URLs that must return HTTP 404,
+and it rejects a spec whose `environment` or private service hostname does not
+match the selected environment. Run private probes inside the VPC and
+public-denial probes outside it; a failed connection is never treated as a
+successful denial. Record both vantage locations and results before accepting
+the environment. The smoke runner validates targets but cannot create or prove
+the network vantage itself. For rollback, restore the previous task-definition
+image digest only when schema changes remain backward compatible; repair forward
+when data has crossed an incompatible boundary. Record plan and image digests,
+migration IDs, smoke results and recovery action without credentials or customer
+data.
 
 No cloud staging smoke, rollback or production deployment is claimed by the
 offline module work. They require a provisioned account, approved network and

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "$0")/../../.." && pwd)"
-workflows=(infra-plan.yml infra-artifacts.yml deploy-stage.yml)
+workflows=(infra-plan.yml infra-artifacts.yml deploy-environment.yml)
 
 ruby -e 'require "yaml"; ARGV.each { |file| YAML.load_file(file) }' \
   "${workflows[@]/#/$repo_root/.github/workflows/}"
@@ -18,31 +18,37 @@ done
 
 plan="$repo_root/.github/workflows/infra-plan.yml"
 artifacts="$repo_root/.github/workflows/infra-artifacts.yml"
-deploy="$repo_root/.github/workflows/deploy-stage.yml"
-rg -q '"\.github/workflows/deploy-stage.yml"' "$plan"
-rg -q '"services/\*\*/Dockerfile"' "$plan"
-rg -q '"infrastructure/docker/\*\*"' "$plan"
-rg -q "if: github.event_name == 'workflow_dispatch'" "$plan"
-rg -q 'terraform .* plan' "$plan"
-if rg -q 'terraform .* apply' "$plan"; then
+deploy="$repo_root/.github/workflows/deploy-environment.yml"
+grep -Eq '"\.github/workflows/deploy-environment.yml"' "$plan"
+grep -Eq '"services/\*\*/Dockerfile"' "$plan"
+grep -Eq '"infrastructure/docker/\*\*"' "$plan"
+grep -Eq "if: github.event_name == 'workflow_dispatch'" "$plan"
+grep -Eq 'terraform .* plan' "$plan"
+if grep -Eq 'terraform .* apply' "$plan"; then
   echo "infrastructure plan workflow must never apply" >&2
   exit 1
 fi
-[[ "$(rg -c 'id-token: write' "$plan")" == 1 ]]
-rg -q 'environment: \$\{\{ inputs.environment \}\}' "$plan"
-rg -q 'permissions:' "$artifacts"
-rg -q 'id-token: write' "$artifacts"
-rg -q 'scripts/infra/publish-images.sh' "$artifacts"
-if rg -q 'ecs:UpdateService|terraform[[:space:]]+apply' "$artifacts"; then
+[[ "$(grep -Ec 'id-token: write' "$plan")" == 1 ]]
+grep -Eq 'environment: \$\{\{ inputs.environment \}\}' "$plan"
+grep -Eq 'permissions:' "$artifacts"
+grep -Eq 'id-token: write' "$artifacts"
+grep -Eq 'scripts/infra/publish-images.sh' "$artifacts"
+if grep -Eq 'ecs:UpdateService|terraform[[:space:]]+apply' "$artifacts"; then
   echo "image publisher must not deploy or apply infrastructure" >&2
   exit 1
 fi
-rg -q 'environment: stage' "$deploy"
-rg -q 'id-token: write' "$deploy"
-rg -q 'RELEASE_MANIFEST.*docs/releases/stage' "$deploy"
-rg -q 'scripts/infra/deploy-stage.sh' "$deploy"
-if rg -q 'terraform|secretsmanager|iam:[[:space:]]*\*' "$deploy"; then
-  echo "stage release workflow must not provision infrastructure or read secrets" >&2
+grep -Eq 'options: \[stage, prod\]' "$deploy"
+grep -Eq 'environment: \$\{\{ inputs.environment \}\}' "$deploy"
+grep -Eq 'TARGET_ENVIRONMENT: \$\{\{ inputs.environment \}\}' "$deploy"
+grep -Eq 'id-token: write' "$deploy"
+grep -Eq 'docs/releases/\$\{TARGET_ENVIRONMENT\}' "$deploy"
+grep -Eq 'deploy-environment\.sh "\$TARGET_ENVIRONMENT"' "$deploy"
+if grep -Eq 'deploy-stage\.sh|deploy-stage\.yml' "$deploy" "$plan"; then
+  echo "stage-only deployment tooling must not remain in the environment workflow" >&2
+  exit 1
+fi
+if grep -Eq 'terraform|secretsmanager|iam:[[:space:]]*\*' "$deploy"; then
+  echo "environment release workflow must not provision infrastructure or read secrets" >&2
   exit 1
 fi
 

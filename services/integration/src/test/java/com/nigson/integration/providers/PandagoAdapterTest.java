@@ -19,11 +19,13 @@ class PandagoAdapterTest {
     HttpServer server;
     TestClock clock;
     PandagoAdapter adapter;
+    String expectedPayment = "PAID";
     final AtomicInteger tokens = new AtomicInteger(), bookings = new AtomicInteger();
     final Map<String, Map<String, Object>> orders = new HashMap<>();
     final Set<String> assertions = new HashSet<>();
     int authStatus = 200, cancellationStatus = 204, quoteStatus = 201, bookingStatus = 201;
     boolean loseBookingResponse, malformedBooking, wrongCurrency, wrongReference;
+    volatile Instant expectedPreorder;
     String pem;
     final PandagoAdapter.Location destination = new PandagoAdapter.Location("Synthetic delivery address", new BigDecimal("6.45"), new BigDecimal("3.39"));
 
@@ -77,11 +79,17 @@ class PandagoAdapterTest {
             assertThat(method).isEqualTo("POST"); var body = EventCodec.JSON.readTree(input);
             assertThat(body.path("sender").path("client_vendor_id").asString()).isEqualTo("mock-outlet");
             assertThat(body.path("recipient").path("location").path("latitude").decimalValue()).isEqualByComparingTo(destination.latitude());
+            assertThat(body.has("preordered_for")).isTrue();
+            if (expectedPreorder == null) assertThat(body.path("preordered_for").isNull()).isTrue();
+            else assertThat(body.path("preordered_for").asLong()).isEqualTo(expectedPreorder.getEpochSecond());
             reply(exchange, quoteStatus, Map.of("quote_id", "quote-1", "estimated_delivery_fee", new BigDecimal("1250.50"), "currency_code", wrongCurrency ? "USD" : "NGN", "expired_at", clock.instant().plusSeconds(600).toString(), "sender", Map.of("client_vendor_id", "mock-outlet"), "recipient", Map.of("location", Map.of("latitude", destination.latitude(), "longitude", destination.longitude())))); return;
         }
         if (path.equals("/ng/api/v1/quotes/quote-1")) {
             assertThat(method).isEqualTo("POST"); var body = EventCodec.JSON.readTree(input); String reference = body.path("client_order_id").asString();
-            assertThat(body.path("payment_method").asString()).isEqualTo("PAID"); assertThat(body.path("currency_code").asString()).isEqualTo("NGN");
+            assertThat(body.path("payment_method").asString()).isEqualTo(expectedPayment); assertThat(body.path("currency_code").asString()).isEqualTo("NGN");
+            assertThat(body.has("preordered_for")).isTrue();
+            if (expectedPreorder == null) assertThat(body.path("preordered_for").isNull()).isTrue();
+            else assertThat(body.path("preordered_for").asLong()).isEqualTo(expectedPreorder.getEpochSecond());
             assertThat(body.path("sender").path("notes").asString()).isEqualTo(reference);
             if (orders.containsKey(reference)) { reply(exchange, 409, Map.of("error", "duplicate_reference")); return; }
             bookings.incrementAndGet(); var order = Map.<String, Object>of("order_id", "order-1", "client_order_id", wrongReference ? UUID.randomUUID().toString() : reference, "status", "NEW"); orders.put(reference, order);
@@ -161,6 +169,45 @@ class PandagoAdapterTest {
         String weak = "-----BEGIN PRIVATE KEY-----\n" + Base64.getEncoder().encodeToString(generator.generateKeyPair().getPrivate().getEncoded()) + "\n-----END PRIVATE KEY-----";
         assertThatThrownBy(() -> new PandagoAdapter("test", ProviderHttp.Mode.TEST, "https://api-infra-eu-central-1.stg.ondemandrider.net", "https://sts-st.deliveryhero.io", "client", "key", "pandago.api.ng.*", "outlet", weak, clock)).hasMessage("PANDAGO_PRIVATE_KEY_INVALID");
         assertThat(tokens.get()).isZero();
+    }
+    @Test void scheduledDeliveryUsesRoundedUnixSecondsAndCashOnDeliveryIsSupported() {
+        expectedPayment = "CASH_ON_DELIVERY";
+        Instant scheduled = clock.instant().plus(Duration.ofSeconds(3600)).plusMillis(450);
+        expectedPreorder = scheduled.truncatedTo(java.time.temporal.ChronoUnit.SECONDS);
+        var quote = adapter.quote(destination, scheduled);
+        UUID reference = UUID.randomUUID();
+        var order = adapter.confirm(quote, reference, new PandagoAdapter.Recipient("Synthetic recipient", "+2348012345678", destination),
+            new BigDecimal("20000.00"), "Synthetic cash order", "CASH_ON_DELIVERY", scheduled);
+        assertThat(order.clientOrderId()).isEqualTo(reference.toString());
+        assertThat(bookings.get()).isEqualTo(1);
+        expectedPreorder = null;
+    }
+    @Test void immediateDeliverySendsAnExplicitProviderNull() {
+        UUID reference = UUID.randomUUID();
+        var order = adapter.confirm(adapter.quote(destination), reference, new PandagoAdapter.Recipient("Synthetic recipient", "+2348012345678", destination),
+            new BigDecimal("20000.00"), "Synthetic prepaid electronics", "PAID", null);
+        assertThat(order.clientOrderId()).isEqualTo(reference.toString());
+        assertThat(bookings.get()).isEqualTo(1);
+    }
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.CsvSource({"PAID,false", "PAID,true", "CASH_ON_DELIVERY,false", "CASH_ON_DELIVERY,true"})
+    void deliveryTimingAndPaymentAreIndependent(String method, boolean scheduled) {
+        expectedPayment = method;
+        expectedPreorder = scheduled ? clock.instant().plusSeconds(3600) : null;
+        var quote = adapter.quote(destination, expectedPreorder);
+        var reference = UUID.randomUUID();
+        assertThat(adapter.confirm(quote, reference, new PandagoAdapter.Recipient("Synthetic recipient", "+2348012345678", destination),
+            new BigDecimal("20000.00"), "Synthetic order", method, expectedPreorder).clientOrderId()).isEqualTo(reference.toString());
+        assertThat(bookings.get()).isEqualTo(1);
+    }
+    @Test void scheduledDeliveryAndUnsupportedPaymentMethodsFailBeforeHttp() {
+        var quote = adapter.quote(destination);
+        var recipient = new PandagoAdapter.Recipient("Synthetic", "+2348012345678", destination);
+        assertThatThrownBy(() -> adapter.quote(destination, clock.instant().plusSeconds(44 * 60))).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> adapter.quote(destination, clock.instant().plus(Duration.ofDays(7)).plusSeconds(1))).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> adapter.confirm(quote, UUID.randomUUID(), recipient, BigDecimal.ONE, "Synthetic order", "CARD_ON_DELIVERY", null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> adapter.confirm(quote, UUID.randomUUID(), recipient, BigDecimal.ONE, "Synthetic order", "PAID", clock.instant().plusSeconds(60))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(bookings.get()).isZero();
     }
     static final class TestClock extends Clock {
         Instant now = Instant.parse("2026-11-07T12:00:00Z");

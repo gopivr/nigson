@@ -6,9 +6,10 @@ import com.nigson.commerce.pricing.CarrierPacking;
 
 /** Private rate protocol; commerce owns cart, packing, address and the persisted bound quote. */
 public interface CarrierRates {
- record Request(UUID commandId,UUID cartId,String market,String currency,CarrierPacking.Address shipper,CarrierPacking.Address destination,List<CarrierPacking.Parcel> packages,String serviceCode,String orderAmount){
-  public Request(UUID commandId,UUID cartId,String market,String currency,CarrierPacking.Address shipper,CarrierPacking.Address destination,List<CarrierPacking.Parcel> packages,String serviceCode){this(commandId,cartId,market,currency,shipper,destination,packages,serviceCode,"0.00");}
-  public Request{packages=List.copyOf(packages);}
+ record Request(UUID commandId,UUID cartId,String market,String currency,CarrierPacking.Address shipper,CarrierPacking.Address destination,List<CarrierPacking.Parcel> packages,String serviceCode,String orderAmount,String deliveryMode,Instant preorderedFor){
+  public Request(UUID commandId,UUID cartId,String market,String currency,CarrierPacking.Address shipper,CarrierPacking.Address destination,List<CarrierPacking.Parcel> packages,String serviceCode){this(commandId,cartId,market,currency,shipper,destination,packages,serviceCode,"0.00","IMMEDIATE",null);}
+  public Request(UUID commandId,UUID cartId,String market,String currency,CarrierPacking.Address shipper,CarrierPacking.Address destination,List<CarrierPacking.Parcel> packages,String serviceCode,String orderAmount){this(commandId,cartId,market,currency,shipper,destination,packages,serviceCode,orderAmount,"IMMEDIATE",null);}
+  public Request{packages=List.copyOf(packages);if(deliveryMode==null)deliveryMode="IMMEDIATE";if(!Set.of("IMMEDIATE","SCHEDULED").contains(deliveryMode)||("IMMEDIATE".equals(deliveryMode))!=(preorderedFor==null))throw new IllegalArgumentException("CARRIER_DELIVERY_MODE_INVALID");}
   @Override public String toString(){return "CarrierRateRequest[protected]";}
  }
  record Rate(String provider,String serviceCode,String currency,String amount,Instant expiresAt,String providerReference,

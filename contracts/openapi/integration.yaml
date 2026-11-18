@@ -1644,6 +1644,21 @@
           "orderAmount": {
             "type": "string",
             "pattern": "^[0-9]{1,15}(\\.[0-9]{1,2})?$"
+          },
+          "deliveryMode": {
+            "type": "string",
+            "enum": [
+              "IMMEDIATE",
+              "SCHEDULED"
+            ],
+            "default": "IMMEDIATE"
+          },
+          "preorderedFor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           }
         }
       },
