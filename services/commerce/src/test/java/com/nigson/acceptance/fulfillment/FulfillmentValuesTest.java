@@ -14,4 +14,11 @@ class FulfillmentValuesTest {
 
  @Test void actualHandoverIsOptionalAndCannotAcceptNullOrUnknownEvidence(){String body="{\"reason\":\"Synthetic physical handover receipt\"}";assertThat(FulfillmentValues.dispatch(EventCodec.JSON.readTree(body)).dispatchedAt()).isNull();String at="2026-10-15T23:00:00.123456789Z";assertThat(FulfillmentValues.dispatch(EventCodec.JSON.readTree(body.replace("}",",\"dispatchedAt\":\""+at+"\"}"))).dispatchedAt()).isEqualTo(java.time.Instant.parse(at));for(String extra:List.of("\"dispatchedAt\":null","\"dispatchedAt\":123","\"dispatchedAt\":\"yesterday\"","\"deliveredAt\":\""+at+"\"","\"dispatchedAt\":\"2026-10-15\""))assertThatThrownBy(()->FulfillmentValues.dispatch(EventCodec.JSON.readTree(body.replace("}",","+extra+"}")))).hasMessage("VALIDATION_ERROR");}
 
+ @Test void deliveryTimingRejectsInconsistentAndMalformedSchedule(){
+  String base="{\"addressId\":\""+ID+"\"";
+  assertThat(DeliveryQuoteValues.input(EventCodec.JSON.readTree(base+"}")).deliveryMode()).isEqualTo("IMMEDIATE");
+  for(String extra:List.of(",\"deliveryMode\":\"SCHEDULED\"",",\"scheduledFor\":\"2026-12-01T12:00:00Z\"",",\"deliveryMode\":\"SCHEDULED\",\"scheduledFor\":\"tomorrow\""))
+   assertThatThrownBy(()->DeliveryQuoteValues.input(EventCodec.JSON.readTree(base+extra+"}"))).hasMessage("VALIDATION_ERROR");
+ }
+
 }

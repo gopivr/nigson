@@ -21,6 +21,6 @@ class OrderContracts(unittest.TestCase):
         self.assertEqual(s['OrderDTO']['properties']['lines']['maxItems'],100)
         self.assertEqual(s['OrderPage']['properties']['items']['maxItems'],100)
         self.assertNotIn('id',s['OrderAddressSnapshot']['properties']);self.assertNotIn('version',s['OrderAddressSnapshot']['properties']);self.assertNotIn('merchantAccount',s['CheckoutPayment']['properties'])
-        self.assertEqual(s['CheckoutInput']['properties']['paymentMethod'],{'const':'HOSTED'})
+        self.assertEqual(s['CheckoutInput']['properties']['paymentMethod'],{'type':'string','enum':['HOSTED','CASH_ON_DELIVERY']})
         self.assertFalse(s['AiOrderStatusInput']['additionalProperties']);self.assertFalse(s['AiOrderStatus']['additionalProperties'])
         self.assertEqual(set(s['AiOrderStatus']['properties']),{'orderNumber','status','fulfillmentStatus','trackingUrl'})

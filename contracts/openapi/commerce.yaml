@@ -8218,7 +8218,7 @@
     "/api/v1/staff/markets/{id}/retail-price-book": {
       "put": {
         "operationId": "API-162",
-        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
+        "description": "Current FINANCE/recent MFA/CSRF/If-Match. Require active RETAIL book of matching approved currency and current effective interval. Lock Party/market/currency/book; atomically increment market version/policy revision with EVT-008/audit/response. Assignment never enables a market.",
         "security": [
           {
             "bffSession": []
@@ -8744,7 +8744,7 @@
     "/api/v1/staff/price-books": {
       "get": {
         "operationId": "API-150",
-        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. Returns retailBindings for NG from the same repeatable-read snapshot.",
+        "description": "Current SALES, no organization. Bounded repeatable-read staff page of draft and active revisions; fixed sort plus UUID tie-break. Entries loaded in one bounded batch.",
         "security": [
           {
             "bffSession": []
@@ -8923,7 +8923,7 @@
       },
       "post": {
         "operationId": "API-027",
-        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
+        "description": "Current SALES/CSRF/key. Explicit nonempty draft revision1; active approved currency, SKU scale and exact minor units. Numeric duplicate thresholds rejected; family advisory lock plus durable idempotency and atomic audit. No prices or market activation invented.",
         "security": [
           {
             "bffSession": []
@@ -9080,7 +9080,7 @@
     "/api/v1/staff/price-books/{id}/activation": {
       "post": {
         "operationId": "API-028",
-        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
+        "description": "Current FINANCE/recent MFA15m/CSRF/key/If-Match. Effective nonexpired valid draft and nonoverlapping active family interval. Immutable published entries; atomically activate/version/audit/EVT-007/ack. Does not choose a default market book; API-162 remains explicit.",
         "security": [
           {
             "bffSession": []
@@ -9256,7 +9256,7 @@
     "/api/v1/staff/price-books/{id}/revisions": {
       "post": {
         "operationId": "API-151",
-        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
+        "description": "Current SALES/CSRF/key/If-Match of parent. Serialize family, require latest revision and next effective interval, same currency/segment. Copy-on-write new draft/revision; published prices never changed. An open-ended active parent cannot be silently shortened.",
         "security": [
           {
             "bffSession": []
@@ -13820,7 +13820,7 @@
     "/internal/v1/shipments/{id}/provider-result": {
       "post": {
         "operationId": "API-120",
-        "description": "Private phase1 nigson-integration logistics.write; no actor/cookie/query. Default disabled until NIGSON_CARRIER_RESULTS_ENABLED plus configured private storage/security/fulfillment qualification. BOOKED requires READY and trusted private PDF label key/checksum; exact environment/shipment prefix, booking owner, actual size/mime/encryption/checksum HEAD outside SQL. Scoped commandId dedup/hash survives response loss and replays without another HEAD. Owned status/metadata/history/audit/outbox commit together. UNKNOWN cannot create ready proof; old events and transit cannot regress or manufacture physical stock dispatch. Delivery requires recorded handover; monetary state is untouched. Optional fields are omitted, not null.",
+        "description": "Private phase1 nigson-integration logistics.write; no actor/cookie/query. Default disabled until NIGSON_CARRIER_RESULTS_ENABLED plus security/fulfillment qualification. PandaGo BOOKED requires READY and the actual provider order reference; label fields must be absent because PandaGo does not issue shipping labels. Scoped commandId dedup/hash survives response loss. Owned status/metadata/history/audit/outbox commit together. UNKNOWN cannot create ready proof; old events and transit cannot regress or manufacture physical stock dispatch. Delivery requires recorded handover; monetary state is untouched. Optional fields are omitted, not null.",
         "security": [
           {
             "carrierIntegrationWorkload": [
@@ -24376,8 +24376,7 @@
           "page",
           "size",
           "totalElements",
-          "totalPages",
-          "retailBindings"
+          "totalPages"
         ],
         "properties": {
           "items": {
@@ -24405,41 +24404,6 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
-          },
-          "retailBindings": {
-            "type": "array",
-            "maxItems": 1,
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "marketId",
-                "code",
-                "priceBookId",
-                "version"
-              ],
-              "properties": {
-                "marketId": {
-                  "type": "string",
-                  "format": "uuid"
-                },
-                "code": {
-                  "type": "string",
-                  "const": "NG"
-                },
-                "priceBookId": {
-                  "type": [
-                    "string",
-                    "null"
-                  ],
-                  "format": "uuid"
-                },
-                "version": {
-                  "type": "integer",
-                  "minimum": 0
-                }
-              }
-            }
           }
         }
       },
@@ -25439,7 +25403,8 @@
           "status",
           "lines",
           "trackingUrl",
-          "version"
+          "version",
+          "providerOrderId"
         ],
         "properties": {
           "id": {
@@ -25487,6 +25452,18 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          },
+          "providerOrderId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },
@@ -25621,8 +25598,28 @@
             "type": "string",
             "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
             "maxLength": 80
+          },
+          "deliveryMode": {
+            "type": "string",
+            "enum": [
+              "IMMEDIATE",
+              "SCHEDULED"
+            ],
+            "default": "IMMEDIATE"
+          },
+          "scheduledFor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
-        }
+        },
+        "description": "IMMEDIATE requires absent/null scheduledFor. SCHEDULED requires an instant between 45 minutes and 7 days from now. Omission defaults to IMMEDIATE."
       },
       "QuoteDeliveryQuoteInput": {
         "type": "object",
@@ -25646,8 +25643,28 @@
             "type": "string",
             "pattern": "^[A-Z][A-Z0-9_]{0,79}$",
             "maxLength": 80
+          },
+          "deliveryMode": {
+            "type": "string",
+            "enum": [
+              "IMMEDIATE",
+              "SCHEDULED"
+            ],
+            "default": "IMMEDIATE"
+          },
+          "scheduledFor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
-        }
+        },
+        "description": "IMMEDIATE requires absent/null scheduledFor. SCHEDULED requires an instant between 45 minutes and 7 days from now. Omission defaults to IMMEDIATE."
       },
       "DeliveryQuoteDTO": {
         "type": "object",
@@ -25666,7 +25683,8 @@
           "estimatedDeliveryTime",
           "deliveryDuration",
           "lowerBound",
-          "upperBound"
+          "upperBound",
+          "deliveryMode"
         ],
         "properties": {
           "id": {
@@ -25773,6 +25791,24 @@
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deliveryMode": {
+            "type": "string",
+            "enum": [
+              "IMMEDIATE",
+              "SCHEDULED"
+            ]
+          },
+          "scheduledFor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
               },
               {
                 "type": "null"
@@ -26139,7 +26175,12 @@
           "packages",
           "bookingReference",
           "mode",
-          "accountHash"
+          "accountHash",
+          "paymentMethod",
+          "preorderedFor",
+          "amount",
+          "deliveryAmount",
+          "description"
         ],
         "properties": {
           "shipmentId": {
@@ -26156,7 +26197,14 @@
             "$ref": "#/components/schemas/OrderAddressSnapshot"
           },
           "shipper": {
-            "$ref": "#/components/schemas/ShipmentCarrierAddress"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ShipmentCarrierAddress"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "serviceCode": {
             "type": "string",
@@ -26187,6 +26235,37 @@
           "accountHash": {
             "type": "string",
             "pattern": "^[a-f0-9]{64}$"
+          },
+          "paymentMethod": {
+            "type": "string",
+            "enum": [
+              "PAID",
+              "CASH_ON_DELIVERY"
+            ]
+          },
+          "preorderedFor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^[0-9]{1,15}\\.[0-9]{2}$"
+          },
+          "deliveryAmount": {
+            "type": "string",
+            "pattern": "^[0-9]{1,15}\\.[0-9]{2}$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
           }
         }
       },
@@ -26648,7 +26727,11 @@
             "pattern": "^[a-f0-9]{64}$"
           },
           "paymentMethod": {
-            "const": "HOSTED"
+            "type": "string",
+            "enum": [
+              "HOSTED",
+              "CASH_ON_DELIVERY"
+            ]
           }
         }
       },
@@ -26710,7 +26793,14 @@
             "$ref": "#/components/schemas/OrderDTO"
           },
           "payment": {
-            "$ref": "#/components/schemas/CheckoutPayment"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CheckoutPayment"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },

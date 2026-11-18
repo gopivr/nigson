@@ -75,6 +75,7 @@ def rollback_sql(owner, statements):
 def generate():
     tables = catalog()
     files = {}
+    pandago_fields={'booking_reference','creation_generation','source_occurred_at','prepared_at','account_hash','result_body'}
     manifest = {'specification': '1.1.0', 'tables': tables}
     for owner in OWNERS:
         base = Path('database/changelog/ai') if owner == 'ai' else Path(f'services/{owner}/src/main/resources/db/changelog')
@@ -90,10 +91,12 @@ def generate():
                     name = fullname.split('.')[1]
                     # Preserve the originally released BP1 table DDL. A later
                     # additive migration relaxes this one field for API-190.
-                    fields = [column(field, (fullname == 'experience.lead' and field['name'] == 'email') or (fullname == 'experience.inbound_message' and field['name'] == 'sender_ciphertext')) for field in table['fields'] if not (fullname == 'commerce.reward_entry' and field['name'] == 'available_at')]
+                    fields = [column(field, (fullname == 'experience.lead' and field['name'] == 'email') or (fullname == 'experience.inbound_message' and field['name'] == 'sender_ciphertext')) for field in table['fields'] if not (fullname == 'commerce.reward_entry' and field['name'] == 'available_at') and not (fullname == 'integration.carrier_booking' and field['name'] in pandago_fields)]
                     primary = [field['name'] for field in table['fields'] if field['primary']]
                     fields.append(f"CONSTRAINT {identifier(name+'_id_pk')} PRIMARY KEY ({','.join(primary)})")
                     for field in table['fields']:
+                        if fullname == 'integration.carrier_booking' and field['name'] in pandago_fields:
+                            continue
                         if field['name'] == 'version':
                             fields.append(f"CONSTRAINT {identifier(name+'_version_ck')} CHECK (version >= 0)")
                         if field['type'] == 'uuid':
@@ -318,12 +321,10 @@ def generate():
     guard="SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
     payload={'databaseChangeLog':[{'changeSet':{'id':change,'author':'nigson-commerce','logicalFilePath':'commerce/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
     files[base/(stem+'.yaml')]=json.dumps(payload,indent=2)+'\n';wrapper=base/'releases/BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
-    # Keep the new wishlist after every previously released BP1 increment.
-    wrapper = Path('services/commerce/src/main/resources/db/changelog/releases/BP1.yaml')
-    payload = json.loads(files[wrapper])
-    wishlist = [entry for entry in payload['databaseChangeLog'] if entry['include']['file'] == '../027-bp1-wishlist.yaml']
-    payload['databaseChangeLog'] = [entry for entry in payload['databaseChangeLog'] if entry not in wishlist] + wishlist
-    files[wrapper] = json.dumps(payload, indent=2)+'\n'
+    base=Path('services/integration/src/main/resources/db/changelog')
+    for suffix in ('.sql','-rollback.sql','.yaml'):
+        path=base/('026-pandago-booking'+suffix); files[path]=(ROOT/path).read_text()
+    wrapper=base/'releases/BP1.yaml'; payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../026-pandago-booking.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
     files[Path('database/schema-manifest.json')] = json.dumps(manifest,indent=2,sort_keys=True)+'\n'
     return files
 

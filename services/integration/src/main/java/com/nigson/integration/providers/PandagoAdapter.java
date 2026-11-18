@@ -3,12 +3,14 @@ package com.nigson.integration.providers;
 import com.nigson.shared.events.EventCodec;
 import com.nigson.shared.security.ProviderHttp;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -36,6 +38,10 @@ public final class PandagoAdapter {
     public enum Cancellation { CANCELLED, LEGACY_ACKNOWLEDGED }
     private static final String AUDIENCE = "https://sts.deliveryhero.io";
     private static final String PREFIX = "/ng/api/v1";
+    /** Provider-supported collection methods. Nigson offers prepaid (PAID) and cash on delivery. */
+    public static final Set<String> PAYMENT_METHODS = Set.of("PAID", "CASH_ON_DELIVERY");
+    private static final Duration PREORDER_MINIMUM = Duration.ofMinutes(45);
+    private static final Duration PREORDER_MAXIMUM = Duration.ofDays(7);
     private static final Set<String> STATUSES = Set.of("NEW", "RECEIVED", "WAITING_FOR_TRANSPORT", "ASSIGNED_TO_TRANSPORT", "COURIER_ACCEPTED_DELIVERY", "NEAR_VENDOR", "PICKED_UP", "COURIER_LEFT_VENDOR", "NEAR_CUSTOMER", "DELIVERED", "DELAYED", "CANCELLED", "RETURNED_TO_VENDOR");
     private static final Set<String> REASONS = Set.of("ADDRESS_INCOMPLETE_MISSTATED", "BAD_WEATHER", "CLOSED", "COURIER_ACCIDENT", "COURIER_UNREACHABLE", "DELIVERY_ETA_TOO_LONG", "DUPLICATE_ORDER", "FOOD_QUALITY_SPILLAGE", "ITEM_UNAVAILABLE", "LATE_DELIVERY", "MISTAKE_ERROR", "NO_COURIER", "OUTSIDE_DELIVERY_AREA", "OUTSIDE_SERVICE_HOURS", "REASON_UNKNOWN", "TECHNICAL_PROBLEM", "TOO_BUSY", "UNABLE_TO_FIND", "UNABLE_TO_PAY", "UNREACHABLE", "WRONG_ORDER_ITEMS_DELIVERED");
     private final ProviderHttp api, auth;
@@ -65,6 +71,18 @@ public final class PandagoAdapter {
     public ProviderHttp.Mode mode() { return mode; }
     public String accountFingerprint() { return accountHash; }
     private static IllegalArgumentException invalid() { return new IllegalArgumentException("PANDAGO_REQUEST_INVALID"); }
+    private static String paymentMethod(String value) { if (value == null || !PAYMENT_METHODS.contains(value)) throw invalid(); return value; }
+    /** Round unix seconds are required; immediate delivery is an explicit provider null. */
+    private Instant preorderedFor(Instant value) {
+        if (value == null) return null;
+        Instant now = clock.instant();
+        if (value.isBefore(now.plus(PREORDER_MINIMUM)) || value.isAfter(now.plus(PREORDER_MAXIMUM))) throw invalid();
+        return value.truncatedTo(ChronoUnit.SECONDS);
+    }
+    private static void preordered(ObjectNode body, Instant preorderedFor) {
+        if (preorderedFor == null) body.putNull("preordered_for");
+        else body.put("preordered_for", preorderedFor.getEpochSecond());
+    }
     private static String text(String value, int limit) {
         if (value == null || value.isBlank() || !value.equals(value.strip()) || value.length() > limit || value.chars().anyMatch(Character::isISOControl)) throw invalid();
         return value;
@@ -114,10 +132,16 @@ public final class PandagoAdapter {
         if (response.status() != 200 || !vendorId.equals(body.path("client_vendor_id").asString()) || !"NGN".equals(body.path("currency").asString())) throw new ProviderHttp.Failure("PANDAGO_OUTLET_MISMATCH", false, response.status());
         return body;
     }
-    /** Quotes reserve a price for ten minutes; they do not create delivery orders. */
-    public Quote quote(Location destination) {
+    /** Quotes reserve a price for ten minutes; they do not create delivery orders. A null instant means immediate delivery. */
+    public Quote quote(Location destination) { return quote(destination, null); }
+    public Quote quote(Location destination, Instant preorderedFor) {
         Objects.requireNonNull(destination);
-        var response = call("POST", "/quotes", Map.of("sender", Map.of("client_vendor_id", vendorId), "recipient", Map.of("location", location(destination))), false);
+        Instant scheduled = preorderedFor(preorderedFor);
+        var request = EventCodec.JSON.createObjectNode();
+        request.putObject("sender").put("client_vendor_id", vendorId);
+        request.putObject("recipient").putObject("location").put("address", destination.address()).put("latitude", destination.latitude()).put("longitude", destination.longitude());
+        preordered(request, scheduled);
+        var response = call("POST", "/quotes", request, false);
         var body = object(response, false);
         try {
             String id = identifier(body.path("quote_id").asString());
@@ -132,13 +156,17 @@ public final class PandagoAdapter {
     }
     /** Read-only pre-checkout estimates. The time endpoint is historical, not live traffic data. */
     public Estimate estimate(UUID clientOrderId, Recipient recipient, BigDecimal orderSubtotal, String description) {
+        return estimate(clientOrderId, recipient, orderSubtotal, description, "PAID");
+    }
+    public Estimate estimate(UUID clientOrderId, Recipient recipient, BigDecimal orderSubtotal, String description, String paymentMethod) {
         if (clientOrderId == null || clientOrderId.equals(new UUID(0, 0)) || recipient == null ||
             orderSubtotal == null || orderSubtotal.signum() < 0 || !text(description, 1000).equals(description)) throw invalid();
         BigDecimal amount = money(orderSubtotal);
+        String method = paymentMethod(paymentMethod);
         var sender = Map.of("client_vendor_id", vendorId);
         var recipientBody = Map.of("name", recipient.name(), "phone_number", recipient.phone(), "location", location(recipient.location()));
         var request = Map.of("client_order_id", clientOrderId.toString(), "sender", sender, "recipient", recipientBody,
-            "payment_method", "PAID", "amount", amount, "description", description);
+            "payment_method", method, "amount", amount, "description", description);
 
         var feeResponse = call("POST", "/orders/fee", request, false);
         var feeBody = object(feeResponse, false);
@@ -176,8 +204,22 @@ public final class PandagoAdapter {
     private static BigDecimal money(BigDecimal value) { if (value == null || value.signum() < 0 || value.compareTo(new BigDecimal("999999999999999.99")) > 0) throw invalid(); try { return value.setScale(2); } catch (ArithmeticException failure) { throw invalid(); } }
     /** Caller must persist this client reference and the confirmed quote before HTTP. No automatic retry. */
     public Order confirm(Quote quote, UUID clientOrderId, Recipient recipient, BigDecimal prepaidAmount, String description) {
+        return confirm(quote, clientOrderId, recipient, prepaidAmount, description, "PAID", null);
+    }
+    public Order confirm(Quote quote, UUID clientOrderId, Recipient recipient, BigDecimal prepaidAmount, String description, String paymentMethod, Instant preorderedFor) {
         if (quote == null || !accountHash.equals(quote.accountHash()) || !"NGN".equals(quote.currency()) || !quote.expiresAt().isAfter(clock.instant()) || clientOrderId == null || clientOrderId.equals(new UUID(0, 0)) || recipient == null) throw invalid();
-        var response = call("POST", "/quotes/" + identifier(quote.id()), Map.of("client_order_id", clientOrderId.toString(), "sender", Map.of("notes", clientOrderId.toString()), "recipient", Map.of("name", recipient.name(), "phone_number", recipient.phone()), "payment_method", "PAID", "amount", money(prepaidAmount), "currency_code", "NGN", "description", text(description, 500)), true);
+        String method = paymentMethod(paymentMethod);
+        Instant scheduled = preorderedFor(preorderedFor);
+        var request = EventCodec.JSON.createObjectNode();
+        request.put("client_order_id", clientOrderId.toString());
+        request.putObject("sender").put("notes", clientOrderId.toString());
+        request.putObject("recipient").put("name", recipient.name()).put("phone_number", recipient.phone());
+        request.put("payment_method", method);
+        request.put("amount", money(prepaidAmount));
+        request.put("currency_code", "NGN");
+        request.put("description", text(description, 500));
+        preordered(request, scheduled);
+        var response = call("POST", "/quotes/" + identifier(quote.id()), request, true);
         var result = order(object(response, true), true, response.status());
         if (!Set.of(200, 201).contains(response.status()) || !clientOrderId.toString().equals(result.clientOrderId())) throw new ProviderHttp.Failure("PANDAGO_BOOKING_UNCONFIRMED", true, response.status());
         return result;

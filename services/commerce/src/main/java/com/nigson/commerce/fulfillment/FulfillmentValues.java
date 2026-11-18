@@ -14,7 +14,7 @@ public final class FulfillmentValues {
  public record LineInput(UUID orderLineId,UUID balanceId,String quantity){}
  public record ShipmentInput(List<LineInput> lines,String provider,String providerReference,String trackingUrl){}
  public record ShipmentLine(UUID orderLineId,String quantity){}
- public record Shipment(UUID id,UUID orderId,String status,List<ShipmentLine> lines,String trackingUrl,long version){}
+ public record Shipment(UUID id,UUID orderId,String status,List<ShipmentLine> lines,String trackingUrl,long version,String providerOrderId){public Shipment(UUID id,UUID orderId,String status,List<ShipmentLine> lines,String trackingUrl,long version){this(id,orderId,status,lines,trackingUrl,version,null);}}
  public record ReturnInput(List<LineInput> lines,StockLedger.ReturnKind kind,String receiptReference,String reason){}
  public record Return(UUID returnId,UUID orderId,List<ShipmentLine> lines){}
  public record Delivery(Instant deliveredAt,String reason){}

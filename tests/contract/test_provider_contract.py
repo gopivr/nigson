@@ -50,7 +50,7 @@ class ProviderContracts(unittest.TestCase):
         self.assertEqual(op['responses']['200']['headers']['X-Nigson-Carrier-Mode']['schema']['enum'],['MOCK','SANDBOX','LIVE'])
         schemas=spec['components']['schemas'];request=schemas['CarrierQuoteInput']
         self.assertFalse(request['additionalProperties'])
-        self.assertEqual(set(request['properties']),{'commandId','cartId','market','currency','shipper','destination','packages','serviceCode','orderAmount'})
+        self.assertEqual(set(request['properties']),{'commandId','cartId','market','currency','shipper','destination','packages','serviceCode','orderAmount','deliveryMode','preorderedFor'})
         self.assertEqual(request['properties']['packages']['maxItems'],100)
         self.assertNotIn('serviceCode',request['required'])
         self.assertIn('orderAmount',request['required'])

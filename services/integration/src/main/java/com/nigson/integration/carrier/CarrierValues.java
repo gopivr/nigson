@@ -18,9 +18,13 @@ public final class CarrierValues {
  public record Parcel(UUID skuId,String quantity,String weightKg,String lengthCm,String widthCm,String heightCm){
   public Parcel{id(skuId);ApiValues.quantity(quantity);ApiValues.quantity(weightKg);dimension(lengthCm);dimension(widthCm);dimension(heightCm);}
  }
- public record QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode,String orderAmount){
-  public QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode){this(commandId,cartId,market,currency,shipper,destination,packages,serviceCode,"0.00");}
-  public QuoteInput{id(commandId);id(cartId);if(!"NG".equals(market)||!"NGN".equals(currency)||destination==null||packages==null||packages.isEmpty()||packages.size()>100)throw ApiValues.invalid();packages=List.copyOf(packages);if(serviceCode!=null)service(serviceCode);money(orderAmount);}
+ public record QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode,String orderAmount,String deliveryMode,Instant preorderedFor){
+  public QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode){this(commandId,cartId,market,currency,shipper,destination,packages,serviceCode,"0.00","IMMEDIATE",null);}
+  public QuoteInput(UUID commandId,UUID cartId,String market,String currency,Address shipper,Address destination,List<Parcel> packages,String serviceCode,String orderAmount){this(commandId,cartId,market,currency,shipper,destination,packages,serviceCode,orderAmount,"IMMEDIATE",null);}
+  public QuoteInput{
+   id(commandId);id(cartId);if(!"NG".equals(market)||!"NGN".equals(currency)||destination==null||packages==null||packages.isEmpty()||packages.size()>100)throw ApiValues.invalid();packages=List.copyOf(packages);if(serviceCode!=null)service(serviceCode);money(orderAmount);
+   if(deliveryMode==null)deliveryMode="IMMEDIATE";if(!Set.of("IMMEDIATE","SCHEDULED").contains(deliveryMode)||("IMMEDIATE".equals(deliveryMode))!=(preorderedFor==null))throw ApiValues.invalid();
+  }
   @Override public String toString(){return "CarrierQuoteInput[protected]";}
  }
  public record Quote(String provider,String serviceCode,String currency,String amount,Instant expiresAt,String providerReference,
@@ -42,9 +46,11 @@ public final class CarrierValues {
  public static Address address(JsonNode node){var fields=Set.of("recipient","phone","line1","line2","city","region","postalCode","countryCode","latitude","longitude");closed(node,fields,fields);return new Address(str(node,"recipient"),str(node,"phone"),str(node,"line1"),nullable(node,"line2"),str(node,"city"),nullable(node,"region"),nullable(node,"postalCode"),str(node,"countryCode"),coordinate(node,"latitude"),coordinate(node,"longitude"));}
  private static BigDecimal coordinate(JsonNode node,String name){var value=node.get(name);if(value==null||value.isNull())return null;if(!value.isNumber())throw ApiValues.invalid();var result=value.decimalValue();BigDecimal limit=name.equals("latitude")?BigDecimal.valueOf(90):BigDecimal.valueOf(180);if(result.abs().compareTo(limit)>0||result.stripTrailingZeros().scale()>6)throw ApiValues.invalid();return result;}
  public static QuoteInput quoteInput(JsonNode node){
-  closed(node,Set.of("commandId","cartId","market","currency","destination","packages","orderAmount"),Set.of("commandId","cartId","market","currency","shipper","destination","packages","serviceCode","orderAmount"));var rows=node.get("packages");if(!rows.isArray()||rows.isEmpty()||rows.size()>100)throw ApiValues.invalid();var parcels=new ArrayList<Parcel>();for(var row:rows){var fields=Set.of("skuId","quantity","weightKg","lengthCm","widthCm","heightCm");closed(row,fields,fields);parcels.add(new Parcel(ApiValues.uuid(str(row,"skuId")),str(row,"quantity"),str(row,"weightKg"),str(row,"lengthCm"),str(row,"widthCm"),str(row,"heightCm")));}
-  var shipper=node.get("shipper");return new QuoteInput(ApiValues.uuid(str(node,"commandId")),ApiValues.uuid(str(node,"cartId")),str(node,"market"),str(node,"currency"),shipper==null||shipper.isNull()?null:address(shipper),address(node.get("destination")),parcels,node.has("serviceCode")?str(node,"serviceCode"):null,str(node,"orderAmount"));
+  closed(node,Set.of("commandId","cartId","market","currency","destination","packages","orderAmount"),Set.of("commandId","cartId","market","currency","shipper","destination","packages","serviceCode","orderAmount","deliveryMode","preorderedFor"));var rows=node.get("packages");if(!rows.isArray()||rows.isEmpty()||rows.size()>100)throw ApiValues.invalid();var parcels=new ArrayList<Parcel>();for(var row:rows){var fields=Set.of("skuId","quantity","weightKg","lengthCm","widthCm","heightCm");closed(row,fields,fields);parcels.add(new Parcel(ApiValues.uuid(str(row,"skuId")),str(row,"quantity"),str(row,"weightKg"),str(row,"lengthCm"),str(row,"widthCm"),str(row,"heightCm")));}
+  var shipper=node.get("shipper");var preordered=node.get("preorderedFor");return new QuoteInput(ApiValues.uuid(str(node,"commandId")),ApiValues.uuid(str(node,"cartId")),str(node,"market"),str(node,"currency"),shipper==null||shipper.isNull()?null:address(shipper),address(node.get("destination")),parcels,node.has("serviceCode")&&!node.get("serviceCode").isNull()?str(node,"serviceCode"):null,str(node,"orderAmount"),node.has("deliveryMode")&&!node.get("deliveryMode").isNull()?str(node,"deliveryMode"):"IMMEDIATE",preordered==null||preordered.isNull()?null:parseInstant(str(node,"preorderedFor")));
  }
 
+
+ private static Instant parseInstant(String value){try{return Instant.parse(value);}catch(java.time.format.DateTimeParseException invalid){throw ApiValues.invalid();}}
 
 }
