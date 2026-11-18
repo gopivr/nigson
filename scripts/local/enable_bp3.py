@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'scripts/identity'))
 from realm_policy import realm_policy
+from dependencies import command as local_compose
 
 
 def docker(*args,env=None):
@@ -20,7 +21,7 @@ def docker(*args,env=None):
 def main():
  if os.environ.get('DOCKER_HOST') and not os.environ['DOCKER_HOST'].startswith(('unix://', 'npipe://')):raise ValueError('Local Docker required')
  if not json.loads(docker('context','inspect'))[0]['Endpoints']['docker']['Host'].startswith(('unix://', 'npipe://')):raise ValueError('Local Docker required')
- config=json.loads(docker('compose','--profile','app','config','--format','json'))
+ config=json.loads(local_compose('--profile','app','config','--format','json',capture=True))
  if config.get('name')!='nigson-local' or config['services']['commerce']['environment'].get('APP_ENV')!='local':raise ValueError('Local nigson project required')
  port=int(config['services']['keycloak']['ports'][0]['published']);base=f'http://127.0.0.1:{port}'
  class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -51,7 +52,12 @@ def main():
   phase=int(config['services']['commerce']['environment']['NIGSON_PRODUCT_PHASE'])
   if phase not in (3,4,5):raise ValueError('Local BP3-BP5 required')
   policy=realm_policy('nigson-local','https://local.synthetic.test/bff/callback',phase,'local-bp3','test',3600)
-  wanted_clients=[c for c in policy['clients'] if c['clientId'] in ('nigson-commerce','nigson-experience')]
+  integration=config['services']['integration']['environment']
+  wanted_names={'nigson-commerce','nigson-experience'}
+  if any(str(integration.get(flag,'false')).lower()=='true' for flag in ('NIGSON_PROVIDER_JOBS_ENABLED','NIGSON_PANDAGO_BOOKING_ENABLED')):
+   if len(integration.get('NIGSON_INTEGRATION_WORKLOAD_SECRET',''))<32:raise ValueError('NIGSON_INTEGRATION_WORKLOAD_SECRET is required for local provider workers')
+   wanted_names.add('nigson-integration')
+  wanted_clients=[c for c in policy['clients'] if c['clientId'] in wanted_names]
   wanted_scopes={name for c in wanted_clients for name in c['defaultClientScopes']}
   existing={scope['name']:scope for scope in request(prefix+'/client-scopes',token=admin_token)}
   def mappers(path,desired):
@@ -69,6 +75,7 @@ def main():
   scopes={scope['name']:scope['id'] for scope in request(prefix+'/client-scopes',token=admin_token)}
   commerce=config['services']['commerce']['environment'];experience=config['services']['experience']['environment']
   client_secrets={'nigson-commerce':commerce['NIGSON_COMMERCE_WORKLOAD_SECRET'],'nigson-experience':experience['NIGSON_DISTRIBUTOR_WORKLOAD_CLIENT_SECRET']}
+  if 'nigson-integration' in wanted_names:client_secrets['nigson-integration']=integration['NIGSON_INTEGRATION_WORKLOAD_SECRET']
   for client in wanted_clients:
    found=request(prefix+'/clients?'+urllib.parse.urlencode({'clientId':client['clientId']}),token=admin_token)
    representation={k:v for k,v in client.items() if k not in ('defaultClientScopes','optionalClientScopes','protocolMappers')};representation['secret']=client_secrets[client['clientId']]

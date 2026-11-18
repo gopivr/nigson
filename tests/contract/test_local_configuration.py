@@ -57,6 +57,12 @@ class LocalIsolationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'NIGSON_CARRIER_CREATION_NOT_BEFORE'):
                 local.application_preflight({'services': {owner: {'environment': {'NIGSON_PANDAGO_BOOKING_ENABLED': 'true'}}}})
 
+    def test_provider_workers_preflight_names_missing_identity_and_owner_url(self):
+        with self.assertRaises(ValueError) as error:
+            local.application_preflight({'services': {'integration': {'environment': {'NIGSON_PROVIDER_JOBS_ENABLED': 'true'}}}})
+        self.assertIn('NIGSON_INTEGRATION_WORKLOAD_SECRET',str(error.exception))
+        self.assertIn('NIGSON_COMMERCE_BASE_URL',str(error.exception))
+
     def test_example_allows_the_frontend_admin_login_destination(self):
         settings = dict(line.split('=', 1) for line in (ROOT / '.env.example').read_text().splitlines() if '=' in line and not line.startswith('#'))
         self.assertIn('/admin', settings['NIGSON_BFF_RETURN_PATHS'].split(','))
