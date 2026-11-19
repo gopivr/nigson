@@ -10978,7 +10978,8 @@
           "state",
           "organizationId",
           "submittedAt",
-          "version"
+          "version",
+          "partnerType"
         ],
         "properties": {
           "id": {
@@ -11017,6 +11018,12 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          },
+          "partnerType": {
+            "enum": [
+              "DISTRIBUTOR",
+              "WHOLESALE"
+            ]
           }
         }
       },
@@ -11055,6 +11062,18 @@
           },
           "documentIds": {
             "$ref": "#/components/schemas/DistributorDocumentInput"
+          },
+          "partnerType": {
+            "enum": [
+              "DISTRIBUTOR",
+              "WHOLESALE"
+            ],
+            "default": "DISTRIBUTOR"
+          },
+          "businessDetails": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
           }
         }
       },
@@ -11131,8 +11150,10 @@
             "enum": [
               "APPROVE",
               "REJECT",
-              "SUSPEND"
-            ]
+              "SUSPEND",
+              "RETRY"
+            ],
+            "description": "RETRY is available only for activation pending, by the original independent approver, with current If-Match. It reuses the saved command, decision and original idempotency key; client market/book overrides are rejected."
           },
           "reason": {
             "type": "string",
@@ -11165,7 +11186,9 @@
           "reviewReason",
           "organizationId",
           "version",
-          "decisionReason"
+          "partnerType",
+          "decisionReason",
+          "businessDetails"
         ],
         "properties": {
           "id": {
@@ -11211,7 +11234,7 @@
               "additionalProperties": false,
               "required": [
                 "fileId",
-                "documentType",
+                "type",
                 "scanStatus"
               ],
               "properties": {
@@ -11220,7 +11243,7 @@
                   "format": "uuid",
                   "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
                 },
-                "documentType": {
+                "type": {
                   "type": "string",
                   "maxLength": 40
                 },
@@ -11275,6 +11298,12 @@
             "format": "int64",
             "minimum": 0
           },
+          "partnerType": {
+            "enum": [
+              "DISTRIBUTOR",
+              "WHOLESALE"
+            ]
+          },
           "decisionReason": {
             "anyOf": [
               {
@@ -11286,6 +11315,17 @@
               }
             ],
             "description": "Latest saved staff decision reason. Null before a decision; distinct from the review note."
+          },
+          "businessDetails": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },

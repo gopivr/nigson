@@ -1584,6 +1584,7 @@ created_by varchar(200) NN
 updated_at timestamptz NN DEFAULT now()
 updated_by varchar(200) NN
 version bigint NN DEFAULT 0
+partner_type varchar(11) NN DEFAULT DISTRIBUTOR
 organization_id uuid NN FK organization
 entitlement varchar(40) NN
 status varchar(20) NN
@@ -1905,7 +1906,7 @@ active boolean NN DEFAULT false
 ```
 
 - **Keys and indexes:** UQ(code,revision); IX(segment,currency_code,effective_from).
-- **Checks:** segment IN (RETAIL,DISTRIBUTOR); revision>0; effective_until IS NULL OR effective_until>effective_from.
+- **Checks:** segment IN (RETAIL,WHOLESALE,DISTRIBUTOR); revision>0; effective_until IS NULL OR effective_until>effective_from.
 - **Business invariant:** Published price book revisions are immutable; changes produce a new revision.
 
 ### commerce.price_entry
@@ -1928,6 +1929,27 @@ unit_amount numeric(19,4) NN
 - **Keys and indexes:** UQ(price_book_id,sku_id,minimum_quantity); IX(sku_id,price_book_id).
 - **Checks:** minimum_quantity>0; unit_amount>=0.
 - **Business invariant:** Resolve the greatest qualifying quantity threshold; amounts must conform to currency minor units.
+
+### commerce.standard_sku_price
+
+Owner: `commerce`; module: `pricing`; introduced: BP3; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+market_id uuid NN FK market
+sku_id uuid NN FK sku
+segment varchar(11) NN
+price_book_id uuid NULL FK price_book
+```
+
+- **Keys and indexes:** UQ(market_id,sku_id,segment).
+- **Checks:** segment IN (WHOLESALE,DISTRIBUTOR).
+- **Business invariant:** Standard per-SKU published book pointer, updated only by an authorized version-checked atomic commercial-price save. Historical books and organization assignments are preserved.
 
 ### commerce.price_assignment
 
@@ -2974,6 +2996,8 @@ created_by varchar(200) NN
 updated_at timestamptz NN DEFAULT now()
 updated_by varchar(200) NN
 version bigint NN DEFAULT 0
+partner_type varchar(11) NN DEFAULT DISTRIBUTOR
+business_details varchar(4000) NULL
 party_id uuid NN EXTERNAL commerce.party
 organization_name varchar(200) NN
 country_code char(2) NN
@@ -10223,3 +10247,19 @@ The user-authorized distributor workflow presentation adds nullable decisionReas
 ## User-authorized account wishlist, 17 November 2026 (ADR-029)
 
 Implement the existing wishlist as an account-owned Commerce SKU set, with authenticated API-216/217/218, additive BP1 migration 027, normal personal CUSTOMER session/CSRF, bounded 100 unique associations and atomic audit/idempotency. No owner boundary/provider/OTP changes. Current catalogue/pricing and actual SKU ids drive the UI. See ADR-029 and the implementation report for exact invariants, tests and activation evidence.
+
+
+## API-219 ? current business price assignment
+GET /api/v1/staff/organizations/{id}/price-assignment?marketId={uuid}. Current persisted ADMIN (normal login) or SALES. Returns current book ID, version and bounded scoped minimum rules for a version-checked replacement. No activation or writes. ADR-030.
+
+
+## API-220 / API-221 ? simple SKU commercial prices
+GET/PUT /api/v1/staff/skus/{id}/commercial-prices. API-220 reads a versioned standard snapshot; legacy published values are prefills only. API-221 normal persisted ADMIN or SALES/FINANCE; CSRF/idempotency, exact decimals, source book and market compare-and-set. One owner transaction publishes and binds all requested prices; no historical book or organization assignment is deleted. Nullable business pointers deliberately mean unavailable.
+
+
+### ADR-030 automatic partner pricing integration (19 November 2026)
+API-026 resolves the authenticated customer's single Commerce-owned approved partner context automatically. Suspended, inactive or ambiguous claims fail closed, even when organizationId is omitted. Active organization-specific assignment takes precedence; otherwise only standard_sku_price for market/SKU/partner_type is eligible. No inferred legacy book or retail fallback. preview=true permits a display quote at the first valid minimum/pack quantity and reports the purchase minimum; mutations and checkout enforce actual quantities.
+API-032 refreshes an ordinary pre-approval retail cart to the canonical business organization, retaining lines and incrementing aggregate version/activity with CART_SET audit. API-033/034/035, cart delivery quoting and API-036 require the current context. Existing carrier/commercial quote versions and hashes invalidate stale contexts/prices before order creation. Customer UI requires review of changed displayed prices and compares authoritative quote lines before API-037. Placed orders and immutable agreed snapshots are never rewritten. No additional migration is introduced beyond previously reviewed 047.
+
+
+ADR-030 browser boundary correction (19 November 2026): API-026 is optionally authenticated. Guest requests without a session remain public retail reads. When a BFF cookie is supplied, TrustFilter validates it and resolves current Commerce identity before PriceQueryService runs; malformed/expired cookies fail AUTH_REQUIRED rather than downgrading to retail. Other public catalogue routes retain their existing public-cookie behavior. Personalized prices remain no-store. Catalogue cards must use the minimum/pack from the same current price response passed to Add to Cart.

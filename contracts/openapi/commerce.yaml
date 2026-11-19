@@ -8218,7 +8218,7 @@
     "/api/v1/staff/markets/{id}/retail-price-book": {
       "put": {
         "operationId": "API-162",
-        "description": "Current FINANCE/recent MFA/CSRF/If-Match. Require active RETAIL book of matching approved currency and current effective interval. Lock Party/market/currency/book; atomically increment market version/policy revision with EVT-008/audit/response. Assignment never enables a market.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -8580,7 +8580,7 @@
     "/api/v1/catalogue/skus/{id}/price": {
       "get": {
         "operationId": "API-026",
-        "description": "Current approved NG/NGN2 retail price from the explicitly selected effective active book. Greatest qualifying tier; exact quantity scale/pack and minor units. Public retail only; organization requires current authenticated membership and the explicitly configured distributor buying entitlement at BP3. An invalid assignment never falls back. Bounded replica budget and repeatable-read/no-store.",
+        "description": "Current approved NG/NGN2 retail price from the explicitly selected effective active book. Greatest qualifying tier; exact quantity scale/pack and minor units. Public retail only; organization requires current authenticated membership and the explicitly configured distributor buying entitlement at BP3. An invalid assignment never falls back. Bounded replica budget and repeatable-read/no-store. ADR-030: authenticated customers use their single Commerce-approved partner context automatically; explicit organizationId cannot bypass it. Suspended, inactive or ambiguous claims fail closed, with no retail fallback. preview=true returns an indicative tier at the first eligible minimum/pack quantity when requested quantity is too low; cart writes and checkout always enforce actual quantities. A valid explicit organization assignment takes precedence; otherwise only the standard SKU price pointer for the approved WHOLESALE/DISTRIBUTOR segment is used. Missing/null standard prices block business purchasing; legacy books are never inferred. Browser boundary: no session cookie permits guest retail pricing; a supplied valid BFF session is authenticated on this public GET and selects current account pricing. Malformed/expired sessions fail AUTH_REQUIRED instead of silently returning retail. Responses remain no-store.",
         "security": [
           {},
           {
@@ -8624,6 +8624,14 @@
               "type": "string",
               "format": "uuid",
               "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "preview",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -8744,7 +8752,7 @@
     "/api/v1/staff/price-books": {
       "get": {
         "operationId": "API-150",
-        "description": "Current SALES, no organization. Bounded repeatable-read staff page of draft and active revisions; fixed sort plus UUID tie-break. Entries loaded in one bounded batch.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. Returns retailBindings for NG from the same repeatable-read snapshot.",
         "security": [
           {
             "bffSession": []
@@ -8759,6 +8767,7 @@
               "type": "string",
               "enum": [
                 "RETAIL",
+                "WHOLESALE",
                 "DISTRIBUTOR"
               ]
             }
@@ -8923,7 +8932,7 @@
       },
       "post": {
         "operationId": "API-027",
-        "description": "Current SALES/CSRF/key. Explicit nonempty draft revision1; active approved currency, SKU scale and exact minor units. Numeric duplicate thresholds rejected; family advisory lock plus durable idempotency and atomic audit. No prices or market activation invented.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -9080,7 +9089,7 @@
     "/api/v1/staff/price-books/{id}/activation": {
       "post": {
         "operationId": "API-028",
-        "description": "Current FINANCE/recent MFA15m/CSRF/key/If-Match. Effective nonexpired valid draft and nonoverlapping active family interval. Immutable published entries; atomically activate/version/audit/EVT-007/ack. Does not choose a default market book; API-162 remains explicit.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -9256,7 +9265,7 @@
     "/api/v1/staff/price-books/{id}/revisions": {
       "post": {
         "operationId": "API-151",
-        "description": "Current SALES/CSRF/key/If-Match of parent. Serialize family, require latest revision and next effective interval, same currency/segment. Copy-on-write new draft/revision; published prices never changed. An open-ended active parent cannot be silently shortened.",
+        "description": "ADR-027: Current persisted ADMIN may perform this price-management operation using normal login, without OTP/recent MFA. Existing non-admin SALES/FINANCE alternative keeps its prior role and MFA requirements. Active party/identity, non-organization context and non-revoked assignment are checked before replay and again inside write transactions. Existing validation, CSRF, idempotency, If-Match, immutable-book and audit/event rules apply. ",
         "security": [
           {
             "bffSession": []
@@ -9432,7 +9441,7 @@
     "/api/v1/staff/organizations/{id}/price-assignment": {
       "put": {
         "operationId": "API-067",
-        "description": "Current SALES/CSRF/key/If-Match. Lock organization, market and active DISTRIBUTOR price book; validate NGN minor units and SKU quantity scales. Atomically replace this organization/market minimum-rule set, version assignment, audit and append EVT-007. Does not alter organization or entitlement state; it cannot activate a suspended distributor.",
+        "description": "Current persisted ADMIN using normal login, or SALES. CSRF, idempotency and current If-Match required. Assign only the approved partner segment; replace scoped quantity rules atomically without activating an organization or entitlement.",
         "security": [
           {
             "bffSession": []
@@ -9603,6 +9612,139 @@
             }
           }
         }
+      },
+      "get": {
+        "operationId": "API-219",
+        "description": "Current ADMIN or SALES. Read the organization assignment version and scoped rules before explicit replacement. No organization activation. No-store.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "marketId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentPriceAssignment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/checkout/quotes": {
@@ -9751,6 +9893,274 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/NewCheckoutQuote"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/skus/{id}/commercial-prices": {
+      "get": {
+        "operationId": "API-220",
+        "description": "Current ADMIN or SALES. Read standard SKU prices; unbound legacy values are display-only prefills. No-store.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommercialPrices"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "API-221",
+        "description": "Normal persisted ADMIN, or existing SALES plus FINANCE authorization. CSRF/key required. Compare market and source-book versions in body. Publish and bind retail/wholesale/distributor prices atomically; preserve historical books and reject legacy custom-assignment conflicts. Blank business pairs explicitly disable that standard rate.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommercialPrices"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommercialPrices"
               }
             }
           }
@@ -11068,7 +11478,7 @@
     "/api/v1/carts": {
       "post": {
         "operationId": "API-032",
-        "description": "Current CUSTOMER and exact organization entitlement before replay. Create or return unique ACTIVE party/organization/market context, with nil business UUIDs prohibited. Does not change existing activity/version. Durable command/audit; no stock reservation.",
+        "description": "Current CUSTOMER and exact organization entitlement before replay. Create or return unique ACTIVE party/organization/market context, with nil business UUIDs prohibited. ADR-030: resolve canonical partner context from current membership/entitlement; an explicit different organization is denied. An ordinary ACTIVE retail cart is refreshed into the approved business context with all lines preserved, version/activity increment and CART_SET audit. Matching carts remain unchanged. Suspended/ambiguous access fails closed, including omitted organizationId. Durable command/audit; no stock reservation.",
         "security": [
           {
             "bffSession": []
@@ -11225,7 +11635,7 @@
     "/api/v1/carts/{id}": {
       "get": {
         "operationId": "API-033",
-        "description": "Current CUSTOMER, owner and organization entitlement. Repeatable read of current cart; no shared cache or activity mutation.",
+        "description": "Current CUSTOMER, owner and organization entitlement. ADR-030 active carts must match the canonical account context; otherwise CHECKOUT_REPRICE_REQUIRED instructs refresh via API-032. Repeatable read of current cart; no shared cache or activity mutation.",
         "security": [
           {
             "bffSession": []
@@ -24227,6 +24637,7 @@
             "type": "string",
             "enum": [
               "RETAIL",
+              "WHOLESALE",
               "DISTRIBUTOR"
             ]
           },
@@ -24272,6 +24683,7 @@
             "type": "string",
             "enum": [
               "RETAIL",
+              "WHOLESALE",
               "DISTRIBUTOR"
             ]
           },
@@ -24332,6 +24744,7 @@
             "type": "string",
             "enum": [
               "RETAIL",
+              "WHOLESALE",
               "DISTRIBUTOR"
             ]
           },
@@ -24376,7 +24789,8 @@
           "page",
           "size",
           "totalElements",
-          "totalPages"
+          "totalPages",
+          "retailBindings"
         ],
         "properties": {
           "items": {
@@ -24404,6 +24818,41 @@
             "type": "integer",
             "format": "int64",
             "minimum": 0
+          },
+          "retailBindings": {
+            "type": "array",
+            "maxItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "marketId",
+                "code",
+                "priceBookId",
+                "version"
+              ],
+              "properties": {
+                "marketId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "code": {
+                  "type": "string",
+                  "const": "NG"
+                },
+                "priceBookId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uuid"
+                },
+                "version": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
           }
         }
       },
@@ -24681,6 +25130,173 @@
           "expiresAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "CurrentPriceAssignment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organizationId",
+          "marketId",
+          "priceBookId",
+          "version",
+          "minimumRules"
+        ],
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "marketId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "priceBookId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "minimumRules": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "skuId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "minimumQuantity": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "packMultiple": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "minimumOrderAmount": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "CommercialPriceValue": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "bookId",
+          "version",
+          "unitAmount",
+          "minimumQuantity",
+          "legacy"
+        ],
+        "properties": {
+          "bookId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "unitAmount": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]{1,15}(\\.[0-9]{1,4})?$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minimumQuantity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]{1,17}(\\.[0-9]{1,3})?$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "legacy": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CommercialPrices": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "marketId",
+          "marketVersion",
+          "retail",
+          "wholesale",
+          "distributor"
+        ],
+        "properties": {
+          "marketId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "marketVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "retail": {
+            "$ref": "#/components/schemas/CommercialPriceValue"
+          },
+          "wholesale": {
+            "$ref": "#/components/schemas/CommercialPriceValue"
+          },
+          "distributor": {
+            "$ref": "#/components/schemas/CommercialPriceValue"
           }
         }
       },
@@ -29535,6 +30151,14 @@
             "type": "string",
             "format": "uuid",
             "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "partnerType": {
+            "type": "string",
+            "enum": [
+              "DISTRIBUTOR",
+              "WHOLESALE"
+            ],
+            "default": "DISTRIBUTOR"
           }
         }
       },

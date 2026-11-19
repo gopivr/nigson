@@ -562,6 +562,14 @@ def ensure_actor_key() -> None:
 def application_preflight(config: dict) -> None:
     """Report setting names only, before a costly build or application restart."""
     errors = []
+    commerce = config.get('services', {}).get('commerce', {}).get('environment', {})
+    try:
+        partner_phase = int(commerce.get('NIGSON_PRODUCT_PHASE', '1'))
+    except (ValueError, TypeError):
+        partner_phase = 1
+        errors.append('NIGSON_PRODUCT_PHASE must be an integer')
+    if partner_phase >= 3 and not re.fullmatch(r'[A-Z][A-Z0-9_]{1,39}', str(commerce.get('NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT', ''))):
+        errors.append('Set NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT to the canonical business purchasing entitlement before make run-core')
     for owner in OWNERS:
         env = config.get('services', {}).get(owner, {}).get('environment', {})
         if not env:

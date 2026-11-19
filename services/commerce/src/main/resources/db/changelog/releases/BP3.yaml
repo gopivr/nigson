@@ -41,6 +41,18 @@
         "file": "../045-bp3-pandago-carrier-quotes.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../046-bp3-partner-type.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../047-bp3-standard-sku-price.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

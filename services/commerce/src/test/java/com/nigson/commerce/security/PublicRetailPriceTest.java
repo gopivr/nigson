@@ -25,8 +25,24 @@ class PublicRetailPriceTest {
   if(!reached[0])assertThat(response.getStatus()).isEqualTo(401);
   return reached[0];
  }
- @Test void retailPriceRemainsPublicWithMissingMalformedOrExpiredSession()throws Exception {
-  for(String cookie:Arrays.asList(null,"expired-session",UUID.randomUUID().toString()))assertThat(passes("GET",PRICE,cookie,false)).isTrue();
+ @Test void retailPriceRemainsPublicWithoutSession()throws Exception {
+  assertThat(passes("GET",PRICE,null,false)).isTrue();
+ }
+ @Test void malformedOrExpiredPriceSessionCannotSilentlyDowngradeToRetail()throws Exception {
+  for(String cookie:List.of("expired-session",UUID.randomUUID().toString()))assertThat(passes("GET",PRICE,cookie,false)).isFalse();
+ }
+ @Test void ordinaryPublicCatalogueStillIgnoresExpiredSession()throws Exception {
+  assertThat(passes("GET","/api/v1/catalogue/products","expired-session",false)).isTrue();
+ }
+ @Test void validPriceSessionReachesDomainAsCurrentCustomer()throws Exception {
+  SecurityContextHolder.clearContext();try{
+   String id=UUID.randomUUID().toString();var record=mock(SessionRecord.class);var sessions=mock(JdbcSessionTrust.class);var authority=mock(CommerceAuthority.class);
+   var actor=new com.nigson.shared.security.ActorAssertion.Actor(UUID.randomUUID(),"https://identity.synthetic.invalid","synthetic",null,Set.of("CUSTOMER"),Set.of(),null);
+   when(sessions.read(id,true)).thenReturn(record);when(authority.resolve(record,null,Set.of())).thenReturn(actor);
+   var request=new MockHttpServletRequest("GET",PRICE);request.setCookies(new Cookie("nigson-local-session",id));var response=new MockHttpServletResponse();boolean[] reached={false};
+   new TrustFilter(null,sessions,new SessionCookies("local",true),authority,new ProblemWriter("test",""),new BrowserBoundary("test",Set.of("https://bff.synthetic.test"))).doFilter(request,response,(req,res)->{reached[0]=true;assertThat(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).isSameAs(actor);});
+   assertThat(reached[0]).isTrue();verify(sessions).read(id,true);verify(authority).resolve(record,null,Set.of());verify(sessions,never()).csrf(any(),any());
+  }finally{SecurityContextHolder.clearContext();}
  }
  @Test void organizationPriceDoesNotBypassSessionValidation()throws Exception {
   assertThat(passes("GET",PRICE,"expired-session",true)).isFalse();

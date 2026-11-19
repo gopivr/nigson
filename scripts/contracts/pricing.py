@@ -6,7 +6,7 @@ def extend(spec):
     quantity={'type':'string','pattern':r'^[0-9]{1,17}(\.[0-9]{1,3})?$'}
     instant={'type':'string','format':'date-time'}
     currency={'type':'string','pattern':'^[A-Z]{3}$'}
-    segment={'type':'string','enum':['RETAIL','DISTRIBUTOR']}
+    segment={'type':'string','enum':['RETAIL','WHOLESALE','DISTRIBUTOR']}
     s['PriceEntry']=object_schema({'skuId':UUID,'minimumQuantity':quantity,'unitAmount':money})
     entries={'type':'array','minItems':1,'maxItems':100,'items':REF('PriceEntry')}
     properties={'currency':currency,'segment':segment,'effectiveFrom':instant,'effectiveUntil':instant,'entries':entries}
@@ -47,6 +47,9 @@ def extend(spec):
     assign['requestBody']={'required':True,'content':{'application/json':{'schema':REF('PriceAssignment')}}}
     assign['responses']['200']['headers']={'Cache-Control':{'schema':{'const':'no-store'}},'ETag':{'schema':{'type':'string'}}}
     assign['responses']['422']['description']='Pricing rule violation or unsupported market/book'
+    read['parameters'].append(parameter('preview','query',{'type':'boolean'}))
+    read['description'] += ' ADR-030: authenticated customers use their single Commerce-approved partner context automatically; explicit organizationId cannot bypass it. Suspended, inactive or ambiguous claims fail closed, with no retail fallback. preview=true returns an indicative tier at the first eligible minimum/pack quantity when requested quantity is too low; cart writes and checkout always enforce actual quantities. A valid explicit organization assignment takes precedence; otherwise only the standard SKU price pointer for the approved WHOLESALE/DISTRIBUTOR segment is used. Missing/null standard prices block business purchasing; legacy books are never inferred.'
+    read['description'] += ' Browser boundary: no session cookie permits guest retail pricing; a supplied valid BFF session is authenticated on this public GET and selects current account pricing. Malformed/expired sessions fail AUTH_REQUIRED instead of silently returning retail. Responses remain no-store.'
     spec['paths']['/api/v1/catalogue/skus/{id}/price']={'get':read}
     spec['paths']['/api/v1/staff/price-books']={'get':listing,'post':create}
     spec['paths']['/api/v1/staff/price-books/{id}/activation']={'post':activate}
@@ -72,4 +75,16 @@ def extend(spec):
                           'priceBookId': {'type': ['string', 'null'], 'format': 'uuid'},
                           'version': {'type': 'integer', 'minimum': 0}}}}
     page['required'].append('retailBindings')
+    s['CurrentPriceAssignment']=object_schema({'organizationId':UUID,'marketId':UUID,'priceBookId':{'anyOf':[UUID,{'type':'null'}]},'version':VERSION,'minimumRules':{'type':'array','maxItems':100,'items':{'type':'object','additionalProperties':False,'properties':{'skuId':{'anyOf':[UUID,{'type':'null'}]},'minimumQuantity':{'type':['string','null']},'packMultiple':{'type':['string','null']},'minimumOrderAmount':{'type':['string','null']}}}}})
+    read=operation('API-219','Current ADMIN or SALES. Read the organization assignment version and scoped rules before explicit replacement. No organization activation. No-store.','CurrentPriceAssignment',[parameter('id','path',UUID,True),parameter('marketId','query',UUID,True)])
+    spec['paths']['/api/v1/staff/organizations/{id}/price-assignment']['get']=read
+    spec['paths']['/api/v1/staff/organizations/{id}/price-assignment']['put']['description']='Current persisted ADMIN using normal login, or SALES. CSRF, idempotency and current If-Match required. Assign only the approved partner segment; replace scoped quantity rules atomically without activating an organization or entitlement.'
+    nullable=lambda value:{'anyOf':[value,{'type':'null'}]}
+    s['CommercialPriceValue']=object_schema({'bookId':nullable(UUID),'version':VERSION,'unitAmount':nullable(money),'minimumQuantity':nullable(quantity),'legacy':{'type':'boolean'}})
+    s['CommercialPrices']=object_schema({'marketId':UUID,'marketVersion':VERSION,'retail':REF('CommercialPriceValue'),'wholesale':REF('CommercialPriceValue'),'distributor':REF('CommercialPriceValue')})
+    path='/api/v1/staff/skus/{id}/commercial-prices';params=[parameter('id','path',UUID,True)]
+    get=operation('API-220','Current ADMIN or SALES. Read standard SKU prices; unbound legacy values are display-only prefills. No-store.','CommercialPrices',params)
+    put=operation('API-221','Normal persisted ADMIN, or existing SALES plus FINANCE authorization. CSRF/key required. Compare market and source-book versions in body. Publish and bind retail/wholesale/distributor prices atomically; preserve historical books and reject legacy custom-assignment conflicts. Blank business pairs explicitly disable that standard rate.','CommercialPrices',params+[parameter('Idempotency-Key','header',{'type':'string','minLength':1,'maxLength':100},True)])
+    put['requestBody']={'required':True,'content':{'application/json':{'schema':REF('CommercialPrices')}}}
+    spec['paths'][path]={'get':get,'put':put}
     return spec

@@ -85,10 +85,14 @@ public final class TrustFilter extends OncePerRequestFilter {
                         && (req.getHeader("Origin") != null || req.getCookies() != null))
                     throw ActorAssertion.denied();
                 stage = "session_cookie";
-                String id = publicRead || providerCallback ? null : cookies.read(req);
+                // Price reads are public for guests, but personalized for a valid browser session.
+                // A supplied invalid session must fail closed, never silently quote retail.
+                boolean personalizedPrice = req.getMethod().equals("GET")
+                        && req.getRequestURI().matches("/api/v1/catalogue/skus/[a-fA-F0-9-]{36}/price");
+                String id = providerCallback || publicRead && !personalizedPrice ? null : cookies.read(req);
                 // Login/callback/session public controllers (next task) explicitly invoke their
                 // own typed flow.
-                if (id != null && !publicRead && !Set.of("/bff/login", "/bff/callback", "/bff/session", "/bff/register")
+                if (id != null && (!publicRead || personalizedPrice) && !Set.of("/bff/login", "/bff/callback", "/bff/session", "/bff/register")
                         .contains(req.getRequestURI())) {
                     stage = "session_authority";
                     var record = sessions.read(id, true);
