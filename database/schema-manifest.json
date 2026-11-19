@@ -2930,6 +2930,16 @@
         },
         {
           "cascade": false,
+          "default": "DISTRIBUTOR",
+          "external": null,
+          "foreign": null,
+          "name": "partner_type",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(11)"
+        },
+        {
+          "cascade": false,
           "default": null,
           "external": null,
           "foreign": "organization",
@@ -7728,7 +7738,7 @@
       "phase": 3
     },
     "commerce.price_book": {
-      "checks": "segment IN (RETAIL,DISTRIBUTOR); revision>0; effective_until IS NULL OR effective_until>effective_from",
+      "checks": "segment IN (RETAIL,WHOLESALE,DISTRIBUTOR); revision>0; effective_until IS NULL OR effective_until>effective_from",
       "creation_changeset": "commerce-20261006-012",
       "creation_file": "services/commerce/src/main/resources/db/changelog/020-bp1-domain-tables.sql",
       "fields": [
@@ -11087,6 +11097,116 @@
       "owner": "commerce",
       "phase": 1
     },
+    "commerce.standard_sku_price": {
+      "checks": "segment IN (WHOLESALE,DISTRIBUTOR)",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "market",
+          "name": "market_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "sku",
+          "name": "sku_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "segment",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(11)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "price_book",
+          "name": "price_book_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        }
+      ],
+      "keys": "UQ(market_id,sku_id,segment)",
+      "module": "pricing",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 3
+    },
     "commerce.stock_location": {
       "checks": "No additional table-level predicate",
       "creation_changeset": "commerce-20261006-012",
@@ -13797,6 +13917,26 @@
           "nullable": false,
           "primary": false,
           "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": "DISTRIBUTOR",
+          "external": null,
+          "foreign": null,
+          "name": "partner_type",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(11)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "business_details",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(4000)"
         },
         {
           "cascade": false,

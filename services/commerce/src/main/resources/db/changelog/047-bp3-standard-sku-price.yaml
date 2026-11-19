@@ -1,0 +1,44 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "commerce-20261119-standard-sku-price",
+        "author": "nigson-commerce",
+        "logicalFilePath": "commerce/047-bp3-standard-sku-price.yaml",
+        "preConditions": [
+          {
+            "onFail": "HALT"
+          },
+          {
+            "dbms": {
+              "type": "postgresql"
+            }
+          },
+          {
+            "sqlCheck": {
+              "expectedResult": "1",
+              "sql": "SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+            }
+          }
+        ],
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "047-bp3-standard-sku-price.sql",
+              "relativeToChangelogFile": true
+            }
+          }
+        ],
+        "rollback": [
+          {
+            "sqlFile": {
+              "path": "047-bp3-standard-sku-price-rollback.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

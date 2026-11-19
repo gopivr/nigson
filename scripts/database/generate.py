@@ -14,6 +14,7 @@ from catalog import ROOT, catalog
 
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
 ADDITIVE_TABLES = {
+    'commerce.standard_sku_price': ('047-bp3-standard-sku-price', 'commerce-20261119-standard-sku-price', 'nigson-commerce', 'ADR-030: explicit standard per-SKU partner prices; preserve legacy books.'),
     'experience.file_transfer': ('025-bp1-file-transfer', 'experience-20261019-files-001', 'nigson-files', 'EXP-FILES-001: Experience-owned pinned file scan/promotion intent; existing migrations preserved.'),
     'experience.lead_rate_limit': ('026-bp1-lead-rate-limit', 'experience-20261111-lead-rate-limit', 'nigson-platform', 'Public lead rate limiting stores only a keyed source hash; prior migrations preserved.'),
     'integration.notification_dispatch': ('024-bp1-notification-dispatch', 'integration-20261017-msg-001', 'nigson-messaging', 'ADR-018: additive owned immutable notification dispatch identity; prior migrations preserved.'),
@@ -91,17 +92,20 @@ def generate():
                     name = fullname.split('.')[1]
                     # Preserve the originally released BP1 table DDL. A later
                     # additive migration relaxes this one field for API-190.
-                    fields = [column(field, (fullname == 'experience.lead' and field['name'] == 'email') or (fullname == 'experience.inbound_message' and field['name'] == 'sender_ciphertext')) for field in table['fields'] if not (fullname == 'commerce.reward_entry' and field['name'] == 'available_at') and not (fullname == 'integration.carrier_booking' and field['name'] in pandago_fields)]
+                    fields = [column(field, (fullname == 'experience.lead' and field['name'] == 'email') or (fullname == 'experience.inbound_message' and field['name'] == 'sender_ciphertext')) for field in table['fields'] if not (fullname in ('commerce.account_entitlement','experience.distributor_application') and field['name'] in ('partner_type','business_details')) and not (fullname == 'commerce.reward_entry' and field['name'] == 'available_at') and not (fullname == 'integration.carrier_booking' and field['name'] in pandago_fields)]
                     primary = [field['name'] for field in table['fields'] if field['primary']]
                     fields.append(f"CONSTRAINT {identifier(name+'_id_pk')} PRIMARY KEY ({','.join(primary)})")
                     for field in table['fields']:
+                        if fullname in ('commerce.account_entitlement','experience.distributor_application') and field['name'] in ('partner_type','business_details'): continue
                         if fullname == 'integration.carrier_booking' and field['name'] in pandago_fields:
                             continue
                         if field['name'] == 'version':
                             fields.append(f"CONSTRAINT {identifier(name+'_version_ck')} CHECK (version >= 0)")
                         if field['type'] == 'uuid':
                             fields.append(f"CONSTRAINT {identifier(name+'_'+field['name']+'_nonnil_ck')} CHECK ({field['name']} <> '00000000-0000-0000-0000-000000000000'::uuid)")
-                    checks = [predicate(value.strip()) for value in table['checks'].split(';') if value.strip() and not value.startswith('No additional')]
+                    # ADR-030 expands the current catalog through migration 028 only.
+                    historical_checks = table['checks'].replace('segment IN (RETAIL,WHOLESALE,DISTRIBUTOR)', 'segment IN (RETAIL,DISTRIBUTOR)') if fullname == 'commerce.price_book' else table['checks']
+                    checks = [predicate(value.strip()) for value in historical_checks.split(';') if value.strip() and not value.startswith('No additional')]
                     for index, check in enumerate(checks, 1):
                         fields.append(f"CONSTRAINT {identifier(name+'_rule_'+str(index)+'_ck')} CHECK ({check})")
                     if fullname == 'commerce.inventory_movement':
@@ -230,7 +234,7 @@ def generate():
         guard = f"SELECT CASE WHEN current_user='nigson_{owner}_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
         payload = {'databaseChangeLog':[{'changeSet':{'id':change,'author':author,'logicalFilePath':owner+'/'+stem+'.yaml','preConditions':[{'onFail':'HALT'},{'dbms':{'type':'postgresql'}},{'sqlCheck':{'expectedResult':'1','sql':guard}}],'changes':[{'sqlFile':{'path':stem+'.sql','relativeToChangelogFile':True}}],'rollback':[{'sqlFile':{'path':stem+'-rollback.sql','relativeToChangelogFile':True,'splitStatements':False}}]}}]}
         files[base/(stem+'.yaml')] = json.dumps(payload,indent=2)+'\n'
-        wrapper = base/'releases'/'BP1.yaml'
+        wrapper = base/'releases'/('BP'+str(table['phase'])+'.yaml')
         include = {'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}}
         if fullname == 'commerce.file_transfer':
             payload = json.loads(files[wrapper]); payload['databaseChangeLog'].append(include)
@@ -261,7 +265,8 @@ def generate():
     payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+nigeria_stem+'.yaml','relativeToChangelogFile':True}})
     files[wrapper]=json.dumps(payload,indent=2)+'\n'
     for wrapper, include in deferred_includes:
-        payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append(include)
+        payload=json.loads(files[wrapper])
+        if include not in payload['databaseChangeLog']:payload['databaseChangeLog'].append(include)
         files[wrapper]=json.dumps(payload,indent=2)+'\n'
     # API-195 requires an immutable BP3 source revision on private quote carts.
     base=Path('services/commerce/src/main/resources/db/changelog');stem='043-bp3-quote-cart';change='commerce-20261018-001';owner='commerce'
@@ -325,6 +330,18 @@ def generate():
     for suffix in ('.sql','-rollback.sql','.yaml'):
         path=base/('026-pandago-booking'+suffix); files[path]=(ROOT/path).read_text()
     wrapper=base/'releases/BP1.yaml'; payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../026-pandago-booking.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    # ADR-030: additive wholesale segment; never rewrite the applied BP1 constraint.
+    base=Path('services/commerce/src/main/resources/db/changelog');stem='028-bp1-wholesale-segment'
+    for suffix in ('.sql','-rollback.sql','.yaml'):
+        path=base/(stem+suffix);files[path]=(ROOT/path).read_text()
+    wrapper=base/'releases/BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    for owner,stem in [('commerce','046-bp3-partner-type'),('experience','043-bp3-partner-type')]:
+        base=Path(f'services/{owner}/src/main/resources/db/changelog')
+        for suffix in ('.sql','-rollback.sql','.yaml'):
+            path=base/(stem+suffix);files[path]=(ROOT/path).read_text()
+        wrapper=base/'releases/BP3.yaml';payload=json.loads(files[wrapper]);entry={'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}}
+        if entry not in payload['databaseChangeLog']:payload['databaseChangeLog'].append(entry)
+        files[wrapper]=json.dumps(payload,indent=2)+'\n'
     files[Path('database/schema-manifest.json')] = json.dumps(manifest,indent=2,sort_keys=True)+'\n'
     return files
 

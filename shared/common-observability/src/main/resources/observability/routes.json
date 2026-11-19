@@ -196,5 +196,6 @@
   "/internal/v1/templates",
   "/wh/paystack",
   "/api/v1/me/wishlist",
-  "/api/v1/me/wishlist/items/{skuId}"
+  "/api/v1/me/wishlist/items/{skuId}",
+  "/api/v1/staff/skus/{id}/commercial-prices"
 ]

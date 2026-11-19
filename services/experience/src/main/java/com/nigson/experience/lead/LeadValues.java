@@ -55,7 +55,7 @@ public final class LeadValues {
     public static UUID uuid(JsonNode n) {if(n==null||!n.isString())throw ApiValues.invalid();return ApiValues.uuid(n.asString());}
     public static void fields(JsonNode n,Set<String> required,Set<String> optional){var allowed=new HashSet<>(required);allowed.addAll(optional);if(n==null||!n.isObject()||!n.propertyNames().containsAll(required)||!allowed.containsAll(n.propertyNames()))throw ApiValues.invalid();}
     public static void validate(Enquiry x) {
-        if(!Set.of("CONTACT","COMPLAINT").contains(x.type())||!EMAIL.matcher(x.email()).matches()||x.phone()!=null&&!x.phone().matches("\\+[1-9][0-9]{7,14}")||x.message().isBlank()||x.antiSpamToken().isBlank())throw ApiValues.invalid();
+        if(!TYPES.contains(x.type())||!EMAIL.matcher(x.email()).matches()||x.phone()!=null&&!x.phone().matches("\\+[1-9][0-9]{7,14}")||x.message().isBlank()||x.antiSpamToken().isBlank())throw ApiValues.invalid();
     }
     public static Problem.Failure denied(){return new Problem.Failure(ProblemCode.ACCESS_DENIED);}
 }

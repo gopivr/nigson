@@ -7,6 +7,8 @@ import com.nigson.commerce.platform.*;
 import com.nigson.commerce.market.MarketEligibility;
 @Configuration(proxyBeanMethods=false)
 public class PricingConfiguration {
+ @Bean ProductPrices productPrices(JdbcTemplate jdbc,PricingAuthority authority,PriceBookService books,com.nigson.commerce.market.MarketService markets,PlatformStore commands,AuditWriter audit,org.springframework.transaction.PlatformTransactionManager manager){return new ProductPrices(jdbc,authority,books,markets,commands,audit,Clock.systemUTC(),manager);}
+
  @Bean PricingAuthority pricingAuthority(JdbcTemplate jdbc,@Value("${NIGSON_PRODUCT_PHASE:1}")int phase,@Value("${NIGSON_PRICING_DISTRIBUTOR_ENTITLEMENT:}")String entitlement){return new PricingAuthority(jdbc,Clock.systemUTC(),phase,entitlement);}
  @Bean Pricing pricing(JdbcTemplate jdbc,@Value("${NIGSON_PRODUCT_PHASE:1}")int phase){return new JdbcPricing(jdbc,phase);}
  @Bean FrozenPrices frozenPrices(JdbcTemplate jdbc,@Value("${NIGSON_PRODUCT_PHASE:1}")int phase){return new JdbcFrozenPrices(jdbc,phase);}

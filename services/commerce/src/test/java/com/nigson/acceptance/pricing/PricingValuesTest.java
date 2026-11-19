@@ -7,6 +7,13 @@ import java.util.*;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 class PricingValuesTest {
+ @Test void wholesaleIsAnExplicitSegmentWithExactTiersAndClosedValidation(){
+  var input=EventCodec.JSON.valueToTree(Map.of("code","SYNTHETIC_WHOLESALE","currency","NGN","segment","WHOLESALE","effectiveFrom","2026-11-19T00:00:00Z","entries",List.of(Map.of("skuId",UUID.randomUUID(),"minimumQuantity","10","unitAmount","123.45"))));
+  var parsed=PricingValues.input(input,true);assertThat(parsed.segment()).isEqualTo("WHOLESALE");assertThat(parsed.entries().getFirst().minimumQuantity()).isEqualTo("10");assertThat(parsed.entries().getFirst().unitAmount()).isEqualTo("123.45");
+  assertThat(new PricingValues.Query("WHOLESALE","NGN",0,10,"code,asc").segment()).isEqualTo("WHOLESALE");
+  ((tools.jackson.databind.node.ObjectNode)input).put("segment","WHOLESALER");assertThatThrownBy(()->PricingValues.input(input,true)).hasMessage("VALIDATION_ERROR");
+  assertThatThrownBy(()->new PricingValues.Query("WHOLESALER","NGN",0,10,"code,asc")).hasMessage("VALIDATION_ERROR");
+ }
  @Test void pricePageSerializesExplicitRetailBindingAndKeepsLegacyConstructor(){UUID market=UUID.randomUUID(),book=UUID.randomUUID();var page=new PricingValues.Page(List.of(),0,100,0,0,List.of(new PricingValues.RetailBinding(market,"NG",book,7)));var json=EventCodec.JSON.valueToTree(page);assertThat(json.path("retailBindings").get(0).path("priceBookId").asString()).isEqualTo(book.toString());assertThat(json.path("retailBindings").get(0).path("version").asLong()).isEqualTo(7);assertThat(new PricingValues.Page(List.of(),0,100,0,0).retailBindings()).isEmpty();}
 
  @Test void minorUnitsRejectEvenZeroExtraDecimalsAndBinaryOrExponentForms(){assertThat(PricingValues.minor("1234.56",2)).isEqualByComparingTo("1234.56");assertThat(PricingValues.minor("999999999999999.99",2)).isEqualByComparingTo("999999999999999.99");for(String value:List.of("1.000","1.001","1e2","-1","NaN"," 1","1,00"))assertThatThrownBy(()->PricingValues.minor(value,2)).isInstanceOf(com.nigson.shared.problem.Problem.Failure.class);assertThatThrownBy(()->PricingValues.quantity("0.001",2)).hasMessage("PRICING_RULE_VIOLATION");assertThatThrownBy(()->PricingValues.rounded(new BigDecimal("1000000000000000"),2)).hasMessage("PRICING_RULE_VIOLATION");}

@@ -44,13 +44,19 @@
     },
     {
       "include": {
+        "file": "../027-bp1-wishlist.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
         "file": "../026-bp1-selected-carrier.yaml",
         "relativeToChangelogFile": true
       }
     },
     {
       "include": {
-        "file": "../027-bp1-wishlist.yaml",
+        "file": "../028-bp1-wholesale-segment.yaml",
         "relativeToChangelogFile": true
       }
     }

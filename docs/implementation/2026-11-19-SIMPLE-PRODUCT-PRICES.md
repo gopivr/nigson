@@ -1,0 +1,19 @@
+# Session report: SIMPLE-PRODUCT-PRICES
+
+Date: 2026-11-19. Specification 1.1.0; status IN_PROGRESS, no acceptance commit.
+
+User approved one retail/wholesale/distributor form, explicit business prices and minimum quantities, and the latest legacy wholesale value 555555 / minimum 30 as the initial source for DEMO-EL-04-02. Values are loaded from the database, not hardcoded. Historical books remain intact.
+
+Product editing now loads API-220 commercial-prices and saves through API-221 with one idempotent, version-checked local transaction. Published books remain immutable. Retail copying preserves other SKUs, quantity tiers and source expiry. Business values use the new standard_sku_price pointers; clearing a value records explicit unavailability rather than resurrecting legacy books. Existing custom organization assignments produce a review conflict instead of being silently overridden. Normal persisted Admin pricing authority remains supported. Metadata saving is separate and its partial-success message remains explicit.
+
+Frontend changes: shared ProductPricesService, product-prices.spec.ts, public-api.ts, product-edit.component.ts, applications.component.ts and Vitest configuration. Routine draft/publish and application assignment controls are removed from these pages; advanced implementation files remain for compatibility. Unknown saves retain the same operation key; a confirmed changed snapshot releases the old pending request. Exact price strings are preserved.
+
+Backend changes: ProductPrices, ProductPriceController, PricingConfiguration, ProductPricesTest; master schema/API definitions; database generator and generated 047 migration/release/manifest; pricing contract generator and generated OpenAPI; observability routes. The additive migration generator now respects a table's release and avoids duplicate wrapper includes. Initial duplicate migration validation failed; corrected without clearing checksums. Failure evidence remains in .build/wishlist-pg/simple-migration.log; corrected migration in simple-migration-fixed.log.
+
+Verification: Admin Angular ngc --noEmit passed; full Admin suite 80 tests passed before final retry refinements, followed by four focused ProductPricesService tests passing after those refinements (simple-fields-final.log). Earlier backend grouped-save/normal-Admin suite passed nine tests (simple-final-tests.log); final ProductPricesTest rerun recorded in simple-verified-tests.log. Database and Commerce OpenAPI generator checks and both repository diff checks passed. BP5 migration validation/update on isolated nigson_fresh passed (simple-fresh-migration.log). Generated artifacts and test outputs stay under ignored .build; no frontend asset build was created.
+
+No running application data was changed, and no Docker restart or browser acceptance was performed. The user must restart core services to apply migration 047 and the API implementation. Automatic customer account pricing, quantity-aware previews and existing-cart repricing remain unfinished; this form must not be represented as enabling those customer flows. Next dependency-ready work is that automatic resolver/cart integration, including suspended/missing-price rejection and frozen-order preservation. No Personal/Business switch is planned.
+
+Final verification: three ProductPricesTest tests passed, zero failures/errors/skips, BUILD SUCCESS (simple-verified-tests.log). Empty-table rollback passed inside a rolled-back transaction (simple-empty-rollback.log); populated-table refusal passed in ProductPricesTest. Isolated PostgreSQL stopped cleanly.
+
+Follow-up: the automatic customer resolver/cart integration previously listed as pending is now implemented and offline-verified in 2026-11-19-AUTOMATIC-PARTNER-CUSTOMER-PRICING.md. Actual browser acceptance remains pending.

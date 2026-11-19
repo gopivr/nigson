@@ -1,0 +1,21 @@
+# ADR-030: Distributor and wholesale business purchasing
+
+User decision, 19 November 2026: implement distributor and wholesaler purchasing first; affiliate attribution and commissions remain separate.
+
+Partner access is an account entitlement, never a staff role. Existing customer access remains. Experience owns reviewed applications; Commerce owns organizations, memberships, entitlements, price assignments and purchasing. No cross-owner SQL is introduced.
+
+Wholesale requires a distinct WHOLESALE price-book segment alongside RETAIL and DISTRIBUTOR. Existing immutable revisions, exact decimal quantities and amounts, explicit effective dates, authorization, audit and bounded entries remain. Migration 028 expands the constraint without changing applied BP1 SQL or creating prices. Rollback refuses populated wholesale books.
+
+This first increment permits authorized book creation and listing only. Existing distributor assignment and shopping guards continue to reject wholesale books until typed application approval, matching entitlement checks and business shopping context are implemented and tested together. Do not enable wholesale purchasing based on this increment alone.
+
+Confirmed business policy: Admin enters explicit prices and minimum quantities; business purchasing remains blocked until valid prices are assigned. One partner type per customer: distributor OR wholesaler, never both. These rules must be enforced transactionally during approval and again during purchasing. No discount, minimum value, commission or account activation is inferred.
+
+Follow-up application increment, 19 November: reviewed applications and acknowledged Commerce entitlements carry an explicit partner type. Legacy rows default to DISTRIBUTOR through additive owner BP3 migrations. A party lock prevents concurrent opposite-type approvals; suspended approval retains its type claim. Typed organization pricing APIs require the matching assigned segment and keep missing-price purchasing blocked. Existing distributor promotions must not apply to wholesale buyers. Staff-independent review, file scan eligibility, signed workload boundaries and UNKNOWN outcomes remain enforced. An explicit Commerce AUTHORIZATION_RULE_VIOLATION returns the application to review with an audit record; a timeout remains pending. The customer profile now shows application status. The personal/business storefront selection and Admin business-pricing interfaces remain the next increment; no runtime activation data is inferred.
+
+User-authorized recovery configuration: BUSINESS_PURCHASING is the canonical local business purchasing entitlement for both typed partner kinds. It is not a staff role or a price.
+
+User decision: automatic customer pricing replaces the proposed Personal/Business switch. Approved wholesaler/distributor accounts use their assigned prices; missing prices and suspension block purchasing. Existing carts require repricing/review; placed orders retain frozen prices.
+
+Admin business-price assignment (API-067) and its read snapshot (API-219) use the existing normal-login persisted ADMIN pricing exception, or existing SALES authority. CSRF, exact segment, current version, atomic rules, audit and idempotency remain. Assignment never activates suspended business access.
+
+Automatic purchasing integration: Commerce selects exactly one approved membership/entitlement for every authenticated price read and active-cart operation. Inactive or ambiguous retained claims fail closed, including omitted organization IDs. API-032 refreshes an existing ordinary retail cart into the canonical business context atomically, retaining all lines and bumping its version; quotes are invalidated by the changed version. Existing matching business carts are retained; no automatic cart merge or frozen-order rewrite occurs. Account-specific assignments take precedence; otherwise only the explicit standard SKU pointer is used. API-026 preview=true may quote the first eligible minimum/pack quantity for display; actual cart writes and checkout enforce the requested quantity. Customer checkout compares the authoritative quote lines against the displayed cart and asks for review before creating an order when they differ.
