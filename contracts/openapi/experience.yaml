@@ -4847,7 +4847,7 @@
     "/api/v1/distributor-applications": {
       "post": {
         "operationId": "API-092",
-        "description": "Signed current CUSTOMER; idempotent create. Only applicant-owned CLEAN PRIVATE unlinked files are accepted. Required document types and recipient group must be explicitly configured; missing configuration fails closed. EVT-019 is written in the same Experience transaction.",
+        "description": "Signed current CUSTOMER; idempotent create. AFFILIATE requires structured contact/channel details, no businessReference and an empty document list; bank fields are rejected. Other types require applicant-owned CLEAN PRIVATE unlinked files. The recipient group must be configured; business applications additionally require configured document types. Missing required configuration fails closed. EVT-019 is written in the same Experience transaction.",
         "security": [
           {
             "workload": [
@@ -5579,7 +5579,7 @@
     "/api/v1/staff/distributor-applications/{id}/decision": {
       "post": {
         "operationId": "API-095",
-        "description": "Signed SALES actor. Persists a decision command and EVT-020 before API-117. Approval requires a prior distinct reviewer. Commerce entitlement is represented only after exact command acknowledgment.",
+        "description": "Signed SALES actor. Persists a decision command and EVT-020 before API-117. Wholesale/distributor approval requires a prior distinct document reviewer; AFFILIATE permits direct approval from SUBMITTED/UNDER_REVIEW by authorized Sales with a reason and no documents or price book. Commerce entitlement is represented only after exact command acknowledgment.",
         "security": [
           {
             "workload": [
@@ -11022,14 +11022,15 @@
           "partnerType": {
             "enum": [
               "DISTRIBUTOR",
-              "WHOLESALE"
+              "WHOLESALE",
+              "AFFILIATE"
             ]
           }
         }
       },
       "DistributorDocumentInput": {
         "type": "array",
-        "minItems": 1,
+        "minItems": 0,
         "maxItems": 20,
         "uniqueItems": true,
         "items": {
@@ -11066,16 +11067,54 @@
           "partnerType": {
             "enum": [
               "DISTRIBUTOR",
-              "WHOLESALE"
+              "WHOLESALE",
+              "AFFILIATE"
             ],
             "default": "DISTRIBUTOR"
           },
           "businessDetails": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 4000
+            "maxLength": 4000,
+            "description": "For AFFILIATE, a JSON string with required email, phone (international +country format), location and channels; optional audience, niche and strategy. Unknown keys, bank fields and businessReference are rejected. Other partner types retain existing text details."
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "partnerType": {
+                  "const": "AFFILIATE"
+                }
+              },
+              "required": [
+                "partnerType"
+              ]
+            },
+            "then": {
+              "required": [
+                "businessDetails"
+              ],
+              "properties": {
+                "documentIds": {
+                  "maxItems": 0
+                }
+              },
+              "not": {
+                "required": [
+                  "businessReference"
+                ]
+              }
+            },
+            "else": {
+              "properties": {
+                "documentIds": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
       },
       "DistributorApplicationPage": {
         "type": "object",
@@ -11153,7 +11192,7 @@
               "SUSPEND",
               "RETRY"
             ],
-            "description": "RETRY is available only for activation pending, by the original independent approver, with current If-Match. It reuses the saved command, decision and original idempotency key; client market/book overrides are rejected."
+            "description": "RETRY is available for activation pending, or affiliate suspension pending, only by the original decision actor with current If-Match. It restores the original market/book inputs and reuses the saved command and idempotency key; client overrides are rejected. Business approval retains its distinct-reviewer requirement."
           },
           "reason": {
             "type": "string",
@@ -11301,7 +11340,8 @@
           "partnerType": {
             "enum": [
               "DISTRIBUTOR",
-              "WHOLESALE"
+              "WHOLESALE",
+              "AFFILIATE"
             ]
           },
           "decisionReason": {

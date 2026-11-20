@@ -1,0 +1,44 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "commerce-20261120-affiliate-partner",
+        "author": "nigson-platform",
+        "logicalFilePath": "commerce/048-bp3-affiliate-partner.yaml",
+        "preConditions": [
+          {
+            "onFail": "HALT"
+          },
+          {
+            "dbms": {
+              "type": "postgresql"
+            }
+          },
+          {
+            "sqlCheck": {
+              "expectedResult": "1",
+              "sql": "SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+            }
+          }
+        ],
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "048-bp3-affiliate-partner.sql",
+              "relativeToChangelogFile": true
+            }
+          }
+        ],
+        "rollback": [
+          {
+            "sqlFile": {
+              "path": "048-bp3-affiliate-partner-rollback.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

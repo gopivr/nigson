@@ -197,5 +197,16 @@
   "/wh/paystack",
   "/api/v1/me/wishlist",
   "/api/v1/me/wishlist/items/{skuId}",
-  "/api/v1/staff/skus/{id}/commercial-prices"
+  "/api/v1/staff/skus/{id}/commercial-prices",
+  "/api/v1/me/affiliate",
+  "/api/v1/me/affiliate/links/{id}",
+  "/api/v1/affiliate-links/{code}",
+  "/api/v1/me/affiliate/earnings",
+  "/api/v1/me/affiliate/payouts",
+  "/api/v1/me/affiliate/bank-details",
+  "/api/v1/staff/affiliates",
+  "/api/v1/staff/affiliates/{id}/payouts",
+  "/api/v1/staff/affiliates/{id}/bank-review",
+  "/api/v1/staff/affiliate-payouts/{id}/paid",
+  "/api/v1/staff/affiliate-payouts/{id}/cancel"
 ]

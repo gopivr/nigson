@@ -76,6 +76,7 @@ public final class TrustFilter extends OncePerRequestFilter {
                         .contains(req.getRequestURI())
                         || req.getRequestURI()
                                 .matches("/api/v1/catalogue/products/[a-fA-F0-9-]{36}(?:/recommendations)?")
+                        || req.getRequestURI().matches("/api/v1/affiliate-links/[a-f0-9]{32}")
                         || req.getRequestURI().matches("/api/v1/catalogue/skus/[a-fA-F0-9-]{36}/price")
                                 && !req.getParameterMap().containsKey("organizationId"));
                 boolean providerCallback = req.getMethod().equals("POST")

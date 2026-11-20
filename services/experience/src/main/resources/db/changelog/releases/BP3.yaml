@@ -29,6 +29,12 @@
         "file": "../043-bp3-partner-type.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../044-bp3-affiliate-partner.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

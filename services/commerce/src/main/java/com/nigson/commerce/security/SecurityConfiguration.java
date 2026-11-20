@@ -56,7 +56,7 @@ public class SecurityConfiguration {
             .csrf(c->c.disable()).cors(c->c.disable())
             .authorizeHttpRequests(a->a.requestMatchers("/actuator/health/liveness","/actuator/health/readiness").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS,"/bff/**","/api/v1/**").permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.GET,"/bff/login","/bff/callback","/bff/session","/api/v1/catalogue/products","/api/v1/catalogue/products/*","/api/v1/catalogue/products/*/recommendations","/api/v1/catalogue/skus/*/price","/api/v1/catalogue/categories","/api/v1/catalogue/brands","/api/v1/markets").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/bff/login","/bff/callback","/bff/session","/api/v1/catalogue/products","/api/v1/catalogue/products/*","/api/v1/catalogue/products/*/recommendations","/api/v1/catalogue/skus/*/price","/api/v1/catalogue/categories","/api/v1/catalogue/brands","/api/v1/markets","/api/v1/affiliate-links/*").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/bff/register","/api/v1/webhooks/payments/paystack","/wh/paystack","/api/v1/webhooks/notifications/twilio/status","/api/v1/webhooks/logistics/*").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/bff/logout").authenticated()
                 .requestMatchers("/api/v1/**","/internal/**").authenticated().anyRequest().denyAll())
