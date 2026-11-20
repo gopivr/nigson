@@ -38,10 +38,9 @@ public final class DistributorService {
   private final Set<String> requiredTypes;
   private final String recipientGroup;
   private final EntitlementPort commerce;
-  private final boolean local;
 
   public DistributorService(JdbcTemplate jdbc, PlatformStore store, AuditWriter audit, Clock clock,
-      Set<String> requiredTypes, String recipientGroup, EntitlementPort commerce, boolean local) {
+      Set<String> requiredTypes, String recipientGroup, EntitlementPort commerce) {
     this.jdbc = jdbc;
     this.store = store;
     this.audit = audit;
@@ -49,12 +48,6 @@ public final class DistributorService {
     this.requiredTypes = Set.copyOf(requiredTypes);
     this.recipientGroup = recipientGroup;
     this.commerce = commerce;
-    this.local = local;
-  }
-
-  public DistributorService(JdbcTemplate jdbc, PlatformStore store, AuditWriter audit, Clock clock,
-      Set<String> requiredTypes, String recipientGroup, EntitlementPort commerce) {
-    this(jdbc, store, audit, clock, requiredTypes, recipientGroup, commerce, false);
   }
 
   private static PrivateWorkload.Route route(String api) {
@@ -102,11 +95,12 @@ public final class DistributorService {
   public DistributorValues.Application submit(PrivateWorkload.Proof proof, DistributorValues.Submission input,
       String key, UUID corr) {
     var actor = customer(proof, "API-092");
-    if (input == null || !input.countryCode().equals("NG") || requiredTypes.isEmpty() || recipientGroup == null
+    if (input == null || !input.countryCode().equals("NG")
+        || (!input.partnerType().equals("AFFILIATE") && requiredTypes.isEmpty()) || recipientGroup == null
         || recipientGroup.isBlank())
       throw new Problem.Failure(ProblemCode.FEATURE_DISABLED);
     ApiValues.idempotencyKey(key);
-    if (input.documents().size() != requiredTypes.size())
+    if (input.documents().size() != (input.partnerType().equals("AFFILIATE") ? 0 : requiredTypes.size()))
       throw rule();
     var orderedTypes = requiredTypes.stream().sorted().toList();
     var typedDocuments = new ArrayList<DistributorValues.Document>();
@@ -251,6 +245,9 @@ public final class DistributorService {
     if (oldRows.size() != 1)
       throw new Problem.Failure(ProblemCode.NOT_FOUND);
     var old = oldRows.getFirst();
+    boolean affiliate = "AFFILIATE".equals(old.get("partner_type"));
+    if (affiliate && in.priceBookId() != null)
+      throw ApiValues.invalid();
     String prior = (String) old.get("status");
     long version = ((Number) old.get("version")).longValue();
     var replay = store.replayLocal(who(actor.party()), "API-095:" + id, key, req);
@@ -258,7 +255,8 @@ public final class DistributorService {
     if (!replaying && version != expected)
       throw new Problem.Failure(ProblemCode.VERSION_MISMATCH);
     if (!replaying && in.decision().equals("APPROVE")
-        && (!prior.equals("UNDER_REVIEW") || actor.party().equals(old.get("reviewer_party_id"))))
+        && (affiliate ? !Set.of("SUBMITTED", "UNDER_REVIEW").contains(prior)
+            : (!prior.equals("UNDER_REVIEW") || actor.party().equals(old.get("reviewer_party_id")))))
       throw rule();
     if (!replaying && in.decision().equals("REJECT") && !Set.of("SUBMITTED", "UNDER_REVIEW").contains(prior))
       throw rule();
@@ -286,6 +284,8 @@ public final class DistributorService {
     var payload = EventCodec.JSON.createObjectNode();
     payload.put("decision", in.decision());
     payload.put("reason", in.reason());
+    payload.put("originalMarketId", in.marketId() == null ? "" : in.marketId().toString());
+    payload.put("originalPriceBookId", in.priceBookId() == null ? "" : in.priceBookId().toString());
     if (market != null)
       payload.put("marketId", market.toString());
     if (book != null)
@@ -308,7 +308,7 @@ public final class DistributorService {
             Long.class, id);
         Long count = db.queryForObject("SELECT count(*) FROM experience.application_document WHERE application_id=?",
             Long.class, id);
-        if (dirty != 0 || count < requiredTypes.size())
+        if (dirty != 0 || count < (affiliate ? 0 : requiredTypes.size()))
           throw rule();
       }
       int changed = db.update(
@@ -396,7 +396,7 @@ public final class DistributorService {
   private DistributorValues.Application retryActivation(PrivateWorkload.Proof proof, ActorAssertion.Actor actor,
       UUID id, long expected, UUID corr) {
     var rows = jdbc.queryForList(
-        "SELECT status,version,decision_payload,reviewer_party_id FROM experience.distributor_application WHERE id=?",
+        "SELECT status,version,decision_payload,reviewer_party_id,partner_type FROM experience.distributor_application WHERE id=?",
         id);
     if (rows.size() != 1)
       throw new Problem.Failure(ProblemCode.NOT_FOUND);
@@ -404,12 +404,22 @@ public final class DistributorService {
     long current = ((Number) row.get("version")).longValue();
     if (current != expected)
       throw new Problem.Failure(ProblemCode.VERSION_MISMATCH);
-    if (!"ACTIVATION_PENDING".equals(row.get("status")) || current < 1
-        || actor.party().equals(row.get("reviewer_party_id")))
+    boolean suspension = "SUSPENSION_PENDING".equals(row.get("status")) && "AFFILIATE".equals(row.get("partner_type"));
+    if ((!"ACTIVATION_PENDING".equals(row.get("status")) && !suspension) || current < 1
+        || (!suspension && actor.party().equals(row.get("reviewer_party_id"))))
       throw rule();
     var payload = EventCodec.JSON.readTree(row.get("decision_payload").toString());
-    var decision = DistributorValues.decision(payload);
-    if (!decision.decision().equals("APPROVE"))
+    var restored = com.nigson.shared.events.EventCodec.JSON.createObjectNode()
+        .put("decision", payload.path("decision").asString()).put("reason", payload.path("reason").asString());
+    for (String field : List.of("marketId", "priceBookId")) {
+      String originalField = field.equals("marketId") ? "originalMarketId" : "originalPriceBookId";
+      String value = payload.has(originalField) ? payload.path(originalField).asString()
+          : payload.path(field).asString("");
+      if (!value.isEmpty())
+        restored.put(field, value);
+    }
+    var decision = DistributorValues.decision(restored);
+    if (!decision.decision().equals(suspension ? "SUSPEND" : "APPROVE"))
       throw rule();
     long original = current - 1;
     var request = EventCodec.JSON.valueToTree(Map.of("id", id, "decision", decision.decision(), "reason",

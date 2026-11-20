@@ -16,7 +16,7 @@ public final class PricingValues {
  public record RetailBinding(UUID marketId,String code,UUID priceBookId,long version){}
  public record Page(List<Book> items,int page,int size,long totalElements,long totalPages,List<RetailBinding> retailBindings){public Page(List<Book> items,int page,int size,long totalElements,long totalPages){this(items,page,size,totalElements,totalPages,List.of());}}
  public record Price(UUID skuId,String unitAmount,String currency,String minimumQuantity,String packMultiple,long priceBookRevision,Instant validUntil){}
- public record QuoteInput(UUID cartId,UUID addressId,UUID carrierQuoteId,String couponCode){}
+ public record QuoteInput(UUID cartId,UUID addressId,UUID carrierQuoteId,String couponCode,@com.fasterxml.jackson.annotation.JsonIgnore UUID affiliateVisitId){public QuoteInput(UUID cart,UUID address,UUID carrier,String coupon){this(cart,address,carrier,coupon,null);}}
  public record Line(UUID skuId,String quantity,String unitAmount,String lineTotal){}
  public record Totals(String subtotal,String discount,String tax,String delivery,String grandTotal){}
  public record Quote(UUID id,long cartVersion,String currency,List<Line> lines,Totals totals,String quoteHash,Instant expiresAt){}

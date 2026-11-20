@@ -53,6 +53,48 @@
         "file": "../047-bp3-standard-sku-price.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../048-bp3-affiliate-partner.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../049-bp3-affiliate-link.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../050-bp3-affiliate-visit.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../051-bp3-affiliate-commission.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../052-bp3-affiliate-bank.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../053-bp3-affiliate-payout.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../054-bp3-affiliate-financial-guards.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

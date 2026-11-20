@@ -80,7 +80,7 @@ def contract():
 def extend_distributor_entitlements(spec):
     schemas=spec['components']['schemas']
     decision={'type':'string','enum':['ACTIVATE','SUSPEND']}
-    schemas['DistributorEntitlementCommand']=object_schema({'commandId':UUID,'applicationId':UUID,'partyId':UUID,'organizationName':{'type':'string','minLength':1,'maxLength':200},'countryCode':{'type':'string','pattern':'^[A-Z]{2}$'},'businessReference':{'type':'string','minLength':1,'maxLength':100},'decision':decision,'marketId':UUID,'priceBookId':UUID,'partnerType':{'type':'string','enum':['DISTRIBUTOR','WHOLESALE'],'default':'DISTRIBUTOR'}})
+    schemas['DistributorEntitlementCommand']=object_schema({'commandId':UUID,'applicationId':UUID,'partyId':UUID,'organizationName':{'type':'string','minLength':1,'maxLength':200},'countryCode':{'type':'string','pattern':'^[A-Z]{2}$'},'businessReference':{'type':'string','minLength':1,'maxLength':100},'decision':decision,'marketId':UUID,'priceBookId':UUID,'partnerType':{'type':'string','enum':['DISTRIBUTOR','WHOLESALE','AFFILIATE'],'default':'DISTRIBUTOR'}})
     schemas['DistributorEntitlementCommand']['required']=[k for k in schemas['DistributorEntitlementCommand']['required'] if k not in ('businessReference','priceBookId','partnerType')]
     schemas['DistributorEntitlementAcknowledgement']=object_schema({'commandId':UUID,'organizationId':UUID,'state':{'type':'string','enum':['PENDING','ACTIVE','SUSPENDED','REVOKED']},'revision':VERSION})
     op={'operationId':'API-117','description':'Private exact nigson-experience entitlement.write workload. Commerce exclusively owns organization, membership and entitlement state. ACTIVATION validates current NG/NGN2 market and optional active distributor book, then commits organization access, entitlement, redacted audit and EVT-015 before acknowledging. SUSPEND commits current entitlement suspension and EVT-015 before acknowledging; market disablement cannot block a suspension. Command UUID is the durable idempotency identity; identical retries return the stored acknowledgment and conflicting input returns 409. No experience schema access or staff-role mutation.','security':[{'commerceEntitlementWorkload':['entitlement.write']}],
@@ -90,6 +90,10 @@ def extend_distributor_entitlements(spec):
     }
     spec['components']['securitySchemes']['commerceEntitlementWorkload']={'type':'oauth2','flows':{'clientCredentials':{'tokenUrl':'/realms/nigson/protocol/openid-connect/token','scopes':{'entitlement.write':'Create or suspend a reviewed distributor entitlement'}}},'description':'Exact nigson-experience workload client, commerce audience, entitlement.write scope and private ingress; no browser session.'}
     spec['paths']['/internal/v1/distributor-entitlements']={'post':op}
+    from affiliate_links import extend as affiliate_extend
+    affiliate_extend(spec)
+    from affiliate_payouts import extend as payout_extend
+    payout_extend(spec)
     return spec
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args = parser.parse_args()

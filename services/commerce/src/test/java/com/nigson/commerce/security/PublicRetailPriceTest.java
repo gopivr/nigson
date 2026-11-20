@@ -44,6 +44,7 @@ class PublicRetailPriceTest {
    assertThat(reached[0]).isTrue();verify(sessions).read(id,true);verify(authority).resolve(record,null,Set.of());verify(sessions,never()).csrf(any(),any());
   }finally{SecurityContextHolder.clearContext();}
  }
+ @Test void affiliateVisitIsPublicWithoutIdentityCredentials()throws Exception {assertThat(passes("GET","/api/v1/affiliate-links/"+"a".repeat(32),"expired-session",false)).isTrue();}
  @Test void organizationPriceDoesNotBypassSessionValidation()throws Exception {
   assertThat(passes("GET",PRICE,"expired-session",true)).isFalse();
   assertThat(passes("GET",PRICE,UUID.randomUUID().toString(),true)).isFalse();

@@ -3227,6 +3227,666 @@
       "owner": "commerce",
       "phase": 1
     },
+    "commerce.affiliate_bank_detail": {
+      "checks": "revision>0; status IN (PENDING,APPROVED,REJECTED); cipher_mode IN (MOCK,TEST,LIVE)",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "party_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "revision",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "affiliate_bank_detail",
+          "name": "previous_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "payload_ciphertext",
+          "nullable": false,
+          "primary": false,
+          "type": "bytea"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "content_hash",
+          "nullable": false,
+          "primary": false,
+          "type": "char(64)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "cipher_mode",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(10)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "status",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "reviewed_by",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "reviewed_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "review_reason",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(500)"
+        }
+      ],
+      "keys": "UQ(party_id,revision)",
+      "module": "affiliate",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 3
+    },
+    "commerce.affiliate_commission_entry": {
+      "checks": "kind IN (EARN,REVERSE); amount>0; merchandise_basis>=0; rate=0.05",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "party_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "sales_order",
+          "name": "order_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "kind",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "amount",
+          "nullable": false,
+          "primary": false,
+          "type": "numeric(19,2)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "merchandise_basis",
+          "nullable": false,
+          "primary": false,
+          "type": "numeric(19,2)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "rate",
+          "nullable": false,
+          "primary": false,
+          "type": "numeric(5,4)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "business_key",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "affiliate_commission_entry",
+          "name": "reverses_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "refund",
+          "name": "refund_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        }
+      ],
+      "keys": "UQ(business_key); IX(party_id,created_at); IX(order_id)",
+      "module": "affiliate",
+      "mutation": "append-only",
+      "owner": "commerce",
+      "phase": 3
+    },
+    "commerce.affiliate_link": {
+      "checks": "char_length(code)=32",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "party_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "product",
+          "name": "product_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "code",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(32)"
+        }
+      ],
+      "keys": "UQ(party_id,product_id); UQ(code)",
+      "module": "affiliate",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 3
+    },
+    "commerce.affiliate_payout": {
+      "checks": "amount>0; state IN (PREPARED,PAID,CANCELLED)",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "party_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "affiliate_bank_detail",
+          "name": "bank_detail_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "period",
+          "nullable": false,
+          "primary": false,
+          "type": "char(7)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "state",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(20)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "amount",
+          "nullable": false,
+          "primary": false,
+          "type": "numeric(19,2)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "transfer_reference",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(120)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "paid_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "resolved_by",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "cancel_reason",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(500)"
+        }
+      ],
+      "keys": "UQ(party_id,period) WHERE state IN (PREPARED,PAID); UQ(party_id) WHERE state=PREPARED; UQ(transfer_reference); IX(party_id,created_at)",
+      "module": "affiliate",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 3
+    },
+    "commerce.affiliate_visit": {
+      "checks": "expires_at>clicked_at",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "affiliate_link",
+          "name": "link_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "clicked_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "expires_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        }
+      ],
+      "keys": "IX(expires_at)",
+      "module": "affiliate",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 3
+    },
     "commerce.asset_reference": {
       "checks": "byte_size>0; purpose IN (IMAGE,BROCHURE,SHIPPING_LABEL); status IN (UPLOADING,QUARANTINED,CLEAN,PUBLISHED,REJECTED); classification IN (PUBLIC,PRIVATE)",
       "creation_changeset": "commerce-20261006-012",

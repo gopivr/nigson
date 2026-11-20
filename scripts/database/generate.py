@@ -14,6 +14,11 @@ from catalog import ROOT, catalog
 
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
 ADDITIVE_TABLES = {
+    'commerce.affiliate_bank_detail': ('052-bp3-affiliate-bank', 'commerce-20261120-affiliate-bank', 'nigson-commerce', 'ADR-031: encrypted reviewed affiliate bank revisions.'),
+    'commerce.affiliate_payout': ('053-bp3-affiliate-payout', 'commerce-20261120-affiliate-payout', 'nigson-commerce', 'ADR-031: reserved monthly manual affiliate payouts, no automated transfer.'),
+    'commerce.affiliate_commission_entry': ('051-bp3-affiliate-commission', 'commerce-20261120-affiliate-commission', 'nigson-commerce', 'ADR-031: immutable verified retail affiliate earnings and refund reversals.'),
+    'commerce.affiliate_link': ('049-bp3-affiliate-link', 'commerce-20261120-affiliate-link', 'nigson-commerce', 'ADR-031: approved affiliate product links.'),
+    'commerce.affiliate_visit': ('050-bp3-affiliate-visit', 'commerce-20261120-affiliate-visit', 'nigson-commerce', 'ADR-031: seven-day same-browser affiliate visits; order snapshots are immutable.'),
     'commerce.standard_sku_price': ('047-bp3-standard-sku-price', 'commerce-20261119-standard-sku-price', 'nigson-commerce', 'ADR-030: explicit standard per-SKU partner prices; preserve legacy books.'),
     'experience.file_transfer': ('025-bp1-file-transfer', 'experience-20261019-files-001', 'nigson-files', 'EXP-FILES-001: Experience-owned pinned file scan/promotion intent; existing migrations preserved.'),
     'experience.lead_rate_limit': ('026-bp1-lead-rate-limit', 'experience-20261111-lead-rate-limit', 'nigson-platform', 'Public lead rate limiting stores only a keyed source hash; prior migrations preserved.'),
@@ -206,7 +211,8 @@ def generate():
         additive_columns = {'integration.notification_dispatch': {'command_hash','recipient_ciphertext','variables_ciphertext','context_key_revision','context_basis'}}
         fields = [column(field) for field in table['fields'] if field['name'] not in additive_columns.get(fullname,set())]
         fields.append(f'CONSTRAINT {name}_id_pk PRIMARY KEY (id)')
-        fields.append(f'CONSTRAINT {name}_version_ck CHECK (version >= 0)')
+        if any(field['name'] == 'version' for field in table['fields']):
+            fields.append(f'CONSTRAINT {name}_version_ck CHECK (version >= 0)')
         for field in table['fields']:
             if field['type'] == 'uuid':
                 fields.append(f"CONSTRAINT {name}_{field['name']}_nonnil_ck CHECK ({field['name']} <> '00000000-0000-0000-0000-000000000000'::uuid)")
@@ -214,7 +220,7 @@ def generate():
         for i, check in enumerate(checks, 1):
             fields.append(f'CONSTRAINT {name}_rule_{i}_ck CHECK ({predicate(check.strip())})')
         statements = [f'CREATE TABLE {fullname} (\n    ' + ',\n    '.join(fields) + '\n);']
-        privileges = 'SELECT, INSERT, DELETE' if table['mutation'] == 'set-membership' else 'SELECT, INSERT, UPDATE, DELETE'
+        privileges = 'SELECT, INSERT' if table['mutation'] == 'append-only' else 'SELECT, INSERT, DELETE' if table['mutation'] == 'set-membership' else 'SELECT, INSERT, UPDATE, DELETE'
         statements.append(f'GRANT {privileges} ON {fullname} TO nigson_{owner}_app;')
         for key in table['keys'].split(';'):
             match = re.fullmatch(r'(UQ|IX)\((.*?)\)(?: WHERE (.*))?', key.strip())
@@ -335,7 +341,7 @@ def generate():
     for suffix in ('.sql','-rollback.sql','.yaml'):
         path=base/(stem+suffix);files[path]=(ROOT/path).read_text()
     wrapper=base/'releases/BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
-    for owner,stem in [('commerce','046-bp3-partner-type'),('experience','043-bp3-partner-type')]:
+    for owner,stem in [('commerce','046-bp3-partner-type'),('experience','043-bp3-partner-type'),('commerce','048-bp3-affiliate-partner'),('experience','044-bp3-affiliate-partner'),('commerce','054-bp3-affiliate-financial-guards')]:
         base=Path(f'services/{owner}/src/main/resources/db/changelog')
         for suffix in ('.sql','-rollback.sql','.yaml'):
             path=base/(stem+suffix);files[path]=(ROOT/path).read_text()

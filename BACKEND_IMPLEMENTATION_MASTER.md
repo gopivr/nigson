@@ -2646,6 +2646,122 @@ coupon_id uuid NULL FK coupon
 - **Checks:** kind IN (EARN,REDEEM,EXPIRE,REVERSE,DEALER_ISSUE); amount>=0.
 - **Business invariant:** Represent value changes as new entries. Unspent balance is the signed ledger sum, never an editable profile counter. Multiple partial-refund reversals may reference one earning. Lock earning/order and enforce cumulative reverse amount<=earned; business_key includes refund_id. Round cumulative entitlement then subtract prior reversals.
 
+### commerce.affiliate_bank_detail
+
+Owner: `commerce`; module: `affiliate`; introduced: BP3; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+party_id uuid NN FK party
+revision bigint NN
+previous_id uuid NULL FK affiliate_bank_detail
+payload_ciphertext bytea NN
+content_hash char(64) NN
+cipher_mode varchar(10) NN
+status varchar(20) NN
+reviewed_by uuid NULL FK party
+reviewed_at timestamptz NULL
+review_reason varchar(500) NULL
+```
+
+- **Keys and indexes:** UQ(party_id,revision).
+- **Checks:** revision>0; status IN (PENDING,APPROVED,REJECTED); cipher_mode IN (MOCK,TEST,LIVE).
+- **Business invariant:** Encrypted immutable Nigerian account details per revision; current revision is largest revision under party lock. Changes reset review and are blocked during prepared payout. Context binds ciphertext to party/revision ID under Commerce payment encryption keys; random secret padding prevents an enumerable plaintext commitment. No plaintext bank numbers in audit/idempotency records. Existing key rotation must retain keys for bank history too.
+
+### commerce.affiliate_payout
+
+Owner: `commerce`; module: `affiliate`; introduced: BP3; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+party_id uuid NN FK party
+bank_detail_id uuid NN FK affiliate_bank_detail
+period char(7) NN
+state varchar(20) NN
+amount numeric(19,2) NN
+transfer_reference varchar(120) NULL
+paid_at timestamptz NULL
+resolved_by uuid NULL FK party
+cancel_reason varchar(500) NULL
+```
+
+- **Keys and indexes:** UQ(party_id,period) WHERE state IN (PREPARED,PAID); UQ(party_id) WHERE state=PREPARED; UQ(transfer_reference); IX(party_id,created_at).
+- **Checks:** amount>0; state IN (PREPARED,PAID,CANCELLED).
+- **Business invariant:** One monthly full-available-balance manual payout per affiliate (Africa/Lagos calendar), immutable amount/bank revision. PREPARED reserves until recorded PAID or confirmed-no-transfer cancellation; no automatic expiry or bank/provider call. Deduct paid/prepared totals from currently qualified net commissions; post-payment refunds create carry-forward recovery against future earnings. Both ADMIN and FINANCE use normal current login, explicit user decision 20 November 2026.
+
+### commerce.affiliate_commission_entry
+
+Owner: `commerce`; module: `affiliate`; introduced: BP3; mutation: append-only.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+party_id uuid NN FK party
+order_id uuid NN FK sales_order
+kind varchar(20) NN
+amount numeric(19,2) NN
+merchandise_basis numeric(19,2) NN
+rate numeric(5,4) NN
+business_key varchar(200) NN
+reverses_id uuid NULL FK affiliate_commission_entry
+refund_id uuid NULL FK refund
+```
+
+- **Keys and indexes:** UQ(business_key); IX(party_id,created_at); IX(order_id).
+- **Checks:** kind IN (EARN,REVERSE); amount>0; merchandise_basis>=0; rate=0.05.
+- **Business invariant:** One immutable earning per verified retail order and cumulative bounded refund reversals under the order lock. NGN only, 5 percent after merchandise discounts excluding shipping/tax. Attribution and policy frozen at checkout. Availability is derived from all-order confirmed delivery plus seven days; unresolved refunds and operational holds block availability. No payout is implemented by this ledger increment.
+
+### commerce.affiliate_link
+
+Owner: `commerce`; module: `affiliate`; introduced: BP3; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+party_id uuid NN FK party
+product_id uuid NN FK product
+code varchar(32) NN
+```
+
+- **Keys and indexes:** UQ(party_id,product_id); UQ(code).
+- **Checks:** char_length(code)=32.
+- **Business invariant:** Stable random product link owned by an approved affiliate; existing customer referral rewards remain separate.
+
+### commerce.affiliate_visit
+
+Owner: `commerce`; module: `affiliate`; introduced: BP3; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+link_id uuid NN FK affiliate_link
+clicked_at timestamptz NN
+expires_at timestamptz NN
+```
+
+- **Keys and indexes:** IX(expires_at).
+- **Checks:** expires_at>clicked_at.
+- **Business invariant:** Opaque anonymous same-browser visit; latest valid link replaces this browser visit, server expiry is seven days. Checkout freezes attribution; no money or customer PII is stored here.
+
 ### commerce.referral_code
 
 Owner: `commerce`; module: `reward`; introduced: BP2; mutation: versioned.
@@ -10263,3 +10379,18 @@ API-032 refreshes an ordinary pre-approval retail cart to the canonical business
 
 
 ADR-030 browser boundary correction (19 November 2026): API-026 is optionally authenticated. Guest requests without a session remain public retail reads. When a BFF cookie is supplied, TrustFilter validates it and resolves current Commerce identity before PriceQueryService runs; malformed/expired cookies fail AUTH_REQUIRED rather than downgrading to retail. Other public catalogue routes retain their existing public-cookie behavior. Personalized prices remain no-store. Catalogue cards must use the minimum/pack from the same current price response passed to Add to Cart.
+
+
+### ADR-031: Basic affiliate applications (20 November 2026)
+Reuse Experience-owned distributor_application as the existing typed partner application workflow; add AFFILIATE to partner_type without changing historical approvals. Affiliate submission is authenticated, includes applicant name and structured contact/channel details in business_details, and requires no documents or bank details. Existing API-092/093/094/095/117/177 routes carry the new type. Authorized Sales staff may approve an affiliate directly from SUBMITTED with a reason, reject, or suspend; independent business-document review remains mandatory for WHOLESALE/DISTRIBUTOR. Only owner Commerce ACK confirms approval/suspension; unknown outcomes remain pending and retry uses the existing saved command.
+Commerce reuses the account grouping/membership and account_entitlement structures with a separate AFFILIATE_MARKETING entitlement, never BUSINESS_PURCHASING or a staff role. No business reference or price book may be supplied for affiliate activation. Party locking prevents affiliate/business overlap and duplicate affiliate activations; suspended claims retain exclusivity. Affiliates shop at retail, including after affiliate suspension. No commission is earned in this first increment.
+Approved future policy: 5 percent of eligible retail merchandise after discounts, excluding shipping/tax; latest valid same-browser referral within seven days; no self-referrals; available seven days after delivery; monthly manual full-available-balance payouts with reviewed payout details. Links, attribution, commissions, bank details and payouts are subsequent increments and remain unimplemented by this application change.
+Additive BP3 migrations Commerce048 and Experience044 expand only partner type checks; rollback refuses affiliate records. No cross-owner SQL, fabricated approval or financial side effect.
+
+
+### AFFILIATE-LINKS-001 (20 November 2026)
+API-222 GET /api/v1/me/affiliate returns current affiliate access (ACTIVE/SUSPENDED/NONE). API-223 PUT /api/v1/me/affiliate/links/{productId} creates/returns a stable random product referral link for a current approved affiliate, with CSRF and idempotency. API-224 GET /api/v1/affiliate-links/{code} is a public bounded-rate visit and relative product redirect; it writes a seven-day HttpOnly SameSite=Lax cookie with a random visit capability, Secure outside explicitly insecure local development. Invalid/suspended affiliates cannot create new attribution. No arbitrary redirect target or browser financial amount is accepted.
+The normal BFF login return path preserves product navigation; the separate referral cookie survives login. Checkout reads this cookie, rejects self/expired/suspended/business attribution and freezes eligible attribution in the existing order commercial snapshot. Current visit/eligibility changes invalidate old quote hashes; placed orders retain their original snapshot. No commission accrual or payout enabled.
+API-225 GET /api/v1/me/affiliate/earnings: current approved/suspended affiliate own-account bounded commission page and totals. New attributed orders freeze commissionRate=0.05 and holdDays=7; verified payment hooks append immutable earnings, successful refund hooks append cumulative proportional merchandise reversals (user approved 20 November 2026). Complete delivery plus seven days qualifies availability; unresolved refunds/order holds block it. No bank details or payouts in this increment. ADR-031 and Commerce051 apply.
+API-226..233 (ADR-031, 20 November 2026): affiliate banking and monthly manual payouts. Own affiliate overview/bank save; current ADMIN/FINANCE normal-login list/detail, bank review, prepare, record bank-confirmed payment or confirmed-no-transfer cancellation. Money never transferred by this app. Encrypted bank revisions, fixed prepared amount/bank/month, unique references, retained financial history, later refund recovery against future earnings; Commerce052/053/054. Other domain MFA policies unchanged.
+Affiliate financial command identity: prepare request UUID is the durable payout ID, so cross-month retries after temporary command expiry return the original resource. Bank request UUID maps one-way with party/purpose to an opaque bank revision ID; do not expose bank replay keys through bank DTO IDs. ADR-031.
