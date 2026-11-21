@@ -1,6 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
-set PYTHON=C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe
+where python >nul 2>nul
+if %ERRORLEVEL% equ 0 (
+    set PYTHON=python
+) else (
+    set PYTHON=C:\Python315\python.exe
+)
 
 set TARGET=
 :parse_args

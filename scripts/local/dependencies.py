@@ -143,7 +143,7 @@ def read_pandago_staging_settings(settings: dict[str, str]) -> dict[str, str]:
     path = ROOT / ".local/pandago/account.env"
     if not path.is_file():
         raise ValueError("Enable delivery quotes requires the verified staging account at .local/pandago/account.env")
-    if path.stat().st_mode & 0o077:
+    if sys.platform != "win32" and (path.stat().st_mode & 0o077):
         raise ValueError("PandaGo staging account file permissions must be 600")
     account = read_env_settings(path)
     if account.get("PANDAGO_MODE") != "TEST":
