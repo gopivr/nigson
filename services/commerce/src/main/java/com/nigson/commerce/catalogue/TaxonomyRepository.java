@@ -6,6 +6,8 @@ public interface TaxonomyRepository {
     enum Kind { BRAND,CATEGORY }
     record Record(UUID id,String name,String slug,UUID parentId,int sortOrder,boolean active,long version){}
     void serialize();
+    java.util.List<Record> categories();
+    java.util.List<Record> brands();
     Record find(Kind kind,UUID id);
     Record save(Kind kind,Record value,String actor,boolean create);
     void validateTree(UUID id,UUID parent);

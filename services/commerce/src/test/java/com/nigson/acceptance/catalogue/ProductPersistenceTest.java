@@ -68,6 +68,19 @@ class ProductPersistenceTest {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM commerce.audit_record WHERE resource_id=?",Integer.class,first.id())).isEqualTo(2);
         assertThatThrownBy(()->reads.product(first.id(),code)).hasMessage("NOT_FOUND");
     }
+    @Test void explicitLocalImagelessPublicationPreservesOtherChecksAndNeverPublishesUnscannedAssets(){
+        var localAssets=new JdbcCatalogueAssets(jdbc,"local","",new CataloguePublicationPolicy("local",true));
+        var manager=new DataSourceTransactionManager(jdbc.getDataSource());var metrics=new SimpleMeterRegistry();
+        var localService=new ProductService(new JdbcProductRepository(jdbc,clock,localAssets),new JdbcTaxonomyRepository(jdbc,clock),new CatalogueAuthority(jdbc),new PlatformStore(jdbc,manager,clock,metrics),new AuditWriter(jdbc,clock,metrics),clock);
+        var product=create("Synthetic imageless publication");var body=EventCodec.JSON.valueToTree(Map.of("action","PUBLISH","reason","Synthetic local publication"));
+        assertThatThrownBy(()->localService.publish(publisher(),product.id(),0,body,UUID.randomUUID().toString(),UUID.randomUUID())).hasMessage("CATALOGUE_RULE_VIOLATION");
+        service.sku(editor(),product.id(),true,0,sku("SYN-"+UUID.randomUUID()),UUID.randomUUID().toString(),UUID.randomUUID());eligibility(product.id());
+        UUID quarantined=asset(product.id(),"QUARANTINED","IMAGE","PUBLIC");
+        var result=localService.publish(publisher(),product.id(),1,body,UUID.randomUUID().toString(),UUID.randomUUID());assertThat(result.status()).isEqualTo("ACTIVE");
+        assertThat(reads.product(product.id(),code).assets()).isEmpty();
+        assertThat(jdbc.queryForObject("SELECT status FROM commerce.asset_reference WHERE id=?",String.class,quarantined)).isEqualTo("QUARANTINED");
+        assertThat(reads.search(search("",0,100)).items()).extracting(CatalogueValues.Summary::id).contains(product.id());
+    }
     @Test void publicationRequiresSkuTaxonomyEligibilityAndCleanPublicImageThenArchiveHidesImmediately(){
         var product=create("Synthetic publication");assertThatThrownBy(()->publish(product,0,"PUBLISH","missing")).hasMessage("CATALOGUE_RULE_VIOLATION");
         service.sku(editor(),product.id(),true,0,sku("SYNTHETIC-"+product.id()),"sku",UUID.randomUUID());eligibility(product.id());

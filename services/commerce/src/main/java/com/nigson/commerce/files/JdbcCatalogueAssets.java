@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 /** Owns the asset publication transition inside the caller's commerce transaction. */
 @Component
 public final class JdbcCatalogueAssets implements CatalogueAssets {
-    private final JdbcTemplate jdbc;private final String base;
-    public JdbcCatalogueAssets(JdbcTemplate jdbc,@Value("${APP_ENV}")String env,@Value("${NIGSON_PUBLIC_ASSET_BASE_URL:}")String configured){
-        this.jdbc=jdbc;
+    private final JdbcTemplate jdbc;private final String base;private final CataloguePublicationPolicy policy;
+    public JdbcCatalogueAssets(JdbcTemplate jdbc,String env,String configured){this(jdbc,env,configured,new CataloguePublicationPolicy(env,false));}
+    @org.springframework.beans.factory.annotation.Autowired
+    public JdbcCatalogueAssets(JdbcTemplate jdbc,@Value("${APP_ENV}")String env,@Value("${NIGSON_PUBLIC_ASSET_BASE_URL:}")String configured,CataloguePublicationPolicy policy){
+        this.jdbc=jdbc;this.policy=policy;
         if(configured.isBlank()){base=null;return;}
         URI uri;try{uri=URI.create(configured);}catch(IllegalArgumentException bad){throw new IllegalArgumentException("PUBLIC_ASSET_TARGET_INVALID");}
         if(!"https".equals(uri.getScheme())||uri.getHost()==null||uri.getUserInfo()!=null||uri.getQuery()!=null||uri.getFragment()!=null||!uri.normalize().equals(uri)||!Set.of("local","test").contains(env)&&(uri.getHost().endsWith(".test")||uri.getHost().endsWith(".invalid")||uri.getHost().endsWith(".example")||uri.getHost().endsWith(".localhost")||uri.getHost().matches("[0-9.]+")||uri.getHost().contains(":")||Set.of("localhost","example.com","example.net","example.org").contains(uri.getHost())))throw new IllegalArgumentException("PUBLIC_ASSET_TARGET_INVALID");
@@ -43,6 +45,7 @@ public final class JdbcCatalogueAssets implements CatalogueAssets {
     public void publishClean(UUID product,String actor){
         if(!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("LOCAL_TRANSACTION_REQUIRED");
         var keys=jdbc.query("SELECT object_key FROM commerce.asset_reference WHERE product_id=? AND purpose='IMAGE' AND classification='PUBLIC' AND status IN ('CLEAN','PUBLISHED') ORDER BY id LIMIT 101 FOR UPDATE",(r,n)->r.getString(1),product);
+        if(keys.isEmpty()&&!policy.imageRequired())return;
         if(keys.isEmpty()||keys.size()>100)throw new Problem.Failure(ProblemCode.CATALOGUE_RULE_VIOLATION);
         keys.forEach(this::url);
         jdbc.update("UPDATE commerce.asset_reference SET status='PUBLISHED',version=version+1,updated_by=?,updated_at=now() WHERE product_id=? AND classification='PUBLIC' AND purpose IN ('IMAGE','BROCHURE') AND status='CLEAN'",actor,product);

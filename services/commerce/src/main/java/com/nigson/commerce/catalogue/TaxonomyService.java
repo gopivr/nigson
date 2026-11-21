@@ -11,6 +11,8 @@ import com.nigson.shared.security.ActorAssertion;
 public final class TaxonomyService {
     private final TaxonomyRepository repository;private final CatalogueAuthority authority;private final PlatformStore commands;private final AuditWriter audit;private final Clock clock;
     public TaxonomyService(TaxonomyRepository repository,CatalogueAuthority authority,PlatformStore commands,AuditWriter audit,Clock clock){this.repository=repository;this.authority=authority;this.commands=commands;this.audit=audit;this.clock=clock;}
+    public List<TaxonomyRepository.Record> categories(ActorAssertion.Actor actor){authority.require(actor,"CONTENT_EDITOR");return repository.categories();}
+    public List<CatalogueValues.Taxonomy> brands(ActorAssertion.Actor actor){authority.require(actor,"CONTENT_EDITOR");return repository.brands().stream().map(v->new CatalogueValues.Taxonomy(v.id(),v.name(),v.slug(),null,v.active(),v.version())).toList();}
     public CatalogueValues.Taxonomy write(ActorAssertion.Actor actor,TaxonomyRepository.Kind kind,UUID id,long expected,JsonNode input,String key,UUID correlation){
         authority.require(actor,"CONTENT_EDITOR");boolean create=id==null;ApiValues.idempotencyKey(key);
         if(expected<0||expected==Long.MAX_VALUE||correlation==null||correlation.equals(new UUID(0,0)))throw ApiValues.invalid();

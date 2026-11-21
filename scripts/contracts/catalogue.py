@@ -80,6 +80,22 @@ def extend(spec):
         read['responses']['200']['headers'] = {'Cache-Control':{'schema':{'const':'no-store'}},'ETag':{'schema':{'type':'string'}}}
         spec['paths'][path] = {'get':read}
     mutations=[(17,'post','/api/v1/staff/products','ProductCreate','ProductAdminDTO',201,False),(18,'patch','/api/v1/staff/products/{id}','ProductPatch','ProductAdminDTO',200,True),(19,'post','/api/v1/staff/products/{id}/publication','PublicationCommand','ProductAdminDTO',201,True),(20,'post','/api/v1/staff/products/{id}/skus','SkuCreate','SkuAdminDTO',201,True),(21,'patch','/api/v1/staff/skus/{id}','SkuPatch','SkuAdminDTO',200,True),(22,'post','/api/v1/staff/brands','BrandCreate','TaxonomyDTO',201,False),(23,'patch','/api/v1/staff/brands/{id}','BrandPatch','TaxonomyDTO',200,True),(24,'post','/api/v1/staff/categories','CategoryCreate','TaxonomyDTO',201,False),(25,'patch','/api/v1/staff/categories/{id}','CategoryPatch','TaxonomyDTO',200,True)]
+    schemas['StaffCategoryDTO'] = object_schema({'id':UUID,'name':text(120),'slug':text(140),'parentId':nullable(UUID),'sortOrder':{'type':'integer','minimum':-2147483648,'maximum':2147483647},'active':{'type':'boolean'},'version':VERSION})
+    staff_categories = op('API-234','StaffCategoryDTO',[])
+    staff_categories['description'] = 'Current CONTENT_EDITOR, unscoped staff actor. Includes active and inactive non-deleted categories with parent, sort order and optimistic version. Bounded to 1000; overflow fails closed. No query parameters or request body. No-store.'
+    staff_categories['responses']['200']['content']['application/json']['schema'] = {'type':'array','maxItems':1000,'items':REF('StaffCategoryDTO')}
+    staff_categories['responses']['200']['headers'] = {'Cache-Control':{'schema':{'const':'no-store'}}}
+    spec['paths']['/api/v1/staff/categories'] = {'get':staff_categories}
+    staff_brands = op('API-235','TaxonomyDTO',[])
+    staff_brands['description'] = 'Current CONTENT_EDITOR and unscoped staff actor. No-store bounded list of non-deleted active and inactive brands with optimistic versions. No query parameters or body. Fail closed beyond 1000 brands.'
+    staff_brands['responses']['200']['content']['application/json']['schema'] = {'type':'array','maxItems':1000,'items':REF('TaxonomyDTO')}
+    staff_brands['responses']['200']['headers'] = {'Cache-Control':{'schema':{'const':'no-store'}}}
+    spec['paths']['/api/v1/staff/brands'] = {'get':staff_brands}
+    schemas['CataloguePublicationPolicyDTO'] = object_schema({'imageRequired':{'type':'boolean'}})
+    publication_policy = op('API-236','CataloguePublicationPolicyDTO',[])
+    publication_policy['description'] = 'Current CONTENT_EDITOR, unscoped actor. Effective image publication requirement; false only for explicitly enabled APP_ENV=local development. No-store, no query/body, no mutation. Other publication and asset security checks remain authoritative.'
+    publication_policy['responses']['200']['headers'] = {'Cache-Control':{'schema':{'const':'no-store'}}}
+    spec['paths']['/api/v1/staff/catalogue/publication-policy'] = {'get':publication_policy}
     for number, method, path, request, response, status, versioned in mutations:
         params=[parameter('Idempotency-Key','header',{'type':'string','minLength':1,'maxLength':100,'pattern':'^[ -~]+$'},True),parameter('X-CSRF-TOKEN','header',{'type':'string','minLength':43,'maxLength':43},True)]
         if '{id}' in path: params.insert(0,parameter('id','path',UUID,True))

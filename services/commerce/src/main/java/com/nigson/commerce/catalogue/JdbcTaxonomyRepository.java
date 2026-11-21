@@ -8,9 +8,11 @@ import com.nigson.shared.problem.*;
 import com.nigson.shared.events.EventCodec;
 
 public final class JdbcTaxonomyRepository implements TaxonomyRepository {
+    public List<Record> brands(){var rows=jdbc.query("SELECT id,name,slug,active,version FROM commerce.brand WHERE deleted_at IS NULL ORDER BY name,id LIMIT 1001",(r,n)->new Record(r.getObject("id",UUID.class),r.getString("name"),r.getString("slug"),null,0,r.getBoolean("active"),r.getLong("version")));if(rows.size()>1000)throw rule();return rows;}
     private final JdbcTemplate jdbc;private final Clock clock;
     public JdbcTaxonomyRepository(JdbcTemplate jdbc,Clock clock){this.jdbc=jdbc;this.clock=clock;}
     private String table(Kind kind){return kind==Kind.BRAND?"commerce.brand":"commerce.category";}
+    public List<Record> categories(){var rows=jdbc.query("SELECT id,name,slug,parent_id,sort_order,active,version FROM commerce.category WHERE deleted_at IS NULL ORDER BY sort_order,name,id LIMIT 1001",(r,n)->new Record(r.getObject("id",UUID.class),r.getString("name"),r.getString("slug"),r.getObject("parent_id",UUID.class),r.getInt("sort_order"),r.getBoolean("active"),r.getLong("version")));if(rows.size()>1000)throw rule();return rows;}
     public void serialize(){
         if(!TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("LOCAL_TRANSACTION_REQUIRED");
         jdbc.execute("SET LOCAL lock_timeout='500ms'");jdbc.execute("SET LOCAL statement_timeout='2s'");
