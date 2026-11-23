@@ -9,7 +9,11 @@ import org.springframework.core.env.Environment;
 
 /** Carrier orchestration depends on provider adapters, never the reverse. */
 @Configuration(proxyBeanMethods=false)
+@org.springframework.scheduling.annotation.EnableScheduling
 public class PandagoConfiguration {
+ @Bean @ConditionalOnProperty(name="NIGSON_CARRIER_CANCELLATION_ENABLED",havingValue="true")
+ PandagoCancellationService pandagoCancellationService(org.springframework.jdbc.core.JdbcTemplate jdbc,org.springframework.transaction.PlatformTransactionManager manager,PandagoAdapter provider,Environment e,AuditWriter audit){if(!e.getProperty("NIGSON_SECURITY_ENABLED",Boolean.class,false))throw new IllegalArgumentException("CARRIER_PRIVATE_SECURITY_REQUIRED");return new PandagoCancellationService(jdbc,manager,provider,java.time.Clock.systemUTC(),java.util.UUID.fromString(e.getRequiredProperty("NIGSON_CARRIER_CREATION_GENERATION")),java.time.Instant.parse(e.getRequiredProperty("NIGSON_CARRIER_CREATION_NOT_BEFORE")),java.time.Instant.parse(e.getRequiredProperty("NIGSON_PANDAGO_APPROVAL_UNTIL")),audit);}
+
  @Bean @ConditionalOnProperty(name="NIGSON_PANDAGO_ENABLED",havingValue="true")
  PandagoQuoteService pandagoQuoteService(PandagoAdapter provider,PlatformStore store,AuditWriter audit,Environment e,com.nigson.integration.providers.GeocodingProvider geocoder){
   return new PandagoQuoteService(provider,store,audit,java.time.Clock.systemUTC(),e.getRequiredProperty("NIGSON_PANDAGO_APPROVAL"),java.time.Instant.parse(e.getRequiredProperty("NIGSON_PANDAGO_APPROVAL_UNTIL")),geocoder);

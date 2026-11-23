@@ -17,3 +17,81 @@ API-040 requires current owned order/key/CSRF/If-Match. It inspects uncertain pa
 API-121 is private exact nigson-experience/purchase-proof.read. The real workload decoder enforces issuer, client, audience, scope and private ingress; browser cookies/actors cannot substitute. The response contains only eligible, reasonCode and revision after party/line/product association, current active party, independent successful settlement and nonfully-refunded quantity checks. It exposes no account/order details and creates no mutable proof record.
 
 Run `ENV=test JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-25.jdk/Contents/Home DOCKER_CONFIG=/private/tmp/nigson-public-image-fetch DOCKER_HOST=unix:///Users/gopiravi/.docker/run/docker.sock python3 scripts/order/verify.py` (or order-check with the same environment). The harness uses isolated native PostgreSQL/all-owner migrations and the pinned previously qualified stateful WireMock Paystack server/dummy credentials. Fixtures explicitly mark prices/tax/location/provider metadata synthetic. Owned API-041/042/052/053/054/118, signed durable callbacks/refund reconciliation/grace expiry and polling are covered by the payment increment and docs/runbooks/payments.md. The complete PAYSTACK-001/CARRIER-001 release qualification remains separate. Passing this harness does not activate actual business policies or qualify genuine provider accounts.
+
+
+## Customer cancellation: PandaGo and Paystack (ADR-033)
+
+API-040 now accepts an unshipped order cancellation and normally returns 202.
+GET order and command replay return the current `cancellation` and
+`cancellationAllowed` values. A request excludes preparation, booking, hosted
+payment initialization and physical dispatch under the Commerce order lock.
+SHIPPED/DELIVERED orders require the separate returns workflow.
+
+Deploy Commerce036/037 and Integration027 migrations before the new artifacts.
+Every Commerce instance must honor the new exclusion before requests are served.
+The Commerce saga worker runs when NIGSON_ORDER_CHECKOUT_ENABLED=true; keep that
+existing setting enabled while servicing these cancellation requests.
+Enable `NIGSON_CARRIER_CANCELLATION_ENABLED=true` on Commerce and Integration
+(together, including docker-compose.pandago.yml); the flag defaults off. Existing
+PandaGo approval, mode/account binding, private workload credentials, externally
+managed creation generation/cutoff and the real Paystack integration ID remain
+required. Do not replace them with guessed values. Restart the applications and
+rebuild/restart the customer and Admin frontends. This implementation does not
+change an existing deployment or its .env automatically.
+
+- REQUESTED: durable request accepted; worker checks current payment/delivery facts.
+- WAITING_PAYMENT: verify/listen for Paystack outcome; no assumption that an expired
+  checkout URL means failed payment. Late success records money without allocating
+  cancelled stock or restarting fulfillment.
+- WAITING_CARRIER: the original shipment cancellation is queued or unknown. Check
+  Commerce carrier_cancellation and the matching Integration source_request_id.
+  Unprepared bookings can be suppressed locally. A prepared booking with no known
+  PandaGo order ID needs reference reconciliation through the provider/operator;
+  do not create another delivery or infer that a missing local ID proves absence.
+- REJECTED: authoritative refusal or physical handover prevents automatic cancellation.
+  Stock and money remain intact; contact the carrier/support for the appropriate
+  exception or returns workflow. Do not clear a hold to force dispatch of an
+  uncertain cancellation.
+- CANCELLED: every unshipped delivery is cancelled; reserved/allocated stock has
+  been released exactly once without adding physical on_hand. A captured payment
+  remains PAID until independently verified refund success.
+
+Cancellation requests the remaining captured amount, including the frozen delivery
+amount, less successful and active refund reservations. It does not deduct invented
+carrier/payment fees. COD without collection creates no Paystack refund. Existing
+Finance and two-person approval rules remain in force. Finance can open Admin
+Orders, refresh the list, view the cancelled order and choose Review and approve
+refund. The dialog confirms the current refund amount fetched from API-054 before
+API-053 approval. Recent MFA and a separate approver (when configured) are enforced
+by the backend. The order exposes only the opaque refund ID and safe status, not
+provider/account details.
+
+Refund REQUESTED needs Finance review. APPROVED/SUBMITTING/PENDING are processed by
+the existing Commerce payment worker. UNKNOWN (including Paystack needs-attention)
+requires reconciliation/customer assistance; it is not refund success. FAILED or
+REJECTED requires Finance attention; fulfillment stays CANCELLED and no automatic
+replacement refund is created. Paystack integration/account configuration must be
+present for execution. Payment workers/webhooks independently verify the provider
+outcome. Successful full refund changes paymentStatus to REFUNDED while order and
+fulfillment remain CANCELLED.
+
+PandaGo DELETE is authorized only once after a committed SUBMITTING checkpoint
+and live fenced lease. 204 proves cancellation; legacy 203 requires GET proof.
+409 is a known refusal; 404/timeout/malformed/unavailable responses remain UNKNOWN.
+Repeated unknown reads replay the same persisted receipt; later cancellation proof
+gets a new deterministic receipt ID. A known booking outcome arriving later can
+permit the first cancellation DELETE only when no cancellation was ever submitted
+and current generation/cutoff/account/approval checks still pass. Submitted, expired
+or restored write authority cannot be recreated by retries.
+
+Customer order pages poll cancellation/refund progress for up to ten minutes;
+reload later for long bank processing. Admin Orders has an explicit Refresh action.
+Logs use ORDER_CANCELLATION_RECOVERY_REQUIRED/REQUIRES_REVIEW and
+PANDAGO_CANCELLATION_RECOVERY_REQUIRED/REQUIRES_REVIEW without personal/provider
+payloads. Durable rows, audit records and original receipt IDs provide recovery
+and operational evidence. Never manually set CANCELLED/REFUNDED to hide uncertainty.
+
+Qualification: `python3 scripts/carrier/verify_order_cancellation.py` uses disposable
+PostgreSQL and isolated provider simulators; `verify_cancellation_migrations.py`
+checks previous-release upgrades, checksums, retained booking evidence and rollback.
+Neither command establishes genuine PandaGo/Paystack or browser acceptance.

@@ -14,11 +14,15 @@ class OrderContracts(unittest.TestCase):
             if api in {'API-037','API-040','API-044'}:self.assertTrue({'Idempotency-Key','X-CSRF-TOKEN'}.issubset({p['name'] for p in op['parameters'] if p['required']}))
             if api in {'API-040','API-044'}:self.assertIn('If-Match',{p['name'] for p in op['parameters']})
         self.assertIn('202',paths['/api/v1/checkout/attempts']['post']['responses'])
+        self.assertIn('202',paths['/api/v1/orders/{id}/cancellation']['post']['responses'])
     def test_frozen_values_are_closed_and_private_proof_is_boolean_only(self):
         s=json.loads((ROOT/'contracts/openapi/commerce.yaml').read_text())['components']['schemas']
         for name in ['CheckoutInput','OrderDTO','OrderLineDTO','OrderTotals','ProofDTO','PurchaseProofInput','OrderAddressSnapshot']:self.assertFalse(s[name]['additionalProperties'])
         self.assertEqual(set(s['ProofDTO']['properties']),{'eligible','reasonCode','revision'})
         self.assertEqual(s['OrderDTO']['properties']['lines']['maxItems'],100)
+        self.assertFalse(s['OrderCancellation']['additionalProperties'])
+        self.assertEqual(s['OrderDTO']['properties']['cancellationAllowed'],{'type':'boolean'})
+        self.assertIn('refundId',s['OrderCancellation']['properties'])
         self.assertEqual(s['OrderPage']['properties']['items']['maxItems'],100)
         self.assertNotIn('id',s['OrderAddressSnapshot']['properties']);self.assertNotIn('version',s['OrderAddressSnapshot']['properties']);self.assertNotIn('merchantAccount',s['CheckoutPayment']['properties'])
         self.assertEqual(s['CheckoutInput']['properties']['paymentMethod'],{'type':'string','enum':['HOSTED','CASH_ON_DELIVERY']})

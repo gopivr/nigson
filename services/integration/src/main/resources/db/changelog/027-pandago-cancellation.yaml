@@ -1,0 +1,45 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "integration-20261122-order-cancellation",
+        "author": "nigson",
+        "logicalFilePath": "integration/027-pandago-cancellation.yaml",
+        "preConditions": [
+          {
+            "onFail": "HALT"
+          },
+          {
+            "dbms": {
+              "type": "postgresql"
+            }
+          },
+          {
+            "sqlCheck": {
+              "expectedResult": "1",
+              "sql": "SELECT CASE WHEN current_user='nigson_integration_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+            }
+          }
+        ],
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "027-pandago-cancellation.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ],
+        "rollback": [
+          {
+            "sqlFile": {
+              "path": "027-pandago-cancellation-rollback.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

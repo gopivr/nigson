@@ -47,6 +47,12 @@
         "file": "../026-pandago-booking.yaml",
         "relativeToChangelogFile": true
       }
+    },
+    {
+      "include": {
+        "file": "../027-pandago-cancellation.yaml",
+        "relativeToChangelogFile": true
+      }
     }
   ]
 }

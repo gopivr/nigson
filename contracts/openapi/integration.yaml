@@ -125,7 +125,7 @@
             }
           }
         },
-        "description": "Private authenticated endpoint; automatic carrier execution is unavailable and fails closed without submitting a provider operation.",
+        "description": "Private nigson-commerce carrier.cancel workload. ADR-033 durable PandaGo cancellation: single prepared DELETE, read-only UNKNOWN reconciliation and original receipt replay; execution flag defaults off.",
         "parameters": [
           {
             "name": "Idempotency-Key",
@@ -828,7 +828,7 @@
             }
           }
         },
-        "description": "Private authenticated endpoint; automatic carrier execution is unavailable and fails closed without submitting a provider operation.",
+        "description": "Private authenticated endpoint; automatic carrier reconciliation is unavailable and fails closed without submitting a provider operation.",
         "parameters": [
           {
             "name": "id",
@@ -1839,7 +1839,7 @@
           },
           "reference": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9]{10,40}$"
+            "pattern": "^[A-Za-z0-9_-]{1,160}$"
           },
           "mode": {
             "type": "string",
@@ -1888,7 +1888,7 @@
           },
           "reference": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9]{10,40}$"
+            "pattern": "^[A-Za-z0-9_-]{1,160}$"
           },
           "mode": {
             "type": "string",

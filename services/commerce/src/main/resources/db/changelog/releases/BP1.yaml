@@ -38,6 +38,12 @@
     },
     {
       "include": {
+        "file": "../036-bp1-order-cancellation.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
         "file": "../025-bp1-carrier-cancellation.yaml",
         "relativeToChangelogFile": true
       }
@@ -57,6 +63,12 @@
     {
       "include": {
         "file": "../028-bp1-wholesale-segment.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
+        "file": "../037-bp1-cancellation-reference.yaml",
         "relativeToChangelogFile": true
       }
     }

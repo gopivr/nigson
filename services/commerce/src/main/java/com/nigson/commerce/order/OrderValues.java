@@ -13,7 +13,10 @@ public final class OrderValues {
  public record Totals(String subtotal,String discount,String tax,String delivery,String grandTotal,String refunded){}
  public record Line(UUID id,UUID skuId,String skuCode,String name,String quantity,String unitAmount,String lineTotal){}
  public record Address(String label,String recipient,String phone,String line1,String line2,String city,String region,String postalCode,String countryCode,boolean isDefault){}
- public record Order(UUID id,String orderNumber,String status,String paymentStatus,String fulfillmentStatus,String currency,Totals totals,List<Line> lines,Address address,long version,Instant createdAt){}
+ public record Cancellation(UUID id,String state,String refundState,String errorCode,UUID refundId){}
+ public record Order(UUID id,String orderNumber,String status,String paymentStatus,String fulfillmentStatus,String currency,Totals totals,List<Line> lines,Address address,long version,Instant createdAt,Cancellation cancellation,boolean cancellationAllowed){
+  public Order(UUID id,String orderNumber,String status,String paymentStatus,String fulfillmentStatus,String currency,Totals totals,List<Line> lines,Address address,long version,Instant createdAt){this(id,orderNumber,status,paymentStatus,fulfillmentStatus,currency,totals,lines,address,version,createdAt,null,false);}
+ }
  public record Payment(UUID attemptId,String state,String checkoutUrl,String reference){}
  public record Checkout(Order order,Payment payment){}
  public record ProofInput(UUID partyId,UUID orderLineId,UUID productId){}

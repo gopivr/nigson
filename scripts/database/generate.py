@@ -14,6 +14,7 @@ from catalog import ROOT, catalog
 
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
 ADDITIVE_TABLES = {
+    'commerce.order_cancellation': ('036-bp1-order-cancellation', 'commerce-20261122-order-cancellation', 'nigson', 'ADR-033: durable order cancellation and refund linkage.'),
     'commerce.affiliate_bank_detail': ('052-bp3-affiliate-bank', 'commerce-20261120-affiliate-bank', 'nigson-commerce', 'ADR-031: encrypted reviewed affiliate bank revisions.'),
     'commerce.affiliate_payout': ('053-bp3-affiliate-payout', 'commerce-20261120-affiliate-payout', 'nigson-commerce', 'ADR-031: reserved monthly manual affiliate payouts, no automated transfer.'),
     'commerce.affiliate_commission_entry': ('051-bp3-affiliate-commission', 'commerce-20261120-affiliate-commission', 'nigson-commerce', 'ADR-031: immutable verified retail affiliate earnings and refund reversals.'),
@@ -209,7 +210,7 @@ def generate():
         owner, name = fullname.split('.')
         base = Path(f'services/{owner}/src/main/resources/db/changelog')
         additive_columns = {'integration.notification_dispatch': {'command_hash','recipient_ciphertext','variables_ciphertext','context_key_revision','context_basis'}}
-        fields = [column(field) for field in table['fields'] if field['name'] not in additive_columns.get(fullname,set())]
+        fields = [column({**field,'type':'varchar(40)'} if fullname in ('commerce.carrier_cancellation','integration.carrier_cancellation') and field['name']=='reference' else field) for field in table['fields'] if field['name'] not in additive_columns.get(fullname,set())]
         fields.append(f'CONSTRAINT {name}_id_pk PRIMARY KEY (id)')
         if any(field['name'] == 'version' for field in table['fields']):
             fields.append(f'CONSTRAINT {name}_version_ck CHECK (version >= 0)')
@@ -348,6 +349,12 @@ def generate():
         wrapper=base/'releases/BP3.yaml';payload=json.loads(files[wrapper]);entry={'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}}
         if entry not in payload['databaseChangeLog']:payload['databaseChangeLog'].append(entry)
         files[wrapper]=json.dumps(payload,indent=2)+'\n'
+    # ADR-033 widens current references without rewriting the original cancellation migrations.
+    for owner,stem in [('commerce','037-bp1-cancellation-reference'),('integration','027-pandago-cancellation')]:
+        base=Path(f'services/{owner}/src/main/resources/db/changelog')
+        for suffix in ('.sql','-rollback.sql','.yaml'):
+            path=base/(stem+suffix);files[path]=(ROOT/path).read_text()
+        wrapper=base/'releases/BP1.yaml';payload=json.loads(files[wrapper]);payload['databaseChangeLog'].append({'include':{'file':'../'+stem+'.yaml','relativeToChangelogFile':True}});files[wrapper]=json.dumps(payload,indent=2)+'\n'
     files[Path('database/schema-manifest.json')] = json.dumps(manifest,indent=2,sort_keys=True)+'\n'
     return files
 

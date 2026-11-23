@@ -1,0 +1,44 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "commerce-20261122-order-cancellation",
+        "author": "nigson",
+        "logicalFilePath": "commerce/036-bp1-order-cancellation.yaml",
+        "preConditions": [
+          {
+            "onFail": "HALT"
+          },
+          {
+            "dbms": {
+              "type": "postgresql"
+            }
+          },
+          {
+            "sqlCheck": {
+              "expectedResult": "1",
+              "sql": "SELECT CASE WHEN current_user='nigson_commerce_migrator' AND current_setting('server_version_num')::int BETWEEN 180000 AND 189999 THEN 1 ELSE 0 END"
+            }
+          }
+        ],
+        "changes": [
+          {
+            "sqlFile": {
+              "path": "036-bp1-order-cancellation.sql",
+              "relativeToChangelogFile": true
+            }
+          }
+        ],
+        "rollback": [
+          {
+            "sqlFile": {
+              "path": "036-bp1-order-cancellation-rollback.sql",
+              "relativeToChangelogFile": true,
+              "splitStatements": false
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

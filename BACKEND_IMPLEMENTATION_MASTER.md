@@ -4488,6 +4488,30 @@ source_quote_revision_id uuid NULL FK quote_revision
 - **Checks:** provider=FEDEX; mode IN (MOCK,SANDBOX,LIVE); status IN (QUOTED,EXPIRED,CONSUMED); delivery_amount>=0.
 - **Business invariant:** Server-computed NGN fee with bound address/package/cart revision; valid5m. No mock quote can be used in live checkout. Carrier can return another rate currency: reject unless a separate approved FX policy exists, never treat it as NGN.
 
+### commerce.order_cancellation
+
+Owner: `commerce`; module: `order`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+order_id uuid NN FK sales_order
+requested_by uuid NN FK party
+reason varchar(500) NN
+state varchar(24) NN DEFAULT REQUESTED
+next_attempt_at timestamptz NN DEFAULT now()
+refund_id uuid NULL FK refund
+error_code varchar(60) NULL
+```
+
+- **Keys and indexes:** UQ(order_id); IX(next_attempt_at).
+- **Checks:** state IN (REQUESTED,WAITING_PAYMENT,WAITING_CARRIER,CANCELLED,REJECTED).
+- **Business invariant:** ADR-033. Customer-approved durable cancellation excludes preparation, booking and dispatch. Payment/carrier UNKNOWN cannot release stock or imply cancellation. Confirmed cancellation releases only unshipped stock and requests the remaining captured amount through existing Finance-approved refunds. Refund failure and late settlement never reopen cancelled fulfillment.
+
 ### commerce.carrier_cancellation
 
 Owner: `commerce`; module: `fulfillment`; introduced: BP1; mutation: versioned.
@@ -4501,7 +4525,7 @@ updated_by varchar(200) NN
 version bigint NN DEFAULT 0
 shipment_id uuid NN FK shipment
 booking_request_id uuid NN
-reference varchar(40) NN
+reference varchar(160) NN
 mode varchar(10) NN
 reason varchar(500) NN
 request_hash char(64) NN
@@ -4569,7 +4593,7 @@ version bigint NN DEFAULT 0
 source_request_id uuid NN EXTERNAL commerce.carrier_cancellation
 booking_id uuid NN FK carrier_booking
 shipment_id uuid NN EXTERNAL commerce.shipment
-reference varchar(40) NN
+reference varchar(160) NN
 mode varchar(10) NN
 account_hash char(64) NN
 request_hash char(64) NN
@@ -5424,7 +5448,7 @@ Commerce BP1; current SALES. Bounded page/size; customer profiles and Commerce o
 - **Request:** `{reason:string}`.
 - **Response:** `OrderDTO`.
 - **Statuses:** 200 success; common section13 errors;202 for explicitly uncertain/queued external actions.
-- **Validation / business rules:** Only unpaid PENDING or failed orders can self-cancel; query uncertain payment first; paid cancellation uses staff refund workflow.
+- **Validation / business rules:** ADR-033: accept an unshipped PENDING/PAID/PROCESSING/PAYMENT_HOLD order cancellation intent and return 202 with additive cancellation/cancellationAllowed fields on OrderDTO. Durable exclusion blocks fulfillment. Reconcile payment and PandaGo before releasing stock. Remaining captured amount becomes a Finance-approved refund request. GET/API-040 replay expose current progress; completed requests return 200. Shipped/delivered orders require returns.
 - **Events:** order.cancelled.v1, inventory.availability.changed.v1
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, ORDER_RULE_VIOLATION; PROVIDER_UNAVAILABLE, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED as applicable.
 
@@ -7811,7 +7835,7 @@ ADR-016: X-Nigson-Carrier-Account-SHA256 is the actual configured adapter identi
 - **Request:** `{reason:string}`.
 - **Response:** `CarrierCancellationDTO`.
 - **Statuses:** 202; standard safe errors.
-- **Validation / business rules:** ADR-014. Persist/audit approved unshipped FEDEX/BOOKED cancellation under order/shipment locks; active intent excludes dispatch. Durable relay, no provider HTTP in this command; no automatic refund/stock return.
+- **Validation / business rules:** ADR-014. Persist/audit approved unshipped PANDAGO/BOOKED cancellation under order/shipment locks; PandaGo has no label requirement (ADR-033); active intent excludes dispatch. Durable relay, no provider HTTP in this command; no automatic refund/stock return.
 - **Events:** Existing EVT-009 only on actual source shipment status change; owned audit.
 - **Errors:** VALIDATION_ERROR, AUTH_REQUIRED, ACCESS_DENIED, NOT_FOUND, VERSION_MISMATCH, INVALID_TRANSITION, IDEMPOTENCY_HASH_MISMATCH, IDEMPOTENCY_IN_PROGRESS, FULFILLMENT_RULE_VIOLATION, PROVIDER_OUTCOME_UNKNOWN, PROVIDER_MODE_MISMATCH, FEATURE_DISABLED.
 
@@ -8359,6 +8383,8 @@ OrderState: PENDING -> PAID -> PROCESSING -> SHIPPED -> DELIVERED; PENDING -> CA
 PaymentAttemptState: CREATED -> INITIATING -> PENDING or UNKNOWN or FAILED; PENDING/UNKNOWN -> SUCCEEDED or FAILED/CANCELLED only after provider verification. SUCCEEDED is terminal; refunds have separate records. Order paymentStatus UNPAID|PENDING|PAID|PARTIALLY_REFUNDED|REFUNDED|FAILED; fulfillmentStatus UNFULFILLED|PROCESSING|PARTIALLY_SHIPPED|SHIPPED|DELIVERED|CANCELLED|HOLD. SQL lifecycle columns enforce these sets. CartState ACTIVE|CHECKOUT_PENDING|CONVERTED|EXPIRED. QuoteState and other enum sets match table CHECK constraints.
 
 ## Refunds and rewards
+
+ADR-033 adds durable customer cancellation separate from order/payment enums. CANCELLED fulfillment may retain PAID/PARTIALLY_REFUNDED until refund confirmation, then paymentStatus=REFUNDED; order status stays CANCELLED. Late settlement on an accepted cancellation records financial truth without allocating stock or restarting fulfillment.
 
 Refund reserve: under order lock, `successful_refunds + pending/unknown_refund_reservations + requested_amount <= verified_settlement`. Stable provider_reference and request_key are required. REQUESTED -> APPROVED/REJECTED; APPROVED -> SUBMITTING -> PENDING/UNKNOWN -> SUCCEEDED/FAILED; only authoritative provider outcome finalizes success. Paystack refund is dispatched by commerce-owned scheduler/outbox handler, never integration worker credentials. Crash after provider call requires verify/list-by-reference reconciliation; never send a second refund solely because a timeout occurred. Inventory reversal is a separate validated unshipped cancellation/physical return operation. Monetary refund does not automatically add stock.
 
@@ -9792,7 +9818,7 @@ Nigeria/NGN and launch Paystack are confirmed. Keycloak production, FedEx launch
 | REQ-API-037 | commerce | API-037 POST /api/v1/checkout/attempts | commerce.sales_order, commerce.order_line, commerce.order_total_component, commerce.order_status_history | order.pending.v1, inventory.availability.changed.v1 | TEST-CHECKOUT-ATOMIC; TEST-LATE-SETTLEMENT; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-ORDER-001 | AC-COM-ORDER-001 |
 | REQ-API-038 | commerce | API-038 GET /api/v1/orders | commerce.sales_order, commerce.order_line, commerce.order_total_component, commerce.order_status_history | None directly | TEST-CHECKOUT-ATOMIC; TEST-LATE-SETTLEMENT; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-ORDER-001 | AC-COM-ORDER-001 |
 | REQ-API-039 | commerce | API-039 GET /api/v1/orders/{id} | commerce.sales_order, commerce.order_line, commerce.order_total_component, commerce.order_status_history | None directly | TEST-CHECKOUT-ATOMIC; TEST-LATE-SETTLEMENT; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-ORDER-001 | AC-COM-ORDER-001 |
-| REQ-API-040 | commerce | API-040 POST /api/v1/orders/{id}/cancellation | commerce.sales_order, commerce.order_line, commerce.order_total_component, commerce.order_status_history | order.cancelled.v1, inventory.availability.changed.v1 | TEST-CHECKOUT-ATOMIC; TEST-LATE-SETTLEMENT; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-ORDER-001 | AC-COM-ORDER-001 |
+| REQ-API-040 | commerce | API-040 POST /api/v1/orders/{id}/cancellation | commerce.sales_order, commerce.order_line, commerce.order_total_component, commerce.order_status_history, commerce.order_cancellation | order.cancelled.v1, inventory.availability.changed.v1 | TEST-CHECKOUT-ATOMIC; TEST-LATE-SETTLEMENT; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-ORDER-001 | AC-COM-ORDER-001 |
 | REQ-API-041 | commerce | API-041 GET /api/v1/orders/{id}/payment | commerce.payment_attempt, commerce.payment_transaction, commerce.webhook_receipt, commerce.refund, commerce.refund_line | None directly | TEST-WEBHOOK-DUP; TEST-PAYMENT-UNKNOWN; TEST-PARTIAL-REFUND; TEST-REFUND-UNKNOWN; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-PAYME-001 | AC-COM-PAYME-001 |
 | REQ-API-042 | commerce | API-042 POST /api/v1/webhooks/payments/paystack | commerce.payment_attempt, commerce.payment_transaction, commerce.webhook_receipt, commerce.refund, commerce.refund_line | order.paid.v1, inventory.availability.changed.v1, refund.succeeded.v1 | TEST-WEBHOOK-DUP; TEST-PAYMENT-UNKNOWN; TEST-PARTIAL-REFUND; TEST-REFUND-UNKNOWN; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-PAYME-001 | AC-COM-PAYME-001 |
 | REQ-API-043 | commerce | API-043 GET /api/v1/staff/orders | commerce.sales_order, commerce.order_line, commerce.order_total_component, commerce.order_status_history | None directly | TEST-CHECKOUT-ATOMIC; TEST-LATE-SETTLEMENT; endpoint input/response contract, owner denial, stale version, replay and migration tests.; COM-ORDER-001 | AC-COM-ORDER-001 |
@@ -10110,6 +10136,7 @@ ARCH rows preserve every source heading; BP rows preserve functional features; t
 | REQ-API-202 | experience | API-202 fixed private phone consent companion | experience.communication_destination, experience.destination_verification, experience.consent_event, experience.communication_suppression | EVT-028/EVT-023 | MSG-001; ADR-017; TEST-PHONE-CONSENT | AC-MSG-001 |
 | REQ-API-203 | experience | API-203 fixed private phone consent companion | experience.communication_destination, experience.destination_verification, experience.consent_event, experience.communication_suppression | EVT-028/EVT-023 | MSG-001; ADR-017; TEST-PHONE-CONSENT | AC-MSG-001 |
 | REQ-API-204 | experience | API-204 fixed private phone consent companion | experience.communication_destination, experience.destination_verification, experience.consent_event, experience.communication_suppression | EVT-028/EVT-023 | MSG-001; ADR-017; TEST-PHONE-CONSENT | AC-MSG-001 |
+| REQ-DB-commerce.order_cancellation | commerce | API-040, API-039, API-043 | commerce.order_cancellation | EVT-004 and EVT-010 after authoritative fulfillment cancellation | ORDER-CANCELLATION-001; native payment/booking/dispatch races, refund outcomes and populated rollback guards; ADR-033. | AC-ORDER-CANCELLATION-001 |
 | REQ-DB-commerce.carrier_cancellation | commerce | API-197, API-198, API-199, API-200 | commerce.carrier_cancellation | None directly | DATA-001; CARRIER-001; TEST-CARRIER-CANCELLATION; ADR-014. | AC-CARRIER-001 |
 | REQ-DB-integration.carrier_cancellation | integration | API-197, API-198, API-199, API-200 | integration.carrier_cancellation | None directly | DATA-001; CARRIER-001; TEST-CARRIER-CANCELLATION; ADR-014. | AC-CARRIER-001 |
 | REQ-DB-commerce.carrier_quote | commerce | API-047, API-048, API-049, API-050, API-051, API-119, API-120, API-160, API-171, API-174, API-181, API-182, API-191, API-195 | commerce.carrier_quote | EVT-027 | DATA-001; CARRIER-001; TEST-CARRIER-RATE-BINDING; TEST-CARRIER-UNKNOWN; TEST-CARRIER-TRACKING; TEST-CARRIER-CONTRACT; TEST-FULFILLMENT-CONSERVATION. | AC-CARRIER-001 |

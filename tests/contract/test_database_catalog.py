@@ -8,7 +8,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/database'))
 from catalog import catalog
-from generate import generate, predicate
+from generate import generate, predicate, ADDITIVE_TABLES
 
 
 class DatabaseCatalogTest(unittest.TestCase):
@@ -16,11 +16,11 @@ class DatabaseCatalogTest(unittest.TestCase):
         for path, content in generate().items():
             self.assertEqual((ROOT / path).read_text(), content, str(path))
         manifest = json.loads((ROOT / 'database/schema-manifest.json').read_text())
-        self.assertEqual(len(manifest['tables']), 128)
+        self.assertEqual(len(manifest['tables']), 136)
         for name, table in manifest['tables'].items():
-            if name in {'commerce.carrier_cancellation','commerce.file_transfer','experience.file_transfer','integration.carrier_cancellation','integration.notification_dispatch','experience.lead_rate_limit'}:
+            if name in ADDITIVE_TABLES:
                 base = 'services/' + table['owner'] + '/src/main/resources/db/changelog/'
-                stem = {'commerce.carrier_cancellation':'025-bp1-carrier-cancellation','commerce.file_transfer':'023-bp1-file-transfer','experience.file_transfer':'025-bp1-file-transfer','integration.carrier_cancellation':'023-bp1-carrier-cancellation','integration.notification_dispatch':'024-bp1-notification-dispatch','experience.lead_rate_limit':'026-bp1-lead-rate-limit'}[name]
+                stem = ADDITIVE_TABLES[name][0]
                 self.assertIn('CREATE TABLE ' + name + ' ', (ROOT / (base + stem + '.sql')).read_text())
                 continue
             self.assertTrue(table['creation_changeset'].startswith(table['owner'] + '-'))

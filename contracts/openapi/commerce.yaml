@@ -15588,7 +15588,7 @@
     "/api/v1/orders/{id}/cancellation": {
       "post": {
         "operationId": "API-040",
-        "description": "Current owner/key/CSRF/If-Match; inspect uncertain payment outside transactions. Only unpaid PENDING with independently verified failure/cancellation can release reservation; UNKNOWN persists and denies cancellation. Atomically cancel/history/stock/cart expiry/audit/outbox; paid money uses staff refund workflow.",
+        "description": "Current owner/key/CSRF/If-Match; persist durable cancellation before asynchronous payment and PandaGo reconciliation. Accept unshipped PENDING/PAID/PROCESSING/PAYMENT_HOLD. Exclude booking/processing/dispatch until rejection or confirmed cancellation. UNKNOWN remains pending. Confirm delivery cancellation before stock release and existing Finance-approved Paystack refund request. No physical return or automatic refund approval.",
         "security": [
           {
             "bffSession": []
@@ -15744,6 +15744,28 @@
               "application/problem+json": {
                 "schema": {
                   "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Durable cancellation accepted; payment/delivery confirmation pending",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDTO"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -28581,7 +28603,7 @@
           },
           "reference": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9]{10,40}$"
+            "pattern": "^[A-Za-z0-9_-]{1,160}$"
           },
           "mode": {
             "type": "string",
@@ -28630,7 +28652,7 @@
           },
           "reference": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9]{10,40}$"
+            "pattern": "^[A-Za-z0-9_-]{1,160}$"
           },
           "mode": {
             "type": "string",
@@ -29289,6 +29311,76 @@
           }
         }
       },
+      "OrderCancellation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "state",
+          "refundState",
+          "errorCode",
+          "refundId"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "state": {
+            "enum": [
+              "REQUESTED",
+              "WAITING_PAYMENT",
+              "WAITING_CARRIER",
+              "CANCELLED",
+              "REJECTED"
+            ]
+          },
+          "refundState": {
+            "anyOf": [
+              {
+                "enum": [
+                  "REQUESTED",
+                  "APPROVED",
+                  "REJECTED",
+                  "SUBMITTING",
+                  "PENDING",
+                  "UNKNOWN",
+                  "SUCCEEDED",
+                  "FAILED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refundId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
       "OrderDTO": {
         "type": "object",
         "additionalProperties": false,
@@ -29303,7 +29395,9 @@
           "lines",
           "address",
           "version",
-          "createdAt"
+          "createdAt",
+          "cancellation",
+          "cancellationAllowed"
         ],
         "properties": {
           "id": {
@@ -29375,6 +29469,19 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "cancellation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OrderCancellation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cancellationAllowed": {
+            "type": "boolean"
           }
         }
       },

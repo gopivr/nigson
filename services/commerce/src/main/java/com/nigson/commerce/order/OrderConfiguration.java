@@ -11,6 +11,9 @@ import com.nigson.commerce.cart.CartCheckout;
 import com.nigson.commerce.inventory.StockLedger;
 @Configuration(proxyBeanMethods=false)
 public class OrderConfiguration {
+ @Bean @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name="NIGSON_ORDER_CHECKOUT_ENABLED",havingValue="true")
+ OrderCancellationWorker orderCancellationWorker(JdbcTemplate jdbc,PlatformTransactionManager manager,CheckoutPayments payments,StockLedger stock,CartCheckout carts,com.nigson.commerce.payment.PaymentRepository refunds,PlatformStore events,AuditWriter audit){return new OrderCancellationWorker(jdbc,manager,payments,stock,carts,refunds,events,audit,Clock.systemUTC());}
+
  @Bean OrderPolicy orderPolicy(@Value("${NIGSON_ORDER_CHECKOUT_ENABLED:false}")boolean enabled,@Value("${APP_ENV:local}")String environment,@Value("${NIGSON_ORDER_PAYMENT_MODE:}")String mode,@Value("${NIGSON_ORDER_MERCHANT_ACCOUNT:}")String account,@Value("${NIGSON_ORDER_STOCK_LOCATION_PRIORITY:}")String locations,@Value("${NIGSON_ORDER_RESERVATION_SECONDS:900}")int ttl){return new OrderPolicy(enabled,environment,mode,account,locations.isEmpty()?List.of():Arrays.stream(locations.split(",",-1)).map(com.nigson.shared.problem.ApiValues::uuid).toList(),ttl);}
  @Bean OrderAuthority orderAuthority(JdbcTemplate jdbc,PricingAuthority pricing){return new OrderAuthority(jdbc,pricing,Clock.systemUTC());}
  @Bean OrderRepository orderRepository(JdbcTemplate jdbc,CheckoutPricing pricing,CheckoutQuoteRepository quotes,StockLedger stock,CartCheckout carts,OrderPolicy policy,@Value("${NIGSON_PRODUCT_PHASE:1}")int phase){return new JdbcOrderRepository(jdbc,pricing,quotes,stock,carts,policy,Clock.systemUTC(),phase);}

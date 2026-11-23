@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @ConditionalOnProperty(name="NIGSON_SECURITY_ENABLED",havingValue="true")
 public final class CarrierOperationsUnavailableController {
- @PostMapping({"/internal/v1/carrier/cancellations","/internal/v1/carrier/shipments/{id}/reconciliation"})
+ @PostMapping("/internal/v1/carrier/shipments/{id}/reconciliation")
  public void unavailable(){throw new Problem.Failure(ProblemCode.PROVIDER_UNAVAILABLE,List.of(new Problem.Violation("provider","CONFIGURATION_REQUIRED","Automatic carrier execution is not configured. No provider operation was submitted.")));}
 }

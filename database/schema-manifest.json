@@ -4434,7 +4434,7 @@
           "name": "reference",
           "nullable": false,
           "primary": false,
-          "type": "varchar(40)"
+          "type": "varchar(160)"
         },
         {
           "cascade": false,
@@ -7083,6 +7083,146 @@
       ],
       "keys": "UQ(market_id,country_code)",
       "module": "market",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 1
+    },
+    "commerce.order_cancellation": {
+      "checks": "state IN (REQUESTED,WAITING_PAYMENT,WAITING_CARRIER,CANCELLED,REJECTED)",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "sales_order",
+          "name": "order_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "requested_by",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "reason",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(500)"
+        },
+        {
+          "cascade": false,
+          "default": "REQUESTED",
+          "external": null,
+          "foreign": null,
+          "name": "state",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(24)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "next_attempt_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "refund",
+          "name": "refund_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "error_code",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(60)"
+        }
+      ],
+      "keys": "UQ(order_id); IX(next_attempt_at)",
+      "module": "order",
       "mutation": "versioned",
       "owner": "commerce",
       "phase": 1
@@ -17374,7 +17514,7 @@
           "name": "reference",
           "nullable": false,
           "primary": false,
-          "type": "varchar(40)"
+          "type": "varchar(160)"
         },
         {
           "cascade": false,
