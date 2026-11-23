@@ -4488,6 +4488,39 @@ source_quote_revision_id uuid NULL FK quote_revision
 - **Checks:** provider=FEDEX; mode IN (MOCK,SANDBOX,LIVE); status IN (QUOTED,EXPIRED,CONSUMED); delivery_amount>=0.
 - **Business invariant:** Server-computed NGN fee with bound address/package/cart revision; valid5m. No mock quote can be used in live checkout. Carrier can return another rate currency: reject unless a separate approved FX policy exists, never treat it as NGN.
 
+### commerce.return_request
+
+Owner: `commerce`; module: `order`; introduced: BP1; mutation: versioned.
+
+```text
+id uuid NN PK
+created_at timestamptz NN DEFAULT now()
+created_by varchar(200) NN
+updated_at timestamptz NN DEFAULT now()
+updated_by varchar(200) NN
+version bigint NN DEFAULT 0
+order_id uuid NN FK sales_order
+order_line_id uuid NN FK order_line
+requested_by uuid NN FK party
+quantity numeric(18,3) NN
+reason varchar(500) NN
+policy_revision varchar(80) NN
+state varchar(16) NN DEFAULT REQUESTED
+reviewed_by uuid NULL FK party
+decision_reason varchar(500) NULL
+instructions varchar(1000) NULL
+received_by uuid NULL FK party
+received_at timestamptz NULL
+receipt_reference varchar(120) NULL
+restock boolean NULL
+inspection_reason varchar(500) NULL
+refund_id uuid NULL FK refund
+```
+
+- **Keys and indexes:** IX(order_id,created_at); IX(order_line_id,state); UQ(refund_id).
+- **Checks:** state IN (REQUESTED,APPROVED,REJECTED,RECEIVED); quantity>0.
+- **Business invariant:** ADR-034. Proven delivery and order-first locking cap requested/approved/received quantities including legacy physical returns. Operations reviews policy and records receipt with explicit restock; Finance separately requests/approves refunds. Physical return never implies money movement or reverses delivery truth. Populated rollback refuses.
+
 ### commerce.order_cancellation
 
 Owner: `commerce`; module: `order`; introduced: BP1; mutation: versioned.

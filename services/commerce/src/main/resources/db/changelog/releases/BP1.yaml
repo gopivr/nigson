@@ -38,6 +38,12 @@
     },
     {
       "include": {
+        "file": "../038-bp1-customer-returns.yaml",
+        "relativeToChangelogFile": true
+      }
+    },
+    {
+      "include": {
         "file": "../036-bp1-order-cancellation.yaml",
         "relativeToChangelogFile": true
       }

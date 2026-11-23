@@ -14,6 +14,7 @@ from catalog import ROOT, catalog
 
 OWNERS = ('commerce', 'experience', 'integration', 'ai')
 ADDITIVE_TABLES = {
+    'commerce.return_request': ('038-bp1-customer-returns', 'commerce-20261122-customer-returns', 'nigson', 'ADR-034: customer delivered-product returns and reviewed receipt/refund linkage.'),
     'commerce.order_cancellation': ('036-bp1-order-cancellation', 'commerce-20261122-order-cancellation', 'nigson', 'ADR-033: durable order cancellation and refund linkage.'),
     'commerce.affiliate_bank_detail': ('052-bp3-affiliate-bank', 'commerce-20261120-affiliate-bank', 'nigson-commerce', 'ADR-031: encrypted reviewed affiliate bank revisions.'),
     'commerce.affiliate_payout': ('053-bp3-affiliate-payout', 'commerce-20261120-affiliate-payout', 'nigson-commerce', 'ADR-031: reserved monthly manual affiliate payouts, no automated transfer.'),

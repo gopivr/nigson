@@ -10629,6 +10629,236 @@
       "owner": "commerce",
       "phase": 1
     },
+    "commerce.return_request": {
+      "checks": "state IN (REQUESTED,APPROVED,REJECTED,RECEIVED); quantity>0",
+      "fields": [
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "id",
+          "nullable": false,
+          "primary": true,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "created_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "created_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "now()",
+          "external": null,
+          "foreign": null,
+          "name": "updated_at",
+          "nullable": false,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "updated_by",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(200)"
+        },
+        {
+          "cascade": false,
+          "default": "0",
+          "external": null,
+          "foreign": null,
+          "name": "version",
+          "nullable": false,
+          "primary": false,
+          "type": "bigint"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "sales_order",
+          "name": "order_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "order_line",
+          "name": "order_line_id",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "requested_by",
+          "nullable": false,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "quantity",
+          "nullable": false,
+          "primary": false,
+          "type": "numeric(18,3)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "reason",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(500)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "policy_revision",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(80)"
+        },
+        {
+          "cascade": false,
+          "default": "REQUESTED",
+          "external": null,
+          "foreign": null,
+          "name": "state",
+          "nullable": false,
+          "primary": false,
+          "type": "varchar(16)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "reviewed_by",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "decision_reason",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(500)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "instructions",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(1000)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "party",
+          "name": "received_by",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "received_at",
+          "nullable": true,
+          "primary": false,
+          "type": "timestamptz"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "receipt_reference",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(120)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "restock",
+          "nullable": true,
+          "primary": false,
+          "type": "boolean"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": null,
+          "name": "inspection_reason",
+          "nullable": true,
+          "primary": false,
+          "type": "varchar(500)"
+        },
+        {
+          "cascade": false,
+          "default": null,
+          "external": null,
+          "foreign": "refund",
+          "name": "refund_id",
+          "nullable": true,
+          "primary": false,
+          "type": "uuid"
+        }
+      ],
+      "keys": "IX(order_id,created_at); IX(order_line_id,state); UQ(refund_id)",
+      "module": "order",
+      "mutation": "versioned",
+      "owner": "commerce",
+      "phase": 1
+    },
     "commerce.reward_entry": {
       "checks": "kind IN (EARN,REDEEM,EXPIRE,REVERSE,DEALER_ISSUE); amount>=0",
       "creation_changeset": "commerce-20261006-015",
