@@ -518,10 +518,135 @@
         }
       }
     },
+    "/api/v1/staff/users/lookup": {
+      "get": {
+        "operationId": "API-237",
+        "description": "Current ADMIN only. Exact active registered-account lookup for staff assignment. The email parameter is not a general customer search: it returns one active party only, rejects ambiguous email matches and does not expose identity subjects, sessions or customer data. No request body.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email",
+              "maxLength": 254
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Last active administrator protection",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/staff/users/{id}/roles": {
       "put": {
         "operationId": "API-012",
-        "description": "Current ADMIN and signed recent MFA within 15 minutes. Active mapped staff target; preserve last active ADMIN. StaffDTO version is the Party aggregate version. Audit changes, increment revision and revoke all target sessions in one transaction. Idempotency identity is actor party plus API-012; canonical input includes target, expected revision, roles and reason. Matching replay returns original response; conflicting input is 409; stale revision is 412. No-op preserves revision and sessions. Reason is validated but free text is redacted from audit under existing policy. No direct domain event.",
+        "description": "Current ADMIN using the password-only staff login. Active registered target; preserve last active ADMIN. StaffDTO version is the Party aggregate version. Audit changes, increment revision and revoke all target sessions in one transaction. Idempotency identity is actor party plus API-012; canonical input includes target, expected revision, roles and reason. Matching replay returns original response; conflicting input is 409; stale revision is 412. No-op preserves revision and sessions. Reason is validated but free text is redacted from audit under existing policy. No direct domain event.",
         "security": [
           {
             "bffSession": []

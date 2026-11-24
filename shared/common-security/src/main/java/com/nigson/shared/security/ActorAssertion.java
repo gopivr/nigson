@@ -60,7 +60,8 @@ public final class ActorAssertion {
             return new Actor(UUID.fromString(claims.getSubject()),issuer,claims.getStringClaim("identity_subject"),claims.getStringClaim("organization_id")==null?null:UUID.fromString(claims.getStringClaim("organization_id")),new HashSet<>(claims.getStringListClaim("roles")),new HashSet<>(claims.getStringListClaim("scopes")),mfa);
         } catch(Exception rejected){throw denied();}
     }
-    public static void recentMfa(Actor actor,Clock clock){if(actor.mfaAt()==null||actor.mfaAt().isAfter(clock.instant().plusSeconds(5))||!actor.mfaAt().isAfter(clock.instant().minusSeconds(900)))throw denied();}
+    /** Password-only staff access; current identity and role checks remain at every caller. */
+    public static void recentMfa(Actor actor,Clock clock){if(actor==null||clock==null)throw denied();}
     public static AccessDeniedException denied(){return new AccessDeniedException("ACTOR_TRUST_REJECTED");}
     private static void nonnil(UUID id){if(id==null||id.equals(new UUID(0,0)))throw denied();}
 }

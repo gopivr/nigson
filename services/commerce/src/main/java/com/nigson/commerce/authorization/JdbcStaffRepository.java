@@ -41,8 +41,16 @@ public final class JdbcStaffRepository implements StaffRepository, com.nigson.co
                 (r, n) -> Staff.Role.valueOf(r.getString(1)), id);
     }
     public Staff.View find(UUID id) {
-        var rows = jdbc.query("SELECT p.id,p.display_name,p.email,p.version FROM commerce.party p WHERE p.id=? AND p.status='ACTIVE' AND EXISTS(SELECT 1 FROM commerce.staff_role_assignment r WHERE r.party_id=p.id)",
+        var rows = jdbc.query("SELECT p.id,p.display_name,p.email,p.version FROM commerce.party p WHERE p.id=? AND p.status='ACTIVE'",
                 (r, n) -> new Staff.View(r.getObject(1, UUID.class), r.getString(2), r.getString(3), roles(id), r.getLong(4)), id);
+        if (rows.size() != 1) throw new Problem.Failure(ProblemCode.NOT_FOUND);
+        return rows.getFirst();
+    }
+    public Staff.View findEligibleByEmail(String email) {
+        var rows = jdbc.query("SELECT p.id,p.display_name,p.email,p.version FROM commerce.party p WHERE p.status='ACTIVE' AND lower(p.email)=lower(?) ORDER BY p.id LIMIT 2",
+                (r, n) -> new Staff.View(r.getObject(1, UUID.class), r.getString(2), r.getString(3), roles(r.getObject(1, UUID.class)), r.getLong(4)), email);
+        // Email is an administrator-entered lookup key, not a globally unique party key.
+        // Never select an arbitrary account when legacy identities share an email.
         if (rows.size() != 1) throw new Problem.Failure(ProblemCode.NOT_FOUND);
         return rows.getFirst();
     }

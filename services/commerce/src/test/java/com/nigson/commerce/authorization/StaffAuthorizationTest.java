@@ -129,12 +129,12 @@ class StaffAuthorizationTest {
         } finally { bootstrap.execute("GRANT INSERT ON commerce.audit_record TO nigson_commerce_app"); }
         assertThat(change(staff, 0, roles(Staff.Role.FINANCE), key).version()).isEqualTo(1);
     }
-    @Test void currentAuthorityMfaOwnershipAndSearchFailClosed() {
+    @Test void currentAuthorityPasswordOnlyOwnershipAndSearchFailClosed() {
         UUID retail = party(null);
         assertThatThrownBy(() -> service.search(null, "", 0, 20, "createdAt,desc")).hasMessage("AUTH_REQUIRED");
         assertThatThrownBy(() -> service.search(actor(retail, clock.instant()), "", 0, 20, "createdAt,desc")).hasMessage("ACCESS_DENIED");
-        assertThatThrownBy(() -> service.change(actor(admin, clock.instant().minusSeconds(901)), staff, 0, roles(), "mfa", UUID.randomUUID())).hasMessage("ACTOR_TRUST_REJECTED");
-        assertThatThrownBy(() -> change(retail, 0, roles(Staff.Role.ADMIN), "retail")).hasMessage("NOT_FOUND");
+        assertThatCode(() -> service.change(actor(admin, clock.instant().minusSeconds(901)), staff, 0, roles(), "password-only", UUID.randomUUID())).doesNotThrowAnyException();
+        assertThat(change(retail, 0, roles(Staff.Role.ADMIN), "registered retail promotion").roles()).containsExactly(Staff.Role.ADMIN);
         assertThatThrownBy(() -> change(UUID.randomUUID(), 0, roles(), "missing")).hasMessage("NOT_FOUND");
         assertThatThrownBy(() -> service.search(actor(admin, clock.instant()), "", 0, 101, "createdAt,desc")).hasMessage("VALIDATION_ERROR");
         assertThatThrownBy(() -> service.search(actor(admin, clock.instant()), "", 0, 20, "identitySubject,asc")).hasMessage("VALIDATION_ERROR");
@@ -142,5 +142,17 @@ class StaffAuthorizationTest {
         assertThat(service.search(actor(admin, clock.instant()), "%_' OR true --", 0, 20, "createdAt,desc").items()).isEmpty();
         jdbc.update("UPDATE commerce.staff_role_assignment SET revoked_at=now() WHERE party_id=?", admin);
         assertThatThrownBy(() -> change(staff, 0, roles(), "current")).hasMessage("ACCESS_DENIED");
+    }
+    @Test void administratorCanLookupRegisteredCustomerThenAssignFirstStaffRole() {
+        UUID customer = party(null);
+        var found = service.eligibleByEmail(actor(admin, null), customer + "@example.invalid");
+        assertThat(found.id()).isEqualTo(customer);
+        assertThat(found.roles()).isEmpty();
+        var assigned = service.change(actor(admin, null), found.id(), found.version(), roles(Staff.Role.SALES), "registered customer staff assignment", UUID.randomUUID());
+        assertThat(assigned.roles()).containsExactly(Staff.Role.SALES);
+        assertThat(service.search(actor(admin, null), customer.toString(), 0, 20, "createdAt,desc").items()).extracting(Staff.View::id).contains(customer);
+        assertThatThrownBy(() -> service.eligibleByEmail(new ActorAssertion.Actor(customer, ISSUER, customer.toString(), null, Set.of("CUSTOMER"), Set.of(), null), customer + "@example.invalid")).hasMessage("ACCESS_DENIED");
+        jdbc.update("UPDATE commerce.party SET status='SUSPENDED' WHERE id=?", customer);
+        assertThatThrownBy(() -> service.eligibleByEmail(actor(admin, null), customer + "@example.invalid")).hasMessage("NOT_FOUND");
     }
 }

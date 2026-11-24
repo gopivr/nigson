@@ -30,6 +30,12 @@ public final class StaffService {
         if (q == null || q.length() > 200 || q.codePoints().anyMatch(Character::isISOControl)) throw ApiValues.invalid();
         return queries.execute(s -> { authorize(actor, false); return repository.search(q, page, size, sort); });
     }
+    public Staff.View eligibleByEmail(ActorAssertion.Actor actor, String email) {
+        authorize(actor, false);
+        if (email == null || email.length() > 254 || !email.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) throw ApiValues.invalid();
+        String normalized = email.strip().toLowerCase(Locale.ROOT);
+        return queries.execute(s -> { authorize(actor, false); return repository.findEligibleByEmail(normalized); });
+    }
     public Staff.View change(ActorAssertion.Actor actor, UUID target, long version, Staff.Change change, String key, UUID correlation) {
         authorize(actor, true);
         if (target == null || target.equals(new UUID(0, 0)) || version < 0 || change == null || correlation == null || correlation.equals(new UUID(0, 0))) throw ApiValues.invalid();

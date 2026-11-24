@@ -23,7 +23,9 @@ def contract():
         parameter('page', 'query', {'type': 'integer', 'minimum': 0, 'default': 0}),
         parameter('size', 'query', {'type': 'integer', 'minimum': 1, 'maximum': 100, 'default': 20}),
         parameter('sort', 'query', {'type': 'string', 'enum': ['createdAt,desc', 'createdAt,asc', 'displayName,asc', 'displayName,desc', 'email,asc', 'email,desc'], 'default': 'createdAt,desc'})])
-    put = operation('API-012', 'Current ADMIN and signed recent MFA within 15 minutes. Active mapped staff target; preserve last active ADMIN. StaffDTO version is the Party aggregate version. Audit changes, increment revision and revoke all target sessions in one transaction. Idempotency identity is actor party plus API-012; canonical input includes target, expected revision, roles and reason. Matching replay returns original response; conflicting input is 409; stale revision is 412. No-op preserves revision and sessions. Reason is validated but free text is redacted from audit under existing policy. No direct domain event.', 'StaffDTO', [
+    lookup = operation('API-237', 'Current ADMIN only. Exact active registered-account lookup for staff assignment. The email parameter is not a general customer search: it returns one active party only, rejects ambiguous email matches and does not expose identity subjects, sessions or customer data. No request body.', 'StaffDTO', [
+        parameter('email', 'query', {'type': 'string', 'format': 'email', 'maxLength': 254}, True)])
+    put = operation('API-012', 'Current ADMIN using the password-only staff login. Active registered target; preserve last active ADMIN. StaffDTO version is the Party aggregate version. Audit changes, increment revision and revoke all target sessions in one transaction. Idempotency identity is actor party plus API-012; canonical input includes target, expected revision, roles and reason. Matching replay returns original response; conflicting input is 409; stale revision is 412. No-op preserves revision and sessions. Reason is validated but free text is redacted from audit under existing policy. No direct domain event.', 'StaffDTO', [
         parameter('id', 'path', UUID, True),
         parameter('If-Match', 'header', {'type': 'string', 'pattern': '^"(0|[1-9][0-9]{0,18})"$'}, True),
         parameter('Idempotency-Key', 'header', {'type': 'string', 'minLength': 1, 'maxLength': 100, 'pattern': '^[ -~]+$'}, True),
@@ -31,7 +33,7 @@ def contract():
     put['requestBody'] = {'required': True, 'content': {'application/json': {'schema': REF('StaffRoleChange')}}}
     put['responses']['200']['headers'] = {'ETag': {'description': 'Quoted aggregate revision', 'schema': {'type': 'string'}}}
     result = {'openapi': '3.1.0', 'info': {'title': 'Nigson commerce implemented authorization contracts', 'version': '1.1.0', 'description': 'Incremental implemented endpoints; pending roadmap APIs remain in docs/API_CONTRACT.md.'},
-            'paths': {'/api/v1/staff/users': {'get': get}, '/api/v1/staff/users/{id}/roles': {'put': put}},
+            'paths': {'/api/v1/staff/users': {'get': get}, '/api/v1/staff/users/lookup': {'get': lookup}, '/api/v1/staff/users/{id}/roles': {'put': put}},
             'components': {'securitySchemes': {'bffSession': {'type': 'apiKey', 'in': 'cookie', 'name': '__Host-nigson-session', 'description': 'Encrypted JDBC BFF session. Explicit insecure local profile uses nigson-local-session. Browser bearer tokens are denied by SEC-001.'}},
                            'schemas': {'Role': {'type': 'string', 'enum': ROLES},
                                        'StaffDTO': object_schema({'id': UUID, 'displayName': {'type': 'string', 'maxLength': 160}, 'email': {'type': 'string', 'format': 'email', 'maxLength': 254}, 'roles': roles, 'version': VERSION}),

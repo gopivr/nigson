@@ -126,9 +126,6 @@ class Admin:
         ensure(alias,provider="auth-cookie")
         ensure(alias,child="nigson-forms")
         ensure("nigson-forms",provider="auth-username-password-form")
-        ensure("nigson-forms",child="nigson-staff-mfa")
-        ensure("nigson-staff-mfa",provider="conditional-user-role")
-        ensure("nigson-staff-mfa",provider="auth-otp-form")
         executions = self.request(prefix + "/authentication/flows/" + alias + "/executions")
         for execution in executions:
             provider = execution.get("providerId")
@@ -136,18 +133,7 @@ class Admin:
             if provider == "auth-cookie" or execution.get("displayName") == "nigson-forms":
                 requirement = "ALTERNATIVE"
             elif execution.get("displayName") == "nigson-staff-mfa":
-                requirement = "CONDITIONAL"
+                # Existing realms retain the historical flow but never run it.
+                requirement = "DISABLED"
             self.request(prefix + "/authentication/flows/" + alias + "/executions", "PUT", {**execution, "requirement": requirement})
-            if provider == "conditional-user-role":
-                desired = {"alias": "nigson-staff-role-condition", "config": {"condUserRole": "nigson-staff-identity"}}
-                if execution.get("authenticationConfig"):
-                    self.request(prefix + "/authentication/config/" + execution["authenticationConfig"], "PUT", desired)
-                else:
-                    self.request(prefix + "/authentication/executions/" + execution["id"] + "/config", "POST", desired)
-            if provider == "auth-otp-form":
-                desired = {"alias": "nigson-otp-reference", "config": {"default.reference.value": "otp", "default.reference.maxAge": "900"}}
-                if execution.get("authenticationConfig"):
-                    self.request(prefix + "/authentication/config/" + execution["authenticationConfig"], "PUT", desired)
-                else:
-                    self.request(prefix + "/authentication/executions/" + execution["id"] + "/config", "POST", desired)
         self.request(prefix, "PUT", {"browserFlow": alias})

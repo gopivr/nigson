@@ -9,6 +9,7 @@ public interface StaffRepository {
     void lockParties(UUID actor, UUID target);
     void requireAdministrator(ActorAssertion.Actor actor);
     Staff.View find(UUID id);
+    Staff.View findEligibleByEmail(String email);
     Staff.Page search(String q, int page, int size, String sort);
     long activeAdministrators();
     void replace(UUID id, Staff.Change change, Staff.View before, ActorAssertion.Actor actor, UUID correlation);

@@ -108,13 +108,13 @@ including the revision's launch messaging/carrier APIs. Subject and target
 audience mappers are explicit. No role/user passwords or automatic production
 staff assignments are in the realm document. Retail business onboarding remains
 a domain task; public registration/reset are closed in this identity baseline.
-Staff's `nigson-staff-identity` marker requires TOTP enrollment at authentication
-and grants no business privilege. When assigning/removing that marker, terminate
-the affected user's existing vendor sessions and enforce the commerce recent-MFA
-policy; do not treat an older SSO/refresh session as staff step-up evidence.
+Staff's `nigson-staff-identity` marker grants no business privilege. The portal
+uses password-only staff login: TOTP enrollment and step-up evidence are not
+required. When assigning/removing that marker, terminate the affected user's
+existing vendor sessions so their current commerce role is resolved again.
 
-Create and enroll the actually approved permanent private administrator with
-TOTP through the private console. Verify that account's administration access.
+Create the actually approved permanent private administrator through the private
+console and verify that account's administration access.
 Then provide its protected credentials/current TOTP to retirement:
 
 ```bash

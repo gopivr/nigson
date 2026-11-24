@@ -1,3 +1,5 @@
+PASSWORD-ONLY-STAFF-LOGIN — IMPLEMENTED locally (2026-11-24). The managed Keycloak browser-flow provisioner disables the historical staff OTP/TOTP step, and the shared recent-MFA guard accepts normal authenticated sessions; current role, identity, ownership, CSRF, version and idempotency checks remain enforced. API-012 contract and staff/identity runbooks now state the password-only policy. Focused security verification: 8 security tests and 7 isolated PostgreSQL staff-authorization tests passed. Applying the browser-flow change to an already provisioned external Keycloak realm still requires its normal provisioning run.
+
 SIMPLE-PRODUCT-PRICES ? IN_PROGRESS. One form and one atomic price save for retail/wholesale/distributor; preserve legacy books and approved starting wholesale 555555 / 30. Automatic storefront selection remains a separate unfinished integration.
 
 AUTOMATIC-PARTNER-PRICING ? IN_PROGRESS. Admin price-book draft/publish and approved-business assignment controls implemented and verified locally; automatic storefront/cart pricing remains pending. No switch. See docs/implementation/2026-11-19-AUTOMATIC-PARTNER-PRICING.md.

@@ -37,6 +37,12 @@ public final class StaffController {
         if (request.getContentLengthLong() > 0 || request.getInputStream().read() != -1) throw ApiValues.invalid();
         return service.search(actor, q, page, size, sort);
     }
+    @GetMapping(value="/api/v1/staff/users/lookup", produces="application/json")
+    public Staff.View lookup(HttpServletRequest request, @RequestParam String email) throws java.io.IOException {
+        var actor = actor(); query(request, Set.of("email"));
+        if (request.getContentLengthLong() > 0 || request.getInputStream().read() != -1) throw ApiValues.invalid();
+        return service.eligibleByEmail(actor, email);
+    }
     @PutMapping(value="/api/v1/staff/users/{id}/roles", consumes="application/json", produces="application/json")
     public ResponseEntity<Staff.View> change(HttpServletRequest request, @PathVariable String id, @RequestBody Staff.Change change) {
         var actor = actor(); query(request, Set.of());
