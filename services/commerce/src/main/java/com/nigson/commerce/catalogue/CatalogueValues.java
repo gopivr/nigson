@@ -5,7 +5,7 @@ import tools.jackson.databind.JsonNode;import com.nigson.shared.problem.ApiValue
 public final class CatalogueValues {
  private CatalogueValues(){}
  public record Reference(UUID id,String name){}
- public record Sku(UUID id,String code,String variantName,String unit,String packSize,boolean available){}
+ public record Sku(UUID id,String code,String variantName,String unit,String packSize,boolean available,com.nigson.commerce.inventory.StockAvailability.Stock stock){public Sku(UUID id,String code,String variantName,String unit,String packSize,boolean available){this(id,code,variantName,unit,packSize,available,null);}}
  public record Asset(UUID id,String purpose,String url){}
  public record AdminAsset(UUID id,String state,String purpose,String mimeType,long size,String checksum,String url,long version){}
  public record Product(UUID id,String name,String slug,String description,JsonNode specifications,Reference brand,List<Reference> categories,List<Sku> skus,List<Asset> assets,long revision){}

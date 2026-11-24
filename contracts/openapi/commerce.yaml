@@ -24319,6 +24319,32 @@
           }
         }
       },
+      "CatalogueStock": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "availableQuantity",
+          "lowStockThreshold"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "IN_STOCK",
+              "LOW_STOCK",
+              "OUT_OF_STOCK"
+            ]
+          },
+          "availableQuantity": {
+            "type": "string",
+            "pattern": "^[0-9]{1,17}(\\.[0-9]{1,3})?$"
+          },
+          "lowStockThreshold": {
+            "type": "string",
+            "pattern": "^[0-9]{1,17}(\\.[0-9]{1,3})?$"
+          }
+        }
+      },
       "CatalogueSku": {
         "type": "object",
         "additionalProperties": false,
@@ -24328,7 +24354,8 @@
           "variantName",
           "unit",
           "packSize",
-          "available"
+          "available",
+          "stock"
         ],
         "properties": {
           "id": {
@@ -24354,6 +24381,16 @@
           },
           "available": {
             "type": "boolean"
+          },
+          "stock": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CatalogueStock"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },

@@ -5,10 +5,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.nigson.shared.problem.*;
 
 public final class JdbcCatalogueQueries implements CatalogueQueryRepository {
-    private final JdbcTemplate jdbc;private final ProductRepository products;private final CatalogueAssets assets;
+    private final JdbcTemplate jdbc;private final ProductRepository products;private final CatalogueAssets assets;private final com.nigson.commerce.inventory.StockAvailability stock;
     private static final String ELIGIBLE="p.status='ACTIVE' AND p.deleted_at IS NULL AND EXISTS(SELECT 1 FROM commerce.product_market_eligibility e JOIN commerce.market m ON m.id=e.market_id WHERE e.product_id=p.id AND e.eligible AND m.enabled AND m.code=?)";
     private static final String AVAILABLE="EXISTS(SELECT 1 FROM commerce.sku s JOIN commerce.inventory_balance b ON b.sku_id=s.id JOIN commerce.stock_location l ON l.id=b.location_id WHERE s.product_id=p.id AND s.active AND s.deleted_at IS NULL AND l.active AND b.on_hand-b.reserved-b.allocated>0)";
-    public JdbcCatalogueQueries(JdbcTemplate jdbc,ProductRepository products,CatalogueAssets assets){this.jdbc=jdbc;this.products=products;this.assets=assets;}
+    public JdbcCatalogueQueries(JdbcTemplate jdbc,ProductRepository products,CatalogueAssets assets){this(jdbc,products,assets,new com.nigson.commerce.inventory.StockAvailability(jdbc,null,java.math.BigDecimal.TEN));}
+    public JdbcCatalogueQueries(JdbcTemplate jdbc,ProductRepository products,CatalogueAssets assets,com.nigson.commerce.inventory.StockAvailability stock){this.jdbc=jdbc;this.products=products;this.assets=assets;this.stock=stock;}
     public CatalogueValues.ProductAdmin staffProduct(UUID id){return products.admin(id);}
     public CatalogueValues.SkuDetail staffSku(UUID id){
         var rows=jdbc.query("SELECT s.id,s.product_id,s.code,s.variant_name,s.unit,s.quantity_scale,s.pack_size,s.active,s.weight_kg,s.carrier_packaging::text,s.version FROM commerce.sku s JOIN commerce.product p ON p.id=s.product_id WHERE s.id=? AND s.deleted_at IS NULL AND p.deleted_at IS NULL",(r,n)->new CatalogueValues.SkuDetail(r.getObject(1,UUID.class),r.getObject(2,UUID.class),r.getString(3),r.getString(4),r.getString(5),r.getInt(6),r.getBigDecimal(7).stripTrailingZeros().toPlainString(),r.getBoolean(8),r.getBigDecimal(9)==null?null:r.getBigDecimal(9).stripTrailingZeros().toPlainString(),r.getString(10)==null?null:com.nigson.shared.events.EventCodec.JSON.readTree(r.getString(10)),r.getLong(11)),id);
@@ -24,7 +25,8 @@ public final class JdbcCatalogueQueries implements CatalogueQueryRepository {
         if(s.productType()!=null){where+=" AND EXISTS(SELECT 1 FROM commerce.product_attribute a WHERE a.product_id=p.id AND a.attribute_key='product_type' AND a.value=to_jsonb(?::text))";args.add(s.productType());}
         long total=Objects.requireNonNull(jdbc.queryForObject("SELECT count(*)"+where,Long.class,args.toArray()));
         if(s.sort().equals("relevance,desc"))args.add(s.q());args.add(s.size());args.add((long)s.page()*s.size());
-        var rows=jdbc.query("SELECT p.id,p.name,p.slug,b.name,"+AVAILABLE+",p.revision"+where+" ORDER BY "+sorting+" LIMIT ? OFFSET ?",(r,n)->new CatalogueValues.Summary(r.getObject(1,UUID.class),r.getString(2),r.getString(3),r.getString(4),null,r.getBoolean(5),r.getLong(6)),args.toArray());
+        String available=AVAILABLE.replace("l.active AND", "("+stock.locationPredicate()+") AND").replace("b.on_hand-b.reserved-b.allocated>0","b.on_hand-b.reserved-b.allocated>=s.pack_size");
+        var rows=jdbc.query("SELECT p.id,p.name,p.slug,b.name,"+available+",p.revision"+where+" ORDER BY "+sorting+" LIMIT ? OFFSET ?",(r,n)->new CatalogueValues.Summary(r.getObject(1,UUID.class),r.getString(2),r.getString(3),r.getString(4),null,r.getBoolean(5),r.getLong(6)),args.toArray());
         var images=assets.images(rows.stream().map(CatalogueValues.Summary::id).toList());
         var result=rows.stream().map(v->new CatalogueValues.Summary(v.id(),v.name(),v.slug(),v.brandName(),images.get(v.id()),v.available(),v.revision())).toList();
         return new CatalogueValues.Page<>(result,s.page(),s.size(),total,(total+s.size()-1)/s.size());
@@ -36,7 +38,8 @@ public final class JdbcCatalogueQueries implements CatalogueQueryRepository {
         var categories=jdbc.query("SELECT c.id,c.name FROM commerce.product_category pc JOIN commerce.category c ON c.id=pc.category_id WHERE pc.product_id=? AND c.active AND c.deleted_at IS NULL ORDER BY c.sort_order,c.id LIMIT 101",(r,n)->new CatalogueValues.Reference(r.getObject(1,UUID.class),r.getString(2)),id);
         var skus=jdbc.query("SELECT s.id,s.code,s.variant_name,s.unit,s.pack_size,EXISTS(SELECT 1 FROM commerce.inventory_balance b JOIN commerce.stock_location l ON l.id=b.location_id WHERE b.sku_id=s.id AND l.active AND b.on_hand-b.reserved-b.allocated>0) FROM commerce.sku s WHERE s.product_id=? AND s.active AND s.deleted_at IS NULL ORDER BY s.id LIMIT 101",(r,n)->new CatalogueValues.Sku(r.getObject(1,UUID.class),r.getString(2),r.getString(3),r.getString(4),r.getBigDecimal(5).stripTrailingZeros().toPlainString(),r.getBoolean(6)),id);
         if(categories.size()>100||skus.size()>100)throw new Problem.Failure(ProblemCode.CATALOGUE_RULE_VIOLATION);
-        return new CatalogueValues.Product(id,input.name(),input.slug(),input.description(),input.specifications(),brands.isEmpty()?null:brands.getFirst(),categories,skus,assets.published(id),v.revision());
+        var availability=stock.product(id);var availableSkus=skus.stream().map(s->{var current=availability.get(s.id());return new CatalogueValues.Sku(s.id(),s.code(),s.variantName(),s.unit(),s.packSize(),current!=null&&!current.status().equals("OUT_OF_STOCK"),current);}).toList();
+        return new CatalogueValues.Product(id,input.name(),input.slug(),input.description(),input.specifications(),brands.isEmpty()?null:brands.getFirst(),categories,availableSkus,assets.published(id),v.revision());
     }
     public List<CatalogueValues.PublicCategory> categories(String market){
         market(market);var rows=jdbc.query("SELECT c.id,c.parent_id,c.name,c.slug,c.sort_order FROM commerce.category c WHERE c.active AND c.deleted_at IS NULL AND EXISTS(SELECT 1 FROM commerce.product_category pc JOIN commerce.product p ON p.id=pc.product_id WHERE pc.category_id=c.id AND "+ELIGIBLE+") ORDER BY c.sort_order,c.id LIMIT 1001",(r,n)->new CatalogueValues.PublicCategory(r.getObject(1,UUID.class),r.getObject(2,UUID.class),r.getString(3),r.getString(4),r.getInt(5)),market);

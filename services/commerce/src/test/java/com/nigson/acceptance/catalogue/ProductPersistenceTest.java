@@ -68,6 +68,17 @@ class ProductPersistenceTest {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM commerce.audit_record WHERE resource_id=?",Integer.class,first.id())).isEqualTo(2);
         assertThatThrownBy(()->reads.product(first.id(),code)).hasMessage("NOT_FOUND");
     }
+    @Test void publicStockUsesAvailableSingleEligibleLocationAndConfiguredThreshold(){
+        var product=ready("Synthetic stock status","SYN-STOCK-"+UUID.randomUUID());var sku=product.skus().getFirst().id();UUID a=UUID.randomUUID(),b=UUID.randomUUID();
+        for(UUID location:List.of(a,b))jdbc.update("INSERT INTO commerce.stock_location(id,created_by,updated_by,code,name,active) VALUES (?,'test','test',?,'Synthetic stock',true)",location,"S"+location);
+        jdbc.update("INSERT INTO commerce.inventory_balance(id,created_by,updated_by,sku_id,location_id,on_hand,reserved,allocated) VALUES (?,'test','test',?,?,20,4,6)",UUID.randomUUID(),sku,a);
+        jdbc.update("INSERT INTO commerce.inventory_balance(id,created_by,updated_by,sku_id,location_id,on_hand,reserved,allocated) VALUES (?,'test','test',?,?,50,0,0)",UUID.randomUUID(),sku,b);
+        var limited=new com.nigson.commerce.inventory.StockAvailability(jdbc,List.of(a),java.math.BigDecimal.TEN);var stock=limited.sku(sku);assertThat(stock.availableQuantity()).isEqualTo("10");assertThat(stock.status()).isEqualTo("LOW_STOCK");
+        var queries=new JdbcCatalogueQueries(jdbc,repository,new JdbcCatalogueAssets(jdbc,"test","https://cdn.synthetic.test/assets/"),limited);assertThat(queries.product(product.id(),code).skus().getFirst().stock()).isEqualTo(stock);
+        jdbc.update("UPDATE commerce.inventory_balance SET reserved=14 WHERE sku_id=? AND location_id=?",sku,a);assertThat(limited.sku(sku).status()).isEqualTo("OUT_OF_STOCK");assertThat(queries.search(search("",0,100)).items()).filteredOn(v->v.id().equals(product.id())).allMatch(v->!v.available());
+        jdbc.update("UPDATE commerce.inventory_balance SET reserved=0,allocated=0 WHERE sku_id=? AND location_id=?",sku,a);assertThat(limited.sku(sku).status()).isEqualTo("IN_STOCK");assertThat(new com.nigson.commerce.inventory.StockAvailability(jdbc,List.of(a,b),java.math.BigDecimal.TEN).sku(sku).availableQuantity()).isEqualTo("50");
+        jdbc.update("UPDATE commerce.stock_location SET active=false WHERE id=?",a);assertThat(limited.sku(sku).availableQuantity()).isEqualTo("0");
+    }
     @Test void explicitLocalImagelessPublicationPreservesOtherChecksAndNeverPublishesUnscannedAssets(){
         var localAssets=new JdbcCatalogueAssets(jdbc,"local","",new CataloguePublicationPolicy("local",true));
         var manager=new DataSourceTransactionManager(jdbc.getDataSource());var metrics=new SimpleMeterRegistry();

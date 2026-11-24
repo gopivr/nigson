@@ -10,7 +10,8 @@ def extend(spec):
     quantity = {'type': 'string', 'pattern': '^[0-9]{1,17}(\\.[0-9]{1,3})?$'}
     url = {'type': 'string', 'format': 'uri', 'pattern': '^https://'}
     schemas['CatalogueReference'] = object_schema({'id': UUID, 'name': text(120)})
-    schemas['CatalogueSku'] = object_schema({'id': UUID, 'code': text(80), 'variantName': text(160), 'unit': text(20), 'packSize': quantity, 'available': {'type': 'boolean'}})
+    schemas['CatalogueStock'] = object_schema({'status':{'enum':['IN_STOCK','LOW_STOCK','OUT_OF_STOCK']},'availableQuantity':quantity,'lowStockThreshold':quantity})
+    schemas['CatalogueSku'] = object_schema({'id': UUID, 'code': text(80), 'variantName': text(160), 'unit': text(20), 'packSize': quantity, 'available': {'type': 'boolean'}, 'stock': nullable(REF('CatalogueStock'))})
     schemas['CatalogueAsset'] = object_schema({'id': UUID, 'purpose': {'enum': ['IMAGE', 'BROCHURE']}, 'url': url})
     schemas['CatalogueAdminAsset'] = object_schema({'id': UUID, 'state': {'enum': ['UPLOADING', 'QUARANTINED', 'CLEAN', 'PUBLISHED', 'REJECTED']}, 'purpose': {'enum': ['IMAGE', 'BROCHURE']}, 'mimeType': text(100), 'size': {'type': 'integer', 'format': 'int64', 'minimum': 1}, 'checksum': {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}, 'url': nullable(url), 'version': VERSION})
     product = {'id': UUID, 'name': text(200), 'slug': text(220), 'description': text(20000), 'specifications': {'type': 'object', 'maxProperties': 50, 'description': 'Registered bounded typed specification keys only; no executable HTML.'}, 'brand': nullable(REF('CatalogueReference')), 'categories': array(REF('CatalogueReference')), 'skus': array(REF('CatalogueSku')), 'assets': array(REF('CatalogueAsset')), 'revision': {'type': 'integer', 'format': 'int64', 'minimum': 1}}
