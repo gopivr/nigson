@@ -16,7 +16,7 @@ class DatabaseCatalogTest(unittest.TestCase):
         for path, content in generate().items():
             self.assertEqual((ROOT / path).read_text(), content, str(path))
         manifest = json.loads((ROOT / 'database/schema-manifest.json').read_text())
-        self.assertEqual(len(manifest['tables']), 136)
+        self.assertEqual(len(manifest['tables']), 137)
         for name, table in manifest['tables'].items():
             if name in ADDITIVE_TABLES:
                 base = 'services/' + table['owner'] + '/src/main/resources/db/changelog/'

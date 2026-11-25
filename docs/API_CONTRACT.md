@@ -3198,3 +3198,72 @@ API-177 adds nullable decisionReason, containing the latest reason already store
 API-216 GET /api/v1/me/wishlist returns at most 100 {skuId, productId, savedAt, available} associations ordered savedAt descending then skuId. Current ACTIVE personal CUSTOMER only; no query/body/client account id, no-store. available means published NG catalogue eligibility, not stock. Unavailable saved entries reveal no unpublished metadata and remain removable.
 
 API-217 PUT /api/v1/me/wishlist/items/{skuId} and API-218 DELETE on the same path require the normal BFF session, CSRF and Idempotency-Key. No OTP or If-Match. Body/query are forbidden. Success is 204, including already-present eligible membership and absent removal. Save of unavailable SKU returns 404. Saving beyond 100 distinct SKUs returns 422 BUSINESS_RULE_VIOLATION. Durable replay is scoped by actor/API/key and does not reapply an old mutation; GET is current-state authority. Actual changes alone append WISHLIST_SAVE/WISHLIST_REMOVE with resource WISHLIST and SKU resource id; actor identifies the account. No event/provider call. See commerce OpenAPI for schemas and remaining errors.
+
+## Customer product returns (ADR-034, 22 November 2026)
+
+All seven routes are Commerce BFF/session routes with `Cache-Control: no-store`. Customer routes require a current CUSTOMER who owns the order; another owner is hidden as 404. Staff routes require a current persisted `OPERATIONS` or `FINANCE` role, rechecked inside the transaction. Reads reject query parameters and bodies. Mutations require the normal CSRF header, an exact quoted `If-Match` version (`"<int64>"`) and an `Idempotency-Key`; replay returns the same resource without applying a second state change. Returns expose no stock location, provider account, staff identity or carrier data.
+
+`ReturnDTO` is closed: `{id:UUID,orderId:UUID,orderLineId:UUID,productName:string,quantity:Quantity,reason:string,policyRevision:string,state:REQUESTED|APPROVED|REJECTED|RECEIVED,decisionReason:string|null,instructions:string|null,receiptReference:string|null,restock:boolean|null,receivedAt:Instant|null,refundId:UUID|null,refundState:RefundState|null,version:int64,createdAt:Instant}`. `ReturnLineDTO` is closed `{orderLineId:UUID,name:string,orderedQuantity:Quantity,availableQuantity:Quantity,quantityScale:int}`. `OrderReturnsDTO` is closed `{orderId:UUID,orderVersion:int64,delivered:boolean,lines:[ReturnLineDTO],requests:[ReturnDTO],refundableAmount:Money,paystackRefundAvailable:boolean}`; both arrays are bounded to 100 and overflow is rejected rather than hidden.
+
+### API-237 GET /api/v1/orders/{id}/returns
+
+- **Service / module / phase:** commerce / order / BP1.
+- **Authorization:** Current CUSTOMER and order owner only.
+- **Path parameters:** id:UUID.
+- **Query / body:** None; reject.
+- **Response:** `OrderReturnsDTO`; ETag is the current order version.
+- **Validation / business rules:** `delivered` requires order/fulfillment DELIVERED. Each line's `availableQuantity` is the authoritative delivered shipment quantity bounded by original dispatch evidence, less non-rejected return requests and net legacy physical returns. Delivered but already-returned lines remain visible with zero availability. `refundableAmount` is the remaining order amount after non-failed/non-rejected refunds; `paystackRefundAvailable` is true only for a verified original Paystack settlement and a positive remaining amount. No side effect.
+
+### API-238 POST /api/v1/orders/{id}/returns
+
+- **Service / module / phase:** commerce / order / BP1.
+- **Authorization:** Current CUSTOMER, order owner, CSRF, `Idempotency-Key`, order `If-Match`.
+- **Path parameters:** id:UUID.
+- **Request:** `ReturnRequestInput` closed `{orderLineId:UUID,quantity:Quantity,reason:string(10..500)}`.
+- **Response:** 201 `ReturnDTO`; ETag is the return version.
+- **Validation / business rules:** Requires a delivered order and a line owned by that order. Captures the frozen `returnsPolicyRevision` from the commercial snapshot; a missing/oversized revision is an order-rule violation. One product and exact scaled positive quantity per request. Under the order lock, quantity cannot exceed current availability, unknown lines are 404, and a 101st request is rejected. Prior non-rejected requests reserve quantity; REJECTED releases it. No stock, money or provider side effect; request, idempotency record and `RETURN_REQUEST` audit commit together.
+
+### API-239 GET /api/v1/returns/{id}
+
+- **Service / module / phase:** commerce / order / BP1.
+- **Authorization:** Current CUSTOMER and owner of the return's order; other owners are 404.
+- **Path parameters:** id:UUID.
+- **Query / body:** None; reject.
+- **Response:** `ReturnDTO`; ETag is the return version. No mutation.
+
+### API-240 POST /api/v1/staff/returns/{id}/review
+
+- **Service / module / phase:** commerce / order / BP1.
+- **Authorization:** Current persisting `OPERATIONS`, CSRF, `Idempotency-Key`, return `If-Match`.
+- **Path parameters:** id:UUID.
+- **Request:** `ReturnReviewInput` closed `{approve:boolean,reason:string(10..500),instructions?:string(10..1000)}`. `instructions` is required for approval and forbidden for rejection.
+- **Response:** 200 `ReturnDTO`.
+- **Validation / business rules:** Only REQUESTED may move to APPROVED or REJECTED. Review applies the frozen policy revision; approval records customer-facing instructions; rejection releases the reserved quantity. `RETURN_REVIEW` audit and state commit together. No stock or money movement.
+
+### API-241 POST /api/v1/staff/returns/{id}/receipt
+
+- **Service / module / phase:** commerce / order / BP1.
+- **Authorization:** Current persisting `OPERATIONS`, CSRF, `Idempotency-Key`, return `If-Match`.
+- **Path parameters:** id:UUID.
+- **Request:** `ReturnReceiptInput` closed `{receiptReference:string,match ^[A-Za-z0-9][A-Za-z0-9:_-]{0,119}$,restock:boolean,reason:string(10..500)}`.
+- **Response:** 200 `ReturnDTO`.
+- **Validation / business rules:** Only APPROVED returns on a still-delivered order may be received. Receipt requires the external reference and an explicit restock decision. Restock consumes the original dispatch balances through the existing idempotent `StockLedger.PHYSICAL_RETURN` ledger; `restock=false` leaves saleable on-hand unchanged. Receipt does not undo delivery truth and does not move money. Receipt, ledger effect and `RETURN_RECEIPT` audit commit together; a populated rollback is refused.
+
+### API-242 POST /api/v1/staff/returns/{id}/refund
+
+- **Service / module / phase:** commerce / order / BP1.
+- **Authorization:** Current persisting `FINANCE` with recent MFA, CSRF, `Idempotency-Key`, return `If-Match`; payment feature must be enabled.
+- **Path parameters:** id:UUID.
+- **Request:** `ReturnRefundInput` closed `{amount:Money,reason:string(10..500)}`.
+- **Response:** 201 `ReturnDTO` with `refundId` and `refundState`.
+- **Validation / business rules:** Only RECEIVED returns without a linked refund. The chosen amount must be positive, have at most two decimal places and remain within the existing refund caps on the originally verified Paystack settlement. The command links exactly one existing Finance refund request; it does not approve, calculate or send money. Existing two-person approval, stable provider reference, worker, webhooks and UNKNOWN reconciliation remain authoritative. COD or an unverified settlement is physically returnable but has no automatic Paystack refund path; Finance resolves payment outside this command.
+
+### API-243 GET /api/v1/staff/orders/{id}/returns
+
+- **Service / module / phase:** commerce / order / BP1.
+- **Authorization:** Current persisting `OPERATIONS` or `FINANCE` (Finance requires recent MFA); order resource check.
+- **Path parameters:** id:UUID.
+- **Query / body:** None; reject.
+- **Response:** `OrderReturnsDTO` with the same customer-safe fields as API-237; ETag is the order version. Read-only.
+
+Returns are one product and exact quantity per request, so partial and multi-product returns remain unambiguous. No return window, return fee, reverse-pickup/carrier booking or automatic refund is implied. Legacy physical returns cap cumulative quantity. See `docs/adr/ADR-034-customer-returns.md` and the generated commerce OpenAPI for the exact schemas and error set.
