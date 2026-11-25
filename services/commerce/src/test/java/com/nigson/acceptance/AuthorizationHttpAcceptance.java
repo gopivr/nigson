@@ -56,14 +56,17 @@ public final class AuthorizationHttpAcceptance {
             assertThat(send(http, mutation(command, cookie.get(admin), csrf.get(admin), "0", UUID.randomUUID().toString(), body)).statusCode()).isEqualTo(412);
             assertThat(send(http, mutation(command, cookie.get(admin), csrf.get(admin), "0", key, body.replace("FINANCE", "ADMIN"))).statusCode()).isEqualTo(409);
             assertThat(send(http, HttpRequest.newBuilder(URI.create(list)).header("Cookie", cookie.get(target)).GET()).statusCode()).isEqualTo(401);
+            // Password-only staff policy permits an ADMIN to assign an ACTIVE registered party its first role.
             String nonstaff = base + "/api/v1/staff/users/" + retail + "/roles";
-            assertThat(send(http, mutation(nonstaff, cookie.get(admin), csrf.get(admin), "0", "nonstaff", body)).statusCode()).isEqualTo(404);
+            assertThat(send(http, mutation(nonstaff, cookie.get(admin), csrf.get(admin), "0", "nonstaff", body)).statusCode()).isEqualTo(200);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM commerce.staff_role_assignment WHERE party_id=? AND role='FINANCE' AND revoked_at IS NULL", Integer.class, retail)).isEqualTo(1);
             String ownCommand = base + "/api/v1/staff/users/" + admin + "/roles";
             assertThat(send(http, mutation(ownCommand, cookie.get(admin), csrf.get(admin), "0", "last-admin", "{\"roles\":[],\"reason\":\"Synthetic operator request\"}")).statusCode()).isEqualTo(422);
             var staleFlow = sessions.begin("/account"); sessions.consume(staleFlow.sessionId(), staleFlow.flow().state());
             String staleCsrf = JdbcSessionTrust.opaque();
             String staleSession = sessions.authenticate(staleFlow.sessionId(), new SessionRecord(1, admin, issuer, admin.toString(), Instant.now(), Instant.now().minusSeconds(901), "synthetic-access", "synthetic-refresh", Instant.now().plusSeconds(300), staleCsrf, SessionRecord.TokenState.READY));
-            assertThat(send(http, mutation(command, "__Host-nigson-session=" + staleSession, staleCsrf, "1", "stale-mfa", body)).statusCode()).isEqualTo(403);
+            // The current ADMIN role and session are authoritative; old MFA evidence does not block password-only staff access.
+            assertThat(send(http, mutation(command, "__Host-nigson-session=" + staleSession, staleCsrf, "1", "stale-mfa", body)).statusCode()).isEqualTo(200);
             assertThat(changed.body()).doesNotContain("identityIssuer", "identitySubject", "synthetic-access", "synthetic-refresh");
         } finally {
             for (UUID id : ids) sessions.revokeSubject(id);

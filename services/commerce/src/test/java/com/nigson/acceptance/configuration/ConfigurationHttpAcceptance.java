@@ -32,7 +32,10 @@ public final class ConfigurationHttpAcceptance {
                 assertThat(send(http,mutation(route,cookies.get(admin),csrf.get(admin),"0",UUID.randomUUID().toString(),bad)).statusCode()).isEqualTo(400);
             assertThat(send(http,mutation(route+"?unknown=1",cookies.get(admin),csrf.get(admin),"0","query",body)).statusCode()).isEqualTo(400);
             assertThat(send(http,mutation(route.replace("catalogue.metadata","unregistered"),cookies.get(admin),csrf.get(admin),"0","unregistered",body)).statusCode()).isEqualTo(422);
-            assertThat(send(http,mutation(route,cookies.get(admin),csrf.get(admin),"0","mfa",body.replace("false","true"))).statusCode()).isEqualTo(403);
+            // Password-only ADMIN access reaches domain validation: an active metadata policy still requires units.
+            var invalidActivation=send(http,mutation(route,cookies.get(admin),csrf.get(admin),"0","invalid-activation",body.replace("false","true")));
+            assertThat(invalidActivation.statusCode()).isEqualTo(422);
+            assertThat(invalidActivation.body()).contains("PLATFORM_RULE_VIOLATION");
             String key=UUID.randomUUID().toString();var response=send(http,mutation(route,cookies.get(admin),csrf.get(admin),"0",key,body));
             assertThat(response.statusCode()).isEqualTo(200);assertThat(response.headers().firstValue("ETag")).hasValue("\"1\"");assertThat(response.headers().firstValue("Cache-Control")).hasValue("no-store");
             assertThat(EventCodec.JSON.readTree(response.body()).properties().stream().map(Map.Entry::getKey)).containsExactlyInAnyOrder("key","revision","active","version");
