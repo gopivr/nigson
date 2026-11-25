@@ -24,11 +24,13 @@ public final class PandagoAdapter {
         }
         @Override public String toString() { return "PandagoLocation[protected]"; }
     }
-    public record Recipient(String name, String phone, Location location) {
+    public record Recipient(String name, String phone, Location location, String notes) {
         public Recipient {
             text(name, 255);
             if (phone == null || !phone.matches("\\+234[1-9][0-9]{9}") || location == null) throw invalid();
+            if (notes != null) text(notes, 2048);
         }
+        public Recipient(String name, String phone, Location location) { this(name, phone, location, null); }
         @Override public String toString() { return "PandagoRecipient[protected]"; }
     }
     public record Quote(String id, BigDecimal fee, String currency, Instant expiresAt, String accountHash) {}
@@ -72,6 +74,8 @@ public final class PandagoAdapter {
     public String accountFingerprint() { return accountHash; }
     private static IllegalArgumentException invalid() { return new IllegalArgumentException("PANDAGO_REQUEST_INVALID"); }
     private static String paymentMethod(String value) { if (value == null || !PAYMENT_METHODS.contains(value)) throw invalid(); return value; }
+    /** PandaGo accepts at most 30 characters; the code is the store-operator handover check, not an order ID. */
+    private static String pickup(String value) { if (value == null || !value.matches("[A-Za-z0-9]{1,30}")) throw invalid(); return value; }
     /** Round unix seconds are required; immediate delivery is an explicit provider null. */
     private Instant preorderedFor(Instant value) {
         if (value == null) return null;
@@ -203,17 +207,16 @@ public final class PandagoAdapter {
     }
     private static BigDecimal money(BigDecimal value) { if (value == null || value.signum() < 0 || value.compareTo(new BigDecimal("999999999999999.99")) > 0) throw invalid(); try { return value.setScale(2); } catch (ArithmeticException failure) { throw invalid(); } }
     /** Caller must persist this client reference and the confirmed quote before HTTP. No automatic retry. */
-    public Order confirm(Quote quote, UUID clientOrderId, Recipient recipient, BigDecimal prepaidAmount, String description) {
-        return confirm(quote, clientOrderId, recipient, prepaidAmount, description, "PAID", null);
-    }
-    public Order confirm(Quote quote, UUID clientOrderId, Recipient recipient, BigDecimal prepaidAmount, String description, String paymentMethod, Instant preorderedFor) {
+    public Order confirm(Quote quote, UUID clientOrderId, Recipient recipient, BigDecimal prepaidAmount, String description, String paymentMethod, Instant preorderedFor, String pickupCode) {
         if (quote == null || !accountHash.equals(quote.accountHash()) || !"NGN".equals(quote.currency()) || !quote.expiresAt().isAfter(clock.instant()) || clientOrderId == null || clientOrderId.equals(new UUID(0, 0)) || recipient == null) throw invalid();
         String method = paymentMethod(paymentMethod);
+        String code = pickup(pickupCode);
         Instant scheduled = preorderedFor(preorderedFor);
         var request = EventCodec.JSON.createObjectNode();
         request.put("client_order_id", clientOrderId.toString());
-        request.putObject("sender").put("notes", clientOrderId.toString());
-        request.putObject("recipient").put("name", recipient.name()).put("phone_number", recipient.phone());
+        var recipientNode = request.putObject("recipient").put("name", recipient.name()).put("phone_number", recipient.phone());
+        if (recipient.notes() != null) recipientNode.put("notes", recipient.notes());
+        request.putObject("pickup_tasks").put("pickup_code", code);
         request.put("payment_method", method);
         request.put("amount", money(prepaidAmount));
         request.put("currency_code", "NGN");

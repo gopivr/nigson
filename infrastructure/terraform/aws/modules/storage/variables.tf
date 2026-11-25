@@ -66,3 +66,9 @@ variable "bucket_access" {
     error_message = "Bucket access must use exact task roles and non-wildcard purpose prefixes; deletion permissions are never granted."
   }
 }
+
+variable "enable_object_expiration" {
+  type        = bool
+  default     = true
+  description = "Existing approved retention behavior by default; first-account bootstrap may disable object expiration until a business retention policy is approved."
+}

@@ -117,3 +117,27 @@ run "reject_public_worker_route" {
   }
   expect_failures = [var.public_routes]
 }
+
+run "bootstrap_does_not_require_or_create_placeholder_tasks" {
+  command = plan
+  variables {
+    provision_tasks = false
+    services        = { for name, service in var.services : name => merge(service, { enabled = false, image_digest = null }) }
+    public_routes   = {}
+  }
+  assert {
+    condition     = length(aws_ecs_task_definition.service) == 0 && length(aws_ecs_service.service) == 0 && length(aws_ecr_repository.service) == 3
+    error_message = "Bootstrap must create repositories without dummy images or task definitions."
+  }
+}
+
+run "read_only_review_routes_do_not_capture_mutations" {
+  command = plan
+  variables {
+    public_routes = { reviews = { service = "experience", priority = 20, path_patterns = ["/api/v1/reviews/*"], methods = ["GET", "HEAD"] } }
+  }
+  assert {
+    condition     = contains(one([for condition in aws_lb_listener_rule.public_route["reviews-0"].condition : condition.http_request_method if length(condition.http_request_method) > 0])[0].values, "GET")
+    error_message = "Review reads must use a method condition so POST continues to Commerce."
+  }
+}

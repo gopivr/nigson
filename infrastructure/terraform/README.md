@@ -6,3 +6,9 @@
 Validate without creating resources: `bash scripts/infra/validate-terraform.sh all`.
 
 Frontend hosting: `aws/frontend/{stage,prod}` and `ovh/frontend/{stage,prod}`; see `shared/frontend/README.md`.
+
+New AWS account with no existing infrastructure: start with
+[`aws/first-account/README.md`](aws/first-account/README.md). Terraform creates
+state/DNS first, then network/certificates/WAF/ALBs/ECR/ECS/RDS/CDN; no image
+placeholder or pre-created AWS resource IDs are required. Squarespace delegation
+remains a registrar-side action. Use this new root only for a new environment.

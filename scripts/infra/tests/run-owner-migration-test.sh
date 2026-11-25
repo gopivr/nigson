@@ -8,7 +8,7 @@ mkdir -p "$temporary_root/bin"
 cat > "$temporary_root/bin/terraform" <<'MOCK_TERRAFORM'
 #!/usr/bin/env bash
 set -euo pipefail
-[[ "$1" == -chdir=infrastructure/terraform/aws/environments/stage ]]
+[[ "$1" == "-chdir=${MOCK_TF_ROOT:-infrastructure/terraform/aws/environments/stage}" ]]
 [[ "$2" == output && "$3" == -json && "$4" == migrations ]]
 cat <<'JSON'
 {"environment":"stage","region":"eu-west-1","task_definition_arns":{"commerce":"arn:aws:ecs:eu-west-1:123456789012:task-definition/commerce:1","experience":"arn:aws:ecs:eu-west-1:123456789012:task-definition/experience:1","integration":"arn:aws:ecs:eu-west-1:123456789012:task-definition/integration:1"},"cluster_arn":"arn:aws:ecs:eu-west-1:123456789012:cluster/nigson-stage","private_subnet_ids":["subnet-private-a","subnet-private-b"],"security_group_id":"sg-migration"}
@@ -58,4 +58,11 @@ if MOCK_WAIT_FAIL=1 "$repo_root/scripts/infra/run-owner-migration.sh" stage comm
 fi
 [[ "$(wc -l < "$MOCK_RUN_LOG" | tr -d ' ')" == 3 ]]
 
+NIGSON_TERRAFORM_ROOT=infrastructure/terraform/aws/first-account MOCK_TF_ROOT=infrastructure/terraform/aws/first-account "$repo_root/scripts/infra/run-owner-migration.sh" stage commerce >/dev/null
+[[ "$(wc -l < "$MOCK_RUN_LOG" | tr -d ' ')" == 4 ]]
+if NIGSON_TERRAFORM_ROOT=infrastructure/terraform/aws/environments/prod "$repo_root/scripts/infra/run-owner-migration.sh" stage commerce >/dev/null 2>&1; then
+  echo "cross-environment Terraform root must fail before launching" >&2
+  exit 1
+fi
+[[ "$(wc -l < "$MOCK_RUN_LOG" | tr -d ' ')" == 4 ]]
 echo "Owner migration launch tests PASS"

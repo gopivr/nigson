@@ -12,13 +12,14 @@ locals {
     ManagedBy   = "terraform"
     Policy      = var.policy_revision
   }
-  enabled_services = { for name, service in var.services : name => service if service.enabled }
+  enabled_services = { for name, service in var.services : name => service if service.enabled && var.provision_tasks }
   public_services  = { for name, service in var.services : name => service if service.public }
   route_rules = merge({}, [for route_name, route in var.public_routes : {
     for pattern_index, pattern in route.path_patterns : "${route_name}-${pattern_index}" => {
       priority = route.priority + pattern_index
       service  = route.service
       pattern  = pattern
+      methods  = route.methods
     }
   }]...)
   egress_rules = merge([for service_name, service in var.services : {
@@ -255,6 +256,12 @@ resource "aws_lb_listener_rule" "public_route" {
   condition {
     path_pattern { values = [each.value.pattern] }
   }
+  dynamic "condition" {
+    for_each = length(each.value.methods) == 0 ? [] : [each.value.methods]
+    content {
+      http_request_method { values = condition.value }
+    }
+  }
 }
 
 resource "aws_service_discovery_service" "service" {
@@ -272,7 +279,7 @@ resource "aws_service_discovery_service" "service" {
 }
 
 resource "aws_ecs_task_definition" "service" {
-  for_each                 = var.services
+  for_each                 = var.provision_tasks ? var.services : {}
   family                   = "nigson-${var.environment}-${each.key}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
@@ -310,7 +317,7 @@ resource "aws_ecs_task_definition" "service" {
 }
 
 resource "aws_ecs_service" "service" {
-  for_each                           = var.services
+  for_each                           = var.provision_tasks ? var.services : {}
   name                               = "nigson-${var.environment}-${each.key}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.service[each.key].arn
@@ -375,3 +382,5 @@ output "task_role_arns" { value = { for name, role in aws_iam_role.task : name =
 output "repository_urls" { value = { for name, repository in aws_ecr_repository.service : name => repository.repository_url } }
 output "repository_arns" { value = { for name, repository in aws_ecr_repository.service : name => repository.arn } }
 output "private_service_names" { value = { for name, service in aws_service_discovery_service.service : name => "${name}.${var.private_namespace}" } }
+
+output "load_balancer_zone_id" { value = aws_lb.public.zone_id }

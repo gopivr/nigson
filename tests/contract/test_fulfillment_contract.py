@@ -31,6 +31,7 @@ class FulfillmentContracts(unittest.TestCase):
         self.assertEqual(op['operationId'],'API-119');self.assertEqual(op['security'],[{'carrierIntegrationWorkload':['logistics.read']}]);self.assertNotIn('requestBody',op)
         self.assertEqual(op['responses']['200']['headers']['Cache-Control']['schema'],{'const':'no-store'})
         context=schemas['ShipmentProviderContext'];self.assertFalse(context['additionalProperties']);self.assertEqual(context['properties']['packages']['maxItems'],100)
+        self.assertEqual(context['properties']['pickupCode'],{'type':'string','pattern':'^[A-Za-z0-9]{1,30}$','maxLength':30});self.assertIn('pickupCode',context['required'])
         self.assertEqual(context['properties']['address'],{'$ref':'#/components/schemas/OrderAddressSnapshot'})
         self.assertTrue({'id','version','organizationId'}.isdisjoint(schemas['OrderAddressSnapshot']['properties']))
         route=next(r for r in json.loads((ROOT/'contracts/security/workload-scopes.json').read_text()) if r['api']=='API-119')

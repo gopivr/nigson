@@ -1,0 +1,19 @@
+# Copy to runtime.auto.tfvars only AFTER real images have been published and captured.
+# Keep secret VALUES in Secrets Manager, never in this file or application_environment.
+# The generated .build/aws-first-stage/images.tfvars.json contains the image digests.
+publish_task_definitions = true
+activate_identity       = false
+activate_applications   = false
+
+# Supply the service-specific secure configuration documented in docs/runbooks/deploy.md
+# before changing activate_applications. Entries below show the shape, not full runtime setup.
+application_environment = {
+  commerce    = { APP_ENV = "stage", NIGSON_SECURITY_ENABLED = "true" }
+  experience  = { APP_ENV = "stage", NIGSON_SECURITY_ENABLED = "true" }
+  integration = { APP_ENV = "stage", NIGSON_SECURITY_ENABLED = "true" }
+}
+application_secret_names = {
+  # Keys are runtime environment variable names. Terraform creates their secret containers.
+  # Values are populated separately through Secrets Manager/approved credential tooling.
+  commerce = ["PAYSTACK_SECRET_KEY"]
+}

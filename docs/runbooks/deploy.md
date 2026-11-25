@@ -220,3 +220,18 @@ restored identifier, verifier output, application/API recovery evidence and
 rollback decision in the release record. This verifier alone does not prove
 application recovery or restore-point completeness; retain the restored target
 until those checks pass and remove it only through the approved cleanup change.
+
+
+## First-account path
+
+For a new account/environment without any pre-created AWS resources, see
+`infrastructure/terraform/aws/first-account/README.md` and ADR-035. The bootstrap
+root creates remote-state storage and DNS, and the first-account root creates
+certificates, WAF, networking, private databases and image-free compute
+infrastructure. AWS credentials use the normal CLI profile chain. Domain
+delegation stays with the registrar. Existing environment roots keep their state
+and addresses; never apply both roots to the same live resources. With the new
+root, `NIGSON_TERRAFORM_ROOT=infrastructure/terraform/aws/first-account` selects
+its guarded migration outputs. Application/identity activation, real secret values,
+owner DB bootstrap, migration receipts and release/provider acceptance remain
+explicit release gates; infrastructure provisioned is not application deployed.

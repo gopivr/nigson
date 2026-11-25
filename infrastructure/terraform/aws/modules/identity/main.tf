@@ -275,6 +275,7 @@ resource "aws_iam_role" "task" {
   tags               = local.tags
 }
 resource "aws_ecs_task_definition" "identity" {
+  count                    = var.provision_tasks ? 1 : 0
   family                   = local.name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -308,9 +309,10 @@ resource "aws_ecs_task_definition" "identity" {
   tags = local.tags
 }
 resource "aws_ecs_service" "identity" {
+  count                              = var.provision_tasks ? 1 : 0
   name                               = local.name
   cluster                            = var.ecs_cluster_arn
-  task_definition                    = aws_ecs_task_definition.identity.arn
+  task_definition                    = aws_ecs_task_definition.identity[0].arn
   desired_count                      = var.service_enabled ? 2 : 0
   launch_type                        = "FARGATE"
   deployment_minimum_healthy_percent = 100
@@ -354,9 +356,9 @@ output "issuer" { value = "https://${var.public_hostname}/realms/${var.realm}" }
 output "private_admin_url" { value = "https://${var.admin_hostname}" }
 output "dedicated_database_address" { value = aws_db_instance.identity.address }
 output "database_admin_secret_arn" { value = aws_db_instance.identity.master_user_secret[0].secret_arn }
-output "identity_service_name" { value = aws_ecs_service.identity.name }
+output "identity_service_name" { value = try(aws_ecs_service.identity[0].name, null) }
 output "identity_security_group_id" { value = aws_security_group.server.id }
-output "keycloak_task_definition_arn" { value = aws_ecs_task_definition.identity.arn }
+output "keycloak_task_definition_arn" { value = try(aws_ecs_task_definition.identity[0].arn, null) }
 output "public_alb_dns_name" { value = aws_lb.public.dns_name }
 output "private_admin_alb_dns_name" { value = aws_lb.admin.dns_name }
 # Public administrative isolation must not depend only on hostname-admin or ALB raw paths.
@@ -463,6 +465,7 @@ resource "aws_iam_role_policy" "bootstrap_execution" {
   ]) })
 }
 resource "aws_ecs_task_definition" "bootstrap" {
+  count                    = var.provision_tasks ? 1 : 0
   family                   = "${local.name}-bootstrap"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -476,12 +479,27 @@ resource "aws_ecs_task_definition" "bootstrap" {
   }
   volume { name = "identity-data" }
   volume { name = "identity-tmp" }
-  container_definitions = jsonencode([for container in jsondecode(aws_ecs_task_definition.identity.container_definitions) : merge(container, {
+  container_definitions = jsonencode([for container in jsondecode(aws_ecs_task_definition.identity[0].container_definitions) : merge(container, {
     command = ["bootstrap-admin", "user"],
     secrets = concat(container.secrets, [{ name = "KC_BOOTSTRAP_ADMIN_USERNAME", valueFrom = var.bootstrap_secret_refs.username }, { name = "KC_BOOTSTRAP_ADMIN_PASSWORD", valueFrom = var.bootstrap_secret_refs.password }])
   })])
   tags = local.tags
 }
-output "bootstrap_task_definition_arn" { value = aws_ecs_task_definition.bootstrap.arn }
+output "bootstrap_task_definition_arn" { value = try(aws_ecs_task_definition.bootstrap[0].arn, null) }
 output "public_identity_web_acl_arn" { value = aws_wafv2_web_acl.identity.arn }
 output "identity_repository_url" { value = aws_ecr_repository.identity.repository_url }
+
+moved {
+  from = aws_ecs_task_definition.identity
+  to   = aws_ecs_task_definition.identity[0]
+}
+moved {
+  from = aws_ecs_service.identity
+  to   = aws_ecs_service.identity[0]
+}
+moved {
+  from = aws_ecs_task_definition.bootstrap
+  to   = aws_ecs_task_definition.bootstrap[0]
+}
+output "public_alb_zone_id" { value = aws_lb.public.zone_id }
+output "private_admin_alb_zone_id" { value = aws_lb.admin.zone_id }

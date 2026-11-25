@@ -48,11 +48,13 @@ public final class PandagoBookingWorker {
   var a=context.path("address");var point=geocoder.resolve(new GeocodingProvider.Address(a.path("line1").asString(),a.path("line2").isString()?a.path("line2").asString():null,a.path("city").asString(),a.path("region").asString(),a.path("postalCode").isString()?a.path("postalCode").asString():null,a.path("countryCode").asString()));
   var location=new PandagoAdapter.Location(String.join(", ",a.path("line1").asString(),a.path("city").asString(),a.path("region").asString(),a.path("countryCode").asString()),point.latitude(),point.longitude());
   Instant scheduled=context.path("preorderedFor").isString()?Instant.parse(context.path("preorderedFor").asString()):null;String method=context.path("paymentMethod").asString();var amount=new BigDecimal(context.path("amount").asString());String description=context.path("description").asString();
-  var recipient=new PandagoAdapter.Recipient(a.path("recipient").asString(),a.path("phone").asString(),location);var quote=provider.quote(location,scheduled);
+  String pickupCode=context.path("pickupCode").asString();if(!pickupCode.matches("[A-Za-z0-9]{1,30}"))throw new IllegalArgumentException("PICKUP_CODE_INVALID");
+  String notes=a.path("line2").isString()&&!a.path("line2").asString().isBlank()?a.path("line2").asString():null;
+  var recipient=new PandagoAdapter.Recipient(a.path("recipient").asString(),a.path("phone").asString(),location,notes);var quote=provider.quote(location,scheduled);
   if(quote.fee().compareTo(new BigDecimal(context.path("deliveryAmount").asString()))!=0)throw new Problem.Failure(ProblemCode.CHECKOUT_REPRICE_REQUIRED);
   approval();boolean permission=Boolean.TRUE.equals(tx.execute(status->jdbc.update("UPDATE integration.carrier_booking SET prepared_at=?,account_hash=?,request_hash=?,updated_at=? WHERE id=? AND state='CLAIMED' AND version=? AND prepared_at IS NULL AND creation_generation=? AND lease_until>? AND NOT EXISTS(SELECT 1 FROM integration.carrier_cancellation c WHERE c.booking_id=integration.carrier_booking.id AND c.state<>'REJECTED')",stamp(clock.instant()),provider.accountFingerprint(),EventCodec.hash(context),stamp(clock.instant()),claim.id(),claim.version(),generation,stamp(clock.instant().plusSeconds(20)))==1));
   if(!permission)return 1;prepared=true;
-  var order=provider.confirm(quote,claim.reference(),recipient,amount,description,method,scheduled);
+  var order=provider.confirm(quote,claim.reference(),recipient,amount,description,method,scheduled,pickupCode);
   var body=result(claim,"BOOKED",order.id());if(save(claim,"BOOKED",order.id(),order.status(),body)){metrics.counter("nigson.pandago.bookings","state","BOOKED").increment();push(claim,body);}
  }catch(RuntimeException failure){
   if(!prepared&&(failure instanceof IllegalArgumentException||failure instanceof Problem.Failure p&&Set.of(ProblemCode.CHECKOUT_REPRICE_REQUIRED,ProblemCode.PROVIDER_RULE_VIOLATION,ProblemCode.PROVIDER_MODE_MISMATCH).contains(p.code))){var body=result(claim,"FAILED",claim.reference().toString());if(save(claim,"FAILED",null,null,body)){try{push(claim,body);}catch(RuntimeException unavailable){}}}

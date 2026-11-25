@@ -122,7 +122,7 @@ variable "services" {
         (service.cpu == 2048 && service.memory >= 4096 && service.memory <= 16384 && service.memory % 1024 == 0) ||
       (service.cpu == 4096 && service.memory >= 8192 && service.memory <= 30720 && service.memory % 1024 == 0)) &&
       contains(["X86_64", "ARM64"], service.architecture) &&
-      can(regex("^sha256:[a-f0-9]{64}$", service.image_digest)) &&
+      (var.provision_tasks ? can(regex("^sha256:[a-f0-9]{64}$", service.image_digest)) : !service.enabled) &&
       startswith(service.health_path, "/") &&
       length(service.probe_command) >= 2 &&
       service.min_count >= 0 && service.desired_count >= 0 && service.max_count >= 1 &&
@@ -138,15 +138,22 @@ variable "services" {
   }
 }
 variable "public_routes" {
-  type = map(object({ service = string, priority = number, path_patterns = list(string) }))
+  type = map(object({ service = string, priority = number, path_patterns = list(string), methods = optional(list(string), []) }))
   validation {
     condition = length(distinct(flatten([for route in values(var.public_routes) : [for index in range(length(route.path_patterns)) : route.priority + index]]))) == length(flatten([for route in values(var.public_routes) : [for index in range(length(route.path_patterns)) : route.priority + index]])) && alltrue([
       for route in values(var.public_routes) : route.priority >= 10 &&
       contains(keys(var.services), route.service) &&
       var.services[route.service].enabled && var.services[route.service].public &&
+      length(route.methods) <= 7 && alltrue([for method in route.methods : contains(["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], method)]) &&
       length(route.path_patterns) > 0 &&
       alltrue([for path in route.path_patterns : startswith(path, "/") && !strcontains(path, "?")])
     ])
     error_message = "Public ALB routes need unique priorities, enabled public services and explicit path-only patterns."
   }
+}
+
+variable "provision_tasks" {
+  type        = bool
+  default     = true
+  description = "False bootstraps ECR/network/IAM/ALB without placeholder images or ECS tasks."
 }

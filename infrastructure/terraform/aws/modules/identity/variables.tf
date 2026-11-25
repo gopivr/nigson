@@ -89,7 +89,7 @@ variable "kms_key_arn" {
 variable "identity_image" {
   type = string
   validation {
-    condition     = can(regex("^[0-9]{12}\\.dkr\\.ecr\\.[a-z0-9-]+\\.amazonaws\\.com/nigson/${var.environment}/identity@sha256:[a-f0-9]{64}$", var.identity_image))
+    condition     = (!var.provision_tasks && !var.service_enabled) || can(regex("^[0-9]{12}\\.dkr\\.ecr\\.[a-z0-9-]+\\.amazonaws\\.com/nigson/${var.environment}/identity@sha256:[a-f0-9]{64}$", var.identity_image))
     error_message = "Immutable optimized Keycloak ECR artifact digest from this environment's identity repository required."
   }
 }
@@ -161,4 +161,10 @@ variable "service_enabled" {
   type        = bool
   default     = false
   description = "Enable only after dedicated DB owner, temporary bootstrap and approved realm/client/MFA provisioning."
+}
+
+variable "provision_tasks" {
+  type        = bool
+  default     = true
+  description = "False creates identity infrastructure/ECR only; no placeholder image or bootstrap task."
 }

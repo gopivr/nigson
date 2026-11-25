@@ -1,0 +1,5 @@
+expected_account_id = "REPLACE_12_DIGIT_ACCOUNT_ID"
+domain_name         = "nigson.com"
+environment         = "stage"
+region              = "eu-west-1"
+# No AWS keys here. Run aws configure --profile nigson-stage on your machine.

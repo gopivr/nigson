@@ -11,7 +11,8 @@ owner=$2
 [[ "$owner" == "commerce" || "$owner" == "experience" || "$owner" == "integration" || "$owner" == "ai" ]]
 [[ -n "${AWS_REGION:-}" && "${AWS_EXPECTED_ACCOUNT_ID:-}" =~ ^[0-9]{12}$ ]]
 
-root="infrastructure/terraform/aws/environments/${environment}"
+root="${NIGSON_TERRAFORM_ROOT:-infrastructure/terraform/aws/environments/${environment}}"
+[[ "$root" == "infrastructure/terraform/aws/environments/${environment}" || "$root" == "infrastructure/terraform/aws/first-account" ]] || { echo "Unapproved Terraform root" >&2; exit 2; }
 outputs=$(terraform -chdir="$root" output -json migrations)
 [[ "$(jq -r .environment <<<"$outputs")" == "$environment" ]]
 [[ "$(jq -r .region <<<"$outputs")" == "$AWS_REGION" ]]

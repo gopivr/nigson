@@ -50,7 +50,7 @@ variables {
 run "bootstrap_closed" {
   command = apply
   assert {
-    condition     = aws_ecs_service.identity.desired_count == 0 && !aws_ecs_service.identity.network_configuration[0].assign_public_ip
+    condition     = aws_ecs_service.identity[0].desired_count == 0 && !aws_ecs_service.identity[0].network_configuration[0].assign_public_ip
     error_message = "Identity must remain closed until explicit provisioning/activation."
   }
   assert {
@@ -66,11 +66,11 @@ run "bootstrap_closed" {
     error_message = "Public and private identity listeners must use the approved TLS policy and their distinct configured certificates."
   }
   assert {
-    condition     = jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].command == ["start", "--optimized"] && jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].readonlyRootFilesystem && jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].user == "1000:0" && length(jsondecode(aws_ecs_task_definition.identity.container_definitions)[0].secrets) == 4
+    condition     = jsondecode(aws_ecs_task_definition.identity[0].container_definitions)[0].command == ["start", "--optimized"] && jsondecode(aws_ecs_task_definition.identity[0].container_definitions)[0].readonlyRootFilesystem && jsondecode(aws_ecs_task_definition.identity[0].container_definitions)[0].user == "1000:0" && length(jsondecode(aws_ecs_task_definition.identity[0].container_definitions)[0].secrets) == 4
     error_message = "Permanent tasks must be optimized, non-root and have no bootstrap credentials."
   }
   assert {
-    condition     = length(jsondecode(aws_ecs_task_definition.bootstrap.container_definitions)[0].secrets) == 6 && jsondecode(aws_ecs_task_definition.bootstrap.container_definitions)[0].command == ["bootstrap-admin", "user"]
+    condition     = length(jsondecode(aws_ecs_task_definition.bootstrap[0].container_definitions)[0].secrets) == 6 && jsondecode(aws_ecs_task_definition.bootstrap[0].container_definitions)[0].command == ["bootstrap-admin", "user"]
     error_message = "Bootstrap must be an isolated one-off task, never a permanent service mode."
   }
   assert {
@@ -82,7 +82,7 @@ run "bootstrap_closed" {
     error_message = "Dedicated Keycloak PostgreSQL must accept ingress only from the identity task group."
   }
   assert {
-    condition     = aws_ecs_task_definition.identity.runtime_platform[0].cpu_architecture == "ARM64" && aws_ecs_task_definition.bootstrap.runtime_platform[0].cpu_architecture == "ARM64"
+    condition     = aws_ecs_task_definition.identity[0].runtime_platform[0].cpu_architecture == "ARM64" && aws_ecs_task_definition.bootstrap[0].runtime_platform[0].cpu_architecture == "ARM64"
     error_message = "Identity and bootstrap task architectures must match the explicitly selected artifact platform."
   }
 }
@@ -90,7 +90,7 @@ run "two_replicas" {
   command = plan
   variables { service_enabled = true }
   assert {
-    condition     = aws_ecs_service.identity.desired_count == 2 && aws_ecs_service.identity.deployment_minimum_healthy_percent == 100 && aws_ecs_service.identity.deployment_circuit_breaker[0].rollback
+    condition     = aws_ecs_service.identity[0].desired_count == 2 && aws_ecs_service.identity[0].deployment_minimum_healthy_percent == 100 && aws_ecs_service.identity[0].deployment_circuit_breaker[0].rollback
     error_message = "Enabled identity requires two replicas and safe replacement."
   }
 }
@@ -98,7 +98,7 @@ run "select_x86_artifact_platform" {
   command = plan
   variables { cpu_architecture = "X86_64" }
   assert {
-    condition     = aws_ecs_task_definition.identity.runtime_platform[0].cpu_architecture == "X86_64" && aws_ecs_task_definition.bootstrap.runtime_platform[0].cpu_architecture == "X86_64"
+    condition     = aws_ecs_task_definition.identity[0].runtime_platform[0].cpu_architecture == "X86_64" && aws_ecs_task_definition.bootstrap[0].runtime_platform[0].cpu_architecture == "X86_64"
     error_message = "The selected artifact architecture must be used consistently by identity and bootstrap tasks."
   }
 }
@@ -126,4 +126,17 @@ run "require_proxy_sources" {
   command = plan
   variables { trusted_proxy_cidrs = ["0.0.0.0/0"] }
   expect_failures = [var.trusted_proxy_cidrs]
+}
+
+run "bootstrap_identity_without_unpublished_image" {
+  command = plan
+  variables {
+    provision_tasks = false
+    identity_image  = null
+    service_enabled = false
+  }
+  assert {
+    condition     = length(aws_ecs_task_definition.identity) == 0 && length(aws_ecs_task_definition.bootstrap) == 0 && length(aws_ecs_service.identity) == 0 && aws_ecr_repository.identity.image_tag_mutability == "IMMUTABLE"
+    error_message = "Identity infrastructure must not need a fake image during initial provisioning."
+  }
 }

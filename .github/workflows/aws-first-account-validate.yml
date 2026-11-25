@@ -1,0 +1,29 @@
+name: validate first AWS account configuration
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'infrastructure/terraform/aws/**'
+      - 'scripts/infra/prepare-first-account.py'
+      - 'scripts/infra/tests/test_first_account.py'
+      - '.github/workflows/aws-first-account-validate.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        directory: [bootstrap, first-account, modules/compute, modules/identity, modules/frontend, modules/storage]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+        with:
+          terraform_version: 1.12.2
+          terraform_wrapper: false
+      - run: terraform fmt -check -recursive infrastructure/terraform/aws/${{ matrix.directory }}
+      - run: terraform -chdir=infrastructure/terraform/aws/${{ matrix.directory }} init -backend=false -input=false
+      - run: terraform -chdir=infrastructure/terraform/aws/${{ matrix.directory }} validate
+      - run: terraform -chdir=infrastructure/terraform/aws/${{ matrix.directory }} test
+      - if: matrix.directory == 'bootstrap'
+        run: python3 -m unittest discover -s scripts/infra/tests -p test_first_account.py -v

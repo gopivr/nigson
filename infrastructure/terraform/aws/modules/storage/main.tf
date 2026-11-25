@@ -68,8 +68,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "owned" {
     id     = "${each.key}-approved-retention"
     status = "Enabled"
     filter {}
-    expiration { days = var.lifecycle_days[each.key].current_version_days }
-    noncurrent_version_expiration { noncurrent_days = var.lifecycle_days[each.key].noncurrent_version_days }
+    dynamic "expiration" {
+      for_each = var.enable_object_expiration ? [var.lifecycle_days[each.key].current_version_days] : []
+      content { days = expiration.value }
+    }
+    dynamic "noncurrent_version_expiration" {
+      for_each = var.enable_object_expiration ? [var.lifecycle_days[each.key].noncurrent_version_days] : []
+      content { noncurrent_days = noncurrent_version_expiration.value }
+    }
     abort_incomplete_multipart_upload { days_after_initiation = var.lifecycle_days[each.key].incomplete_upload_days }
   }
   depends_on = [aws_s3_bucket_versioning.owned]

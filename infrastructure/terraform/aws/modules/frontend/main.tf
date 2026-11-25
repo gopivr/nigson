@@ -170,3 +170,5 @@ output "url" { value = "https://${var.domain_name}" }
 output "distribution_id" { value = aws_cloudfront_distribution.frontend.id }
 output "bucket_name" { value = aws_s3_bucket.frontend.id }
 output "upload_prefix" { value = "releases/${var.release_id}" }
+
+output "distribution_arn" { value = aws_cloudfront_distribution.frontend.arn }

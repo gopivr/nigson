@@ -14588,7 +14588,7 @@
     "/internal/v1/shipments/{id}/provider-context": {
       "get": {
         "operationId": "API-119",
-        "description": "Private phase1 nigson-integration logistics.read; no actor/cookie/query/body. Bounded repeatable-read snapshot of verified paid unheld order and PANDAGO shipment intent; current qualified mode. Frozen minimal order address (CF-ORDER-001), original shipper and hash-bound parcels/reference. Only outstanding CREATED/EXCEPTION creation intents; completed operational states reject409 (CF-CARRIER-004). Missing historical shipper fails closed; no current configuration fallback, stock/payment writes or provider HTTP.",
+        "description": "Private phase1 nigson-integration logistics.read; no actor/cookie/query/body. Bounded repeatable-read snapshot of verified paid unheld order and PANDAGO shipment intent; current qualified mode. Frozen minimal order address (CF-ORDER-001), original shipper, hash-bound parcels/reference and a store-operator pickup handover code. The address line2 carries floor/door instructions for the recipient. Only outstanding CREATED/EXCEPTION creation intents; completed operational states reject409 (CF-CARRIER-004). Missing historical shipper fails closed; no current configuration fallback, stock/payment writes or provider HTTP.",
         "security": [
           {
             "carrierIntegrationWorkload": [
@@ -30256,7 +30256,8 @@
           "preorderedFor",
           "amount",
           "deliveryAmount",
-          "description"
+          "description",
+          "pickupCode"
         ],
         "properties": {
           "shipmentId": {
@@ -30342,6 +30343,11 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 500
+          },
+          "pickupCode": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{1,30}$",
+            "maxLength": 30
           }
         }
       },

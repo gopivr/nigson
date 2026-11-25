@@ -43,3 +43,12 @@ run "secure_versioned_buckets_and_cloudfront_origin" {
     error_message = "Quarantine evidence must retain object versions."
   }
 }
+
+run "bootstrap_preserves_objects_until_retention_is_reviewed" {
+  command = plan
+  variables { enable_object_expiration = false }
+  assert {
+    condition     = alltrue([for policy in aws_s3_bucket_lifecycle_configuration.owned : alltrue([for rule in policy.rule : length(rule.expiration) == 0 && length(rule.noncurrent_version_expiration) == 0 && length(rule.abort_incomplete_multipart_upload) == 1])])
+    error_message = "Bootstrap must not invent data expiration policy; incomplete uploads may still be cleaned up."
+  }
+}
