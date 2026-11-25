@@ -15921,7 +15921,7 @@
     "/api/v1/staff/orders": {
       "get": {
         "operationId": "API-043",
-        "description": "Current persisted OPERATIONS or FINANCE (recent MFA); closed bounded stable filters, frozen private reads, no export or financial mutation.",
+        "description": "Current persisted OPERATIONS, FINANCE or SALES staff. Closed bounded stable filters, frozen private reads, no export or financial mutation; order mutations remain OPERATIONS-only.",
         "security": [
           {
             "bffSession": []
@@ -16459,6 +16459,137 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/PurchaseProofInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staff/orders/after-sales": {
+      "get": {
+        "operationId": "API-245",
+        "description": "Current persisted OPERATIONS, FINANCE or SALES staff. Compact latest-first non-rejected return and refund states for order-list attention indicators; bounded, no-store and read-only.",
+        "security": [
+          {
+            "bffSession": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffOrderAttentionView"
+                }
+              }
+            },
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicting or in-progress request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Version mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "ORDER_RULE_VIOLATION or disabled/mismatched provider qualification",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Provider outcome uncertain or safe read unavailable",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../problem/problem.schema.json"
+                }
               }
             }
           }
@@ -31150,6 +31281,72 @@
           },
           "paystackRefundAvailable": {
             "type": "boolean"
+          }
+        }
+      },
+      "StaffOrderAttentionItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "orderId",
+          "returnState",
+          "refundState",
+          "updatedAt"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+          },
+          "returnState": {
+            "type": "string",
+            "enum": [
+              "REQUESTED",
+              "APPROVED",
+              "REJECTED",
+              "RECEIVED"
+            ]
+          },
+          "refundState": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "REQUESTED",
+                  "APPROVED",
+                  "REJECTED",
+                  "SUBMITTING",
+                  "PENDING",
+                  "UNKNOWN",
+                  "SUCCEEDED",
+                  "FAILED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "StaffOrderAttentionView": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 1000,
+            "items": {
+              "$ref": "#/components/schemas/StaffOrderAttentionItem"
+            }
           }
         }
       },
