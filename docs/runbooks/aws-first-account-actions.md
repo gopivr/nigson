@@ -144,3 +144,34 @@ with the supplied repository secrets remains required.
 
 References: [AWS credential action](https://github.com/aws-actions/configure-aws-credentials),
 [Terraform S3 backend](https://developer.hashicorp.com/terraform/language/backend/s3).
+
+## Provider checksum failure on Linux runners
+
+If Terraform reports that cached AWS6.15.0 does not match the lock file after
+read-only initialization, use the updated bootstrap and first-account lock files.
+The original files included the macOS ARM unpacked hash and signed archive hashes,
+but lacked Linux unpacked hashes. Read-only init could verify the downloaded ZIP
+without recording the Linux hash needed by subsequent cached-package checks.
+Both roots now include registry-verified Linux AMD64/ARM64 and macOS ARM hashes.
+The provider version and checksum verification remain unchanged.
+
+Commit/push the corrected files to the default branch, then start a **new**
+workflow run for that revision. Re-running the old failed job uses its old source
+revision. Use the same action/account/region; do not delete state, the bucket or
+other AWS resources to fix a provider checksum error. Credentials need no change
+for this checksum-only failure.
+
+When deliberately changing a provider version in future, regenerate signed
+platform hashes before committing the lock files:
+
+```bash
+for root in bootstrap first-account; do
+  terraform -chdir="infrastructure/terraform/aws/$root" providers lock \
+    -platform=linux_amd64 -platform=linux_arm64 -platform=darwin_arm64
+done
+```
+
+Keep `-lockfile=readonly` in the provisioning pipeline. PR validation initializes
+these two roots read-only on Linux and then validates them, matching the failing
+path rather than silently updating the lock file during the test.
+See [HashiCorp's multi-platform lock guidance](https://developer.hashicorp.com/terraform/cli/commands/providers/lock).

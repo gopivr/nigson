@@ -26,7 +26,16 @@ jobs:
           terraform_version: 1.12.2
           terraform_wrapper: false
       - run: terraform fmt -check -recursive infrastructure/terraform/aws/${{ matrix.directory }}
-      - run: terraform -chdir=infrastructure/terraform/aws/${{ matrix.directory }} init -backend=false -input=false
+      - name: Initialize using the same lock policy as the bootstrap pipeline
+        env:
+          TF_ROOT: ${{ matrix.directory }}
+        run: |
+          set -euo pipefail
+          lock_args=()
+          if [[ "$TF_ROOT" == bootstrap || "$TF_ROOT" == first-account ]]; then
+            lock_args+=(-lockfile=readonly)
+          fi
+          terraform -chdir="infrastructure/terraform/aws/$TF_ROOT" init -backend=false -input=false "${lock_args[@]}"
       - run: terraform -chdir=infrastructure/terraform/aws/${{ matrix.directory }} validate
       - run: terraform -chdir=infrastructure/terraform/aws/${{ matrix.directory }} test
       - if: matrix.directory == 'bootstrap'
