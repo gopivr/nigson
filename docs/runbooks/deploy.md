@@ -235,3 +235,5 @@ root, `NIGSON_TERRAFORM_ROOT=infrastructure/terraform/aws/first-account` selects
 its guarded migration outputs. Application/identity activation, real secret values,
 owner DB bootstrap, migration receipts and release/provider acceptance remain
 explicit release gates; infrastructure provisioned is not application deployed.
+
+First-account staging can also be provisioned through the manual GitHub workflow `aws-first-account-bootstrap.yml`, using repository AWS credentials and durable S3 bootstrap state. Follow [the Actions bootstrap guide](aws-first-account-actions.md). This foundation workflow does not activate application releases or replace the existing environment release process.

@@ -6,6 +6,16 @@ bucket. Use it instead of `aws/environments/stage` for this environment, not
 alongside that root. Existing deployments must retain their original state and
 resource ownership. No live AWS apply has been performed to qualify this path.
 
+## GitHub Actions setup
+
+For a fresh staging account, use the [GitHub Actions guide](../../../../docs/runbooks/aws-first-account-actions.md).
+Add repository secrets AWS_ACCOUNT_ID, AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY;
+run **bootstrap first AWS account** with actions **bootstrap**, then **plan** and
+**apply** after adding the generated Squarespace NS records. The workflow persists
+bootstrap state on S3 so later hosted runners can resume. The local CLI procedure
+below remains supported; migrate any existing local bootstrap state before moving
+its ownership to Actions.
+
 ## Inputs and credentials
 
 Required initial inputs:

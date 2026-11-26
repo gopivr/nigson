@@ -6,6 +6,10 @@ on:
       - 'infrastructure/terraform/aws/**'
       - 'scripts/infra/prepare-first-account.py'
       - 'scripts/infra/tests/test_first_account.py'
+      - 'scripts/infra/first-account-pipeline.py'
+      - 'scripts/infra/tests/test_first_account_pipeline.py'
+      - 'scripts/infra/tests/workflows-test.sh'
+      - '.github/workflows/aws-first-account-bootstrap.yml'
       - '.github/workflows/aws-first-account-validate.yml'
 permissions:
   contents: read
@@ -27,3 +31,7 @@ jobs:
       - run: terraform -chdir=infrastructure/terraform/aws/${{ matrix.directory }} test
       - if: matrix.directory == 'bootstrap'
         run: python3 -m unittest discover -s scripts/infra/tests -p test_first_account.py -v
+      - if: matrix.directory == 'bootstrap'
+        run: python3 -m unittest discover -s scripts/infra/tests -p test_first_account_pipeline.py -v
+      - if: matrix.directory == 'bootstrap'
+        run: bash scripts/infra/tests/workflows-test.sh

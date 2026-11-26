@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "$0")/../../.." && pwd)"
-workflows=(infra-plan.yml infra-artifacts.yml deploy-environment.yml)
+workflows=(infra-plan.yml infra-artifacts.yml deploy-environment.yml aws-first-account-bootstrap.yml aws-first-account-validate.yml)
 
 ruby -e 'require "yaml"; ARGV.each { |file| YAML.load_file(file) }' \
   "${workflows[@]/#/$repo_root/.github/workflows/}"
@@ -53,3 +53,20 @@ if grep -Eq 'terraform|secretsmanager|iam:[[:space:]]*\*' "$deploy"; then
 fi
 
 echo "Workflow syntax, pinned actions, and permission boundaries PASS"
+
+ruby - "$repo_root/.github/workflows/aws-first-account-bootstrap.yml" <<'RUBY'
+require 'yaml'
+workflow = YAML.load_file(ARGV.fetch(0))
+triggers = workflow['on'] || workflow[true]
+raise 'bootstrap credentials must be manual-only' unless triggers.keys == ['workflow_dispatch']
+raise 'unexpected bootstrap operations' unless triggers['workflow_dispatch']['inputs']['action']['options'] == ['bootstrap', 'plan', 'apply']
+raise 'bootstrap must not require a pre-existing OIDC role' unless workflow['permissions'] == {'contents' => 'read'}
+raise 'state mutation runs must serialize' unless workflow['concurrency'] == {'group' => 'nigson-infrastructure-stage', 'cancel-in-progress' => false}
+job = workflow['jobs']['first-account']
+raise 'bootstrap must use staging environment' unless job['environment'] == 'stage'
+raise 'bootstrap must use default-branch code' unless job['if'].include?('github.event.repository.default_branch')
+raise 'account must come from the documented secret' unless job['env']['AWS_EXPECTED_ACCOUNT_ID'] == '${{ secrets.AWS_ACCOUNT_ID }}'
+raise 'do not upload Terraform state/plan artifacts' if job['steps'].any? { |step| step.fetch('uses', '').include?('upload-artifact') }
+raise 'do not interpolate dispatch input into shell code' if job['steps'].any? { |step| step.fetch('run', '').include?('${{ inputs.') }
+puts 'First-account manual dispatch, staging secrets and durable state boundaries PASS'
+RUBY
