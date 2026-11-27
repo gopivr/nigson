@@ -20,7 +20,7 @@ if __name__=='__main__':
     platform_main(
         java_tests='NotificationPersistenceTest,NotificationHttpTest,NewsletterPersistenceTest,PhoneConsentPersistenceTest,VerificationSenderPersistenceTest,NotificationReceiptPersistenceTest,BuildCompatibilityTest',
         run_python=False,
-        evidence=ROOT/'docs/implementation/evidence/2026-10-19-EXP-NOTIF-001',
+        evidence=ROOT/'.build/evidence/2026-10-19-EXP-NOTIF-001',
         completion='PASS: EXP-NOTIF-001 native PostgreSQL/API-137 owner outcome acceptance and consent/provider regression checks; Integration remains owner of escaped template rendering, durable provider attempts and live dispatch',
         maven_command=os.environ.get('NIGSON_MAVEN_BIN','mvn'),
         java_projects='services/experience,services/integration',

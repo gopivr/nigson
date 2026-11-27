@@ -30,6 +30,6 @@ if __name__ == '__main__':
     platform.main(
         java_tests='QuoteLeadPersistenceTest,QuoteLeadHttpTest,QuoteSkuEligibilityHttpClientTest,QuoteSkuEligibilityPersistenceTest,BuildCompatibilityTest',
         run_python=False,
-        evidence=ROOT / 'docs/implementation/evidence/2026-10-18-EXP-LEAD-002',
+        evidence=ROOT / '.build/evidence/2026-10-18-EXP-LEAD-002',
         completion='PASS: EXP-LEAD-002 Experience lead PostgreSQL and actual HTTP acceptance; private API-206 adapter exercised through an explicit stateful local mock; live recipient and Commerce workload configuration remain gated',
     )

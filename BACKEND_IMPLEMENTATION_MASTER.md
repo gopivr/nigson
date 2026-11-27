@@ -1,4 +1,8 @@
-# Nigson Backend Implementation Master
+# Nigson Backend Specification
+
+Detailed reference for schema/event generators and contracts. Start with README.md
+for maintained setup and deployment instructions. Historical roadmap entries do
+not establish current implementation or release status.
 
 Specification1.1.0 | Architecture source1.0 + ADR-008 |4 October2026
 
@@ -472,7 +476,6 @@ Use a backend monorepo at the current repository root; do not create a nested gi
 
 ```text
 BACKEND_IMPLEMENTATION_MASTER.md
-IMPLEMENTATION_STATUS.md
 pom.xml  mvnw  mvnw.cmd  .mvn/wrapper/
 services/commerce/pom.xml
 services/experience/pom.xml
@@ -498,7 +501,6 @@ infrastructure/terraform/ovh/{modules/platform,environments/stage,environments/p
 infrastructure/docker/{localstack,keycloak,otel,postgres}/
 .github/workflows/{ci,deploy,ai-evaluation,restore-drill}.yml
 docs/{ARCHITECTURE,API_CONTRACT,DATA_MODEL,EVENT_CATALOG,SECURITY,AI_ARCHITECTURE,LOCAL_DEVELOPMENT}.md
-docs/adr/  docs/implementation/  docs/runbooks/
 tests/contract/  tests/e2e/  tests/load/  tests/fixtures/
 scripts/  .env.example  docker-compose.yml  Makefile  README.md
 ```
@@ -8817,7 +8819,7 @@ Automated provider contracts use `make provider-contract-test PROVIDER=all MODE=
 | make load-test / restore-test | Realistic staging-safe synthetic workloads and isolated restore |
 | make status-check | Verify task/report/status consistency; never infer test success |
 
-Scripts use strict shell error handling, quote paths/variables, bounded readiness waits and clear exit codes. Do not repurpose HOME/system variables. Execution scripts must be safe to rerun and must not mask failures. Document exact generated command forms in LOCAL_DEVELOPMENT.md and task completion reports. Avoid requiring manual table edits, guessed ports or privileged cloud credentials for local development.
+Scripts use strict shell error handling, quote paths/variables, bounded readiness waits and clear exit codes. Do not repurpose HOME/system variables. Execution scripts must be safe to rerun and must not mask failures. Document exact generated command forms in docs/LOCAL_APPLICATION_GUIDE.md. Avoid requiring manual table edits, guessed ports or privileged cloud credentials for local development.
 
 
 | Added command | Required behavior |
@@ -8939,48 +8941,19 @@ Within each domain task: write contract/race test -> migration -> domain invaria
 BP1 launch gate now additionally requires MOCK-001, IDP-001, NGN-001, PAYSTACK-001, CARRIER-001 and MSG-001. Carrier/messaging are not BP4/BP2 deferrals. EP09 deepens operations; newsletters/promotions retain BP2. Four domain services plus production Keycloak platform service; AI remains BP5. Re-run INFRA-001/OPS-002 identity/callback/restore smoke before BP1 release.
 
 
-# 47. Codex Execution Rules
+# 47. Implementation guidance
 
-1. Read AGENTS.md, this master, IMPLEMENTATION_STATUS.md, relevant supporting contract and active ADRs before edits. Inspect the existing repository and git state; preserve unrelated user work.
-2. Select the next dependency-ready task. Read its referenced tables/APIs/events and section17 transaction rules; record IN_PROGRESS with current task and planned verification. Activation blockers do not prevent unrelated implementation/test work.
-3. Never regenerate or overwrite completed code wholesale. Implement the smallest coherent increment, using the existing styles/module boundaries. No core TODO, fake success response or in-memory substitute in production profiles.
-4. Source architecture and explicit approved decisions control scope. A prompt mentioning Kafka, Kubernetes, Helm or an API gateway does not authorize replacing SNS/SQS/ECS/BFF. Record proposed contract/schema/boundary changes in an ADR and update traceability/tests before adoption.
-5. Run targeted tests and relevant build/format/migration/security checks. On failure retain FAIL and useful safe diagnostics; fix within scope before proceeding. Never mark NOT_RUN/BLOCKED as PASS or reinterpret a failed business invariant as flaky.
-6. Validate API/event/schema backward compatibility. Include repository, provider, permissions and negative paths; do not stop at controller unit tests. Never access another owner's tables to shortcut a missing API.
-7. Update status after every session, including failed/partial sessions: phase/task IDs, changed files, actual commands/results, commit if created, blockers, next task. Use section48 report. A commit hash is recorded only after git confirms it; document-only deliverables are not runtime implementations.
-8. Do not expose secrets/PII in reports or fixtures. Implement provider test adapters under the isolated test profile only; application runtime uses official live APIs and never falls back to mocks. Obtain real provider/market/rule approvals through the project's agreed governance before activation.
-9. Continue authorized reversible implementation independently. Ask for missing business facts only when the next dependent decision cannot be resolved from the contract/approved config; do not stall unrelated dependency-ready tasks. Publishing/production changes follow the project's existing release authority, not an invented blueprint approval requirement.
-10. Stop the current dependent rollout on integrity/security failure, unexplained schema drift or UNKNOWN financial outcome. Preserve durable records, investigate/reconcile and report the precise blocker. Never delete financial evidence to make tests or deployment pass.
+Follow AGENTS.md, the relevant contracts and current ADRs. Preserve unrelated
+work, owner boundaries, financial invariants and provider UNKNOWN handling.
+Run relevant checks and report the actual results and remaining limitations.
+Keep secrets and customer data out of code and logs.
 
+# 48. Documentation
 
-User clarification in ADR-008 takes precedence over original assumptions002/003/004/012/013. Implement the required stateful mock servers during MOCK-001; do not merely return hardcoded success from production adapters. Credential-free offline work is authorized and must proceed; adding actual provider accounts/credentials on release uses the versioned configuration checklist.
-
-
-# 48. Codex Completion Report Format
-
-After each implementation session, write `docs/implementation/YYYY-MM-DD-TASK-ID.md` and update the status file:
-
-```markdown
-# Session report: TASK-ID
-Date/time: UTC
-Specification/architecture version:
-Task status: IN_PROGRESS | DONE | BLOCKED | FAILED
-Current engineering/product phase:
-Summary: concrete resulting behavior
-Files changed: exact repository paths
-Contracts/migrations/events affected: stable IDs
-Acceptance criteria: AC-TASK-ID and actual evidence
-Commands executed: exact safe commands, exit result and evidence paths
-Build: PASS | FAIL | NOT_RUN (reason)
-Tests: PASS | FAIL | NOT_RUN | BLOCKED (reason)
-Security/migration/compatibility checks: results
-Last successful commit: actual hash or NONE
-Open issues/activation inputs: IDs and owner
-Next dependency-ready task: ID and reason
-```
-
-Do not include raw credentials, customer data or fabricated successful command output. Passing a formatting or document check is not a backend build/test pass.
-
+Maintain concise setup, deployment and operational guides. Do not create task
+registries, session reports or committed command-output evidence. Generated logs
+and test evidence belong under ignored `.build/`. The task catalogue below is
+historical specification context, not a required status-tracking workflow.
 
 # 49. Codex Task Breakdown
 
@@ -8990,7 +8963,6 @@ Permanent task IDs; existing IDs retained. Specification1.1.0 adds six explicit 
 
 - **Phase / service:** EP00 / platform.
 - **Dependencies:** None
-- **Files/packages:** `README.md`, `AGENTS.md`, `BACKEND_IMPLEMENTATION_MASTER.md`, `IMPLEMENTATION_STATUS.md`
 - **Implementation:** Initialize the section6 tree; copy this complete contract and synchronized docs; record architecture1.0/spec1.0.0 and define no-source generation history. AGENTS.md points to sections3/17/47 and forbids owner-boundary changes without ADR.
 - **Contracts:** APIs None directly; tables Owned existing tables; events None directly
 - **Tests:** TEST-FOUND-TREE: fresh clone has all required paths, no runtime credentials, status IDs match the master.
@@ -9600,7 +9572,6 @@ Permanent task IDs; existing IDs retained. Specification1.1.0 adds six explicit 
 
 - **Phase / service:** EP13 / platform.
 - **Dependencies:** OPS-002, SEC-001, COM-AUTHO-001, COM-PARTY-001, COM-SESSI-001, COM-CATAL-001, COM-FILES-001, COM-NOTIF-001, COM-PLATF-001, COM-PROVI-001, EXP-CONTE-001, EXP-FILES-001, EXP-LEAD-001, EXP-NOTIF-001, EXP-PLATF-001, COM-INVEN-001, COM-MARKE-001, COM-PRICI-001, COM-CART-001, COM-FULFI-001, COM-ORDER-001, COM-PAYME-001, INT-NOTIF-001, INT-PROVI-001, COM-PROMO-001, COM-REWAR-001, EXP-CAREE-001, EXP-CONSE-001, EXP-ENGAG-001, EXP-FILES-002, EXP-NOTIF-002, INT-PROVI-002, COM-AUTHO-002, COM-PARTY-002, COM-PRICI-002, COM-QUOTE-001, COM-REWAR-002, EXP-DISTR-001, EXP-LEAD-002, COM-AUDIT-001, COM-CART-002, COM-FULFI-002, COM-REPOR-001, EXP-AUDIT-001, EXP-REPOR-001, AI-EVALU-001, AI-GATEW-001, AI-KNOWL-001, AI-ASSIS-001, COM-CATAL-002, COM-MARKE-002, COM-ORDER-002, EXP-CONTE-002, OPS-001, MOCK-001, IDP-001, NGN-001, PAYSTACK-001, CARRIER-001, MSG-001
-- **Files/packages:** `docs/implementation/`, `docs/runbooks/`, `IMPLEMENTATION_STATUS.md`, `docs/RELEASE_EVIDENCE.md`
 - **Implementation:** At every BP gate select only tasks introduced through that product phase, require relevant AC/test/build/migration/security evidence, unresolved approvals and scoped release notes. Final BP5 qualification includes every task. Exercise business journeys and rollback; reconcile this contract to deployed OpenAPI/schema/event registry; record commit/digests/config revision and handover.
 - **Contracts:** APIs None directly; tables Owned existing tables; events None directly
 - **Tests:** TEST-E2E-BP1 through TEST-E2E-BP5: journeys section50; no approval activation bypass; no unexecuted test marked PASS.
@@ -10344,11 +10315,9 @@ Build/test PASS is command-scoped and timestamped; it does not imply every test 
 
 # 56. Codex State Tracking
 
-IMPLEMENTATION_STATUS.md is created alongside this master, initially EP00 / FOUND-001. No backend implementation occurred in this authoring task. Every task is PENDING, no completed or in-progress implementation, build/test NOT_RUN, commit NONE. The prompt's PASS/FAIL fields cannot truthfully be populated before commands execute; NOT_RUN is the explicit initial state and BLOCKED is permitted for unmet external inputs.
 
 After every implementation session update Current Phase, Current Task, Completed Tasks, In Progress, Pending, Build Status, Test Status, Last Successful Commit, Known Issues, Next Recommended Task and evidence/report links. States: PENDING -> IN_PROGRESS -> DONE; IN_PROGRESS may become BLOCKED/FAILED; only actual evidence allows DONE. Preserve completed history. Resume from dependency-ready IDs, never infer progress from a file's existence alone.
 
-Known activation inputs are ASSUMPTION IDs from section3, tracked separately from defects. Date/commit/commands must be real. Final blueprint static validation is reported in SPECIFICATION_VALIDATION.md; it is not a backend test run.
 
 
 Specification1.1.0 revises approved inputs, adds six tasks and retains all existing task IDs/PENDING implementation state. No backend build/test has run during this document edit. Status lists every new task and separates confirmed choices from remaining actual account credentials/policies.
@@ -10356,7 +10325,6 @@ Specification1.1.0 revises approved inputs, adds six tasks and retains all exist
 
 # 57. Additional Codex Instruction Files
 
-The generated package contains this master, IMPLEMENTATION_STATUS.md, SPECIFICATION_VALIDATION.md and synchronized supporting files:
 
 | File | Authoritative sections |
 |---|---|
@@ -10366,9 +10334,8 @@ The generated package contains this master, IMPLEMENTATION_STATUS.md, SPECIFICAT
 | docs/EVENT_CATALOG.md | 16–17; payloads and transaction handling |
 | docs/SECURITY.md | 15, 26, 29, 45 |
 | docs/AI_ARCHITECTURE.md | 19–24; bounded RAG/tool contracts |
-| docs/LOCAL_DEVELOPMENT.md | 30–31, 36, 39–40 |
+| docs/LOCAL_APPLICATION_GUIDE.md | 30–31, 36, 39–40 |
 | docs/adr/ADR-001…007 | section53 initial decisions |
-| docs/implementation/README.md | sections47–48 report/status instructions |
 
 Files are specification artifacts only. Supporting views state specification1.1.0 and master authority. Update the master first, then synchronized views. Future actual dependency-lock/provider/runbook/evidence files are implementation-task outputs, not fabricated completed artifacts in this package.
 
@@ -10402,7 +10369,6 @@ Specification completeness (document checks, not runtime checks):
 - [x] EP00–EP13, task dependencies, code paths, acceptance criteria and product phase release gates created.
 - [x] Codex execution/session-report/status mechanism and anti-patterns created.
 
-The companion SPECIFICATION_VALIDATION.md records mechanical coverage/ID/DAG checks and package checksums. This is completeness against the stated recommended architecture and explicit provisional assumptions, not evidence that clients approved scope or that backend implementations/tests exist. Provider account/sender/route configuration and unapproved tax/returns/campaign/AI policies remain activation inputs; they cannot be safely invented by this specification.
 
 
 Revision1.1.0 completeness additionally covers approved Nigeria/NGN, Paystack exclusivity, stateful mock contracts, required FedEx quote/booking/tracking, SMS/WhatsApp/destination proof/consent/receipts/inbound and production Keycloak deployment/DB/restore. Each has schema/API/task/test/acceptance mapping; real mock servers and backend source remain future implementation outputs, not generated code in this task.

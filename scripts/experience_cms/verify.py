@@ -16,7 +16,7 @@ def java25(environment):
 
 if __name__=='__main__':
     platform_main(java_tests='ContentKnowledgePersistenceTest,ContentKnowledgeHttpTest,BuildCompatibilityTest',
-                  evidence=ROOT/'docs/implementation/evidence/2026-10-18-EXP-CONTE-001',
+                  evidence=ROOT/'.build/evidence/2026-10-18-EXP-CONTE-001',
                   run_python=False,maven_command=os.environ.get('NIGSON_MAVEN_BIN','./mvnw'),
                   java_projects='services/experience',java_environment=java25,
                   completion='PASS: EXP-CONTE-001 Experience CMS revision, review, approval, scheduled publication/withdrawal, channel and actual HTTP/native PostgreSQL acceptance')

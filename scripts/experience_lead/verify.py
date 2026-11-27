@@ -20,7 +20,7 @@ if __name__ == '__main__':
     platform_main(
         java_tests='LeadPersistenceTest,LeadHttpTest,InboundMessagePersistenceTest,QuoteLeadPersistenceTest,QuoteLeadHttpTest,BuildCompatibilityTest',
         run_python=False,
-        evidence=ROOT / 'docs/implementation/evidence/2026-10-19-EXP-LEAD-001',
+        evidence=ROOT / '.build/evidence/2026-10-19-EXP-LEAD-001',
         completion='PASS: EXP-LEAD-001 native Experience PostgreSQL migrations and actual HTTP lead intake, signed staff ownership, versioned assignment/history, durable EVT-016 and exact integration notification context; live recipient, anti-abuse provider and privacy configuration remain gated',
         maven_command=os.environ.get('NIGSON_MAVEN_BIN', 'mvn'),
         java_projects='services/experience',

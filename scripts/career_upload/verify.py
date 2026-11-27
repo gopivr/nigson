@@ -21,6 +21,6 @@ if __name__=='__main__':
         platform.subprocess.run=run_with_pinned_maven
     if os.environ.get('ENV','test')!='test':
         raise SystemExit('experience file qualification requires ENV=test')
-    evidence=ROOT/'docs/implementation/evidence/2026-10-18-EXP-FILES-002'
+    evidence=ROOT/'.build/evidence/2026-10-18-EXP-FILES-002'
     platform.main(java_tests='Career*Test',run_python=False,evidence=evidence,
                   completion='PASS: API-157 public anti-abuse checked CAREER_CV upload sessions, purpose/size/expiry bounds, encrypted idempotent capability replay, owner-local audit and actual anonymous HTTP route; no binary transfer or live object-store activation implied')

@@ -18,4 +18,4 @@ if __name__=='__main__':
    return real_run(args,*a,**kw)
   platform.subprocess.run=pinned
  if os.environ.get('ENV','test')!='test':raise SystemExit('engagement qualification requires ENV=test')
- platform.main(java_tests='EngagementValuesTest,PurchaseProofClientTest,EngagementPersistenceTest,AuditPersistenceTest,BuildCompatibilityTest',run_python=False,evidence=ROOT/'docs/implementation/evidence/2026-10-18-EXP-ENGAG-001',completion='PASS: EXP-ENGAG-001 purchase-proofed reviews, moderation/version/outbox, public privacy filters and display-only campaigns on isolated owner PostgreSQL; Commerce HTTP is stateful local mock; live settings not implied')
+ platform.main(java_tests='EngagementValuesTest,PurchaseProofClientTest,EngagementPersistenceTest,AuditPersistenceTest,BuildCompatibilityTest',run_python=False,evidence=ROOT/'.build/evidence/2026-10-18-EXP-ENGAG-001',completion='PASS: EXP-ENGAG-001 purchase-proofed reviews, moderation/version/outbox, public privacy filters and display-only campaigns on isolated owner PostgreSQL; Commerce HTTP is stateful local mock; live settings not implied')

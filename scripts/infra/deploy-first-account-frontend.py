@@ -54,6 +54,43 @@ def state_resource(state, address):
     return found
 
 
+
+def changed_field_paths(before, after, *, limit=20):
+    """Describe plan differences without logging values, headers, tags or secrets."""
+    paths = []
+    missing = object()
+
+    def visit(left, right, path):
+        if len(paths) >= limit:
+            return
+        if isinstance(left, dict) and isinstance(right, dict):
+            for key in sorted(left.keys() | right.keys()):
+                # Only fixed Terraform schema names enter diagnostics; map keys
+                # (tags, custom headers, etc.) may themselves contain private data.
+                if key not in left or key not in right or left[key] != right[key]:
+                    visit(left.get(key, missing), right.get(key, missing), path + '/' + str(key))
+        elif isinstance(left, list) and isinstance(right, list):
+            for index in range(max(len(left), len(right))):
+                visit(left[index] if index < len(left) else missing,
+                      right[index] if index < len(right) else missing, path + '/' + str(index))
+        elif type(left) is not type(right) or left != right:
+            paths.append(path or '/')
+
+    # Compare each top-level schema field separately. Report nested block indices
+    # only for known CloudFront blocks; arbitrary user map keys are never emitted.
+    blocks = {'origin', 'default_cache_behavior', 'ordered_cache_behavior',
+              'viewer_certificate', 'restrictions', 'logging_config'}
+    for key in sorted(before.keys() | after.keys()):
+        left, right = before.get(key, missing), after.get(key, missing)
+        if type(left) is type(right) and left == right:
+            continue
+        if key in blocks:
+            visit(left, right, '/' + key)
+        elif len(paths) < limit:
+            paths.append('/' + key)
+    return paths
+
+
 def frontend_plan(plan, release, distribution):
     changed = [c for c in plan.get("resource_changes", []) if c["change"]["actions"] not in [["no-op"], ["read"]]]
     if len(changed) != 1 or changed[0]["address"] != ADDRESS or changed[0]["change"]["actions"] != ["update"]:
@@ -75,16 +112,31 @@ def frontend_plan(plan, release, distribution):
         raise ValueError("Unexpected CloudFront origin topology")
     if new["static"].get("origin_path") != "/releases/" + release:
         raise ValueError("Release plan does not activate the uploaded release")
-    # AWS provider 6.15 flattens absent response timeout as 0, but plans it as null.
-    # Both omit the API field; a positive configured timeout is never ignored.
+    # AWS 6.15's SDK state uses empty strings/collections for omitted origin
+    # fields; a replacement set element can plan these as null or omit them.
+    # Normalize only empty optional values. Never discard a configured OAC, IP
+    # address type, header/config block or positive response timeout.
     for origin in [*old.values(), *new.values()]:
         if origin.get("response_completion_timeout") in (None, 0):
             origin.pop("response_completion_timeout", None)
+        for key in ("origin_access_control_id", "origin_path"):
+            if origin.get(key) in (None, ""):
+                origin.pop(key, None)
+        for key in ("custom_header", "custom_origin_config", "origin_shield",
+                    "s3_origin_config", "vpc_origin_config"):
+            if origin.get(key) in (None, []):
+                origin.pop(key, None)
+        for config in origin.get("custom_origin_config", []):
+            if config.get("ip_address_type") in (None, ""):
+                config.pop("ip_address_type", None)
     old["static"]["origin_path"] = "/releases/" + release
     before["origin"] = [old[k] for k in sorted(old)]
     after["origin"] = [new[k] for k in sorted(new)]
     if before != after:
-        raise ValueError("Release plan changes CloudFront settings beyond the static release path")
+        fields = ", ".join(changed_field_paths(before, after))
+        raise ValueError("Release plan changes CloudFront settings beyond the static release path. "
+                         "Changed fields (values withheld): " + fields +
+                         ". Review these fields in the Terraform resource diff; reconcile infrastructure changes separately before retrying UI deployment.")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

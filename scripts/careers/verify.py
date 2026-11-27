@@ -21,6 +21,6 @@ if __name__=='__main__':
         platform.subprocess.run=run_with_pinned_maven
     if os.environ.get('ENV','test')!='test':
         raise SystemExit('career qualification requires ENV=test')
-    evidence=ROOT/'docs/implementation/evidence/2026-10-18-EXP-CAREE-001'
+    evidence=ROOT/'.build/evidence/2026-10-18-EXP-CAREE-001'
     platform.main(java_tests='Career*Test',run_python=False,evidence=evidence,
                   completion='PASS: all ten career unit/persistence tests pass, including PostgreSQL quarantine, one-shot CV claim, encrypted applicant, EVT-024 replay, state transition, and minimal sheet context scenarios')

@@ -1,5 +1,5 @@
 require 'yaml'
-path = File.expand_path('../../../../.github/workflows/aws-stage-ui.yml', __dir__)
+path = File.expand_path('../../../../.github/workflows/frontend-deploy.yml', __dir__)
 w = YAML.load_file(path)
 on = w['on'] || w[true]
 raise 'unsafe workflow trigger' if on.key?('pull_request_target') || on.key?('workflow_run')

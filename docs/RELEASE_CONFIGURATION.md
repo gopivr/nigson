@@ -173,7 +173,7 @@ Production profile rejects mock/sandbox targets or dummy credentials for enabled
 4. Add genuine Paystack test key, FedEx sandbox/account and Twilio trial/sandbox senders/approved templates in Secrets Manager; apply provider target allowlist and test recipient restrictions.
 5. Record actual provider checkout/refund/rate/book/cancel/track/SMS/WhatsApp/callback evidence. Verify FedEx services cover approved routes/currency; keys alone cannot establish service availability. Fix account/config gaps without pretending mocks prove live support.
 6. Switch configuration to live secrets/endpoints/senders/templates; no adapter/domain source rewrite. Production validation refuses dummy/mock targets. Run approved bounded live smoke and record commit/config revisions, mode/account and receipts without raw credentials.
-7. Verify alerts/reconciliation/backup/rollback and update IMPLEMENTATION_STATUS.md with actual results. Existing project deployment authority governs release, no new permission workflow introduced here.
+7. Verify alerts/reconciliation/backup/rollback and record actual results in the release review. Existing project deployment authority governs release, no new permission workflow introduced here.
 
 ## Identity deployment artifact and policy inputs
 

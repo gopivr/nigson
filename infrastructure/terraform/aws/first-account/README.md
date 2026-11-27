@@ -10,7 +10,7 @@ resource ownership. No live AWS apply has been performed to qualify this path.
 
 For a fresh staging account, use the [GitHub Actions guide](../../../../docs/runbooks/aws-first-account-actions.md).
 Add repository secrets AWS_ACCOUNT_ID, AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY;
-run **bootstrap first AWS account** with actions **bootstrap**, then **plan** and
+run **Backend — AWS Infrastructure** with actions **bootstrap**, then **plan** and
 **apply** after adding the generated Squarespace NS records. The workflow persists
 bootstrap state on S3 so later hosted runners can resume. The local CLI procedure
 below remains supported; migrate any existing local bootstrap state before moving
@@ -249,6 +249,10 @@ These tests use Terraform mock providers and fake local CLI fixtures. They do no
 prove actual AWS quota, engine availability, certificate validation, DNS delivery,
 application startup or live provider qualification.
 
-## UI repository CI/CD
+## UI CI/CD
 
-Use the UI repository's `.github/workflows/aws-stage-ui.yml` and `deployment/AWS.md`. Apply this root's new deployment_configuration output once using current inputs before the first UI deployment. That sensitive state snapshot lets UI-only releases retain backend activation/images/environment. The UI workflow needs only a read-only infrastructure repository token in addition to its authorized AWS secrets and public reCAPTCHA site key; it discovers bucket/distribution from state. First-account Actions preserves the applied frontend release on later infrastructure runs. Preserve that same release ID in any manual full-root/runtime activation inputs.
+The root `.github/workflows/frontend-deploy.yml` builds `frontend/` and deploys from
+this same repository revision. No cross-repository token is needed. Apply the
+current platform configuration once so state records `deployment_configuration`;
+UI-only releases use this snapshot to preserve backend inputs. Follow the
+[deployment guide](../../../../docs/DEPLOYMENT.md).

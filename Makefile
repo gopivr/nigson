@@ -1,4 +1,4 @@
-.PHONY: status-check build test verify java-build dependency-check ai-sync ai-build ai-test ai-lint local-up local-down local-config-check local-status
+.PHONY: build test verify java-build dependency-check ai-sync ai-build ai-test ai-lint local-up local-down local-config-check local-status
 UV ?= uv
 PROFILE ?= core
 ENV ?= local
@@ -10,9 +10,6 @@ export UV_PYTHON_INSTALL_DIR := $(CURDIR)/.build/python
 export UV_PROJECT_ENVIRONMENT := $(CURDIR)/.build/ai-env
 export SOURCE_DATE_EPOCH := 1791072000
 
-status-check:
-	python3 scripts/check_repository.py
-
 java-build:
 	$(MAVEN_BIN) -B verify
 
@@ -22,7 +19,7 @@ dependency-check:
 
 build test: java-build
 
-verify: status-check java-build dependency-check command-surface-check
+verify: security-source-check java-build dependency-check command-surface-check
 
 ifeq ($(PROFILE),ai)
 build: ai-build
@@ -176,7 +173,6 @@ inventory-check:
 
 .PHONY: market-check
 market-check:
-	$(MAKE) status-check
 	ENV=test python3 scripts/market/verify.py
 
 .PHONY: pricing-check
@@ -186,7 +182,6 @@ pricing-check:
 
 .PHONY: nigeria-check
 nigeria-check:
-	$(MAKE) status-check
 	ENV=test python3 scripts/nigeria/verify.py
 
 .PHONY: cart-check
@@ -249,3 +244,7 @@ ui-build:
 	cd frontend && npm run build:release -- --output "$(CURDIR)/frontend/.build/release/site"
 ui-dev:
 	cd frontend && npm start
+
+.PHONY: security-source-check
+security-source-check:
+	python3 scripts/security/check_source_secrets.py

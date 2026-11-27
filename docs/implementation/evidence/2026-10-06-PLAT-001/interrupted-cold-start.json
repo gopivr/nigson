@@ -1,8 +1,0 @@
-{
-  "test": "TEST-LOCAL-COLD-START",
-  "project": "nigson-test-cold-bbed5039bc",
-  "checks": [
-    "all test profile containers stopped; named volumes and original local state retained"
-  ],
-  "result": "FAIL"
-}

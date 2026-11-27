@@ -22,6 +22,6 @@ if __name__=='__main__':
             return real_run(args,*a,**kw)
         platform.subprocess.run=pinned
     if os.environ.get('ENV','test')!='test':raise SystemExit('consent qualification requires ENV=test')
-    evidence=ROOT/'docs/implementation/evidence/2026-10-18-EXP-CONSE-001'
+    evidence=ROOT/'.build/evidence/2026-10-18-EXP-CONSE-001'
     platform.main(java_tests='NewsletterPersistenceTest,PhoneConsentPersistenceTest,PhoneHttpTest,PhoneKeysTest,PhoneSecretsTest,BuildCompatibilityTest',run_python=False,evidence=evidence,
         completion='PASS: EXP-CONSE-001 newsletter double opt-in, stable private notification context, channel-purpose consent, current email/phone eligibility, one-time confirmation, idempotent unsubscribe, authoritative suppression, API-102 signed customer and stale-version denial; phone API-127/API-175 regression included')
