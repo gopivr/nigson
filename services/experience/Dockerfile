@@ -3,11 +3,11 @@ ARG TARGETARCH
 ARG MAVEN_VERSION=3.10.0
 RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
 RUN case "$TARGETARCH" in \
-    arm64) archive_arch=aarch64; archive_sha=fcf80d778fde63110d4856d2518f29da72944f4772a6041270887955e4196d92 ;; \
-    amd64) archive_arch=x64; archive_sha=6deafad80454d1f968105b1f582d89b8c2e88a5dfc98116a8226e0ec2fd5df8e ;; \
+    arm64) archive_arch=aarch64; archive_sha=2c30d5fe69796452732d32e746c5f4b4031e4991e2be9a3313f76e51fe5196ee ;; \
+    amd64) archive_arch=x64; archive_sha=3d40d69461200594380ac84c17be6224539022028730cffe043ac70c41ffd1d5 ;; \
     *) exit 1 ;; \
     esac && \
-    curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.5.0.3_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz && \
+    curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.5.1_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz && \
     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - && \
     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
 RUN curl --fail --location --max-time 300 "https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${MAVEN_VERSION}/apache-maven-${MAVEN_VERSION}-bin.zip" -o /tmp/maven.zip && \

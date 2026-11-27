@@ -4,7 +4,8 @@ Specification 1.1.0 / FOUND-002, verified 5 October 2026 on macOS ARM64.
 
 | Tool or dependency | Pin / source |
 |---|---|
-| Java compiler/runtime | Oracle JDK 25.0.2+10-LTS-69, Oracle Corporation |
+| Original local Java baseline | Oracle JDK 25.0.2+10-LTS-69, Oracle Corporation |
+| Production Java containers | Oracle JDK 25.0.5.1; verified archive hashes below |
 | Maven | 3.10.0, official only-script wrapper 3.3.4 |
 | Maven ZIP SHA256 | `1f6d9909266510f039f59aa0e13dcd2c66da85f043e56276e41f2918f8bddaff` |
 | Maven ZIP SHA512 | `22d31676d5b92ed53308c19ecded3245d0efd0cddfec51ec7bab62f4f13ad70ddddceff8e62940e0e8e2421f3cde8106737f4becec0aa034ffeff2a754e88337` |
@@ -28,8 +29,10 @@ Specification 1.1.0 / FOUND-002, verified 5 October 2026 on macOS ARM64.
 | Hatchling | 1.32.4, included in the locked dev group for offline wheel builds |
 
 All other Java versions, including Jupiter, are selected by the Boot/Modulith BOMs.
-No forced JUnit 5 or Spring/Hibernate overrides. Enforcer rejects Java 17, other
-Java patches/vendors, other Maven versions, snapshots and dependency divergence.
+No forced JUnit 5 or Spring/Hibernate overrides. Enforcer rejects unsupported
+Java versions/vendors, Maven versions outside its supported range, snapshots and
+dependency divergence. The Java range permits maintained patch releases; production
+container security pins are recorded below.
 The required JDK is already installed in this workspace's environment. Other
 platforms must supply the same distribution/version; Windows wrapper is included
 but was not executed. No automatic global JDK replacement is performed.
@@ -154,7 +157,7 @@ configuration and does not retroactively strengthen earlier evidence.
 
 ## IDP-001 identity additions
 
-Production Keycloak uses the existing official26.8.0 manifest digest, an optimized
+Production Keycloak uses the official 26.8.2 security-updated manifest digest, an optimized
 PostgreSQL/health/metrics/event-metrics build, and non-root read-only runtime. The
 identity qualification PostgreSQL18.6 digest is the existing FOUND-003 pin. The
 test-only TLS proxy pins nginx1.30.5-alpine at
@@ -190,13 +193,17 @@ Commerce adds AWS KMS SDK2.55.10 from the existing pinned AWS BOM. Shared wire f
 
 The Commerce, Experience and Integration Dockerfiles use Oracle Linux 9-slim
 index `sha256:2aec3940ecce6e008c59040c9e62945ad6ecb810ce893253e216b49732546132`
-for both build and runtime stages, and Oracle JDK **25.0.5.0.3** for the custom
+for both build and runtime stages, and Oracle JDK **25.0.5.1** for the custom
 jlink runtime. Local developer JDK installations are not changed automatically.
 
 Official archive checksums:
 
-- Linux aarch64: `fcf80d778fde63110d4856d2518f29da72944f4772a6041270887955e4196d92`.
-- Linux x64: `6deafad80454d1f968105b1f582d89b8c2e88a5dfc98116a8226e0ec2fd5df8e`.
+- Linux aarch64: `2c30d5fe69796452732d32e746c5f4b4031e4991e2be9a3313f76e51fe5196ee`.
+- Linux x64: `3d40d69461200594380ac84c17be6224539022028730cffe043ac70c41ffd1d5`.
+
+The JDK 25.0.5.1 pin also addresses the November JVM vulnerabilities described
+in [Oracle's November advisory](https://www.oracle.com/security-alerts/cspunov2026.html).
+Basic OS-package scans do not establish coverage for a copied jlink runtime.
 
 Sources: [Oracle JDK archives](https://www.oracle.com/java/technologies/javase/jdk25-archive-downloads.html),
 [CA trust advisory](https://www.oracle.com/security-alerts/alert-cve-2026-114820.html),
@@ -205,3 +212,17 @@ Sources: [Oracle JDK archives](https://www.oracle.com/java/technologies/javase/j
 These pins replace the older OS packages reported in the initial Commerce ECR
 scan. Rebuild under a new immutable tag and require the full ECR gate to pass;
 local build success does not establish a clean scan. No finding is suppressed.
+
+## Production Keycloak security pin
+
+The identity Dockerfile pins official Keycloak **26.8.2** index
+`sha256:7e66a96e4739239070aeaf72e4c5decf0f7f682cfc725b9f7ea2b336eaba38b3`
+in both optimization and runtime stages. The verified ARM64 image includes
+Red Hat OpenJDK **21.0.13.1.2-1.2.el9** and updated glibc, libgcc and PCRE2 RPMs.
+All seven packages flagged by the initial identity scan are newer in this image.
+
+[Keycloak's advisory](https://www.keycloak.org/2026/11/java4shell-vulnerability-cve-2026-114938)
+identifies the updated 26.8.2 images and OpenJDK 21.0.13.1 as patched for
+CVE-2026-114938. The existing optimized PostgreSQL/HTTPS configuration, production
+entrypoint and non-root user remain in place. Rebuild and require a new ECR scan
+before deploying; updating a source pin does not replace already-running tasks.
