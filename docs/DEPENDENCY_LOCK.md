@@ -185,3 +185,23 @@ are timestamped evidence, not future security guarantees.
 ## SEC-001 security additions
 
 Commerce adds AWS KMS SDK2.55.10 from the existing pinned AWS BOM. Shared wire filters use existing Spring Security7.1.1 and the Boot-managed Jakarta Servlet API6.1.0 (provided); owner entities and JDBC session logic remain commerce-owned. No new production domain service or Python dependency is introduced. Terraform private trust retains AWS6.15.0 and uses the installed repository-compatible Terraform1.12.2. Exact graph/hash refresh and advisory results are recorded in the SEC-001 report after execution.
+
+## Production Java container security pins
+
+The Commerce, Experience and Integration Dockerfiles use Oracle Linux 9-slim
+index `sha256:2aec3940ecce6e008c59040c9e62945ad6ecb810ce893253e216b49732546132`
+for both build and runtime stages, and Oracle JDK **25.0.5.0.3** for the custom
+jlink runtime. Local developer JDK installations are not changed automatically.
+
+Official archive checksums:
+
+- Linux aarch64: `fcf80d778fde63110d4856d2518f29da72944f4772a6041270887955e4196d92`.
+- Linux x64: `6deafad80454d1f968105b1f582d89b8c2e88a5dfc98116a8226e0ec2fd5df8e`.
+
+Sources: [Oracle JDK archives](https://www.oracle.com/java/technologies/javase/jdk25-archive-downloads.html),
+[CA trust advisory](https://www.oracle.com/security-alerts/alert-cve-2026-114820.html),
+[curl update](https://linux.oracle.com/errata/ELSA-2026-100686.html), and
+[Kerberos update](https://linux.oracle.com/errata/ELSA-2026-99715.html).
+These pins replace the older OS packages reported in the initial Commerce ECR
+scan. Rebuild under a new immutable tag and require the full ECR gate to pass;
+local build success does not establish a clean scan. No finding is suppressed.

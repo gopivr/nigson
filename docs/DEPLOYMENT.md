@@ -84,7 +84,9 @@ releases. Production is not deployed by the staging UI workflow.
   contains CVE IDs and package versions; enhanced scans may include fixed versions.
   Use those findings to update affected base-image pins or application dependencies,
   rebuild under a new commit tag and rescan. Do not bypass the gate or overwrite
-  existing immutable tags. Basic-scan findings may require the linked vendor
+  existing immutable tags. The Java container security pins are documented in
+  [Dependency versions](DEPENDENCY_LOCK.md#production-java-container-security-pins).
+  Basic-scan findings may require the linked vendor
   advisory to identify the patched package version.
 - **Missing public site key:** set the repository variable before rerunning build.
 - **Release plan changes CloudFront settings beyond the static release path:** the

@@ -1,13 +1,13 @@
-FROM oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c AS build
+FROM oraclelinux:9-slim@sha256:2aec3940ecce6e008c59040c9e62945ad6ecb810ce893253e216b49732546132 AS build
 ARG TARGETARCH
 ARG MAVEN_VERSION=3.10.0
 RUN microdnf install -y tar gzip unzip findutils && microdnf clean all
 RUN case "$TARGETARCH" in \
-    arm64) archive_arch=aarch64; archive_sha=1aaf2d46506ecdf15569d5d3f0c2295a7c18795ec7a6ee030cf19406daccd0dc ;; \
-    amd64) archive_arch=x64; archive_sha=505fdcb1f172b4aad23415f0584912cff90b7d902adc5f1593894b4a8cbf7c39 ;; \
+    arm64) archive_arch=aarch64; archive_sha=fcf80d778fde63110d4856d2518f29da72944f4772a6041270887955e4196d92 ;; \
+    amd64) archive_arch=x64; archive_sha=6deafad80454d1f968105b1f582d89b8c2e88a5dfc98116a8226e0ec2fd5df8e ;; \
     *) exit 1 ;; \
     esac && \
-    curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.2_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz && \
+    curl --fail --location --max-time 300 "https://download.oracle.com/java/25/archive/jdk-25.0.5.0.3_linux-${archive_arch}_bin.tar.gz" -o /tmp/jdk.tar.gz && \
     printf '%s  /tmp/jdk.tar.gz\n' "$archive_sha" | sha256sum -c - && \
     mkdir -p /opt/jdk && tar -xzf /tmp/jdk.tar.gz --strip-components=1 -C /opt/jdk && rm /tmp/jdk.tar.gz
 RUN curl --fail --location --max-time 300 "https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${MAVEN_VERSION}/apache-maven-${MAVEN_VERSION}-bin.zip" -o /tmp/maven.zip && \
@@ -36,7 +36,7 @@ RUN --mount=type=cache,id=nigson-maven-repository-${TARGETARCH},target=/workspac
 RUN javac -cp '/migration-lib/*' -d /tools scripts/java/MigrationTargetPolicy.java scripts/java/OwnerMigration.java && javac -d /probe scripts/java/HealthProbe.java
 RUN jlink --module-path /opt/jdk/jmods --add-modules java.se,jdk.net,jdk.unsupported,jdk.crypto.ec,jdk.management,jdk.zipfs --strip-java-debug-attributes --no-man-pages --no-header-files --output /jre
 
-FROM oraclelinux:9-slim@sha256:fdf4581abc841d49f63cf456ea92f8152a80b5bdc62d5409a4e77827b824265c AS runtime-base
+FROM oraclelinux:9-slim@sha256:2aec3940ecce6e008c59040c9e62945ad6ecb810ce893253e216b49732546132 AS runtime-base
 COPY --from=build /jre /opt/java
 ENV PATH=/opt/java/bin:$PATH
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70 -Djava.io.tmpdir=/tmp"
