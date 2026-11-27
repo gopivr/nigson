@@ -47,8 +47,9 @@ for configuration and [application deployment](runbooks/deploy.md) for runtime a
 
 ## 3. Publish the UI
 
-Merge UI changes to `main`, or run **Actions → Frontend — Build and Deploy Staging**
-on the default branch. Pull requests test/build without deploying.
+Merge UI changes to `main`, then manually run **Actions → Frontend — Build and Deploy Staging**
+on the default branch. Pushes do not start this workflow. Pull requests test/build
+without deploying.
 
 The workflow tests and builds the shell and all remotes, seals a static artifact,
 then publishes it to an immutable S3 prefix. It updates only the managed
@@ -79,8 +80,8 @@ releases. Production is not deployed by the staging UI workflow.
 - **Unexpected Terraform changes:** reconcile the infrastructure plan before retrying;
   do not bypass the UI release guard or change the state key/account/region.
 
-Rollback a UI change by reverting it on `main` and deploying the resulting new
-release. Existing immutable release objects are retained.
+Rollback a UI change by reverting it on `main`, then manually running the frontend
+workflow to deploy the resulting new release. Existing immutable release objects are retained.
 
 ## Other retained workflows
 

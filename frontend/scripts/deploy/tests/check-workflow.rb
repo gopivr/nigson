@@ -2,6 +2,7 @@ require 'yaml'
 path = File.expand_path('../../../../.github/workflows/frontend-deploy.yml', __dir__)
 w = YAML.load_file(path)
 on = w['on'] || w[true]
+raise 'commits must not deploy the frontend' if on.key?('push')
 raise 'unsafe workflow trigger' if on.key?('pull_request_target') || on.key?('workflow_run')
 raise 'read-only GitHub token required' unless w['permissions'] == {'contents' => 'read'}
 build, deploy = w['jobs'].values_at('build', 'deploy')
