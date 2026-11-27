@@ -1,0 +1,17 @@
+import '@angular/compiler';
+import {signal} from '@angular/core';
+import {firstValueFrom,of,throwError,Subject} from 'rxjs';
+import {describe,it,expect,vi} from 'vitest';
+import {CartService} from './cart.service';
+import {QtyStepperComponent} from './qty-stepper/qty-stepper.component';
+
+function cart(){const service:any=Object.create(CartService.prototype);Object.assign(service,{items:signal([]),reviewRequired:signal(false),http:{get:vi.fn()},session:{authenticated:()=>true},cartId:signal('legacy'),cartVersion:signal(0),selectedLineIds:signal(new Set()),skuCache:new Map(),pricingError:signal(null)});return service;}
+const line={productId:'product',skuId:'sku',lineId:'line',quantity:2,unitPriceMinorUnits:1200,name:'Product',sku:'SKU'};
+describe('Automatic customer price refresh',()=>{
+ it('shows current business prices with an actionable minimum and requires review',async()=>{const c=cart();c.items.set([line]);c.http.get.mockImplementation((url:string)=>of(url.includes('/products/')?{skus:[{id:'sku',stock:{status:'IN_STOCK',availableQuantity:'100'}}]}:{unitAmount:'7.00',minimumQuantity:'10',packMultiple:'2'}));const [updated]:any=await firstValueFrom(c.loadLinePrices([line]));expect(updated.unitPriceMinorUnits).toBe(700);expect(updated.purchaseError).toContain('Minimum 10');expect(c.reviewRequired()).toBe(true);expect(c.http.get.mock.calls[0][0]).toContain('preview=true');c.acknowledgePrices();expect(c.reviewRequired()).toBe(false);});
+ it('keeps missing or suspended prices unavailable instead of using cached retail prices',async()=>{const c=cart();c.http.get.mockReturnValue(throwError(()=>({status:403})));const [updated]:any=await firstValueFrom(c.loadLinePrices([line]));expect(updated.unitPriceMinorUnits).toBe(0);expect(updated.purchaseError).toContain('No current price');});
+ it('accepts the actual minimum and pack without a purchase error',async()=>{const c=cart();c.http.get.mockImplementation((url:string)=>of(url.includes('/products/')?{skus:[{id:'sku',stock:{status:'IN_STOCK',availableQuantity:'100'}}]}:{unitAmount:'7.00',minimumQuantity:'10',packMultiple:'2'}));const [updated]:any=await firstValueFrom(c.loadLinePrices([{...line,quantity:10}]));expect(updated.purchaseError).toBeUndefined();expect(updated.minimumQuantity).toBe(10);});
+ it('refreshes canonical cart context even when a previous cart ID exists',async()=>{const c=cart();c.createNewCart=vi.fn(()=>of('canonical'));expect(await firstValueFrom(c.ensureCart())).toBe('canonical');expect(c.createNewCart).toHaveBeenCalledOnce();});
+ it('shares overlapping cart refreshes instead of racing context commands',async()=>{const c=cart();const pending=new Subject<string|null>();c.loading=signal(false);c.syncing=signal(false);c.ensureCart=vi.fn(()=>pending);const one=c.loadCart(),two=c.loadCart();expect(two).toBe(one);const a=firstValueFrom(one),b=firstValueFrom(two);pending.next(null);pending.complete();expect(await a).toBeNull();expect(await b).toBeNull();expect(c.ensureCart).toHaveBeenCalledOnce();});
+ it('adds the minimum pack and supports removing the final minimum batch',()=>{const stepper:any=Object.create(QtyStepperComponent.prototype);stepper.product={skuId:'sku',minimumQuantity:11,packMultiple:2,priceMinorUnits:700};stepper.shop={cart:()=>[],addToCart:vi.fn(),updateQty:vi.fn()};stepper.add();expect(stepper.shop.addToCart.mock.calls[0][1]).toBe(12);stepper.shop.cart=()=>[{skuId:'sku',qty:12}];stepper.decrease();expect(stepper.shop.updateQty).toHaveBeenCalledWith('sku',0);});
+});

@@ -1,0 +1,18 @@
+import '@angular/compiler';
+import {signal} from '@angular/core';
+import {of,throwError,firstValueFrom} from 'rxjs';
+import {describe,it,expect,vi} from 'vitest';
+import {stockFromSku} from './stock-status.component';
+import {QtyStepperComponent} from './qty-stepper/qty-stepper.component';
+import {ShopService} from './shop.service';
+import {CartService} from './cart.service';
+import {CatalogService} from './catalog.service';
+describe('Customer stock controls',()=>{
+ it('does not infer unlimited availability from missing or malformed backend stock',()=>{for(const value of [undefined,{stock:{status:'IN_STOCK',availableQuantity:'bad'}}])expect(stockFromSku(value)).toEqual({stock:0,stockStatus:'UNKNOWN'});expect(stockFromSku({stock:{status:'LOW_STOCK',availableQuantity:'5'}})).toEqual({stock:5,stockStatus:'LOW_STOCK'});});
+ function stepper(stock:number,minimum=1,pack=1,qty=0){const c:any=Object.create(QtyStepperComponent.prototype);c.product={id:'p',skuId:'s',stock,minimumQuantity:minimum,packMultiple:pack,priceMinorUnits:100};c.shop={cart:()=>qty?[{skuId:'s',qty}]:[],addToCart:vi.fn(),updateQty:vi.fn()};return c;}
+ it('blocks out-of-stock and business minimums above available stock',()=>{for(const c of [stepper(0),stepper(5,10),stepper(3,3,2)]){c.add();expect(c.shop.addToCart).not.toHaveBeenCalled();}const c=stepper(5,3,2);c.add();expect(c.shop.addToCart.mock.calls[0][1]).toBe(4);});
+ it('blocks increases beyond stock but permits a correction after stock falls',()=>{const c=stepper(5,2,2,4);expect(c.atMax()).toBe(true);c.update(6);expect(c.shop.updateQty).not.toHaveBeenCalled();const changed=stepper(4,2,2,8);changed.decrease();expect(changed.shop.updateQty).toHaveBeenCalledWith('s',4);});
+ it('never displays a success toast for a failed backend cart mutation',()=>{const c:any=Object.create(ShopService.prototype);c.cart=()=>[];c.session={authenticated:()=>true};c.cartService={addItem:vi.fn(()=>of(null))};c.showToast=vi.fn();const item={sku:'S',skuId:'s',stock:2,price:1,name:'Product',category:''};c.addToCart(item);expect(c.showToast).not.toHaveBeenCalled();expect(c.addToCart({...item,stock:0})).toBe(false);expect(c.cartService.addItem).toHaveBeenCalledOnce();c.cartService.addItem.mockReturnValue(of({}));c.addToCart(item);expect(c.showToast).toHaveBeenCalledOnce();});
+ it('maps stock after presentation overrides so they cannot enable purchasing',()=>{const c:any=Object.create(CatalogService.prototype);c.getProductOverride=()=>({stock:999,stockStatus:'IN_STOCK'});c.resolveImageUrl=(v:string)=>v;c.FALLBACK_IMG='/placeholder';const result=c.toProduct({id:'p',name:'Product',available:true},{skus:[{id:'s',stock:{status:'OUT_OF_STOCK',availableQuantity:'0'}}]});expect(result.stock).toBe(0);expect(result.stockStatus).toBe('OUT_OF_STOCK');});
+ it('refreshes cart-line stock and blocks checkout for quantities no longer available',async()=>{const c:any=Object.create(CartService.prototype);c.items=signal([]);c.reviewRequired=signal(false);c.http={get:vi.fn((url:string)=>of(url.includes('/price?')?{unitAmount:'10',minimumQuantity:'1',packMultiple:'1'}:{skus:[{id:'s',stock:{status:'LOW_STOCK',availableQuantity:'5'}}]}))};const [line]=await firstValueFrom(c.loadLinePrices([{skuId:'s',productId:'p',quantity:7}]));expect(line.stock).toBe(5);expect(line.purchaseError).toContain('no longer available');c.http.get.mockReturnValue(throwError(()=>Error('offline')));const [failed]=await firstValueFrom(c.loadLinePrices([{skuId:'s',productId:'p',quantity:1}]));expect(failed.stockStatus).toBe('UNKNOWN');expect(failed.purchaseError).toContain('could not be confirmed');});
+});

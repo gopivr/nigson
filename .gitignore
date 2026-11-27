@@ -15,3 +15,11 @@
 .vscode/
 .build/
 artifacts/
+
+/.monorepo-backups/
+/build/
+
+/.env
+/.local/
+/cookies.txt
+/cookies_test.txt

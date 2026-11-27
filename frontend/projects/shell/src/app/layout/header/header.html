@@ -1,0 +1,143 @@
+<header class="transition-all duration-300" [ngClass]="scrolled() ? 'border-b border-border/80 bg-white/95 backdrop-blur-lg backdrop-saturate-150 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.08)]' : 'border-b border-border/40 bg-white/95 backdrop-blur-sm'">
+  <div class="mx-auto flex max-w-[1440px] items-center justify-between gap-6 px-5 lg:gap-10 lg:px-12 transition-all duration-300" [ngClass]="scrolled() ? 'h-14 sm:h-16' : 'h-16 sm:h-20'">
+    <!-- Brand -->
+    <a routerLink="/" class="flex shrink-0" title="Nigson Home" aria-label="Nigson Home" (click)="open.set(false)">
+      <img src="/assets/logo.png" alt="Nigson" width="1920" height="640" class="w-auto object-contain transition-all duration-300" [ngClass]="scrolled() ? 'h-8 sm:h-10 lg:h-11' : 'h-10 sm:h-12 lg:h-14'" />
+    </a>
+    
+    <!-- Large Central Search Bar -->
+    <div class="hidden lg:block flex-1 max-w-2xl">
+      <div class="relative w-full group">
+        <svg lucideSearch class="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-ink group-focus-within:text-brand transition-colors"></svg>
+        <input
+          #searchInput
+          type="text"
+          (keydown.enter)="handleSearch(searchInput.value); searchInput.value = ''"
+          placeholder="Search products, SKUs, or categories..."
+          class="w-full rounded-full border-2 border-border bg-surface-alt pl-12 pr-24 py-2.5 sm:py-3 text-[15px] font-semibold text-ink placeholder:text-muted-ink focus:outline-none focus:border-brand focus:bg-white focus:shadow-sm transition-all"
+        />
+        <button (click)="handleSearch(searchInput.value); searchInput.value = ''" title="Search products" aria-label="Search products" class="absolute right-2 top-1/2 -translate-y-1/2 bg-ink text-white rounded-full px-5 py-2 text-[13px] font-bold hover:bg-brand transition-colors">
+          Search
+        </button>
+      </div>
+    </div>
+    
+    <!-- Right Actions: Links, Account, Cart -->
+    <div class="flex shrink-0 items-center justify-end gap-1 lg:gap-6">
+      
+      <!-- Desktop Links -->
+      <div class="hidden lg:flex items-center gap-7 border-r border-border pr-7">
+        <a routerLink="/products" class="display-type text-[15px] font-bold text-ink transition-colors hover:text-brand">Shop</a>
+        <a routerLink="/distributor" class="display-type text-[15px] font-bold text-ink transition-colors hover:text-brand whitespace-nowrap">Become a Partner</a>
+      </div>
+
+      <!-- Icons Wrapper -->
+      <div class="flex items-center gap-1 sm:gap-2">
+        <button class="inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors hover:bg-surface-alt hover:text-brand h-10 w-10 lg:hidden" aria-label="Search products" title="Search products" (click)="searchOpen.set(!searchOpen())">
+          <svg lucideSearch class="h-5 w-5"></svg>
+        </button>
+
+      <!-- Account -->
+      <ng-container *ngIf="shop.hydrated(); else loadingAccount">
+        <ng-container *ngIf="shop.user(); else guestUser">
+          <ng-container *ngIf="session.isStaff(); else normalUser">
+            <a routerLink="/admin" class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9" aria-label="Staff Portal" title="Staff Portal">
+              <span class="grid h-7 w-7 place-items-center rounded-full text-white text-xs font-bold" [style.background]="avatarBg()">
+                {{ shop.initialsOf(shop.user()?.fullName) }}
+              </span>
+            </a>
+          </ng-container>
+          <ng-template #normalUser>
+            <div class="relative profile-dropdown-container hidden sm:block">
+              <button (click)="toggleProfileOpen()" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9" aria-label="My Account" title="My Account">
+                <span class="grid h-7 w-7 place-items-center rounded-full text-white text-xs font-bold" [style.background]="avatarBg()">
+                  {{ shop.initialsOf(shop.user()?.fullName) }}
+                </span>
+              </button>
+              <div *ngIf="profileOpen()" class="absolute right-0 top-full mt-2 w-72 rounded-md bg-white border border-border shadow-lg overflow-hidden animate-fade-in z-50">
+                <div class="p-4 border-b border-border flex items-center gap-3">
+                  <span class="grid h-11 w-11 place-items-center rounded-full text-white text-sm font-bold" [style.background]="avatarBg()">
+                    {{ shop.initialsOf(shop.user()?.fullName) }}
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold truncate">{{ shop.user()?.fullName }}</p>
+                    <p class="text-xs text-muted-foreground truncate">{{ shop.user()?.email }}</p>
+                  </div>
+                </div>
+                <div class="p-2">
+                  <a routerLink="/account" (click)="toggleProfileOpen()" title="My Profile" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+                    <svg lucideUser class="h-4 w-4"></svg> My Profile
+                  </a>
+                  <a routerLink="/account/orders" (click)="toggleProfileOpen()" title="My Orders" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+                    <svg lucidePackage class="h-4 w-4"></svg> My Orders
+                  </a>
+                </div>
+                <div class="p-2 border-t border-border">
+                  <button (click)="handleLogout()" title="Logout" class="w-full flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
+                    <svg lucideLogOut class="h-4 w-4"></svg> Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+        <ng-template #guestUser>
+          <a routerLink="/auth/login" class="hidden sm:inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9" aria-label="Sign in to your account" title="Sign in to your account">
+            <svg lucideUserRound class="h-5 w-5"></svg>
+          </a>
+        </ng-template>
+      </ng-container>
+      <ng-template #loadingAccount>
+        <div class="hidden sm:block h-9 w-9 rounded-md bg-muted animate-pulse mx-1"></div>
+      </ng-template>
+
+      <!-- Cart -->
+      <a routerLink="/cart" class="relative inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9" aria-label="Shopping Cart" title="Shopping Cart">
+        <svg lucideShoppingBag class="h-5 w-5"></svg>
+        <span *ngIf="shop.hydrated() && shop.cartCount() > 0" class="absolute right-0.5 top-0.5 grid size-4 place-items-center rounded-full bg-primary text-[9px] text-primary-foreground">
+          {{ shop.cartCount() }}
+        </span>
+      </a>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="lg:hidden inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9" [attr.aria-label]="open() ? 'Close menu' : 'Open menu'" [attr.title]="open() ? 'Close menu' : 'Open menu'" (click)="toggleOpen()">
+        <svg *ngIf="open()" lucideX class="h-5 w-5"></svg>
+        <svg *ngIf="!open()" lucideMenu class="h-5 w-5"></svg>
+      </button>
+      </div> <!-- Close Icons Wrapper -->
+    </div>
+  </div>
+
+  <!-- Search Dropdown -->
+  <div *ngIf="searchOpen()" class="border-t border-border bg-background px-5 py-4 animate-fade-in relative z-50 shadow-lg lg:hidden">
+    <div class="mx-auto flex max-w-2xl items-center gap-3 border-b-2 border-foreground py-2 relative">
+      <app-nav-search [full]="true" class="w-full"></app-nav-search>
+      <button type="button" class="absolute right-0 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9" aria-label="Close search" title="Close search" (click)="searchOpen.set(false)">
+        <svg lucideX class="h-5 w-5"></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <nav *ngIf="open()" class="border-t border-border bg-background px-5 py-5 lg:hidden animate-fade-in absolute w-full top-full left-0 z-40 max-h-[calc(100vh-80px)] overflow-y-auto">
+    <a routerLink="/products" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold">Shop<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+    <a routerLink="/products" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold">Categories<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+    <a routerLink="/products" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold">New Arrivals<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+    <a routerLink="/products" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold">Best Sellers<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+    <a routerLink="/distributor" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold">Wholesale<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+    <a routerLink="/distributor" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold">Become a Partner<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+
+    <ng-container *ngIf="shop.hydrated() && shop.user(); else mobileGuestUser">
+      <ng-container *ngIf="session.isStaff(); else mobileNormalUser">
+        <a routerLink="/admin" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold text-primary">Staff Portal<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+      </ng-container>
+      <ng-template #mobileNormalUser>
+        <a routerLink="/account" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold text-primary">My Account<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+        <button (click)="open.set(false); handleLogout()" class="display-type w-full flex items-center justify-between border-b border-border py-4 font-semibold text-destructive">Logout<svg lucideChevronRight class="h-4 w-4 text-destructive"></svg></button>
+      </ng-template>
+    </ng-container>
+    <ng-template #mobileGuestUser>
+      <a routerLink="/auth/login" (click)="open.set(false)" class="display-type flex items-center justify-between border-b border-border py-4 font-semibold text-primary">Login / Account<svg lucideChevronRight class="h-4 w-4 text-primary"></svg></a>
+    </ng-template>
+  </nav>
+</header>

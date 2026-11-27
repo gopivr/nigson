@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.app.json",
+  "files": [
+    "../shared-ui/src/public-api.ts",
+    "src/app/app.routes.ts",
+    "src/app/layout/admin-layout.component.ts",
+    "src/app/dashboard/admin-dashboard.component.ts",
+    "src/app/analytics/analytics.component.ts",
+    "src/app/users/users.component.ts",
+    "src/app/roles/roles.component.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
+}

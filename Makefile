@@ -236,3 +236,16 @@ messaging-check:
 .PHONY: local-app-config
 local-app-config:
 	python3 scripts/local/configure_application.py
+
+.PHONY: ui-install ui-test ui-build ui-dev
+ui-install:
+	cd frontend && npm ci
+ui-test:
+	cd frontend && python3 -m unittest discover -s scripts/deploy/tests -v
+	cd frontend && ruby scripts/deploy/tests/check-workflow.rb
+	cd frontend && npx vitest run --config vitest.checkout.config.mjs
+	cd frontend && npx vitest run --config vitest.cancellation.config.mjs
+ui-build:
+	cd frontend && npm run build:release -- --output "$(CURDIR)/frontend/.build/release/site"
+ui-dev:
+	cd frontend && npm start

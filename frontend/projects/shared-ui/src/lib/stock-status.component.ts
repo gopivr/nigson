@@ -1,0 +1,5 @@
+import {Component,Input} from '@angular/core';
+import {CommonModule} from '@angular/common';
+export function stockFromSku(sku:any):{stock:number;stockStatus:string}{const value=Number(sku?.stock?.availableQuantity);const status=sku?.stock?.status;if(!['IN_STOCK','LOW_STOCK','OUT_OF_STOCK'].includes(status)||!Number.isFinite(value)||value<0)return {stock:0,stockStatus:'UNKNOWN'};return {stock:status==='OUT_OF_STOCK'?0:Math.min(value,Number.MAX_SAFE_INTEGER),stockStatus:status};}
+@Component({selector:'ui-stock-status',standalone:true,imports:[CommonModule],template:`<span role="status" class="inline-flex rounded-full px-3 py-1 text-xs font-semibold" [ngClass]="status==='IN_STOCK'?'bg-emerald-50 text-emerald-700':status==='LOW_STOCK'?'bg-amber-50 text-amber-800':'bg-gray-100 text-gray-600'">{{status==='IN_STOCK'?'In stock':status==='LOW_STOCK'?'Low stock':status==='OUT_OF_STOCK'?'Out of stock':'Availability unavailable'}}</span>`})
+export class StockStatusComponent{@Input()status?:string;}
