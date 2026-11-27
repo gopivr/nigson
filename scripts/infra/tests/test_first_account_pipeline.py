@@ -16,10 +16,17 @@ ACCOUNT = "123456789012"
 NS = ["ns-1.awsdns-01.com", "ns-2.awsdns-02.net", "ns-3.awsdns-03.org", "ns-4.awsdns-04.co.uk"]
 
 
+def applied_variables(**updates):
+    values = {"expected_account_id": ACCOUNT, "region": "eu-west-1", "environment": "stage", "domain_name": "nigson.com", "zone_name": "stage.nigson.com", "zone_id": "Z1234567890", "vpc_cidr": "10.40.0.0/16", "product_phase": 1, "policy_revision": "test-v1", "frontend_release_id": "initial", "log_retention_days": 30, "database_instance_class": "db.t4g.medium", "publish_task_definitions": False, "activate_applications": False, "activate_identity": False, "image_digests": {}, "application_environment": {}, "application_secret_names": {}, "provider_egress": {}, "alert_email": None, "migration_image_digest": None}
+    values.update(updates)
+    return values
+
+
 class FakeCommands:
-    def __init__(self, *, bucket=True, state=True, zone=False, recognized=True, delegated=True, account=ACCOUNT, changes=()):
+    def __init__(self, *, bucket=True, state=True, zone=False, recognized=True, delegated=True, account=ACCOUNT, changes=(), configuration=None):
         self.bucket, self.state, self.zone, self.recognized = bucket, state, zone, recognized
         self.delegated, self.account, self.changes = delegated, account, changes
+        self.configuration = configuration
         self.calls = []
 
     def aws(self, *args, **kwargs):
@@ -43,6 +50,8 @@ class FakeCommands:
         if args[0] == "dig":
             return "\n".join(NS) if self.delegated else "ns.wrong.example.\n"
         if "show" in args:
+            if args[-1] == "-json":
+                return json.dumps({"values": {"outputs": {"deployment_configuration": {"value": {"schema_version": 1, "variables": self.configuration}}}}}) if self.configuration else "{}"
             return json.dumps({"resource_changes": list(self.changes)})
         if "output" in args:
             if args[-1] == "squarespace_nameservers":
@@ -116,6 +125,23 @@ class PipelineTests(unittest.TestCase):
         calls = self.execute("plan", FakeCommands())
         self.assertTrue(any("plan" in c for c in calls))
         self.assertFalse(any("apply" in c or "import" in c for c in calls))
+
+    def test_infrastructure_plan_preserves_the_deployed_ui_release(self):
+        variables = applied_variables(frontend_release_id="reviewed-ui-release")
+        self.execute("plan", FakeCommands(configuration=variables))
+        rendered = json.loads((self.work / "platform.tfvars.json").read_text())
+        self.assertEqual(rendered["frontend_release_id"], "reviewed-ui-release")
+
+    def test_upgrade_preserves_a_legacy_recorded_frontend_release(self):
+        fake = FakeCommands()
+        original = fake.call
+        def call(args, capture=False):
+            if "show" in args and args[-1] == "-json":
+                return json.dumps({"values": {"outputs": {"infrastructure": {"value": {"frontend_release": "legacy-ui"}}}}})
+            return original(args, capture)
+        fake.call = call
+        self.execute("plan", fake)
+        self.assertEqual(json.loads((self.work / "platform.tfvars.json").read_text())["frontend_release_id"], "legacy-ui")
 
     def test_plan_requires_an_existing_bootstrap(self):
         with self.assertRaisesRegex(ValueError, "bootstrap action first"):

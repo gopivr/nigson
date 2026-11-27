@@ -7,6 +7,9 @@ on:
       - 'scripts/infra/prepare-first-account.py'
       - 'scripts/infra/tests/test_first_account.py'
       - 'scripts/infra/first-account-pipeline.py'
+      - 'scripts/infra/deploy-first-account-frontend.py'
+      - 'scripts/infra/tests/test_frontend_deployment.py'
+      - 'scripts/infra/tests/verify_frontend_release_plan.py'
       - 'scripts/infra/tests/test_first_account_pipeline.py'
       - 'scripts/infra/tests/workflows-test.sh'
       - 'scripts/infra/tests/verify_log_group_moves.py'
@@ -51,6 +54,7 @@ jobs:
             exit 1
           fi
           python3 scripts/infra/tests/verify_log_group_moves.py "$result"
+          python3 scripts/infra/tests/verify_frontend_release_plan.py "$result"
           python3 -m unittest discover -s scripts/infra/tests -p test_log_group_moves.py -v
       - if: matrix.directory == 'bootstrap'
         run: python3 -m unittest discover -s scripts/infra/tests -p test_first_account.py -v
@@ -58,3 +62,5 @@ jobs:
         run: python3 -m unittest discover -s scripts/infra/tests -p test_first_account_pipeline.py -v
       - if: matrix.directory == 'bootstrap'
         run: bash scripts/infra/tests/workflows-test.sh
+      - if: matrix.directory == 'bootstrap'
+        run: python3 -m unittest discover -s scripts/infra/tests -p test_frontend_deployment.py -v

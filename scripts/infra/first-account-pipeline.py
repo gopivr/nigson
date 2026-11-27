@@ -46,6 +46,26 @@ def foundation_plan(plan):
             raise ValueError("Runtime tasks already exist or are proposed; use the application deployment flow")
 
 
+def deployment_configuration(state, account, region):
+    output = state.get("values", {}).get("outputs", {}).get("deployment_configuration")
+    if output is None:
+        return None
+    snapshot = output.get("value")
+    if not isinstance(snapshot, dict):
+        raise ValueError("Missing applied deployment configuration")
+    variables = snapshot.get("variables", {})
+    if snapshot.get("schema_version") != 1 or not isinstance(variables, dict):
+        raise ValueError("Unsupported applied deployment configuration")
+    fields = set(re.findall(r'^variable\s+"([^\"]+)"', (ROOT / "infrastructure/terraform/aws/first-account/variables.tf").read_text(), re.MULTILINE))
+    if set(variables) != fields:
+        raise ValueError("Apply the updated infrastructure configuration before deploying UI; its input snapshot is incomplete")
+    if (variables.get("expected_account_id") != account or variables.get("region") != region or
+            variables.get("environment") != "stage" or variables.get("zone_name") != "stage.nigson.com" or
+            not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}", variables.get("frontend_release_id", ""))):
+        raise ValueError("Applied deployment configuration does not match this staging account")
+    return variables
+
+
 class Pipeline:
     def __init__(self, account, region, action, *, root=ROOT, work=None, commands=None):
         if not re.fullmatch(r"[0-9]{12}", account or ""):
@@ -158,6 +178,14 @@ class Pipeline:
         platform_backend = self.work / "platform-backend.hcl"
         platform_backend.write_text(backend)
         self.init(platform, "-reconfigure", "-backend-config=" + str(platform_backend))
+        state = json.loads(self.tf(platform, "show", "-json", capture=True))
+        applied = deployment_configuration(state, self.account, self.region)
+        previous = (state.get("values", {}).get("outputs", {}).get("infrastructure", {}).get("value") or {})
+        release = applied["frontend_release_id"] if applied is not None else previous.get("frontend_release", "initial")
+        if not isinstance(release, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}", release):
+            raise ValueError("Invalid applied frontend release")
+        inputs["frontend_release_id"] = release
+        varfile.write_text(json.dumps(inputs) + "\n")
         self.plan_apply(platform, "platform", apply=self.action == "apply", extra=("-var-file=" + str(varfile),))
         self.summary("\nPlatform " + ("apply completed" if self.action == "apply" else "plan completed; no infrastructure applied") + ". Review the Terraform output in this run.\n")
 

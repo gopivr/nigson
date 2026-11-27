@@ -98,3 +98,31 @@ run "resume_partial_apply_moves_groups_to_compute" {
     error_message = "Moved groups remain available to the runtime and observability under identical names."
   }
 }
+
+run "record_applied_runtime_configuration_for_ui_releases" {
+  command = plan
+  variables {
+    publish_task_definitions = true
+    activate_applications    = true
+    activate_identity        = true
+    image_digests            = { commerce = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", experience = "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", integration = "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", identity = "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" }
+    migration_image_digest   = "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    application_environment  = { commerce = { APP_ENV = "stage", NIGSON_SECURITY_ENABLED = "true" }, experience = { APP_ENV = "stage", NIGSON_SECURITY_ENABLED = "true" }, integration = { APP_ENV = "stage", NIGSON_SECURITY_ENABLED = "true" } }
+  }
+  assert {
+    condition     = output.deployment_configuration.schema_version == 1 && output.deployment_configuration.variables.publish_task_definitions && output.deployment_configuration.variables.activate_applications && output.deployment_configuration.variables.activate_identity && output.deployment_configuration.variables.image_digests == var.image_digests
+    error_message = "UI releases must be able to retain applied runtime activation, images and environment inputs."
+  }
+}
+run "frontend_release_existing_distribution" {
+  command   = apply
+  state_key = "ui-origin-only"
+  module { source = "./tests/fixtures/frontend-release-plan" }
+  variables { release_id = "initial" }
+}
+run "frontend_release_plan_updates_static_origin_only" {
+  command   = plan
+  state_key = "ui-origin-only"
+  module { source = "./tests/fixtures/frontend-release-plan" }
+  variables { release_id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-123-1" }
+}

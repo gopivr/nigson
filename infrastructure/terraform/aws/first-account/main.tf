@@ -573,3 +573,34 @@ moved {
   from = module.observability.aws_cloudwatch_log_group.owner["ai"]
   to   = module.compute.aws_cloudwatch_log_group.service["ai"]
 }
+
+output "deployment_configuration" {
+  description = "Applied inputs for guarded frontend-only releases; never publish this state output as an artifact."
+  sensitive   = true
+  value = {
+    schema_version = 1
+    variables = {
+      expected_account_id      = var.expected_account_id
+      region                   = var.region
+      environment              = var.environment
+      domain_name              = var.domain_name
+      zone_name                = var.zone_name
+      zone_id                  = var.zone_id
+      vpc_cidr                 = var.vpc_cidr
+      product_phase            = var.product_phase
+      policy_revision          = var.policy_revision
+      frontend_release_id      = var.frontend_release_id
+      log_retention_days       = var.log_retention_days
+      database_instance_class  = var.database_instance_class
+      publish_task_definitions = var.publish_task_definitions
+      activate_applications    = var.activate_applications
+      activate_identity        = var.activate_identity
+      image_digests            = var.image_digests
+      application_environment  = var.application_environment
+      application_secret_names = var.application_secret_names
+      provider_egress          = var.provider_egress
+      alert_email              = var.alert_email
+      migration_image_digest   = var.migration_image_digest
+    }
+  }
+}

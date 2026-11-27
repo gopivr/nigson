@@ -215,3 +215,9 @@ repeat for other genuinely untracked groups only as needed. Keep the logs and
 review a fresh plan after import. Do not use `terraform state rm` to bypass the
 ownership checks. If KMS errors persist after the scoped policy update, inspect
 applicable IAM/SCP restrictions and the key's region/state before retrying.
+
+## UI builds from the other repository
+
+The UI repository now contains `.github/workflows/aws-stage-ui.yml` and its setup guide `deployment/AWS.md`. Merge this repository's `deploy-first-account-frontend.py` support and apply the updated root once so encrypted state includes the complete sensitive deployment_configuration snapshot. The UI workflow checks out infrastructure tooling read-only, validates/seals the artifact, publishes a unique S3 prefix and applies only a guarded CloudFront release-path change. It requires its own AWS secrets, INFRASTRUCTURE_READ_TOKEN and public NIGSON_GOOGLE_RECAPTCHA_SITE_KEY variable.
+
+The foundation workflow preserves frontend_release_id from applied state on later runs. When using the older manual full-root/image-activation commands, carry the currently applied frontend_release_id forward rather than falling back to initial. Do not apply the standalone frontend state/root over first-account-owned resources.

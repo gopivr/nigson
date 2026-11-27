@@ -248,3 +248,7 @@ bash scripts/infra/tests/run-owner-migration-test.sh
 These tests use Terraform mock providers and fake local CLI fixtures. They do not
 prove actual AWS quota, engine availability, certificate validation, DNS delivery,
 application startup or live provider qualification.
+
+## UI repository CI/CD
+
+Use the UI repository's `.github/workflows/aws-stage-ui.yml` and `deployment/AWS.md`. Apply this root's new deployment_configuration output once using current inputs before the first UI deployment. That sensitive state snapshot lets UI-only releases retain backend activation/images/environment. The UI workflow needs only a read-only infrastructure repository token in addition to its authorized AWS secrets and public reCAPTCHA site key; it discovers bucket/distribution from state. First-account Actions preserves the applied frontend release on later infrastructure runs. Preserve that same release ID in any manual full-root/runtime activation inputs.
