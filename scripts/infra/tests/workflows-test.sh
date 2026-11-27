@@ -82,6 +82,10 @@ raise 'role must use deterministic bootstrap name' unless config['run'].include?
 auth = job['steps'].find { |s| s.fetch('uses', '').start_with?('aws-actions/configure-aws-credentials@') }
 raise 'publisher must use the resolved OIDC role' unless auth['with']['role-to-assume'] == '${{ steps.configuration.outputs.role_arn }}'
 raise 'publisher must not use static credentials' if auth['with'].keys.any? { |k| ['aws-access-key-id', 'aws-secret-access-key'].include?(k) }
+builder = job['steps'].find { |s| s['id'] == 'buildx' }
+raise 'attestations require the Docker container builder' unless builder && builder.fetch('uses', '').start_with?('docker/setup-buildx-action@') && builder['with'] == {'driver' => 'docker-container', 'use' => true}
+publication = job['steps'].find { |s| s.fetch('run', '').include?('scripts/infra/publish-images.sh') }
+raise 'publication must use the selected attestation builder' unless publication.dig('env', 'BUILDX_BUILDER') == '${{ steps.buildx.outputs.name }}' && job['steps'].index(builder) < job['steps'].index(publication)
 puts 'Bootstrap-managed publishing role discovery and short-lived credential wiring PASS'
 RUBY
 

@@ -68,6 +68,11 @@ releases. Production is not deployed by the staging UI workflow.
 - **AccessDenied with explicit SCP deny:** the AWS organization policy must be
   corrected by its administrator. IAM allow permissions cannot override it.
 - **Certificate pending:** check the Squarespace `stage` NS delegation.
+- **Attestation is not supported for the docker driver:** use the latest
+  **Backend — Build and Publish Images** workflow. It creates a `docker-container`
+  Buildx builder and selects it explicitly for publication, retaining SBOM and
+  provenance. Start a new manual run after the fix is on `main`; an old failed
+  run retains its old workflow revision.
 - **Missing public site key:** set the repository variable before rerunning build.
 - **Release plan changes CloudFront settings beyond the static release path:** the
   guard now prints changed field paths without their values. Review those fields
