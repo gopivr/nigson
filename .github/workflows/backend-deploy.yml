@@ -8,14 +8,6 @@ on:
         required: true
         type: choice
         options: [stage, prod]
-      release_manifest:
-        description: Committed, reviewed release receipt and immutable task definitions under docs/releases/<environment>/
-        required: true
-        type: string
-      rollback_manifest:
-        description: Committed, reviewed prior task definitions under docs/releases/<environment>/
-        required: true
-        type: string
 
 permissions:
   contents: read
@@ -28,10 +20,11 @@ jobs:
   deploy:
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 90
     environment: ${{ inputs.environment }}
     permissions:
       contents: read
+      actions: read
       id-token: write
     env:
       TARGET_ENVIRONMENT: ${{ inputs.environment }}
@@ -39,34 +32,50 @@ jobs:
       AWS_EXPECTED_ACCOUNT_ID: ${{ vars.AWS_EXPECTED_ACCOUNT_ID || secrets.AWS_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - id: configuration
-        name: Validate manifests and resolve the bootstrap-managed deployment role
-        shell: bash
+      - id: release
+        name: Select the latest successful image release for this environment
         env:
-          RELEASE_MANIFEST: ${{ inputs.release_manifest }}
-          ROLLBACK_MANIFEST: ${{ inputs.rollback_manifest }}
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: python3 scripts/infra/select-backend-release.py "$TARGET_ENVIRONMENT"
+      - name: Download the selected immutable release artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.release.outputs.run_id }}
+          artifact-ids: ${{ steps.release.outputs.artifact_id }}
+          merge-multiple: true
+          path: .build/selected-backend-release
+      - id: configuration
+        name: Resolve the environment deployment role
         run: |
           set -euo pipefail
           [[ "$TARGET_ENVIRONMENT" == "stage" || "$TARGET_ENVIRONMENT" == "prod" ]]
           [[ "$AWS_REGION" =~ ^[a-z]{2}(-gov)?-[a-z]+-[0-9]+$ ]]
           [[ "$AWS_EXPECTED_ACCOUNT_ID" =~ ^[0-9]{12}$ ]]
-          [[ "$RELEASE_MANIFEST" =~ ^docs/releases/${TARGET_ENVIRONMENT}/[A-Za-z0-9._-]+\.json$ ]]
-          [[ "$ROLLBACK_MANIFEST" =~ ^docs/releases/${TARGET_ENVIRONMENT}/[A-Za-z0-9._-]+\.json$ ]]
-          [[ -f "$RELEASE_MANIFEST" && -f "$ROLLBACK_MANIFEST" ]]
           echo "role_arn=arn:aws:iam::${AWS_EXPECTED_ACCOUNT_ID}:role/nigson-${TARGET_ENVIRONMENT}-github-deploy" >> "$GITHUB_OUTPUT"
       - name: Obtain short-lived target deployment credentials through OIDC
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
         with:
           role-to-assume: ${{ steps.configuration.outputs.role_arn }}
           role-session-name: nigson-${{ inputs.environment }}-deploy-${{ github.run_id }}
+          role-duration-seconds: 5400
           aws-region: ${{ env.AWS_REGION }}
-      - name: Verify scoped AWS account
-        run: |
-          set -euo pipefail
-          actual_account="$(aws sts get-caller-identity --query Account --output text --no-cli-pager)"
-          [[ "$actual_account" == "$AWS_EXPECTED_ACCOUNT_ID" ]]
-      - name: Deploy after migration receipts, verify health and roll back on failure
+      - name: Migrate and deploy the latest qualified images
         env:
-          RELEASE_MANIFEST: ${{ inputs.release_manifest }}
-          ROLLBACK_MANIFEST: ${{ inputs.rollback_manifest }}
-        run: scripts/infra/deploy-environment.sh "$TARGET_ENVIRONMENT" "$RELEASE_MANIFEST" "$ROLLBACK_MANIFEST"
+          SOURCE_COMMIT: ${{ steps.release.outputs.source_commit }}
+          SOURCE_RUN_ID: ${{ steps.release.outputs.run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ steps.release.outputs.source_run_attempt }}
+        run: |
+          python3 scripts/infra/deploy-latest-backend.py "$TARGET_ENVIRONMENT" \
+            --receipt .build/selected-backend-release/release.json \
+            --source-commit "$SOURCE_COMMIT" --source-run-id "$SOURCE_RUN_ID" \
+            --source-run-attempt "$SOURCE_RUN_ATTEMPT"
+      - name: Retain deployment and rollback outcome
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: backend-deployment-${{ inputs.environment }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .build/backend-deploy/deployment.json
+          if-no-files-found: ignore
+          retention-days: 30

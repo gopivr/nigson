@@ -41,8 +41,7 @@ grep -Eq 'options: \[stage, prod\]' "$deploy"
 grep -Eq 'environment: \$\{\{ inputs.environment \}\}' "$deploy"
 grep -Eq 'TARGET_ENVIRONMENT: \$\{\{ inputs.environment \}\}' "$deploy"
 grep -Eq 'id-token: write' "$deploy"
-grep -Eq 'docs/releases/\$\{TARGET_ENVIRONMENT\}' "$deploy"
-grep -Eq 'deploy-environment\.sh "\$TARGET_ENVIRONMENT"' "$deploy"
+grep -Eq 'deploy-latest-backend\.py "\$TARGET_ENVIRONMENT"' "$deploy"
 if grep -Eq 'deploy-stage\.sh|deploy-stage\.yml' "$deploy" "$plan"; then
   echo "stage-only deployment tooling must not remain in the environment workflow" >&2
   exit 1
@@ -86,8 +85,10 @@ builder = job['steps'].find { |s| s['id'] == 'buildx' }
 raise 'attestations require the Docker container builder' unless builder && builder.fetch('uses', '').start_with?('docker/setup-buildx-action@') && builder['with'] == {'driver' => 'docker-container', 'use' => true}
 publication = job['steps'].find { |s| s.fetch('run', '').include?('scripts/infra/publish-images.sh') }
 raise 'publication must use the selected attestation builder' unless publication.dig('env', 'BUILDX_BUILDER') == '${{ steps.buildx.outputs.name }}' && job['steps'].index(builder) < job['steps'].index(publication)
-report = job['steps'].find { |s| s.fetch('uses', '').start_with?('actions/upload-artifact@') }
+report = job['steps'].find { |s| s.dig('with', 'path') == '.build/image-scans/*.json' }
 raise 'vulnerability details must survive gate failures without exporting other files' unless report && report['if'] == 'always()' && report.dig('with', 'path') == '.build/image-scans/*.json'
+release = job['steps'].find { |s| s.dig('with', 'path') == '.build/backend-release/release.json' }
+raise 'only successful builds may publish the deployable cohort' unless release && release['if'].nil? && release['with']['name'].include?('inputs.environment')
 puts 'Bootstrap-managed publishing role discovery and short-lived credential wiring PASS'
 RUBY
 
@@ -102,5 +103,11 @@ raise 'deployment role must match the bootstrap-managed name' unless config['run
 auth = job['steps'].find { |s| s.fetch('uses', '').start_with?('aws-actions/configure-aws-credentials@') }
 raise 'deployment must use resolved OIDC role' unless auth['with']['role-to-assume'] == '${{ steps.configuration.outputs.role_arn }}'
 raise 'deployment must not use static keys or manual role variables' if File.read(ARGV.fetch(0)).match?(/AWS_DEPLOY_ROLE_ARN|aws-access-key-id|aws-secret-access-key/)
+triggers = w['on'] || w[true]
+raise 'only environment should be required to deploy' unless triggers['workflow_dispatch']['inputs'].keys == ['environment']
+raise 'artifact lookup requires read-only Actions access' unless job.dig('permissions', 'actions') == 'read'
+download = job['steps'].find { |s| s.fetch('uses', '').start_with?('actions/download-artifact@') }
+raise 'release must be selected by immutable build/run IDs' unless download.dig('with', 'artifact-ids') == '${{ steps.release.outputs.artifact_id }}' && download.dig('with', 'run-id') == '${{ steps.release.outputs.run_id }}'
+raise 'do not upload sensitive task-template payloads' unless job['steps'].find { |s| s.fetch('uses', '').start_with?('actions/upload-artifact@') }.dig('with', 'path') == '.build/backend-deploy/deployment.json'
 puts 'Bootstrap-managed deployment role discovery and OIDC credential wiring PASS'
 RUBY

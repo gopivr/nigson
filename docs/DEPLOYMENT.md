@@ -155,16 +155,25 @@ environment and account, then assumes it through GitHub OIDC. You do not need
 or optional environment-specific `AWS_EXPECTED_ACCOUNT_ID` variable and runs
 only from the default branch.
 
-This role can inspect migration receipts and services, read task definitions,
-update the named application services and pass only their task/execution roles
-to ECS. It cannot create services, register task definitions, launch migrations,
-change Terraform, read secrets or publish/delete images. Read access to task
-definitions is region-scoped because that ECS API does not support resource-level
-IAM permissions. Service updates and rollback are restricted to this environment's
-cluster, service names and task-definition families.
+1. Run **Backend — Build and Publish Images** for the target environment. A complete release artifact is published only after every required image passes scanning.
+2. Run **Backend — Deploy Release** and select **stage** or **prod**. No manifest paths or image digests are required.
+3. Check the job and its `backend-deployment-…` artifact for migration, rollout and rollback results.
 
-Existing prerequisites remain: provision and activate the backend services,
-register reviewed task definitions, complete owner migrations, and commit both
-release/rollback manifests before running the deployment workflow. On the first
-installation, the foundation-only bootstrap does not perform those activation steps.
-See [backend release operations](runbooks/deploy.md).
+Deploy selects the newest successful default-branch image publication with a complete
+release artifact for that environment. It pins the artifact ID, verifies its provenance,
+rechecks ECR scans, registers immutable task revisions, runs owner migrations, then
+updates identity and application services. Failed application rollouts restore the
+captured running revisions. Identity schema upgrades require a compatibility review
+before rollback; failed or uncertain migrations stop deployment.
+
+Run **bootstrap** once after adopting this workflow to refresh deployment-role
+permissions. The role is restricted to the environment's task families, migration
+launches, services and required task/execution roles. It cannot create services,
+change Terraform, administer IAM, read secrets or publish/delete images.
+
+First-time runtime setup is still required: provision and activate services, populate
+real secrets, register approved task templates and configure migration networking.
+The foundation-only bootstrap leaves applications inactive; deployment checks this
+before making changes. Terraform retains service configuration ownership while the
+release workflow owns the deployed task revision. Configuration updates use the latest
+registered family template on the next release. See [backend release operations](runbooks/deploy.md).

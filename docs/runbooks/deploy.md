@@ -32,7 +32,7 @@ into `AWS_*`. Configure at least:
 | Resource names | `nigson-stage-*` | `nigson-prod-*` |
 | ECR repositories | `nigson/stage/*` | `nigson/prod/*` |
 | Private service namespace | `*.svc.stage.nigson.internal` | `*.svc.prod.nigson.internal` |
-| Release manifests | `docs/releases/stage/` | `docs/releases/prod/` |
+| Release selection | latest successful stage image artifact | latest successful prod image artifact |
 
 Copy `environments/<environment>/backend.hcl.example` to an untracked backend
 configuration for that environment's state. Never point stage and production at
@@ -95,8 +95,8 @@ initial scan) with no HIGH or CRITICAL findings, or the run fails. Attested imag
 indexes are resolved to their selected Linux platform digest for scanning; the
 summary retains both the published index digest and scanned image digest. Existing immutable tags are reused
 and rechecked rather than overwritten. The workflow run summary records each
-repository, tag, content digest, and scan counts; use those digests in a
-separately reviewed Terraform plan. Keep every task definition's CPU
+repository, tag, content digest, and scan counts. A complete `release.json`
+artifact binds all required images to that successful publication. Keep every task definition's CPU
 architecture aligned with its image set. AI is built only when product phase 5
 is explicitly selected and its ECR repository exists.
 
@@ -131,40 +131,44 @@ never retries automatically. The operator's ECS launch role must be limited to
 these exact task definitions and `iam:PassRole` for the migration task and
 execution roles; the task role has no application permissions.
 
-Only after every required owner migration has a confirmed exit code of zero
-should the separately reviewed application deployment proceed. Use the manual
-`Backend — Deploy Release` workflow and select `stage` or `prod`. The job runs
-inside that GitHub Environment, so it receives only that environment's
-`AWS_REGION` and account ID (`AWS_EXPECTED_ACCOUNT_ID` variable or `AWS_ACCOUNT_ID`
-secret). The role ARN is resolved from its bootstrap-managed name; configure
-each environment's variables separately and never reuse stage values in prod.
-Commit both reviewed JSON manifests beneath `docs/releases/<environment>/`;
-enter their repository-relative paths at dispatch. The workflow accepts only a
-path inside the selected environment's directory, uses short-lived OIDC
-credentials, and checks the resolved AWS account. The release and rollback
-manifests must also declare that same environment, and the deploy script
-rejects service names, task definitions, ECR images, and migration tasks that
-do not carry the `nigson-<environment>-` / `nigson/<environment>/` prefix.
+## Deploy the latest backend artifacts
 
-The `stage` GitHub Environment must have required reviewers and branch
-restrictions. The `prod` GitHub Environment must additionally require a
-separate approval with no bypass, and its bootstrap-managed deployment role is limited
-to the production cluster/services, named task definitions and required
-`iam:PassRole` ARNs. Neither environment's deploy role may have Terraform,
-Secrets Manager, IAM administration, or cross-environment access. For local
-operator execution, use
-`scripts/infra/deploy-environment.sh <stage|prod> <release.json> <rollback.json>`
-with that environment's credentials, `AWS_REGION`, and
-`AWS_EXPECTED_ACCOUNT_ID`. The release manifest must name the environment
-cluster, product phase, exact required owner list, each successful migration
-task ARN and zero exit code, immutable service task definition ARNs and matching
-ECR image digests, plus HTTPS health URLs. The rollback manifest must contain the
-previously reviewed task definition for each service. The script checks the AWS
-account and actual stopped migration tasks, verifies task definition image
-digests, rolls services, waits for ECS stability, checks HTTPS health, and
-submits the reviewed prior task definitions if rollout or health fails.
-Rollback is refused unless it covers the same exact service set. The ECS
-deployment role should be restricted to these services and task definitions.
+Run **Backend — Build and Publish Images**, then **Backend — Deploy Release**.
+Select only `stage` or `prod` in the deploy workflow. It selects the latest successful
+manual publication on the default branch with a complete matching-environment
+`backend-release-…` artifact. Expired artifacts require another publication; builds
+from before this artifact contract are not eligible. No committed release/rollback
+manifests are needed by this workflow.
+
+The selected GitHub Environment supplies `AWS_REGION` and `AWS_EXPECTED_ACCOUNT_ID`
+(or the `AWS_ACCOUNT_ID` secret). Configure environment reviewers and branch restrictions;
+production requires its own approval. Bootstrap creates the OIDC role automatically.
+Rerun bootstrap once to install the updated task-registration and migration permissions.
+
+Before first deployment, provision healthy active services, reviewed task-family
+templates, real secret values and private migration networking/security groups.
+Foundation-only infrastructure is inactive and fails deployment preflight before writes.
+The workflow checks account, release provenance, complete image cohort, architecture
+and fresh ECR scan results. It preserves each latest task template's configuration,
+changes the immutable image/architecture, and captures running service revisions for
+rollback. Terraform ignores the service task-definition pointer so subsequent
+infrastructure applies do not reset a deployed release. Service task definitions
+retain old revisions for rollback after template updates.
+
+All required owner migrations must exit zero before rollout. Identity rolls first,
+then application services. ECS must report the candidate revision healthy and stable;
+a circuit breaker returning to an older revision is a failed release. Application
+failures restore captured revisions. Identity schema rollback requires manual
+compatibility review; it is never blindly downgraded. Migration timeout or ambiguous
+launch is recorded as `UNKNOWN`: inspect the ECS task, CloudWatch logs and owner
+`databasechangelog` before deciding whether to rerun. Do not blindly retry migrations.
+
+The `backend-deployment-…` artifact contains image digests, task ARNs and outcomes.
+It excludes task-template contents and secret values. Publication and deployment
+artifacts are retained for 30 days. The legacy `deploy-environment.sh` utility remains
+available for explicitly reviewed local manifest-based operations; the GitHub workflow
+does not use it. Successful ECS rollout does not replace the network/API acceptance
+checks below.
 
 Run `scripts/infra/smoke-environment.sh <stage|prod> <approved-smoke.json>` from
 the required network vantages. Its JSON lists private service readiness URLs

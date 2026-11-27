@@ -207,11 +207,14 @@ output "github_oidc_provider_arn" {
 
 resource "aws_iam_role" "github_deploy" {
   name                 = "nigson-${var.environment}-github-deploy"
-  max_session_duration = 3600
+  max_session_duration = 7200
   assume_role_policy   = aws_iam_role.github_publish.assume_role_policy
 }
 locals {
-  deploy_owners      = ["commerce", "experience", "integration", "ai"]
+  deploy_owners    = ["commerce", "experience", "integration", "identity", "ai"]
+  migration_owners = ["commerce", "experience", "integration", "ai"]
+  deploy_migration_definition_arns = [for owner in local.migration_owners :
+  "arn:aws:ecs:${var.region}:${var.expected_account_id}:task-definition/nigson-${var.environment}-${owner}-migration-BP*:*"]
   deploy_cluster_arn = "arn:aws:ecs:${var.region}:${var.expected_account_id}:cluster/nigson-${var.environment}"
   deploy_service_arns = [for service in local.deploy_owners :
   "arn:aws:ecs:${var.region}:${var.expected_account_id}:service/nigson-${var.environment}/nigson-${var.environment}-${service}"]
@@ -249,11 +252,44 @@ resource "aws_iam_role_policy" "github_deploy" {
       },
       {
         Sid = "PassApplicationRoles", Effect = "Allow", Action = ["iam:PassRole"]
-        Resource = flatten([for service in local.deploy_owners : [
+        Resource = concat(flatten([for service in local.deploy_owners : [
           "arn:aws:iam::${var.expected_account_id}:role/nigson-${var.environment}-${service}-task",
           "arn:aws:iam::${var.expected_account_id}:role/nigson-${var.environment}-${service}-execution"
-        ]])
+          ]]), flatten([for owner in local.migration_owners : [
+          "arn:aws:iam::${var.expected_account_id}:role/nigson-${var.environment}-${owner}-migration-task",
+          "arn:aws:iam::${var.expected_account_id}:role/nigson-${var.environment}-${owner}-migration-execution"
+        ]]))
         Condition = { StringEquals = { "iam:PassedToService" = "ecs-tasks.amazonaws.com" } }
+      },
+      {
+        Sid      = "RegisterReleaseRevisions", Effect = "Allow", Action = ["ecs:RegisterTaskDefinition"]
+        Resource = concat(local.deploy_task_definition_arns, local.deploy_migration_definition_arns)
+        Condition = {
+          StringEquals                = { "aws:RequestTag/Application" = "nigson", "aws:RequestTag/Environment" = var.environment }
+          BoolIfExists                = { "ecs:privileged" = "false" }
+          "ForAllValues:StringEquals" = { "ecs:compute-compatibility" = ["FARGATE"] }
+        }
+      },
+      {
+        Sid      = "RunOwnerMigrations", Effect = "Allow", Action = ["ecs:RunTask"]
+        Resource = local.deploy_migration_definition_arns
+        Condition = {
+          ArnEquals    = { "ecs:cluster" = local.deploy_cluster_arn }
+          BoolIfExists = { "ecs:enable-execute-command" = "false" }
+        }
+      },
+      {
+        Sid       = "TagReleaseResources", Effect = "Allow", Action = ["ecs:TagResource"]
+        Resource  = concat(local.deploy_task_definition_arns, local.deploy_migration_definition_arns, ["arn:aws:ecs:${var.region}:${var.expected_account_id}:task/nigson-${var.environment}/*"])
+        Condition = { StringEquals = { "ecs:CreateAction" = ["RegisterTaskDefinition", "RunTask"] } }
+      },
+      {
+        Sid      = "VerifyReleaseImages", Effect = "Allow", Action = ["ecr:DescribeImages", "ecr:DescribeImageScanFindings"]
+        Resource = [for service in local.deploy_owners : "arn:aws:ecr:${var.region}:${var.expected_account_id}:repository/nigson/${var.environment}/${service}"]
+      },
+      {
+        Sid       = "DiscoverMigrationNetwork", Effect = "Allow", Action = ["ec2:DescribeSubnets", "ec2:DescribeSecurityGroups"], Resource = "*"
+        Condition = { StringEquals = { "aws:RequestedRegion" = var.region } }
       }
     ]
   })

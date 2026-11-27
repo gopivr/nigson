@@ -275,6 +275,8 @@ resource "aws_iam_role" "task" {
   tags               = local.tags
 }
 resource "aws_ecs_task_definition" "identity" {
+  # Keep running and rollback revisions available after template updates.
+  skip_destroy             = true
   count                    = var.provision_tasks ? 1 : 0
   family                   = local.name
   network_mode             = "awsvpc"
@@ -335,6 +337,8 @@ resource "aws_ecs_service" "identity" {
       container_port   = 8443
     }
   }
+  # Image revisions are promoted by the backend deployment workflow.
+  lifecycle { ignore_changes = [task_definition] }
   depends_on = [aws_lb_listener.admin, aws_lb_listener_rule.oidc]
   tags       = local.tags
 }

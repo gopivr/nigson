@@ -279,6 +279,8 @@ resource "aws_service_discovery_service" "service" {
 }
 
 resource "aws_ecs_task_definition" "service" {
+  # Keep running and rollback revisions available after template updates.
+  skip_destroy             = true
   for_each                 = var.provision_tasks ? var.services : {}
   family                   = "nigson-${var.environment}-${each.key}"
   requires_compatibilities = ["FARGATE"]
@@ -346,7 +348,7 @@ resource "aws_ecs_service" "service" {
   }
   service_registries { registry_arn = aws_service_discovery_service.service[each.key].arn }
   depends_on = [aws_lb_listener.https, aws_wafv2_web_acl_association.public]
-  lifecycle { ignore_changes = [desired_count] }
+  lifecycle { ignore_changes = [desired_count, task_definition] }
   tags = merge(local.tags, { Service = each.key })
 }
 

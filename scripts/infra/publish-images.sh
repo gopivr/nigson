@@ -27,6 +27,10 @@ esac
 
 registry="${account_id}.dkr.ecr.${region}.amazonaws.com"
 tag="${commit_sha}-${architecture}"
+workspace=${GITHUB_WORKSPACE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}
+release_file="$workspace/.build/backend-release/release.json"
+mkdir -p "$(dirname "$release_file")"
+rm -f "$release_file"
 scan_work=$(mktemp -d)
 trap 'rm -rf "$scan_work"' EXIT
 docker buildx version >/dev/null
@@ -137,6 +141,13 @@ publish_and_scan() {
     echo "Image ${repository}:${image_tag} has ${critical} critical and ${high} high findings. Download the backend-image-scan-findings artifact for CVE/package details." >&2
     return 1
   fi
+  local component=${repository##*/}
+  [[ "$target" != migration ]] || component=migration
+  jq -n --arg component "$component" --arg image "${registry}/${repository}@${digest}" \
+      --arg scan_digest "$scan_digest" \
+      '{component:$component,image:$image,scan_digest:$scan_digest,critical:0,high:0}' \
+      > "$scan_work/component-$component.json"
+
 }
 
 summary=${GITHUB_STEP_SUMMARY:-/dev/null}
@@ -150,5 +161,16 @@ if [[ "$product_phase" == "5" ]]; then
   publish_and_scan "nigson/${environment}/ai" services/ai/Dockerfile "" "$tag"
 fi
 publish_and_scan "nigson/${environment}/identity" infrastructure/docker/keycloak/Dockerfile "" "$tag"
+
+# Publish one complete cohort only after every required image passes its scan.
+jq -s --arg environment "$environment" --arg account_id "$account_id" --arg region "$region" \
+  --arg architecture "$architecture" --arg source_commit "$commit_sha" \
+  --arg source_run_id "${GITHUB_RUN_ID:-local}" --arg source_run_attempt "${GITHUB_RUN_ATTEMPT:-1}" \
+  --argjson product_phase "$product_phase" '
+  {schema_version:1,environment:$environment,account_id:$account_id,region:$region,
+   architecture:$architecture,source_commit:$source_commit,source_run_id:$source_run_id,
+   source_run_attempt:$source_run_attempt,product_phase:$product_phase,
+   components:(map({key:.component,value:del(.component)}) | from_entries)}
+' "$scan_work"/component-*.json > "$release_file"
 
 printf '\nAll published images target ECS `%s`; set each task definition architecture to `%s` and use the reported immutable digest. Product phase `%s`.\n' "$architecture" "$ecs_architecture" "$product_phase" >> "$summary"

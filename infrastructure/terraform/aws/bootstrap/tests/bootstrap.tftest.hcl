@@ -107,25 +107,38 @@ run "github_deployer_is_scoped_to_existing_environment_services" {
     error_message = "Migration receipt inspection must stay within this environment's cluster."
   }
   assert {
-    condition     = toset(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[1].Resource) == toset([for service in ["commerce", "experience", "integration", "ai"] : "arn:aws:ecs:eu-west-1:123456789012:service/nigson-stage/nigson-stage-${service}"])
-    error_message = "Service inspection must not extend to identity or another environment."
+    condition     = toset(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[1].Resource) == toset([for service in ["commerce", "experience", "integration", "identity", "ai"] : "arn:aws:ecs:eu-west-1:123456789012:service/nigson-stage/nigson-stage-${service}"])
+    error_message = "Service inspection must stay within the backend environment."
   }
   assert {
     condition     = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[2].Action == ["ecs:DescribeTaskDefinition"] && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[2].Resource == "*" && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[2].Condition.StringEquals["aws:RequestedRegion"] == "eu-west-1"
     error_message = "The ECS task-definition read API requires wildcard resources but must remain region-scoped and read-only."
   }
   assert {
-    condition     = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Action == ["ecs:UpdateService"] && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Resource == jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[1].Resource && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Condition.ArnEquals["ecs:cluster"] == "arn:aws:ecs:eu-west-1:123456789012:cluster/nigson-stage" && toset(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Condition.ArnLike["ecs:task-definition"]) == toset([for service in ["commerce", "experience", "integration", "ai"] : "arn:aws:ecs:eu-west-1:123456789012:task-definition/nigson-stage-${service}:*"])
+    condition     = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Action == ["ecs:UpdateService"] && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Resource == jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[1].Resource && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Condition.ArnEquals["ecs:cluster"] == "arn:aws:ecs:eu-west-1:123456789012:cluster/nigson-stage" && toset(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[3].Condition.ArnLike["ecs:task-definition"]) == toset([for service in ["commerce", "experience", "integration", "identity", "ai"] : "arn:aws:ecs:eu-west-1:123456789012:task-definition/nigson-stage-${service}:*"])
     error_message = "Deploy and rollback must stay within existing environment services and their task-definition families."
   }
   assert {
-    condition     = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[4].Action == ["iam:PassRole"] && toset(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[4].Resource) == toset(flatten([for service in ["commerce", "experience", "integration", "ai"] : ["arn:aws:iam::123456789012:role/nigson-stage-${service}-task", "arn:aws:iam::123456789012:role/nigson-stage-${service}-execution"]])) && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[4].Condition.StringEquals["iam:PassedToService"] == "ecs-tasks.amazonaws.com"
+    condition     = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[4].Action == ["iam:PassRole"] && toset(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[4].Resource) == toset(concat(flatten([for service in ["commerce", "experience", "integration", "identity", "ai"] : ["arn:aws:iam::123456789012:role/nigson-stage-${service}-task", "arn:aws:iam::123456789012:role/nigson-stage-${service}-execution"]]), flatten([for service in ["commerce", "experience", "integration", "ai"] : ["arn:aws:iam::123456789012:role/nigson-stage-${service}-migration-task", "arn:aws:iam::123456789012:role/nigson-stage-${service}-migration-execution"]]))) && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[4].Condition.StringEquals["iam:PassedToService"] == "ecs-tasks.amazonaws.com"
     error_message = "Only this environment's app execution/task roles may be passed to ECS tasks."
   }
   assert {
-    condition     = toset(flatten([for statement in jsondecode(aws_iam_role_policy.github_deploy.policy).Statement : statement.Action])) == toset(["ecs:DescribeTasks", "ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:UpdateService", "iam:PassRole"])
-    error_message = "Deployer must not publish images, create services/task definitions, run migrations, provision infrastructure or read secrets."
+    condition     = toset(flatten([for statement in jsondecode(aws_iam_role_policy.github_deploy.policy).Statement : statement.Action])) == toset(["ecs:DescribeTasks", "ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:UpdateService", "iam:PassRole", "ecs:RegisterTaskDefinition", "ecs:RunTask", "ecs:TagResource", "ecr:DescribeImages", "ecr:DescribeImageScanFindings", "ec2:DescribeSubnets", "ec2:DescribeSecurityGroups"])
+    error_message = "Deployer must not publish/delete images, create services, provision infrastructure or read secrets."
   }
+  assert {
+    condition = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[5].Condition.StringEquals["aws:RequestTag/Environment"] == "stage" && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[5].Condition.StringEquals["aws:RequestTag/Application"] == "nigson" && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[5].Condition["ForAllValues:StringEquals"]["ecs:compute-compatibility"] == ["FARGATE"] && alltrue([for arn in jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[5].Resource : startswith(arn, "arn:aws:ecs:eu-west-1:123456789012:task-definition/nigson-stage-")])
+    error_message = "Registration must retain environment/application tags, Fargate compatibility and named task-family scope."
+  }
+  assert {
+    condition = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[6].Action == ["ecs:RunTask"] && toset(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[6].Resource) == toset([for owner in ["commerce", "experience", "integration", "ai"] : "arn:aws:ecs:eu-west-1:123456789012:task-definition/nigson-stage-${owner}-migration-BP*:*"]) && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[6].Condition.ArnEquals["ecs:cluster"] == "arn:aws:ecs:eu-west-1:123456789012:cluster/nigson-stage"
+    error_message = "Only owner migrations may be launched, in the selected environment cluster."
+  }
+  assert {
+    condition = jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[7].Condition.StringEquals["ecs:CreateAction"] == ["RegisterTaskDefinition", "RunTask"] && jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[9].Condition.StringEquals["aws:RequestedRegion"] == "eu-west-1" && alltrue([for arn in jsondecode(aws_iam_role_policy.github_deploy.policy).Statement[8].Resource : startswith(arn, "arn:aws:ecr:eu-west-1:123456789012:repository/nigson/stage/")])
+    error_message = "Tags are creation-only; scan and network discovery must remain environment/region scoped."
+  }
+
 }
 run "production_deployer_does_not_share_staging_scope" {
   command = plan

@@ -77,6 +77,13 @@ jobs:
           TARGET_ARCHITECTURE: ${{ inputs.architecture }}
           PRODUCT_PHASE: ${{ inputs.product_phase }}
         run: scripts/infra/publish-images.sh "$TARGET_ENVIRONMENT" "$TARGET_ARCHITECTURE" "$PRODUCT_PHASE" "$AWS_EXPECTED_ACCOUNT_ID" "$AWS_REGION"
+      - name: Publish the complete deployable image release
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: backend-release-${{ inputs.environment }}-${{ github.sha }}-${{ github.run_attempt }}
+          path: .build/backend-release/release.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Upload image vulnerability details
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
