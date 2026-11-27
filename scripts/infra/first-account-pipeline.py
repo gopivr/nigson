@@ -113,9 +113,20 @@ class Pipeline:
         source = self.root / "infrastructure/terraform/aws/bootstrap"
         for name in ["main.tf", ".terraform.lock.hcl"]:
             shutil.copyfile(source / name, self.bootstrap / name)
-        (self.bootstrap / "ci.auto.tfvars.json").write_text(json.dumps({
+        bootstrap_inputs = {
             "expected_account_id": self.account, "region": self.region,
-            "environment": "stage", "domain_name": "nigson.com"}) + "\n")
+            "environment": "stage", "domain_name": "nigson.com",
+            "github_repository": os.environ.get("GITHUB_REPOSITORY", "gopivr/nigson")}
+        for name in ("GITHUB_REPOSITORY_ID", "GITHUB_REPOSITORY_OWNER_ID"):
+            value = os.environ.get(name)
+            if value:
+                if not re.fullmatch(r"[0-9]+", value):
+                    raise ValueError("GitHub repository/owner IDs must be numeric")
+                bootstrap_inputs["github_repository_id" if name == "GITHUB_REPOSITORY_ID" else "github_owner_id"] = value
+        provider = os.environ.get("GITHUB_OIDC_PROVIDER_ARN")
+        if provider:
+            bootstrap_inputs["github_oidc_provider_arn"] = provider
+        (self.bootstrap / "ci.auto.tfvars.json").write_text(json.dumps(bootstrap_inputs) + "\n")
         bucket_exists = self.s3("head-bucket", missing=True) is not None
         state_exists = bucket_exists and self.s3("head-object", key=self.key, missing=True) is not None
         backend = self.work / "bootstrap-backend.hcl"
@@ -151,6 +162,10 @@ class Pipeline:
             self.init(self.bootstrap, "-migrate-state", "-force-copy", "-backend-config=" + str(backend))
         if self.action == "bootstrap":
             self.plan_apply(self.bootstrap, "bootstrap", apply=True)
+            self.summary("\nGitHub image publishing role: "
+                         f"`arn:aws:iam::{self.account}:role/nigson-stage-github-publish`\n"
+                         "GitHub deployment role: "
+                         f"`arn:aws:iam::{self.account}:role/nigson-stage-github-deploy`\n")
 
     def run(self):
         self.prepare_bootstrap()

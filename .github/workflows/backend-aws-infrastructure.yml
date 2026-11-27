@@ -28,6 +28,7 @@ jobs:
       TF_INPUT: 'false'
       AWS_REGION: ${{ vars.AWS_REGION || 'eu-west-1' }}
       AWS_EXPECTED_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      GITHUB_OIDC_PROVIDER_ARN: ${{ vars.GITHUB_OIDC_PROVIDER_ARN }}
       BOOTSTRAP_ACTION: ${{ inputs.action }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683

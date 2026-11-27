@@ -148,6 +148,12 @@ this stack does not open the administration endpoint to the internet.
 
 ## 4. Publish actual images and task definitions
 
+For GitHub Actions, first run **Backend — AWS Infrastructure → bootstrap** to
+create the managed GitHub OIDC provider and publishing role. Then run
+**Backend — Build and Publish Images**; its role ARN is resolved automatically.
+See [backend image publishing](../../../../docs/DEPLOYMENT.md#publish-backend-images).
+
+
 After reviewing/committing the release source, publish real images to the ECR
 repositories Terraform created. This command builds and scans images; it does
 not deploy services:

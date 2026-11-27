@@ -70,3 +70,31 @@ raise 'do not upload Terraform state/plan artifacts' if job['steps'].any? { |ste
 raise 'do not interpolate dispatch input into shell code' if job['steps'].any? { |step| step.fetch('run', '').include?('${{ inputs.') }
 puts 'First-account manual dispatch, staging secrets and durable state boundaries PASS'
 RUBY
+
+ruby - "$artifacts" <<'RUBY'
+require 'yaml'
+w = YAML.load_file(ARGV.fetch(0))
+job = w['jobs']['publish']
+raise 'publisher must run from default branch' unless job['if'].include?('default_branch')
+raise 'bootstrap account secret must work without another account variable' unless job['env']['AWS_EXPECTED_ACCOUNT_ID'] == '${{ vars.AWS_EXPECTED_ACCOUNT_ID || secrets.AWS_ACCOUNT_ID }}'
+config = job['steps'].find { |s| s['id'] == 'configuration' }
+raise 'role must use deterministic bootstrap name' unless config['run'].include?('role/nigson-${TARGET_ENVIRONMENT}-github-publish')
+auth = job['steps'].find { |s| s.fetch('uses', '').start_with?('aws-actions/configure-aws-credentials@') }
+raise 'publisher must use the resolved OIDC role' unless auth['with']['role-to-assume'] == '${{ steps.configuration.outputs.role_arn }}'
+raise 'publisher must not use static credentials' if auth['with'].keys.any? { |k| ['aws-access-key-id', 'aws-secret-access-key'].include?(k) }
+puts 'Bootstrap-managed publishing role discovery and short-lived credential wiring PASS'
+RUBY
+
+ruby - "$deploy" <<'RUBY'
+require 'yaml'
+w = YAML.load_file(ARGV.fetch(0))
+job = w['jobs']['deploy']
+raise 'deployment must run from default branch' unless job['if'].include?('default_branch')
+raise 'deployment must accept the bootstrap account secret' unless job['env']['AWS_EXPECTED_ACCOUNT_ID'] == '${{ vars.AWS_EXPECTED_ACCOUNT_ID || secrets.AWS_ACCOUNT_ID }}'
+config = job['steps'].find { |s| s['id'] == 'configuration' }
+raise 'deployment role must match the bootstrap-managed name' unless config['run'].include?('role/nigson-${TARGET_ENVIRONMENT}-github-deploy')
+auth = job['steps'].find { |s| s.fetch('uses', '').start_with?('aws-actions/configure-aws-credentials@') }
+raise 'deployment must use resolved OIDC role' unless auth['with']['role-to-assume'] == '${{ steps.configuration.outputs.role_arn }}'
+raise 'deployment must not use static keys or manual role variables' if File.read(ARGV.fetch(0)).match?(/AWS_DEPLOY_ROLE_ARN|aws-access-key-id|aws-secret-access-key/)
+puts 'Bootstrap-managed deployment role discovery and OIDC credential wiring PASS'
+RUBY

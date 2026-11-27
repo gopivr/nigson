@@ -27,6 +27,8 @@ The provisioner's IAM permissions and organization policies must allow the resou
 Open **Actions → Backend — AWS Infrastructure → Run workflow**, select `main`:
 
 1. Choose **bootstrap**. This creates the state bucket and staging DNS zone.
+   Bootstrap also creates the GitHub OIDC provider and
+   `nigson-stage-github-publish` and `nigson-stage-github-deploy` roles.
 2. In Squarespace DNS custom records, add the four NS records shown in the run
    summary with host **stage**. Keep the root domain nameservers unchanged.
 3. Wait for DNS propagation, then run the same workflow with **plan**.
@@ -91,3 +93,57 @@ release. Existing immutable release objects are retained.
 Backend image publishing and deployment require the configured application
 release roles and manifests. They are not prerequisites for publishing the static
 staging UI. Infrastructure planning uses **Backend — AWS Infrastructure → plan**.
+
+## Publish backend images
+
+After merging these changes, run **Backend — AWS Infrastructure → bootstrap**
+once, even if the infrastructure already exists. This updates the existing
+bootstrap state and adds the GitHub publishing identity; it does not activate
+application services. The provisioning identity needs IAM OIDC-provider/role and
+inline-policy management permissions. Organization SCPs still apply.
+
+Then run **Backend — Build and Publish Images** on `main`, choose `stage`,
+`amd64` for the current first-account X86_64 task definitions, and product phase
+`1`. Platform/ECR provisioning must already have completed. The workflow uses
+`AWS_REGION` and `AWS_ACCOUNT_ID` from the existing settings (or the optional
+`AWS_EXPECTED_ACCOUNT_ID` variable), resolves the bootstrap-managed role ARN and
+assumes it through OIDC. No `AWS_PUBLISH_ROLE_ARN` variable or stored publisher
+access keys are needed. Image publication does not deploy applications.
+
+Trust is restricted to the exact repository and GitHub Environment. Configure the
+`stage` Environment's deployment branch restriction to `main`; the publishing
+workflow also rejects non-default branches. Bootstrap records GitHub repository
+and owner IDs to support GitHub's immutable OIDC subject format as well as the
+legacy named format. The role can push/pull and read scans only in the five
+named environment ECR repositories; it cannot deploy ECS, manage IAM, read
+Secrets Manager or delete ECR images.
+
+If the account already has a GitHub OIDC provider owned elsewhere, set optional
+`GITHUB_OIDC_PROVIDER_ARN` to its ARN **before the initial role bootstrap**. This
+reuses it without taking ownership. Do not toggle this setting after bootstrap
+has created its own provider; that would propose an ownership/resource change.
+When sharing an account across stage/prod roots, reuse the existing provider in
+the second root. Provision each environment's role in its own bootstrap state.
+
+## Deploy backend releases
+
+The same **bootstrap** run also creates `nigson-stage-github-deploy`.
+**Backend — Deploy Release** resolves its ARN automatically using the selected
+environment and account, then assumes it through GitHub OIDC. You do not need
+`AWS_DEPLOY_ROLE_ARN`. The workflow accepts the existing `AWS_ACCOUNT_ID` secret
+or optional environment-specific `AWS_EXPECTED_ACCOUNT_ID` variable and runs
+only from the default branch.
+
+This role can inspect migration receipts and services, read task definitions,
+update the named application services and pass only their task/execution roles
+to ECS. It cannot create services, register task definitions, launch migrations,
+change Terraform, read secrets or publish/delete images. Read access to task
+definitions is region-scoped because that ECS API does not support resource-level
+IAM permissions. Service updates and rollback are restricted to this environment's
+cluster, service names and task-definition families.
+
+Existing prerequisites remain: provision and activate the backend services,
+register reviewed task definitions, complete owner migrations, and commit both
+release/rollback manifests before running the deployment workflow. On the first
+installation, the foundation-only bootstrap does not perform those activation steps.
+See [backend release operations](runbooks/deploy.md).

@@ -26,7 +26,7 @@ into `AWS_*`. Configure at least:
 | AWS account | dedicated stage account | dedicated production account |
 | `AWS_REGION` | stage region | production region |
 | `AWS_EXPECTED_ACCOUNT_ID` | stage account ID | production account ID |
-| `AWS_PLAN_ROLE_ARN` / `AWS_DEPLOY_ROLE_ARN` | stage-scoped OIDC roles | production-scoped OIDC roles |
+| Deployment OIDC role | bootstrap-managed `nigson-stage-github-deploy` | separately bootstrapped `nigson-prod-github-deploy` |
 | `TF_STATE_BUCKET` and key | `nigson/stage/terraform.tfstate` | `nigson/prod/terraform.tfstate` |
 | `TF_VAR_*` network, phase, sizing, retention and route values | stage inputs | independently reviewed production inputs |
 | Resource names | `nigson-stage-*` | `nigson-prod-*` |
@@ -81,9 +81,9 @@ and a reviewed release plan.
 
 After Terraform has created the environment's immutable ECR repositories, run
 the manual `Backend — Build and Publish Images` workflow in that environment. It
-uses only a short-lived GitHub OIDC role (`AWS_PUBLISH_ROLE_ARN`) and verifies
-the returned AWS account against `AWS_EXPECTED_ACCOUNT_ID`. Scope the role to
-ECR upload and scan-read actions for that environment's commerce, experience,
+uses the bootstrap-managed `nigson-<environment>-github-publish` OIDC role and verifies
+the returned AWS account against `AWS_EXPECTED_ACCOUNT_ID`. Bootstrap scopes the role to
+ECR upload/pull and scan-read actions for that environment's commerce, experience,
 integration, identity, and BP5-only AI repositories. Do not grant ECR delete,
 Terraform, ECS deployment, IAM, or secret-read permissions.
 
@@ -133,7 +133,8 @@ Only after every required owner migration has a confirmed exit code of zero
 should the separately reviewed application deployment proceed. Use the manual
 `Backend — Deploy Release` workflow and select `stage` or `prod`. The job runs
 inside that GitHub Environment, so it receives only that environment's
-`AWS_REGION`, `AWS_EXPECTED_ACCOUNT_ID`, and `AWS_DEPLOY_ROLE_ARN`; configure
+`AWS_REGION` and account ID (`AWS_EXPECTED_ACCOUNT_ID` variable or `AWS_ACCOUNT_ID`
+secret). The role ARN is resolved from its bootstrap-managed name; configure
 each environment's variables separately and never reuse stage values in prod.
 Commit both reviewed JSON manifests beneath `docs/releases/<environment>/`;
 enter their repository-relative paths at dispatch. The workflow accepts only a
@@ -145,7 +146,7 @@ do not carry the `nigson-<environment>-` / `nigson/<environment>/` prefix.
 
 The `stage` GitHub Environment must have required reviewers and branch
 restrictions. The `prod` GitHub Environment must additionally require a
-separate approval with no bypass, and its `AWS_DEPLOY_ROLE_ARN` must be limited
+separate approval with no bypass, and its bootstrap-managed deployment role is limited
 to the production cluster/services, named task definitions and required
 `iam:PassRole` ARNs. Neither environment's deploy role may have Terraform,
 Secrets Manager, IAM administration, or cross-environment access. For local

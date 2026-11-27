@@ -90,6 +90,23 @@ class PipelineTests(unittest.TestCase):
         self.assertNotIn('access_key', backend)
         self.assertNotIn('secret_key', backend)
 
+    def test_bootstrap_records_github_identity_for_immutable_subject_trust(self):
+        with patch.dict('os.environ', {'GITHUB_REPOSITORY': 'gopivr/nigson',
+                                      'GITHUB_REPOSITORY_ID': '12345',
+                                      'GITHUB_REPOSITORY_OWNER_ID': '67890'}):
+            self.execute('bootstrap', FakeCommands())
+        values = json.loads((self.work/'bootstrap/ci.auto.tfvars.json').read_text())
+        self.assertEqual(values['github_repository'], 'gopivr/nigson')
+        self.assertEqual(values['github_repository_id'], '12345')
+        self.assertEqual(values['github_owner_id'], '67890')
+
+    def test_bootstrap_can_reuse_an_existing_github_oidc_provider(self):
+        arn = f'arn:aws:iam::{ACCOUNT}:oidc-provider/token.actions.githubusercontent.com'
+        with patch.dict('os.environ', {'GITHUB_OIDC_PROVIDER_ARN': arn}):
+            self.execute('bootstrap', FakeCommands())
+        values = json.loads((self.work/'bootstrap/ci.auto.tfvars.json').read_text())
+        self.assertEqual(values['github_oidc_provider_arn'], arn)
+
     def test_repeat_bootstrap_uses_remote_state_without_target_or_import(self):
         calls = self.execute("bootstrap", FakeCommands())
         self.assertEqual(sum("apply" in c for c in calls), 1)
