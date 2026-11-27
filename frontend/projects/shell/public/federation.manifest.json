@@ -1,0 +1,9 @@
+{
+  "marketing": "http://localhost:4201/remoteEntry.json",
+  "auth": "http://localhost:4203/remoteEntry.json",
+  "shop": "http://localhost:4202/remoteEntry.json",
+  "account": "http://localhost:4204/remoteEntry.json",
+  "admin-core": "http://localhost:4205/remoteEntry.json",
+  "admin-shop": "http://localhost:4206/remoteEntry.json",
+  "admin-cms": "http://localhost:4211/remoteEntry.json"
+}

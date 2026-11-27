@@ -1,0 +1,16 @@
+import '@angular/compiler';
+import {Injector,runInInjectionContext} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {of,throwError} from 'rxjs';
+import {describe,it,expect,vi} from 'vitest';
+import {AdminCategoriesComponent,AdminCategory} from './categories.component';
+const root:AdminCategory={id:'root',name:'Power',slug:'power',parentId:null,sortOrder:2,active:true,version:4};
+function fixture(http:any){const c=runInInjectionContext(Injector.create({providers:[{provide:HttpClient,useValue:http}]}),()=>new AdminCategoriesComponent());c.rows.set([root]);c.ready.set(true);return c;}
+describe('Category editing',()=>{
+ it('opens a modal immediately and prevents closing during a save',()=>{const c=fixture({});const dialog={showModal:vi.fn(),close:vi.fn()};c.editor={nativeElement:dialog} as any;c.startNew();expect(dialog.showModal).toHaveBeenCalledOnce();c.busy.set(true);const event=new Event('cancel',{cancelable:true});c.onCancel(event);expect(event.defaultPrevented).toBe(true);c.closeEditor();expect(dialog.close).not.toHaveBeenCalled();c.busy.set(false);c.closeEditor();expect(dialog.close).toHaveBeenCalledOnce();expect(c.editing()).toBe(false);});
+ it('generates a slug until explicitly edited and excludes descendants as parents',()=>{const c=fixture({});c.startNew();c.nameChanged('Power Banks');expect(c.slug).toBe('power-banks');c.slugTouched=true;c.slug='custom';c.nameChanged('New Name');expect(c.slug).toBe('custom');c.rows.set([root,{...root,id:'child',parentId:'root'},{...root,id:'other'}]);c.edit(root);expect(c.parentOptions().map(r=>r.id)).toEqual(['other']);});
+ it('creates a category and reloads authoritative versions and ordering',()=>{const http={post:vi.fn(()=>of({id:'new'})),get:vi.fn(()=>of([root]))};const c=fixture(http);c.startNew();c.nameChanged('Cables');c.sortOrder=3;c.save();expect(http.post).toHaveBeenCalledWith('/api/v1/staff/categories',{name:'Cables',slug:'cables',parentId:null,sortOrder:3,active:true},expect.anything());expect(http.post.mock.calls[0][2].headers.get('Idempotency-Key')).toBeTruthy();expect(http.get).toHaveBeenCalledOnce();expect(c.editing()).toBe(false);expect(c.notice()).toBe('Category saved.');});
+ it('uses the loaded version for updates and requires refresh after a stale save',()=>{const http={patch:vi.fn(()=>throwError(()=>({status:412})))};const c=fixture(http);c.edit(root);c.active=false;c.save();expect(http.patch.mock.calls[0][2].headers.get('If-Match')).toBe('"4"');expect(c.ready()).toBe(false);expect(c.error()).toContain('changed');c.save();expect(http.patch).toHaveBeenCalledOnce();});
+ it('blocks duplicate slugs and invalid display orders before writing',()=>{const http={post:vi.fn()};const c=fixture(http);c.startNew();c.nameChanged('Power');c.save();expect(c.error()).toContain('already used');c.nameChanged('Other');c.sortOrder=1.5;c.save();expect(http.post).not.toHaveBeenCalled();});
+ it('distinguishes a saved category from a failed refresh without retrying the mutation',()=>{const http={post:vi.fn(()=>of({})),get:vi.fn(()=>throwError(()=>new Error('network')))};const c=fixture(http);c.startNew();c.nameChanged('Cables');c.save();expect(c.error()).toContain('Category saved, but');expect(c.ready()).toBe(false);c.save();expect(http.post).toHaveBeenCalledOnce();});
+});

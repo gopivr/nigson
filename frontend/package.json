@@ -1,0 +1,53 @@
+{
+  "name": "micro-frontend-workspace",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "prestart:all": "node scripts/sync-federation-cache.js",
+    "start": "npm run start:all",
+    "start:all": "concurrently \"ng serve marketing\" \"ng serve shop\" \"ng serve auth\" \"ng serve account\" \"ng serve admin-core\" \"ng serve admin-shop\" \"ng serve admin-cms\" \"ng serve shell\"",
+    "build": "ng build shell",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "build:all": "ng build marketing && ng build shop && ng build auth && ng build account && ng build admin-core && ng build admin-shop && ng build admin-cms && ng build shell",
+    "test:distributor": "vitest run --config vitest.distributor.config.mjs",
+    "test:wishlist": "vitest run --config vitest.wishlist.config.mjs",
+    "test:auth": "vitest run --config vitest.auth.config.mjs",
+    "build:release": "python3 scripts/deploy/build-release.py"
+  },
+  "private": true,
+  "packageManager": "npm@11.19.0",
+  "dependencies": {
+    "@angular-architects/module-federation": "^22.0.0",
+    "@angular-architects/native-federation": "^22.1.3",
+    "@angular/common": "^22.1.0",
+    "@angular/compiler": "^22.1.0",
+    "@angular/core": "^22.1.0",
+    "@angular/forms": "^22.1.0",
+    "@angular/platform-browser": "^22.1.0",
+    "@angular/router": "^22.1.0",
+    "@lucide/angular": "^1.46.0",
+    "autoprefixer": "^10.6.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "es-module-shims": "^2.8.0",
+    "postcss": "^8.5.28",
+    "rxjs": "~7.8.0",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^3.4.19",
+    "tslib": "^2.3.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.1.8",
+    "@angular/cli": "^22.1.8",
+    "@angular/compiler-cli": "^22.1.0",
+    "@softarc/native-federation-orchestrator": "^4.6.0",
+    "concurrently": "^10.0.5",
+    "jsdom": "^28.0.0",
+    "ng-packagr": "^22.1.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2",
+    "vitest": "^4.0.8"
+  }
+}

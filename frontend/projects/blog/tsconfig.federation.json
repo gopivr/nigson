@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.app.json",
+  "files": [
+    "../shared-ui/src/public-api.ts",
+    "src/app/app.ts",
+    "src/app/app.routes.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
+}

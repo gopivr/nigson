@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.app.json",
+  "files": [
+    "../shared-ui/src/public-api.ts",
+    "src/app/inventory/catalogue-import.component.ts",
+    "src/app/inventory/categories.component.ts",
+    "src/app/app.routes.ts",
+    "src/app/inventory/inventory-dashboard.component.ts",
+    "src/app/inventory/product-list.component.ts",
+    "src/app/inventory/product-edit.component.ts",
+    "src/app/inventory/stock-adjustment.component.ts",
+    "src/app/inventory/stock-movements.component.ts",
+    "src/app/inventory/stock-report.component.ts",
+    "src/app/sales/orders.component.ts",
+    "src/app/sales/affiliate-payouts.component.ts",
+    "src/app/sales/customers.component.ts",
+    "src/app/sales/quotes.component.ts",
+    "src/app/sales/applications.component.ts",
+    "src/app/sales/inquiries.component.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
+}

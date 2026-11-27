@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.app.json",
+  "files": [
+    "../shared-ui/src/public-api.ts",
+    "src/app/app.routes.ts",
+    "src/app/cms/blog.component.ts",
+    "src/app/cms/pages.component.ts",
+    "src/app/cms/reviews.component.ts",
+    "src/app/cms/visual-home-editor.component.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
+}

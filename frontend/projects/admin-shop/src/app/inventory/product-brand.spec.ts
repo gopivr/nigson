@@ -1,0 +1,12 @@
+import '@angular/compiler';
+import {describe,it,expect,vi} from 'vitest';
+import {AdminService} from '../../../../shared-ui/src/lib/admin/admin.service';
+import {ProductEditComponent} from './product-edit.component';
+import {signal} from '@angular/core';
+import {of,throwError} from 'rxjs';
+describe('Product editor brand round trip',()=>{
+ it('requires images unless the backend explicitly disables the requirement',()=>{const c:any=Object.create(ProductEditComponent.prototype);c.imageRequired=signal(true);c.cdr={markForCheck:vi.fn()};c.http={get:vi.fn(()=>of({imageRequired:false}))};c.loadPublicationPolicy();expect(c.imageRequired()).toBe(false);expect(c.http.get).toHaveBeenCalledWith('/api/v1/staff/catalogue/publication-policy');c.http.get.mockReturnValue(of({}));c.loadPublicationPolicy();expect(c.imageRequired()).toBe(true);c.imageRequired.set(false);c.http.get.mockReturnValue(throwError(()=>Error('unavailable')));c.loadPublicationPolicy();expect(c.imageRequired()).toBe(true);});
+ it('keeps backend brand references as a text name and a separate ID after refresh',()=>{const c:any=Object.create(ProductEditComponent.prototype);c.product={brand:'Nigson',images:[]};c.cdr={markForCheck:vi.fn()};c.populateProduct({id:'p',status:'DRAFT',brand:{id:'n',name:'Nigson'},specifications:{},assets:[]});expect(c.product.brand).toBe('Nigson');expect(c.product.brandId).toBe('n');c.populateProduct({id:'p',status:'ACTIVE',brand:{id:'n',name:'Nigson'},specifications:{},assets:[]});expect(c.product.brand).toBe('Nigson');expect(c.product.status).toBe('Active');});
+ it('accepts text and reference brands without silently selecting an unrelated brand',()=>{const service:any=Object.create(AdminService.prototype);const categories=[{id:'c',name:'Power Banks'}],brands=[{id:'other',name:'Other'},{id:'n',name:'Nigson'}];for(const brand of ['Nigson',{id:'n',name:'Nigson'}]){const body=service.productBody({name:'Power bank',slug:'power-bank',category:'Power Banks',brand,specifications:{}},categories,brands);expect(body.brandId).toBe('n');}expect(()=>service.productBody({category:'Power Banks',brand:'Missing'},categories,brands)).toThrow('active brand');});
+ it('clears a null backend brand rather than displaying an object or old name',()=>{const c:any=Object.create(ProductEditComponent.prototype);c.product={brand:'Nigson',brandId:'n',images:[]};c.cdr={markForCheck:vi.fn()};c.populateProduct({status:'DRAFT',brand:null,specifications:{},assets:[]});expect(c.product.brand).toBe('');expect(c.product.brandId).toBeNull();});
+});
