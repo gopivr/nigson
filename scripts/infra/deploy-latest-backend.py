@@ -155,9 +155,26 @@ class Deployer:
         self.check_scans()
         states = self.aws.call('ecs', 'describe-services', cluster=self.cluster,
                                services=[self.family(s) for s in self.services])
-        if states.get('failures') or len(states.get('services', [])) != len(self.services):
-            raise ValueError('One-time runtime setup is incomplete: provision and activate the environment services/task templates first')
-        self.current = {s['serviceName']: s for s in states['services']}
+        # DescribeServices may return HTTP success with MISSING failures. Only
+        # retain our expected names and allowlisted statuses, never raw responses.
+        returned = {state.get('serviceName'): state for state in states.get('services', [])}
+        readiness = {}
+        for service in self.services:
+            state = returned.get(self.family(service))
+            readiness[service] = ('MISSING' if state is None else
+                                  'INACTIVE' if state.get('status') != 'ACTIVE' else
+                                  'SCALED_TO_ZERO' if state.get('desiredCount', 0) < 1 else 'PRESENT')
+        self.record['service_readiness'] = readiness
+        if states.get('failures') or any(value == 'MISSING' for value in readiness.values()):
+            missing = ', '.join(self.family(service) for service, value in readiness.items() if value == 'MISSING')
+            raise ValueError(
+                'One-time runtime setup is incomplete in ' + self.cluster + '. '
+                + ('Missing services: ' + missing + '. ' if missing else 'ECS service lookup failed. ')
+                + 'The AWS Infrastructure workflow provisions foundation resources only; rerunning its apply does not create runtime services. '
+                + 'Complete database/Keycloak/secret setup and the reviewed runtime Terraform activation described in '
+                + 'infrastructure/terraform/aws/first-account/README.md section 5. '
+                + 'No task revisions, migrations or services were changed.')
+        self.current = returned
         self.targets = {}
         for service in self.services:
             state = self.current.get(self.family(service), {})
@@ -239,7 +256,12 @@ class Deployer:
             raise RuntimeError('Service is not healthy on the candidate revision: ' + service)
 
     def run(self):
-        self.preflight()
+        try:
+            self.preflight()
+        except (ValueError, RuntimeError, KeyError, OSError):
+            self.record['status'] = 'PREFLIGHT_BLOCKED'
+            self.save()
+            raise
         changed = []
         try:
             self.record['status'] = 'REGISTERING'

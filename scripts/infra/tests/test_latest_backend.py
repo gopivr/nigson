@@ -157,6 +157,30 @@ class LatestBackendTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'activation'):self.run_release(aws)
         self.assertFalse(any(c[1]=='register-task-definition' for c in aws.calls))
 
+    def test_foundation_only_installation_reports_missing_services_and_saves_safe_receipt(self):
+        aws=FakeAWS();original=aws.call
+        def call(aws_service, operation, **kw):
+            if operation=='describe-services':
+                return {'services': [], 'failures': [{'arn': 'do-not-copy-provider-response', 'reason': 'MISSING'}]}
+            return original(aws_service, operation, **kw)
+        aws.call=call
+        with self.assertRaisesRegex(ValueError,'Missing services: nigson-stage-identity') as error:
+            self.run_release(aws)
+        self.assertIn('rerunning its apply does not create runtime services',str(error.exception))
+        saved=(self.work/'deployment.json').read_text()
+        record=json.loads(saved)
+        self.assertEqual(record['status'],'PREFLIGHT_BLOCKED')
+        self.assertEqual(record['service_readiness'],dict.fromkeys(['identity','commerce','experience','integration'],'MISSING'))
+        self.assertNotIn('do-not-copy-provider-response',saved)
+        self.assertFalse(any(c[1] in {'register-task-definition','run-task','update-service'} for c in aws.calls))
+
+    def test_scaled_to_zero_preflight_keeps_diagnostic_artifact(self):
+        aws=FakeAWS();aws.inactive=True
+        with self.assertRaisesRegex(ValueError,'activation'):self.run_release(aws)
+        record=json.loads((self.work/'deployment.json').read_text())
+        self.assertEqual(record['status'],'PREFLIGHT_BLOCKED')
+        self.assertTrue(all(value=='SCALED_TO_ZERO' for value in record['service_readiness'].values()))
+
     def test_wrong_account_stops_before_any_other_aws_access(self):
         aws=FakeAWS();original=aws.call
         aws.call=lambda service,operation,**kw: {'Account':'999999999999'} if service=='sts' else original(service,operation,**kw)

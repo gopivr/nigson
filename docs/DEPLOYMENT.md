@@ -109,7 +109,7 @@ workflow to deploy the resulting new release. Existing immutable release objects
 | --- | --- |
 | `backend-infrastructure-validate.yml` | Offline validation of first-account Terraform and helpers |
 | `backend-images-publish.yml` | Publish immutable backend images; requires configured OIDC role |
-| `backend-deploy.yml` | Deploy reviewed backend manifests; requires runtime setup |
+| `backend-deploy.yml` | Deploy latest successful environment image release; requires runtime setup |
 
 Backend image publishing and deployment require the configured application
 release roles and manifests. They are not prerequisites for publishing the static
@@ -177,3 +177,22 @@ The foundation-only bootstrap leaves applications inactive; deployment checks th
 before making changes. Terraform retains service configuration ownership while the
 release workflow owns the deployed task revision. Configuration updates use the latest
 registered family template on the next release. See [backend release operations](runbooks/deploy.md).
+
+### Deploy fails with “One-time runtime setup is incomplete”
+
+The foundation installation has no application ECS services or task templates.
+A successful image build alone does not create them. Repeating infrastructure
+`apply` will not activate them: that workflow explicitly rejects runtime changes.
+The deployment artifact records `PREFLIGHT_BLOCKED` and each service's readiness.
+
+Follow [first runtime setup, section 5](../infrastructure/terraform/aws/first-account/README.md#5-configure-and-activate-the-actual-application):
+prepare database roles/schemas, real app/migration secrets and Keycloak DB/TLS/client
+configuration; publish task templates with the release's immutable image digests;
+run owner migrations; then activate identity and applications through reviewed
+runtime Terraform plans against the existing first-account state. The activation
+flags are `publish_task_definitions`, `activate_identity` and `activate_applications`.
+The example tfvars file is only a shape example and does not contain a working
+runtime configuration. Never flip all three flags using only the foundation defaults.
+
+Once runtime services are healthy, rerun **Backend — Deploy Release**, selecting
+only the environment. A preflight failure has not changed services or run migrations.
