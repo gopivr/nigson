@@ -21,4 +21,4 @@ if __name__=='__main__':
             return real_run(args,*a,**kw)
         platform.subprocess.run=pinned
     if os.environ.get('ENV','test')!='test':raise SystemExit('career Sheet qualification requires ENV=test')
-    platform.main(java_tests='CareerSheetSyncPersistenceTest,GoogleSheetsHttpAdapterTest,BuildCompatibilityTest',run_python=False,evidence=ROOT/'docs/implementation/evidence/2026-10-18-INT-PROVI-002',completion='PASS: EVT-024 stable job enqueue, Integration-owned Sheet row intent, formula-safe stable application row, OAuth JWT + Sheets HTTP local mock upsert, accepted-write timeout and UNKNOWN reconciliation; no live spreadsheet account/recipient policy qualification implied')
+    platform.main(java_tests='CareerSheetSyncPersistenceTest,GoogleSheetsHttpAdapterTest,BuildCompatibilityTest',run_python=False,evidence=ROOT/'.build/evidence/2026-10-18-INT-PROVI-002',completion='PASS: EVT-024 stable job enqueue, Integration-owned Sheet row intent, formula-safe stable application row, OAuth JWT + Sheets HTTP local mock upsert, accepted-write timeout and UNKNOWN reconciliation; no live spreadsheet account/recipient policy qualification implied')

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "$0")/../../.." && pwd)"
-workflows=(infra-plan.yml infra-artifacts.yml deploy-environment.yml aws-first-account-bootstrap.yml aws-first-account-validate.yml)
+workflows=(backend-infrastructure-validate.yml backend-images-publish.yml backend-deploy.yml backend-aws-infrastructure.yml frontend-deploy.yml)
 
 ruby -e 'require "yaml"; ARGV.each { |file| YAML.load_file(file) }' \
   "${workflows[@]/#/$repo_root/.github/workflows/}"
@@ -16,20 +16,20 @@ for workflow in "${workflows[@]}"; do
   done < "$file"
 done
 
-plan="$repo_root/.github/workflows/infra-plan.yml"
-artifacts="$repo_root/.github/workflows/infra-artifacts.yml"
-deploy="$repo_root/.github/workflows/deploy-environment.yml"
-grep -Eq '"\.github/workflows/deploy-environment.yml"' "$plan"
-grep -Eq '"services/\*\*/Dockerfile"' "$plan"
-grep -Eq '"infrastructure/docker/\*\*"' "$plan"
-grep -Eq "if: github.event_name == 'workflow_dispatch'" "$plan"
-grep -Eq 'terraform .* plan' "$plan"
+plan="$repo_root/.github/workflows/backend-infrastructure-validate.yml"
+artifacts="$repo_root/.github/workflows/backend-images-publish.yml"
+deploy="$repo_root/.github/workflows/backend-deploy.yml"
+ruby - "$plan" <<'RUBY'
+require 'yaml'
+w = YAML.load_file(ARGV.fetch(0))
+raise 'validation must use read-only permissions' unless w['permissions'] == {'contents' => 'read'}
+raise 'keep general offline checks after removing legacy remote plan' unless w['jobs'].key?('offline-validation')
+raise 'validation must not use AWS secrets or OIDC' if File.read(ARGV.fetch(0)).match?(/\$\{\{\s*secrets\.|id-token: write/)
+RUBY
 if grep -Eq 'terraform .* apply' "$plan"; then
-  echo "infrastructure plan workflow must never apply" >&2
+  echo "validation workflow must never apply" >&2
   exit 1
 fi
-[[ "$(grep -Ec 'id-token: write' "$plan")" == 1 ]]
-grep -Eq 'environment: \$\{\{ inputs.environment \}\}' "$plan"
 grep -Eq 'permissions:' "$artifacts"
 grep -Eq 'id-token: write' "$artifacts"
 grep -Eq 'scripts/infra/publish-images.sh' "$artifacts"
@@ -54,7 +54,7 @@ fi
 
 echo "Workflow syntax, pinned actions, and permission boundaries PASS"
 
-ruby - "$repo_root/.github/workflows/aws-first-account-bootstrap.yml" <<'RUBY'
+ruby - "$repo_root/.github/workflows/backend-aws-infrastructure.yml" <<'RUBY'
 require 'yaml'
 workflow = YAML.load_file(ARGV.fetch(0))
 triggers = workflow['on'] || workflow[true]

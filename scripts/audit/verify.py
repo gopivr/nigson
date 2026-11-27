@@ -17,7 +17,7 @@ def enable_audit_http(_env):
 
 if __name__ == '__main__':
     main(java_tests='AuditQueryPersistenceTest,AuditPersistenceTest,SecurityAssemblyTest,SecurityProtocolTest,BuildCompatibilityTest',
-         evidence=ROOT / 'docs/implementation/evidence/2026-10-18-COM-AUDIT-001',
+         evidence=ROOT / '.build/evidence/2026-10-18-COM-AUDIT-001',
          run_python=False,
          java_environment=enable_audit_http,
          maven_command=os.environ.get('NIGSON_MAVEN_BIN', './mvnw'),

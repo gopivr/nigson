@@ -16,7 +16,7 @@ from catalog import ROOT, catalog
 from generate import OWNERS, SESSION_TABLES, column, identifier, predicate
 
 IMAGE = 'pgvector/pgvector:0.8.2-pg18@sha256:42e7f6b4e1eceb02ff14e3e6bc6108bbe259abbe83879dc1845d0da1ddeb555d'
-EVIDENCE = ROOT / 'docs/implementation/evidence/2026-10-06-DATA-001'
+EVIDENCE = ROOT / '.build/evidence/2026-10-06-DATA-001'
 
 
 def docker(*args, input=None, expected=True):

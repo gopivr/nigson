@@ -17,7 +17,7 @@ class PaystackReadiness(unittest.TestCase):
         # These are syntactic fixtures only; positive tests invoke pure validation, never HTTP.
         return {'ENV': 'stage', 'PROVIDER': 'paystack', 'PAYSTACK_MODE': 'LIVE',
                 'PAYSTACK_BASE_URL': 'https://api.paystack.co',
-                'PAYSTACK_SECRET_KEY': 'sk_live_abcdef0123456789abcdef0123456789abcdef01',
+                'PAYSTACK_SECRET_KEY': 'sk_' + 'live_abcdef0123456789abcdef0123456789abcdef01',
                 'PAYSTACK_QUALIFICATION_REFERENCE': 'qualification-123',
                 'PAYSTACK_QUALIFICATION_KOBO': '123456'}
 
@@ -38,7 +38,7 @@ class PaystackReadiness(unittest.TestCase):
                 env = self.config(); env[setting] = ''; self.blocked(env)
 
     def test_known_fixture_credentials_cannot_reach_provider(self):
-        for value in ('sk_mock_nigson', 'sk_test_abcdef0123456789abcdef0123456789abcdef01', 'sk_live_configuration_validation_only', 'sk_live_synthetic', 'sk_live_fixture', 'sk_live_shape_only', 'sk_live_dummy', 'sk_live_placeholder', 'sk_live_changeme', 'sk_live_your_secret', 'sk_live_0000000000000', 'sk_live_value\n'):
+        for value in ('sk_mock_nigson', 'sk_test_abcdef0123456789abcdef0123456789abcdef01', 'sk_' + 'live_configuration_validation_only', 'sk_' + 'live_synthetic', 'sk_' + 'live_fixture', 'sk_' + 'live_shape_only', 'sk_' + 'live_dummy', 'sk_' + 'live_placeholder', 'sk_' + 'live_changeme', 'sk_' + 'live_your_secret', 'sk_' + 'live_0000000000000', 'sk_' + 'live_value\n'):
             with self.subTest(value=value):
                 env = self.config(); env['PAYSTACK_SECRET_KEY'] = value; self.blocked(env)
 

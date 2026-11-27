@@ -10,7 +10,7 @@ sys.path.insert(0,str(ROOT/'scripts/database'))
 _spec=importlib.util.spec_from_file_location('database_qualification',ROOT/'scripts/database/verify.py')
 database_verify=importlib.util.module_from_spec(_spec);_spec.loader.exec_module(database_verify)
 Database,docker,preserved,OWNERS,IMAGE=(getattr(database_verify,name) for name in ('Database','docker','preserved','OWNERS','IMAGE'))
-EVIDENCE=ROOT/'docs/implementation/evidence/2026-10-06-PLAT-001'
+EVIDENCE=ROOT/'.build/evidence/2026-10-06-PLAT-001'
 EVIDENCE.mkdir(parents=True,exist_ok=True)
 database_verify.EVIDENCE=EVIDENCE
 

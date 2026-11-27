@@ -370,8 +370,8 @@ location / {{ proxy_pass https://identity; proxy_ssl_trusted_certificate /cert/c
         try: docker('network','rm',self.name)
         except Exception: pass
         after=snapshot();assert after==self.before,'ORIGINAL_LOCAL_STATE_CHANGED'
-        evidence=Path(os.environ.get('NIGSON_IDENTITY_EVIDENCE',str(ROOT/'docs/implementation/evidence/2026-10-09-IDP-001'))).resolve()
-        if not evidence.is_relative_to(ROOT/'docs/implementation/evidence'):raise ValueError('LOCAL_QUALIFICATION_EVIDENCE_REQUIRED')
+        evidence=Path(os.environ.get('NIGSON_IDENTITY_EVIDENCE',str(ROOT/'.build/evidence/2026-10-09-IDP-001'))).resolve()
+        if not evidence.is_relative_to(ROOT/'.build/evidence'):raise ValueError('LOCAL_QUALIFICATION_EVIDENCE_REQUIRED')
         evidence.mkdir(parents=True,exist_ok=True)
         (evidence/(self.name+'.json')).write_text(json.dumps({'project':self.name,'checks':self.checks,'status':'PASS' if 'TEST-IDENTITY-RESTORE' in self.checks else 'FAIL','originalContainersPreserved':True,'original':after,'cloudQualification':'NOT_RUN','acceptanceComplete':'TEST-IDENTITY-RESTORE' in self.checks},indent=2)+'\n')
         print('PASS ORIGINAL-NIGSON-LOCAL-PRESERVED',flush=True)

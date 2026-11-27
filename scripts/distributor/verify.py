@@ -17,4 +17,4 @@ if __name__=='__main__':
                 kw['env']=env
             return real_run(args,*a,**kw)
         platform.subprocess.run=pinned
-    platform.main(java_tests='DistributorPersistenceTest,DistributorHttpTest,DistributorEntitlementHttpClientTest,BuildCompatibilityTest',run_python=False,evidence=ROOT/'docs/implementation/evidence/2026-10-18-EXP-DISTR-001',completion='PASS: EXP-DISTR-001 Experience PostgreSQL and actual HTTP acceptance; API-117 exercised through stateful local mock, live Commerce API remains configuration gated')
+    platform.main(java_tests='DistributorPersistenceTest,DistributorHttpTest,DistributorEntitlementHttpClientTest,BuildCompatibilityTest',run_python=False,evidence=ROOT/'.build/evidence/2026-10-18-EXP-DISTR-001',completion='PASS: EXP-DISTR-001 Experience PostgreSQL and actual HTTP acceptance; API-117 exercised through stateful local mock, live Commerce API remains configuration gated')

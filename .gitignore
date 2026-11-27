@@ -23,3 +23,7 @@ artifacts/
 /.local/
 /cookies.txt
 /cookies_test.txt
+
+# Generated reports must stay out of maintained documentation.
+/docs/implementation/
+/frontend/docs/implementation/

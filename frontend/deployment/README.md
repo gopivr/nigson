@@ -1,9 +1,18 @@
-# Production artifact
+# Frontend release packaging
 
-Run `npm run build:release -- --output /absolute/path/to/new-release` after `npm ci`. It builds the shell and all remotes in the federation manifest using production configuration and same-origin URLs.
+See [AWS deployment](../../docs/DEPLOYMENT.md) for the normal GitHub Actions flow.
+The root `.github/workflows/aws-stage-ui.yml` owns staging UI builds/deployments.
 
-AWS uploads that artifact to private S3 through the backend repository's `scripts/infra/publish-frontend.py`. OVH builds a digest-pinned image with `docker build -f deployment/Dockerfile -t REGISTRY/nigson-frontend:RELEASE /absolute/path/to/new-release`; publish it for your VM architecture.
+For a manual local artifact, from `frontend/`:
 
-Terraform roots and TLS/backend setup instructions live in the backend repository under `infrastructure/terraform/{aws,ovh}/frontend/{stage,prod}` and `infrastructure/terraform/shared/frontend/README.md`. No production secrets belong in the artifact.
+```sh
+npm ci
+# Set NIGSON_GOOGLE_RECAPTCHA_SITE_KEY to the real public browser site key first.
+npm run build:release -- --output /absolute/path/to/new-release
+```
 
-For the current first-account staging infrastructure, use [the UI GitHub Actions deployment guide](AWS.md). The workflow builds in this repository, publishes an immutable S3 release and activates only its CloudFront release path through the existing backend-owned Terraform state.
+The directory must be new. The build contains the shell and every configured
+remote, using same-origin federation URLs. Do not put runtime credentials in it.
+AWS publication uses the root `scripts/infra/` helpers and existing Terraform state.
+The Dockerfile/nginx configuration in this directory remains available for the
+optional container-based frontend deployment.

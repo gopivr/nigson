@@ -1,15 +1,10 @@
 # Nigson monorepo implementation instructions
 
-Read `BACKEND_IMPLEMENTATION_MASTER.md` (specification 1.1.0),
-`IMPLEMENTATION_STATUS.md`, the task's supporting documents and ADRs before editing.
-The master and explicit user decisions govern; ADR-008 supersedes historical
-provider/identity assumptions. Read master sections 3, 17, 46, 47, 48 and 54.
-
-Use this workspace root as the monorepo. The untouched
-`Nigson_Backend_Implementation_Blueprint/` is the supplied historical package;
-root documents and `docs/` govern current implementation. Preserve unrelated work.
-The original architecture 1.0 / specification 1.0.0 and its 1.1.0 revision were
-document deliverables without application source or executed backend tests.
+Read the relevant source, contracts and operational guides before editing.
+Start with `README.md` and `docs/README.md`. The backend specification is detailed
+reference for existing generators; current implementation and later ADRs govern.
+Preserve unrelated work. Do not create task-status files, session reports or
+committed build evidence. Document maintained behavior and commands concisely.
 
 ## Boundaries and launch decisions
 
@@ -30,7 +25,7 @@ document deliverables without application source or executed backend tests.
 
 ## Working behavior
 
-Choose dependency-ready roadmap tasks. Record IN_PROGRESS before implementation.
+Work on the requested feature or fix.
 Read referenced schemas, APIs, events, acceptance and transaction rules. Implement
 complete behavior with validation, authorization, safe errors, audit, observability,
 migrations and applicable tests. No core TODOs, canned production success or fake
@@ -60,15 +55,12 @@ schedule. Do not defer required launch carrier/messaging to BP4/BP2.
 ## Verification and handoff
 
 Run relevant build, migration, contract, security, integration and race checks.
-Resolve failures before DONE. Section 54 requires actual commit/acceptance
-evidence; file existence is not evidence of behavior. Never claim unexecuted checks
+Resolve failures before DONE. File existence is not evidence of behavior. Never claim unexecuted checks
 passed. Record exact conflicts/proposed resolutions and continue independent work.
 
-Update `IMPLEMENTATION_STATUS.md` and write
-`docs/implementation/YYYY-MM-DD-TASK-ID.md` using section 48. Preserve failure and
-blocked history, exact safe commands, evidence paths, actual commit hashes and
-the next dependency-ready task. Do not log secrets or customer data. Builds/cache
-outputs stay ignored. Keep shared packages limited to protocol utilities.
+Summarize changes, checks and remaining limitations in the handoff. Keep generated
+logs and evidence under ignored `.build/`. Do not log secrets or customer data.
+Keep shared packages limited to protocol utilities.
 
 ## Repository layout
 

@@ -81,7 +81,7 @@ NIGSON_PROBLEM_TYPE_BASE must be approved HTTPS outside local/test. Configure
 application env directly; the ordinary Compose setup deliberately enables no
 external collector or AWS exporter. No agent/collector fallback is automatic.
 
-[The observability Terraform module](../infrastructure/terraform/modules/observability/main.tf)
+[The observability Terraform module](../infrastructure/terraform/aws/modules/observability/main.tf)
 requires an actual region from its caller/provider, KMS key, approved retention and
 policy revision, named operator and alert SNS destinations. It creates encrypted
 log groups, an operations dashboard, 5xx >1% for five minutes, outbox >60s for five

@@ -80,7 +80,7 @@ and a reviewed release plan.
 ## Immutable image publication
 
 After Terraform has created the environment's immutable ECR repositories, run
-the manual `publish infrastructure images` workflow in that environment. It
+the manual `Backend — Build and Publish Images` workflow in that environment. It
 uses only a short-lived GitHub OIDC role (`AWS_PUBLISH_ROLE_ARN`) and verifies
 the returned AWS account against `AWS_EXPECTED_ACCOUNT_ID`. Scope the role to
 ECR upload and scan-read actions for that environment's commerce, experience,
@@ -131,7 +131,7 @@ execution roles; the task role has no application permissions.
 
 Only after every required owner migration has a confirmed exit code of zero
 should the separately reviewed application deployment proceed. Use the manual
-`deploy reviewed release` workflow and select `stage` or `prod`. The job runs
+`Backend — Deploy Release` workflow and select `stage` or `prod`. The job runs
 inside that GitHub Environment, so it receives only that environment's
 `AWS_REGION`, `AWS_EXPECTED_ACCOUNT_ID`, and `AWS_DEPLOY_ROLE_ARN`; configure
 each environment's variables separately and never reuse stage values in prod.
@@ -236,4 +236,4 @@ its guarded migration outputs. Application/identity activation, real secret valu
 owner DB bootstrap, migration receipts and release/provider acceptance remain
 explicit release gates; infrastructure provisioned is not application deployed.
 
-First-account staging can also be provisioned through the manual GitHub workflow `aws-first-account-bootstrap.yml`, using repository AWS credentials and durable S3 bootstrap state. Follow [the Actions bootstrap guide](aws-first-account-actions.md). This foundation workflow does not activate application releases or replace the existing environment release process.
+First-account staging can also be provisioned through the manual GitHub workflow `backend-aws-infrastructure.yml`, using repository AWS credentials and durable S3 bootstrap state. Follow [the Actions bootstrap guide](aws-first-account-actions.md). This foundation workflow does not activate application releases or replace the existing environment release process.
