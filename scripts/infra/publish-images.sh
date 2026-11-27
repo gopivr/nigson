@@ -112,8 +112,29 @@ publish_and_scan() {
   critical=$(jq '.imageScanFindings.findingSeverityCounts.CRITICAL // 0' <<<"$findings")
   high=$(jq '.imageScanFindings.findingSeverityCounts.HIGH // 0' <<<"$findings")
   printf '| `%s` | `%s` | `%s` | `%s` | %s | %s |\n' "$repository" "$image_tag" "$digest" "$scan_digest" "$critical" "$high" >> "$summary"
+  # Preserve actionable, allowlisted scan details even when the gate fails.
+  # Do not publish raw scan responses, credentials, task state or build context.
+  local report_dir="${GITHUB_WORKSPACE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}/.build/image-scans"
+  local report="${repository//\//_}-${image_tag}.json"
+  mkdir -p "$report_dir"
+  jq --arg repository "$repository" --arg tag "$image_tag" --arg published "$digest" \
+      --arg scanned "$scan_digest" --arg architecture "$architecture" '
+    def important: .severity == "CRITICAL" or .severity == "HIGH";
+    {repository: $repository, tag: $tag, architecture: $architecture,
+     publishedDigest: $published, scannedDigest: $scanned,
+     severityCounts: .imageScanFindings.findingSeverityCounts,
+     findings: ([.imageScanFindings.findings[]? | select(important) |
+       {id: .name, severity: .severity, packages: [
+         {name: ([.attributes[]? | select(.key == "package_name") | .value][0]),
+          version: ([.attributes[]? | select(.key == "package_version") | .value][0])}]}] +
+       [.imageScanFindings.enhancedFindings[]? | select(important) |
+        {id: .packageVulnerabilityDetails.vulnerabilityId, severity: .severity,
+         fixAvailable: .fixAvailable,
+         packages: [.packageVulnerabilityDetails.vulnerablePackages[]? |
+           {name, version, fixedInVersion}]}])}
+  ' <<<"$findings" > "$report_dir/$report"
   if (( critical > 0 || high > 0 )); then
-    echo "Image ${repository}:${image_tag} has ${critical} critical and ${high} high findings." >&2
+    echo "Image ${repository}:${image_tag} has ${critical} critical and ${high} high findings. Download the backend-image-scan-findings artifact for CVE/package details." >&2
     return 1
   fi
 }

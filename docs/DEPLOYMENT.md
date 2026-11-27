@@ -79,6 +79,13 @@ releases. Production is not deployed by the staging UI workflow.
   It reports permanent AWS scan errors immediately; a remaining timeout includes
   the last status. Check registry scan filters and the named digest in ECR.
   HIGH/CRITICAL findings still block publication. No new IAM permissions are needed.
+- **Image has HIGH/CRITICAL findings:** scanning succeeded and blocked the image.
+  Download `backend-image-scan-findings-…` from the workflow run's artifacts. It
+  contains CVE IDs and package versions; enhanced scans may include fixed versions.
+  Use those findings to update affected base-image pins or application dependencies,
+  rebuild under a new commit tag and rescan. Do not bypass the gate or overwrite
+  existing immutable tags. Basic-scan findings may require the linked vendor
+  advisory to identify the patched package version.
 - **Missing public site key:** set the repository variable before rerunning build.
 - **Release plan changes CloudFront settings beyond the static release path:** the
   guard now prints changed field paths without their values. Review those fields

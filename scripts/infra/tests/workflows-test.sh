@@ -86,6 +86,8 @@ builder = job['steps'].find { |s| s['id'] == 'buildx' }
 raise 'attestations require the Docker container builder' unless builder && builder.fetch('uses', '').start_with?('docker/setup-buildx-action@') && builder['with'] == {'driver' => 'docker-container', 'use' => true}
 publication = job['steps'].find { |s| s.fetch('run', '').include?('scripts/infra/publish-images.sh') }
 raise 'publication must use the selected attestation builder' unless publication.dig('env', 'BUILDX_BUILDER') == '${{ steps.buildx.outputs.name }}' && job['steps'].index(builder) < job['steps'].index(publication)
+report = job['steps'].find { |s| s.fetch('uses', '').start_with?('actions/upload-artifact@') }
+raise 'vulnerability details must survive gate failures without exporting other files' unless report && report['if'] == 'always()' && report.dig('with', 'path') == '.build/image-scans/*.json'
 puts 'Bootstrap-managed publishing role discovery and short-lived credential wiring PASS'
 RUBY
 

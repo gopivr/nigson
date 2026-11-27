@@ -40,7 +40,7 @@ case "$*" in
       echo "An error occurred (${MOCK_SCAN_ERROR}) when calling DescribeImageScanFindings: private-error-detail" >&2
       exit 1
     fi
-    printf '{"imageScanStatus":{"status":"%s"},"imageScanFindings":{"imageScanCompletedAt":%s,"findingSeverityCounts":{"CRITICAL":%s,"HIGH":%s}}}\n' "${MOCK_SCAN_STATUS:-COMPLETE}" "${MOCK_SCAN_COMPLETED:-1234567890}" "${MOCK_CRITICAL:-0}" "${MOCK_HIGH:-0}"
+    printf '{"imageScanStatus":{"status":"%s"},"imageScanFindings":{"imageScanCompletedAt":%s,"findingSeverityCounts":{"CRITICAL":%s,"HIGH":%s},"findings":[{"name":"CVE-2099-12345","severity":"HIGH","attributes":[{"key":"package_name","value":"synthetic-package"},{"key":"package_version","value":"1.0"}],"private":"must-not-export"}]},"private":"must-not-export"}\n' "${MOCK_SCAN_STATUS:-COMPLETE}" "${MOCK_SCAN_COMPLETED:-1234567890}" "${MOCK_CRITICAL:-0}" "${MOCK_HIGH:-0}"
     ;;
   *) echo "unexpected mocked AWS command: $*" >&2; exit 9 ;;
 esac
@@ -93,6 +93,7 @@ run_case() {
   MOCK_AWS_BUILD_MISSING="$expect_build" \
   MOCK_DOCKER_BUILDS="$build_log" \
   GITHUB_SHA=0123456789abcdef0123456789abcdef01234567 \
+  GITHUB_WORKSPACE="$temporary_root/workspace-$phase" \
   GITHUB_STEP_SUMMARY="$summary" \
   PATH="$temporary_root/bin:$PATH" \
     "$repo_root/scripts/infra/publish-images.sh" stage arm64 "$phase" 123456789012 us-east-1
@@ -120,7 +121,7 @@ run_case 1 0 0
 MOCK_MANIFEST_MODE=index MOCK_EXPECT_SCAN_DIGEST=$(printf 'sha256:%064d' 2) run_case 5 1 1
 
 mkdir -p "$temporary_root/state-critical"
-if MOCK_CRITICAL=1 MOCK_AWS_STATE="$temporary_root/state-critical" GITHUB_SHA=0123456789abcdef0123456789abcdef01234567 GITHUB_STEP_SUMMARY="$temporary_root/summary-critical.md" PATH="$temporary_root/bin:$PATH" "$repo_root/scripts/infra/publish-images.sh" stage arm64 1 123456789012 us-east-1 >/dev/null 2>&1; then
+if GITHUB_WORKSPACE="$temporary_root/critical-workspace" MOCK_CRITICAL=1 MOCK_AWS_STATE="$temporary_root/state-critical" GITHUB_SHA=0123456789abcdef0123456789abcdef01234567 GITHUB_STEP_SUMMARY="$temporary_root/summary-critical.md" PATH="$temporary_root/bin:$PATH" "$repo_root/scripts/infra/publish-images.sh" stage arm64 1 123456789012 us-east-1 >/dev/null 2>&1; then
   echo "critical ECR findings must fail publication" >&2
   exit 1
 fi
@@ -128,7 +129,7 @@ fi
 expect_failure() {
   local name=$1 message=$2
   mkdir -p "$temporary_root/$name"
-  if MOCK_AWS_STATE="$temporary_root/$name" GITHUB_SHA=0123456789abcdef0123456789abcdef01234567 \
+  if GITHUB_WORKSPACE="$temporary_root/workspace-$name" MOCK_AWS_STATE="$temporary_root/$name" GITHUB_SHA=0123456789abcdef0123456789abcdef01234567 \
       GITHUB_STEP_SUMMARY="$temporary_root/$name-summary.md" PATH="$temporary_root/bin:$PATH" \
       "$repo_root/scripts/infra/publish-images.sh" stage arm64 1 123456789012 us-east-1 > "$temporary_root/$name.log" 2>&1; then
     echo "Expected publication failure: $name" >&2; exit 1
@@ -156,4 +157,8 @@ MOCK_SCAN_STATUS=ACTIVE MOCK_SCAN_COMPLETED=1234567890 run_case 1 0 0
 # Guard the new column: attestations keep their published index digest while the
 # vulnerability gate records the distinct runnable image digest.
 rg -q "$(printf 'sha256:%064d' 2)" "$temporary_root/summary-5.md"
+report="$temporary_root/critical-workspace/.build/image-scans/nigson_stage_commerce-0123456789abcdef0123456789abcdef01234567-arm64.json"
+jq -e '.findings[0].id == "CVE-2099-12345" and .findings[0].packages[0].name == "synthetic-package" and .severityCounts.CRITICAL == 1' "$report" >/dev/null
+if rg -q 'must-not-export|"private"' "$report"; then echo 'Report exported non-allowlisted fields' >&2; exit 1; fi
+
 echo "Infrastructure artifact publication tests PASS (single/index scans, retained attestations, IAM errors, bounded polling, enhanced scans and vulnerability failures)"
