@@ -52,6 +52,18 @@ variable "alert_destination_arns" {
   }
 }
 variable "queue_names" { type = map(object({ work = string, dead = string })) }
+variable "application_log_groups" {
+  type        = map(string)
+  default     = null
+  description = "Existing Compute-owned application groups. Null retains standalone group creation."
+  validation {
+    condition = var.application_log_groups == null ? true : (
+      toset(keys(var.application_log_groups)) == toset(var.product_phase == 5 ? ["commerce", "experience", "integration", "ai"] : ["commerce", "experience", "integration"]) &&
+      alltrue([for owner, name in var.application_log_groups : name == "/nigson/${var.environment}/${owner}"])
+    )
+    error_message = "Provide the complete phase-appropriate Compute log groups in this environment."
+  }
+}
 # Domain owners must emit these observations as their roadmap tasks are implemented.
 # Missing data remains INSUFFICIENT_DATA. This module never fabricates healthy domain observations.
 locals {
@@ -72,7 +84,7 @@ locals {
   } : {})
 }
 resource "aws_cloudwatch_log_group" "owner" {
-  for_each          = local.owners
+  for_each          = var.application_log_groups == null ? local.owners : toset([])
   name              = "/nigson/${var.environment}/${each.key}"
   kms_key_id        = var.kms_key_arn
   retention_in_days = var.log_retention_days
@@ -197,7 +209,7 @@ resource "aws_cloudwatch_dashboard" "operations" {
   }]) })
 }
 data "aws_region" "current" {}
-output "log_groups" { value = { for owner, group in aws_cloudwatch_log_group.owner : owner => group.name } }
+output "log_groups" { value = var.application_log_groups == null ? { for owner, group in aws_cloudwatch_log_group.owner : owner => group.name } : var.application_log_groups }
 output "alarm_arns" { value = concat([for alarm in aws_cloudwatch_metric_alarm.http_errors : alarm.arn], [for alarm in aws_cloudwatch_metric_alarm.foundation : alarm.arn], [for alarm in aws_cloudwatch_metric_alarm.queue_age : alarm.arn], [for alarm in aws_cloudwatch_metric_alarm.dead_letters : alarm.arn], [for alarm in aws_cloudwatch_metric_alarm.domain : alarm.arn]) }
 
 resource "aws_cloudwatch_log_group" "metrics" {

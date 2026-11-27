@@ -1,4 +1,7 @@
-mock_provider "aws" {}
+mock_provider "aws" {
+  mock_data "aws_caller_identity" { defaults = { account_id = "123456789012" } }
+  mock_data "aws_region" { defaults = { region = "us-east-2", name = "us-east-2" } }
+}
 
 variables {
   environment                 = "stage"
@@ -62,4 +65,19 @@ run "reject_ai_secrets_before_bp5" {
     }
   }
   expect_failures = [var.secret_names]
+}
+
+run "logs_key_allows_only_environment_groups_and_exact_identity_rds_export" {
+  command = plan
+  assert {
+    condition = toset(one([for statement in jsondecode(aws_kms_key.application.policy).Statement : statement if statement.Sid == "CloudWatchLogGroupEncryption"]).Condition.ArnLike["kms:EncryptionContext:aws:logs:arn"]) == toset([
+      "arn:aws:logs:us-east-2:123456789012:log-group:/nigson/stage/*",
+      "arn:aws:logs:us-east-2:123456789012:log-group:/aws/rds/instance/nigson-stage-identity/postgresql"
+    ])
+    error_message = "KMS must authorize identity RDS logs without opening unrelated groups/accounts/environments."
+  }
+  assert {
+    condition     = one([for statement in jsondecode(aws_kms_key.application.policy).Statement : statement if statement.Sid == "CloudWatchLogGroupEncryption"]).Principal.Service == "logs.us-east-2.amazonaws.com"
+    error_message = "Only the configured regional CloudWatch Logs service may encrypt these groups."
+  }
 }

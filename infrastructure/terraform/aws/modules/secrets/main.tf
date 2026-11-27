@@ -47,7 +47,10 @@ resource "aws_kms_key" "application" {
         Principal = { Service = "logs.${data.aws_region.current.region}.amazonaws.com" }
         Action    = ["kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey"]
         Resource  = "*"
-        Condition = { ArnLike = { "kms:EncryptionContext:aws:logs:arn" = "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/nigson/${var.environment}/*" } }
+        Condition = { ArnLike = { "kms:EncryptionContext:aws:logs:arn" = [
+          "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/nigson/${var.environment}/*",
+          "arn:aws:logs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/rds/instance/nigson-${var.environment}-identity/postgresql"
+        ] } }
       },
       {
         Sid       = "EcrRepositoryEncryption"

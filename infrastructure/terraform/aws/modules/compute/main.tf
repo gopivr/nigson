@@ -384,3 +384,5 @@ output "repository_arns" { value = { for name, repository in aws_ecr_repository.
 output "private_service_names" { value = { for name, service in aws_service_discovery_service.service : name => "${name}.${var.private_namespace}" } }
 
 output "load_balancer_zone_id" { value = aws_lb.public.zone_id }
+
+output "log_groups" { value = { for name, group in aws_cloudwatch_log_group.service : name => group.name } }

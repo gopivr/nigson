@@ -61,3 +61,39 @@ run "encryption_required" {
   variables { kms_key_arn = "" }
   expect_failures = [var.kms_key_arn]
 }
+
+run "reuse_compute_owned_log_groups" {
+  command = plan
+  variables {
+    application_log_groups = { commerce = "/nigson/stage/commerce", experience = "/nigson/stage/experience", integration = "/nigson/stage/integration" }
+  }
+  assert {
+    condition     = length(aws_cloudwatch_log_group.owner) == 0 && output.log_groups == var.application_log_groups
+    error_message = "Observability must reuse Compute groups rather than create duplicate names."
+  }
+}
+run "reuse_compute_owned_ai_group_in_bp5" {
+  command = plan
+  variables {
+    product_phase          = 5
+    application_log_groups = { commerce = "/nigson/stage/commerce", experience = "/nigson/stage/experience", integration = "/nigson/stage/integration", ai = "/nigson/stage/ai" }
+  }
+  assert {
+    condition     = length(aws_cloudwatch_log_group.owner) == 0 && length(output.log_groups) == 4
+    error_message = "BP5 reuses all four Compute-owned groups."
+  }
+}
+run "reject_incomplete_compute_log_group_map" {
+  command = plan
+  variables {
+    application_log_groups = { commerce = "/nigson/stage/commerce" }
+  }
+  expect_failures = [var.application_log_groups]
+}
+run "reject_other_environment_log_groups" {
+  command = plan
+  variables {
+    application_log_groups = { commerce = "/nigson/prod/commerce", experience = "/nigson/stage/experience", integration = "/nigson/stage/integration" }
+  }
+  expect_failures = [var.application_log_groups]
+}

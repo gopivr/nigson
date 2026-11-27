@@ -50,3 +50,51 @@ run "activation_requires_published_artifacts" {
   }
   expect_failures = [var.image_digests]
 }
+
+run "alerts_use_only_sns_topic_policy_actions" {
+  command = plan
+  override_resource {
+    target          = aws_sns_topic.alerts
+    override_during = plan
+    values          = { arn = "arn:aws:sns:eu-west-1:123456789012:nigson-stage-operator-alerts" }
+  }
+  assert {
+    condition = toset(jsondecode(aws_sns_topic_policy.alerts.policy).Statement[0].Action) == toset([
+      "sns:GetTopicAttributes", "sns:SetTopicAttributes", "sns:AddPermission", "sns:RemovePermission", "sns:DeleteTopic", "sns:Subscribe", "sns:ListSubscriptionsByTopic", "sns:Publish"
+    ])
+    error_message = "SNS topic policies require supported topic actions, not a service-wide wildcard."
+  }
+  assert {
+    condition = (
+      jsondecode(aws_sns_topic_policy.alerts.policy).Statement[1].Action == "sns:Publish" &&
+      jsondecode(aws_sns_topic_policy.alerts.policy).Statement[1].Principal.Service == "cloudwatch.amazonaws.com" &&
+      jsondecode(aws_sns_topic_policy.alerts.policy).Statement[1].Condition.StringEquals["aws:SourceAccount"] == var.expected_account_id &&
+      jsondecode(aws_sns_topic_policy.alerts.policy).Statement[1].Condition.ArnLike["aws:SourceArn"] == "arn:aws:cloudwatch:${var.region}:${var.expected_account_id}:alarm:nigson-${var.environment}-*"
+    )
+    error_message = "CloudWatch publishing must remain restricted to this account/environment alarms."
+  }
+}
+run "compute_and_observability_share_application_log_groups" {
+  command = plan
+  assert {
+    condition     = tomap(module.compute.log_groups) == tomap(module.observability.log_groups) && length(module.compute.log_groups) == 3
+    error_message = "Application groups must have one resource owner and shared names."
+  }
+}
+
+run "partial_apply_has_observability_owned_groups" {
+  command   = apply
+  state_key = "log-ownership-upgrade"
+  module { source = "./tests/fixtures/legacy-logs" }
+  plan_options {
+    target = [module.observability.aws_cloudwatch_log_group.owner]
+  }
+}
+run "resume_partial_apply_moves_groups_to_compute" {
+  command   = plan
+  state_key = "log-ownership-upgrade"
+  assert {
+    condition     = tomap(module.compute.log_groups) == tomap(module.observability.log_groups)
+    error_message = "Moved groups remain available to the runtime and observability under identical names."
+  }
+}

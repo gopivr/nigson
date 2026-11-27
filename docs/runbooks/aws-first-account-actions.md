@@ -175,3 +175,43 @@ Keep `-lockfile=readonly` in the provisioning pipeline. PR validation initialize
 these two roots read-only on Linux and then validates them, matching the failing
 path rather than silently updating the lock file during the test.
 See [HashiCorp's multi-platform lock guidance](https://developer.hashicorp.com/terraform/cli/commands/providers/lock).
+
+## Resume after SNS / duplicate log group / identity KMS errors
+
+The first-account fixes make three in-place corrections:
+
+- Operator SNS policy uses explicit supported topic actions, replacing `sns:*`.
+- Compute owns `/nigson/stage/{commerce,experience,integration}`. Observability
+  reuses those groups. Terraform moved blocks preserve IDs/ARNs for any groups
+  that the partial apply already recorded under Observability. BP5 includes AI.
+- The application KMS policy authorizes the configured regional Logs service
+  for `/aws/rds/instance/nigson-stage-identity/postgresql`, in addition to the
+  existing environment application logs. It does not disable encryption or
+  grant access to unrelated database logs.
+
+After pushing the reviewed fix, start a **new** `bootstrap first AWS account`
+workflow on the updated default branch with action **plan**. Use the **same
+AWS account, region and existing S3 state** as the partial apply. Review the log
+address moves and policy updates, then run action **apply**. Do not run bootstrap
+again, change region/state keys, or delete existing logs/KMS keys/databases to
+resolve these failures. Terraform refreshes recorded partial progress and retries
+only the remaining planned work; the no-delete/runtime guards remain enabled.
+
+If a log group still reports AlreadyExists, check the first-account state with
+`terraform state list` from a correctly initialized/authenticated working directory.
+The automatic moves cover groups tracked by Observability or Compute. They do not
+adopt manually created groups or groups owned by another state. Only after
+confirming the group belongs to this account/environment and no other state owns
+it, import it into the existing first-account state, e.g.:
+
+```bash
+terraform import -var-file=/absolute/path/to/platform.tfvars.json \
+  'module.compute.aws_cloudwatch_log_group.service["commerce"]' \
+  '/nigson/stage/commerce'
+```
+
+Use the generated account/region/zone input file for that same environment;
+repeat for other genuinely untracked groups only as needed. Keep the logs and
+review a fresh plan after import. Do not use `terraform state rm` to bypass the
+ownership checks. If KMS errors persist after the scoped policy update, inspect
+applicable IAM/SCP restrictions and the key's region/state before retrying.

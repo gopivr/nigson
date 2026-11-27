@@ -516,6 +516,7 @@ module "observability" {
   kms_key_arn            = module.secrets.kms_key_arn
   log_retention_days     = var.log_retention_days
   policy_revision        = var.policy_revision
+  application_log_groups = module.compute.log_groups
   named_operator         = "first-account-operator"
   alert_destination_arns = [aws_sns_topic.alerts.arn]
   queue_names            = module.messaging.queue_names
@@ -544,7 +545,31 @@ resource "aws_kms_key" "alerts" {
 resource "aws_sns_topic_policy" "alerts" {
   arn = aws_sns_topic.alerts.arn
   policy = jsonencode({ Version = "2012-10-17", Statement = [
-    { Sid = "AccountAdministration", Effect = "Allow", Principal = { AWS = "arn:aws:iam::${var.expected_account_id}:root" }, Action = "sns:*", Resource = aws_sns_topic.alerts.arn },
+    { Sid = "AccountAdministration", Effect = "Allow", Principal = { AWS = "arn:aws:iam::${var.expected_account_id}:root" }, Action = ["sns:GetTopicAttributes", "sns:SetTopicAttributes", "sns:AddPermission", "sns:RemovePermission", "sns:DeleteTopic", "sns:Subscribe", "sns:ListSubscriptionsByTopic", "sns:Publish"], Resource = aws_sns_topic.alerts.arn },
     { Sid = "EnvironmentAlarms", Effect = "Allow", Principal = { Service = "cloudwatch.amazonaws.com" }, Action = "sns:Publish", Resource = aws_sns_topic.alerts.arn, Condition = { StringEquals = { "aws:SourceAccount" = var.expected_account_id }, ArnLike = { "aws:SourceArn" = "arn:aws:cloudwatch:${var.region}:${var.expected_account_id}:alarm:${local.prefix}-*" } } }
   ] })
+}
+
+# Preserve any group created by Observability before ownership was consolidated.
+moved {
+  from = module.observability.aws_cloudwatch_log_group.owner["commerce"]
+  to   = module.compute.aws_cloudwatch_log_group.service["commerce"]
+}
+
+# Preserve any group created by Observability before ownership was consolidated.
+moved {
+  from = module.observability.aws_cloudwatch_log_group.owner["experience"]
+  to   = module.compute.aws_cloudwatch_log_group.service["experience"]
+}
+
+# Preserve any group created by Observability before ownership was consolidated.
+moved {
+  from = module.observability.aws_cloudwatch_log_group.owner["integration"]
+  to   = module.compute.aws_cloudwatch_log_group.service["integration"]
+}
+
+# Preserve any group created by Observability before ownership was consolidated.
+moved {
+  from = module.observability.aws_cloudwatch_log_group.owner["ai"]
+  to   = module.compute.aws_cloudwatch_log_group.service["ai"]
 }
