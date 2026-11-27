@@ -12,3 +12,7 @@ Nigson_Backend_Implementation_Blueprint
 docs
 tests
 services/ai
+
+.monorepo-backups
+frontend
+build

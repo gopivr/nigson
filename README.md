@@ -1,3 +1,19 @@
+# Nigson monorepo
+
+Backend, Angular microfrontends and Terraform share this repository (`gopivr/nigson`).
+
+- Backend: `services/`, `shared/`, root `pom.xml` and existing Make targets.
+- UI: `frontend/`, its own npm lockfile; use Node 24.15.0.
+- Infrastructure: `infrastructure/terraform/`; deployment helpers: `scripts/infra/`.
+- CI/CD: root `.github/workflows/`.
+
+Run `make ui-install`, `make ui-test`, `make ui-dev` from this root.
+`make ui-build` needs the public `NIGSON_GOOGLE_RECAPTCHA_SITE_KEY` and a fresh
+output directory. See [UI AWS deployment](frontend/deployment/AWS.md) and
+[repository migration](docs/implementation/2026-11-26-MONOREPO-001.md).
+
+---
+
 # Nigson backend
 
 This monorepo implements the Nigson platform from

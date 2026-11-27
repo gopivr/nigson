@@ -1,8 +1,8 @@
 # Build and deploy the UI to AWS staging
 
-The UI repository owns its build/deployment workflow:
+The monorepo owns its UI build/deployment workflow:
 `.github/workflows/aws-stage-ui.yml` (**build and deploy UI to AWS staging**).
-Backend Terraform remains in `gopivr/nigson`. Neither repository needs to be moved.
+UI sources live under `frontend/`; Terraform and its scripts remain at the root.
 This workflow deploys only `stage.nigson.com`; it never activates production.
 
 ## 1. Prepare infrastructure once
@@ -26,43 +26,18 @@ must resolve, and HTTPS must be ready. The UI workflow discovers the destination
 from that same remote state; no bucket or distribution ID needs to be copied into
 GitHub variables.
 
-## 2. Configure this UI repository
+## 2. Configure the monorepo
 
-Open **Settings → Secrets and variables → Actions** in
-**TechXplorers1/nigson-micro-frontend**. Backend repository secrets are not inherited.
-You may use repository secrets or the UI repository's `stage` environment secrets.
+In **gopivr/nigson → Settings → Secrets and variables → Actions**, keep
+`AWS_ACCOUNT_ID`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` (and
+`AWS_SESSION_TOKEN` for temporary credentials). The deployment uses the `stage`
+environment; its protection rules and environment secrets apply.
 
-Required **Secrets**:
-
-| Name | Value |
-| --- | --- |
-| `AWS_ACCOUNT_ID` | Same twelve-digit account used by infrastructure. |
-| `AWS_ACCESS_KEY_ID` | Authorized deployment IAM access key ID. |
-| `AWS_SECRET_ACCESS_KEY` | Matching secret access key. |
-| `INFRASTRUCTURE_READ_TOKEN` | Fine-grained GitHub token with Contents:read access to the private Terraform repository. |
-| `AWS_SESSION_TOKEN` | Only when using temporary AWS credentials. |
-
-Create the read token from an authorized GitHub user's **Settings → Developer
-settings → Personal access tokens → Fine-grained tokens**. Choose the Terraform
-repository's owner (currently `gopivr`), restrict repository access to **nigson**,
-and grant **Repository permissions → Contents → Read-only**. No repository write
-or workflow-dispatch permission is needed. Store the token only as the UI secret
-above; do not paste it into code or chat. Organization restrictions may require
-the repository owner's normal token approval process.
-
-Required **Variables**:
-
-| Name | Value |
-| --- | --- |
-| `AWS_REGION` | Same infrastructure region: `us-east-2` for this setup. |
-| `NIGSON_GOOGLE_RECAPTCHA_SITE_KEY` | Real public Google reCAPTCHA site key registered for `stage.nigson.com`. This is the browser site key, not the secret key. |
-
-Optional variables:
-
-- `INFRASTRUCTURE_REPOSITORY`: defaults to `gopivr/nigson`.
-- `INFRASTRUCTURE_REF`: pin a reviewed backend commit SHA if desired. Empty uses
-  that repository's default branch. The actual checked-out revision is recorded
-  in the deployment summary. It must contain the new deployment helper.
+Set repository variables `AWS_REGION=us-east-2` and
+`NIGSON_GOOGLE_RECAPTCHA_SITE_KEY` to the real public site key for stage.nigson.com.
+The build job does not use environment secrets. A GitHub personal access token
+is not required: both UI and Terraform are checked out from the same revision
+using the built-in read-only repository token.
 
 The AWS identity needs access to the existing bootstrap/platform state and lock
 objects, the owned frontend bucket, CloudFront read/update/invalidation, and
@@ -74,11 +49,11 @@ browser build. Only the public reCAPTCHA site key is compiled into the UI.
 
 ## 3. Run the workflow
 
-After both repository changes are merged and configuration is set, either:
+After the monorepo migration is merged and configuration is set, either:
 
-- Push/merge to the UI repository's `main` branch: build and staging deployment
+- Push/merge to the monorepo's `main` branch: build and staging deployment
   run automatically.
-- Open **Actions → build and deploy UI to AWS staging → Run workflow** on the UI
+- Open **Actions → build and deploy UI to AWS staging → Run workflow** on the monorepo
   default branch.
 
 Pull requests run tests and build, but never receive AWS/private-infrastructure
@@ -96,7 +71,7 @@ The jobs perform these steps:
    ID comes from the successful build, so retrying only a failed deployment job
    can reuse that exact artifact.
 4. Refuse an obsolete UI build if a newer default-branch commit already exists;
-   check out the private Terraform tooling with the read-only token.
+   check out the same monorepo revision containing the Terraform tooling.
 5. Authenticate to AWS; verify account, state configuration, bucket ownership and
    the managed distribution's exact staging alias.
 6. Load the complete applied Terraform input snapshot. Change only
@@ -112,7 +87,7 @@ The jobs perform these steps:
 Release IDs are `<UI-commit-SHA>-<GitHub-run-ID>-<attempt>`. Deployment jobs
 serialize within this repository and do not cancel an in-progress release.
 Terraform uses the existing encrypted S3 backend/locks; a stale saved plan is
-rejected if another repository's Terraform operation has changed state.
+rejected if another Terraform operation has changed state.
 
 Terraform remains the owner of CloudFront. Release activation is an intentionally
 scoped plan targeting the distribution, with a stricter post-plan check; it does

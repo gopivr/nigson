@@ -1,4 +1,4 @@
-# Nigson backend implementation instructions
+# Nigson monorepo implementation instructions
 
 Read `BACKEND_IMPLEMENTATION_MASTER.md` (specification 1.1.0),
 `IMPLEMENTATION_STATUS.md`, the task's supporting documents and ADRs before editing.
@@ -69,3 +69,10 @@ Update `IMPLEMENTATION_STATUS.md` and write
 blocked history, exact safe commands, evidence paths, actual commit hashes and
 the next dependency-ready task. Do not log secrets or customer data. Builds/cache
 outputs stay ignored. Keep shared packages limited to protocol utilities.
+
+## Repository layout
+
+Backend Maven modules, infrastructure and deployment scripts remain at the root.
+The Angular shell and microfrontends live in `frontend/`, with their own npm lockfile.
+GitHub workflows live only in root `.github/workflows/`. Both components share
+one Git revision; CI uses the built-in repository token.

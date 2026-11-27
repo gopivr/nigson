@@ -13,6 +13,9 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: frontend
     outputs:
       artifact_id: ${{ steps.artifact.outputs.artifact-id }}
     env:
@@ -25,6 +28,7 @@ jobs:
         with:
           node-version: 24.15.0
           cache: npm
+          cache-dependency-path: frontend/package-lock.json
       - name: Check public build configuration
         run: |
           test -n "$NIGSON_GOOGLE_RECAPTCHA_SITE_KEY" || { echo 'Set the public NIGSON_GOOGLE_RECAPTCHA_SITE_KEY Actions variable for stage.nigson.com.' >&2; exit 1; }
@@ -38,14 +42,14 @@ jobs:
           npx vitest run --config vitest.checkout.config.mjs
           npx vitest run --config vitest.cancellation.config.mjs
       - name: Build shell and every microfrontend
-        run: npm run build:release -- --output "$GITHUB_WORKSPACE/.build/release/site"
+        run: npm run build:release -- --output "$GITHUB_WORKSPACE/frontend/.build/release/site"
       - name: Seal the artifact for this UI commit
         run: python3 scripts/deploy/seal-release.py --site .build/release/site --source-commit "$GITHUB_SHA" --output .build/release/build.json
       - id: artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: ui-${{ github.sha }}-${{ github.run_attempt }}
-          path: .build/release/
+          path: frontend/.build/release/
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
@@ -62,18 +66,15 @@ jobs:
     env:
       AWS_REGION: ${{ vars.AWS_REGION || 'us-east-2' }}
       AWS_EXPECTED_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      INFRASTRUCTURE_REPOSITORY: ${{ vars.INFRASTRUCTURE_REPOSITORY || 'gopivr/nigson' }}
     steps:
       - name: Validate deployment inputs
         env:
           ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          INFRA_TOKEN: ${{ secrets.INFRASTRUCTURE_READ_TOKEN }}
         run: |
           set -euo pipefail
           [[ "$AWS_EXPECTED_ACCOUNT_ID" =~ ^[0-9]{12}$ ]]
-          [[ -n "$ACCESS_KEY_ID" && -n "$SECRET_ACCESS_KEY" && -n "$INFRA_TOKEN" ]] || { echo 'Set AWS credentials and a Contents:read token for the private infrastructure repository.' >&2; exit 1; }
-          [[ "$INFRASTRUCTURE_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]
+          [[ -n "$ACCESS_KEY_ID" && -n "$SECRET_ACCESS_KEY" ]] || { echo 'Set AWS_ACCOUNT_ID, AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.' >&2; exit 1; }
       - name: Refuse an obsolete default-branch build
         env:
           GH_TOKEN: ${{ github.token }}
@@ -82,16 +83,12 @@ jobs:
           set -euo pipefail
           current="$(gh api "repos/$GITHUB_REPOSITORY/commits/$DEFAULT_BRANCH" --jq .sha)"
           [[ "$current" == "$GITHUB_SHA" ]] || { echo 'A newer default-branch revision exists; deploy the latest build.' >&2; exit 1; }
-      - name: Check out infrastructure tooling
+      - name: Check out this release and infrastructure tooling
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          repository: ${{ env.INFRASTRUCTURE_REPOSITORY }}
-          ref: ${{ vars.INFRASTRUCTURE_REF }}
-          token: ${{ secrets.INFRASTRUCTURE_READ_TOKEN }}
-          path: infrastructure
           persist-credentials: false
       - name: Verify infrastructure deployment tooling is available
-        run: test -f infrastructure/scripts/infra/deploy-first-account-frontend.py || { echo 'Merge the UI deployment support into the infrastructure repository first.' >&2; exit 1; }
+        run: test -f scripts/infra/deploy-first-account-frontend.py || { echo 'Infrastructure deployment tooling is missing from this revision.' >&2; exit 1; }
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           artifact-ids: ${{ needs.build.outputs.artifact_id }}
@@ -112,9 +109,9 @@ jobs:
       - name: Publish, activate and verify the UI release
         run: |
           set -euo pipefail
-          infra_commit="$(git -C infrastructure rev-parse HEAD)"
+          infra_commit="$(git rev-parse HEAD)"
           echo "Infrastructure tooling revision: $infra_commit" >> "$GITHUB_STEP_SUMMARY"
-          python3 infrastructure/scripts/infra/deploy-first-account-frontend.py \
+          python3 scripts/infra/deploy-first-account-frontend.py \
             --site "$GITHUB_WORKSPACE/release/site" \
             --proof "$GITHUB_WORKSPACE/release/build.json" \
             --source-commit "$GITHUB_SHA" \
