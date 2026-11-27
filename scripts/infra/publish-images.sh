@@ -27,13 +27,16 @@ esac
 
 registry="${account_id}.dkr.ecr.${region}.amazonaws.com"
 tag="${commit_sha}-${architecture}"
+scan_work=$(mktemp -d)
+trap 'rm -rf "$scan_work"' EXIT
 docker buildx version >/dev/null
 aws ecr get-login-password --region "$region" | docker login --username AWS --password-stdin "$registry" >/dev/null
 
 publish_and_scan() {
   local repository=$1 dockerfile=$2 target=$3 image_tag=$4
   local image="${registry}/${repository}:${image_tag}"
-  local digest scan_status findings critical high
+  local digest scan_digest manifest scan_status findings critical high error_code
+  local scan_complete=0
   local -a build_arguments
 
   if digest=$(aws ecr describe-images --region "$region" --repository-name "$repository" --image-ids "imageTag=${image_tag}" --query 'imageDetails[0].imageDigest' --output text 2>/dev/null) && [[ "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]; then
@@ -57,21 +60,58 @@ publish_and_scan() {
     [[ "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]
   fi
 
-  for ((attempt = 0; attempt < 60; attempt++)); do
-    scan_status=$(aws ecr describe-image-scan-findings --region "$region" --repository-name "$repository" --image-id "imageTag=${image_tag}" --query 'imageScanStatus.status' --output text 2>/dev/null || true)
-    [[ "$scan_status" == "COMPLETE" ]] && break
-    if [[ "$scan_status" == "FAILED" || "$scan_status" == "UNSUPPORTED_IMAGE" ]]; then
-      echo "ECR vulnerability scan failed for ${repository}:${image_tag}: ${scan_status}" >&2
-      return 1
-    fi
-    sleep 10
-  done
-  [[ "${scan_status:-}" == "COMPLETE" ]] || { echo "Timed out waiting for ECR scan: ${repository}:${image_tag}" >&2; return 1; }
+  # Attestations add an OCI index. Scan the requested Linux image, not the
+  # index or its unknown/unknown attestation manifests. Inspect by immutable
+  # digest so the scanned artifact remains bound to the published image.
+  manifest=$(docker buildx imagetools inspect --raw "${registry}/${repository}@${digest}")
+  if jq -e 'has("manifests")' <<<"$manifest" >/dev/null; then
+    scan_digest=$(jq -er --arg arch "$architecture" '
+      [.manifests[] | select(.platform.os == "linux" and .platform.architecture == $arch)
+       | select((.annotations["vnd.docker.reference.type"] // "") != "attestation-manifest")
+       | .digest] | if length == 1 then .[0] else error("Expected exactly one requested Linux platform image") end
+    ' <<<"$manifest")
+  else
+    jq -e '.schemaVersion == 2 and (.config | type == "object") and (.layers | type == "array")' <<<"$manifest" >/dev/null
+    scan_digest=$digest
+  fi
+  [[ "$scan_digest" =~ ^sha256:[a-f0-9]{64}$ ]]
+  echo "Scanning ${repository} linux/${architecture} (${scan_digest}); published digest ${digest}" >&2
 
-  findings=$(aws ecr describe-image-scan-findings --region "$region" --repository-name "$repository" --image-id "imageTag=${image_tag}" --output json)
-  critical=$(jq '[.imageScanFindings.findingSeverityCounts.CRITICAL // 0] | add' <<<"$findings")
-  high=$(jq '[.imageScanFindings.findingSeverityCounts.HIGH // 0] | add' <<<"$findings")
-  printf '| `%s` | `%s` | `%s` | %s | %s |\n' "$repository" "$image_tag" "$digest" "$critical" "$high" >> "$summary"
+  for ((attempt = 0; attempt < 60; attempt++)); do
+    if findings=$(aws ecr describe-image-scan-findings --region "$region" --repository-name "$repository" \
+        --image-id "imageDigest=${scan_digest}" --output json --no-cli-pager 2>"$scan_work/error"); then
+      scan_status=$(jq -er '.imageScanStatus.status | select(type == "string")' <<<"$findings")
+      case "$scan_status" in
+        COMPLETE) scan_complete=1 ;;
+        ACTIVE)
+          # Enhanced scanning remains ACTIVE; require a completed initial scan.
+          if jq -e '.imageScanFindings.imageScanCompletedAt != null' <<<"$findings" >/dev/null; then scan_complete=1; fi
+          ;;
+        IN_PROGRESS|PENDING) ;;
+        *) echo "ECR scan failed for ${repository}@${scan_digest}: ${scan_status}" >&2; return 1 ;;
+      esac
+      if (( scan_complete == 1 )); then
+        jq -e '.imageScanFindings | type == "object"' <<<"$findings" >/dev/null
+        break
+      fi
+    else
+      error_code=$(sed -n 's/.*An error occurred (\([A-Za-z0-9]*\)).*/\1/p' "$scan_work/error" | head -1)
+      error_code=${error_code:-REQUEST_FAILED}
+      scan_status=$error_code
+      case "$error_code" in
+        ScanNotFoundException|ImageNotFoundException|ServerException|ThrottlingException|TooManyRequestsException) ;;
+        *) echo "ECR scan lookup failed for ${repository}@${scan_digest}: ${error_code}" >&2; return 1 ;;
+      esac
+    fi
+    if (( attempt < 59 )); then sleep 10; fi
+  done
+  (( scan_complete == 1 )) || { echo "Timed out waiting for ECR scan: ${repository}@${scan_digest}; last status: ${scan_status:-UNKNOWN}. Verify registry scan filters include this image." >&2; return 1; }
+
+  # Never interpret malformed counts as a passing vulnerability scan.
+  jq -e '[.imageScanFindings.findingSeverityCounts.CRITICAL // 0, .imageScanFindings.findingSeverityCounts.HIGH // 0] | all(.[]; type == "number" and . >= 0 and floor == .)' <<<"$findings" >/dev/null
+  critical=$(jq '.imageScanFindings.findingSeverityCounts.CRITICAL // 0' <<<"$findings")
+  high=$(jq '.imageScanFindings.findingSeverityCounts.HIGH // 0' <<<"$findings")
+  printf '| `%s` | `%s` | `%s` | `%s` | %s | %s |\n' "$repository" "$image_tag" "$digest" "$scan_digest" "$critical" "$high" >> "$summary"
   if (( critical > 0 || high > 0 )); then
     echo "Image ${repository}:${image_tag} has ${critical} critical and ${high} high findings." >&2
     return 1
@@ -79,7 +119,7 @@ publish_and_scan() {
 }
 
 summary=${GITHUB_STEP_SUMMARY:-/dev/null}
-printf '\n| Repository | Immutable tag | Digest | Critical | High |\n|---|---|---|---:|---:|\n' >> "$summary"
+printf '\n| Repository | Immutable tag | Published digest | Scanned image digest | Critical | High |\n|---|---|---|---|---:|---:|\n' >> "$summary"
 
 publish_and_scan "nigson/${environment}/commerce" services/commerce/Dockerfile application "$tag"
 publish_and_scan "nigson/${environment}/commerce" services/commerce/Dockerfile migration "${tag}-migration"

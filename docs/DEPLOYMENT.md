@@ -73,6 +73,12 @@ releases. Production is not deployed by the staging UI workflow.
   Buildx builder and selects it explicitly for publication, retaining SBOM and
   provenance. Start a new manual run after the fix is on `main`; an old failed
   run retains its old workflow revision.
+- **Timed out waiting for ECR scan:** the publisher resolves the immutable image
+  index to the requested Linux platform and scans that image digest. Attestation
+  manifests are excluded. The summary records both published and scanned digests.
+  It reports permanent AWS scan errors immediately; a remaining timeout includes
+  the last status. Check registry scan filters and the named digest in ECR.
+  HIGH/CRITICAL findings still block publication. No new IAM permissions are needed.
 - **Missing public site key:** set the repository variable before rerunning build.
 - **Release plan changes CloudFront settings beyond the static release path:** the
   guard now prints changed field paths without their values. Review those fields

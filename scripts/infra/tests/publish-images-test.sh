@@ -29,11 +29,18 @@ case "$*" in
     printf 'sha256:%064d\n' 1
     ;;
   *"ecr describe-image-scan-findings"*)
-    if [[ "$*" == *"--query imageScanStatus.status"* ]]; then
-      echo COMPLETE
-    else
-      printf '{"imageScanFindings":{"findingSeverityCounts":{"CRITICAL":%s,"HIGH":%s}}}\n' "${MOCK_CRITICAL:-0}" "${MOCK_HIGH:-0}"
+    [[ "$*" == *"imageDigest=${MOCK_EXPECT_SCAN_DIGEST:-sha256:$(printf '%064d' 1)}"* ]] || { echo 'Scan must target the expected image digest, not an attestation index or tag' >&2; exit 9; }
+    echo call >> "$MOCK_AWS_STATE/scan-calls"
+    if [[ "${MOCK_SCAN_PENDING_ONCE:-0}" == 1 && ! -e "$MOCK_AWS_STATE/pending-returned" ]]; then
+      touch "$MOCK_AWS_STATE/pending-returned"
+      echo '{"imageScanStatus":{"status":"IN_PROGRESS"}}'
+      exit 0
     fi
+    if [[ -n "${MOCK_SCAN_ERROR:-}" ]]; then
+      echo "An error occurred (${MOCK_SCAN_ERROR}) when calling DescribeImageScanFindings: private-error-detail" >&2
+      exit 1
+    fi
+    printf '{"imageScanStatus":{"status":"%s"},"imageScanFindings":{"imageScanCompletedAt":%s,"findingSeverityCounts":{"CRITICAL":%s,"HIGH":%s}}}\n' "${MOCK_SCAN_STATUS:-COMPLETE}" "${MOCK_SCAN_COMPLETED:-1234567890}" "${MOCK_CRITICAL:-0}" "${MOCK_HIGH:-0}"
     ;;
   *) echo "unexpected mocked AWS command: $*" >&2; exit 9 ;;
 esac
@@ -43,6 +50,24 @@ cat > "$temporary_root/bin/docker" <<'MOCK_DOCKER'
 #!/usr/bin/env bash
 set -euo pipefail
 if [[ "$1 $2" == "buildx version" ]]; then exit 0; fi
+if [[ "$1 $2 $3" == "buildx imagetools inspect" ]]; then
+  [[ "$*" == *"@sha256:"* ]] || { echo 'Manifest must be read by immutable digest' >&2; exit 9; }
+  case "${MOCK_MANIFEST_MODE:-single}" in
+    single) echo '{"schemaVersion":2,"config":{},"layers":[]}' ;;
+    index|missing|ambiguous)
+      digest=$(printf 'sha256:%064d' 2)
+      duplicate=""
+      if [[ "${MOCK_MANIFEST_MODE}" == ambiguous ]]; then
+        duplicate=",{\"digest\":\"$digest\",\"platform\":{\"os\":\"linux\",\"architecture\":\"arm64\"}}"
+      fi
+      arch=arm64
+      [[ "${MOCK_MANIFEST_MODE}" != missing ]] || arch=amd64
+      printf '{"schemaVersion":2,"manifests":[{"digest":"%s","platform":{"os":"linux","architecture":"%s"}},{"digest":"sha256:attestation","platform":{"os":"unknown","architecture":"unknown"},"annotations":{"vnd.docker.reference.type":"attestation-manifest"}}%s]}\n' "$digest" "$arch" "$duplicate"
+      ;;
+    invalid) echo '{"unexpected":"manifest"}' ;;
+  esac
+  exit 0
+fi
 if [[ "$1 $2" == "buildx build" ]]; then
   printf '%s\n' "$*" >> "$MOCK_DOCKER_BUILDS"
   exit 0
@@ -52,7 +77,11 @@ echo "unexpected mocked Docker command: $*" >&2
 exit 9
 MOCK_DOCKER
 
-chmod +x "$temporary_root/bin/aws" "$temporary_root/bin/docker"
+cat > "$temporary_root/bin/sleep" <<'MOCK_SLEEP'
+#!/usr/bin/env bash
+exit 0
+MOCK_SLEEP
+chmod +x "$temporary_root/bin/aws" "$temporary_root/bin/docker" "$temporary_root/bin/sleep"
 
 run_case() {
   local phase=$1 expect_ai=$2 expect_build=$3
@@ -88,7 +117,7 @@ run_case() {
 
 bash -n "$repo_root/scripts/infra/publish-images.sh"
 run_case 1 0 0
-run_case 5 1 1
+MOCK_MANIFEST_MODE=index MOCK_EXPECT_SCAN_DIGEST=$(printf 'sha256:%064d' 2) run_case 5 1 1
 
 mkdir -p "$temporary_root/state-critical"
 if MOCK_CRITICAL=1 MOCK_AWS_STATE="$temporary_root/state-critical" GITHUB_SHA=0123456789abcdef0123456789abcdef01234567 GITHUB_STEP_SUMMARY="$temporary_root/summary-critical.md" PATH="$temporary_root/bin:$PATH" "$repo_root/scripts/infra/publish-images.sh" stage arm64 1 123456789012 us-east-1 >/dev/null 2>&1; then
@@ -96,4 +125,35 @@ if MOCK_CRITICAL=1 MOCK_AWS_STATE="$temporary_root/state-critical" GITHUB_SHA=01
   exit 1
 fi
 
-echo "Infrastructure artifact publication tests PASS"
+expect_failure() {
+  local name=$1 message=$2
+  mkdir -p "$temporary_root/$name"
+  if MOCK_AWS_STATE="$temporary_root/$name" GITHUB_SHA=0123456789abcdef0123456789abcdef01234567 \
+      GITHUB_STEP_SUMMARY="$temporary_root/$name-summary.md" PATH="$temporary_root/bin:$PATH" \
+      "$repo_root/scripts/infra/publish-images.sh" stage arm64 1 123456789012 us-east-1 > "$temporary_root/$name.log" 2>&1; then
+    echo "Expected publication failure: $name" >&2; exit 1
+  fi
+  rg -q "$message" "$temporary_root/$name.log"
+  if rg -q 'private-error-detail' "$temporary_root/$name.log"; then echo 'Raw AWS error leaked' >&2; exit 1; fi
+}
+
+MOCK_SCAN_ERROR=AccessDeniedException expect_failure denied AccessDeniedException
+[[ "$(wc -l < "$temporary_root/denied/scan-calls" | tr -d ' ')" == 1 ]]
+MOCK_SCAN_STATUS=UNSUPPORTED_IMAGE expect_failure unsupported UNSUPPORTED_IMAGE
+MOCK_SCAN_STATUS=SCAN_ELIGIBILITY_EXPIRED expect_failure expired SCAN_ELIGIBILITY_EXPIRED
+MOCK_SCAN_ERROR=ScanNotFoundException expect_failure missing-scan 'last status: ScanNotFoundException'
+[[ "$(wc -l < "$temporary_root/missing-scan/scan-calls" | tr -d ' ')" == 60 ]]
+MOCK_SCAN_STATUS=ACTIVE MOCK_SCAN_COMPLETED=null expect_failure incomplete-enhanced 'last status: ACTIVE'
+MOCK_HIGH=1 expect_failure high '1 high findings'
+MOCK_HIGH='"invalid"' expect_failure invalid-counts 'Scanning nigson/stage/commerce'
+MOCK_SCAN_PENDING_ONCE=1 run_case 1 0 0
+MOCK_MANIFEST_MODE=ambiguous expect_failure ambiguous 'Expected exactly one'
+MOCK_MANIFEST_MODE=missing expect_failure missing-platform 'Expected exactly one'
+MOCK_MANIFEST_MODE=invalid expect_failure invalid-manifest 'Reusing immutable image'
+[[ ! -e "$temporary_root/ambiguous/scan-calls" && ! -e "$temporary_root/missing-platform/scan-calls" ]]
+MOCK_SCAN_STATUS=ACTIVE MOCK_SCAN_COMPLETED=1234567890 run_case 1 0 0
+
+# Guard the new column: attestations keep their published index digest while the
+# vulnerability gate records the distinct runnable image digest.
+rg -q "$(printf 'sha256:%064d' 2)" "$temporary_root/summary-5.md"
+echo "Infrastructure artifact publication tests PASS (single/index scans, retained attestations, IAM errors, bounded polling, enhanced scans and vulnerability failures)"

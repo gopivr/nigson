@@ -90,8 +90,10 @@ Terraform, ECS deployment, IAM, or secret-read permissions.
 Choose the ECS architecture explicitly. The workflow builds the app,
 commerce migration, and Keycloak images for that architecture, tags them with
 the source commit and architecture, and uses BuildKit to attach SBOM and
-provenance attestations. ECR scan-on-push results must reach COMPLETE with no
-HIGH or CRITICAL findings or the run fails. Existing immutable tags are reused
+provenance attestations. ECR scan-on-push results must reach COMPLETE (or enhanced ACTIVE with a completed
+initial scan) with no HIGH or CRITICAL findings, or the run fails. Attested image
+indexes are resolved to their selected Linux platform digest for scanning; the
+summary retains both the published index digest and scanned image digest. Existing immutable tags are reused
 and rechecked rather than overwritten. The workflow run summary records each
 repository, tag, content digest, and scan counts; use those digests in a
 separately reviewed Terraform plan. Keep every task definition's CPU
