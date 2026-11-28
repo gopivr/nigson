@@ -42,7 +42,7 @@ def foundation_plan(plan):
         actions = change["change"]["actions"]
         if "delete" in actions:
             raise ValueError("Foundation pipeline refuses resource deletion/replacement: " + change["address"])
-        if change.get("type") in {"aws_ecs_task_definition", "aws_ecs_service"}:
+        if change.get("type") in {"aws_ecs_task_definition", "aws_ecs_service"} and actions not in [["no-op"], ["read"]]:
             raise ValueError("Runtime tasks already exist or are proposed; use the application deployment flow")
 
 
@@ -56,6 +56,8 @@ def deployment_configuration(state, account, region):
     variables = snapshot.get("variables", {})
     if snapshot.get("schema_version") != 1 or not isinstance(variables, dict):
         raise ValueError("Unsupported applied deployment configuration")
+    # Historical first-account snapshots used a fixed X86_64 architecture.
+    variables = {"cpu_architecture": "X86_64", "key_administrator_principal_arn": None, **variables}
     fields = set(re.findall(r'^variable\s+"([^\"]+)"', (ROOT / "infrastructure/terraform/aws/first-account/variables.tf").read_text(), re.MULTILINE))
     if set(variables) != fields:
         raise ValueError("Apply the updated infrastructure configuration before deploying UI; its input snapshot is incomplete")
@@ -199,9 +201,18 @@ class Pipeline:
         release = applied["frontend_release_id"] if applied is not None else previous.get("frontend_release", "initial")
         if not isinstance(release, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}", release):
             raise ValueError("Invalid applied frontend release")
+        if applied is not None:
+            inputs = dict(applied)
         inputs["frontend_release_id"] = release
         varfile.write_text(json.dumps(inputs) + "\n")
         self.plan_apply(platform, "platform", apply=self.action == "apply", extra=("-var-file=" + str(varfile),))
+        if self.action == "apply" and os.environ.get("GITHUB_OUTPUT"):
+            snapshot = json.loads(self.tf(platform, "output", "-json", "deployment_configuration", capture=True))["variables"]
+            phase = str(snapshot["product_phase"])
+            architecture = {"ARM64":"arm64", "X86_64":"amd64"}[snapshot.get("cpu_architecture", "X86_64")]
+            if phase not in {"1","2","3","4","5"}: raise ValueError("Invalid applied product phase")
+            with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+                output.write("architecture="+architecture+"\nproduct_phase="+phase+"\n")
         self.summary("\nPlatform " + ("apply completed" if self.action == "apply" else "plan completed; no infrastructure applied") + ". Review the Terraform output in this run.\n")
 
     @staticmethod
@@ -217,7 +228,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["bootstrap", "plan", "apply"])
     args = parser.parse_args()
-    Pipeline(os.environ.get("AWS_EXPECTED_ACCOUNT_ID", ""), os.environ.get("AWS_REGION", "eu-west-1"), args.action).run()
+    Pipeline(os.environ.get("AWS_EXPECTED_ACCOUNT_ID", ""), os.environ.get("AWS_REGION", "eu-west-1"), args.action, work=ROOT/".build/aws-first-stage"/("ci-"+args.action)).run()
 
 
 if __name__ == "__main__":

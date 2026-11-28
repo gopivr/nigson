@@ -11,6 +11,7 @@ for workflow in "${workflows[@]}"; do
   file="$repo_root/.github/workflows/$workflow"
   while IFS= read -r line; do
     [[ "$line" =~ uses:[[:space:]] ]] || continue
+    [[ "$line" == *"uses: ./.github/workflows/"* ]] && continue
     ref=${line##*@}
     [[ "$ref" =~ ^[0-9a-f]{40}$ ]] || { echo "un-pinned action reference in $workflow" >&2; exit 1; }
   done < "$file"
@@ -46,7 +47,7 @@ if grep -Eq 'deploy-stage\.sh|deploy-stage\.yml' "$deploy" "$plan"; then
   echo "stage-only deployment tooling must not remain in the environment workflow" >&2
   exit 1
 fi
-if grep -Eq 'terraform|secretsmanager|iam:[[:space:]]*\*' "$deploy"; then
+if grep -Eq 'secretsmanager|iam:[[:space:]]*\*' "$deploy"; then
   echo "environment release workflow must not provision infrastructure or read secrets" >&2
   exit 1
 fi
@@ -58,14 +59,16 @@ require 'yaml'
 workflow = YAML.load_file(ARGV.fetch(0))
 triggers = workflow['on'] || workflow[true]
 raise 'bootstrap credentials must be manual-only' unless triggers.keys == ['workflow_dispatch']
-raise 'unexpected bootstrap operations' unless triggers['workflow_dispatch']['inputs']['action']['options'] == ['bootstrap', 'plan', 'apply']
+raise 'unexpected bootstrap operations' unless triggers['workflow_dispatch']['inputs']['action']['options'] == ['bootstrap', 'plan', 'apply', 'runtime-plan', 'runtime-apply']
 raise 'bootstrap must not require a pre-existing OIDC role' unless workflow['permissions'] == {'contents' => 'read'}
-raise 'state mutation runs must serialize' unless workflow['concurrency'] == {'group' => 'nigson-infrastructure-stage', 'cancel-in-progress' => false}
+raise 'state mutation runs must serialize' unless workflow['concurrency'] == {'group' => 'nigson-stage-deployment', 'cancel-in-progress' => false}
 job = workflow['jobs']['first-account']
 raise 'bootstrap must use staging environment' unless job['environment'] == 'stage'
 raise 'bootstrap must use default-branch code' unless job['if'].include?('github.event.repository.default_branch')
 raise 'account must come from the documented secret' unless job['env']['AWS_EXPECTED_ACCOUNT_ID'] == '${{ secrets.AWS_ACCOUNT_ID }}'
-raise 'do not upload Terraform state/plan artifacts' if job['steps'].any? { |step| step.fetch('uses', '').include?('upload-artifact') }
+raise 'do not upload Terraform state/plan artifacts' if job['steps'].any? { |step| step.fetch('uses', '').include?('upload-artifact') && step.dig('with', 'path') != '.build/backend-deploy/deployment.json' }
+raise 'runtime artifact lookup requires read-only Actions access' unless job['permissions'] == {'contents' => 'read', 'actions' => 'read'}
+raise 'foundation must not run in runtime actions' unless job['steps'].find { |s| s['name'] == 'Bootstrap or provision the first-account platform' }['if'].include?('!startsWith')
 raise 'do not interpolate dispatch input into shell code' if job['steps'].any? { |step| step.fetch('run', '').include?('${{ inputs.') }
 puts 'First-account manual dispatch, staging secrets and durable state boundaries PASS'
 RUBY

@@ -139,3 +139,17 @@ run "identity_target_tls_is_automatically_provisioned" {
     error_message = "First-account identity must generate private target TLS and retain public ACM coverage for both identity hostnames."
   }
 }
+
+run "runtime_templates_precede_service_creation" {
+  command = plan
+  variables {
+    publish_task_definitions = true
+    cpu_architecture = "ARM64"
+    image_digests = { commerce = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", experience = "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", integration = "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", identity = "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" }
+    migration_image_digest = "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  }
+  assert {
+    condition = length(module.compute.task_definition_arns) == 3 && length(module.compute.service_names) == 0 && module.identity.identity_service_name == null && output.deployment_configuration.variables.cpu_architecture == "ARM64"
+    error_message = "First deployment must provision matching-architecture task templates while all permanent services remain absent."
+  }
+}

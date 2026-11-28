@@ -31,10 +31,10 @@ def validate_release(release, environment, account, region, commit, run_id, atte
     components = {'commerce', 'experience', 'integration', 'identity', 'migration'}
     if release['product_phase'] == 5:
         components.add('ai')
-    if not isinstance(release['components'], dict) or set(release['components']) != components:
+    if not isinstance(release['components'], dict) or set(release['components']) not in [components, components | {'operations'}]:
         raise ValueError('Release must contain the complete environment image cohort')
     for component, item in release['components'].items():
-        repository = 'commerce' if component == 'migration' else component
+        repository = 'commerce' if component == 'migration' else ('identity' if component == 'operations' else component)
         prefix = f'{account}.dkr.ecr.{region}.amazonaws.com/nigson/{environment}/{repository}@'
         if (not isinstance(item, dict) or set(item) != {'image', 'scan_digest', 'critical', 'high'} or
                 not isinstance(item['image'], str) or not item['image'].startswith(prefix) or
@@ -133,7 +133,7 @@ class Deployer:
 
     def check_scans(self):
         for name, image in self.release['components'].items():
-            repository = f'nigson/{self.env}/' + ('commerce' if name == 'migration' else name)
+            repository = f'nigson/{self.env}/' + ('commerce' if name == 'migration' else 'identity' if name == 'operations' else name)
             digest = image['image'].split('@')[1]
             described = self.aws.call('ecr', 'describe-images', repository_name=repository, image_ids=[{'imageDigest': digest}])
             if len(described.get('imageDetails', [])) != 1 or described['imageDetails'][0].get('imageDigest') != digest:
@@ -171,6 +171,7 @@ class Deployer:
                 'One-time runtime setup is incomplete in ' + self.cluster + '. '
                 + ('Missing services: ' + missing + '. ' if missing else 'ECS service lookup failed. ')
                 + 'The AWS Infrastructure workflow provisions foundation resources only; rerunning its apply does not create runtime services. '
+                + 'Use Backend — AWS Infrastructure runtime-plan then runtime-apply with the reviewed runtime_configuration file. '
                 + 'Complete database/Keycloak/secret setup and the reviewed runtime Terraform activation described in '
                 + 'infrastructure/terraform/aws/first-account/README.md section 5. '
                 + 'No task revisions, migrations or services were changed.')

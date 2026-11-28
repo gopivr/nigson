@@ -206,31 +206,27 @@ reviewed operation:
    `identity/tls_certificate` and `identity/tls_key` containers need no values.
    The identity database password and regional database CA remain required.
    Ordinary application containers must not use the RDS master password.
-3. Run owner migrations with the existing launcher, pointed at this new root:
+3. Supply the reviewed non-secret runtime configuration as a committed Terraform
+   `.tfvars` or `.json` file beneath this root. `runtime.auto.tfvars.example` is
+   only a shape example and is rejected by the workflow. Secret values remain in
+   Secrets Manager; configure their environment-variable names through
+   `application_secret_names`. Keep stage settings separate from local development.
+4. Run **Backend — AWS Infrastructure → runtime-plan** with `runtime_configuration`
+   set to that file's repository-relative path. Review the resource summary, then
+   run **runtime-apply** with the same path. It selects the latest staging release,
+   provisions matching-architecture task templates without services, checks secret
+   versions and runs each owner migration once before service creation.
+5. The workflow bootstraps the temporary Keycloak administrator with the existing
+   isolated bootstrap task, creates identity and checks health. Configure the
+   approved realm/client/MFA policy through its private admin endpoint using the
+   identity provisioning scripts. If discovery is absent, setup stops before
+   backend activation. Resume the same release after realm configuration; the
+   offline administrator bootstrap is skipped once identity is active. No fake
+   credentials or public admin route are introduced.
+6. After the realm gate, setup creates and activates the backend services and
+   waits for health. Subsequent releases use **Backend — Deploy Release**, selecting
+   only the environment. Publish the frontend using its existing monorepo workflow.
 
-   ```bash
-   export NIGSON_TERRAFORM_ROOT=infrastructure/terraform/aws/first-account
-   bash scripts/infra/run-owner-migration.sh stage commerce
-   bash scripts/infra/run-owner-migration.sh stage experience
-   bash scripts/infra/run-owner-migration.sh stage integration
-   ```
-
-4. Supply complete service runtime configuration using
-   `runtime.auto.tfvars.example` as a SHAPE example, not a complete configuration.
-   Secret values belong in Secrets Manager, not in `application_environment`.
-   Configure purpose-specific storage grants and explicit provider egress CIDRs;
-   wildcard internet egress is not added. Review private workload TLS/identity
-   bindings and the frontend BFF origin/Keycloak redirect settings.
-5. Enable identity only after its bootstrap is ready, and applications only after
-   every required migration has succeeded, via reviewed Terraform plans with real
-   image files and runtime settings. Do not replace the workflow with local
-   development `.env` settings.
-6. Build the frontend with `npm run build:release -- --output PATH` in the sibling
-   frontend repository, then upload that reviewed artifact using
-   `scripts/infra/publish-frontend.py`. Use the `frontend_bucket` and
-   `frontend_release` outputs; no manual S3 bucket creation is needed. Until upload
-   and application activation, provisioned URLs are infrastructure endpoints,
-   not a working qualified storefront.
 7. Run real HTTPS/login/API/internal-denial/provider, backup/restore and rollback
    acceptance before declaring the deployment ready. Production uses separate
    account/state and a deliberate nigson.com root DNS cutover after preserving

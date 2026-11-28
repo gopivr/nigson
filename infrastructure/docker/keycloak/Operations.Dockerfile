@@ -1,13 +1,15 @@
 FROM ghcr.io/astral-sh/uv:0.9.3@sha256:ecfea7316b266ba82a5e9efb052339ca410dd774dc01e134a30890e6b85c7cd1 AS uv
-FROM python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c AS build
+FROM oraclelinux:9-slim@sha256:2aec3940ecce6e008c59040c9e62945ad6ecb810ce893253e216b49732546132 AS runtime-base
+RUN microdnf install -y python3.12 ca-certificates && microdnf clean all
+FROM runtime-base AS build
 COPY --from=uv /uv /usr/local/bin/uv
-ENV UV_PYTHON_DOWNLOADS=never
+ENV UV_PYTHON_DOWNLOADS=never UV_PYTHON=python3.12
 WORKDIR /identity
 COPY scripts/identity/pyproject.toml scripts/identity/uv.lock ./
 RUN uv sync --locked --no-dev
-FROM python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+FROM runtime-base
 COPY --from=build /identity/.venv /identity/.venv
-COPY scripts/identity/admin.py scripts/identity/backup.py scripts/identity/database.py scripts/identity/provision.py scripts/identity/realm_policy.py scripts/identity/retire_bootstrap.py /app/scripts/identity/
+COPY scripts/identity/admin.py scripts/identity/backup.py scripts/identity/database.py scripts/identity/provision.py scripts/identity/realm_policy.py scripts/identity/retire_bootstrap.py scripts/identity/bootstrap_runtime.py /app/scripts/identity/
 COPY contracts/security/workload-scopes.json /app/contracts/security/workload-scopes.json
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 USER 10001:10001

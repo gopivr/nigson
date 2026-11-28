@@ -59,4 +59,5 @@ COPY --from=build /workspace/services/commerce/target/commerce-0.1.0.jar /app/ap
 ENV SERVER_PORT=8081
 EXPOSE 8081
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=12 CMD ["java", "-cp", "/app/probe", "HealthProbe"]
-ENTRYPOINT ["java", "-jar", "/app/application.jar"]
+COPY --chmod=0555 infrastructure/docker/java/entrypoint.sh /app/start
+ENTRYPOINT ["/app/start"]

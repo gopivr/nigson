@@ -19,6 +19,18 @@ on:
         type: choice
         options: ['1', '2', '3', '4', '5']
 
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      architecture:
+        required: true
+        type: string
+      product_phase:
+        required: true
+        type: string
+
 permissions:
   contents: read
 

@@ -167,6 +167,8 @@ jobs:
         run: bash scripts/infra/tests/migration-target-policy-test.sh
       - name: Test one-shot migration launch and no-retry behavior
         run: bash scripts/infra/tests/run-owner-migration-test.sh
+      - name: Test first runtime setup guards and migration ordering
+        run: python3 -m unittest discover -s scripts/infra/tests -p test_runtime_setup.py -v
       - name: Test latest artifact selection, migration and release rollback
         run: python3 -m unittest discover -s scripts/infra/tests -p test_latest_backend.py -v
       - name: Test stage and production deployment migration gate and rollback behavior

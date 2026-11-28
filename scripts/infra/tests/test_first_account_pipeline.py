@@ -90,6 +90,13 @@ class PipelineTests(unittest.TestCase):
         self.assertNotIn('access_key', backend)
         self.assertNotIn('secret_key', backend)
 
+    def test_historical_snapshot_infers_its_fixed_x86_architecture(self):
+        legacy=applied_variables()
+        state={'values':{'outputs':{'deployment_configuration':{'value':{'schema_version':1,'variables':legacy}}}}}
+        resolved=pipeline.deployment_configuration(state,ACCOUNT,'eu-west-1')
+        self.assertEqual(resolved['cpu_architecture'],'X86_64')
+        self.assertEqual({k:v for k,v in resolved.items() if k not in {'cpu_architecture','key_administrator_principal_arn'}},legacy)
+
     def test_bootstrap_records_github_identity_for_immutable_subject_trust(self):
         with patch.dict('os.environ', {'GITHUB_REPOSITORY': 'gopivr/nigson',
                                       'GITHUB_REPOSITORY_ID': '12345',
@@ -178,7 +185,7 @@ class PipelineTests(unittest.TestCase):
         self.assertFalse(any("-auto-approve" in c for c in calls))
 
     def test_destructive_or_runtime_plan_never_applies(self):
-        for resource_type, actions in [("aws_lb", ["delete", "create"]), ("aws_ecs_task_definition", ["no-op"]), ("aws_ecs_service", ["create"])]:
+        for resource_type, actions in [("aws_lb", ["delete", "create"]), ("aws_ecs_task_definition", ["update"]), ("aws_ecs_service", ["create"])]:
             with self.subTest(resource_type=resource_type):
                 fake = FakeCommands(changes=[{"address": "module.test.example", "type": resource_type, "change": {"actions": actions}}])
                 # Each pipeline needs a new ephemeral checkout directory.

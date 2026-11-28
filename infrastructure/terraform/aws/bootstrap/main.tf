@@ -298,3 +298,62 @@ output "github_deploy_role_arn" {
   description = "Automatically used by Backend — Deploy Release."
   value       = aws_iam_role.github_deploy.arn
 }
+
+# Initial deployment stays on short-lived OIDC. Ordinary release permissions are unchanged.
+locals {
+  setup_roles           = concat(flatten([for owner in ["commerce", "experience", "integration", "ai"] : ["${owner}-migration-task", "${owner}-migration-execution"]]), ["database-setup-task", "database-setup-execution", "realm-setup-task", "realm-setup-execution"])
+  setup_role_arns       = [for role in local.setup_roles : "arn:aws:iam::${var.expected_account_id}:role/nigson-${var.environment}-${role}"]
+  setup_definition_arns = concat(local.deploy_task_definition_arns, local.deploy_migration_definition_arns, [for mode in ["database", "realm"] : "arn:aws:ecs:${var.region}:${var.expected_account_id}:task-definition/nigson-${var.environment}-${mode}-setup:*"], ["arn:aws:ecs:${var.region}:${var.expected_account_id}:task-definition/nigson-${var.environment}-identity-bootstrap:*"])
+}
+resource "aws_iam_policy" "runtime_task_boundary" {
+  name = "nigson-${var.environment}-runtime-task-boundary"
+  policy = jsonencode({ Version = "2012-10-17", Statement = [
+    { Effect = "Allow", Action = ["ecr:GetAuthorizationToken"], Resource = "*" },
+    { Effect = "Allow", Action = ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer", "ecr:BatchCheckLayerAvailability"], Resource = "arn:aws:ecr:${var.region}:${var.expected_account_id}:repository/nigson/${var.environment}/*" },
+    { Effect = "Allow", Action = ["logs:CreateLogStream", "logs:PutLogEvents"], Resource = "arn:aws:logs:${var.region}:${var.expected_account_id}:log-group:/nigson/${var.environment}/*" },
+    { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = "arn:aws:secretsmanager:${var.region}:${var.expected_account_id}:secret:nigson/${var.environment}/*" },
+    { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = "arn:aws:secretsmanager:${var.region}:${var.expected_account_id}:secret:rds!db-*", Condition = { StringEquals = { "aws:ResourceTag/aws:rds:primaryDBInstanceArn" = [for name in ["commerce", "identity"] : "arn:aws:rds:${var.region}:${var.expected_account_id}:db:nigson-${var.environment}-${name}"] } } },
+    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = "arn:aws:kms:${var.region}:${var.expected_account_id}:key/*", Condition = { StringEquals = { "kms:ViaService" = "secretsmanager.${var.region}.amazonaws.com" } } }
+  ] })
+}
+resource "aws_iam_role" "github_runtime_setup" {
+  name                 = "nigson-${var.environment}-github-runtime-setup"
+  max_session_duration = 7200
+  assume_role_policy   = aws_iam_role.github_publish.assume_role_policy
+}
+locals {
+  runtime_setup_statements = concat(jsondecode(aws_iam_role_policy.github_deploy.policy).Statement, [
+    { Sid = "StateBucketMetadata", Effect = "Allow", Action = ["s3:ListBucket", "s3:GetBucketLocation"], Resource = aws_s3_bucket.state.arn },
+    { Sid = "ReadBootstrapAndPlatformState", Effect = "Allow", Action = ["s3:GetObject"], Resource = ["${aws_s3_bucket.state.arn}/nigson/bootstrap/${var.environment}/terraform.tfstate", "${aws_s3_bucket.state.arn}/nigson/first-account/${var.environment}/terraform.tfstate"] },
+    { Sid = "WritePlatformStateAndLock", Effect = "Allow", Action = ["s3:PutObject"], Resource = ["${aws_s3_bucket.state.arn}/nigson/first-account/${var.environment}/terraform.tfstate", "${aws_s3_bucket.state.arn}/nigson/first-account/${var.environment}/terraform.tfstate.tflock"] },
+    { Sid = "PlatformLock", Effect = "Allow", Action = ["s3:GetObject", "s3:DeleteObject"], Resource = "${aws_s3_bucket.state.arn}/nigson/first-account/${var.environment}/terraform.tfstate.tflock" },
+    { Sid = "ReadPlatformMetadata", Effect = "Allow", Action = ["ec2:Describe*", "elasticloadbalancing:Describe*", "rds:Describe*", "rds:ListTagsForResource", "logs:DescribeLogGroups", "logs:ListTagsForResource", "logs:ListTagsLogGroup", "acm:DescribeCertificate", "acm:ListTagsForCertificate", "wafv2:Get*", "wafv2:ListTagsForResource", "cloudfront:Get*", "cloudfront:ListTagsForResource", "route53:Get*", "route53:ListResourceRecordSets", "route53:ListTagsForResource", "sns:GetTopicAttributes", "sns:ListTagsForResource", "sqs:GetQueueAttributes", "sqs:GetQueueUrl", "sqs:ListQueueTags", "servicediscovery:GetNamespace", "servicediscovery:GetService", "servicediscovery:ListTagsForResource", "application-autoscaling:DescribeScalableTargets", "application-autoscaling:DescribeScalingPolicies", "application-autoscaling:ListTagsForResource"], Resource = "*" },
+    { Sid = "ReadStorageMetadata", Effect = "Allow", Action = ["s3:GetBucket*", "s3:GetEncryptionConfiguration", "s3:GetLifecycleConfiguration", "s3:GetReplicationConfiguration", "s3:GetAccelerateConfiguration", "s3:GetBucketObjectLockConfiguration"], Resource = "arn:aws:s3:::nigson-${var.environment}-*" },
+    { Sid = "ReadRoleMetadata", Effect = "Allow", Action = ["iam:GetRole", "iam:GetRolePolicy", "iam:ListRolePolicies", "iam:ListAttachedRolePolicies", "iam:GetPolicy", "iam:GetPolicyVersion"], Resource = ["arn:aws:iam::${var.expected_account_id}:role/nigson-${var.environment}-*", aws_iam_policy.runtime_task_boundary.arn] },
+    { Sid = "CreateBoundedSetupRoles", Effect = "Allow", Action = ["iam:CreateRole", "iam:PutRolePermissionsBoundary"], Resource = local.setup_role_arns, Condition = { StringEquals = { "iam:PermissionsBoundary" = aws_iam_policy.runtime_task_boundary.arn } } },
+    { Sid = "ConfigureSetupRoles", Effect = "Allow", Action = ["iam:PutRolePolicy", "iam:TagRole", "iam:UpdateAssumeRolePolicy"], Resource = local.setup_role_arns },
+    { Sid = "PassSetupRoles", Effect = "Allow", Action = ["iam:PassRole"], Resource = concat(local.setup_role_arns, ["arn:aws:iam::${var.expected_account_id}:role/nigson-${var.environment}-identity-bootstrap-execution"]), Condition = { StringEquals = { "iam:PassedToService" = "ecs-tasks.amazonaws.com" } } },
+    { Sid = "ReadKeys", Effect = "Allow", Action = ["kms:DescribeKey", "kms:GetKeyPolicy", "kms:GetKeyRotationStatus", "kms:ListResourceTags", "kms:GetPublicKey"], Resource = "arn:aws:kms:${var.region}:${var.expected_account_id}:key/*" },
+    { Sid = "SeedWrappedSessionKey", Effect = "Allow", Action = ["kms:GenerateDataKeyWithoutPlaintext"], Resource = "arn:aws:kms:${var.region}:${var.expected_account_id}:key/*", Condition = { StringEquals = { "aws:ResourceTag/Environment" = var.environment, "kms:EncryptionContext:purpose" = "nigson-commerce-session" }, Null = { "kms:EncryptionContext:revision" = "false" } } },
+    { Sid = "SeedInternalSecrets", Effect = "Allow", Action = ["secretsmanager:DescribeSecret", "secretsmanager:GetResourcePolicy", "secretsmanager:PutSecretValue"], Resource = "arn:aws:secretsmanager:${var.region}:${var.expected_account_id}:secret:nigson/${var.environment}/*" },
+    { Sid = "InspectRdsSecretMetadata", Effect = "Allow", Action = ["secretsmanager:DescribeSecret"], Resource = "arn:aws:secretsmanager:${var.region}:${var.expected_account_id}:secret:rds!db-*" },
+    { Sid = "RegisterAndRunInitialTasks", Effect = "Allow", Action = ["ecs:RegisterTaskDefinition", "ecs:RunTask", "ecs:TagResource"], Resource = concat(local.setup_definition_arns, ["arn:aws:ecs:${var.region}:${var.expected_account_id}:task/nigson-${var.environment}/*"]) },
+    { Sid = "CreateInitialServices", Effect = "Allow", Action = ["ecs:CreateService", "ecs:TagResource"], Resource = local.deploy_service_arns, Condition = { ArnEquals = { "ecs:cluster" = local.deploy_cluster_arn } } },
+    { Sid = "InspectInitialTasks", Effect = "Allow", Action = ["ecs:DescribeClusters", "ecs:ListTasks"], Resource = local.deploy_cluster_arn },
+    { Sid = "ReadTaskTags", Effect = "Allow", Action = ["ecs:ListTagsForResource"], Resource = concat(local.setup_definition_arns, local.deploy_service_arns, [local.deploy_cluster_arn]) },
+    { Sid = "InitialRoutes", Effect = "Allow", Action = ["elasticloadbalancing:CreateRule", "elasticloadbalancing:AddTags", "elasticloadbalancing:SetRulePriorities"], Resource = ["arn:aws:elasticloadbalancing:${var.region}:${var.expected_account_id}:listener/app/nigson-${var.environment}/*/*", "arn:aws:elasticloadbalancing:${var.region}:${var.expected_account_id}:listener-rule/app/nigson-${var.environment}/*/*/*"] },
+    { Sid = "InitialScaling", Effect = "Allow", Action = ["application-autoscaling:RegisterScalableTarget", "application-autoscaling:PutScalingPolicy", "application-autoscaling:TagResource"], Resource = "arn:aws:application-autoscaling:${var.region}:${var.expected_account_id}:scalable-target/*", Condition = { StringEqualsIfExists = { "application-autoscaling:service-namespace" = "ecs", "application-autoscaling:scalable-dimension" = "ecs:service:DesiredCount" } } },
+    { Sid = "ServiceLinkedRoles", Effect = "Allow", Action = ["iam:CreateServiceLinkedRole"], Resource = ["arn:aws:iam::${var.expected_account_id}:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS", "arn:aws:iam::${var.expected_account_id}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"], Condition = { StringEquals = { "iam:AWSServiceName" = ["ecs.amazonaws.com", "ecs.application-autoscaling.amazonaws.com"] } } }
+  ])
+}
+resource "aws_iam_policy" "github_runtime_setup" {
+  for_each = { for index, statements in chunklist(local.runtime_setup_statements, 6) : tostring(index) => statements }
+  name     = "nigson-${var.environment}-first-runtime-${each.key}"
+  policy   = jsonencode({ Version = "2012-10-17", Statement = each.value })
+}
+resource "aws_iam_role_policy_attachment" "github_runtime_setup" {
+  for_each   = aws_iam_policy.github_runtime_setup
+  role       = aws_iam_role.github_runtime_setup.name
+  policy_arn = each.value.arn
+}
+output "github_runtime_setup_role_arn" { value = aws_iam_role.github_runtime_setup.arn }

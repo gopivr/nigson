@@ -51,10 +51,10 @@ locals {
   azs      = slice(sort(data.aws_availability_zones.available.names), 0, 2)
   prefix   = "nigson-${var.environment}"
   registry = "${var.expected_account_id}.dkr.ecr.${var.region}.amazonaws.com"
-  operator = try(data.aws_iam_session_context.operator[0].issuer_arn, data.aws_caller_identity.current.arn)
+  operator = var.key_administrator_principal_arn != null ? var.key_administrator_principal_arn : try(data.aws_iam_session_context.operator[0].issuer_arn, data.aws_caller_identity.current.arn)
   secret_names = merge({
     for service in local.names : service => {
-      for name in setunion(toset(["migration_password", "SPRING_DATASOURCE_PASSWORD"]), lookup(var.application_secret_names, service, toset([]))) : name => "nigson/${var.environment}/${service}/${name}"
+      for name in setunion(toset(["migration_password", "SPRING_DATASOURCE_PASSWORD"]), lookup(var.application_secret_names, service, toset([])), lookup({ commerce = toset(["NIGSON_BFF_CLIENT_SECRET", "NIGSON_COMMERCE_WORKLOAD_SECRET", "NIGSON_SESSION_WRAPPED_KEY"]), experience = toset(["NIGSON_EXPERIENCE_WORKLOAD_SECRET"]), integration = toset(["NIGSON_INTEGRATION_WORKLOAD_SECRET"]) }, service, toset([]))) : name => "nigson/${var.environment}/${service}/${name}"
     }
     }, {
     # Retain existing empty TLS containers to avoid destructive foundation changes.
@@ -71,7 +71,7 @@ locals {
       port                    = name == "commerce" ? 8081 : name == "experience" ? 8082 : name == "integration" ? 8083 : 8084
       cpu                     = 1024
       memory                  = 2048
-      architecture            = "X86_64"
+      architecture            = var.cpu_architecture
       min_count               = var.environment == "prod" && contains(["commerce", "experience"], name) ? 2 : 1
       desired_count           = var.environment == "prod" && contains(["commerce", "experience"], name) ? 2 : 1
       max_count               = contains(["commerce", "experience"], name) ? 4 : 2
@@ -83,9 +83,9 @@ locals {
         APP_ENV = var.environment, NIGSON_PRODUCT_PHASE = tostring(var.product_phase)
         }, lookup(var.application_environment, name, {
       }))
-      secret_arns = {
+      secret_arns = merge({
         for alias, arn in module.secrets.secret_arns[name] : alias => arn if alias != "migration_password"
-      }
+      }, { NIGSON_DB_PASSWORD = module.secrets.secret_arns[name].SPRING_DATASOURCE_PASSWORD, NIGSON_DB_CA_PEM = module.secrets.secret_arns.identity.database_ca })
       egress = merge({
         aws_endpoints = {
           description = "Private AWS endpoints", cidr_ipv4 = var.vpc_cidr, protocol = "tcp", port = 443
@@ -263,6 +263,7 @@ module "compute" {
   database_connection_budget = 160
   cpu_target_percent         = 65
   services                   = local.services
+  provision_services         = var.activate_applications
   provision_tasks            = var.publish_task_definitions
   public_routes = { for name, route in {
     commerce     = { service = "commerce", priority = 100, path_patterns = ["/bff/*", "/api/v1/*", "/wh/*"] }
@@ -309,7 +310,7 @@ module "identity" {
   private_subnet_ids             = module.network.application_subnet_ids
   database_subnet_ids            = module.network.data_subnet_ids
   admin_cidrs                    = [var.vpc_cidr]
-  trusted_proxy_cidrs            = [for index, az in local.azs : cidrsubnet(var.vpc_cidr, 8, index)]
+  trusted_proxy_cidrs            = concat([for index, az in local.azs : cidrsubnet(var.vpc_cidr, 8, index)], [for index, az in local.azs : cidrsubnet(var.vpc_cidr, 8, 16 + index)])
   aws_endpoint_security_group_id = module.network.endpoint_security_group_id
   public_hostname                = "auth.${var.zone_name}"
   admin_hostname                 = "identity-admin.${var.zone_name}"
@@ -318,8 +319,9 @@ module "identity" {
   admin_certificate_arn          = aws_acm_certificate_validation.regional.certificate_arn
   kms_key_arn                    = module.secrets.kms_key_arn
   identity_image                 = var.publish_task_definitions ? "${local.registry}/nigson/${var.environment}/identity@${lookup(var.image_digests, "identity", "")}" : null
+  provision_service              = var.activate_identity
   provision_tasks                = var.publish_task_definitions
-  cpu_architecture               = "X86_64"
+  cpu_architecture               = var.cpu_architecture
   tls_mode                       = "generated"
   secret_refs = {
     for name in ["database_password", "database_ca"] : name => module.secrets.secret_arns.identity[name]
@@ -415,8 +417,10 @@ module "migrations" {
   region                      = var.region
   product_phase               = var.product_phase
   migration_release           = "BP${var.product_phase}"
+  permissions_boundary_arn    = "arn:aws:iam::${var.expected_account_id}:policy/nigson-${var.environment}-runtime-task-boundary"
+  database_ca_secret_arn      = module.secrets.secret_arns.identity.database_ca
   image_digest                = var.migration_image_digest
-  architecture                = "X86_64"
+  architecture                = var.cpu_architecture
   database_address            = module.database.database_address
   migration_security_group_id = module.database.migration_task_security_group_id
   kms_key_arn                 = module.secrets.kms_key_arn
@@ -447,8 +451,17 @@ output "infrastructure" {
     secret_arns                = module.secrets.secret_arns
     migration_task_definitions = try(module.migrations[0].task_definition_arns, {
     })
-    applications_activated = var.activate_applications
-    identity_activated     = var.activate_identity
+    applications_activated             = var.activate_applications
+    identity_activated                 = var.activate_identity
+    identity_bootstrap_task_definition = module.identity.bootstrap_task_definition_arn
+    identity_security_group_id         = module.identity.identity_security_group_id
+    key_administrator_principal_arn    = local.operator
+    runtime_actor_key_arn              = aws_kms_key.actor.arn
+    runtime_session_key_arn            = module.secrets.kms_key_arn
+    identity_database_address          = module.identity.dedicated_database_address
+    private_subnet_cidrs               = [for index, az in local.azs : cidrsubnet(var.vpc_cidr, 8, 16 + index)]
+    setup_task_definitions             = { for mode, task in aws_ecs_task_definition.setup : mode => task.arn }
+    setup_security_group_id            = module.database.migration_task_security_group_id
 
   }
 }
@@ -583,27 +596,29 @@ output "deployment_configuration" {
   value = {
     schema_version = 1
     variables = {
-      expected_account_id      = var.expected_account_id
-      region                   = var.region
-      environment              = var.environment
-      domain_name              = var.domain_name
-      zone_name                = var.zone_name
-      zone_id                  = var.zone_id
-      vpc_cidr                 = var.vpc_cidr
-      product_phase            = var.product_phase
-      policy_revision          = var.policy_revision
-      frontend_release_id      = var.frontend_release_id
-      log_retention_days       = var.log_retention_days
-      database_instance_class  = var.database_instance_class
-      publish_task_definitions = var.publish_task_definitions
-      activate_applications    = var.activate_applications
-      activate_identity        = var.activate_identity
-      image_digests            = var.image_digests
-      application_environment  = var.application_environment
-      application_secret_names = var.application_secret_names
-      provider_egress          = var.provider_egress
-      alert_email              = var.alert_email
-      migration_image_digest   = var.migration_image_digest
+      expected_account_id             = var.expected_account_id
+      region                          = var.region
+      environment                     = var.environment
+      domain_name                     = var.domain_name
+      zone_name                       = var.zone_name
+      zone_id                         = var.zone_id
+      vpc_cidr                        = var.vpc_cidr
+      product_phase                   = var.product_phase
+      policy_revision                 = var.policy_revision
+      frontend_release_id             = var.frontend_release_id
+      log_retention_days              = var.log_retention_days
+      database_instance_class         = var.database_instance_class
+      publish_task_definitions        = var.publish_task_definitions
+      activate_applications           = var.activate_applications
+      activate_identity               = var.activate_identity
+      image_digests                   = var.image_digests
+      application_environment         = var.application_environment
+      application_secret_names        = var.application_secret_names
+      provider_egress                 = var.provider_egress
+      alert_email                     = var.alert_email
+      migration_image_digest          = var.migration_image_digest
+      key_administrator_principal_arn = var.key_administrator_principal_arn
+      cpu_architecture                = var.cpu_architecture
     }
   }
 }

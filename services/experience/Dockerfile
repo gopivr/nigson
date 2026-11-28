@@ -59,4 +59,5 @@ COPY --from=build /workspace/services/experience/target/experience-0.1.0.jar /ap
 ENV SERVER_PORT=8082
 EXPOSE 8082
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=12 CMD ["java", "-cp", "/app/probe", "HealthProbe"]
-ENTRYPOINT ["java", "-jar", "/app/application.jar"]
+COPY --chmod=0555 infrastructure/docker/java/entrypoint.sh /app/start
+ENTRYPOINT ["/app/start"]

@@ -141,3 +141,12 @@ run "read_only_review_routes_do_not_capture_mutations" {
     error_message = "Review reads must use a method condition so POST continues to Commerce."
   }
 }
+
+run "template_only_phase_has_no_services_or_autoscaling" {
+  command = plan
+  variables { provision_services = false }
+  assert {
+    condition = length(aws_ecs_task_definition.service) > 0 && length(aws_ecs_service.service) == 0 && length(aws_appautoscaling_target.service) == 0
+    error_message = "First-deployment template phase must not create services before migrations."
+  }
+}

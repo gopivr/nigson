@@ -178,24 +178,61 @@ before making changes. Terraform retains service configuration ownership while t
 release workflow owns the deployed task revision. Configuration updates use the latest
 registered family template on the next release. See [backend release operations](runbooks/deploy.md).
 
-### Deploy fails with “One-time runtime setup is incomplete”
+### First backend deployment
 
-The foundation installation has no application ECS services or task templates.
-A successful image build alone does not create them. Repeating infrastructure
-`apply` will not activate them: that workflow explicitly rejects runtime changes.
-The deployment artifact records `PREFLIGHT_BLOCKED` and each service's readiness.
+A foundation installation has no application services. Use **Backend — AWS
+Infrastructure** with **runtime-plan**, then **runtime-apply**. Supply the same
+`runtime_configuration` path for both actions: the existing reviewed, committed,
+non-secret Terraform `.tfvars` or `.json` file under
+`infrastructure/terraform/aws/first-account/`. The example file is incomplete and
+is rejected. Do not commit secret values or use development `.env` files.
 
-Follow [first runtime setup, section 5](../infrastructure/terraform/aws/first-account/README.md#5-configure-and-activate-the-actual-application):
-prepare database roles/schemas, real app/migration secrets and Keycloak DB/TLS/client
-configuration; publish task templates with the release's immutable image digests;
-run owner migrations; then activate identity and applications through reviewed
-runtime Terraform plans against the existing first-account state. The activation
-flags are `publish_task_definitions`, `activate_identity` and `activate_applications`.
-The example tfvars file is only a shape example and does not contain a working
-runtime configuration. Never flip all three flags using only the foundation defaults.
+The workflow automatically selects the latest complete successful staging image
+publication and verifies its provenance, account, current scans, phase and CPU
+architecture. It reads the existing foundation state and preserves network,
+database and frontend inputs. Only reviewed runtime environment settings, secret
+names and provider egress may change. Destruction/replacement, unrelated resource
+changes and RDS modifications are refused. Runtime setup is staging-only and uses
+the existing infrastructure provisioner; the normal OIDC release role is unchanged.
 
-Once runtime services are healthy, rerun **Backend — Deploy Release**, selecting
-only the environment. A preflight failure has not changed services or run migrations.
+`runtime-apply` performs these phases in order:
+
+1. Create immutable application, identity and migration task definitions. No ECS
+   services or autoscaling are created yet. Both ARM64 and X86_64 publications are supported.
+2. Check that required Secrets Manager entries have current versions. Legacy
+   target TLS secrets are not required. If values are missing, it stops with their
+   names so they can be populated before resuming.
+3. Run commerce, experience and integration owner migrations once each, waiting
+   for confirmed zero exits. Database roles/schemas/passwords must already be
+   prepared using the owner database provisioning procedure; this workflow never
+   supplies RDS master credentials to application or migration tasks.
+4. Run Keycloak's isolated initial administrator bootstrap while all identity
+   nodes are stopped, then create its permanent service and wait for health.
+5. Verify the staging realm discovery endpoint over certificate-verified HTTPS.
+   If realm/client provisioning has not been completed through the private admin
+   endpoint with `scripts/identity/provision.py`, the workflow stops here with
+   backend services still absent. Configure the reviewed realm policy and resume
+   the same release. It does not invent client secrets or administrator accounts.
+6. Create and activate the three backend services and verify candidate revisions
+   are healthy. Phase 5 also includes its explicitly configured AI owner.
+
+The sanitized `backend-runtime-stage-…` artifact records migration task ARNs,
+bootstrap outcome and final status. Raw Terraform plans, state, task payloads and
+secret values are never uploaded. An ambiguous task launch/timeout is `UNKNOWN`;
+inspect ECS, CloudWatch and database changelogs before manually rerunning. There
+are no automatic mutation retries or destructive cleanup on failure.
+
+Partial setup retains its state. After identity activation, the same cohort can
+resume without rerunning the offline administrator bootstrap or stopping identity.
+Avoid publishing another staging cohort during partial setup. Changing the
+selected release during partial identity setup is refused until schema
+compatibility is reviewed; the CLI can explicitly resume the original receipt. Once applications are activated, use normal
+**Backend — Deploy Release**, selecting only the environment. That workflow and
+infrastructure setup share a concurrency group to prevent concurrent promotions.
+
+No successful cloud activation is implied by a local test or a successful plan.
+Runtime settings, populated secrets, owner database setup and realm/client
+configuration are required before application acceptance.
 
 ### Identity TLS is provisioned automatically
 

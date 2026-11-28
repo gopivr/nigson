@@ -141,7 +141,7 @@ publish_and_scan() {
     echo "Image ${repository}:${image_tag} has ${critical} critical and ${high} high findings. Download the backend-image-scan-findings artifact for CVE/package details." >&2
     return 1
   fi
-  local component=${repository##*/}
+  local component=${5:-${repository##*/}}
   [[ "$target" != migration ]] || component=migration
   jq -n --arg component "$component" --arg image "${registry}/${repository}@${digest}" \
       --arg scan_digest "$scan_digest" \
@@ -161,6 +161,7 @@ if [[ "$product_phase" == "5" ]]; then
   publish_and_scan "nigson/${environment}/ai" services/ai/Dockerfile "" "$tag"
 fi
 publish_and_scan "nigson/${environment}/identity" infrastructure/docker/keycloak/Dockerfile "" "$tag"
+publish_and_scan "nigson/${environment}/identity" infrastructure/docker/keycloak/Operations.Dockerfile "" "${tag}-operations" operations
 
 # Publish one complete cohort only after every required image passes its scan.
 jq -s --arg environment "$environment" --arg account_id "$account_id" --arg region "$region" \

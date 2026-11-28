@@ -145,8 +145,12 @@ The selected GitHub Environment supplies `AWS_REGION` and `AWS_EXPECTED_ACCOUNT_
 production requires its own approval. Bootstrap creates the OIDC role automatically.
 Rerun bootstrap once to install the updated task-registration and migration permissions.
 
-Before first deployment, provision healthy active services, reviewed task-family
-templates, real secret values and private migration networking/security groups.
+For first deployment use **Backend — AWS Infrastructure → runtime-plan**, then
+**runtime-apply**, with the reviewed runtime configuration path. See
+[the first-deployment procedure](../DEPLOYMENT.md#first-backend-deployment).
+It provisions task templates, runs migrations, bootstraps identity and creates
+services in order. Real secret values, owner database provisioning and approved
+realm/client settings are still required.
 Foundation-only infrastructure is inactive and fails deployment preflight before writes.
 The workflow checks account, release provenance, complete image cohort, architecture
 and fresh ECR scan results. It preserves each latest task template's configuration,

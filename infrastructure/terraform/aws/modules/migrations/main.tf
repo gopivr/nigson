@@ -25,10 +25,11 @@ resource "aws_cloudwatch_log_group" "migration" {
 }
 
 resource "aws_iam_role" "execution" {
-  for_each           = var.migration_password_secret_arns
-  name               = "nigson-${var.environment}-${each.key}-migration-execution"
-  assume_role_policy = jsonencode({ Version = "2012-10-17", Statement = [{ Effect = "Allow", Principal = { Service = "ecs-tasks.amazonaws.com" }, Action = "sts:AssumeRole" }] })
-  tags               = merge(local.tags, { Owner = each.key, Role = "migration-execution" })
+  for_each             = var.migration_password_secret_arns
+  name                 = "nigson-${var.environment}-${each.key}-migration-execution"
+  permissions_boundary = var.permissions_boundary_arn
+  assume_role_policy   = jsonencode({ Version = "2012-10-17", Statement = [{ Effect = "Allow", Principal = { Service = "ecs-tasks.amazonaws.com" }, Action = "sts:AssumeRole" }] })
+  tags                 = merge(local.tags, { Owner = each.key, Role = "migration-execution" })
 }
 
 resource "aws_iam_role_policy" "execution" {
@@ -39,16 +40,17 @@ resource "aws_iam_role_policy" "execution" {
     { Effect = "Allow", Action = ["ecr:GetAuthorizationToken"], Resource = "*" },
     { Effect = "Allow", Action = ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"], Resource = var.commerce_repository_arn },
     { Effect = "Allow", Action = ["logs:CreateLogStream", "logs:PutLogEvents"], Resource = "${aws_cloudwatch_log_group.migration.arn}:*" },
-    { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = [each.value] },
-    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn, Condition = { StringEquals = { "kms:ViaService" = "secretsmanager.${data.aws_region.current.region}.amazonaws.com" }, "ForAnyValue:StringEquals" = { "kms:EncryptionContext:SecretARN" = [each.value] } } }
+    { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = compact([each.value, var.database_ca_secret_arn]) },
+    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn, Condition = { StringEquals = { "kms:ViaService" = "secretsmanager.${data.aws_region.current.region}.amazonaws.com" }, "ForAnyValue:StringEquals" = { "kms:EncryptionContext:SecretARN" = compact([each.value, var.database_ca_secret_arn]) } } }
   ] })
 }
 
 resource "aws_iam_role" "task" {
-  for_each           = var.migration_password_secret_arns
-  name               = "nigson-${var.environment}-${each.key}-migration-task"
-  assume_role_policy = aws_iam_role.execution[each.key].assume_role_policy
-  tags               = merge(local.tags, { Owner = each.key, Role = "migration-task" })
+  for_each             = var.migration_password_secret_arns
+  name                 = "nigson-${var.environment}-${each.key}-migration-task"
+  permissions_boundary = var.permissions_boundary_arn
+  assume_role_policy   = aws_iam_role.execution[each.key].assume_role_policy
+  tags                 = merge(local.tags, { Owner = each.key, Role = "migration-task" })
 }
 
 resource "aws_ecs_task_definition" "migration" {
@@ -78,7 +80,7 @@ resource "aws_ecs_task_definition" "migration" {
       MIGRATION_JDBC_URL      = "jdbc:postgresql://${var.database_address}:5432/nigson?sslmode=verify-full",
       MIGRATION_ROOT          = "/app/source"
     } : { name = name, value = value }]
-    secrets          = [{ name = "MIGRATION_PASSWORD", valueFrom = each.value }]
+    secrets          = concat([{ name = "MIGRATION_PASSWORD", valueFrom = each.value }], var.database_ca_secret_arn == null ? [] : [{ name = "MIGRATION_DB_CA_PEM", valueFrom = var.database_ca_secret_arn }])
     mountPoints      = [{ sourceVolume = "tmp", containerPath = "/tmp", readOnly = false }]
     linuxParameters  = { capabilities = { drop = ["ALL"] }, initProcessEnabled = true }
     logConfiguration = { logDriver = "awslogs", options = { awslogs-group = aws_cloudwatch_log_group.migration.name, awslogs-region = data.aws_region.current.region, awslogs-stream-prefix = each.key } }

@@ -12,8 +12,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 
 @Configuration(proxyBeanMethods = false)
 public class FoundationConfiguration {
-    public FoundationConfiguration(@Value("${APP_ENV}") String environment) {
-        if (!java.util.Set.of("local", "test").contains(environment)) {
+    public FoundationConfiguration(@Value("${APP_ENV}") String environment, @Value("${NIGSON_SECURITY_ENABLED:false}") boolean enabled) {
+        if (!java.util.Set.of("local", "test").contains(environment) && (!enabled || !java.util.Set.of("dev", "qa", "stage", "prod").contains(environment))) {
             throw new IllegalArgumentException("Foundation-only runtime requires APP_ENV=local|test");
         }
     }

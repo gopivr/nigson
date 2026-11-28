@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: Bootstrap state and DNS, plan the platform, or apply staging infrastructure
+        description: Bootstrap/plan/apply foundation, or runtime-plan/runtime-apply for first deployment
         required: true
         type: choice
-        options: [bootstrap, plan, apply]
+        options: [bootstrap, plan, apply, runtime-plan, runtime-apply]
         default: bootstrap
 
 permissions:
   contents: read
 
 concurrency:
-  group: nigson-infrastructure-stage
+  group: nigson-stage-deployment
   cancel-in-progress: false
 
 jobs:
@@ -23,6 +23,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     environment: stage
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      architecture: ${{ steps.foundation.outputs.architecture }}
+      product_phase: ${{ steps.foundation.outputs.product_phase }}
     env:
       TF_IN_AUTOMATION: 'true'
       TF_INPUT: 'false'
@@ -55,5 +61,55 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           mask-aws-account-id: true
           unset-current-credentials: true
-      - name: Bootstrap or provision the first-account platform
-        run: python3 scripts/infra/first-account-pipeline.py "$BOOTSTRAP_ACTION"
+      - id: release
+        name: Select latest staging release for first runtime setup
+        if: startsWith(inputs.action, 'runtime-')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: python3 scripts/infra/select-backend-release.py stage
+      - name: Download the selected immutable runtime receipt
+        if: startsWith(inputs.action, 'runtime-')
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.release.outputs.run_id }}
+          artifact-ids: ${{ steps.release.outputs.artifact_id }}
+          merge-multiple: true
+          path: .build/selected-backend-release
+      - id: foundation
+        name: Bootstrap or provision the first-account platform
+        if: ${{ !startsWith(inputs.action, 'runtime-') }}
+        run: |
+          set -euo pipefail
+          python3 scripts/infra/first-account-pipeline.py "$BOOTSTRAP_ACTION"
+          if [[ "$BOOTSTRAP_ACTION" == bootstrap ]]; then
+            python3 scripts/infra/first-account-pipeline.py apply
+          fi
+      - name: Provision tasks, migrate, bootstrap identity and activate services
+        if: startsWith(inputs.action, 'runtime-')
+        env:
+          SOURCE_COMMIT: ${{ steps.release.outputs.source_commit }}
+          SOURCE_RUN_ID: ${{ steps.release.outputs.run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ steps.release.outputs.source_run_attempt }}
+        run: python3 scripts/infra/setup-first-account-runtime.py "$BOOTSTRAP_ACTION" --receipt .build/selected-backend-release/release.json
+      - name: Retain sanitized first-deployment outcome
+        if: always() && startsWith(inputs.action, 'runtime-')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: backend-runtime-stage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .build/backend-deploy/deployment.json
+          if-no-files-found: ignore
+          retention-days: 30
+  publish-images:
+    needs: first-account
+    if: inputs.action == 'bootstrap'
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/backend-images-publish.yml
+    with:
+      environment: stage
+      architecture: ${{ needs.first-account.outputs.architecture }}
+      product_phase: ${{ needs.first-account.outputs.product_phase }}
+    secrets: inherit

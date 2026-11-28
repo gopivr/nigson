@@ -148,3 +148,18 @@ variable "migration_image_digest" {
     error_message = "Publish the separate migration image before provisioning migration task definitions."
   }
 }
+
+variable "cpu_architecture" {
+  type    = string
+  default = "X86_64"
+  validation {
+    condition     = contains(["X86_64", "ARM64"], var.cpu_architecture)
+    error_message = "Use the architecture of the selected immutable release."
+  }
+}
+
+variable "key_administrator_principal_arn" {
+  type        = string
+  default     = null
+  description = "Preserve the foundation provisioner's principal when runtime setup uses its separate OIDC role."
+}

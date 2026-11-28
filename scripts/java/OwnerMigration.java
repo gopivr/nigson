@@ -23,7 +23,16 @@ public class OwnerMigration {
         String root = required("MIGRATION_ROOT");
         String changelog = owner.equals("ai") ? "database/changelog/ai/master.yaml"
                 : "services/" + owner + "/src/main/resources/db/changelog/master.yaml";
-        try (var connection = DriverManager.getConnection(url, username, password);
+        var properties = new java.util.Properties();
+        properties.setProperty("user", username); properties.setProperty("password", password);
+        String ca = System.getenv("MIGRATION_DB_CA_PEM");
+        if (ca != null && !ca.isBlank()) {
+            var path = java.nio.file.Files.createTempFile("nigson-rds-ca-", ".pem");
+            java.nio.file.Files.setPosixFilePermissions(path, java.nio.file.attribute.PosixFilePermissions.fromString("rw-------"));
+            java.nio.file.Files.writeString(path, ca); path.toFile().deleteOnExit();
+            properties.setProperty("sslrootcert", path.toString());
+        }
+        try (var connection = DriverManager.getConnection(url, properties);
              var resources = new DirectoryResourceAccessor(Path.of(root))) {
             var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
             database.setDefaultSchemaName(owner);

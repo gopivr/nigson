@@ -313,7 +313,7 @@ resource "aws_ecs_task_definition" "identity" {
   tags = local.tags
 }
 resource "aws_ecs_service" "identity" {
-  count                              = var.provision_tasks ? 1 : 0
+  count                              = var.provision_tasks && var.provision_service ? 1 : 0
   name                               = local.name
   cluster                            = var.ecs_cluster_arn
   task_definition                    = aws_ecs_task_definition.identity[0].arn
@@ -511,3 +511,6 @@ output "public_alb_zone_id" { value = aws_lb.public.zone_id }
 output "private_admin_alb_zone_id" { value = aws_lb.admin.zone_id }
 
 output "target_tls_mode" { value = var.tls_mode }
+
+output "admin_security_group_id" { value = aws_security_group.admin.id }
+output "database_security_group_id" { value = aws_security_group.database.id }

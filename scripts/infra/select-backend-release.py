@@ -36,7 +36,9 @@ def select_release(get, environment, branch):
     for page in range(1, 11):
         query = urllib.parse.urlencode({'branch': branch, 'event': 'workflow_dispatch',
                                        'status': 'success', 'per_page': 100, 'page': page})
-        runs = get('actions/workflows/backend-images-publish.yml/runs?' + query).get('workflow_runs', [])
+        direct = get('actions/workflows/backend-images-publish.yml/runs?' + query).get('workflow_runs', [])
+        bootstrap = get('actions/workflows/backend-aws-infrastructure.yml/runs?' + query).get('workflow_runs', [])
+        runs = sorted({str(r['id']):r for r in direct+bootstrap}.values(), key=lambda r:int(r['id']), reverse=True)
         for run in runs:
             if (run.get('conclusion') != 'success' or run.get('status') != 'completed' or
                     run.get('event') != 'workflow_dispatch' or run.get('head_branch') != branch):
@@ -62,7 +64,7 @@ def select_release(get, environment, branch):
                 raise ValueError('Invalid immutable artifact ID')
             return {'artifact_id': artifact_id, 'run_id': run_id,
                     'source_commit': commit, 'source_run_attempt': attempt}
-        if len(runs) < 100:
+        if len(direct) < 100 and len(bootstrap) < 100:
             break
     raise ValueError('No complete successful release for this environment; run Backend — Build and Publish Images with the updated workflow first')
 

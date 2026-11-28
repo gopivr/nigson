@@ -157,3 +157,9 @@ variable "provision_tasks" {
   default     = true
   description = "False bootstraps ECR/network/IAM/ALB without placeholder images or ECS tasks."
 }
+
+variable "provision_services" {
+  type        = bool
+  default     = true
+  description = "Allow template-only first-deployment phases without creating ECS services."
+}

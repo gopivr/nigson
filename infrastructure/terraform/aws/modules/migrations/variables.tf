@@ -75,3 +75,13 @@ variable "migration_password_secret_arns" {
     error_message = "One migration credential secret per active owner is required; AI is BP5-only."
   }
 }
+
+variable "database_ca_secret_arn" {
+  type    = string
+  default = null
+}
+
+variable "permissions_boundary_arn" {
+  type    = string
+  default = null
+}

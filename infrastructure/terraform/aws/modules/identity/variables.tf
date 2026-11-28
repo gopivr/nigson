@@ -181,3 +181,9 @@ variable "provision_tasks" {
   default     = true
   description = "False creates identity infrastructure/ECR only; no placeholder image or bootstrap task."
 }
+
+variable "provision_service" {
+  type        = bool
+  default     = true
+  description = "Allow bootstrap/task templates to exist before starting the identity service."
+}

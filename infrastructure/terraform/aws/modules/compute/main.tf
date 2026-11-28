@@ -12,7 +12,7 @@ locals {
     ManagedBy   = "terraform"
     Policy      = var.policy_revision
   }
-  enabled_services = { for name, service in var.services : name => service if service.enabled && var.provision_tasks }
+  enabled_services = { for name, service in var.services : name => service if service.enabled && var.provision_tasks && var.provision_services }
   public_services  = { for name, service in var.services : name => service if service.public }
   route_rules = merge({}, [for route_name, route in var.public_routes : {
     for pattern_index, pattern in route.path_patterns : "${route_name}-${pattern_index}" => {
@@ -319,7 +319,7 @@ resource "aws_ecs_task_definition" "service" {
 }
 
 resource "aws_ecs_service" "service" {
-  for_each                           = var.provision_tasks ? var.services : {}
+  for_each                           = var.provision_tasks && var.provision_services ? var.services : {}
   name                               = "nigson-${var.environment}-${each.key}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.service[each.key].arn
@@ -388,3 +388,6 @@ output "private_service_names" { value = { for name, service in aws_service_disc
 output "load_balancer_zone_id" { value = aws_lb.public.zone_id }
 
 output "log_groups" { value = { for name, group in aws_cloudwatch_log_group.service : name => group.name } }
+
+output "service_names" { value = { for name, service in aws_ecs_service.service : name => service.name } }
+output "task_definition_arns" { value = { for name, task in aws_ecs_task_definition.service : name => task.arn } }

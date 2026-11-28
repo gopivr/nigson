@@ -20,7 +20,7 @@ jobs:
   deploy:
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 120
     environment: ${{ inputs.environment }}
     permissions:
       contents: read
@@ -54,6 +54,7 @@ jobs:
           [[ "$AWS_REGION" =~ ^[a-z]{2}(-gov)?-[a-z]+-[0-9]+$ ]]
           [[ "$AWS_EXPECTED_ACCOUNT_ID" =~ ^[0-9]{12}$ ]]
           echo "role_arn=arn:aws:iam::${AWS_EXPECTED_ACCOUNT_ID}:role/nigson-${TARGET_ENVIRONMENT}-github-deploy" >> "$GITHUB_OUTPUT"
+          echo "setup_role_arn=arn:aws:iam::${AWS_EXPECTED_ACCOUNT_ID}:role/nigson-${TARGET_ENVIRONMENT}-github-runtime-setup" >> "$GITHUB_OUTPUT"
       - name: Obtain short-lived target deployment credentials through OIDC
         uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
         with:
@@ -61,7 +62,37 @@ jobs:
           role-session-name: nigson-${{ inputs.environment }}-deploy-${{ github.run_id }}
           role-duration-seconds: 5400
           aws-region: ${{ env.AWS_REGION }}
+      - id: runtime
+        name: Detect first deployment from ECS state
+        env:
+          SOURCE_COMMIT: ${{ steps.release.outputs.source_commit }}
+          SOURCE_RUN_ID: ${{ steps.release.outputs.run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ steps.release.outputs.source_run_attempt }}
+        run: python3 scripts/infra/setup-first-account-runtime.py detect --receipt .build/selected-backend-release/release.json
+      - name: Install Terraform for initial provisioning
+        if: steps.runtime.outputs.required == 'true'
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+        with:
+          terraform_version: 1.12.2
+          terraform_wrapper: false
+      - name: Obtain short-lived first-setup credentials through OIDC
+        if: steps.runtime.outputs.required == 'true'
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df
+        with:
+          role-to-assume: ${{ steps.configuration.outputs.setup_role_arn }}
+          role-session-name: nigson-${{ inputs.environment }}-setup-${{ github.run_id }}
+          role-duration-seconds: 7200
+          aws-region: ${{ env.AWS_REGION }}
+          unset-current-credentials: true
+      - name: Provision initial runtime from the existing Terraform state
+        if: steps.runtime.outputs.required == 'true'
+        env:
+          SOURCE_COMMIT: ${{ steps.release.outputs.source_commit }}
+          SOURCE_RUN_ID: ${{ steps.release.outputs.run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ steps.release.outputs.source_run_attempt }}
+        run: python3 scripts/infra/setup-first-account-runtime.py runtime-apply --receipt .build/selected-backend-release/release.json
       - name: Migrate and deploy the latest qualified images
+        if: steps.runtime.outputs.required != 'true'
         env:
           SOURCE_COMMIT: ${{ steps.release.outputs.source_commit }}
           SOURCE_RUN_ID: ${{ steps.release.outputs.run_id }}

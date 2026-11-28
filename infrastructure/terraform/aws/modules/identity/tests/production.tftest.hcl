@@ -178,3 +178,12 @@ run "legacy_tls_requires_certificate_pair" {
   }
   expect_failures = [var.tls_mode]
 }
+
+run "bootstrap_before_identity_service_creation" {
+  command = plan
+  variables { provision_service = false }
+  assert {
+    condition = length(aws_ecs_task_definition.identity) == 1 && length(aws_ecs_task_definition.bootstrap) == 1 && length(aws_ecs_service.identity) == 0
+    error_message = "Identity task/bootstrap definitions must be provisionable without starting a permanent service."
+  }
+}

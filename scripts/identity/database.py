@@ -25,7 +25,13 @@ def bootstrap(admin_dsn: str, password: str, environment: str):
             conn.execute("CREATE DATABASE keycloak OWNER nigson_identity ENCODING 'UTF8'")
         owner = conn.execute("SELECT pg_get_userbyid(datdba) FROM pg_database WHERE datname='keycloak'").fetchone()[0]
         if owner != "nigson_identity":
-            raise ValueError("IDENTITY_DATABASE_OWNER_DRIFT")
+            # Adopt only RDS's empty initial database owned by its provisioning user.
+            if owner != info.get("user"):
+                raise ValueError("IDENTITY_DATABASE_OWNER_DRIFT")
+            with psycopg.connect(**{**info, "dbname":"keycloak"}, autocommit=True, connect_timeout=5) as initial:
+                if initial.execute("SELECT EXISTS(SELECT 1 FROM pg_tables WHERE schemaname NOT IN ('pg_catalog','information_schema'))").fetchone()[0]:
+                    raise ValueError("IDENTITY_DATABASE_OWNER_DRIFT")
+            conn.execute("ALTER DATABASE keycloak OWNER TO nigson_identity")
         conn.execute("REVOKE CONNECT,TEMPORARY ON DATABASE keycloak FROM PUBLIC")
         conn.execute("GRANT CONNECT,TEMPORARY ON DATABASE keycloak TO nigson_identity")
     private = {**info, "dbname": "keycloak", "user": "nigson_identity", "password": password}
