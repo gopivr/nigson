@@ -1,4 +1,11 @@
 mock_provider "aws" {}
+mock_provider "aws" {
+  alias = "policy_chunks"
+  override_during = plan
+  mock_resource "aws_iam_policy" {
+    defaults = { arn = "arn:aws:iam::123456789012:policy/mock-runtime-policy" }
+  }
+}
 variables {
   expected_account_id = "123456789012"
   region              = "eu-west-1"
@@ -149,5 +156,35 @@ run "production_deployer_does_not_share_staging_scope" {
   assert {
     condition     = aws_iam_role.github_deploy.name == "nigson-prod-github-deploy" && jsondecode(aws_iam_role.github_deploy.assume_role_policy).Statement[0].Condition.StringEquals["token.actions.githubusercontent.com:sub"] == ["repo:gopivr/nigson:environment:prod"] && !strcontains(aws_iam_role_policy.github_deploy.policy, "nigson-stage")
     error_message = "Production must use its own role, trust subject and resource scope."
+  }
+}
+
+run "runtime_policy_chunks_preserve_statements_and_aws_limits" {
+  command = plan
+  override_resource {
+    target = aws_s3_bucket.state
+    override_during = plan
+    values = { arn = "arn:aws:s3:::nigson-123456789012-eu-west-1-terraform-state" }
+  }
+  override_resource {
+    target = aws_iam_policy.runtime_task_boundary
+    override_during = plan
+    values = { arn = "arn:aws:iam::123456789012:policy/nigson-stage-runtime-task-boundary" }
+  }
+  providers = { aws = aws.policy_chunks }
+  variables {
+    github_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"
+  }
+  assert {
+    condition = flatten([for index in range(length(aws_iam_policy.github_runtime_setup)) : [for statement in jsondecode(aws_iam_policy.github_runtime_setup[tostring(index)].policy).Statement : jsonencode(statement)]]) == [for statement in local.runtime_setup_statements : jsonencode(statement)]
+    error_message = "Chunking must preserve every heterogeneous IAM statement exactly once and in order."
+  }
+  assert {
+    condition = length(aws_iam_policy.github_runtime_setup) <= 10 && alltrue([for policy in aws_iam_policy.github_runtime_setup : length(policy.policy) <= 6144 && length(jsondecode(policy.policy).Statement) <= 6])
+    error_message = "Runtime policies must respect AWS's managed-policy size and role attachment limits."
+  }
+  assert {
+    condition = toset(keys(aws_iam_role_policy_attachment.github_runtime_setup)) == toset(keys(aws_iam_policy.github_runtime_setup))
+    error_message = "Every generated runtime policy must be attached to its dedicated setup role."
   }
 }

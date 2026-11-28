@@ -347,9 +347,10 @@ locals {
   ])
 }
 resource "aws_iam_policy" "github_runtime_setup" {
-  for_each = { for index, statements in chunklist(local.runtime_setup_statements, 6) : tostring(index) => statements }
+  # Chunk homogeneous indices: IAM statements have heterogeneous object types.
+  for_each = { for index, indices in chunklist(range(length(local.runtime_setup_statements)), 6) : tostring(index) => indices }
   name     = "nigson-${var.environment}-first-runtime-${each.key}"
-  policy   = jsonencode({ Version = "2012-10-17", Statement = each.value })
+  policy   = jsonencode({ Version = "2012-10-17", Statement = [for index in each.value : local.runtime_setup_statements[index]] })
 }
 resource "aws_iam_role_policy_attachment" "github_runtime_setup" {
   for_each   = aws_iam_policy.github_runtime_setup
