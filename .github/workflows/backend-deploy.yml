@@ -37,7 +37,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-        run: python3 scripts/infra/select-backend-release.py "$TARGET_ENVIRONMENT"
+        run: python3 scripts/infra/select-backend-release.py "$TARGET_ENVIRONMENT" --require-operations
       - name: Download the selected immutable release artifact
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:

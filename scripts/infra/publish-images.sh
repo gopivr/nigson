@@ -168,10 +168,12 @@ jq -s --arg environment "$environment" --arg account_id "$account_id" --arg regi
   --arg architecture "$architecture" --arg source_commit "$commit_sha" \
   --arg source_run_id "${GITHUB_RUN_ID:-local}" --arg source_run_attempt "${GITHUB_RUN_ATTEMPT:-1}" \
   --argjson product_phase "$product_phase" '
-  {schema_version:1,environment:$environment,account_id:$account_id,region:$region,
+  {schema_version:2,environment:$environment,account_id:$account_id,region:$region,
    architecture:$architecture,source_commit:$source_commit,source_run_id:$source_run_id,
    source_run_attempt:$source_run_attempt,product_phase:$product_phase,
    components:(map({key:.component,value:del(.component)}) | from_entries)}
 ' "$scan_work"/component-*.json > "$release_file"
+# V2 publication guarantees the operations image needed for first-account setup.
+jq -e '.components | has("commerce") and has("experience") and has("integration") and has("identity") and has("migration") and has("operations")' "$release_file" >/dev/null
 
 printf '\nAll published images target ECS `%s`; set each task definition architecture to `%s` and use the reported immutable digest. Product phase `%s`.\n' "$architecture" "$ecs_architecture" "$product_phase" >> "$summary"

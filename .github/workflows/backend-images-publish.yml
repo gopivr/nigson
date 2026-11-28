@@ -92,7 +92,7 @@ jobs:
       - name: Publish the complete deployable image release
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: backend-release-${{ inputs.environment }}-${{ github.sha }}-${{ github.run_attempt }}
+          name: backend-release-v2-${{ inputs.environment }}-${{ github.sha }}-${{ github.run_attempt }}
           path: .build/backend-release/release.json
           if-no-files-found: error
           retention-days: 30

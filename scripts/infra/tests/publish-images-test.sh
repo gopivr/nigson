@@ -98,7 +98,7 @@ run_case() {
   PATH="$temporary_root/bin:$PATH" \
     "$repo_root/scripts/infra/publish-images.sh" stage arm64 "$phase" 123456789012 us-east-1
 
-  jq -e --argjson phase "$phase" '.schema_version == 1 and .environment == "stage" and .product_phase == $phase and .architecture == "arm64" and (.components | has("commerce") and has("experience") and has("integration") and has("identity") and has("migration"))' "$temporary_root/workspace-$phase/.build/backend-release/release.json" >/dev/null
+  jq -e --argjson phase "$phase" '.schema_version == 2 and .environment == "stage" and .product_phase == $phase and .architecture == "arm64" and (.components | has("commerce") and has("experience") and has("integration") and has("identity") and has("migration") and has("operations"))' "$temporary_root/workspace-$phase/.build/backend-release/release.json" >/dev/null
   if [[ "$expect_ai" == "1" ]]; then
     rg -q 'nigson/stage/ai' "$summary"
   elif rg -q 'nigson/stage/ai' "$summary"; then

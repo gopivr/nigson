@@ -18,7 +18,7 @@ def validate_release(release, environment, account, region, commit, run_id, atte
         raise ValueError('Invalid deployment account or region')
     required = {'schema_version', 'environment', 'account_id', 'region', 'architecture',
                 'source_commit', 'source_run_id', 'source_run_attempt', 'product_phase', 'components'}
-    if not isinstance(release, dict) or set(release) != required or type(release['schema_version']) is not int or release['schema_version'] != 1:
+    if not isinstance(release, dict) or set(release) != required or type(release['schema_version']) is not int or release['schema_version'] not in {1, 2}:
         raise ValueError('Unsupported or incomplete release artifact')
     if not str(run_id).isdigit() or not str(attempt).isdigit():
         raise ValueError('Expected immutable publication run metadata')
@@ -33,6 +33,8 @@ def validate_release(release, environment, account, region, commit, run_id, atte
         components.add('ai')
     if not isinstance(release['components'], dict) or set(release['components']) not in [components, components | {'operations'}]:
         raise ValueError('Release must contain the complete environment image cohort')
+    if release['schema_version'] == 2 and set(release['components']) != components | {'operations'}:
+        raise ValueError('V2 release must include the scan-qualified operations image; publish images again')
     for component, item in release['components'].items():
         repository = 'commerce' if component == 'migration' else ('identity' if component == 'operations' else component)
         prefix = f'{account}.dkr.ecr.{region}.amazonaws.com/nigson/{environment}/{repository}@'

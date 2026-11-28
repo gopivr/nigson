@@ -213,6 +213,8 @@ class RuntimeSetup:
         receipt['status'] = 'SUCCEEDED'; runner.save()
 
     def run(self):
+        if 'operations' not in self.release['components']:
+            raise ValueError('Publish a new complete image release including the scan-qualified operations image before initial setup')
         self.pipeline.prepare_bootstrap()
         bootstrap = json.loads(self.pipeline.tf(self.pipeline.bootstrap, 'output', '-json', 'configuration', capture=True))
         inputs, backend = infra.inputs_module.render(bootstrap)
@@ -226,8 +228,6 @@ class RuntimeSetup:
             raise ValueError('Apply foundation infrastructure first')
         if self.applied['activate_applications']:
             raise ValueError('Applications already activated; use Backend — Deploy Release')
-        if 'operations' not in self.release['components']:
-            raise ValueError('Publish a new complete image release including the scan-qualified operations image before initial setup')
         infrastructure = state['values']['outputs']['infrastructure']['value']
         self.runner = deploy.Deployer(self.release,self.aws,self.pipeline.root/'.build/backend-deploy')
         runner = self.runner

@@ -295,3 +295,61 @@ class SelectionTests(unittest.TestCase):
             if '/artifacts?' not in path:return {'workflow_runs':[{'id':123,'head_sha':COMMIT,'status':'completed','conclusion':'success','head_branch':'main','event':'workflow_dispatch'}]}
             return {'artifacts':[{'id':12,'name':f'backend-release-stage-{COMMIT}-1','expired':True}]}
         with self.assertRaisesRegex(ValueError,'expired'):S.select_release(get,'stage','main')
+
+
+class OperationsReleaseTests(unittest.TestCase):
+    def test_v2_receipt_requires_a_qualified_identity_operations_image(self):
+        value=release();value['schema_version']=2
+        with self.assertRaisesRegex(ValueError,'operations image'):
+            D.validate_release(value,'stage',ACCOUNT,REGION,COMMIT,'123','1')
+        value['components']['operations']=dict(value['components']['identity'])
+        self.assertEqual(D.validate_release(value,'stage',ACCOUNT,REGION,COMMIT,'123','1'),value)
+        value['components']['operations']['high']=1
+        with self.assertRaisesRegex(ValueError,'Unqualified'):
+            D.validate_release(value,'stage',ACCOUNT,REGION,COMMIT,'123','1')
+
+    @staticmethod
+    def publication(run_id, commit=COMMIT):
+        return {'id':run_id,'head_sha':commit,'run_attempt':1,'status':'completed','conclusion':'success','head_branch':'main','event':'workflow_dispatch'}
+
+    def test_runtime_selection_skips_legacy_cohort_and_pins_latest_compatible_artifact(self):
+        def get(path):
+            if '/artifacts?' not in path:
+                return {'workflow_runs':[self.publication(124,'b'*40),self.publication(123)]}
+            if '/124/' in path:return {'artifacts':[{'id':21,'name':f'backend-release-stage-{"b"*40}-1','expired':False}]}
+            return {'artifacts':[{'id':22,'name':f'backend-release-v2-stage-{COMMIT}-1','expired':False}]}
+        self.assertEqual(S.select_release(get,'stage','main',require_operations=True)['artifact_id'],'22')
+        self.assertEqual(S.select_release(get,'stage','main')['artifact_id'],'21')
+
+    def test_legacy_only_publication_explains_new_successful_build_is_required(self):
+        def get(path):
+            if '/artifacts?' not in path:return {'workflow_runs':[self.publication(123)]}
+            return {'artifacts':[{'id':22,'name':f'backend-release-stage-{COMMIT}-1','expired':False}]}
+        with self.assertRaisesRegex(ValueError,'Run Backend — Build and Publish Images on the current default branch'):
+            S.select_release(get,'stage','main',require_operations=True)
+
+    def test_expired_v2_artifact_is_not_replaced_by_a_legacy_cohort(self):
+        def get(path):
+            if '/artifacts?' not in path:return {'workflow_runs':[self.publication(123)]}
+            return {'artifacts':[{'id':22,'name':f'backend-release-v2-stage-{COMMIT}-1','expired':True},
+                                  {'id':21,'name':f'backend-release-stage-{COMMIT}-1','expired':False}]}
+        with self.assertRaisesRegex(ValueError,'expired'):
+            S.select_release(get,'stage','main',require_operations=True)
+
+    def test_v2_is_preferred_when_both_artifact_versions_exist_on_one_run(self):
+        def get(path):
+            if '/artifacts?' not in path:return {'workflow_runs':[self.publication(123)]}
+            return {'artifacts':[{'id':22,'name':f'backend-release-v2-stage-{COMMIT}-1','expired':False},
+                                  {'id':21,'name':f'backend-release-stage-{COMMIT}-1','expired':False}]}
+        self.assertEqual(S.select_release(get,'stage','main')['artifact_id'],'22')
+
+    def test_pagination_across_direct_and_bootstrap_builds_keeps_global_latest_order(self):
+        def get(path):
+            if path.startswith('actions/workflows/backend-images-publish.yml/'):
+                return {'workflow_runs':[self.publication(i) for i in range(400,300,-1)] if path.endswith('&page=1') else [self.publication(200)]}
+            if path.startswith('actions/workflows/backend-aws-infrastructure.yml/'):
+                return {'workflow_runs':[self.publication(150)]}
+            run_id=int(path.split('/')[2])
+            prefix='backend-release-v2' if run_id in {150,200} else 'backend-release'
+            return {'artifacts':[{'id':run_id*10,'name':f'{prefix}-stage-{COMMIT}-1','expired':False}]}
+        self.assertEqual(S.select_release(get,'stage','main',require_operations=True)['run_id'],'200')

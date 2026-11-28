@@ -67,6 +67,7 @@ raise 'bootstrap must use staging environment' unless job['environment'] == 'sta
 raise 'bootstrap must use default-branch code' unless job['if'].include?('github.event.repository.default_branch')
 raise 'account must come from the documented secret' unless job['env']['AWS_EXPECTED_ACCOUNT_ID'] == '${{ secrets.AWS_ACCOUNT_ID }}'
 raise 'do not upload Terraform state/plan artifacts' if job['steps'].any? { |step| step.fetch('uses', '').include?('upload-artifact') && step.dig('with', 'path') != '.build/backend-deploy/deployment.json' }
+raise 'first runtime setup must select operations-ready releases' unless job['steps'].find { |step| step['id'] == 'release' }['run'].include?('--require-operations')
 raise 'runtime artifact lookup requires read-only Actions access' unless job['permissions'] == {'contents' => 'read', 'actions' => 'read'}
 raise 'foundation must not run in runtime actions' unless job['steps'].find { |s| s['name'] == 'Bootstrap or provision the first-account platform' }['if'].include?('!startsWith')
 raise 'do not interpolate dispatch input into shell code' if job['steps'].any? { |step| step.fetch('run', '').include?('${{ inputs.') }
@@ -91,7 +92,7 @@ raise 'publication must use the selected attestation builder' unless publication
 report = job['steps'].find { |s| s.dig('with', 'path') == '.build/image-scans/*.json' }
 raise 'vulnerability details must survive gate failures without exporting other files' unless report && report['if'] == 'always()' && report.dig('with', 'path') == '.build/image-scans/*.json'
 release = job['steps'].find { |s| s.dig('with', 'path') == '.build/backend-release/release.json' }
-raise 'only successful builds may publish the deployable cohort' unless release && release['if'].nil? && release['with']['name'].include?('inputs.environment')
+raise 'only successful builds may publish the deployable cohort' unless release && release['if'].nil? && release['with']['name'].start_with?('backend-release-v2-') && release['with']['name'].include?('inputs.environment')
 puts 'Bootstrap-managed publishing role discovery and short-lived credential wiring PASS'
 RUBY
 
@@ -99,6 +100,7 @@ ruby - "$deploy" <<'RUBY'
 require 'yaml'
 w = YAML.load_file(ARGV.fetch(0))
 job = w['jobs']['deploy']
+raise 'deploy selection must require operations-ready releases' unless job['steps'].find { |step| step['id'] == 'release' }['run'].include?('--require-operations')
 raise 'deployment must run from default branch' unless job['if'].include?('default_branch')
 raise 'deployment must accept the bootstrap account secret' unless job['env']['AWS_EXPECTED_ACCOUNT_ID'] == '${{ vars.AWS_EXPECTED_ACCOUNT_ID || secrets.AWS_ACCOUNT_ID }}'
 config = job['steps'].find { |s| s['id'] == 'configuration' }

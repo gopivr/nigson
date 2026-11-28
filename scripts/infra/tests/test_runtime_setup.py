@@ -102,6 +102,12 @@ class RuntimeSetupTests(unittest.TestCase):
     def run_setup(self,apply=True,check=None):
         runner=R.RuntimeSetup(self.pipeline,self.aws,release(),apply,realm_check=check or (lambda issuer:self.events.append('realm')))
         runner.run();return runner
+    def test_legacy_release_is_refused_before_terraform_initialization(self):
+        value=release();del value['components']['operations']
+        runner=R.RuntimeSetup(self.pipeline,self.aws,value,False)
+        with self.assertRaisesRegex(ValueError,'scan-qualified operations image'):runner.run()
+        self.assertEqual(self.events,[])
+
     def test_templates_migrations_bootstrap_identity_and_app_activation_are_ordered(self):
         runner=self.run_setup()
         self.assertEqual(runner.runner.record['status'],'RUNTIME_ACTIVATED')
