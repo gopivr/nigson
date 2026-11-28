@@ -140,3 +140,41 @@ run "bootstrap_identity_without_unpublished_image" {
     error_message = "Identity infrastructure must not need a fake image during initial provisioning."
   }
 }
+
+run "generated_target_tls_without_certificate_secrets" {
+  command = plan
+  variables {
+    tls_mode = "generated"
+    secret_refs = {
+      database_password = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-db"
+      database_ca       = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-ca"
+    }
+  }
+  assert {
+    condition = length(jsondecode(aws_ecs_task_definition.identity[0].container_definitions)[0].secrets) == 2 && length(jsondecode(aws_ecs_task_definition.bootstrap[0].container_definitions)[0].secrets) == 4 && contains(jsondecode(aws_ecs_task_definition.identity[0].container_definitions)[0].environment, { name = "NIGSON_IDENTITY_TLS_MODE", value = "generated" })
+    error_message = "Generated TLS must provision both permanent and bootstrap tasks without certificate/private-key secret dependencies."
+  }
+  assert {
+    condition = alltrue([for tg in aws_lb_target_group.identity : tg.protocol == "HTTPS" && tg.health_check[0].protocol == "HTTPS"]) && !strcontains(aws_iam_role_policy.execution.policy, "test-cert") && !strcontains(aws_iam_role_policy.execution.policy, "test-key")
+    error_message = "Generated TLS must retain private HTTPS targets and remove unused certificate secret permissions."
+  }
+}
+run "generated_tls_drops_legacy_key_permissions" {
+  command = plan
+  variables { tls_mode = "generated" }
+  assert {
+    condition = !strcontains(aws_iam_role_policy.execution.policy, "test-cert") && !strcontains(aws_iam_role_policy.execution.policy, "test-key") && !strcontains(aws_iam_role_policy.execution.policy, "null")
+    error_message = "Generated mode must remove both GetSecretValue and KMS permissions for unused TLS secrets, including when legacy references remain in inputs."
+  }
+}
+
+run "legacy_tls_requires_certificate_pair" {
+  command = plan
+  variables {
+    secret_refs = {
+      database_password = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-db"
+      database_ca       = "arn:aws:secretsmanager:us-east-1:000000000000:secret:test-ca"
+    }
+  }
+  expect_failures = [var.tls_mode]
+}

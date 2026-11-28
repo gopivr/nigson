@@ -4,6 +4,8 @@ RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true --metrics-
 
 FROM quay.io/keycloak/keycloak:26.8.2@sha256:7e66a96e4739239070aeaf72e4c5decf0f7f682cfc725b9f7ea2b336eaba38b3
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
+# Fail the build if the pinned runtime cannot provision its private target TLS.
+RUN command -v keytool && command -v od && command -v tr
 COPY --chown=1000:0 --chmod=0550 infrastructure/docker/keycloak/production-entrypoint.sh /opt/keycloak/bin/nigson-start
 VOLUME ["/opt/keycloak/data"]
 USER 1000:0

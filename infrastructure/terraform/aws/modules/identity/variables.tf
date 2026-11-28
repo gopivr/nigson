@@ -100,10 +100,23 @@ variable "cpu_architecture" {
     error_message = "Explicit supported ECS identity task architecture required."
   }
 }
-variable "secret_refs" {
-  type = object({ database_password = string, tls_certificate = string, tls_key = string, database_ca = string })
+variable "tls_mode" {
+  type        = string
+  default     = "secret-pem"
+  description = "generated creates a private per-task keystore behind the ACM HTTPS ALBs; secret-pem retains externally managed target certificates."
   validation {
-    condition     = alltrue([for arn in values(var.secret_refs) : can(regex("^arn:aws[a-z-]*:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:", arn))])
+    condition     = contains(["generated", "secret-pem"], var.tls_mode)
+    error_message = "Choose generated or secret-pem target TLS."
+  }
+  validation {
+    condition     = var.tls_mode != "secret-pem" || (var.secret_refs.tls_certificate != null && var.secret_refs.tls_key != null)
+    error_message = "secret-pem TLS requires certificate and private-key secret ARNs."
+  }
+}
+variable "secret_refs" {
+  type = object({ database_password = string, tls_certificate = optional(string), tls_key = optional(string), database_ca = string })
+  validation {
+    condition     = alltrue([for name, arn in var.secret_refs : (contains(["tls_certificate", "tls_key"], name) && arn == null) || can(regex("^arn:aws[a-z-]*:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:", arn))])
     error_message = "Secrets Manager references required; never pass secret values."
   }
 }

@@ -1,7 +1,8 @@
 data "aws_region" "current" {}
 locals {
-  name = "nigson-${var.environment}-identity"
-  tags = { Service = "keycloak", Environment = var.environment, Policy = var.policy_revision, Operator = var.named_operator }
+  runtime_secret_arns = [for name, arn in var.secret_refs : arn if arn != null && (var.tls_mode == "secret-pem" || !contains(["tls_certificate", "tls_key"], name))]
+  name                = "nigson-${var.environment}-identity"
+  tags                = { Service = "keycloak", Environment = var.environment, Policy = var.policy_revision, Operator = var.named_operator }
 }
 resource "aws_security_group" "public" {
   name   = "${local.name}-public"
@@ -265,8 +266,8 @@ resource "aws_iam_role_policy" "execution" {
     { Effect = "Allow", Action = ["ecr:GetAuthorizationToken"], Resource = "*" },
     { Effect = "Allow", Action = ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage"], Resource = aws_ecr_repository.identity.arn },
     { Effect = "Allow", Action = ["logs:CreateLogStream", "logs:PutLogEvents"], Resource = "${aws_cloudwatch_log_group.identity.arn}:*" },
-    { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = values(var.secret_refs) },
-    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn, Condition = { StringEquals = { "kms:ViaService" = "secretsmanager.${data.aws_region.current.region}.amazonaws.com" }, "ForAnyValue:StringEquals" = { "kms:EncryptionContext:SecretARN" = values(var.secret_refs) } } }
+    { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = local.runtime_secret_arns },
+    { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn, Condition = { StringEquals = { "kms:ViaService" = "secretsmanager.${data.aws_region.current.region}.amazonaws.com" }, "ForAnyValue:StringEquals" = { "kms:EncryptionContext:SecretARN" = local.runtime_secret_arns } } }
   ] })
 }
 resource "aws_iam_role" "task" {
@@ -297,6 +298,7 @@ resource "aws_ecs_task_definition" "identity" {
     portMappings = [for port in [8443, 9000, 7800, 57800] : { containerPort = port, protocol = "tcp" }],
     mountPoints  = [{ sourceVolume = "identity-data", containerPath = "/opt/keycloak/data", readOnly = false }, { sourceVolume = "identity-tmp", containerPath = "/tmp", readOnly = false }],
     environment = [for name, value in {
+      NIGSON_IDENTITY_TLS_MODE   = var.tls_mode,
       APP_ENV                    = var.environment, KC_HOSTNAME = "https://${var.public_hostname}", KC_HOSTNAME_ADMIN = "https://${var.admin_hostname}",
       KC_DB_URL                  = "jdbc:postgresql://${aws_db_instance.identity.address}:5432/keycloak", KC_DB_USERNAME = "nigson_identity",
       KC_PROXY_TRUSTED_ADDRESSES = join(",", var.trusted_proxy_cidrs), NIGSON_IDENTITY_POLICY_REVISION = var.policy_revision
@@ -304,7 +306,7 @@ resource "aws_ecs_task_definition" "identity" {
     secrets = [for name, ref in {
       KC_DB_PASSWORD          = var.secret_refs.database_password, NIGSON_IDENTITY_CERT_PEM = var.secret_refs.tls_certificate,
       NIGSON_IDENTITY_KEY_PEM = var.secret_refs.tls_key, NIGSON_IDENTITY_DB_CA_PEM = var.secret_refs.database_ca
-    } : { name = name, valueFrom = ref }],
+    } : { name = name, valueFrom = ref } if ref != null && (var.tls_mode == "secret-pem" || !contains(["NIGSON_IDENTITY_CERT_PEM", "NIGSON_IDENTITY_KEY_PEM"], name))],
     linuxParameters  = { capabilities = { drop = ["ALL"] }, initProcessEnabled = true },
     logConfiguration = { logDriver = "awslogs", options = { awslogs-group = aws_cloudwatch_log_group.identity.name, awslogs-region = data.aws_region.current.region, awslogs-stream-prefix = "keycloak" } }
   }])
@@ -507,3 +509,5 @@ moved {
 }
 output "public_alb_zone_id" { value = aws_lb.public.zone_id }
 output "private_admin_alb_zone_id" { value = aws_lb.admin.zone_id }
+
+output "target_tls_mode" { value = var.tls_mode }

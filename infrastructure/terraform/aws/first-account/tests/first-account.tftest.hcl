@@ -126,3 +126,16 @@ run "frontend_release_plan_updates_static_origin_only" {
   module { source = "./tests/fixtures/frontend-release-plan" }
   variables { release_id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-123-1" }
 }
+
+run "identity_target_tls_is_automatically_provisioned" {
+  command = plan
+  variables {
+    publish_task_definitions = true
+    image_digests = { commerce = "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", experience = "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", integration = "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", identity = "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" }
+    migration_image_digest = "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  }
+  assert {
+    condition = module.identity.target_tls_mode == "generated" && aws_acm_certificate.regional.subject_alternative_names == toset(["auth.stage.nigson.com", "identity-admin.stage.nigson.com"])
+    error_message = "First-account identity must generate private target TLS and retain public ACM coverage for both identity hostnames."
+  }
+}

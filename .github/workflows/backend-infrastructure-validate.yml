@@ -72,6 +72,9 @@ jobs:
         run: bash scripts/infra/tests/workflows-test.sh
       - if: matrix.directory == 'bootstrap'
         run: python3 -m unittest discover -s scripts/infra/tests -p test_frontend_deployment.py -v
+      - name: Test automatic identity target TLS and legacy compatibility
+        if: matrix.directory == 'bootstrap'
+        run: python3 -m unittest discover -s scripts/infra/tests -p test_identity_target_tls.py -v
       - name: Check CDN navigation and error routing
         if: matrix.directory == 'modules/frontend'
         run: node scripts/infra/tests/frontend-routing-test.cjs

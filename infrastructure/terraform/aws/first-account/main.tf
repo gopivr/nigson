@@ -57,6 +57,8 @@ locals {
       for name in setunion(toset(["migration_password", "SPRING_DATASOURCE_PASSWORD"]), lookup(var.application_secret_names, service, toset([]))) : name => "nigson/${var.environment}/${service}/${name}"
     }
     }, {
+    # Retain existing empty TLS containers to avoid destructive foundation changes.
+    # Generated target TLS does not read them or require their values.
     identity = {
       for name in ["database_password", "tls_certificate", "tls_key", "database_ca", "bootstrap_username", "bootstrap_password"] : name => "nigson/${var.environment}/identity/${name}"
     }
@@ -318,8 +320,9 @@ module "identity" {
   identity_image                 = var.publish_task_definitions ? "${local.registry}/nigson/${var.environment}/identity@${lookup(var.image_digests, "identity", "")}" : null
   provision_tasks                = var.publish_task_definitions
   cpu_architecture               = "X86_64"
+  tls_mode                       = "generated"
   secret_refs = {
-    for name in ["database_password", "tls_certificate", "tls_key", "database_ca"] : name => module.secrets.secret_arns.identity[name]
+    for name in ["database_password", "database_ca"] : name => module.secrets.secret_arns.identity[name]
   }
   postgres_version        = data.aws_rds_engine_version.postgres.version
   database_instance_class = var.database_instance_class

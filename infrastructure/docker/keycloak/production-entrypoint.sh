@@ -18,13 +18,42 @@ if [[ "$APP_ENV" != test ]]; then
 fi
 mkdir -p /opt/keycloak/data/nigson-secrets
 # ECS injects Secrets Manager references at runtime, never at image build or in Terraform values.
-for pair in 'NIGSON_IDENTITY_CERT_PEM:tls.crt' 'NIGSON_IDENTITY_KEY_PEM:tls.key' 'NIGSON_IDENTITY_DB_CA_PEM:db-ca.crt'; do
+for pair in 'NIGSON_IDENTITY_DB_CA_PEM:db-ca.crt'; do
   name="${pair%%:*}"; file="${pair#*:}"; [[ -n "${!name:-}" ]] || refuse
   printf '%s\n' "${!name}" > "/opt/keycloak/data/nigson-secrets/$file"
   unset "$name"
 done
 export KC_HTTP_ENABLED=false KC_HOSTNAME_STRICT=true KC_PROXY_HEADERS=xforwarded KC_CACHE_STACK=jdbc-ping
-export KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/data/nigson-secrets/tls.crt KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/data/nigson-secrets/tls.key
+# Public trust is terminated at the ACM-backed ALBs. Private target TLS stays
+# enabled; only the ALB security groups can reach this task's HTTPS listeners.
+case "${NIGSON_IDENTITY_TLS_MODE:-secret-pem}" in
+  generated)
+    [[ -z "${NIGSON_IDENTITY_CERT_PEM:-}" && -z "${NIGSON_IDENTITY_KEY_PEM:-}" ]] || refuse
+    unset KC_HTTPS_CERTIFICATE_FILE KC_HTTPS_CERTIFICATE_KEY_FILE
+    export KC_HTTPS_KEY_STORE_FILE=/opt/keycloak/data/nigson-secrets/server.p12 KC_HTTPS_KEY_STORE_TYPE=PKCS12
+    # Never reuse a key baked into an image, shared between tasks, or kept in state.
+    rm -f "$KC_HTTPS_KEY_STORE_FILE"
+    export KC_HTTPS_KEY_STORE_PASSWORD
+    KC_HTTPS_KEY_STORE_PASSWORD=$(od -An -N32 -tx1 /dev/urandom | tr -d ' \n')
+    [[ "$KC_HTTPS_KEY_STORE_PASSWORD" =~ ^[a-f0-9]{64}$ ]] || refuse
+    public_host=${KC_HOSTNAME#https://}; public_host=${public_host%%:*}
+    admin_host=${KC_HOSTNAME_ADMIN#https://}; admin_host=${admin_host%%:*}
+    keytool -genkeypair -alias identity -keyalg RSA -keysize 2048 -validity 3650 \
+      -storetype PKCS12 -keystore "$KC_HTTPS_KEY_STORE_FILE" \
+      -storepass:env KC_HTTPS_KEY_STORE_PASSWORD -dname "CN=$public_host" \
+      -ext "SAN=dns:$public_host,dns:$admin_host" -noprompt >/dev/null 2>&1 || refuse
+    ;;
+  secret-pem)
+    unset KC_HTTPS_KEY_STORE_FILE KC_HTTPS_KEY_STORE_TYPE KC_HTTPS_KEY_STORE_PASSWORD
+    for pair in 'NIGSON_IDENTITY_CERT_PEM:tls.crt' 'NIGSON_IDENTITY_KEY_PEM:tls.key'; do
+      name="${pair%%:*}"; file="${pair#*:}"; [[ -n "${!name:-}" ]] || refuse
+      printf '%s\n' "${!name}" > "/opt/keycloak/data/nigson-secrets/$file"
+      unset "$name"
+    done
+    export KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/data/nigson-secrets/tls.crt KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/data/nigson-secrets/tls.key
+    ;;
+  *) refuse ;;
+esac
 export KC_DB_TLS_MODE=verify-server KC_DB_TLS_TRUST_STORE_FILE=/opt/keycloak/data/nigson-secrets/db-ca.crt
 export KC_DB_POOL_INITIAL_SIZE=2 KC_DB_POOL_MIN_SIZE=2 KC_DB_POOL_MAX_SIZE=10 KC_DB_CONNECT_TIMEOUT=5s
 export KC_HTTP_MAX_QUEUED_REQUESTS=100 KC_HTTP_POOL_MAX_THREADS=50

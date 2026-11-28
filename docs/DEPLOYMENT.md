@@ -196,3 +196,35 @@ runtime configuration. Never flip all three flags using only the foundation defa
 
 Once runtime services are healthy, rerun **Backend — Deploy Release**, selecting
 only the environment. A preflight failure has not changed services or run migrations.
+
+### Identity TLS is provisioned automatically
+
+The regional ACM certificate covers `api.stage.nigson.com`, `auth.stage.nigson.com`
+and `identity-admin.stage.nigson.com`. Terraform attaches it to the HTTPS listeners;
+ACM handles public certificate renewal. Do not request a second exportable public
+certificate for Keycloak or copy an ACM private key into Secrets Manager.
+
+The first-account identity tasks use `generated` target TLS. Each task generates a
+private RSA PKCS12 keystore at startup in its private writable data volume, with a
+random password and owner-only file permissions. Replacement/restart generates a
+new key. The self-signed target certificate has a ten-year validity and is never
+served directly to browsers. The ALBs continue using HTTPS on ports 8443/9000 to
+reach Keycloak, with task ingress restricted to the existing security groups.
+ALBs do not validate target certificate trust; public identity comes from the ACM
+listener certificate. No key is stored in Terraform state, the image or workflow artifacts.
+
+You no longer need values in `nigson/stage/identity/tls_key` or `tls_certificate`.
+Existing secret containers are retained to avoid destructive infrastructure changes,
+but generated-mode tasks neither read them nor receive permission to read them.
+The Keycloak database password and regional database CA secret remain required.
+Legacy environment roots keep their explicit secret-PEM mode for compatibility.
+
+To adopt this change, publish a new identity image using **Build and Publish Images**
+and provision the updated first-account task configuration with that digest. Existing
+task templates need the new `NIGSON_IDENTITY_TLS_MODE=generated` setting and reduced
+secret references; publishing a new image alone does not change their configuration.
+This addresses TLS provisioning; database/realm setup and first runtime activation
+remain separate prerequisites.
+
+References: [AWS ALB HTTPS target behavior](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)
+and [Keycloak keystore configuration](https://www.keycloak.org/server/enabletls).

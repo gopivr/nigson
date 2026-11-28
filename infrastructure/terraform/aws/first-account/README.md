@@ -196,13 +196,16 @@ credentials or authorize their business policies. Secret containers are created,
 not populated with dummy credentials. Application activation remains a separate
 reviewed operation:
 
-1. Populate the owner app/migration passwords and required identity/client/TLS
+1. Populate the owner app/migration passwords and required identity/client/database-CA
    secrets outside Terraform state; configure provider credentials in the named
    secret containers. RDS manages the master credential itself.
 2. Bootstrap owner DB roles/schemas using the existing reviewed private-database
    procedure in `aws/database/README.md`; initialize the dedicated Keycloak DB
-   role and identity TLS/realm/client/MFA configuration. Ordinary application
-   containers must not use the RDS master password.
+   role and identity realm/client/MFA configuration. Public identity TLS is attached
+   through ACM; private target TLS is generated per task automatically. The legacy
+   `identity/tls_certificate` and `identity/tls_key` containers need no values.
+   The identity database password and regional database CA remain required.
+   Ordinary application containers must not use the RDS master password.
 3. Run owner migrations with the existing launcher, pointed at this new root:
 
    ```bash
