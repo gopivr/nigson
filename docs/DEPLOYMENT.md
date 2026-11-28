@@ -251,3 +251,18 @@ remain separate prerequisites.
 
 References: [AWS ALB HTTPS target behavior](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)
 and [Keycloak keystore configuration](https://www.keycloak.org/server/enabletls).
+
+### Runtime setup reports a foundation network rule change
+
+If setup stops at `aws_vpc_security_group_egress_rule.owner_database["commerce"]`
+(or another root network rule), reconcile the base network before activating
+services. After merging the fix, run **Backend — AWS Infrastructure → apply**,
+then start a new runtime-plan/deploy run. A rule replacement requires review in
+the infrastructure workflow; runtime setup continues to reject it.
+
+Application/ALB and migration-task security groups use standalone outbound rule
+resources. Do not add inline `egress = []` to those groups: it can revoke the
+standalone database, DNS and service routes on a later apply. The database-only
+group deliberately retains its empty outbound policy. No allow-all rule is added.
+
+See the [AWS provider rule-ownership guidance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group).

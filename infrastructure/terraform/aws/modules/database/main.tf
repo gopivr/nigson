@@ -26,7 +26,6 @@ resource "aws_security_group" "migration_tasks" {
   name        = "nigson-${var.environment}-owner-migrations"
   description = "One-shot owner migration tasks; no ingress and only database/AWS endpoint egress"
   vpc_id      = var.vpc_id
-  egress      = []
   tags        = merge(local.tags, { Service = "owner-migrations" })
 }
 

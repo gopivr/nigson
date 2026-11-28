@@ -61,6 +61,10 @@ def guard_plan(plan):
         if actions in [['no-op'], ['read']]:
             continue
         address = change['address']
+        if address.startswith(('aws_vpc_security_group_egress_rule.', 'aws_vpc_security_group_ingress_rule.')):
+            raise ValueError('Runtime setup requires foundation network reconciliation: ' + address +
+                ' (actions: ' + '/'.join(actions) + '). Run Backend — AWS Infrastructure with action apply from the updated default branch, '
+                'reviewing any rule replacement there, then start a new runtime/deploy run. Runtime setup does not modify foundation network rules.')
         if 'delete' in actions or not address.startswith(('module.compute.', 'module.identity.', 'module.migrations[0].', 'module.secrets.', 'aws_iam_role.setup_execution[', 'aws_iam_role.setup_task[', 'aws_iam_role_policy.setup_execution[', 'aws_ecs_task_definition.setup[')):
             raise ValueError('Runtime setup refuses deletion/replacement or unrelated infrastructure changes: ' + address)
         if change.get('type') in {'aws_db_instance', 'aws_kms_key', 'aws_kms_alias', 'aws_ecr_repository'}:

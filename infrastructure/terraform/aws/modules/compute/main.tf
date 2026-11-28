@@ -119,16 +119,16 @@ resource "aws_security_group" "load_balancer" {
     to_port     = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
-  egress = []
-  tags   = local.tags
+  tags = local.tags
 }
 
+# Standalone resources own egress, including first-account database/DNS routes.
+# An inline empty list would revoke those rules on subsequent infrastructure applies.
 resource "aws_security_group" "service" {
   for_each    = var.services
   name        = "nigson-${var.environment}-${each.key}"
   description = "Private application task ingress and explicit destination egress"
   vpc_id      = var.vpc_id
-  egress      = []
   tags        = merge(local.tags, { Service = each.key })
 }
 

@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -202,6 +203,19 @@ class RuntimeSetupTests(unittest.TestCase):
         bad=configuration();bad['application_environment']['commerce']['PAYSTACK_SECRET_KEY']='isolated-test-key';self.config=bad
         with self.assertRaisesRegex(ValueError,'Secret values'):self.run_setup()
         self.assertFalse(any(x.startswith('apply:') for x in self.events))
+    def test_foundation_network_drift_requires_foundation_apply_not_a_runtime_exception(self):
+        for kind in ['egress','ingress']:
+            for actions in [['create'],['update'],['delete','create']]:
+                address='aws_vpc_security_group_'+kind+'_rule.owner_database["commerce"]'
+                change={'address':address,'type':'aws_vpc_security_group_'+kind+'_rule','change':{'actions':actions}}
+                with self.subTest(kind=kind,actions=actions),self.assertRaises(ValueError) as error:
+                    R.guard_plan({'resource_changes':[change]})
+                message=str(error.exception)
+                self.assertIn('foundation network reconciliation',message)
+                self.assertIn('actions: '+'/'.join(actions),message)
+                self.assertIn('action apply',message)
+        R.guard_plan({'resource_changes':[{'address':address,'type':change['type'],'change':{'actions':['no-op']}}]})
+
     def test_plan_guard_denies_deletions_and_database_changes(self):
         for address,kind,actions in [('module.compute.aws_ecs_service.service["commerce"]','aws_ecs_service',['delete','create']),('module.identity.aws_db_instance.identity','aws_db_instance',['update']),('module.frontend.aws_cloudfront_distribution.frontend','aws_cloudfront_distribution',['update'])]:
             with self.subTest(address=address),self.assertRaises(ValueError):
@@ -210,3 +224,28 @@ class RuntimeSetupTests(unittest.TestCase):
         self.run_setup()
         self.assertNotIn('get-secret-value',self.events)
         self.assertEqual(self.events.count('describe-secret'),1)
+
+
+def conflicting_egress_owners(source):
+    groups={name:body for name,body in re.findall(r'^resource "aws_security_group" "([^\"]+)" \{\n(.*?)^\}',source,re.MULTILINE|re.DOTALL)}
+    targets=set()
+    for body in re.findall(r'^resource "aws_vpc_security_group_egress_rule" "[^\"]+" \{\n(.*?)^\}',source,re.MULTILINE|re.DOTALL):
+        targets.update(re.findall(r'^\s*security_group_id\s*=\s*aws_security_group\.([A-Za-z0-9_]+)',body,re.MULTILINE))
+    return {name for name in targets if name in groups and re.search(r'^\s*egress\s*(?:=|\{)',groups[name],re.MULTILINE)}
+
+
+class EgressOwnershipTests(unittest.TestCase):
+    def test_static_configuration_cannot_clear_standalone_outbound_rules(self):
+        for path in (ROOT/'infrastructure/terraform/aws/modules').glob('*/main.tf'):
+            with self.subTest(module=path.parent.name):
+                self.assertEqual(conflicting_egress_owners(path.read_text()),set(),
+                    'Inline egress must not compete with standalone outbound rule resources')
+
+    def test_empty_inline_policy_is_detected_but_unmanaged_egress_is_allowed(self):
+        source='resource "aws_security_group" "task" {\n  egress = []\n}\nresource "aws_vpc_security_group_egress_rule" "database" {\n  security_group_id = aws_security_group.task.id\n}\n'
+        self.assertEqual(conflicting_egress_owners(source),{'task'})
+        self.assertEqual(conflicting_egress_owners(source.replace('  egress = []\n','')),set())
+
+    def test_referenced_destination_group_does_not_own_the_outbound_rule(self):
+        source='resource "aws_security_group" "database" {\n  egress = []\n}\nresource "aws_vpc_security_group_egress_rule" "database" {\n  security_group_id = var.task_group\n  referenced_security_group_id = aws_security_group.database.id\n}\n'
+        self.assertEqual(conflicting_egress_owners(source),set())
